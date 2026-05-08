@@ -8,29 +8,37 @@ It should feel like a structured conversation with a rigorous project architect,
 
 ## Commands
 
-### `logos init`
+The primary CLI entrypoint is `logos`, which opens the TUI.
+
+Inside the TUI, the user can choose actions from the interface or type slash commands with autocomplete.
+
+### `/init`
 
 Initializes LOGOS Engine in the current directory.
 
-### `logos continue`
+### `/continue`
 
 Resumes the next best question group.
 
-### `logos diagnose`
+### `/diagnose`
 
 Runs diagnostics and shows gaps.
 
-### `logos generate`
+### `/generate`
 
 Renders or refreshes documents.
 
-### `logos validate`
+### `/validate`
 
 Checks phase readiness.
 
-### `logos status`
+### `/status`
 
 Shows current project progress.
+
+### `/config ai`
+
+Configures LLM provider access.
 
 ## Interaction Principles
 
@@ -61,6 +69,14 @@ The user should be able to:
 - save and exit;
 - view related docs;
 - run diagnostics.
+
+## Slash Command Behavior
+
+- Slash commands should start with `/`.
+- Slash commands should support autocomplete.
+- Slash commands should show short descriptions and option hints.
+- Slash command results should render in the TUI, not as raw terminal output.
+- Destructive slash commands should ask for confirmation.
 
 ## UX Tone
 

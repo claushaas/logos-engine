@@ -51,14 +51,42 @@ It should be a structured specification.
 
 ```text
 profiles/app-business/
-  profile.json
-  phases.json
-  decisions.json
-  questions/
-  validations/
-  risks/
+  profile.yml
+  phases.yml
+  documents.yml
+  decisions.yml
+  questions.yml
+  validations.yml
+  risks.yml
+  prompts.yml
   templates/
 ```
+
+YAML is preferred for profile contract files because profiles are authored and reviewed by humans.
+
+The implementation may load YAML into typed runtime objects and validate them with schemas.
+
+Markdown files in `docs/05-profiles/` explain the profile contract for humans. They should not be the engine's primary machine-readable source of truth.
+
+## Document Contract Files
+
+Canonical document definitions should live in `documents.yml`.
+
+That file should define:
+
+- document id;
+- phase id;
+- output path;
+- title;
+- purpose;
+- required inputs;
+- primary questions;
+- section structure;
+- generated outputs;
+- completion criteria;
+- dependencies;
+- related validation rules;
+- prompt context requirements.
 
 ## Profile Versioning
 

@@ -1,117 +1,5 @@
 # Phased Tasks
 
-## Phase 0 Tasks
-
-- [ ] Create repository
-- [ ] Add README
-- [ ] Add license
-- [ ] Configure TypeScript
-- [ ] Configure package manager
-- [ ] Add linting
-- [ ] Add formatter
-- [ ] Add test runner
-- [ ] Add docs structure
-
-## Phase 1 Tasks
-
-- [ ] Create CLI entrypoint
-- [ ] Add command parser
-- [ ] Implement `logos --help`
-- [ ] Implement command stubs
-- [ ] Add basic tests
-
-## Phase 2 Tasks
-
-- [ ] Implement project root detection
-- [ ] Implement workspace creation
-- [ ] Write `.logos/project.json`
-- [ ] Write `.logos/profile.lock.json`
-- [ ] Create docs folder
-- [ ] Add init tests
-
-## Phase 3 Tasks
-
-- [ ] Define profile schema
-- [ ] Add app-business profile
-- [ ] Validate profile at load time
-- [ ] Add profile tests
-
-## Phase 4 Tasks
-
-- [ ] Define question schema
-- [ ] Implement question group selection
-- [ ] Store answers
-- [ ] Implement `logos continue`
-- [ ] Support unknown answers
-- [ ] Support assumptions
-
-## Phase 5 Tasks
-
-- [ ] Define decision schema
-- [ ] Map answers to decisions
-- [ ] Store decisions
-- [ ] Preserve source answer references
-- [ ] Add decision update tests
-
-## Phase 6 Tasks
-
-- [ ] Create Markdown renderer
-- [ ] Create document templates
-- [ ] Implement safe render
-- [ ] Add generated frontmatter
-- [ ] Preserve manual notes section
-
-## Phase 7 Tasks
-
-- [ ] Define validation rule schema
-- [ ] Implement required decision validation
-- [ ] Implement dependency validation
-- [ ] Add severity levels
-- [ ] Implement `logos validate`
-
-## Phase 8 Tasks
-
-- [ ] Implement diagnostics summary
-- [ ] Group gaps by severity
-- [ ] Show affected documents
-- [ ] Recommend next action
-- [ ] Implement `logos diagnose`
-
-## Phase 9 Tasks
-
-- [ ] Improve TUI layout
-- [ ] Add progress indicator
-- [ ] Add keyboard navigation
-- [ ] Add review screen
-- [ ] Improve errors
-
-## Phase 10 Tasks
-
-- [ ] Complete all app-business docs
-- [ ] Complete all app-business question sets
-- [ ] Complete profile validation
-- [ ] Generate example workspace
-- [ ] Write profile documentation
-
-## Phase 11 Tasks
-
-- [ ] Add contributing guide
-- [ ] Add code of conduct
-- [ ] Add issue templates
-- [ ] Add examples
-- [ ] Record demo
-- [ ] Prepare launch post
-
-## Phase 12 Tasks
-
-- [ ] Publish npm package
-- [ ] Create GitHub release
-- [ ] Announce project
-- [ ] Collect feedback
-- [ ] Triage issues
-
-## Phased Tasks
-
 ## Purpose
 
 This document translates `00_IMPLEMENTATION_ROADMAP.md` into actionable implementation checklists.
@@ -119,6 +7,17 @@ This document translates `00_IMPLEMENTATION_ROADMAP.md` into actionable implemen
 It must stay aligned with the current roadmap, especially the AI-first architecture decisions.
 
 LOGOS Engine uses AI as a core workflow layer for interrogation, synthesis, decision proposal, risk analysis, and document drafting. Therefore, task planning must include provider abstraction, prompt contracts, structured outputs, confirmation flows, AI safety, and mocked AI testing from the beginning.
+
+The deterministic core must remain useful without live model calls. The default implementation path should use explicit schemas, fixtures, and mocked AI providers first, with remote provider usage added behind configuration and clear user disclosure.
+
+## Implementation Contracts
+
+- [ ] Keep `DecisionStatus` separate from `AiOutputStatus`
+- [ ] Keep deterministic validation separate from AI diagnostics
+- [ ] Treat Markdown as rendered output, not source of truth
+- [ ] Treat the App Business document tree as a profile contract
+- [ ] Require user confirmation before AI proposals become confirmed decisions
+- [ ] Ensure default tests do not call live models
 
 ## Related Documents
 
@@ -148,20 +47,27 @@ Create the technical and documentation foundation for an AI-first local TUI appl
 - [ ] Configure linting
 - [ ] Configure formatter
 - [ ] Configure test runner
+- [ ] Configure test coverage reporting if practical
 - [ ] Add initial `src/` structure
 - [ ] Add initial `tests/` structure
+- [ ] Add initial `fixtures/` or test fixture convention
 - [ ] Add development scripts
+- [ ] Add package build script
+- [ ] Add CLI smoke-test script
 - [ ] Document local development setup
 - [ ] Document AI-first engineering constraints
 - [ ] Document prompt/context safety expectations
+- [ ] Document default no-live-model test policy
 
 ## Acceptance Checklist
 
 - [ ] Project installs cleanly
 - [ ] Tests can run
 - [ ] Lint/format commands exist
+- [ ] Build command exists
 - [ ] Documentation tree exists
 - [ ] Development standards are committed
+- [ ] Default test policy does not require network or live AI credentials
 - [ ] Repository is ready for Phase 1
 
 ---
@@ -175,24 +81,36 @@ Create the executable command structure and initial TUI shell.
 ## Tasks
 
 - [ ] Create CLI entrypoint
-- [ ] Add command parser
+- [ ] Make `logos` open the TUI by default
+- [ ] Add CLI help and version output
+- [ ] Add slash command parser
+- [ ] Add slash command autocomplete
 - [ ] Implement `logos --help`
-- [ ] Implement `logos init` stub
-- [ ] Implement `logos status` stub
-- [ ] Implement `logos generate` stub
-- [ ] Implement `logos continue` stub
-- [ ] Implement `logos diagnose` stub
-- [ ] Implement `logos validate` stub
+- [ ] Implement `/init` stub
+- [ ] Implement `/status` stub
+- [ ] Implement `/generate` stub
+- [ ] Implement `/continue` stub
+- [ ] Implement `/diagnose` stub
+- [ ] Implement `/validate` stub
+- [ ] Implement `/config ai` stub
+- [ ] Implement `/help` stub
+- [ ] Implement `/exit` stub
+- [ ] Implement shared command context loader stub
+- [ ] Implement common command error output
+- [ ] Define exit code conventions
 - [ ] Create basic TUI shell
 - [ ] Establish command handler layer
 - [ ] Establish application service boundary
+- [ ] Add command help text for all V1 commands
 - [ ] Add basic command routing tests
 
 ## Acceptance Checklist
 
-- [ ] CLI can be executed locally
+- [ ] `logos` opens the TUI locally
 - [ ] Help output is readable
-- [ ] Core command stubs exist
+- [ ] Core slash command stubs exist
+- [ ] Slash command autocomplete works
+- [ ] Commands return predictable exit codes
 - [ ] TUI can render without workspace state
 - [ ] Command handlers do not directly mutate files
 
@@ -211,23 +129,33 @@ Allow LOGOS Engine to initialize a local workspace inside a project repository.
 - [ ] Implement workspace creation
 - [ ] Create `.logos/` directory
 - [ ] Create `.logos/sessions/` directory
+- [ ] Create `.logos/proposals/` directory or equivalent proposal store
 - [ ] Write `.logos/project.json`
 - [ ] Write `.logos/profile.lock.json`
 - [ ] Write `.logos/answers.json`
 - [ ] Write `.logos/decisions.json`
+- [ ] Write `.logos/diagnostics.json` or define why diagnostics remain ephemeral
+- [ ] Write `.logos/config.json` or equivalent local configuration file
 - [ ] Create `docs/` folder
 - [ ] Create initial docs subfolder structure
+- [ ] Normalize App Business folder names to canonical tree
 - [ ] Implement safe file write utility
+- [ ] Implement atomic JSON write utility
+- [ ] Implement schema validation on state read
 - [ ] Prevent destructive overwrite during init
+- [ ] Explain created files before or after init
 - [ ] Add init tests
 - [ ] Add repeated-init tests
+- [ ] Add corrupted-state read tests
 
 ## Acceptance Checklist
 
-- [ ] `logos init` creates a valid workspace
+- [ ] `/init` creates a valid workspace
 - [ ] Existing workspace is detected safely
 - [ ] Generated files are text-based and Git-friendly
 - [ ] Profile lock is persisted
+- [ ] Initial state files validate against schemas
+- [ ] Canonical docs folder structure is created consistently
 - [ ] Safe write behavior is tested
 
 ---
@@ -243,28 +171,51 @@ Implement the profile system and load the initial `app-business` profile.
 - [ ] Define profile schema
 - [ ] Define phase schema
 - [ ] Define canonical document schema
+- [ ] Define `documents.yml` schema
 - [ ] Define question set schema
 - [ ] Define validation rule schema stub
+- [ ] Define risk pattern schema stub
+- [ ] Define dependency mapping schema
+- [ ] Define prompt context requirement schema
 - [ ] Define profile versioning model
 - [ ] Implement profile loader
 - [ ] Implement profile validation
+- [ ] Reject duplicate profile ids
+- [ ] Reject duplicate phase ids
+- [ ] Reject duplicate document ids
+- [ ] Reject duplicate document output paths
+- [ ] Reject missing template references
+- [ ] Reject document definitions without completion criteria
 - [ ] Add `app-business` profile metadata
 - [ ] Add `app-business` phase definitions
-- [ ] Add `app-business` canonical document definitions
+- [ ] Add `app-business` `documents.yml` canonical document definitions
+- [ ] Normalize `11-governance` as the governance phase folder
+- [ ] Normalize `IMPLEMENTATION_PLAN.md` as the implementation planning document
 - [ ] Add document structure metadata to each canonical document
+- [ ] Add section metadata to each canonical document
+- [ ] Add primary question metadata to each canonical document
+- [ ] Add required input metadata to each canonical document
+- [ ] Add generated output metadata to each canonical document
 - [ ] Add document completion criteria metadata
+- [ ] Add document dependency metadata
 - [ ] Add `app-business` question set stubs
 - [ ] Add `app-business` validation rule stubs
+- [ ] Add `app-business` risk pattern stubs
 - [ ] Add profile loader tests
+- [ ] Add `documents.yml` schema tests
 - [ ] Add invalid profile tests
+- [ ] Add canonical tree consistency tests
 
 ## Acceptance Checklist
 
 - [ ] App Business profile loads successfully
 - [ ] Invalid profile fails with clear errors
 - [ ] Canonical documents define structure, not just filenames
+- [ ] Canonical documents are loaded from structured YAML
+- [ ] Canonical folder and document names match the roadmap contract
 - [ ] Profile version is available to workspace state
 - [ ] Profile tests cover document contract metadata
+- [ ] Invalid document references fail before runtime
 
 ---
 
@@ -278,14 +229,34 @@ Introduce AI as a first-class system layer without coupling the product to one p
 
 - [ ] Define `LlmProvider` interface
 - [ ] Define provider configuration model
+- [ ] Define provider capability metadata
+- [ ] Define provider transmission disclosure metadata
+- [ ] Define provider preset registry
+- [ ] Define token source model
+- [ ] Define secret redaction rules
 - [ ] Implement mock provider
+- [ ] Implement fixture response provider
+- [ ] Implement OpenAI-compatible adapter
+- [ ] Implement Anthropic-compatible adapter if included in V1
+- [ ] Implement Ollama/local adapter if included in V1
+- [ ] Define local provider configuration path where practical
+- [ ] Define remote provider configuration path as opt-in
+- [ ] Define `LOGOS_LLM_API_KEY` as generic default token environment variable
+- [ ] Define provider-specific token env var aliases where useful
+- [ ] Implement `.logos/config.json` AI config read/write without raw token persistence
+- [ ] Implement optional global AI defaults config
+- [ ] Implement token resolution from environment variables
+- [ ] Define optional OS keychain integration boundary
+- [ ] Add `/config ai` slash command or equivalent configuration flow
+- [ ] Add `/config ai --test` or equivalent provider connectivity check
+- [ ] Add `/config ai --show` with token redaction
 - [ ] Define provider error model
 - [ ] Define AI operation registry
 - [ ] Define AI request schema
 - [ ] Define AI response schema
 - [ ] Define structured output validation utilities
-- [ ] Define AI output status enum
-- [ ] Define statuses: `draft`, `proposed`, `confirmed`, `rejected`, `needs_review`
+- [ ] Define `AiOutputStatus` enum
+- [ ] Define `AiOutputStatus` values: `draft`, `proposed`, `confirmed`, `rejected`, `needs_review`
 - [ ] Define operation: `generate_follow_up_questions`
 - [ ] Define operation: `summarize_answer`
 - [ ] Define operation: `extract_decision_proposals`
@@ -295,13 +266,22 @@ Introduce AI as a first-class system layer without coupling the product to one p
 - [ ] Define operation: `draft_document_section`
 - [ ] Define operation: `recommend_next_question_group`
 - [ ] Add tests for mock provider
+- [ ] Add tests for fixture response provider
+- [ ] Add tests for provider preset resolution
+- [ ] Add tests for token environment variable resolution
+- [ ] Add tests that raw tokens are not written to `.logos/config.json`
 - [ ] Add tests for malformed AI response handling
 - [ ] Add tests for provider failure handling
+- [ ] Add tests proving default suite avoids live provider calls
 
 ## Acceptance Checklist
 
 - [ ] All AI calls route through provider abstraction
 - [ ] Mock provider supports deterministic tests
+- [ ] Default tests do not require live AI credentials
+- [ ] Remote provider usage is explicit and configurable
+- [ ] User can configure endpoint, model, and token source
+- [ ] Provider config can be displayed with secrets redacted
 - [ ] Malformed AI output is rejected safely
 - [ ] AI outputs are classified before use
 - [ ] AI operations do not directly mutate project state
@@ -320,16 +300,20 @@ Treat prompt construction as a versioned, testable product surface.
 - [ ] Create prompt builder module
 - [ ] Create context builder module
 - [ ] Define operation-specific prompt contracts
+- [ ] Define prompt version metadata
 - [ ] Define context selection rules
 - [ ] Include profile context where required
 - [ ] Include document contract context where required
 - [ ] Include decision registry context where required
 - [ ] Include open questions context where required
 - [ ] Include assumption context where required
+- [ ] Include validation findings context where required
+- [ ] Exclude unrelated project files by default
 - [ ] Add structured output instructions to prompts
 - [ ] Add refusal and uncertainty handling instructions
 - [ ] Add provider transmission disclosure metadata
 - [ ] Add token/context budgeting utility if needed
+- [ ] Add context preview or disclosure data structure
 - [ ] Add prompt snapshot tests where practical
 - [ ] Add context selection tests
 
@@ -339,6 +323,8 @@ Treat prompt construction as a versioned, testable product surface.
 - [ ] Prompt construction is tested
 - [ ] Context inclusion is intentional and minimal
 - [ ] User facts, assumptions, and AI proposals are separated
+- [ ] Prompt version is inspectable
+- [ ] Context sent to providers is explainable
 - [ ] Output schema expectations are explicit
 - [ ] Prompt changes are reviewable
 
@@ -355,20 +341,30 @@ Implement guided intake with profile-defined questions and AI-assisted follow-up
 - [ ] Define question schema
 - [ ] Define answer schema
 - [ ] Define session schema
+- [ ] Define open question schema
+- [ ] Define assumption schema
 - [ ] Implement answer store
 - [ ] Implement session store
+- [ ] Implement open question store or derived open question view
+- [ ] Implement assumption tracking behavior
 - [ ] Implement question group selector
 - [ ] Implement phase-aware question selection
 - [ ] Implement missing-decision-aware question selection
-- [ ] Implement `logos continue`
+- [ ] Implement maximum question group size guard
+- [ ] Implement skipped question handling
+- [ ] Implement save-and-exit behavior
+- [ ] Implement `/continue`
 - [ ] Support `unknown` answers
 - [ ] Support assumption-based answers
 - [ ] Store raw user answers
+- [ ] Store normalized answer summaries separately from raw answers
 - [ ] Use AI operation: `generate_follow_up_questions`
 - [ ] Use AI operation: `summarize_answer`
 - [ ] Use AI operation: `recommend_next_question_group`
 - [ ] Mark AI-generated follow-up questions as proposed
+- [ ] Require user acceptance before AI follow-ups enter the active session
 - [ ] Add tests with mocked AI responses
+- [ ] Add tests for skipped, unknown, and assumed answers
 
 ## Acceptance Checklist
 
@@ -378,6 +374,7 @@ Implement guided intake with profile-defined questions and AI-assisted follow-up
 - [ ] Unknown answers create open questions
 - [ ] Assumption answers create assumptions
 - [ ] AI follow-up questions are proposed, not silently canonical
+- [ ] User can save and resume an unfinished intake
 - [ ] Question selection does not become infinite or uncontrolled
 
 ---
@@ -391,10 +388,15 @@ Implement structured decisions as the source of truth and allow AI to propose de
 ## Tasks
 
 - [ ] Define decision schema
+- [ ] Define `DecisionStatus` enum
+- [ ] Define `DecisionStatus` values: `unknown`, `assumed`, `proposed`, `confirmed`, `deprecated`
 - [ ] Define decision proposal schema
+- [ ] Keep decision proposals modeled separately from confirmed decisions
 - [ ] Implement decision store
 - [ ] Implement decision status transitions
+- [ ] Reject invalid decision status transitions
 - [ ] Implement decision source tracking
+- [ ] Link confirmed decisions to accepted proposal ids where applicable
 - [ ] Preserve source answer references
 - [ ] Implement AI operation: `extract_decision_proposals`
 - [ ] Implement AI operation: `classify_assumptions`
@@ -403,17 +405,22 @@ Implement structured decisions as the source of truth and allow AI to propose de
 - [ ] Add reject proposal flow
 - [ ] Prevent AI proposals from becoming confirmed automatically
 - [ ] Track decision changes
+- [ ] Add decision revision or change metadata
 - [ ] Identify affected documents on decision change
+- [ ] Identify affected validation rules on decision change
 - [ ] Add tests for confirmation-gated state changes
 - [ ] Add tests for decision source tracking
+- [ ] Add tests proving `DecisionStatus` and `AiOutputStatus` are not conflated
 
 ## Acceptance Checklist
 
 - [ ] Decisions can be stored and updated
 - [ ] Decision status is explicit
+- [ ] Invalid decision transitions are rejected
 - [ ] AI-extracted decisions enter as `proposed`
 - [ ] User can confirm or reject proposals
 - [ ] Confirmed decisions preserve source references
+- [ ] Proposal review state does not silently become confirmed decision state
 - [ ] Changed decisions identify affected documents or validations
 
 ---
@@ -431,26 +438,36 @@ Generate complete canonical Markdown documents using structured state and AI-ass
 - [ ] Add generated YAML frontmatter
 - [ ] Implement safe render mode
 - [ ] Implement refresh render mode
+- [ ] Implement force render mode with explicit confirmation
 - [ ] Implement manual notes preservation strategy
 - [ ] Implement canonical App Business document tree generation
+- [ ] Generate `IMPLEMENTATION_PLAN.md` as the canonical implementation roadmap output
+- [ ] Generate `DECISION_LOG.md` from decision registry state
+- [ ] Generate `ASSUMPTIONS.md` from assumption state
+- [ ] Generate `OPEN_QUESTIONS.md` from unknown answers and unresolved gaps
 - [ ] Implement AI operation: `draft_document_section`
 - [ ] Pass document contract into AI drafting context
 - [ ] Pass confirmed decisions into AI drafting context
 - [ ] Pass assumptions and open questions into AI drafting context
+- [ ] Pass validation findings into drafting context where useful
 - [ ] Mark AI-drafted content as `draft` or `needs_review` where appropriate
 - [ ] Report missing inputs per document
 - [ ] Report document completion criteria status
+- [ ] Report created, updated, skipped, and blocked files
 - [ ] Add document rendering regression tests
 - [ ] Add document snapshot tests
+- [ ] Add manual notes preservation tests
 
 ## Acceptance Checklist
 
-- [ ] `logos generate` creates canonical App Business docs
+- [ ] `/generate` creates canonical App Business docs
 - [ ] Documents include required sections
 - [ ] Documents are broad and complete, not shallow summaries
 - [ ] AI-drafted sections are clearly classified
 - [ ] Manual sections are preserved where supported
 - [ ] Incomplete documents report missing inputs
+- [ ] Render output includes implementation planning content
+- [ ] Render summary explains file actions
 - [ ] Rendering is regression tested
 
 ---
@@ -468,9 +485,15 @@ Implement deterministic validation rules that verify structural completeness and
 - [ ] Implement required decision validation
 - [ ] Implement dependency validation
 - [ ] Implement phase readiness validation
+- [ ] Implement consistency validation
+- [ ] Implement risk pattern validation
 - [ ] Implement severity levels
+- [ ] Implement `ValidationSeverity`: `info`, `warning`, `error`, `critical`
 - [ ] Implement affected document reporting
-- [ ] Implement `logos validate`
+- [ ] Implement affected decision reporting
+- [ ] Implement `/validate`
+- [ ] Implement `/validate --phase <phase>`
+- [ ] Implement `/validate --all`
 - [ ] Add App Business foundation rules
 - [ ] Add App Business market rules
 - [ ] Add App Business economics rules
@@ -478,12 +501,16 @@ Implement deterministic validation rules that verify structural completeness and
 - [ ] Add App Business architecture rules
 - [ ] Add App Business GTM rules
 - [ ] Add App Business operations rules
+- [ ] Add App Business governance rules
+- [ ] Add contradiction fixtures
 - [ ] Add validation tests
 
 ## Acceptance Checklist
 
 - [ ] Required decisions are enforced
 - [ ] Dependency rules work
+- [ ] Consistency rules flag contradictions
+- [ ] Risk pattern rules flag known high-risk combinations
 - [ ] Severity levels are clear
 - [ ] Validation does not depend on live AI
 - [ ] Validation output references affected docs/phases
@@ -503,14 +530,18 @@ Combine deterministic validation with AI-assisted interpretation, risk analysis,
 - [ ] Implement deterministic gap summary
 - [ ] Implement severity grouping
 - [ ] Implement affected document list
-- [ ] Implement `logos diagnose`
+- [ ] Implement affected decision list
+- [ ] Implement deterministic next action fallback
+- [ ] Implement `/diagnose`
 - [ ] Use AI operation: `identify_gaps`
 - [ ] Use AI operation: `identify_risks`
 - [ ] Use AI operation: `recommend_next_question_group`
 - [ ] Mark AI diagnostics as advisory/proposed
+- [ ] Show when diagnostics were generated without live AI
 - [ ] Prevent diagnostics from mutating confirmed decisions
 - [ ] Add malformed AI diagnostics handling
 - [ ] Add mocked AI diagnostic tests
+- [ ] Add diagnostics tests without live provider
 - [ ] Add risk output tests
 
 ## Acceptance Checklist
@@ -518,6 +549,7 @@ Combine deterministic validation with AI-assisted interpretation, risk analysis,
 - [ ] Diagnostics show critical, important, and optional gaps
 - [ ] AI risk notes are clearly marked as advisory/proposed
 - [ ] User receives next useful action
+- [ ] Diagnostics remain useful without live AI
 - [ ] Diagnostics do not mutate confirmed state
 - [ ] Malformed AI diagnostics are handled safely
 
@@ -540,10 +572,13 @@ Make the AI-assisted workflow transparent, controlled, and usable.
 - [ ] Add assumption confirmation screen
 - [ ] Add diagnostics screen
 - [ ] Add generation summary screen
+- [ ] Add status screen or `/status` TUI output
 - [ ] Add provider usage notice where relevant
 - [ ] Add context disclosure screen where relevant
+- [ ] Add no-provider / mocked-provider state messaging
 - [ ] Improve error messages
 - [ ] Improve destructive-action confirmations
+- [ ] Add safe regeneration confirmation flow
 - [ ] Add TUI flow tests where practical
 
 ## Acceptance Checklist
@@ -552,6 +587,7 @@ Make the AI-assisted workflow transparent, controlled, and usable.
 - [ ] User can distinguish proposed decisions from confirmed decisions
 - [ ] Progress by phase is visible
 - [ ] Diagnostics are readable
+- [ ] Provider and context disclosure are visible before remote calls
 - [ ] Destructive actions require confirmation
 - [ ] TUI supports resume-oriented workflows
 
@@ -570,7 +606,12 @@ Complete the first production-quality profile.
 - [ ] Complete all App Business document templates
 - [ ] Complete all App Business question sets
 - [ ] Complete all App Business validation rules
+- [ ] Complete all App Business risk pattern rules
+- [ ] Complete all App Business dependency mappings
 - [ ] Complete all App Business AI prompt context requirements
+- [ ] Reconcile all document lists to the canonical output tree
+- [ ] Reconcile `IMPLEMENTATION_PLAN.md` naming across implementation docs
+- [ ] Reconcile `11-governance` naming across profile docs
 - [ ] Ensure docs cover ideation
 - [ ] Ensure docs cover market
 - [ ] Ensure docs cover business model
@@ -587,12 +628,15 @@ Complete the first production-quality profile.
 - [ ] Ensure docs cover governance
 - [ ] Generate example workspace
 - [ ] Add profile tests
+- [ ] Add profile contract snapshot tests
 
 ## Acceptance Checklist
 
 - [ ] App Business profile can produce every canonical document
+- [ ] Canonical document names are consistent across documentation
 - [ ] Each document follows its declared structure
 - [ ] Each document has completion criteria
+- [ ] Each document declares required inputs and generated outputs
 - [ ] Incomplete documents report missing decisions
 - [ ] Example workspace demonstrates end-to-end value
 - [ ] Profile validation is tested
@@ -610,6 +654,7 @@ Validate the complete LOGOS workflow from initialization to generated documentat
 - [ ] Create fixture project for minimal app business
 - [ ] Create fixture project for complex app business
 - [ ] Test init → intake → decision proposal → confirmation → generate
+- [ ] Test init → intake → status → validate → diagnose → generate
 - [ ] Test init → unknown answers → open questions
 - [ ] Test init → assumptions → assumption tracking
 - [ ] Test diagnostics after partial intake
@@ -621,12 +666,16 @@ Validate the complete LOGOS workflow from initialization to generated documentat
 - [ ] Test rate limit behavior
 - [ ] Test invalid structured output behavior
 - [ ] Test context length exceeded behavior
+- [ ] Test no-provider configured behavior
+- [ ] Test remote-provider disclosure behavior
+- [ ] Test profile canonical tree generation
 - [ ] Add regression suite
 - [ ] Improve error messages based on E2E findings
 
 ## Acceptance Checklist
 
 - [ ] Full workflow can run with mocked AI
+- [ ] Full deterministic workflow can run without live provider
 - [ ] Provider failures do not corrupt state
 - [ ] Generated docs remain stable under regression tests
 - [ ] User confirmation flow is enforced
@@ -748,7 +797,10 @@ V1 is complete only when all items below are true.
 - [ ] User can run diagnostics
 - [ ] User can regenerate documents safely
 - [ ] User can inspect project state in `.logos/`
+- [ ] User can understand whether remote AI is configured
+- [ ] User can see what context would be sent to a remote provider
 - [ ] User can commit the workspace to Git
 - [ ] Tests do not require live model calls by default
 - [ ] Provider coupling is avoided
+- [ ] Decision status and AI output status remain separate
 - [ ] AI output is never silently treated as confirmed truth

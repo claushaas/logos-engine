@@ -5,7 +5,13 @@
 The user runs:
 
 ```bash
-logos init
+logos
+```
+
+Then runs:
+
+```text
+/init
 ```
 
 Then selects:
@@ -21,8 +27,10 @@ The system creates a workspace, starts an intake process, asks questions, stores
 The user runs:
 
 ```bash
-logos continue
+logos
 ```
+
+Then runs `/continue`.
 
 The system reads current state, identifies the next useful question group, and resumes the process.
 
@@ -30,8 +38,8 @@ The system reads current state, identifies the next useful question group, and r
 
 The user runs:
 
-```bash
-logos diagnose
+```text
+/diagnose
 ```
 
 The system checks the decision registry and generated documents for:
@@ -46,8 +54,8 @@ The system checks the decision registry and generated documents for:
 
 The user runs:
 
-```bash
-logos generate
+```text
+/generate
 ```
 
 The system renders Markdown documents from the current decision registry.
@@ -56,8 +64,8 @@ The system renders Markdown documents from the current decision registry.
 
 The user runs:
 
-```bash
-logos validate
+```text
+/validate
 ```
 
 The system checks whether the current phase has enough information to be considered ready.
@@ -70,7 +78,9 @@ The system identifies impacted documents and downstream decisions.
 
 ## Use Case 7 — Export Implementation Roadmap
 
-The system generates:
+V1 generates this as `IMPLEMENTATION_PLAN.md` during document rendering.
+
+The document includes:
 
 - milestones;
 - phases;
@@ -78,6 +88,8 @@ The system generates:
 - validation gates;
 - testing requirements;
 - launch checklist.
+
+A future export command may generate additional formats from the same structured state.
 
 ## Use Case 8 — Prepare Agent Prompts
 

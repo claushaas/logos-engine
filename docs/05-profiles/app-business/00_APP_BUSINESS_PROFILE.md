@@ -37,7 +37,7 @@ At the end of the process, the user should have enough documentation to:
 08-testing
 09-go-to-market
 10-operations
-11-roadmap
+11-governance
 ```
 
 ## Canonical Documents
@@ -45,26 +45,34 @@ At the end of the process, the user should have enough documentation to:
 The profile should generate:
 
 - IDEA_BRIEF.md
-- PRODUCT_THESIS.md
+- ASSUMPTIONS.md
+- OPEN_QUESTIONS.md
 - MARKET_ANALYSIS.md
 - COMPETITOR_MATRIX.md
 - ICP.md
 - BUSINESS_MODEL.md
+- POSITIONING.md
+- PRICING.md
 - FINANCIAL_MODEL.md
 - BREAK_EVEN.md
-- PRICING.md
+- PRODUCT_THESIS.md
 - MVP_SCOPE.md
+- ROADMAP.md
 - UX_FLOWS.md
 - DESIGN_DIRECTION.md
+- ONBOARDING.md
 - ARCHITECTURE.md
 - TECH_STACK.md
 - DATA_MODEL.md
 - API_SPEC.md
+- IMPLEMENTATION_PLAN.md
+- DEVELOPMENT_STANDARDS.md
 - TESTING_STRATEGY.md
-- IMPLEMENTATION_ROADMAP.md
 - MARKETING_STRATEGY.md
 - LAUNCH_PLAN.md
+- CONTENT_STRATEGY.md
 - OPERATIONS.md
+- SUPPORT_MODEL.md
 - METRICS.md
+- DECISION_LOG.md
 - RISK_REGISTER.md
-- OPEN_QUESTIONS.md

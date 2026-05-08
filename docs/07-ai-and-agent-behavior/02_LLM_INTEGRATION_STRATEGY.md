@@ -139,6 +139,89 @@ type LlmProvider = {
 };
 ```
 
+## Provider Configuration
+
+Users should bring their own LLM access.
+
+LOGOS Engine should not create provider accounts, issue API keys, or hide provider costs.
+
+The user should be able to configure AI access through an explicit command such as:
+
+```bash
+logos config ai
+```
+
+The configuration flow should ask for:
+
+- provider preset;
+- endpoint URL;
+- model id;
+- token source;
+- optional request limits or timeout;
+- whether remote transmission is allowed for the current workspace.
+
+The token source should be one of:
+
+- environment variable;
+- operating system keychain or credential store, if supported;
+- manual session entry for temporary use.
+
+The default recommendation is environment-variable based credentials.
+
+LOGOS Engine should store non-secret provider configuration in local config files, but should not store raw API tokens in the project workspace by default.
+
+Recommended project config:
+
+```json
+{
+  "ai": {
+    "enabled": true,
+    "provider": "openai-compatible",
+    "endpoint": "https://api.example.com/v1",
+    "model": "provider/model-name",
+    "tokenEnvVar": "LOGOS_LLM_API_KEY",
+    "transmission": "remote-explicit"
+  }
+}
+```
+
+Recommended storage locations:
+
+- `.logos/config.json` for project-specific, non-secret AI settings;
+- user shell environment for API tokens;
+- optional global user config for default provider preferences;
+- optional OS keychain integration for users who opt in.
+
+`LOGOS_LLM_API_KEY` should be supported as a generic default token variable.
+
+Provider-specific variables may also be supported for convenience, but the core system should normalize them into the same provider config model.
+
+## Provider Presets
+
+V1 should include presets for common provider styles, while keeping a custom provider path available.
+
+Recommended presets:
+
+- `openai-compatible` for providers that expose an OpenAI-compatible HTTP API;
+- `openai` as a convenience preset over the OpenAI-compatible adapter;
+- `openrouter` as a convenience preset over the OpenAI-compatible adapter;
+- `anthropic` for Anthropic-compatible message APIs;
+- `ollama` for local models;
+- `lm-studio` for local OpenAI-compatible endpoints;
+- `custom` for any endpoint and protocol the user wants to configure manually.
+
+Each preset should define:
+
+- protocol adapter;
+- default endpoint;
+- expected token environment variable;
+- whether a token is required;
+- whether the provider is local or remote;
+- default timeout;
+- model id examples.
+
+Presets must be editable. They should reduce setup friction, not prevent custom endpoints.
+
 ## Privacy
 
 The system should be explicit about what is sent to an AI provider.

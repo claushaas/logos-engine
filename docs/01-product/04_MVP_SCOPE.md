@@ -10,11 +10,14 @@ Build the smallest useful version of LOGOS Engine that validates the core premis
 
 ### CLI/TUI
 
-- `logos init`
-- `logos continue`
-- `logos diagnose`
-- `logos generate`
-- `logos validate`
+- `logos` opens the TUI;
+- `/init`
+- `/continue`
+- `/diagnose`
+- `/generate`
+- `/validate`
+- `/status`
+- `/config ai`
 
 ### Profile
 
@@ -28,9 +31,11 @@ Build the smallest useful version of LOGOS Engine that validates the core premis
 
 ### AI
 
-Optional and minimal.
+Architecturally required, operationally configurable.
 
-The MVP should not depend on AI to function.
+The MVP should include provider abstraction, prompt contracts, structured output validation, mocked AI tests, and user confirmation flows.
+
+The MVP should not depend on live remote AI calls to install, test, initialize a workspace, validate state, or render deterministic documentation.
 
 ### Documentation
 

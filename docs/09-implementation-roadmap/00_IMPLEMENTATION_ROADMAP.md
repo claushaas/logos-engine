@@ -2,212 +2,6 @@
 
 ## Roadmap Objective
 
-Build LOGOS Engine incrementally without overengineering the first version.
-
-## Phase 0 — Repository Foundation
-
-### Goals
-
-- initialize repository;
-- define package manager;
-- configure TypeScript;
-- configure linting and formatting;
-- configure tests;
-- create documentation structure.
-
-### Deliverables
-
-- package.json;
-- tsconfig;
-- lint config;
-- test runner;
-- README;
-- docs folder.
-
-## Phase 1 — CLI Skeleton
-
-### Goals
-
-- create executable CLI;
-- implement command router;
-- support basic commands.
-
-### Commands
-
-- `logos init`
-- `logos status`
-- `logos generate`
-
-### Deliverables
-
-- CLI entrypoint;
-- command parser;
-- basic output.
-
-## Phase 2 — Workspace Initialization
-
-### Goals
-
-- create `.logos/`;
-- create `docs/`;
-- initialize project metadata;
-- select profile.
-
-### Deliverables
-
-- project.json;
-- profile lock;
-- initial docs.
-
-## Phase 3 — Profile Loader
-
-### Goals
-
-- define profile schema;
-- load app-business profile;
-- validate profile config.
-
-### Deliverables
-
-- profile loader;
-- app-business profile metadata;
-- phase definitions;
-- document definitions.
-
-## Phase 4 — Question Engine
-
-### Goals
-
-- ask question groups;
-- store answers;
-- resume sessions.
-
-### Deliverables
-
-- question schema;
-- answer store;
-- continue command;
-- simple TUI prompts.
-
-## Phase 5 — Decision Registry
-
-### Goals
-
-- map answers to decisions;
-- store decisions;
-- support decision statuses.
-
-### Deliverables
-
-- decisions.json;
-- decision update logic;
-- decision inspection.
-
-## Phase 6 — Document Renderer
-
-### Goals
-
-- render Markdown templates;
-- create canonical docs;
-- support safe render.
-
-### Deliverables
-
-- template renderer;
-- app-business document templates;
-- generate command.
-
-## Phase 7 — Validation Engine
-
-### Goals
-
-- implement required decision checks;
-- implement basic dependency checks;
-- show validation output.
-
-### Deliverables
-
-- validation rules;
-- validate command;
-- severity reporting.
-
-## Phase 8 — Diagnostics
-
-### Goals
-
-- summarize gaps;
-- identify risks;
-- recommend next question group.
-
-### Deliverables
-
-- diagnose command;
-- risk output;
-- next action recommendation.
-
-## Phase 9 — TUI Polish
-
-### Goals
-
-- improve navigation;
-- show progress;
-- support skip/assume/unknown;
-- improve visual hierarchy.
-
-### Deliverables
-
-- better TUI components;
-- progress display;
-- keyboard interactions.
-
-## Phase 10 — App Business Profile Completion
-
-### Goals
-
-- complete canonical question sets;
-- complete document templates;
-- complete validation rules.
-
-### Deliverables
-
-- full profile;
-- sample generated project;
-- tests.
-
-## Phase 11 — Open Source Launch Prep
-
-### Goals
-
-- prepare docs;
-- write contribution guide;
-- create demo;
-- create issue templates.
-
-### Deliverables
-
-- CONTRIBUTING.md;
-- CODE_OF_CONDUCT.md;
-- examples;
-- launch README.
-
-## Phase 12 — Public Release
-
-### Goals
-
-- publish package;
-- tag release;
-- announce project.
-
-### Deliverables
-
-- npm package;
-- GitHub release;
-- launch content.
-
-## Implementation Roadmap
-
-## Roadmap Objective
-
 Build LOGOS Engine incrementally without overengineering the first version, while treating AI as a core product layer from the beginning.
 
 LOGOS Engine is not a generic documentation generator.
@@ -259,7 +53,11 @@ This roadmap should be read alongside:
 
 AI must be present in the core workflow from the first usable version.
 
-However, AI output must enter the system as:
+For V1, this means the architecture, prompt contracts, structured output validation, mocked provider, and user review flows are mandatory.
+
+Live remote model usage remains configurable. The product must be useful with deterministic flows and mocked or local providers, but the implementation must not treat AI as an afterthought.
+
+AI output must enter the system as:
 
 - `draft`;
 - `proposed`;
@@ -293,6 +91,89 @@ Markdown is the human-readable projection.
 Avoid multi-agent orchestration, cloud sync, dashboards, and profile marketplaces in V1.
 
 The first milestone is a local-first TUI that can conduct an AI-assisted intake and produce a coherent App Business documentation workspace.
+
+## Scope Reconciliation
+
+This roadmap reconciles the MVP and AI strategy as follows:
+
+- the deterministic core must be usable without live model calls;
+- the V1 architecture must include the AI layer from the beginning;
+- mocked AI providers are required for default tests and local development;
+- local providers should be supported where practical;
+- remote providers are optional and must require explicit configuration;
+- users provide their own LLM endpoint and credential source;
+- raw API tokens must not be stored in project files by default;
+- project context sent to a remote provider must be visible and explainable;
+- AI outputs may become `confirmed` only through user confirmation.
+
+This keeps the MVP inspectable and local-first while still building the product that LOGOS Engine is meant to become.
+
+## State and Status Contracts
+
+The implementation must separate these concepts:
+
+- `DecisionStatus`: `unknown`, `assumed`, `proposed`, `confirmed`, `deprecated`;
+- `AiOutputStatus`: `draft`, `proposed`, `needs_review`, `rejected`, `confirmed`;
+- `ValidationSeverity`: `info`, `warning`, `error`, `critical`;
+- `RenderMode`: `safe`, `refresh`, `force`.
+
+Decision state is the source of truth. AI output state describes the review status of generated suggestions or drafts before they are accepted, rejected, or used as document content.
+
+## Canonical App Business Output
+
+V1 must treat the generated App Business documentation tree as a profile contract, not as incidental template output.
+
+The canonical V1 tree is:
+
+```text
+docs/
+  00-intake/
+    IDEA_BRIEF.md
+    ASSUMPTIONS.md
+    OPEN_QUESTIONS.md
+  01-market/
+    MARKET_ANALYSIS.md
+    COMPETITOR_MATRIX.md
+    ICP.md
+  02-business/
+    BUSINESS_MODEL.md
+    POSITIONING.md
+  03-economics/
+    PRICING.md
+    FINANCIAL_MODEL.md
+    BREAK_EVEN.md
+  04-product/
+    PRODUCT_THESIS.md
+    MVP_SCOPE.md
+    ROADMAP.md
+  05-design/
+    UX_FLOWS.md
+    DESIGN_DIRECTION.md
+    ONBOARDING.md
+  06-architecture/
+    ARCHITECTURE.md
+    TECH_STACK.md
+    DATA_MODEL.md
+    API_SPEC.md
+  07-implementation/
+    IMPLEMENTATION_PLAN.md
+    DEVELOPMENT_STANDARDS.md
+  08-testing/
+    TESTING_STRATEGY.md
+  09-go-to-market/
+    MARKETING_STRATEGY.md
+    LAUNCH_PLAN.md
+    CONTENT_STRATEGY.md
+  10-operations/
+    OPERATIONS.md
+    SUPPORT_MODEL.md
+    METRICS.md
+  11-governance/
+    DECISION_LOG.md
+    RISK_REGISTER.md
+```
+
+If another document uses older names such as `IMPLEMENTATION_ROADMAP.md` or `11-roadmap`, implementation should normalize toward this tree.
 
 ---
 
@@ -363,20 +244,22 @@ Create the executable interface and command structure that will host the LOGOS w
 
 ## Goals
 
-- create executable CLI;
-- implement command router;
+- create executable `logos` CLI entrypoint;
+- implement TUI slash command router;
 - create initial TUI shell;
-- support basic commands;
+- support core slash commands;
 - establish command-to-application-service boundaries.
 
 ## Commands
 
-- `logos init`
-- `logos status`
-- `logos generate`
-- `logos continue`
-- `logos diagnose`
-- `logos validate`
+- `logos`
+- `/init`
+- `/status`
+- `/generate`
+- `/continue`
+- `/diagnose`
+- `/validate`
+- `/config ai`
 
 ## Related Docs
 
@@ -390,12 +273,16 @@ Create the executable interface and command structure that will host the LOGOS w
 - CLI entrypoint;
 - command parser;
 - TUI layout shell;
+- slash command input;
+- slash command autocomplete;
 - help output;
-- command stubs;
+- slash command stubs;
 - application service boundary;
 - basic command tests.
 
 ## Implementation Notes
+
+The CLI should open the TUI by default.
 
 The TUI must not directly mutate project state.
 
@@ -412,8 +299,10 @@ TUI
 ## Acceptance Criteria
 
 - `logos --help` works;
-- each core command has a stub;
-- command routing is tested;
+- `logos` opens the TUI;
+- each core slash command has a stub;
+- slash command routing is tested;
+- slash command autocomplete exists;
 - TUI shell renders without requiring project state;
 - command handlers do not directly write files.
 
@@ -463,8 +352,8 @@ The initialization flow should support:
 
 ## Acceptance Criteria
 
-- `logos init` creates a valid workspace;
-- repeated `logos init` does not corrupt existing state;
+- `/init` creates a valid workspace;
+- repeated `/init` does not corrupt existing state;
 - generated files are text-based and Git-friendly;
 - profile lock is persisted;
 - safe file write behavior is tested.
@@ -485,6 +374,9 @@ Implement the profile system and load the initial `app-business` profile.
 - define canonical documents;
 - define question sets;
 - define validation rule structure;
+- define decision ids required by each phase and document;
+- define risk pattern metadata;
+- define dependency mappings between decisions and documents;
 - validate profile configuration.
 
 ## Related Docs
@@ -502,30 +394,59 @@ Implement the profile system and load the initial `app-business` profile.
 - profile validation;
 - app-business profile metadata;
 - app-business phase definitions;
-- app-business document definitions;
+- app-business `documents.yml` definitions;
 - app-business question set definitions;
-- app-business validation rule stubs.
+- app-business validation rule stubs;
+- app-business risk pattern stubs;
+- normalized canonical output tree definition;
+- profile fixture files for tests.
 
 ## Implementation Notes
 
 The profile must define more than filenames.
 
+Canonical document definitions should live in a structured `documents.yml` file. Markdown documentation may explain the contract, but the engine should load and validate YAML.
+
 Each canonical document definition should include:
 
 - document id;
+- phase id;
 - output path;
+- title;
 - purpose;
+- primary questions;
 - required decisions;
 - recommended structure;
+- generated outputs;
 - completion criteria;
 - dependencies.
+
+Phase and folder naming must align with the canonical output tree:
+
+- `00-intake`;
+- `01-market`;
+- `02-business`;
+- `03-economics`;
+- `04-product`;
+- `05-design`;
+- `06-architecture`;
+- `07-implementation`;
+- `08-testing`;
+- `09-go-to-market`;
+- `10-operations`;
+- `11-governance`.
+
+The profile loader should reject duplicate document ids, duplicate output paths, missing template references, invalid phase references, and document definitions without completion criteria.
 
 ## Acceptance Criteria
 
 - app-business profile loads successfully;
 - invalid profiles fail with clear errors;
 - document definitions include internal structure metadata;
+- `documents.yml` is schema-validated;
 - profile version is available to the workspace;
+- canonical output paths match the App Business documentation contract;
+- profile validation catches duplicate ids and missing dependencies;
 - profile loader is covered by tests.
 
 ---
@@ -542,8 +463,12 @@ Introduce the AI layer as a first-class system component before building AI-assi
 - define AI operation types;
 - define request/response schemas;
 - support mocked providers for tests;
-- support at least one real provider adapter later;
-- define output status model.
+- support local provider configuration where practical;
+- support at least one remote provider adapter behind explicit configuration later;
+- define AI output status model;
+- define provider privacy and transmission metadata;
+- define provider preset model;
+- define token source model.
 
 ## Related Docs
 
@@ -561,7 +486,12 @@ Introduce the AI layer as a first-class system component before building AI-assi
 - structured response schemas;
 - AI output status enum;
 - response validation utilities;
-- provider error model.
+- provider error model;
+- provider capability metadata;
+- provider transmission disclosure model;
+- provider preset registry;
+- token source resolver;
+- AI configuration validation command or service.
 
 ## AI Operations for V1
 
@@ -580,6 +510,30 @@ Initial operation types:
 
 AI modules must not directly mutate project state.
 
+The mocked provider is required before any live provider integration.
+
+Remote provider support must be opt-in. If no remote provider is configured, the system should still run deterministic flows, render incomplete documents, and execute tests with fixture AI responses.
+
+The user should provide:
+
+- endpoint URL;
+- model id;
+- token source.
+
+The token source should usually be an environment variable such as `LOGOS_LLM_API_KEY`.
+
+Project config may store endpoint, provider preset, model id, timeout, and token environment variable name. It should not store the raw token by default.
+
+V1 should include presets for:
+
+- OpenAI-compatible providers;
+- OpenAI;
+- OpenRouter;
+- Anthropic;
+- Ollama;
+- LM Studio;
+- custom endpoints.
+
 Recommended flow:
 
 ```text
@@ -596,6 +550,10 @@ application service
 
 - AI calls route through provider abstraction;
 - mocked provider works in tests;
+- deterministic workflows can run without a live provider;
+- remote provider usage is explicit and configurable;
+- provider presets can be inspected and overridden;
+- tokens are loaded from approved secret sources, not raw project config;
 - malformed AI output is rejected safely;
 - AI outputs are classified by status;
 - no AI operation directly writes project state;
@@ -613,10 +571,12 @@ Implement prompt construction as a versioned and testable product surface.
 
 - create prompt modules per AI operation;
 - define context selection rules;
+- define prompt version identifiers;
 - include profile context where needed;
 - include document contracts where needed;
 - include decision registry context where needed;
 - enforce structured output instructions;
+- enforce uncertainty and refusal handling instructions;
 - add prompt snapshot tests where practical.
 
 ## Related Docs
@@ -634,7 +594,8 @@ Implement prompt construction as a versioned and testable product surface.
 - schema-aware output instructions;
 - prompt tests or snapshots;
 - context budgeting utilities if needed;
-- provider transmission disclosure metadata.
+- provider transmission disclosure metadata;
+- prompt version metadata persisted with AI outputs where useful.
 
 ## Implementation Notes
 
@@ -652,6 +613,7 @@ Prompts must clearly separate:
 - prompts are inspectable in code;
 - prompt construction is tested;
 - context inclusion is intentional and minimal;
+- prompt versions are visible in reviewable output or logs where useful;
 - output schema expectations are explicit;
 - prompt changes are reviewable through tests or snapshots.
 
@@ -685,7 +647,7 @@ Implement the guided intake system, using the profile and AI layer to ask contex
 - question schema;
 - answer store;
 - session store;
-- `logos continue` command;
+- `/continue` slash command;
 - question group selector;
 - AI follow-up question operation;
 - answer summarization operation;
@@ -726,6 +688,8 @@ Implement the structured decision registry and allow AI to propose decisions bas
 ## Goals
 
 - define decision schema;
+- define decision status transitions;
+- define AI proposal schema separately from confirmed decisions;
 - store decisions;
 - support decision statuses;
 - preserve source answer references;
@@ -743,6 +707,7 @@ Implement the structured decision registry and allow AI to propose decisions bas
 ## Deliverables
 
 - decision schema;
+- decision status transition rules;
 - decision store;
 - decision proposal model;
 - decision confirmation flow;
@@ -763,13 +728,28 @@ AI may propose:
 
 AI may not confirm decisions without the user.
 
+The decision registry should use `DecisionStatus`.
+
+AI-generated proposal objects should use `AiOutputStatus` until the user confirms, rejects, or leaves them for later review.
+
+Confirmed decisions should retain:
+
+- source answer ids;
+- source proposal id where applicable;
+- confidence;
+- dependencies;
+- affected document ids;
+- revision history or change metadata.
+
 ## Acceptance Criteria
 
 - decisions can be stored and updated;
 - decision status is explicit;
+- invalid decision status transitions are rejected;
 - AI-extracted decisions enter as `proposed`;
 - user can confirm or reject proposals;
 - confirmed decisions preserve source answer references;
+- proposal status and decision status are not conflated;
 - changing a decision identifies affected documents or future validation needs.
 
 ---
@@ -785,6 +765,8 @@ Render complete canonical Markdown documents from structured state and AI-assist
 - render Markdown templates;
 - create canonical docs;
 - support safe render;
+- support refresh render;
+- support force render behind explicit confirmation;
 - support generated sections;
 - support manual notes preservation;
 - use AI to draft complete document sections based on document contracts;
@@ -806,6 +788,7 @@ Render complete canonical Markdown documents from structured state and AI-assist
 - generated frontmatter;
 - safe render mode;
 - refresh render mode;
+- force render mode with confirmation;
 - AI document section drafting operation;
 - document completion criteria reporting.
 
@@ -819,13 +802,16 @@ The renderer should produce documents that are:
 - not artificially brief;
 - not overwritten destructively.
 
+`IMPLEMENTATION_PLAN.md` is the V1 home for generated milestones, phases, technical epics, validation gates, testing requirements, and launch checklist content. A future `/export` command may expose this in additional formats, but V1 should generate it as part of `/generate`.
+
 ## Acceptance Criteria
 
-- `logos generate` creates the canonical App Business document tree;
+- `/generate` creates the canonical App Business document tree;
 - generated documents include required sections;
 - manual sections are preserved where supported;
 - AI-drafted sections are clearly classified;
 - incomplete documents report missing inputs;
+- implementation planning output is generated as canonical documentation;
 - document rendering is regression tested.
 
 ---
@@ -841,6 +827,8 @@ Implement deterministic validation rules that check whether the documentation an
 - implement required decision checks;
 - implement dependency checks;
 - implement phase readiness checks;
+- implement consistency checks;
+- implement risk pattern checks;
 - implement severity levels;
 - keep validation separate from AI judgment;
 - allow AI to explain validation findings where useful without replacing the rules.
@@ -855,10 +843,12 @@ Implement deterministic validation rules that check whether the documentation an
 
 - validation rule schema;
 - validation engine;
-- `logos validate` command;
+- `/validate` slash command;
 - severity reporting;
 - phase readiness output;
 - affected document reporting;
+- consistency validation output;
+- risk validation output;
 - tests for validation rules.
 
 ## Implementation Notes
@@ -868,6 +858,7 @@ Validation should answer:
 - What is missing?
 - What is blocking?
 - What is risky but not blocking?
+- What is contradictory?
 - Which documents are affected?
 - Which phase can proceed?
 
@@ -875,6 +866,8 @@ Validation should answer:
 
 - required decisions are enforced;
 - dependency rules work;
+- consistency rules flag known contradictions;
+- risk pattern rules identify high-risk combinations;
 - severity levels are shown clearly;
 - validation does not depend on live AI;
 - validation output references affected phases/documents;
@@ -907,7 +900,7 @@ Build diagnostics that combine deterministic validation with AI-assisted interpr
 
 ## Deliverables
 
-- `logos diagnose` command;
+- `/diagnose` slash command;
 - diagnostics engine;
 - deterministic gap summary;
 - AI risk analysis operation;
@@ -998,6 +991,8 @@ Complete the first production-quality profile: `app-business`.
 - complete document templates;
 - complete validation rules;
 - complete AI prompt context for the profile;
+- complete risk pattern definitions;
+- complete dependency mappings;
 - complete example generated project.
 
 ## Related Docs
@@ -1014,6 +1009,8 @@ Complete the first production-quality profile: `app-business`.
 - full document contracts;
 - full question sets;
 - full validation rules;
+- full risk pattern definitions;
+- full dependency mappings;
 - full document templates;
 - full AI prompt context for profile operations;
 - sample generated project;
@@ -1038,10 +1035,24 @@ The profile must be broad enough to generate documentation for:
 - operations;
 - governance.
 
+The profile completion pass should reconcile all App Business document references to the canonical output tree defined earlier in this roadmap. Older names should either become aliases for migration or be removed from implementation-facing docs.
+
+Each canonical document contract should include:
+
+- required inputs;
+- primary questions;
+- generated outputs;
+- completion criteria;
+- dependent decisions;
+- related validation rules;
+- related prompt context requirements.
+
 ## Acceptance Criteria
 
 - app-business profile can produce all canonical documents;
+- canonical document names and phase folders are consistent across docs;
 - each document follows its declared structure;
+- each document declares required inputs and generated outputs;
 - incomplete documents report missing decisions;
 - profile validation is covered by tests;
 - sample project demonstrates end-to-end value.
@@ -1238,16 +1249,20 @@ V1 is complete when a user can:
 11. run diagnostics;
 12. safely regenerate documents;
 13. inspect project state in `.logos/`;
-14. commit everything to Git.
+14. understand whether any context is being sent to an AI provider;
+15. run the default test suite without live model calls;
+16. commit everything to Git.
 
 ## V1 Non-Negotiables
 
 - AI is part of the core workflow.
+- Live remote AI is opt-in and configurable.
 - AI output is never silently treated as confirmed truth.
 - Documents are broad and complete, not shallow summaries.
 - Profiles define document structure, not just document names.
 - The project remains local-first.
 - State is text-based and Git-friendly.
+- Decision status and AI output status are separate model concepts.
 - Provider coupling is avoided.
 - Tests do not depend on live model calls by default.
 

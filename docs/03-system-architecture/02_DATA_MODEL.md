@@ -70,19 +70,66 @@ type Answer = {
 ## Decision
 
 ```ts
+type DecisionStatus = "unknown" | "assumed" | "proposed" | "confirmed" | "deprecated";
+
 type Decision = {
   id: string;
   title: string;
   value: unknown;
-  status: "unknown" | "assumed" | "proposed" | "confirmed" | "deprecated";
+  status: DecisionStatus;
   confidence: "low" | "medium" | "high";
   sourceAnswerIds: string[];
+  sourceProposalId?: string;
   impacts: string[];
   affectedDocuments: string[];
   createdAt: string;
   updatedAt: string;
 };
 ```
+
+## AI Output
+
+```ts
+type AiOutputStatus = "draft" | "proposed" | "needs_review" | "rejected" | "confirmed";
+
+type AiOutput = {
+  id: string;
+  operation: string;
+  status: AiOutputStatus;
+  promptVersion: string;
+  providerId: string;
+  sourceAnswerIds: string[];
+  relatedDecisionIds: string[];
+  createdAt: string;
+};
+```
+
+Decision status and AI output status are separate concepts. A generated AI proposal can become a confirmed decision only after user confirmation.
+
+## AI Provider Configuration
+
+```ts
+type AiProviderProtocol = "openai_compatible" | "anthropic" | "ollama" | "custom";
+
+type AiTransmissionMode = "local_only" | "remote_explicit";
+
+type AiProviderConfig = {
+  enabled: boolean;
+  provider: string;
+  protocol: AiProviderProtocol;
+  endpoint: string;
+  model: string;
+  tokenEnvVar?: string;
+  tokenCredentialRef?: string;
+  requiresToken: boolean;
+  transmission: AiTransmissionMode;
+  timeoutMs?: number;
+};
+```
+
+`AiProviderConfig` may be stored in `.logos/config.json` when it contains no raw secrets.
+
+Raw API tokens should not be stored in project state by default. They should be read from environment variables, an OS credential store, or temporary session input.
 
 ## Risk
 
@@ -102,10 +149,36 @@ type Risk = {
 ```ts
 type DocumentDefinition = {
   id: string;
+  phaseId: string;
   path: string;
   title: string;
+  purpose: string;
   templatePath: string;
   requiredDecisionIds: string[];
+  primaryQuestions: string[];
+  sections: DocumentSectionDefinition[];
+  generatedOutputs: string[];
+  dependencies: DocumentDependencyDefinition;
+  completionCriteria: string[];
+  validationRuleIds: string[];
+  promptContext: DocumentPromptContext;
+};
+
+type DocumentSectionDefinition = {
+  id: string;
+  title: string;
+  required: boolean;
+};
+
+type DocumentDependencyDefinition = {
+  documents: string[];
+  decisions: string[];
+};
+
+type DocumentPromptContext = {
+  includeConfirmedDecisions: boolean;
+  includeAssumptions: boolean;
+  includeOpenQuestions: boolean;
 };
 ```
 
@@ -115,7 +188,7 @@ type DocumentDefinition = {
 type ValidationRule = {
   id: string;
   description: string;
-  severity: "info" | "warning" | "error";
+  severity: "info" | "warning" | "error" | "critical";
   condition: Condition;
   message: string;
 };

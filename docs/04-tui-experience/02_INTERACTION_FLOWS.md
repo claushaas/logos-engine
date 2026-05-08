@@ -3,7 +3,9 @@
 ## Flow 1 — New Project
 
 ```text
-User runs logos init
+User runs logos
+→ TUI opens
+→ user runs /init
 → selects profile
 → confirms project name
 → creates workspace
@@ -14,8 +16,9 @@ User runs logos init
 ## Flow 2 — Continue Intake
 
 ```text
-User runs logos continue
-→ system loads state
+User runs logos
+→ TUI opens and loads state
+→ user runs /continue or selects Continue
 → shows progress
 → selects next question group
 → user answers
@@ -26,7 +29,7 @@ User runs logos continue
 ## Flow 3 — Diagnostic Review
 
 ```text
-User runs logos diagnose
+User runs /diagnose
 → system analyzes gaps
 → groups findings by severity
 → suggests next action
@@ -35,7 +38,7 @@ User runs logos diagnose
 ## Flow 4 — Document Generation
 
 ```text
-User runs logos generate
+User runs /generate
 → system renders docs
 → reports created/updated/skipped files
 ```

@@ -2,20 +2,18 @@
 
 ## 1. CLI Entrypoint
 
-Responsible for parsing commands:
+Responsible for starting the application:
 
 ```bash
-logos init
-logos continue
-logos diagnose
-logos generate
-logos validate
+logos
 ```
 
 ## 2. TUI Layer
 
 Responsible for:
 
+- slash command input;
+- slash command autocomplete;
 - interactive flows;
 - profile selection;
 - question display;

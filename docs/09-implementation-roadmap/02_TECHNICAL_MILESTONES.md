@@ -52,28 +52,33 @@ The user can execute the LOGOS command-line interface and access the core comman
 ## Capabilities
 
 - executable CLI entrypoint;
-- command parser;
+- slash command parser;
+- slash command autocomplete;
 - TUI shell;
-- command routing;
+- slash command routing;
 - command handler layer;
 - application service boundary.
 
-## Required Commands
+## Required Command Surface
 
-```bash
-logos init
-logos status
-logos continue
-logos generate
-logos validate
-logos diagnose
+```text
+logos
+/init
+/status
+/continue
+/generate
+/validate
+/diagnose
+/config ai
 ```
 
 ## Completion Criteria
 
 - `logos --help` works;
-- all core commands exist;
-- command routing is tested;
+- `logos` opens the TUI;
+- all core slash commands exist;
+- slash command routing is tested;
+- slash command autocomplete works;
 - TUI renders without requiring workspace state;
 - command handlers do not directly mutate files.
 
@@ -112,8 +117,8 @@ docs/
 
 ## Completion Criteria
 
-- `logos init` creates a valid workspace;
-- repeated `logos init` does not corrupt existing state;
+- `/init` creates a valid workspace;
+- repeated `/init` does not corrupt existing state;
 - generated files are Git-friendly;
 - safe file writes are tested.
 
@@ -324,7 +329,7 @@ Generated documents must be:
 
 ## Completion Criteria
 
-- `logos generate` creates the canonical App Business document tree;
+- `/generate` creates the canonical App Business document tree;
 - generated documents include required sections;
 - AI-drafted sections are clearly classified;
 - incomplete documents report missing inputs;
@@ -347,7 +352,7 @@ The system can validate project completeness without relying on live AI calls.
 - phase readiness validation;
 - severity levels;
 - affected document reporting;
-- `logos validate` command.
+- `/validate` slash command.
 
 ## Completion Criteria
 
@@ -375,7 +380,7 @@ The system can explain gaps, risks, inconsistencies, and next steps by combining
 - next question group recommendation;
 - severity grouping;
 - affected document list;
-- `logos diagnose` command.
+- `/diagnose` slash command.
 
 ## Completion Criteria
 
@@ -560,7 +565,7 @@ LOGOS Engine is published and usable by external users.
 V1 is done when:
 
 - LOGOS Engine can be installed;
-- `logos init` creates a valid local workspace;
+- `/init` creates a valid local workspace;
 - the App Business profile works end-to-end;
 - AI is part of the guided workflow;
 - AI calls use provider abstraction;

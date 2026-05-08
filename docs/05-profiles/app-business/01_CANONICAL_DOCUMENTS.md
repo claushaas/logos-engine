@@ -8,6 +8,14 @@ This document defines the canonical documentation set for the `app-business` pro
 
 A profile must not only define which documents should be generated. It must also define the ideal internal structure, required sections, input decisions, expected outputs, and completion criteria for each document.
 
+The machine-readable source of truth for these definitions should be:
+
+```text
+profiles/app-business/documents.yml
+```
+
+This Markdown document explains the document contract for humans. The engine should load and validate `documents.yml`, not parse this Markdown file as its primary profile definition.
+
 The goal is not to generate short summaries.
 
 The goal is to generate complete, useful, implementation-ready documentation that helps the user clarify, evaluate, design, build, launch, and operate an app-based business.
@@ -37,6 +45,76 @@ Every canonical document in a profile should define:
 7. **Dependencies** — which other documents or decisions affect it.
 8. **Open Questions** — what still needs clarification.
 9. **Risks** — what can go wrong if this document is weak or incomplete.
+
+## Recommended YAML Shape
+
+Each document should be represented as structured YAML.
+
+Example:
+
+```yml
+documents:
+  - id: intake.idea_brief
+    phaseId: 00-intake
+    path: docs/00-intake/IDEA_BRIEF.md
+    title: Idea Brief
+    template: templates/00-intake/IDEA_BRIEF.md
+    purpose: Capture the initial idea with enough clarity to support structured exploration.
+    primaryQuestions:
+      - What is the idea?
+      - Who is it for?
+      - What problem does it solve?
+      - Why does it matter?
+    requiredInputs:
+      decisions:
+        - foundation.initial_idea
+        - foundation.target_user
+        - foundation.problem_statement
+      assumptions: []
+      answers:
+        - foundation.idea
+    sections:
+      - id: purpose
+        title: Purpose
+        required: true
+      - id: initial_idea
+        title: Initial Idea
+        required: true
+      - id: target_user
+        title: Target User
+        required: true
+      - id: problem_statement
+        title: Problem Statement
+        required: true
+      - id: assumptions
+        title: Assumptions
+        required: true
+      - id: open_questions
+        title: Open Questions
+        required: true
+    generatedOutputs:
+      - initial idea summary
+      - target user statement
+      - problem statement
+      - early risks and open questions
+    completionCriteria:
+      - Initial idea is explicitly stated.
+      - Target user is explicitly stated.
+      - Problem statement is explicitly stated.
+      - Desired outcome is explicitly stated.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules:
+      - foundation.target_user_required
+      - foundation.problem_required
+    promptContext:
+      includeConfirmedDecisions: true
+      includeAssumptions: true
+      includeOpenQuestions: true
+```
+
+The YAML does not need to store long prose when concise structured fields are enough. Long explanatory prose may remain in Markdown documentation or templates.
 
 ## Standard Document Sections
 

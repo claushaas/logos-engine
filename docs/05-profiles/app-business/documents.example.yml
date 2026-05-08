@@ -1,0 +1,304 @@
+# Example machine-readable canonical document contract for the app-business profile.
+# The production profile should use the same shape in profiles/app-business/documents.yml.
+
+version: 0.1.0
+profileId: app-business
+
+defaults:
+  promptContext:
+    includeConfirmedDecisions: true
+    includeAssumptions: true
+    includeOpenQuestions: true
+  standardSections:
+    - id: purpose
+      title: Purpose
+      required: true
+    - id: executive_summary
+      title: Executive Summary
+      required: true
+    - id: confirmed_decisions
+      title: Confirmed Decisions
+      required: true
+    - id: assumptions
+      title: Assumptions
+      required: true
+    - id: open_questions
+      title: Open Questions
+      required: true
+    - id: risks
+      title: Risks
+      required: true
+    - id: dependencies
+      title: Dependencies
+      required: true
+    - id: next_actions
+      title: Next Actions
+      required: true
+
+documents:
+  - id: intake.idea_brief
+    phaseId: 00-intake
+    path: docs/00-intake/IDEA_BRIEF.md
+    title: Idea Brief
+    template: templates/00-intake/IDEA_BRIEF.md
+    purpose: Capture the initial app idea with enough clarity to support structured exploration.
+    primaryQuestions:
+      - What is the app idea?
+      - Who is it for?
+      - What problem does it solve?
+      - Why does it matter now?
+      - What outcome should exist when the project succeeds?
+    requiredInputs:
+      decisions:
+        - foundation.initial_idea
+        - foundation.target_user
+        - foundation.problem_statement
+        - foundation.desired_outcome
+      answers:
+        - foundation.idea
+        - foundation.primary_user
+        - foundation.problem
+      assumptions: []
+    sections:
+      - id: purpose
+        title: Purpose
+        required: true
+      - id: initial_idea
+        title: Initial Idea
+        required: true
+      - id: target_user
+        title: Target User
+        required: true
+      - id: problem_statement
+        title: Problem Statement
+        required: true
+      - id: desired_outcome
+        title: Desired Outcome
+        required: true
+      - id: current_alternatives
+        title: Current Alternatives
+        required: false
+      - id: early_differentiation
+        title: Early Differentiation
+        required: false
+      - id: known_constraints
+        title: Known Constraints
+        required: false
+      - id: assumptions
+        title: Assumptions
+        required: true
+      - id: open_questions
+        title: Open Questions
+        required: true
+      - id: risks
+        title: Risks
+        required: true
+      - id: next_actions
+        title: Next Actions
+        required: true
+    generatedOutputs:
+      - initial idea summary
+      - target user statement
+      - problem statement
+      - desired outcome statement
+      - early risks and open questions
+    completionCriteria:
+      - Initial idea is explicitly stated.
+      - Target user is explicitly stated.
+      - Problem statement is explicitly stated.
+      - Desired outcome is explicitly stated.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules:
+      - foundation.target_user_required
+      - foundation.problem_required
+    promptContext:
+      includeConfirmedDecisions: true
+      includeAssumptions: true
+      includeOpenQuestions: true
+
+  - id: market.market_analysis
+    phaseId: 01-market
+    path: docs/01-market/MARKET_ANALYSIS.md
+    title: Market Analysis
+    template: templates/01-market/MARKET_ANALYSIS.md
+    purpose: Evaluate whether the target market is understandable, reachable, and potentially viable.
+    primaryQuestions:
+      - What market does this belong to?
+      - Who already serves this market?
+      - What alternatives exist?
+      - What trends matter?
+      - Where is the opportunity?
+    requiredInputs:
+      decisions:
+        - foundation.target_user
+        - foundation.problem_statement
+        - market.category
+        - market.target_segment
+      answers:
+        - market.category
+        - market.competitors
+        - market.alternatives
+      assumptions:
+        - market.size_assumption
+    sections:
+      - id: purpose
+        title: Purpose
+        required: true
+      - id: executive_summary
+        title: Executive Summary
+        required: true
+      - id: market_category
+        title: Market Category
+        required: true
+      - id: target_segment
+        title: Target Segment
+        required: true
+      - id: market_context
+        title: Market Context
+        required: true
+      - id: user_pain_and_demand_signals
+        title: User Pain and Demand Signals
+        required: true
+      - id: current_alternatives
+        title: Current Alternatives
+        required: true
+      - id: market_size_reasoning
+        title: Market Size Reasoning
+        required: false
+      - id: opportunity_gaps
+        title: Opportunity Gaps
+        required: true
+      - id: assumptions
+        title: Assumptions
+        required: true
+      - id: open_questions
+        title: Open Questions
+        required: true
+      - id: risks
+        title: Risks
+        required: true
+      - id: validation_plan
+        title: Validation Plan
+        required: true
+      - id: next_actions
+        title: Next Actions
+        required: true
+    generatedOutputs:
+      - market category summary
+      - target segment definition
+      - current alternatives list
+      - opportunity gap summary
+      - validation plan
+    completionCriteria:
+      - Market category is explicit.
+      - Target segment is explicit.
+      - Current alternatives are identified.
+      - Opportunity gap is stated.
+      - Validation plan is present.
+    dependencies:
+      documents:
+        - intake.idea_brief
+      decisions:
+        - foundation.target_user
+        - foundation.problem_statement
+    validationRules:
+      - market.competitors_required
+    promptContext:
+      includeConfirmedDecisions: true
+      includeAssumptions: true
+      includeOpenQuestions: true
+
+  - id: implementation.implementation_plan
+    phaseId: 07-implementation
+    path: docs/07-implementation/IMPLEMENTATION_PLAN.md
+    title: Implementation Plan
+    template: templates/07-implementation/IMPLEMENTATION_PLAN.md
+    purpose: Define the execution sequence for building the app.
+    primaryQuestions:
+      - What should be built first?
+      - What are the implementation milestones?
+      - What dependencies define the critical path?
+      - What validation gates must exist?
+      - What is the definition of done?
+    requiredInputs:
+      decisions:
+        - product.mvp_scope
+        - architecture.platform_targets
+        - architecture.tech_stack
+        - testing.required_strategy
+      answers:
+        - implementation.first_milestone
+        - implementation.critical_path
+      assumptions:
+        - implementation.capacity_assumption
+    sections:
+      - id: purpose
+        title: Purpose
+        required: true
+      - id: executive_summary
+        title: Executive Summary
+        required: true
+      - id: implementation_principles
+        title: Implementation Principles
+        required: true
+      - id: milestones
+        title: Milestones
+        required: true
+      - id: phase_by_phase_plan
+        title: Phase-by-Phase Plan
+        required: true
+      - id: technical_dependencies
+        title: Technical Dependencies
+        required: true
+      - id: feature_dependencies
+        title: Feature Dependencies
+        required: true
+      - id: critical_path
+        title: Critical Path
+        required: true
+      - id: validation_gates
+        title: Validation Gates
+        required: true
+      - id: definition_of_done
+        title: Definition of Done
+        required: true
+      - id: assumptions
+        title: Assumptions
+        required: true
+      - id: open_questions
+        title: Open Questions
+        required: true
+      - id: risks
+        title: Risks
+        required: true
+    generatedOutputs:
+      - implementation milestones
+      - critical path
+      - technical dependency list
+      - validation gates
+      - definition of done
+    completionCriteria:
+      - Milestones are explicit.
+      - Critical path is explicit.
+      - Technical dependencies are listed.
+      - Validation gates are defined.
+      - Definition of done is stated.
+    dependencies:
+      documents:
+        - product.mvp_scope
+        - architecture.architecture
+        - architecture.tech_stack
+        - testing.testing_strategy
+      decisions:
+        - product.mvp_scope
+        - architecture.tech_stack
+        - testing.required_strategy
+    validationRules:
+      - product.mvp_scope_required
+      - implementation.validation_gates_required
+    promptContext:
+      includeConfirmedDecisions: true
+      includeAssumptions: true
+      includeOpenQuestions: true
