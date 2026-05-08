@@ -40,7 +40,7 @@ function executeCommand(
 		case '/diagnose':
 			return services.diagnoseWorkspace();
 		case '/generate':
-			return services.generateDocuments();
+			return services.generateDocuments(context, command.args);
 		case '/config ai':
 			return services.showAiConfig(context, command.args);
 		case '/help':

@@ -103,6 +103,11 @@ export {
 	reviewProposedDecision,
 	saveDecisionStore,
 } from './application/decision-service.js';
+export {
+	type GenerateOptions,
+	generateDocuments,
+	generateDocumentsForCwd,
+} from './application/document-generation.js';
 export { continueGuidedIntake } from './application/guided-intake.js';
 export {
 	type ApplicationCommandResult,
@@ -141,6 +146,42 @@ export {
 	type SlashCommandId,
 	slashCommandDefinitions,
 } from './commands/slash-command-registry.js';
+export {
+	buildTemplateContext,
+	collectMissingInputs,
+	collectMissingRequiredSections,
+	DocumentRenderError,
+	generateDocumentContent,
+	renderDocument,
+	renderDocuments,
+} from './document-renderer/document-renderer.js';
+export {
+	type DocumentFrontmatter,
+	generateFrontmatter,
+	parseFrontmatter,
+} from './document-renderer/frontmatter.js';
+export {
+	extractManualSections,
+	type ManualSection,
+	mergeManualSections,
+	wrapManualSection,
+} from './document-renderer/manual-notes.js';
+export {
+	createRenderSummary,
+	type DocumentRenderResult,
+	type DocumentRenderStatus,
+	formatRenderSummary,
+	type RenderSummary,
+} from './document-renderer/render-result.js';
+export {
+	generateDefaultTemplate,
+	loadTemplate,
+	renderSection,
+	renderTemplate,
+	resolveTemplatePath,
+	type TemplateContext,
+	TemplateRenderError,
+} from './document-renderer/template-renderer.js';
 export {
 	assertValidStatusTransition,
 	confirmDecision,

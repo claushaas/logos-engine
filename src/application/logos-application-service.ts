@@ -5,6 +5,7 @@ import {
 	testAiConfiguration,
 	updateAiConfiguration,
 } from './ai-configuration.js';
+import { generateDocumentsForCwd } from './document-generation.js';
 import { continueGuidedIntake } from './guided-intake.js';
 import { initializeWorkspace } from './workspace-initialization.js';
 
@@ -24,7 +25,10 @@ export type LogosApplicationServices = {
 		args: readonly string[],
 	) => Promise<ApplicationCommandResult>;
 	readonly diagnoseWorkspace: () => ApplicationCommandResult;
-	readonly generateDocuments: () => ApplicationCommandResult;
+	readonly generateDocuments: (
+		context: ApplicationServiceContext,
+		args: readonly string[],
+	) => ApplicationCommandResult;
 	readonly initializeWorkspace: (
 		context: ApplicationServiceContext,
 	) => ApplicationCommandResult;
@@ -45,11 +49,14 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				'/diagnose',
 				'Diagnostics will analyze gaps, assumptions, risks, and affected documents in a later phase.',
 			),
-		generateDocuments: () =>
-			createStubResult(
-				'/generate',
-				'Document rendering will create or refresh Markdown projections in a later phase.',
-			),
+		generateDocuments: (context, args) => {
+			const result = generateDocumentsForCwd(context.cwd, args);
+			return {
+				body: result.lines,
+				status: result.status,
+				title: result.title,
+			};
+		},
 		initializeWorkspace: (context) => createInitializeWorkspaceResult(context),
 		showAiConfig: (context, args) => createAiConfigResult(context, args),
 		showHelp: () => ({
