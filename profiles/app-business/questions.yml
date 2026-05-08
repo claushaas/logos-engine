@@ -330,6 +330,58 @@ questionSets:
         answerType: text
         mapsToDecisionIds: [gtm.landing_page_promise]
 
+  - id: testing
+    phaseId: 08-testing
+    title: Testing
+    purpose: Define testing strategy and quality gates.
+    questions:
+      - id: testing.test_types
+        text: What test types are essential from day one?
+        helpText: Include unit, integration, E2E, accessibility, and release validation.
+        examples:
+          - Unit tests for core domain, integration tests for data flows, E2E for the primary user journey.
+        answerType: text
+        mapsToDecisionIds: [testing.required_strategy]
+      - id: testing.release_gate
+        text: What must pass before a release?
+        helpText: "Name the mandatory gates: test suite, lint, typecheck, smoke tests, manual QA."
+        answerType: text
+        mapsToDecisionIds: [testing.release_gate]
+      - id: testing.offline_testing
+        text: How will offline behavior be tested?
+        helpText: Describe the plan for testing offline states, sync conflicts, and edge cases.
+        answerType: text
+        mapsToDecisionIds: [testing.offline_testing]
+
+  - id: governance
+    phaseId: 11-governance
+    title: Governance
+    purpose: Define decision and risk tracking processes.
+    questions:
+      - id: governance.decision_review
+        text: How will major decisions be reviewed and approved?
+        helpText: Describe the decision process and who owns each decision domain.
+        answerType: text
+        mapsToDecisionIds: [governance.decision_review]
+      - id: governance.risk_review_cadence
+        text: How often should the risk register be reviewed?
+        helpText: Choose a cadence that matches the project pace.
+        answerType: choice
+        options:
+          - { value: weekly, label: Weekly, description: Review risks every week during active development. }
+          - { value: biweekly, label: Biweekly, description: Every two weeks. }
+          - { value: monthly, label: Monthly, description: Monthly review is enough for slower projects. }
+          - { value: per_milestone, label: Per Milestone, description: Review at each implementation milestone. }
+        mapsToDecisionIds: [governance.risk_review_cadence]
+      - id: governance.assumption_validation
+        text: How will assumptions be validated?
+        helpText: Describe when and how assumptions should be revisited.
+        examples:
+          - Revisit market assumptions after 10 user interviews.
+          - Validate pricing assumptions with a landing-page test.
+        answerType: text
+        mapsToDecisionIds: [governance.assumption_validation]
+
   - id: operations
     phaseId: 10-operations
     title: Operations

@@ -9,7 +9,9 @@ import {
 	getDefaultProfileDirectory,
 	loadProfileContract,
 } from '../domain/profile-loader.js';
+import type { ConfigState } from '../domain/workspace-state.js';
 import { readWorkspaceState } from '../domain/workspace-state.js';
+import type { ValidationSeverity } from '../foundation/status-contracts.js';
 import { detectProjectRoot } from '../storage/project-root.js';
 import { runValidation } from '../validation/validation-engine.js';
 
@@ -150,9 +152,7 @@ export function diagnoseWorkspace(
 	}
 }
 
-function resolveProvider(_config: {
-	ai: { enabled: boolean; provider: string };
-}): LlmProvider {
+function resolveProvider(_config: ConfigState): LlmProvider {
 	// For now, always return mock provider.
 	// Live provider resolution will be added when AI configuration is wired.
 	return createMockLlmProvider();
@@ -199,7 +199,7 @@ export function formatDiagnosticsResult(
 
 	for (const severity of ['critical', 'error', 'warning', 'info'] as const) {
 		const findings = severityGroups[severity];
-		if (findings.length === 0) continue;
+		if (!findings || findings.length === 0) continue;
 
 		lines.push('', `${severity.toUpperCase()} (${findings.length}):`);
 
@@ -259,7 +259,7 @@ export function formatDiagnosticsResult(
 
 function groupFindingsBySeverity(
 	findings: readonly DiagnosticsResult['findings'][number][],
-): Record<ValidationSeverity, DiagnosticsResult['findings']> {
+): Record<ValidationSeverity, DiagnosticsResult['findings'][number][]> {
 	const result: Record<
 		ValidationSeverity,
 		DiagnosticsResult['findings'][number][]
@@ -271,7 +271,10 @@ function groupFindingsBySeverity(
 	};
 
 	for (const finding of findings) {
-		result[finding.severity].push(finding);
+		const bucket = result[finding.severity];
+		if (bucket) {
+			bucket.push(finding);
+		}
 	}
 
 	return result;

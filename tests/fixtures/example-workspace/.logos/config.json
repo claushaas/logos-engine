@@ -1,0 +1,14 @@
+{
+	"ai": {
+		"enabled": false,
+		"endpoint": null,
+		"model": null,
+		"provider": null,
+		"remoteContextDisclosureAccepted": false,
+		"timeoutMs": null,
+		"tokenSource": {
+			"kind": "none"
+		}
+	},
+	"schemaVersion": "0.1.0"
+}

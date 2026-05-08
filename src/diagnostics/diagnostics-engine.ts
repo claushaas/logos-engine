@@ -1,3 +1,5 @@
+import type { AiOperationId } from '../ai/ai-operations.js';
+import type { LlmProvider } from '../ai/llm-provider.js';
 import type { ValidationSeverity } from '../foundation/status-contracts.js';
 import type {
 	ValidationContext,
@@ -5,8 +7,6 @@ import type {
 	ValidationResult,
 } from '../validation/validation-engine.js';
 import { runValidation } from '../validation/validation-engine.js';
-import type { AiOperationId } from './ai-operations.js';
-import type { LlmProvider } from './llm-provider.js';
 
 export type DiagnosticSource = 'deterministic' | 'ai';
 
@@ -309,6 +309,7 @@ async function runAiDiagnostics(
 				input: operation.input,
 				messages: operation.messages,
 				operationId: operation.operationId,
+				responseFormat: { format: 'json', name: 'logos_ai_operation_output' },
 			});
 
 			if (operation.operationId === 'identify_gaps') {
