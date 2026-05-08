@@ -122,18 +122,17 @@ No API key needed. LM Studio must be running locally.
 /config ai --clear                  Remove AI configuration
 ```
 
-## Running Without a Provider
+## Running Without a Live Remote Provider
 
-LOGOS Engine works without any AI provider configured:
+LOGOS Engine works without live remote AI credentials for operational tasks:
 
-- Profile-defined questions are asked in order.
-- Answers are stored.
-- Document templates render with available state.
-- Validation and diagnostics run deterministically.
+- Workspace initialization works.
+- Provider configuration can be inspected and changed.
+- State schemas can be validated.
+- Default tests use mocked or fixture AI responses.
 - No network calls are made.
-- All default tests pass without AI credentials.
 
-When no provider is configured, `/generate` produces documents with blank AI-drafted sections, marked as incomplete. You can fill them in manually.
+The normal intake and document drafting workflow is AI-led. For an actual workspace, configure a local, mock, fixture, or remote provider before starting intake. If no provider is enabled, LOGOS should guide the user through provider setup instead of asking profile coverage prompts in a deterministic order.
 
 ## Testing a Provider
 

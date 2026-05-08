@@ -35,9 +35,9 @@ Documents, tasks, prompts, roadmaps, and implementation plans should be derived 
 
 ## Proposed Solution
 
-LOGOS Engine is a TUI that runs at the root of a project repository and progressively builds a documentation system by interacting with the user.
+LOGOS Engine is a TUI that runs at the root of a project repository and progressively builds a documentation system through an AI-led conversation with the user.
 
-It asks contextual questions, records decisions, tracks assumptions, identifies gaps, and renders canonical Markdown documents into a predictable folder structure.
+The user should not have to operate a deterministic questionnaire, choose question ids, or drive the process through slash commands. The AI asks the next useful questions, interprets answers, records proposed decisions, tracks assumptions, identifies gaps, and drafts canonical Markdown documents into a predictable folder structure.
 
 ## Target Initial Use Case
 

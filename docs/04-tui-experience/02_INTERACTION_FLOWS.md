@@ -5,12 +5,12 @@
 ```text
 User runs logos
 → TUI opens
-→ user runs /init
+→ user runs /init or selects initialize
 → selects profile
 → confirms project name
 → creates workspace
-→ starts foundation questions
-→ generates initial docs
+→ starts AI-led intake conversation
+→ AI drafts initial docs from captured context
 ```
 
 ## Flow 2 — Continue Intake
@@ -18,12 +18,12 @@ User runs logos
 ```text
 User runs logos
 → TUI opens and loads state
-→ user runs /continue or selects Continue
+→ user runs /continue, selects Continue, or types into the conversation
 → shows progress
-→ selects next question group
-→ user answers, skips, marks unknown, or marks assumption
-→ raw answers and normalized summaries are stored
-→ AI follow-up questions may be proposed for review
+→ AI chooses the next useful question or small question cluster
+→ user answers naturally, says they do not know, asks to assume, or skips
+→ raw conversation turns, normalized summaries, assumptions, and open questions are stored
+→ AI proposes follow-up questions and decision updates for review
 → docs refresh option appears
 ```
 
@@ -84,5 +84,5 @@ AI operation returns proposed follow-ups
 → proposed follow-ups are stored in the intake session
 → user accepts selected follow-ups
 → accepted follow-ups become session-scoped questions
-→ profile questions remain canonical
+→ profile coverage prompts remain canonical
 ```

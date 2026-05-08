@@ -110,13 +110,14 @@ Code is licensed under MIT. Documentation template licensing can be refined when
 
 AI is a first-class workflow layer in LOGOS Engine. It is used for:
 
-- Generating context-aware follow-up questions during intake
+- Leading the intake conversation
+- Generating context-aware initial and follow-up questions during intake
 - Summarizing user answers into structured form
 - Extracting decision proposals from answers
 - Classifying assumptions and identifying gaps
 - Identifying risks and inconsistencies
 - Drafting document sections
-- Recommending next question groups
+- Recommending the next useful conversational move
 
 AI output always enters the system with a status that keeps it distinct from confirmed state:
 
@@ -130,17 +131,13 @@ AI output always enters the system with a status that keeps it distinct from con
 
 AI-generated decisions may become `confirmed` only after explicit user confirmation. This distinction is enforced in the data model: `DecisionStatus` and `AiOutputStatus` are separate concepts.
 
-### Running Without AI
+### Running Without A Live Remote Provider
 
-LOGOS Engine is fully functional without any AI provider configured:
+LOGOS Engine does not require live remote model calls for installation, tests, initialization, status, validation, or provider setup.
 
-- Profile-defined questions are asked in order
-- Document templates render with available state
-- Validation and diagnostics run deterministically
-- No network calls are made
-- Generated documents report which sections are AI-drafted and incomplete
+The core intake and documentation workflow is AI-led. Local development and tests may use mocked or fixture providers, and users may configure local providers such as Ollama or LM Studio. If no AI provider is enabled for an actual workspace, LOGOS should guide the user to configure AI instead of falling back to a deterministic questionnaire.
 
-This is the default mode. Remote AI is always opt-in.
+Remote AI is always opt-in.
 
 ## Provider Configuration
 

@@ -4,7 +4,7 @@
 
 Build the smallest useful version of LOGOS Engine that validates the core premise:
 
-> People benefit from a local-first system that asks structured questions and generates living documentation for app-business projects.
+> People benefit from a local-first system that uses AI conversation to clarify intent and generate living documentation for app-business projects.
 
 ## Included in MVP
 
@@ -31,11 +31,11 @@ Build the smallest useful version of LOGOS Engine that validates the core premis
 
 ### AI
 
-Architecturally required, operationally configurable.
+Required for the core intake and documentation workflow.
 
 The MVP should include provider abstraction, prompt contracts, structured output validation, mocked AI tests, and user confirmation flows.
 
-The MVP should not depend on live remote AI calls to install, test, initialize a workspace, validate state, or render deterministic documentation.
+The MVP should not depend on live remote AI calls to install, test, initialize a workspace, or run automated tests. Tests and local development may use a mocked or fixture AI provider. The real user-facing intake and document drafting flow, however, is AI-led; without an enabled local, mock, fixture, or remote provider, the app should guide the user to configure AI instead of falling back to a deterministic questionnaire.
 
 ### Documentation
 

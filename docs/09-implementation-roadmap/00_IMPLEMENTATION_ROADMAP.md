@@ -59,7 +59,7 @@ AI must be present in the core workflow from the first usable version.
 
 For V1, this means the architecture, prompt contracts, structured output validation, mocked provider, and user review flows are mandatory.
 
-Live remote model usage remains configurable. The product must be useful with deterministic flows and mocked or local providers, but the implementation must not treat AI as an afterthought.
+Live remote model usage remains configurable. The product must be useful with mocked, fixture, or local providers, but the implementation must not provide a deterministic intake questionnaire as the normal fallback.
 
 AI output must enter the system as:
 
@@ -71,7 +71,9 @@ AI output must enter the system as:
 
 ### 2. Keep Deterministic Guardrails Strong
 
-The AI layer should not replace:
+The AI layer owns the normal intake and documentation conversation. Deterministic code should not choose a scripted question path for the user in the primary workflow.
+
+The AI layer still must not replace:
 
 - profile schemas;
 - validation rules;
@@ -94,13 +96,14 @@ Markdown is the human-readable projection.
 
 Avoid multi-agent orchestration, cloud sync, dashboards, and profile marketplaces in V1.
 
-The first milestone is a local-first TUI that can conduct an AI-assisted intake and produce a coherent App Business documentation workspace.
+The first milestone is a local-first TUI that can conduct an AI-led intake conversation and produce a coherent App Business documentation workspace.
 
 ## Scope Reconciliation
 
 This roadmap reconciles the MVP and AI strategy as follows:
 
-- the deterministic core must be usable without live model calls;
+- slash commands, workspace initialization, schema validation, state reading, and tests must be usable without live model calls;
+- the user-facing intake and documentation workflow must be AI-led, using a mocked, fixture, local, or explicitly configured remote provider;
 - the V1 architecture must include the AI layer from the beginning;
 - mocked AI providers are required for default tests and local development;
 - local providers should be supported where practical;
@@ -519,6 +522,7 @@ Introduce the AI layer as a first-class system component before building AI-assi
 
 Initial operation types:
 
+- `lead_intake_turn`;
 - `generate_follow_up_questions`;
 - `summarize_answer`;
 - `extract_decision_proposals`;
@@ -526,7 +530,7 @@ Initial operation types:
 - `identify_gaps`;
 - `identify_risks`;
 - `draft_document_section`;
-- `recommend_next_question_group`.
+- `recommend_next_conversation_move`.
 
 ## Implementation Notes
 
@@ -534,7 +538,7 @@ AI modules must not directly mutate project state.
 
 The mocked provider is required before any live provider integration.
 
-Remote provider support must be opt-in. If no remote provider is configured, the system should still run deterministic flows, render incomplete documents, and execute tests with fixture AI responses.
+Remote provider support must be opt-in. If no remote provider is configured, the system should still run operational commands and execute tests with fixture AI responses. Normal intake should use a mocked, fixture, local, or explicitly configured remote provider; it should not fall back to a deterministic question script.
 
 The user should provide:
 
@@ -572,7 +576,8 @@ application service
 
 - AI calls route through provider abstraction;
 - mocked provider works in tests;
-- deterministic workflows can run without a live provider;
+- operational workflows and automated tests can run without a live provider;
+- intake and documentation flows use a provider abstraction, including mocked or fixture providers in development and tests;
 - remote provider usage is explicit and configurable;
 - provider presets can be inspected and overridden;
 - tokens are loaded from approved secret sources, not raw project config;
@@ -641,21 +646,21 @@ Prompts must clearly separate:
 
 ---
 
-## Phase 6 — Question Engine and AI-Assisted Interrogation
+## Phase 6 — AI-Led Conversational Intake
 
 ## Objective
 
-Implement the guided intake system, using the profile and AI layer to ask context-aware questions.
+Implement the conversational intake system, using the AI layer as the normal driver and the profile as coverage context.
 
 ## Goals
 
-- ask question groups;
-- store answers;
+- let AI choose and ask the next useful question or small question cluster;
+- store raw conversation turns and interpreted answers;
 - resume sessions;
 - allow `unknown` answers;
 - allow assumption-based answers;
 - use AI to generate contextual follow-up questions;
-- use AI to recommend next question groups.
+- use AI to propose the next conversational move.
 
 ## Related Docs
 
@@ -668,19 +673,20 @@ Implement the guided intake system, using the profile and AI layer to ask contex
 
 - question schema;
 - guided question metadata;
+- conversation turn schema;
 - answer store;
 - session store;
 - `/continue` slash command;
-- question group selector;
+- AI intake turn operation;
 - AI follow-up question operation;
 - answer summarization operation;
 - assumption marking behavior.
 
 ## Implementation Notes
 
-The question engine should combine:
+The conversation engine should combine:
 
-- profile-defined questions;
+- profile-defined coverage prompts;
 - current phase;
 - missing required decisions;
 - AI-suggested follow-ups;
@@ -688,20 +694,20 @@ The question engine should combine:
 
 The system should not ask unlimited questions.
 
-Question groups should remain small and purposeful.
+Conversational question clusters should remain small and purposeful.
 
-Questions should be helpful without being leading. When useful, the TUI should show short examples and option lists so the user understands the expected level of detail.
+Questions should be helpful without being leading. When useful, the AI may mention examples or options in natural language so the user understands the expected level of detail.
 
 ## Acceptance Criteria
 
-- user can answer foundation questions;
-- answers are stored;
+- user can progress through foundation intake by conversing with AI;
+- raw turns and interpreted answers are stored;
 - sessions can resume;
 - unknown answers create open questions;
 - assumption answers create assumptions;
-- questions can show help text, examples, and options;
+- AI can use help text, examples, and options from profile context;
 - AI follow-up questions are proposed, not silently injected as canonical requirements;
-- question selection is tested with mocked AI responses.
+- AI conversation move selection is tested with mocked AI responses.
 
 ---
 
@@ -912,7 +918,7 @@ Build diagnostics that combine deterministic validation with AI-assisted interpr
 - summarize gaps;
 - identify risks;
 - detect inconsistencies;
-- recommend next question group;
+- recommend next conversational move;
 - identify weak documents;
 - explain downstream implications;
 - keep AI diagnostics classified as advisory unless confirmed.
@@ -943,7 +949,7 @@ Diagnostics should produce concise but useful output in the TUI, with deeper det
 
 - diagnostics show critical, important, and optional gaps;
 - AI risk notes are clearly marked as proposed/advisory;
-- user can act on recommended next question group;
+- user can act on the recommended next conversational move;
 - diagnostics do not mutate confirmed decisions;
 - malformed AI diagnostics are handled safely.
 
@@ -953,7 +959,7 @@ Diagnostics should produce concise but useful output in the TUI, with deeper det
 
 ## Objective
 
-Improve the TUI so the AI-assisted workflow feels controlled, transparent, and useful.
+Improve the TUI so the AI-led workflow feels controlled, transparent, and useful.
 
 ## Goals
 
@@ -987,7 +993,7 @@ Improve the TUI so the AI-assisted workflow feels controlled, transparent, and u
 
 The TUI should make it clear when the user is:
 
-- answering a profile-defined question;
+- answering an AI-led conversational prompt;
 - reviewing an AI-generated proposal;
 - confirming a decision;
 - accepting an assumption;
@@ -997,7 +1003,7 @@ The TUI should make it clear when the user is:
 
 - user can distinguish AI proposals from confirmed state;
 - progress by phase is visible;
-- question sessions are easy to resume;
+- conversation sessions are easy to resume;
 - diagnostics are readable;
 - destructive actions require confirmation;
 - TUI flows are covered by integration-style tests where practical.
@@ -1176,7 +1182,245 @@ Prepare LOGOS Engine for public use and contribution.
 
 ---
 
-## Phase 15 — Public Release
+## Post-Phase 14 Migration Context
+
+Phase 0 through Phase 14 have already produced a working repository with CLI/TUI
+shell, workspace initialization, profile loading, provider abstraction, prompt
+contracts, guided intake, decision and validation models, document rendering,
+diagnostics, regression tests, examples, and launch/contribution documentation.
+
+That implementation was built around a deterministic question engine exposed
+through `/continue` subcommands such as answering a selected question id. The
+desired product direction has changed: normal intake and documentation must now
+be driven by AI conversation. The existing deterministic structure remains
+valuable as profile coverage, validation, persistence, tests, and guardrails, but
+it must no longer be the user-facing intake path.
+
+The following migration phases convert the current post-Phase 14 repository into
+the desired AI-led conversational product before public release.
+
+---
+
+## Phase 15 — Conversation Model and Legacy Intake Boundary
+
+## Objective
+
+Introduce the conversation-first runtime model while explicitly isolating the
+existing deterministic guided-intake implementation as legacy/internal support.
+
+## Goals
+
+- define conversation turns as first-class state;
+- add AI operation contracts for leading intake turns;
+- rename or supersede next-question-group operations with next-conversation-move operations;
+- preserve existing question/profile metadata as AI coverage context;
+- prevent `/continue answer <question-id>` from remaining the documented user path;
+- keep existing tests passing while new conversational tests are introduced.
+
+## Related Docs
+
+- `docs/04-tui-experience/01_COMMANDS.md`
+- `docs/04-tui-experience/02_INTERACTION_FLOWS.md`
+- `docs/07-ai-and-agent-behavior/00_AGENT_BEHAVIOR.md`
+- `docs/07-ai-and-agent-behavior/01_PROMPTING_CONTRACT.md`
+- `docs/07-ai-and-agent-behavior/02_LLM_INTEGRATION_STRATEGY.md`
+- `docs/03-system-architecture/02_DATA_MODEL.md`
+- `profiles/app-business/questions.yml`
+
+## Deliverables
+
+- conversation turn schema and storage;
+- conversation session model or migration of the current intake session model;
+- `lead_intake_turn` AI operation schema;
+- `recommend_next_conversation_move` AI operation schema;
+- prompt/context updates for conversation state;
+- legacy boundary around deterministic question selection APIs;
+- migration notes for existing `.logos/sessions/` data.
+
+## Implementation Notes
+
+The current `question-engine` can remain as an internal helper for coverage,
+fixtures, and migration, but user-facing services should not ask the user to
+select question ids.
+
+Conversation turns should preserve:
+
+- user message;
+- AI response;
+- interpreted answer records;
+- proposed decisions;
+- assumptions;
+- open questions;
+- source links between the turn and generated state.
+
+## Acceptance Criteria
+
+- conversation turns are persisted and schema-validated;
+- AI operation registry includes `lead_intake_turn` and `recommend_next_conversation_move`;
+- old next-question-group behavior is not presented as the primary product path;
+- existing workspace state can still be read safely;
+- new tests cover conversation turn parsing and storage;
+- default tests still avoid live model calls.
+
+---
+
+## Phase 16 — Conversational TUI Runtime
+
+## Objective
+
+Make the TUI behave like a conversation with AI by routing ordinary text input
+to the conversational intake service instead of the slash command parser.
+
+## Goals
+
+- route non-slash input to AI conversation;
+- keep slash commands only for operational actions;
+- make `/continue` start or resume the conversation;
+- show AI messages and user messages as conversation history;
+- handle no-provider state by guiding setup instead of falling back to deterministic questions;
+- keep destructive operations confirmation-gated.
+
+## Related Docs
+
+- `docs/04-tui-experience/00_TUI_PRODUCT_SPEC.md`
+- `docs/04-tui-experience/01_COMMANDS.md`
+- `docs/04-tui-experience/02_INTERACTION_FLOWS.md`
+- `docs/07-ai-and-agent-behavior/03_PROVIDER_CONFIGURATION.md`
+- `docs/10-operational-playbooks/00_DEVELOPMENT_STANDARDS.md`
+
+## Deliverables
+
+- conversational intake application service;
+- TUI input router that separates slash commands from conversation messages;
+- `/continue` implementation that resumes AI-led conversation;
+- no-provider setup prompt/state;
+- conversation rendering components;
+- provider/context disclosure hook before remote calls;
+- tests for non-slash input behavior.
+
+## Implementation Notes
+
+The current TUI rejects non-slash input as a command error. That behavior must be
+removed for normal mode. A user typing `I don't know yet`, `assume solo
+founders`, or a long product explanation should create a conversation turn, not
+a command parse failure.
+
+## Acceptance Criteria
+
+- ordinary text input advances the AI conversation;
+- slash commands continue to work for explicit operations;
+- `/continue` does not require subcommands for normal progress;
+- no-provider state points the user to `/config ai`;
+- user can mark uncertainty and assumptions conversationally;
+- TUI tests cover both slash command and conversation input paths.
+
+---
+
+## Phase 17 — AI Interpretation, Proposals, and Confirmation
+
+## Objective
+
+Use AI to interpret conversation turns into structured answers, assumptions,
+open questions, and decision proposals while preserving explicit user control.
+
+## Goals
+
+- interpret free-form user messages into structured state;
+- extract proposed decisions from conversation turns;
+- classify assumptions and unknowns from natural language;
+- require confirmation before proposed decisions become confirmed;
+- preserve traceability from document claims back to conversation turns;
+- reject malformed or overconfident AI output safely.
+
+## Related Docs
+
+- `docs/03-system-architecture/03_DECISION_REGISTRY.md`
+- `docs/07-ai-and-agent-behavior/00_AGENT_BEHAVIOR.md`
+- `docs/07-ai-and-agent-behavior/01_PROMPTING_CONTRACT.md`
+- `docs/07-ai-and-agent-behavior/02_LLM_INTEGRATION_STRATEGY.md`
+- `docs/10-operational-playbooks/02_RISK_REGISTER.md`
+
+## Deliverables
+
+- conversation interpretation service;
+- AI response schemas for interpreted answers and proposal batches;
+- proposal review flow adapted to conversation turns;
+- confirmation and rejection flows for AI proposals;
+- source linking from turns to answers, assumptions, decisions, and documents;
+- malformed AI output tests;
+- provider failure tests for conversation interpretation.
+
+## Implementation Notes
+
+AI may infer candidate decisions, but must not silently confirm them. If a user
+states something directly and unambiguously, the system may prepare a proposed
+decision and ask for confirmation, or route it through an explicit confirmation
+screen.
+
+## Acceptance Criteria
+
+- conversation messages create structured interpreted records;
+- AI-generated decisions enter as `proposed`;
+- confirmed decisions require explicit user confirmation;
+- assumptions and unknowns are separated from confirmed facts;
+- malformed interpretation output does not corrupt state;
+- traceability from generated state to conversation turns is test-covered.
+
+---
+
+## Phase 18 — AI-Led Document Drafting and Regression Rebaseline
+
+## Objective
+
+Rebaseline document generation, diagnostics, examples, and regression tests
+around AI-led conversation rather than deterministic question-answer commands.
+
+## Goals
+
+- draft documents from conversation-derived state and confirmed decisions;
+- remove deterministic questionnaire assumptions from E2E tests and examples;
+- update diagnostics to recommend conversational next steps;
+- update demo scripts and example guidance;
+- preserve deterministic validation as a guardrail;
+- verify the complete AI-led workflow before release.
+
+## Related Docs
+
+- `docs/03-system-architecture/04_DOCUMENT_RENDERING.md`
+- `docs/03-system-architecture/05_VALIDATION_AND_DIAGNOSTICS.md`
+- `docs/06-documentation-system/00_DOCUMENTATION_ARCHITECTURE.md`
+- `docs/07-ai-and-agent-behavior/03_PROVIDER_CONFIGURATION.md`
+- `docs/08-growth-and-community/01_LAUNCH_PLAN.md`
+- `examples/README.md`
+
+## Deliverables
+
+- conversational E2E workflow tests;
+- updated example workspace or new conversation-first fixture;
+- updated demo script;
+- document rendering tests based on conversation-derived state;
+- diagnostics tests using next conversational move recommendations;
+- README and example updates for AI-led usage;
+- regression suite proving no live provider is required for tests.
+
+## Implementation Notes
+
+Existing tests that exercise `/continue answer <question-id>` should either move
+to internal service-level coverage or be replaced by conversation-first workflow
+tests. Release-facing examples should not teach users to answer question ids.
+
+## Acceptance Criteria
+
+- full workflow can run with mocked or fixture AI conversation;
+- E2E tests no longer depend on user-facing question id commands;
+- generated docs remain broad, auditable, and explicit about uncertainty;
+- diagnostics recommend conversational next steps;
+- examples demonstrate AI-led intake;
+- `pnpm check` passes.
+
+---
+
+## Phase 19 — Public Release
 
 ## Objective
 
@@ -1217,7 +1461,7 @@ Publish the first public version of LOGOS Engine.
 
 ---
 
-## Phase 16 — Post-Release Iteration
+## Phase 20 — Post-Release Iteration
 
 ## Objective
 
@@ -1265,8 +1509,8 @@ V1 is complete when a user can:
 1. install LOGOS Engine;
 2. initialize a local workspace;
 3. select the App Business profile;
-4. answer guided questions;
-5. receive AI-generated follow-up questions;
+4. complete an AI-led intake conversation;
+5. receive AI-generated initial and follow-up questions;
 6. review AI-generated decision proposals;
 7. confirm or reject proposed decisions;
 8. generate the canonical App Business documentation tree;

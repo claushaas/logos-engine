@@ -20,7 +20,7 @@ Then selects:
 App Business
 ```
 
-The system creates a workspace, starts an intake process, asks questions, stores answers, and renders initial documentation.
+The system creates a workspace, starts an AI-led intake conversation, interprets answers into structured state, and renders initial documentation.
 
 ## Use Case 2 — Continue an Existing Documentation Session
 
@@ -32,7 +32,7 @@ logos
 
 Then runs `/continue`.
 
-The system reads current state, identifies the next useful question group, and resumes the process.
+The system reads current state, gives the AI the relevant profile and project context, and resumes the conversation at the next useful point.
 
 ## Use Case 3 — Diagnose Missing Decisions
 

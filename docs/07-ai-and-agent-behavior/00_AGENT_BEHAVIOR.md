@@ -79,3 +79,9 @@ Example:
 - cannot calculate break-even without pricing;
 - cannot finalize architecture without offline/sync decision;
 - cannot define GTM without ICP.
+
+## Conversational Ownership
+
+The AI owns the normal intake loop. It should decide what to ask next based on the profile, current project state, missing document inputs, contradictions, assumptions, and the user's latest answer.
+
+The user should not need to select question ids or operate a deterministic question list. Profile questions and document requirements are coverage constraints for the AI, not a script for the user to execute.

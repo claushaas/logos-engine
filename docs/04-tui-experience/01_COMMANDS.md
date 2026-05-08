@@ -12,7 +12,7 @@ logos
 
 Running `logos` opens the interactive terminal UI for the current project.
 
-Inside the TUI, commands are typed as slash commands, such as:
+Inside the TUI, normal input is sent to the AI conversation. System operations are typed as slash commands, such as:
 
 ```text
 /init
@@ -20,7 +20,7 @@ Inside the TUI, commands are typed as slash commands, such as:
 /status
 ```
 
-Slash commands should support autocomplete, descriptions, argument hints, and keyboard navigation.
+Slash commands should support autocomplete, descriptions, argument hints, and keyboard navigation, but they are not the main intake interface.
 
 ## CLI Entrypoint
 
@@ -43,7 +43,7 @@ These commands are typed inside the TUI command input.
 | Slash Command | Behavior |
 | --- | --- |
 | `/init` | Initializes a workspace and starts setup |
-| `/continue` | Resumes the next useful intake session |
+| `/continue` | Resumes the AI-led intake conversation |
 | `/status` | Shows project progress |
 | `/validate` | Runs validation and shows findings |
 | `/diagnose` | Runs diagnostics and shows findings |
@@ -72,9 +72,9 @@ Autocomplete should expose available options after the user types the command.
 
 ## TUI Actions
 
-These actions happen inside screens, menus, and review flows.
+These actions happen inside the AI conversation, screens, menus, and review flows.
 
-- answer current question;
+- answer the AI's current question in natural language;
 - skip current question;
 - mark answer as unknown;
 - mark answer as an assumption;
@@ -92,14 +92,16 @@ These actions happen inside screens, menus, and review flows.
 - configure or review AI provider settings.
 
 The TUI may expose these actions through menus, buttons, keyboard shortcuts, command palette items, or review screens.
+The default path should be conversational text, not command syntax.
 
 ## Command Behavior Rules
 
 - `logos` must open the TUI by default.
-- Slash commands are the primary command surface after the TUI starts.
+- Conversational AI input is the primary surface after the TUI starts.
+- Slash commands are reserved for explicit operations such as initialization, status, validation, diagnostics, generation, AI configuration, help, and exit.
 - Slash commands must be discoverable through `/help` and autocomplete.
 - Destructive actions must require confirmation.
-- Long conversational flows should happen in dedicated TUI screens.
+- Long intake and documentation flows should happen as AI-led conversation in dedicated TUI screens.
 - The same application services should power slash commands and any future non-interactive CLI aliases.
 - The TUI must not directly mutate project state; it should call command handlers or application services.
 
@@ -119,46 +121,38 @@ Creates a LOGOS workspace.
 
 ## `/continue`
 
-Continues guided intake.
+Continues AI-led intake.
 
 ### Responsibilities
 
 - load project state;
 - identify next useful phase;
-- select question group;
-- store answers;
-- update decisions;
+- provide profile, document, decision, assumption, and gap context to the AI;
+- ask the next useful conversational question or question cluster;
+- store raw conversation turns;
+- interpret user replies into structured answers, assumptions, open questions, and proposed decisions;
 - offer document regeneration.
 
 ### Intake Actions
 
-Phase 6 exposes guided intake actions through `/continue` subcommands. A richer
-dedicated TUI question screen may use the same application services later.
+Phase 6 exposes AI-led intake through the normal conversational input. `/continue`
+only starts or resumes that conversation.
 
-```text
-/continue
-/continue answer <question-id> <answer>
-/continue unknown <question-id>
-/continue assume <question-id> <answer>
-/continue skip <question-id>
-/continue propose-followups
-/continue accept-followups --all
-/continue accept-followups <follow-up-id>
-/continue save
-```
+Internal service APIs may exist for tests and automation, but user-facing intake
+must not require question ids or `/continue` subcommands.
 
 Behavior rules:
 
-- `/continue` shows the next bounded question group;
-- `answer` stores the raw user answer and a separate normalized summary;
-- `unknown` stores an unknown answer and creates a derived open question view;
-- `assume` stores an assumption without confirming a decision;
-- `skip` records an explicit skipped answer for the current intake session;
-- `propose-followups` uses the AI operation contract to store follow-up
+- `/continue` resumes the AI-led conversation;
+- conversational answers store the raw user answer and a separate normalized summary;
+- conversational unknowns store an unknown answer and create a derived open question view;
+- conversational assumptions store an assumption without confirming a decision;
+- conversational skips record an explicit skipped answer for the current intake session;
+- AI follow-up generation uses the AI operation contract to store follow-up
   questions as proposed;
-- `accept-followups` makes proposed follow-ups session-active, but does not make
-  them canonical profile questions;
-- `save` persists the current intake session for later resume.
+- accepting follow-ups makes proposed follow-ups session-active, but does not make
+  them canonical profile coverage prompts;
+- session save persists the current intake session for later resume.
 
 ## `/diagnose`
 
@@ -216,7 +210,7 @@ GTM: 0%
 
 ## `/config ai`
 
-Configures LLM access for AI-assisted workflows.
+Configures LLM access for AI-led workflows.
 
 ### Responsibilities
 

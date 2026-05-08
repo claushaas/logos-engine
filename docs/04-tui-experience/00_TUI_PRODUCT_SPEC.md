@@ -10,7 +10,7 @@ It should feel like a structured conversation with a rigorous project architect,
 
 The primary CLI entrypoint is `logos`, which opens the TUI.
 
-Inside the TUI, the user can choose actions from the interface or type slash commands with autocomplete.
+Inside the TUI, ordinary text input is conversation with AI. Slash commands exist for explicit system operations and exceptional control flows.
 
 ### `/init`
 
@@ -18,7 +18,7 @@ Initializes LOGOS Engine in the current directory.
 
 ### `/continue`
 
-Resumes the next best question group.
+Resumes the AI-led intake conversation.
 
 ### `/diagnose`
 
@@ -50,13 +50,15 @@ Configures LLM provider access.
 - Avoid fake certainty.
 - Prefer progress with traceability.
 
-## Question Group Size
+## Conversation Round Size
 
 Recommended:
 
 - minimum: 3 questions;
 - ideal: 5 to 8 questions;
 - maximum: 12 questions.
+
+These are AI behavior guidelines, not a deterministic questionnaire contract. The AI may ask fewer questions when one answer unlocks useful documentation work.
 
 ## Navigation
 
@@ -77,6 +79,7 @@ The user should be able to:
 - Slash commands should show short descriptions and option hints.
 - Slash command results should render in the TUI, not as raw terminal output.
 - Destructive slash commands should ask for confirmation.
+- Slash commands should not be required for normal intake progress.
 
 ## UX Tone
 

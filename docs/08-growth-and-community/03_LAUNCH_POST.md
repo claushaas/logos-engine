@@ -30,9 +30,9 @@ Most founders answer these questions in scattered notes, Slack threads, and late
 
 ### What It Does
 
-1. **Guided Intake** — The engine walks you through ~50 structured questions across 12 phases: ideation, market, business model, pricing, product, UX, architecture, implementation, testing, marketing, launch, and operations.
+1. **AI-Led Intake** — The engine conducts a focused conversation across the areas that matter: ideation, market, business model, pricing, product, UX, architecture, implementation, testing, marketing, launch, and operations.
 
-2. **AI-Assisted Reasoning** — Optionally configure any LLM provider (OpenAI, Anthropic, Ollama, local models). AI proposes follow-up questions, extracts decisions from your answers, identifies gaps, and drafts document sections.
+2. **AI Reasoning** — Configure any LLM provider (OpenAI, Anthropic, Ollama, local models). AI asks follow-up questions, extracts decisions from your answers, identifies gaps, and drafts document sections.
 
 3. **Decision Registry** — Every key decision is tracked with source, status, and dependencies. Decisions are confirmed by you — never by the AI.
 

@@ -13,16 +13,19 @@ The system must:
 - create initial documents;
 - create project state files.
 
-### Guided Intake
+### AI-Led Conversational Intake
 
 The system must:
 
-- ask questions in small groups;
+- conduct intake as a conversation with AI;
+- let the AI choose and phrase the next useful questions;
 - avoid overwhelming the user;
 - allow unknown answers;
-- record answers;
-- derive decisions when possible;
+- record raw conversation turns;
+- interpret answers into structured answers, assumptions, open questions, and proposed decisions;
 - mark incomplete areas.
+
+The user must not be required to select a question id or invoke slash command subcommands to progress through the normal intake flow.
 
 ### Decision Registry
 
@@ -94,7 +97,7 @@ The system should not send project content to an LLM provider unless explicitly 
 V1 is complete when a user can:
 
 1. initialize an app-business project;
-2. answer guided questions;
+2. complete an AI-led intake conversation;
 3. generate a full documentation skeleton;
 4. fill core documents incrementally;
 5. run diagnostics;

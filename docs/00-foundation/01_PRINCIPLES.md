@@ -35,11 +35,13 @@ Markdown, JSON, and Git should be enough to make the system useful.
 
 Users should be able to inspect:
 
-- questions asked;
+- conversation turns and questions asked;
 - decisions stored;
 - documents generated;
 - validation rules;
 - dependency mappings.
+
+The primary experience should still feel like a natural conversation with AI. Inspectability belongs in review, diagnostics, state files, and generated audit trails, not in a user-facing requirement to answer deterministic question ids.
 
 ## 6. Open Source Reciprocity
 
@@ -72,7 +74,7 @@ The V1 should be useful without complex multi-agent orchestration.
 The core system should be:
 
 - profiles;
-- questions;
+- AI-led conversation;
 - decisions;
 - validation;
 - rendering;

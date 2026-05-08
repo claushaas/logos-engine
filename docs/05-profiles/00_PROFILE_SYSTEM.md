@@ -11,7 +11,7 @@ The engine remains generic. Profiles specialize it.
 - outcome type;
 - phases;
 - canonical documents;
-- question sets;
+- AI intake coverage prompts;
 - decision ids and decision mappings;
 - conditional logic;
 - validation rules;
@@ -126,7 +126,7 @@ Defines canonical generated documents:
 
 ### `questions.yml`
 
-Defines guided question sets:
+Defines profile-authored intake coverage for the AI conversation:
 
 - question set id;
 - phase id;
@@ -141,7 +141,7 @@ Defines guided question sets:
 - mapped decision ids;
 - unknown and assumption behavior.
 
-Questions should guide the user without forcing an answer.
+Questions are not a deterministic script that the user must walk through by id. They are structured coverage prompts and examples that the AI may use when deciding what to ask next, how to interpret answers, and which decisions still need evidence.
 
 ### `validations.yml`
 

@@ -28,11 +28,11 @@ This document lists starter issues for new contributors. Each issue is self-cont
 - **Files**: `profiles/app-business/validations.yml`, `src/domain/validation/`
 - **Docs**: `docs/03-system-architecture/05_VALIDATION_AND_DIAGNOSTICS.md`
 
-### 3. Improve Question Help Text — Market Phase
+### 3. Improve AI Intake Coverage Prompts — Market Phase
 
 - **Difficulty**: Easy
 - **Scope**: Profile / Questions
-- **Description**: Review and improve the `helpText` and `examples` fields for questions in the market phase (`01-market`). Make them more concrete and actionable.
+- **Description**: Review and improve the `helpText` and `examples` fields for market-phase intake coverage prompts. They should help the AI ask better conversational questions without becoming a deterministic script.
 - **Files**: `profiles/app-business/questions.yml`
 - **Docs**: `docs/05-profiles/00_PROFILE_SYSTEM.md`
 
@@ -52,11 +52,11 @@ This document lists starter issues for new contributors. Each issue is self-cont
 - **Files**: `src/ai/` provider preset registry
 - **Docs**: `docs/07-ai-and-agent-behavior/03_PROVIDER_CONFIGURATION.md`
 
-### 6. Improve TUI Help Text Display
+### 6. Improve Conversational TUI Prompt Display
 
 - **Difficulty**: Medium
 - **Scope**: TUI
-- **Description**: Question `helpText` and `examples` are defined in the profile but the TUI display could be clearer. Add line-wrapping, better spacing, or a toggle to show/hide help.
+- **Description**: Profile `helpText` and `examples` should be available to the AI-led conversation and review UI without forcing the user into a question-id flow. Improve how conversational prompts, examples, and context are displayed.
 - **Files**: `src/tui/`
 - **Docs**: `docs/04-tui-experience/00_TUI_PRODUCT_SPEC.md`
 

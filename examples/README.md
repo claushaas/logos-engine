@@ -6,12 +6,16 @@ Example workspaces demonstrating LOGOS Engine in action.
 
 A complete App Business profile workspace for "FitFlow," a hypothetical personal trainer scheduling app.
 
-This example demonstrates:
+This example demonstrates the current structured workspace shape:
 
-- 50 intake answers across all 12 phases
+- intake state across all 12 phases
 - 38 confirmed and assumed decisions
 - A fully populated canonical document tree
 - Workspace state files (`.logos/project.json`, `.logos/answers.json`, `.logos/decisions.json`)
+
+The roadmap now targets AI-led conversational intake as the normal product flow.
+Phase 18 updates examples and fixtures so they demonstrate conversation-first
+usage instead of deterministic question answering.
 
 Location: `tests/fixtures/example-workspace/`
 
@@ -42,7 +46,7 @@ Location: `tests/fixtures/example-workspace/docs/`
 logos
 /init
 # Select app-business profile
-# Answer questions from the example or fill your own
+# Continue the AI-led conversation or inspect the example state
 /generate
 ```
 

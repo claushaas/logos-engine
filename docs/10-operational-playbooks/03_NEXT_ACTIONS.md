@@ -37,14 +37,14 @@ Create a working CLI skeleton and workspace initializer.
 
 ### Goal
 
-Implement guided intake.
+Implement AI-led conversational intake.
 
 ### Tasks
 
-- define question schema;
-- create foundation question set;
+- define question and conversation turn schemas;
+- create foundation coverage prompts;
 - store answers;
-- implement `logos continue`;
+- implement conversational `/continue` resume behavior;
 - update project state.
 
 ## Third Implementation Sprint

@@ -28,7 +28,7 @@ Implementation rules:
 - Follow the scope of the requested phase.
 - Use the tasks and acceptance checklist from 01_PHASED_TASKS.md as the implementation checklist.
 - Keep the implementation aligned with the roadmap and technical milestones.
-- Preserve the TUI-first model: `logos` opens the TUI, and in-app commands are slash commands.
+- Preserve the TUI-first model: `logos` opens the TUI, normal text input is AI conversation, and slash commands are reserved for explicit system operations.
 - Treat profile YAML files as source of truth for profiles.
 - Keep Markdown as rendered output, not source of truth.
 - Keep deterministic validation separate from AI judgment.

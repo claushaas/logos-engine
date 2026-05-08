@@ -1,6 +1,6 @@
 # Profile Contribution Guide
 
-LOGOS Engine uses outcome profiles to define what documents, questions, validation rules, and templates are used for a given project type.
+LOGOS Engine uses outcome profiles to define what documents, AI intake coverage prompts, validation rules, and templates are used for a given project type.
 
 ## What Is a Profile?
 
@@ -8,7 +8,7 @@ A profile is a structured YAML contract that defines:
 
 - **Phases** — ordered stages of the workflow (e.g. intake, market, economics, product).
 - **Documents** — canonical output documents with internal structure, completion criteria, and dependencies.
-- **Questions** — guided intake questions with help text, examples, and answer types.
+- **Questions** — structured coverage prompts the AI can use when leading intake, with help text, examples, and answer types.
 - **Validations** — deterministic rules that check for structural completeness.
 - **Templates** — Markdown templates for rendering each document.
 - **Risk patterns** — known high-risk combinations to flag.
@@ -19,7 +19,7 @@ A profile is a structured YAML contract that defines:
 profiles/<profile-id>/
   profile.yml         # Metadata, phases, version
   documents.yml        # Canonical document definitions
-  questions.yml        # Intake question sets
+  questions.yml        # AI intake coverage prompts
   validations.yml      # Deterministic validation rules
   templates/           # Markdown templates per phase
     00-intake/
@@ -85,7 +85,7 @@ documents:
 
 ### 4. Define `questions.yml`
 
-Each question needs:
+Each question defines coverage the AI should satisfy during conversation:
 
 ```yaml
 questions:
@@ -101,6 +101,8 @@ questions:
 ```
 
 Supported answer types: `text`, `choice`, `multi_choice`, `number`, `boolean`.
+
+These questions are not the user-facing flow. They should help the AI ask better questions and map answers to decisions without requiring the user to select question ids.
 
 ### 5. Define `validations.yml`
 
@@ -153,7 +155,7 @@ The profile loader validates:
 
 1. **Phases should be sequential but allow skipping.** Users should move forward even with unknowns.
 2. **Documents should be complete, not just named.** Define internal structure.
-3. **Questions should guide without leading.** Provide examples but let users think.
+3. **Questions should guide the AI without becoming a script.** Provide examples but let the AI adapt the conversation.
 4. **Validation rules should be deterministic.** No AI judgment in validation.
 5. **Dependencies should be explicit.** Which decisions does each document need?
 

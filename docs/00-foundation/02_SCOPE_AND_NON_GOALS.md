@@ -7,7 +7,7 @@ The first version of LOGOS Engine should support:
 - initializing a project workspace;
 - selecting the App Business profile;
 - creating a canonical folder structure;
-- asking guided questions;
+- conducting AI-led intake conversation;
 - storing structured decisions;
 - rendering Markdown documents;
 - identifying open gaps;

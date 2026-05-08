@@ -236,22 +236,23 @@ Prompts must clearly separate:
 
 ---
 
-## Milestone 7 — AI-Assisted Guided Intake
+## Milestone 7 — AI-Led Conversational Intake
 
 ## Outcome
 
-A user can answer structured questions, and the system can use AI to generate context-aware follow-ups and summaries.
+A user can converse with AI, and the system can interpret the conversation into structured answers, assumptions, open questions, proposed decisions, follow-ups, and summaries.
 
 ## Capabilities
 
 - question schema;
+- conversation turn schema;
 - answer schema;
 - session schema;
 - answer store;
 - session store;
-- question group selector;
-- phase-aware question selection;
-- missing-decision-aware question selection;
+- AI-led intake turn service;
+- phase-aware prompt context;
+- missing-decision-aware prompt context;
 - AI-assisted follow-up question generation;
 - AI-assisted answer summarization;
 - unknown answer handling;
@@ -259,13 +260,13 @@ A user can answer structured questions, and the system can use AI to generate co
 
 ## Completion Criteria
 
-- user can answer foundation questions;
+- user can complete foundation intake through AI conversation;
 - answers are persisted;
 - sessions can resume;
 - unknown answers create open questions;
 - assumption answers create assumptions;
 - AI follow-up questions are proposed, not silently canonical;
-- question selection is tested with mocked AI responses.
+- conversation move selection is tested with mocked AI responses.
 
 ---
 
@@ -377,7 +378,7 @@ The system can explain gaps, risks, inconsistencies, and next steps by combining
 - deterministic gap summary;
 - AI-assisted gap analysis;
 - AI-assisted risk analysis;
-- next question group recommendation;
+- next conversational move recommendation;
 - severity grouping;
 - affected document list;
 - `/diagnose` slash command.
@@ -396,7 +397,7 @@ The system can explain gaps, risks, inconsistencies, and next steps by combining
 
 ## Outcome
 
-The TUI makes the AI-assisted workflow transparent and controlled.
+The TUI makes the AI-led workflow transparent and controlled.
 
 ## Capabilities
 
@@ -412,7 +413,7 @@ The TUI makes the AI-assisted workflow transparent and controlled.
 
 ## Completion Criteria
 
-- user can distinguish profile questions from AI proposals;
+- user can distinguish AI conversational prompts from AI proposals;
 - user can distinguish proposed decisions from confirmed decisions;
 - user can confirm/reject proposals;
 - progress by phase is visible;
@@ -474,7 +475,7 @@ The full LOGOS workflow is reliable enough for external users.
 
 ```text
 init
-→ guided intake
+→ AI-led conversational intake
 → AI follow-up
 → AI decision proposal
 → user confirmation
@@ -504,36 +505,116 @@ init
 
 ---
 
-## Milestone 15 — Open Source Launch Readiness
+## Milestone 15 — Conversation Model and Legacy Intake Boundary
 
 ## Outcome
 
-The project is ready for public use and contribution.
+The post-Phase 14 codebase has a first-class conversation model, and the old deterministic question-id intake path is isolated as legacy/internal support.
 
 ## Capabilities
 
-- installation docs;
-- provider configuration docs;
-- privacy behavior docs;
-- AI behavior docs;
-- contribution guide;
-- code of conduct;
-- security policy;
-- issue templates;
-- example workspace;
-- demo recording or GIF.
+- conversation turn schema;
+- conversation turn storage;
+- conversation session model;
+- `lead_intake_turn` AI operation;
+- `recommend_next_conversation_move` AI operation;
+- conversation-aware prompt context;
+- legacy boundary around deterministic question selection;
+- migration-safe reads for existing `.logos/sessions/` state.
 
 ## Completion Criteria
 
-- new users can install and run the tool;
-- new contributors understand where to help;
-- AI provider usage is documented;
-- privacy implications are explicit;
-- example workspace demonstrates value quickly.
+- conversation turns are persisted and schema-validated;
+- conversation-first AI operations exist and are tested;
+- existing workspace state can still be read safely;
+- deterministic question selection is not presented as the primary path;
+- default tests avoid live model calls.
 
 ---
 
-## Milestone 16 — Public Release
+## Milestone 16 — Conversational TUI Runtime
+
+## Outcome
+
+The TUI behaves as an AI conversation for ordinary input while keeping slash commands for explicit system operations.
+
+## Capabilities
+
+- non-slash input routing;
+- conversational intake application service;
+- `/continue` conversation resume;
+- conversation history rendering;
+- no-provider setup guidance;
+- provider/context disclosure hook;
+- slash command preservation for operational actions.
+
+## Completion Criteria
+
+- ordinary text creates conversation turns;
+- slash commands still route through command handlers;
+- `/continue` resumes the AI-led conversation without question-id subcommands;
+- no-provider state guides the user to configure AI;
+- TUI tests cover command and conversation paths.
+
+---
+
+## Milestone 17 — AI Interpretation and Confirmation
+
+## Outcome
+
+AI-led conversation can produce structured answers, assumptions, open questions, and decision proposals without bypassing user confirmation.
+
+## Capabilities
+
+- interpreted conversation output schema;
+- proposal batch schema;
+- conversation interpretation service;
+- source links from turns to generated state;
+- proposal review flow;
+- confirmation/rejection flow;
+- malformed AI output handling;
+- provider failure handling.
+
+## Completion Criteria
+
+- conversation turns produce structured interpreted records;
+- AI-generated decisions enter as `proposed`;
+- confirmed decisions require explicit user confirmation;
+- assumptions and unknowns remain separate from confirmed decisions;
+- malformed interpretation output does not corrupt state;
+- traceability from turns to generated state is tested.
+
+---
+
+## Milestone 18 — AI-Led Regression Rebaseline
+
+## Outcome
+
+Document generation, diagnostics, examples, and regression tests are re-centered on AI-led conversation.
+
+## Capabilities
+
+- conversation-derived document drafting context;
+- conversation-first E2E tests;
+- fixture AI conversation transcript;
+- fixture provider responses for full workflow;
+- diagnostics with next conversational move recommendations;
+- updated example guidance;
+- updated demo script;
+- no-live-provider regression coverage.
+
+## Completion Criteria
+
+- full workflow can run with mocked or fixture AI conversation;
+- E2E tests no longer depend on user-facing question id commands;
+- generated docs remain broad and auditable;
+- diagnostics recommend conversational next steps;
+- examples demonstrate AI-led intake;
+- `pnpm check` passes.
+
+---
+
+## Milestone 19 — Public Release
 
 ## Outcome
 
@@ -567,7 +648,7 @@ V1 is done when:
 - LOGOS Engine can be installed;
 - `/init` creates a valid local workspace;
 - the App Business profile works end-to-end;
-- AI is part of the guided workflow;
+- AI leads the conversational workflow;
 - AI calls use provider abstraction;
 - prompt/context management is explicit and tested;
 - answers are persisted;

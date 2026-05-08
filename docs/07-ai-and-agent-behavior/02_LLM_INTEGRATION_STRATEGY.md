@@ -18,7 +18,7 @@ AI is a core part of the system because it enables:
 
 However, AI must not become an unchecked source of truth.
 
-The system should combine AI-assisted reasoning with deterministic structures such as profiles, schemas, decision registries, validation rules, and document templates.
+The system should combine AI-led reasoning with deterministic guardrails such as profiles, schemas, decision registries, validation rules, and document templates.
 
 ## Core Position
 
@@ -33,6 +33,8 @@ The correct model is:
 ```text
 LOGOS Engine uses AI as the reasoning and synthesis layer, constrained by explicit structure, traceability, and user confirmation.
 ```
+
+The normal product flow is not a deterministic questionnaire with optional AI help. It is a conversation with AI that writes back into structured, auditable state.
 
 ## Role of AI
 
@@ -61,12 +63,14 @@ The deterministic layer is responsible for:
 
 - defining canonical phases;
 - defining required documents;
-- defining expected decisions;
+- defining expected coverage and decision contracts;
 - validating completeness;
 - tracking decision status;
 - preserving traceability;
 - rendering predictable document structures;
 - preventing AI from silently inventing facts.
+
+It is not responsible for choosing a fixed next question sequence for the user during normal intake.
 
 ## V1 Strategy
 
@@ -76,13 +80,14 @@ The V1 should still avoid unnecessary complexity.
 
 The goal is not to build a fully autonomous multi-agent system.
 
-The goal is to build a structured AI-assisted documentation engine.
+The goal is to build a structured AI-led documentation engine.
 
 ## V1 AI Responsibilities
 
 The V1 AI layer should support:
 
-- generating follow-up questions from profile context;
+- leading the intake conversation from profile and document context;
+- generating initial and follow-up questions from profile context;
 - summarizing and normalizing user answers;
 - extracting proposed decisions;
 - drafting sections of canonical Markdown documents;
@@ -90,7 +95,7 @@ The V1 AI layer should support:
 - suggesting assumptions when information is incomplete;
 - producing gap analysis;
 - producing risk notes;
-- recommending the next useful question group.
+- recommending the next useful conversational move.
 
 ## V1 Non-Goals
 
