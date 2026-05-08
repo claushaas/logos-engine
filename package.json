@@ -1,0 +1,19 @@
+{
+	"author": "",
+	"description": "",
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.14",
+		"markdownlint-cli": "^0.48.0"
+	},
+	"keywords": [],
+	"license": "ISC",
+	"main": "index.js",
+	"name": "logos-engine",
+	"packageManager": "pnpm@10.33.2",
+	"scripts": {
+		"lint:biome": "biome check --unsafe --write",
+		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules --fix",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"version": "1.0.0"
+}
