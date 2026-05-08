@@ -26,7 +26,7 @@ The deterministic core must remain useful without live model calls. The default 
 - `docs/07-ai-and-agent-behavior/00_AGENT_BEHAVIOR.md`
 - `docs/07-ai-and-agent-behavior/01_PROMPTING_CONTRACT.md`
 - `docs/07-ai-and-agent-behavior/02_LLM_INTEGRATION_STRATEGY.md`
-- `docs/05-profiles/app-business/01_CANONICAL_DOCUMENTS.md`
+- `docs/05-profiles/app-business/documents.yml`
 
 ---
 
@@ -339,6 +339,10 @@ Implement guided intake with profile-defined questions and AI-assisted follow-up
 ## Tasks
 
 - [ ] Define question schema
+- [ ] Define `questions.yml` schema
+- [ ] Add `helpText` support to questions
+- [ ] Add examples support to questions
+- [ ] Add choice option metadata to questions
 - [ ] Define answer schema
 - [ ] Define session schema
 - [ ] Define open question schema
@@ -358,6 +362,9 @@ Implement guided intake with profile-defined questions and AI-assisted follow-up
 - [ ] Support assumption-based answers
 - [ ] Store raw user answers
 - [ ] Store normalized answer summaries separately from raw answers
+- [ ] Render question help text in the TUI
+- [ ] Render question examples in the TUI where present
+- [ ] Render option lists for choice and multi-choice questions
 - [ ] Use AI operation: `generate_follow_up_questions`
 - [ ] Use AI operation: `summarize_answer`
 - [ ] Use AI operation: `recommend_next_question_group`
@@ -373,6 +380,8 @@ Implement guided intake with profile-defined questions and AI-assisted follow-up
 - [ ] Sessions can resume
 - [ ] Unknown answers create open questions
 - [ ] Assumption answers create assumptions
+- [ ] Questions can guide users with examples without forcing an answer
+- [ ] Choice questions display options clearly
 - [ ] AI follow-up questions are proposed, not silently canonical
 - [ ] User can save and resume an unfinished intake
 - [ ] Question selection does not become infinite or uncontrolled

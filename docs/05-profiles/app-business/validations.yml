@@ -1,0 +1,234 @@
+version: 0.1.0
+profileId: app-business
+
+rules:
+  - id: foundation.target_user_required
+    phaseId: 00-intake
+    title: Target User Required
+    severity: error
+    description: The project cannot complete foundation without a primary user.
+    requiredDecisionIds:
+      - foundation.target_user
+    affectedDocuments:
+      - intake.idea_brief
+
+  - id: foundation.problem_required
+    phaseId: 00-intake
+    title: Problem Required
+    severity: error
+    description: The project cannot complete foundation without a defined problem.
+    requiredDecisionIds:
+      - foundation.problem_statement
+    affectedDocuments:
+      - intake.idea_brief
+      - product.product_thesis
+
+  - id: foundation.alternative_required
+    phaseId: 00-intake
+    title: Alternative Required
+    severity: warning
+    description: If no current alternative is known, market validation is weak.
+    requiredDecisionIds:
+      - market.current_alternative
+    affectedDocuments:
+      - intake.idea_brief
+      - market.market_analysis
+
+  - id: market.competitors_required
+    phaseId: 01-market
+    title: Competitors Required
+    severity: warning
+    description: At least direct or indirect alternatives must be identified.
+    requiredDecisionIds:
+      - market.alternative_types
+    affectedDocuments:
+      - market.competitor_matrix
+
+  - id: market.icp_required
+    phaseId: 01-market
+    title: ICP Required
+    severity: error
+    description: Marketing and product strategy cannot be considered ready without an ICP.
+    requiredDecisionIds:
+      - market.ideal_customer_profile
+    affectedDocuments:
+      - market.icp
+      - gtm.marketing_strategy
+
+  - id: economics.pricing_required
+    phaseId: 03-economics
+    title: Pricing Required
+    severity: error
+    description: Break-even cannot be calculated without pricing.
+    requiredDecisionIds:
+      - economics.pricing_model
+    affectedDocuments:
+      - economics.pricing
+      - economics.break_even
+
+  - id: economics.variable_costs_required
+    phaseId: 03-economics
+    title: Variable Costs Required
+    severity: error
+    description: Margin cannot be estimated without variable cost assumptions.
+    requiredDecisionIds:
+      - economics.variable_costs
+    affectedDocuments:
+      - economics.financial_model
+      - economics.break_even
+
+  - id: economics.cac_assumption_required
+    phaseId: 03-economics
+    title: CAC Assumption Required
+    severity: warning
+    description: Growth strategy is incomplete without acquisition cost assumptions.
+    requiredDecisionIds:
+      - economics.cac_assumption
+    affectedDocuments:
+      - economics.financial_model
+      - gtm.marketing_strategy
+
+  - id: economics.ai_cost_risk
+    phaseId: 03-economics
+    title: AI Cost Risk
+    severity: warning
+    description: If the app uses AI-heavy workflows and has low pricing or a freemium model, flag gross margin risk.
+    condition:
+      all:
+        - decision: product.uses_ai_heavy_workflows
+          equals: true
+        - decision: economics.pricing_model
+          in:
+            - free
+            - freemium
+            - low_price_subscription
+    affectedDocuments:
+      - economics.financial_model
+      - governance.risk_register
+
+  - id: product.mvp_scope_required
+    phaseId: 04-product
+    title: MVP Scope Required
+    severity: error
+    description: Implementation cannot begin without MVP boundaries.
+    requiredDecisionIds:
+      - product.mvp_scope
+    affectedDocuments:
+      - product.mvp_scope
+      - implementation.implementation_plan
+
+  - id: product.core_loop_required
+    phaseId: 04-product
+    title: Core Loop Required
+    severity: error
+    description: Retention cannot be reasoned about without a core loop.
+    requiredDecisionIds:
+      - product.core_loop
+    affectedDocuments:
+      - product.product_thesis
+      - design.ux_flows
+
+  - id: product.activation_moment_required
+    phaseId: 04-product
+    title: Activation Moment Required
+    severity: warning
+    description: Onboarding cannot be completed without activation definition.
+    requiredDecisionIds:
+      - product.activation_moment
+    affectedDocuments:
+      - product.product_thesis
+      - design.onboarding
+
+  - id: architecture.offline_first_dependency
+    phaseId: 06-architecture
+    title: Offline-First Dependency
+    severity: error
+    description: Offline-first requires local storage, sync strategy, conflict resolution, and offline testing.
+    condition:
+      decision: architecture.offline_strategy
+      equals: offline_first
+    requiredDecisionIds:
+      - architecture.local_storage
+      - architecture.sync_strategy
+      - architecture.conflict_resolution
+      - testing.offline_testing
+    affectedDocuments:
+      - architecture.architecture
+      - architecture.data_model
+      - testing.testing_strategy
+
+  - id: architecture.multi_device_sync_dependency
+    phaseId: 06-architecture
+    title: Multi-Device Sync Dependency
+    severity: error
+    description: If multi-device sync is required, backend architecture must be defined.
+    condition:
+      decision: architecture.requires_multi_device_sync
+      equals: true
+    requiredDecisionIds:
+      - architecture.backend_architecture
+      - architecture.sync_strategy
+    affectedDocuments:
+      - architecture.architecture
+
+  - id: architecture.authentication_dependency
+    phaseId: 06-architecture
+    title: Authentication Dependency
+    severity: error
+    description: If user data is persisted remotely, authentication must be defined.
+    condition:
+      decision: architecture.remote_user_data
+      equals: true
+    requiredDecisionIds:
+      - architecture.authentication_strategy
+    affectedDocuments:
+      - architecture.architecture
+      - architecture.api_spec
+
+  - id: gtm.distribution_channel_required
+    phaseId: 09-go-to-market
+    title: Distribution Channel Required
+    severity: error
+    description: Launch planning cannot be completed without at least one primary channel.
+    requiredDecisionIds:
+      - gtm.primary_distribution_channel
+    affectedDocuments:
+      - gtm.marketing_strategy
+      - gtm.launch_plan
+
+  - id: gtm.paid_acquisition_risk
+    phaseId: 09-go-to-market
+    title: Paid Acquisition Risk
+    severity: warning
+    description: If paid ads are primary and CAC is unknown, flag economic risk.
+    condition:
+      decision: gtm.primary_distribution_channel
+      equals: paid_ads
+    requiredDecisionIds:
+      - economics.cac_assumption
+    affectedDocuments:
+      - gtm.marketing_strategy
+      - governance.risk_register
+
+  - id: operations.support_model_required
+    phaseId: 10-operations
+    title: Support Model Required
+    severity: warning
+    description: Public launch should not occur without support model.
+    requiredDecisionIds:
+      - operations.support_model
+    affectedDocuments:
+      - operations.support_model
+
+  - id: operations.metrics_required
+    phaseId: 10-operations
+    title: Metrics Required
+    severity: warning
+    description: Launch should not occur without activation, retention, revenue, and reliability metrics.
+    requiredDecisionIds:
+      - operations.activation_metrics
+      - operations.retention_metrics
+      - operations.revenue_metrics
+      - operations.reliability_metrics
+    affectedDocuments:
+      - operations.metrics

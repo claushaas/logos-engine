@@ -1,0 +1,61 @@
+id: app-business
+version: 0.1.0
+name: App Business
+description: Transform an app idea into complete documentation covering business, product, design, engineering, launch, and operations.
+targetUser: A technical or semi-technical builder who wants to build an app-based business.
+
+outcomes:
+  - evaluate the opportunity
+  - understand the business model
+  - define the MVP
+  - design the user experience
+  - architect the system
+  - implement the product
+  - test it
+  - launch it
+  - operate it
+  - evolve it
+
+phases:
+  - id: 00-intake
+    title: Intake
+    purpose: Capture the initial idea, assumptions, and open questions.
+  - id: 01-market
+    title: Market
+    purpose: Understand the market, competitors, and ideal customer.
+  - id: 02-business
+    title: Business
+    purpose: Define value creation, value capture, and positioning.
+  - id: 03-economics
+    title: Economics
+    purpose: Test pricing, financial model, and break-even logic.
+  - id: 04-product
+    title: Product
+    purpose: Define product thesis, MVP scope, and roadmap.
+  - id: 05-design
+    title: Design
+    purpose: Define UX flows, design direction, and onboarding.
+  - id: 06-architecture
+    title: Architecture
+    purpose: Define system architecture, tech stack, data model, and API.
+  - id: 07-implementation
+    title: Implementation
+    purpose: Define implementation plan and development standards.
+  - id: 08-testing
+    title: Testing
+    purpose: Define validation and testing strategy.
+  - id: 09-go-to-market
+    title: Go-To-Market
+    purpose: Define marketing, launch, and content strategy.
+  - id: 10-operations
+    title: Operations
+    purpose: Define operations, support, and metrics.
+  - id: 11-governance
+    title: Governance
+    purpose: Track risks and decisions.
+
+contracts:
+  documents: documents.yml
+  questions: questions.yml
+  validations: validations.yml
+  templatesDir: templates

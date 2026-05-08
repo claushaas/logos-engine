@@ -34,10 +34,10 @@ This roadmap should be read alongside:
 - `docs/04-tui-experience/01_COMMANDS.md`
 - `docs/04-tui-experience/02_INTERACTION_FLOWS.md`
 - `docs/05-profiles/00_PROFILE_SYSTEM.md`
-- `docs/05-profiles/app-business/00_APP_BUSINESS_PROFILE.md`
-- `docs/05-profiles/app-business/01_CANONICAL_DOCUMENTS.md`
-- `docs/05-profiles/app-business/02_QUESTION_SETS.md`
-- `docs/05-profiles/app-business/03_VALIDATION_RULES.md`
+- `docs/05-profiles/app-business/profile.yml`
+- `docs/05-profiles/app-business/documents.yml`
+- `docs/05-profiles/app-business/questions.yml`
+- `docs/05-profiles/app-business/validations.yml`
 - `docs/06-documentation-system/00_DOCUMENTATION_ARCHITECTURE.md`
 - `docs/06-documentation-system/01_CANONICAL_DOCUMENT_TEMPLATE.md`
 - `docs/06-documentation-system/02_APP_BUSINESS_DOC_STRUCTURE.md`
@@ -382,10 +382,10 @@ Implement the profile system and load the initial `app-business` profile.
 ## Related Docs
 
 - `docs/05-profiles/00_PROFILE_SYSTEM.md`
-- `docs/05-profiles/app-business/00_APP_BUSINESS_PROFILE.md`
-- `docs/05-profiles/app-business/01_CANONICAL_DOCUMENTS.md`
-- `docs/05-profiles/app-business/02_QUESTION_SETS.md`
-- `docs/05-profiles/app-business/03_VALIDATION_RULES.md`
+- `docs/05-profiles/app-business/profile.yml`
+- `docs/05-profiles/app-business/documents.yml`
+- `docs/05-profiles/app-business/questions.yml`
+- `docs/05-profiles/app-business/validations.yml`
 
 ## Deliverables
 
@@ -420,6 +420,20 @@ Each canonical document definition should include:
 - generated outputs;
 - completion criteria;
 - dependencies.
+
+Question definitions should also be structured, ideally in `questions.yml`.
+
+Each question definition should support:
+
+- question id;
+- phase id;
+- question text;
+- short help text;
+- examples;
+- answer type;
+- options for choice and multi-choice answers;
+- mapped decision ids;
+- unknown and assumption behavior.
 
 Phase and folder naming must align with the canonical output tree:
 
@@ -584,7 +598,7 @@ Implement prompt construction as a versioned and testable product surface.
 - `docs/07-ai-and-agent-behavior/01_PROMPTING_CONTRACT.md`
 - `docs/07-ai-and-agent-behavior/02_LLM_INTEGRATION_STRATEGY.md`
 - `docs/10-operational-playbooks/00_DEVELOPMENT_STANDARDS.md`
-- `docs/05-profiles/app-business/01_CANONICAL_DOCUMENTS.md`
+- `docs/05-profiles/app-business/documents.yml`
 
 ## Deliverables
 
@@ -637,7 +651,7 @@ Implement the guided intake system, using the profile and AI layer to ask contex
 
 ## Related Docs
 
-- `docs/05-profiles/app-business/02_QUESTION_SETS.md`
+- `docs/05-profiles/app-business/questions.yml`
 - `docs/04-tui-experience/02_INTERACTION_FLOWS.md`
 - `docs/07-ai-and-agent-behavior/00_AGENT_BEHAVIOR.md`
 - `docs/03-system-architecture/01_MODULES.md`
@@ -645,6 +659,7 @@ Implement the guided intake system, using the profile and AI layer to ask contex
 ## Deliverables
 
 - question schema;
+- guided question metadata;
 - answer store;
 - session store;
 - `/continue` slash command;
@@ -667,6 +682,8 @@ The system should not ask unlimited questions.
 
 Question groups should remain small and purposeful.
 
+Questions should be helpful without being leading. When useful, the TUI should show short examples and option lists so the user understands the expected level of detail.
+
 ## Acceptance Criteria
 
 - user can answer foundation questions;
@@ -674,6 +691,7 @@ Question groups should remain small and purposeful.
 - sessions can resume;
 - unknown answers create open questions;
 - assumption answers create assumptions;
+- questions can show help text, examples, and options;
 - AI follow-up questions are proposed, not silently injected as canonical requirements;
 - question selection is tested with mocked AI responses.
 
@@ -778,7 +796,7 @@ Render complete canonical Markdown documents from structured state and AI-assist
 - `docs/06-documentation-system/00_DOCUMENTATION_ARCHITECTURE.md`
 - `docs/06-documentation-system/01_CANONICAL_DOCUMENT_TEMPLATE.md`
 - `docs/06-documentation-system/02_APP_BUSINESS_DOC_STRUCTURE.md`
-- `docs/05-profiles/app-business/01_CANONICAL_DOCUMENTS.md`
+- `docs/05-profiles/app-business/documents.yml`
 
 ## Deliverables
 
@@ -836,7 +854,7 @@ Implement deterministic validation rules that check whether the documentation an
 ## Related Docs
 
 - `docs/03-system-architecture/05_VALIDATION_AND_DIAGNOSTICS.md`
-- `docs/05-profiles/app-business/03_VALIDATION_RULES.md`
+- `docs/05-profiles/app-business/validations.yml`
 - `docs/03-system-architecture/03_DECISION_REGISTRY.md`
 
 ## Deliverables
@@ -997,10 +1015,10 @@ Complete the first production-quality profile: `app-business`.
 
 ## Related Docs
 
-- `docs/05-profiles/app-business/00_APP_BUSINESS_PROFILE.md`
-- `docs/05-profiles/app-business/01_CANONICAL_DOCUMENTS.md`
-- `docs/05-profiles/app-business/02_QUESTION_SETS.md`
-- `docs/05-profiles/app-business/03_VALIDATION_RULES.md`
+- `docs/05-profiles/app-business/profile.yml`
+- `docs/05-profiles/app-business/documents.yml`
+- `docs/05-profiles/app-business/questions.yml`
+- `docs/05-profiles/app-business/validations.yml`
 - `docs/06-documentation-system/02_APP_BUSINESS_DOC_STRUCTURE.md`
 
 ## Deliverables

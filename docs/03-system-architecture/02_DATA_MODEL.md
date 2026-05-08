@@ -48,10 +48,17 @@ type Question = {
   phaseId: string;
   text: string;
   helpText?: string;
+  examples?: string[];
   answerType: "text" | "choice" | "multi_choice" | "number" | "boolean";
-  options?: string[];
+  options?: QuestionOption[];
   mapsToDecisionIds?: string[];
   condition?: Condition;
+};
+
+type QuestionOption = {
+  value: string;
+  label: string;
+  description?: string;
 };
 ```
 
