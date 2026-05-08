@@ -33,6 +33,32 @@ export {
 } from './ai/llm-provider.js';
 export { createMockLlmProvider } from './ai/mock-provider.js';
 export {
+	type BuildPromptInput,
+	type BuiltPrompt,
+	buildPromptForAiOperation,
+	createAiOperationOutputJsonSchema,
+	createPromptContract,
+	createStructuredOutputInstructions,
+	type PromptContract,
+	promptBuilderVersion,
+} from './ai/prompt-builder.js';
+export {
+	type BuildPromptContextInput,
+	buildPromptContext,
+	type ContextSelectionRule,
+	contextSelectionRules,
+	estimatePromptContextCharacters,
+	groupPromptContextItems,
+	type PromptContextBundle,
+	type PromptContextCategory,
+	type PromptContextDisclosure,
+	PromptContextError,
+	type PromptContextItem,
+	promptContextCategories,
+	promptContextVersion,
+	serializeContext,
+} from './ai/prompt-context.js';
+export {
 	type AiProviderConfig,
 	aiProviderConfigSchema,
 	assertConfigDoesNotContainRawToken,
