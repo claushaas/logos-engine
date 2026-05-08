@@ -1,4 +1,10 @@
 import type { SlashCommandId } from '../commands/slash-command-registry.js';
+import {
+	disableAiConfiguration,
+	showAiConfiguration,
+	testAiConfiguration,
+	updateAiConfiguration,
+} from './ai-configuration.js';
 import { initializeWorkspace } from './workspace-initialization.js';
 
 export type ApplicationCommandResult = {
@@ -18,7 +24,10 @@ export type LogosApplicationServices = {
 	readonly initializeWorkspace: (
 		context: ApplicationServiceContext,
 	) => ApplicationCommandResult;
-	readonly showAiConfig: () => ApplicationCommandResult;
+	readonly showAiConfig: (
+		context: ApplicationServiceContext,
+		args: readonly string[],
+	) => ApplicationCommandResult;
 	readonly showHelp: () => ApplicationCommandResult;
 	readonly showStatus: () => ApplicationCommandResult;
 	readonly validateWorkspace: () => ApplicationCommandResult;
@@ -42,11 +51,7 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				'Document rendering will create or refresh Markdown projections in a later phase.',
 			),
 		initializeWorkspace: (context) => createInitializeWorkspaceResult(context),
-		showAiConfig: () =>
-			createStubResult(
-				'/config ai',
-				'AI provider configuration will store non-secret settings and disclose remote context in a later phase.',
-			),
+		showAiConfig: (context, args) => createAiConfigResult(context, args),
 		showHelp: () => ({
 			body: ['Type a slash command or use autocomplete to inspect options.'],
 			status: 'ok',
@@ -63,6 +68,35 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				'Deterministic validation will check readiness and profile rules in a later phase.',
 			),
 	};
+}
+
+function createAiConfigResult(
+	context: ApplicationServiceContext,
+	args: readonly string[],
+): ApplicationCommandResult {
+	try {
+		const result = args.includes('--test')
+			? testAiConfiguration(context.cwd)
+			: args.includes('--disable')
+				? disableAiConfiguration(context.cwd)
+				: args.length === 0 || args.includes('--show')
+					? showAiConfiguration(context.cwd)
+					: updateAiConfiguration(context.cwd, args);
+
+		return {
+			body: result.lines,
+			status: result.status,
+			title: result.title,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+
+		return {
+			body: [message, 'No raw tokens were stored.'],
+			status: 'error',
+			title: 'AI configuration failed',
+		};
+	}
 }
 
 function createInitializeWorkspaceResult(

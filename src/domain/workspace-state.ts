@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
+import { aiProviderConfigSchema } from '../ai/provider-config.js';
 import {
 	decisionStatuses,
 	validationSeverities,
@@ -64,18 +65,7 @@ export const diagnosticsStateSchema = schemaVersionSchema.extend({
 });
 
 export const configStateSchema = schemaVersionSchema.extend({
-	ai: z.object({
-		enabled: z.boolean(),
-		model: z.string().nullable(),
-		provider: z.string().nullable(),
-		remoteContextDisclosureAccepted: z.boolean(),
-		tokenSource: z
-			.object({
-				envVar: z.string().min(1),
-				type: z.literal('environment'),
-			})
-			.nullable(),
-	}),
+	ai: aiProviderConfigSchema,
 });
 
 export type ProjectState = z.infer<typeof projectStateSchema>;

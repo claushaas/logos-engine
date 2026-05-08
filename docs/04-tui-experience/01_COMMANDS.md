@@ -65,6 +65,7 @@ Slash commands may accept arguments when useful.
 /config ai --show
 /config ai --test
 /config ai --disable
+/config ai --provider openai --model gpt-4.1-mini --token-env LOGOS_LLM_API_KEY --allow-remote
 ```
 
 Autocomplete should expose available options after the user types the command.
@@ -205,7 +206,21 @@ Configures LLM access for AI-assisted workflows.
 /config ai --show
 /config ai --test
 /config ai --disable
+/config ai --provider <preset> --endpoint <url> --model <model-id> --token-env <env-var>
+/config ai --allow-remote
 ```
+
+Configuration flags:
+
+- `--provider <preset>` selects a provider preset such as `openai-compatible`,
+  `openai`, `openrouter`, `anthropic`, `ollama`, `lm-studio`, or `custom`;
+- `--endpoint <url>` stores a non-secret endpoint override;
+- `--model <model-id>` stores the model id;
+- `--token-env <env-var>` stores the name of an environment variable, not the
+  token value;
+- `--timeout-ms <milliseconds>` stores a request timeout;
+- `--allow-remote` records explicit acknowledgement that selected project
+  context may be sent to a remote provider.
 
 ### Token Sources
 

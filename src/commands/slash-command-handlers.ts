@@ -42,7 +42,7 @@ function executeCommand(
 		case '/generate':
 			return services.generateDocuments();
 		case '/config ai':
-			return services.showAiConfig();
+			return services.showAiConfig(context, command.args);
 		case '/help':
 			return {
 				body: slashCommandDefinitions.map(

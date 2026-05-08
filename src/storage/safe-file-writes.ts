@@ -32,6 +32,18 @@ export function atomicWriteJsonFile(path: string, value: unknown): void {
 		throw new SafeWriteError(`Refusing to overwrite existing file: ${path}`);
 	}
 
+	atomicWriteJsonContents(path, value, false);
+}
+
+export function atomicReplaceJsonFile(path: string, value: unknown): void {
+	atomicWriteJsonContents(path, value, true);
+}
+
+function atomicWriteJsonContents(
+	path: string,
+	value: unknown,
+	allowReplace: boolean,
+): void {
 	mkdirSync(dirname(path), { recursive: true });
 
 	const temporaryPath = `${path}.${process.pid}.${Date.now()}.tmp`;
@@ -40,7 +52,7 @@ export function atomicWriteJsonFile(path: string, value: unknown): void {
 	try {
 		writeFileSync(temporaryPath, contents, { encoding: 'utf8', flag: 'wx' });
 
-		if (existsSync(path)) {
+		if (!allowReplace && existsSync(path)) {
 			throw new SafeWriteError(`Refusing to overwrite existing file: ${path}`);
 		}
 

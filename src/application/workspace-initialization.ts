@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
+import { defaultAiProviderConfig } from '../ai/provider-config.js';
 import {
 	loadProfileById,
 	type ProfileContract,
@@ -103,13 +104,7 @@ export function initializeWorkspace(
 		{
 			path: join(workspaceRoot, 'config.json'),
 			value: {
-				ai: {
-					enabled: false,
-					model: null,
-					provider: null,
-					remoteContextDisclosureAccepted: false,
-					tokenSource: null,
-				},
+				ai: defaultAiProviderConfig,
 				schemaVersion: workspaceSchemaVersion,
 			},
 		},

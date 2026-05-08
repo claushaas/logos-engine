@@ -1,4 +1,69 @@
 export {
+	type AiOperationId,
+	type AiOperationOutput,
+	AiResponseValidationError,
+	aiOperationIds,
+	aiOperationOutputSchemas,
+	aiOperationRegistry,
+	getAiOperationMetadata,
+	validateAiOperationOutput,
+} from './ai/ai-operations.js';
+export {
+	createFixtureResponseProvider,
+	type FixtureResponse,
+	type FixtureResponseMap,
+} from './ai/fixture-provider.js';
+export {
+	createAnthropicCompatibleProvider,
+	createOllamaProvider,
+	createOpenAiCompatibleProvider,
+} from './ai/http-adapters.js';
+export {
+	type LlmMessage,
+	type LlmProvider,
+	LlmProviderError,
+	type LlmProviderFactory,
+	type LlmProviderMetadata,
+	type LlmRequest,
+	type LlmResponse,
+	llmMessageSchema,
+	llmRequestSchema,
+	llmResponseSchema,
+	runAiOperation,
+} from './ai/llm-provider.js';
+export { createMockLlmProvider } from './ai/mock-provider.js';
+export {
+	type AiProviderConfig,
+	aiProviderConfigSchema,
+	assertConfigDoesNotContainRawToken,
+	defaultAiProviderConfig,
+	getGlobalAiDefaultsPath,
+	getProviderPreset,
+	type ProviderAdapterId,
+	type ProviderCapability,
+	ProviderConfigurationError,
+	type ProviderPreset,
+	type ProviderPresetId,
+	type ProviderTransmission,
+	providerAdapterIds,
+	providerPresetIds,
+	providerPresetRegistry,
+	type ResolvedToken,
+	redactAiProviderConfig,
+	redactSecret,
+	resolveProviderConfigDefaults,
+	resolveTokenFromEnvironment,
+	type TokenSource,
+	tokenSourceSchema,
+} from './ai/provider-config.js';
+export {
+	type AiConfigCommandResult,
+	disableAiConfiguration,
+	showAiConfiguration,
+	testAiConfiguration,
+	updateAiConfiguration,
+} from './application/ai-configuration.js';
+export {
 	type ApplicationCommandResult,
 	type ApplicationServiceContext,
 	createLogosApplicationServices,
@@ -86,6 +151,7 @@ export {
 export { defaultTestPolicy } from './foundation/test-policy.js';
 export { detectProjectRoot } from './storage/project-root.js';
 export {
+	atomicReplaceJsonFile,
 	atomicWriteJsonFile,
 	ensureDirectory,
 	SafeWriteError,

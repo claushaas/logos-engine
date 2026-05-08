@@ -53,8 +53,19 @@ export const slashCommandDefinitions = [
 		aliases: [],
 		description: 'Configure LLM provider access without storing raw tokens.',
 		id: '/config ai',
-		options: ['--show', '--test', '--disable'],
-		usage: '/config ai [--show|--test|--disable]',
+		options: [
+			'--show',
+			'--test',
+			'--disable',
+			'--provider',
+			'--endpoint',
+			'--model',
+			'--token-env',
+			'--timeout-ms',
+			'--allow-remote',
+		],
+		usage:
+			'/config ai [--show|--test|--disable|--provider <preset> --model <id> --token-env <name> --allow-remote]',
 	},
 	{
 		aliases: [],
