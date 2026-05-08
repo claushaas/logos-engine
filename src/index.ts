@@ -104,6 +104,12 @@ export {
 	saveDecisionStore,
 } from './application/decision-service.js';
 export {
+	type DiagnosticsCommandOptions,
+	type DiagnosticsCommandResult,
+	diagnoseWorkspace,
+	formatDiagnosticsResult,
+} from './application/diagnostics-service.js';
+export {
 	type GenerateOptions,
 	generateDocuments,
 	generateDocumentsForCwd,
@@ -146,6 +152,20 @@ export {
 	type SlashCommandId,
 	slashCommandDefinitions,
 } from './commands/slash-command-registry.js';
+export {
+	type AiDiagnosticContribution,
+	buildDiagnosticsContext,
+	convertValidationFindingToDiagnostic,
+	createEmptyDiagnosticsResult,
+	type DiagnosticCategory,
+	type DiagnosticFinding,
+	type DiagnosticSource,
+	type DiagnosticsContext,
+	type DiagnosticsOptions,
+	type DiagnosticsResult,
+	runDeterministicDiagnostics,
+	runDiagnostics,
+} from './diagnostics/diagnostics-engine.js';
 export {
 	buildTemplateContext,
 	collectMissingInputs,
