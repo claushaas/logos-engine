@@ -206,7 +206,7 @@ function recordUnknownQuestion(
 	});
 	writeDecisionsState(projectRoot, {
 		...workspace.decisions,
-		decisions: decisionStore.decisions,
+		decisions: [...decisionStore.decisions],
 	});
 
 	return {
@@ -264,7 +264,7 @@ async function recordAssumptionQuestion(
 	});
 	writeDecisionsState(projectRoot, {
 		...workspace.decisions,
-		decisions: decisionStore.decisions,
+		decisions: [...decisionStore.decisions],
 	});
 
 	return {

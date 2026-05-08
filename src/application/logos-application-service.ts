@@ -7,6 +7,7 @@ import {
 } from './ai-configuration.js';
 import { generateDocumentsForCwd } from './document-generation.js';
 import { continueGuidedIntake } from './guided-intake.js';
+import { validateWorkspace } from './validation-service.js';
 import { initializeWorkspace } from './workspace-initialization.js';
 
 export type ApplicationCommandResult = {
@@ -38,7 +39,10 @@ export type LogosApplicationServices = {
 	) => ApplicationCommandResult;
 	readonly showHelp: () => ApplicationCommandResult;
 	readonly showStatus: () => ApplicationCommandResult;
-	readonly validateWorkspace: () => ApplicationCommandResult;
+	readonly validateWorkspace: (
+		context: ApplicationServiceContext,
+		args: readonly string[],
+	) => ApplicationCommandResult;
 };
 
 export function createLogosApplicationServices(): LogosApplicationServices {
@@ -69,11 +73,20 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				'/status',
 				'Project progress will load from structured workspace state in a later phase.',
 			),
-		validateWorkspace: () =>
-			createStubResult(
-				'/validate',
-				'Deterministic validation will check readiness and profile rules in a later phase.',
-			),
+		validateWorkspace: (context, args) => {
+			const phaseIndex = args.indexOf('--phase');
+			const phaseId = phaseIndex >= 0 ? args[phaseIndex + 1] : undefined;
+			const allFlag = args.includes('--all');
+			const result = validateWorkspace(context.cwd, {
+				all: allFlag,
+				phaseId,
+			});
+			return {
+				body: result.lines,
+				status: result.status === 'ok' ? 'ok' : 'error',
+				title: result.title,
+			};
+		},
 	};
 }
 

@@ -316,3 +316,13 @@ export {
 	SafeWriteError,
 	safeWriteTextFile,
 } from './storage/safe-file-writes.js';
+export {
+	evaluateCondition,
+	evaluateRiskPattern,
+	evaluateValidationRule,
+	runValidation,
+	type ValidationCondition,
+	type ValidationContext,
+	type ValidationFinding,
+	type ValidationResult,
+} from './validation/validation-engine.js';

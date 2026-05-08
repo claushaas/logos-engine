@@ -36,7 +36,7 @@ function executeCommand(
 		case '/status':
 			return services.showStatus();
 		case '/validate':
-			return services.validateWorkspace();
+			return services.validateWorkspace(context, command.args);
 		case '/diagnose':
 			return services.diagnoseWorkspace();
 		case '/generate':

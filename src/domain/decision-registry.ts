@@ -73,7 +73,7 @@ const validStatusTransitions: readonly DecisionStatusTransition[] = [
 	{ from: ['assumed'], to: 'confirmed' },
 	{ from: ['assumed'], to: 'deprecated' },
 	{ from: ['proposed'], to: 'confirmed' },
-	{ from: ['proposed'], to: 'rejected' },
+	{ from: ['proposed'], to: 'deprecated' },
 	{ from: ['proposed'], to: 'deprecated' },
 	{ from: ['confirmed'], to: 'deprecated' },
 	{ from: ['confirmed'], to: 'assumed' },
@@ -135,7 +135,7 @@ export function createDecision(decision: {
 	impacts?: readonly string[];
 	rationale: string;
 	sourceAnswerIds?: readonly string[];
-	sourceProposalId?: string;
+	sourceProposalId?: string | undefined;
 	status: (typeof decisionStatuses)[number];
 	title: string;
 	value: unknown;

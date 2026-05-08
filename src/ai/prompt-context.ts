@@ -440,8 +440,8 @@ function buildWorkspaceItems(
 					.map((decision) => ({
 						category: 'confirmed_decision' as const,
 						content: {
-							confirmedAt: decision.confirmedAt,
 							rationale: decision.rationale,
+							updatedAt: decision.updatedAt,
 							value: decision.value,
 						},
 						id: decision.id,

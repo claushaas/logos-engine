@@ -9,6 +9,7 @@ import {
 	type AnswersState,
 	answersStateSchema,
 	type DecisionsState,
+	decisionsStateSchema,
 	workspaceSchemaVersion,
 } from '../domain/workspace-state.js';
 import { atomicReplaceJsonFile } from './safe-file-writes.js';
