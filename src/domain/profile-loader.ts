@@ -77,25 +77,39 @@ const documentsFileSchema = z.object({
 	version: versionSchema,
 });
 
-const questionOptionSchema = z.object({
+export const questionOptionSchema = z.object({
 	description: z.string().min(1),
 	label: z.string().min(1),
 	value: idSchema,
 });
 
-const questionSchema = z.object({
-	allowAssumption: z.boolean().optional(),
-	allowUnknown: z.boolean().optional(),
-	answerType: z.enum(['boolean', 'choice', 'multi_choice', 'number', 'text']),
-	examples: z.array(z.string().min(1)).optional(),
-	helpText: z.string().min(1),
-	id: idSchema,
-	mapsToDecisionIds: z.array(idSchema).min(1),
-	options: z.array(questionOptionSchema).optional(),
-	text: z.string().min(1),
-});
+export const questionSchema = z
+	.object({
+		allowAssumption: z.boolean().optional(),
+		allowUnknown: z.boolean().optional(),
+		answerType: z.enum(['boolean', 'choice', 'multi_choice', 'number', 'text']),
+		examples: z.array(z.string().min(1)).optional(),
+		helpText: z.string().min(1),
+		id: idSchema,
+		mapsToDecisionIds: z.array(idSchema).min(1),
+		options: z.array(questionOptionSchema).optional(),
+		text: z.string().min(1),
+	})
+	.superRefine((question, context) => {
+		if (
+			(question.answerType === 'choice' ||
+				question.answerType === 'multi_choice') &&
+			(!question.options || question.options.length === 0)
+		) {
+			context.addIssue({
+				code: 'custom',
+				message: `${question.answerType} questions must define options.`,
+				path: ['options'],
+			});
+		}
+	});
 
-const questionSetSchema = z.object({
+export const questionSetSchema = z.object({
 	id: idSchema,
 	phaseId: idSchema,
 	purpose: z.string().min(1),
@@ -103,7 +117,7 @@ const questionSetSchema = z.object({
 	title: z.string().min(1),
 });
 
-const questionSetFileSchema = z.object({
+export const questionSetFileSchema = z.object({
 	defaults: z
 		.object({
 			allowAssumption: z.boolean(),
@@ -166,7 +180,10 @@ const validationsFileSchema = z.object({
 
 export type ProfilePhase = z.infer<typeof phaseSchema>;
 export type CanonicalDocument = z.infer<typeof canonicalDocumentSchema>;
+export type Question = z.infer<typeof questionSchema>;
+export type QuestionOption = z.infer<typeof questionOptionSchema>;
 export type QuestionSet = z.infer<typeof questionSetSchema>;
+export type QuestionSetFile = z.infer<typeof questionSetFileSchema>;
 export type ValidationRule = z.infer<typeof validationRuleSchema>;
 export type RiskPattern = z.infer<typeof riskPatternSchema>;
 export type PromptContextRequirement = z.infer<
@@ -188,6 +205,7 @@ export type ProfileContract = {
 	readonly id: string;
 	readonly name: string;
 	readonly phases: readonly ProfilePhase[];
+	readonly questionDefaults: QuestionSetFile['defaults'];
 	readonly questionSets: readonly QuestionSet[];
 	readonly questionsVersion: string;
 	readonly riskPatterns: readonly RiskPattern[];
@@ -242,6 +260,7 @@ export function loadProfileContract(profileDirectory: string): ProfileContract {
 		id: profileMetadata.id,
 		name: profileMetadata.name,
 		phases: profileMetadata.phases,
+		questionDefaults: profileQuestions.defaults,
 		questionSets: profileQuestions.questionSets,
 		questionsVersion: profileQuestions.version,
 		riskPatterns: profileValidations.riskPatterns,

@@ -6,6 +6,7 @@ import {
 	decisionStatuses,
 	validationSeverities,
 } from '../foundation/status-contracts.js';
+import { answerRecordSchema } from './question-engine.js';
 
 export const workspaceSchemaVersion = '0.1.0';
 
@@ -30,15 +31,7 @@ export const profileLockStateSchema = schemaVersionSchema.extend({
 });
 
 export const answersStateSchema = schemaVersionSchema.extend({
-	answers: z.array(
-		z.object({
-			answer: z.unknown(),
-			answeredAt: z.string().datetime(),
-			id: z.string().min(1),
-			questionId: z.string().min(1),
-			status: z.enum(['answered', 'unknown', 'assumption']),
-		}),
-	),
+	answers: z.array(answerRecordSchema),
 });
 
 export const decisionsStateSchema = schemaVersionSchema.extend({

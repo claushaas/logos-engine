@@ -130,6 +130,36 @@ Continues guided intake.
 - update decisions;
 - offer document regeneration.
 
+### Intake Actions
+
+Phase 6 exposes guided intake actions through `/continue` subcommands. A richer
+dedicated TUI question screen may use the same application services later.
+
+```text
+/continue
+/continue answer <question-id> <answer>
+/continue unknown <question-id>
+/continue assume <question-id> <answer>
+/continue skip <question-id>
+/continue propose-followups
+/continue accept-followups --all
+/continue accept-followups <follow-up-id>
+/continue save
+```
+
+Behavior rules:
+
+- `/continue` shows the next bounded question group;
+- `answer` stores the raw user answer and a separate normalized summary;
+- `unknown` stores an unknown answer and creates a derived open question view;
+- `assume` stores an assumption without confirming a decision;
+- `skip` records an explicit skipped answer for the current intake session;
+- `propose-followups` uses the AI operation contract to store follow-up
+  questions as proposed;
+- `accept-followups` makes proposed follow-ups session-active, but does not make
+  them canonical profile questions;
+- `save` persists the current intake session for later resume.
+
 ## `/diagnose`
 
 Runs diagnostics.

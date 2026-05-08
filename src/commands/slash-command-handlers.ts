@@ -10,12 +10,12 @@ export type SlashCommandHandlerResult = ApplicationCommandResult & {
 	readonly exitRequested: boolean;
 };
 
-export function handleSlashCommand(
+export async function handleSlashCommand(
 	command: ParsedSlashCommand,
 	context: CommandContext,
 	services: LogosApplicationServices,
-): SlashCommandHandlerResult {
-	const result = executeCommand(command, context, services);
+): Promise<SlashCommandHandlerResult> {
+	const result = await executeCommand(command, context, services);
 
 	return {
 		...result,
@@ -27,12 +27,12 @@ function executeCommand(
 	command: ParsedSlashCommand,
 	context: CommandContext,
 	services: LogosApplicationServices,
-): ApplicationCommandResult {
+): ApplicationCommandResult | Promise<ApplicationCommandResult> {
 	switch (command.definition.id) {
 		case '/init':
 			return services.initializeWorkspace(context);
 		case '/continue':
-			return services.continueIntake();
+			return services.continueIntake(context, command.args);
 		case '/status':
 			return services.showStatus();
 		case '/validate':

@@ -36,7 +36,7 @@ describe('slash command parser and router', () => {
 		expect(result.command.args).toEqual(['--show']);
 	});
 
-	it('routes core command stubs through handlers and services', () => {
+	it('routes core command stubs through handlers and services', async () => {
 		const services = createLogosApplicationServices();
 		const context = loadCommandContext('/tmp/logos-test');
 		const result = parseSlashCommand('/status');
@@ -46,14 +46,14 @@ describe('slash command parser and router', () => {
 			throw new Error(result.error.message);
 		}
 
-		const routed = handleSlashCommand(result.command, context, services);
+		const routed = await handleSlashCommand(result.command, context, services);
 
 		expect(routed.title).toBe('/status stub');
 		expect(routed.exitRequested).toBe(false);
 		expect(routed.body).toContain('No files were changed.');
 	});
 
-	it('marks /exit as an exit request', () => {
+	it('marks /exit as an exit request', async () => {
 		const services = createLogosApplicationServices();
 		const context = loadCommandContext('/tmp/logos-test');
 		const result = parseSlashCommand('/exit');
@@ -63,12 +63,12 @@ describe('slash command parser and router', () => {
 			throw new Error(result.error.message);
 		}
 
-		expect(handleSlashCommand(result.command, context, services)).toMatchObject(
-			{
-				exitRequested: true,
-				status: 'ok',
-			},
-		);
+		await expect(
+			handleSlashCommand(result.command, context, services),
+		).resolves.toMatchObject({
+			exitRequested: true,
+			status: 'ok',
+		});
 	});
 
 	it('rejects non-slash input with a common command error', () => {

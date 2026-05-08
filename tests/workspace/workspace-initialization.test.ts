@@ -30,7 +30,7 @@ describe('workspace initialization', () => {
 		expect(detectProjectRoot(nestedDirectory)).toBe(projectRoot);
 	});
 
-	it('creates a valid LOGOS workspace from /init', () => {
+	it('creates a valid LOGOS workspace from /init', async () => {
 		const projectRoot = createProjectRoot();
 		const nestedDirectory = join(projectRoot, 'src');
 		mkdirSync(nestedDirectory, { recursive: true });
@@ -41,7 +41,7 @@ describe('workspace initialization', () => {
 			throw new Error(parsed.error.message);
 		}
 
-		const result = handleSlashCommand(
+		const result = await handleSlashCommand(
 			parsed.command,
 			loadCommandContext(nestedDirectory),
 			createLogosApplicationServices(),

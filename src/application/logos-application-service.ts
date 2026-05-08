@@ -5,6 +5,7 @@ import {
 	testAiConfiguration,
 	updateAiConfiguration,
 } from './ai-configuration.js';
+import { continueGuidedIntake } from './guided-intake.js';
 import { initializeWorkspace } from './workspace-initialization.js';
 
 export type ApplicationCommandResult = {
@@ -18,7 +19,10 @@ export type ApplicationServiceContext = {
 };
 
 export type LogosApplicationServices = {
-	readonly continueIntake: () => ApplicationCommandResult;
+	readonly continueIntake: (
+		context: ApplicationServiceContext,
+		args: readonly string[],
+	) => Promise<ApplicationCommandResult>;
 	readonly diagnoseWorkspace: () => ApplicationCommandResult;
 	readonly generateDocuments: () => ApplicationCommandResult;
 	readonly initializeWorkspace: (
@@ -35,11 +39,7 @@ export type LogosApplicationServices = {
 
 export function createLogosApplicationServices(): LogosApplicationServices {
 	return {
-		continueIntake: () =>
-			createStubResult(
-				'/continue',
-				'Guided intake will resume the next useful question group in a later phase.',
-			),
+		continueIntake: (context, args) => continueGuidedIntake(context.cwd, args),
 		diagnoseWorkspace: () =>
 			createStubResult(
 				'/diagnose',

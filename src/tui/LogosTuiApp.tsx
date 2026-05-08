@@ -56,25 +56,27 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 					return;
 				}
 
-				const result = handleSlashCommand(
-					parseResult.command,
-					context,
-					services,
-				);
+				void (async () => {
+					const result = await handleSlashCommand(
+						parseResult.command,
+						context,
+						services,
+					);
 
-				setMessages((currentMessages) => [
-					...currentMessages,
-					{
-						body: result.body,
-						title: result.title,
-						tone: 'normal',
-					},
-				]);
-				setInput('');
+					setMessages((currentMessages) => [
+						...currentMessages,
+						{
+							body: result.body,
+							title: result.title,
+							tone: result.status === 'error' ? 'error' : 'normal',
+						},
+					]);
+					setInput('');
 
-				if (result.exitRequested) {
-					exit();
-				}
+					if (result.exitRequested) {
+						exit();
+					}
+				})();
 
 				return;
 			}

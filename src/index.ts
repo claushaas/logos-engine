@@ -89,6 +89,7 @@ export {
 	testAiConfiguration,
 	updateAiConfiguration,
 } from './application/ai-configuration.js';
+export { continueGuidedIntake } from './application/guided-intake.js';
 export {
 	type ApplicationCommandResult,
 	type ApplicationServiceContext,
@@ -141,10 +142,45 @@ export {
 	ProfileValidationError,
 	type ProfileVersionLock,
 	type PromptContextRequirement,
+	type Question,
+	type QuestionOption,
 	type QuestionSet,
+	type QuestionSetFile,
+	questionOptionSchema,
+	questionSchema,
+	questionSetFileSchema,
+	questionSetSchema,
 	type RiskPattern,
 	type ValidationRule,
 } from './domain/profile-loader.js';
+export {
+	type AnswerRecord,
+	type AnswerStatus,
+	type Assumption,
+	answerRecordSchema,
+	answerStatuses,
+	assumptionSchema,
+	createAnswerRecord,
+	createIntakeSession,
+	deriveAssumptions,
+	deriveOpenQuestions,
+	generateProposedFollowUpQuestions,
+	getQuestionById,
+	type IntakeSession,
+	intakeSessionSchema,
+	intakeSessionStatuses,
+	type OpenQuestion,
+	openQuestionSchema,
+	type ProposedFollowUpQuestion,
+	parseAnswerValue,
+	proposedFollowUpQuestionSchema,
+	type ResolvedQuestion,
+	recommendNextQuestionGroup,
+	saveIntakeSession,
+	selectNextQuestionGroup,
+	summarizeIntakeAnswer,
+	upsertAnswer,
+} from './domain/question-engine.js';
 export {
 	type AnswersState,
 	answersStateSchema,
@@ -175,6 +211,16 @@ export {
 	validationSeverities,
 } from './foundation/status-contracts.js';
 export { defaultTestPolicy } from './foundation/test-policy.js';
+export {
+	createEmptyAnswersState,
+	getCurrentSessionPath,
+	IntakeStateError,
+	readAnswersState,
+	readCurrentIntakeSession,
+	writeAnswersState,
+	writeCurrentIntakeSession,
+	writeDecisionsState,
+} from './storage/intake-state.js';
 export { detectProjectRoot } from './storage/project-root.js';
 export {
 	atomicReplaceJsonFile,

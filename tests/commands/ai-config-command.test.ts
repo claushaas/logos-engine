@@ -18,23 +18,23 @@ describe('/config ai command', () => {
 		delete process.env[tokenEnvVar];
 	});
 
-	it('shows redacted provider configuration and preset disclosure metadata', () => {
+	it('shows redacted provider configuration and preset disclosure metadata', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 
-		const result = runCommand(projectRoot, '/config ai --show');
+		const result = await runCommand(projectRoot, '/config ai --show');
 
 		expect(result.status).toBe('ok');
 		expect(result.body.join('\n')).toContain('Available presets:');
 		expect(result.body.join('\n')).toContain('Raw tokens are not stored');
 	});
 
-	it('writes explicit non-secret provider settings without persisting raw tokens', () => {
+	it('writes explicit non-secret provider settings without persisting raw tokens', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 		process.env[tokenEnvVar] = 'sk-test-secret-value';
 
-		const result = runCommand(
+		const result = await runCommand(
 			projectRoot,
 			`/config ai --provider openai --endpoint https://api.example.test/v1 --model gpt-test --token-env ${tokenEnvVar} --allow-remote`,
 		);
@@ -61,16 +61,16 @@ describe('/config ai command', () => {
 		expect(configText).not.toContain('sk-test-secret-value');
 	});
 
-	it('checks provider configuration deterministically without live model calls', () => {
+	it('checks provider configuration deterministically without live model calls', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 		process.env[tokenEnvVar] = 'sk-test-secret-value';
-		runCommand(
+		await runCommand(
 			projectRoot,
 			`/config ai --provider openai --endpoint https://api.example.test/v1 --model gpt-test --token-env ${tokenEnvVar} --allow-remote`,
 		);
 
-		const result = runCommand(projectRoot, '/config ai --test');
+		const result = await runCommand(projectRoot, '/config ai --test');
 
 		expect(result.status).toBe('ok');
 		expect(result.body.join('\n')).toContain(
@@ -79,16 +79,16 @@ describe('/config ai command', () => {
 		expect(result.body.join('\n')).toContain('sk-t...[redacted]...alue');
 	});
 
-	it('fails remote config checks until transmission is acknowledged', () => {
+	it('fails remote config checks until transmission is acknowledged', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 		process.env[tokenEnvVar] = 'sk-test-secret-value';
-		runCommand(
+		await runCommand(
 			projectRoot,
 			`/config ai --provider openai --endpoint https://api.example.test/v1 --model gpt-test --token-env ${tokenEnvVar}`,
 		);
 
-		const result = runCommand(projectRoot, '/config ai --test');
+		const result = await runCommand(projectRoot, '/config ai --test');
 
 		expect(result.status).toBe('error');
 		expect(result.body.join('\n')).toContain(
@@ -97,14 +97,14 @@ describe('/config ai command', () => {
 	});
 });
 
-function runCommand(projectRoot: string, input: string) {
+async function runCommand(projectRoot: string, input: string) {
 	const parsed = parseSlashCommand(input);
 	expect(parsed.ok).toBe(true);
 	if (!parsed.ok) {
 		throw new Error(parsed.error.message);
 	}
 
-	return handleSlashCommand(
+	return await handleSlashCommand(
 		parsed.command,
 		loadCommandContext(projectRoot),
 		createLogosApplicationServices(),

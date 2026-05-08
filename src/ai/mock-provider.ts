@@ -45,7 +45,7 @@ const defaultMockResponses = {
 	recommend_next_question_group: {
 		recommendation: {
 			priority: 'medium',
-			questionSetId: 'intake.foundation',
+			questionSetId: 'foundation',
 			rationale: 'The mock provider always recommends the foundation group.',
 		},
 		status: 'proposed',
