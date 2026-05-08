@@ -1,8 +1,17 @@
 {
+	"bin": {
+		"logos": "./dist/cli.js"
+	},
+	"dependencies": {
+		"commander": "^14.0.3",
+		"ink": "^7.0.2",
+		"react": "^19.2.6"
+	},
 	"description": "Local-first TUI engine for AI-structured documentation and intent clarification.",
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.14",
 		"@types/node": "^25.6.2",
+		"@types/react": "^19.2.14",
 		"@vitest/coverage-v8": "^4.1.5",
 		"markdownlint-cli": "^0.48.0",
 		"typescript": "^6.0.3",

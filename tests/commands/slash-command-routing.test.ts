@@ -1,0 +1,133 @@
+import { describe, expect, it } from 'vitest';
+import {
+	createLogosApplicationServices,
+	getSlashCommandCompletions,
+	handleSlashCommand,
+	loadCommandContext,
+	parseSlashCommand,
+	runCli,
+	slashCommandDefinitions,
+} from '../../src/index.js';
+
+describe('slash command parser and router', () => {
+	it('registers the Phase 1 command surface', () => {
+		expect(slashCommandDefinitions.map((command) => command.id)).toEqual([
+			'/init',
+			'/continue',
+			'/status',
+			'/validate',
+			'/diagnose',
+			'/generate',
+			'/config ai',
+			'/help',
+			'/exit',
+		]);
+	});
+
+	it('parses multi-word slash commands with arguments', () => {
+		const result = parseSlashCommand('/config ai --show');
+
+		expect(result.ok).toBe(true);
+		if (!result.ok) {
+			throw new Error(result.error.message);
+		}
+
+		expect(result.command.definition.id).toBe('/config ai');
+		expect(result.command.args).toEqual(['--show']);
+	});
+
+	it('routes core command stubs through handlers and services', () => {
+		const services = createLogosApplicationServices();
+		const context = loadCommandContext('/tmp/logos-test');
+		const result = parseSlashCommand('/init');
+
+		expect(result.ok).toBe(true);
+		if (!result.ok) {
+			throw new Error(result.error.message);
+		}
+
+		const routed = handleSlashCommand(result.command, context, services);
+
+		expect(routed.title).toBe('/init stub');
+		expect(routed.exitRequested).toBe(false);
+		expect(routed.body).toContain('No files were changed.');
+	});
+
+	it('marks /exit as an exit request', () => {
+		const services = createLogosApplicationServices();
+		const context = loadCommandContext('/tmp/logos-test');
+		const result = parseSlashCommand('/exit');
+
+		expect(result.ok).toBe(true);
+		if (!result.ok) {
+			throw new Error(result.error.message);
+		}
+
+		expect(handleSlashCommand(result.command, context, services)).toMatchObject(
+			{
+				exitRequested: true,
+				status: 'ok',
+			},
+		);
+	});
+
+	it('rejects non-slash input with a common command error', () => {
+		const result = parseSlashCommand('status');
+
+		expect(result.ok).toBe(false);
+		if (result.ok) {
+			throw new Error('Expected parse failure.');
+		}
+
+		expect(result.error.code).toBe('missing_slash');
+	});
+});
+
+describe('slash command autocomplete', () => {
+	it('suggests commands from a slash prefix', () => {
+		expect(
+			getSlashCommandCompletions('/con').map((item) => item.insertText),
+		).toEqual(['/continue', '/config ai']);
+	});
+
+	it('suggests options for commands that define them', () => {
+		expect(
+			getSlashCommandCompletions('/generate --r').map(
+				(item) => item.insertText,
+			),
+		).toEqual(['/generate --refresh']);
+	});
+});
+
+describe('CLI program', () => {
+	it('prints readable help without launching the TUI', async () => {
+		let output = '';
+		const writable = {
+			write: (chunk: string) => {
+				output += chunk;
+				return true;
+			},
+		} as NodeJS.WritableStream;
+
+		await runCli(['node', 'logos', '--help'], {
+			errorOutput: writable,
+			output: writable,
+		});
+
+		expect(output).toContain('Usage: logos');
+		expect(output).toContain('Open the LOGOS Engine TUI');
+	});
+
+	it('opens the TUI by default through the launcher boundary', async () => {
+		let launched = false;
+
+		const exitCode = await runCli(['node', 'logos'], {
+			launchTui: async () => {
+				launched = true;
+			},
+		});
+
+		expect(exitCode).toBe(0);
+		expect(launched).toBe(true);
+	});
+});

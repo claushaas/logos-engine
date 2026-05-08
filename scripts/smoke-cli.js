@@ -19,6 +19,12 @@ if (!existsSync(join(root, 'src', 'index.ts'))) {
 	throw new Error('Missing src/index.ts foundation entrypoint.');
 }
 
-console.log(
-	'CLI smoke preflight passed. The executable logos TUI is Phase 1 scope.',
-);
+if (!packageJson.bin?.logos) {
+	throw new Error('Missing logos executable bin entry.');
+}
+
+if (!existsSync(join(root, 'src', 'cli.ts'))) {
+	throw new Error('Missing src/cli.ts executable entrypoint.');
+}
+
+console.log('CLI smoke check passed. The logos executable is wired.');
