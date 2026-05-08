@@ -26,6 +26,7 @@ The deterministic core must remain useful without live model calls. The default 
 - `docs/07-ai-and-agent-behavior/00_AGENT_BEHAVIOR.md`
 - `docs/07-ai-and-agent-behavior/01_PROMPTING_CONTRACT.md`
 - `docs/07-ai-and-agent-behavior/02_LLM_INTEGRATION_STRATEGY.md`
+- `profiles/app-business/documents.yml`
 - `docs/05-profiles/app-business/documents.yml`
 
 ---

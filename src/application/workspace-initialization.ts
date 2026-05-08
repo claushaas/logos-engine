@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs';
 import { basename, dirname, join, relative } from 'node:path';
 import {
-	type AppBusinessProfileContract,
-	loadAppBusinessProfileContract,
-} from '../domain/app-business-profile-contract.js';
+	loadProfileById,
+	type ProfileContract,
+} from '../domain/profile-loader.js';
 import {
 	readWorkspaceState,
 	workspaceSchemaVersion,
@@ -27,7 +27,7 @@ export type WorkspaceInitializationResult =
 
 export function initializeWorkspace(
 	cwd: string,
-	profileContract: AppBusinessProfileContract = loadAppBusinessProfileContract(),
+	profileContract: ProfileContract = loadProfileById('app-business'),
 ): WorkspaceInitializationResult {
 	const projectRoot = detectProjectRoot(cwd);
 	const workspaceRoot = join(projectRoot, '.logos');

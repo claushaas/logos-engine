@@ -34,6 +34,10 @@ This roadmap should be read alongside:
 - `docs/04-tui-experience/01_COMMANDS.md`
 - `docs/04-tui-experience/02_INTERACTION_FLOWS.md`
 - `docs/05-profiles/00_PROFILE_SYSTEM.md`
+- `profiles/app-business/profile.yml`
+- `profiles/app-business/documents.yml`
+- `profiles/app-business/questions.yml`
+- `profiles/app-business/validations.yml`
 - `docs/05-profiles/app-business/profile.yml`
 - `docs/05-profiles/app-business/documents.yml`
 - `docs/05-profiles/app-business/questions.yml`
@@ -382,6 +386,10 @@ Implement the profile system and load the initial `app-business` profile.
 ## Related Docs
 
 - `docs/05-profiles/00_PROFILE_SYSTEM.md`
+- `profiles/app-business/profile.yml`
+- `profiles/app-business/documents.yml`
+- `profiles/app-business/questions.yml`
+- `profiles/app-business/validations.yml`
 - `docs/05-profiles/app-business/profile.yml`
 - `docs/05-profiles/app-business/documents.yml`
 - `docs/05-profiles/app-business/questions.yml`

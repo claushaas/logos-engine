@@ -36,11 +36,18 @@ If a requested change conflicts with the documentation, update the documentation
 ## Profile Rules
 
 - Profiles are structured YAML contracts, not Markdown documents.
-- For V1, the App Business profile contract lives in:
+- Runtime profile contracts live under `profiles/<profile-id>/`.
+- For V1, the App Business runtime profile contract lives in:
+  - `profiles/app-business/profile.yml`;
+  - `profiles/app-business/documents.yml`;
+  - `profiles/app-business/questions.yml`;
+  - `profiles/app-business/validations.yml`.
+- The documentation mirror for the App Business profile lives in:
   - `docs/05-profiles/app-business/profile.yml`;
   - `docs/05-profiles/app-business/documents.yml`;
   - `docs/05-profiles/app-business/questions.yml`;
   - `docs/05-profiles/app-business/validations.yml`.
+- Keep the runtime profile and documentation mirror aligned.
 - Parse YAML with a real YAML parser.
 - Validate profile files with explicit schemas.
 - Reject duplicate ids, invalid references, missing required fields, and unresolved template paths when templates exist.

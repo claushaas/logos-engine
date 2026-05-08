@@ -36,6 +36,25 @@ export {
 	slashCommandDefinitions,
 } from './commands/slash-command-registry.js';
 export {
+	type CanonicalDocument,
+	createProfileVersionLock,
+	type DependencyMapping,
+	getDefaultProfileDirectory,
+	getDefaultProfilesDirectory,
+	loadAvailableProfileContracts,
+	loadProfileById,
+	loadProfileContract,
+	loadProfileContracts,
+	type ProfileContract,
+	type ProfilePhase,
+	ProfileValidationError,
+	type ProfileVersionLock,
+	type PromptContextRequirement,
+	type QuestionSet,
+	type RiskPattern,
+	type ValidationRule,
+} from './domain/profile-loader.js';
+export {
 	type AnswersState,
 	answersStateSchema,
 	type ConfigState,

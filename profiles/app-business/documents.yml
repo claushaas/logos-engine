@@ -1,0 +1,1079 @@
+version: 0.1.0
+profileId: app-business
+
+defaults:
+  promptContext: &defaultPromptContext
+    includeConfirmedDecisions: true
+    includeAssumptions: true
+    includeOpenQuestions: true
+  requiredInputs: &emptyInputs
+    decisions: []
+    answers: []
+    assumptions: []
+
+documents:
+  - id: intake.idea_brief
+    phaseId: 00-intake
+    path: docs/00-intake/IDEA_BRIEF.md
+    title: Idea Brief
+    template: templates/00-intake/IDEA_BRIEF.md
+    purpose: Capture the initial idea with enough clarity to support structured exploration.
+    primaryQuestions:
+      - What is the idea?
+      - Who is it for?
+      - What problem does it solve?
+      - Why does it matter?
+    requiredInputs:
+      decisions:
+        - foundation.initial_idea
+        - foundation.target_user
+        - foundation.problem_statement
+        - foundation.desired_outcome
+      answers:
+        - foundation.idea
+        - foundation.primary_user
+        - foundation.problem
+      assumptions: []
+    sections:
+      - { id: purpose, title: Purpose, required: true }
+      - { id: initial_idea, title: Initial Idea, required: true }
+      - { id: target_user, title: Target User, required: true }
+      - { id: problem_statement, title: Problem Statement, required: true }
+      - { id: desired_outcome, title: Desired Outcome, required: true }
+      - { id: current_alternatives, title: Current Alternatives, required: false }
+      - { id: assumptions, title: Assumptions, required: true }
+      - { id: open_questions, title: Open Questions, required: true }
+      - { id: risks, title: Risks, required: true }
+      - { id: next_actions, title: Next Actions, required: true }
+    generatedOutputs:
+      - idea summary
+      - target user statement
+      - problem statement
+      - desired outcome statement
+    completionCriteria:
+      - Idea, target user, problem, and desired outcome are explicitly stated.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules:
+      - foundation.target_user_required
+      - foundation.problem_required
+    promptContext: *defaultPromptContext
+
+  - id: intake.assumptions
+    phaseId: 00-intake
+    path: docs/00-intake/ASSUMPTIONS.md
+    title: Assumptions
+    template: templates/00-intake/ASSUMPTIONS.md
+    purpose: Track all planning assumptions that are not yet validated.
+    primaryQuestions:
+      - Which claims are still assumptions?
+      - Which assumptions are risky?
+      - How should each assumption be validated?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: purpose, title: Purpose, required: true }
+      - { id: active_assumptions, title: Active Assumptions, required: true }
+      - { id: assumptions_by_domain, title: Assumptions by Domain, required: true }
+      - { id: validation_plan, title: Validation Plan, required: true }
+      - { id: deprecated_assumptions, title: Deprecated Assumptions, required: false }
+    generatedOutputs:
+      - assumption register
+      - validation plan
+    completionCriteria:
+      - Material non-confirmed claims are recorded as assumptions.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: intake.open_questions
+    phaseId: 00-intake
+    path: docs/00-intake/OPEN_QUESTIONS.md
+    title: Open Questions
+    template: templates/00-intake/OPEN_QUESTIONS.md
+    purpose: Track unresolved questions that affect the project.
+    primaryQuestions:
+      - What is unresolved?
+      - Which questions block progress?
+      - Which domain owns each question?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: purpose, title: Purpose, required: true }
+      - { id: critical_questions, title: Critical Questions, required: true }
+      - { id: important_questions, title: Important Questions, required: true }
+      - { id: optional_questions, title: Optional Questions, required: false }
+      - { id: questions_by_domain, title: Questions by Domain, required: true }
+      - { id: resolved_questions, title: Resolved Questions, required: false }
+    generatedOutputs:
+      - open question register
+      - question severity grouping
+    completionCriteria:
+      - Unresolved questions are grouped by severity and domain.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: market.market_analysis
+    phaseId: 01-market
+    path: docs/01-market/MARKET_ANALYSIS.md
+    title: Market Analysis
+    template: templates/01-market/MARKET_ANALYSIS.md
+    purpose: Evaluate whether the target market is understandable, reachable, and potentially viable.
+    primaryQuestions:
+      - What market does this belong to?
+      - Who already serves this market?
+      - Where is the opportunity?
+    requiredInputs:
+      decisions:
+        - foundation.target_user
+        - foundation.problem_statement
+        - market.category
+      answers:
+        - market.category
+        - market.alternatives
+      assumptions:
+        - market.size_assumption
+    sections:
+      - { id: purpose, title: Purpose, required: true }
+      - { id: executive_summary, title: Executive Summary, required: true }
+      - { id: market_category, title: Market Category, required: true }
+      - { id: target_segment, title: Target Segment, required: true }
+      - { id: current_alternatives, title: Current Alternatives, required: true }
+      - { id: market_size_reasoning, title: Market Size Reasoning, required: false }
+      - { id: opportunity_gaps, title: Opportunity Gaps, required: true }
+      - { id: risks, title: Risks, required: true }
+      - { id: validation_plan, title: Validation Plan, required: true }
+    generatedOutputs:
+      - market category summary
+      - target segment definition
+      - opportunity gap summary
+      - validation plan
+    completionCriteria:
+      - Market category, target segment, alternatives, opportunity gap, and validation plan are explicit.
+    dependencies:
+      documents:
+        - intake.idea_brief
+      decisions:
+        - foundation.target_user
+        - foundation.problem_statement
+    validationRules:
+      - market.competitors_required
+    promptContext: *defaultPromptContext
+
+  - id: market.competitor_matrix
+    phaseId: 01-market
+    path: docs/01-market/COMPETITOR_MATRIX.md
+    title: Competitor Matrix
+    template: templates/01-market/COMPETITOR_MATRIX.md
+    purpose: Compare direct, indirect, and substitute alternatives.
+    primaryQuestions:
+      - Who are the direct competitors?
+      - What indirect alternatives exist?
+      - What substitute behaviors compete with this app?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: competitor_categories, title: Competitor Categories, required: true }
+      - { id: comparison_table, title: Comparison Table, required: true }
+      - { id: feature_comparison, title: Feature Comparison, required: false }
+      - { id: pricing_comparison, title: Pricing Comparison, required: false }
+      - { id: differentiation_opportunities, title: Differentiation Opportunities, required: true }
+      - { id: risks, title: Risks, required: true }
+    generatedOutputs:
+      - competitor list
+      - comparison matrix
+      - differentiation opportunities
+    completionCriteria:
+      - Direct alternatives, indirect alternatives, and substitute behaviors are identified.
+    dependencies:
+      documents:
+        - market.market_analysis
+      decisions: []
+    validationRules:
+      - market.competitors_required
+    promptContext: *defaultPromptContext
+
+  - id: market.icp
+    phaseId: 01-market
+    path: docs/01-market/ICP.md
+    title: Ideal Customer Profile
+    template: templates/01-market/ICP.md
+    purpose: Define the ideal customer profile for product, messaging, pricing, and onboarding.
+    primaryQuestions:
+      - Who is the primary user?
+      - Who pays?
+      - What pain do they have?
+      - How do they currently solve it?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: primary_user, title: Primary User, required: true }
+      - { id: buyer, title: Buyer, required: false }
+      - { id: decision_maker, title: Decision Maker, required: false }
+      - { id: jobs_to_be_done, title: Jobs To Be Done, required: true }
+      - { id: pain_points, title: Pain Points, required: true }
+      - { id: existing_behaviors, title: Existing Behaviors, required: true }
+      - { id: willingness_to_pay, title: Willingness to Pay, required: false }
+      - { id: validation_plan, title: Validation Plan, required: true }
+    generatedOutputs:
+      - ICP definition
+      - acquisition context
+      - validation plan
+    completionCriteria:
+      - Primary user, buyer, pain, current behavior, and acquisition context are explicit.
+    dependencies:
+      documents:
+        - market.market_analysis
+      decisions: []
+    validationRules:
+      - market.icp_required
+    promptContext: *defaultPromptContext
+
+  - id: business.business_model
+    phaseId: 02-business
+    path: docs/02-business/BUSINESS_MODEL.md
+    title: Business Model
+    template: templates/02-business/BUSINESS_MODEL.md
+    purpose: Define how the app creates, delivers, and captures value.
+    primaryQuestions:
+      - What value is created?
+      - Who pays?
+      - How is revenue captured?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: value_proposition, title: Value Proposition, required: true }
+      - { id: customer_segments, title: Customer Segments, required: true }
+      - { id: revenue_model, title: Revenue Model, required: true }
+      - { id: pricing_logic, title: Pricing Logic, required: true }
+      - { id: cost_structure, title: Cost Structure, required: true }
+      - { id: distribution_model, title: Distribution Model, required: true }
+      - { id: retention_model, title: Retention Model, required: false }
+      - { id: business_risks, title: Business Risks, required: true }
+    generatedOutputs:
+      - business model summary
+      - value capture logic
+      - business risks
+    completionCriteria:
+      - Value creation, value delivery, and value capture are explicitly connected.
+    dependencies:
+      documents:
+        - market.icp
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: business.positioning
+    phaseId: 02-business
+    path: docs/02-business/POSITIONING.md
+    title: Positioning
+    template: templates/02-business/POSITIONING.md
+    purpose: Define how the product should be understood by the market.
+    primaryQuestions:
+      - What category should users place this in?
+      - What promise should be remembered?
+      - What alternatives does this replace?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: category, title: Category, required: true }
+      - { id: target_audience, title: Target Audience, required: true }
+      - { id: core_promise, title: Core Promise, required: true }
+      - { id: primary_differentiation, title: Primary Differentiation, required: true }
+      - { id: messaging_pillars, title: Messaging Pillars, required: true }
+      - { id: anti_positioning, title: Anti-Positioning, required: false }
+    generatedOutputs:
+      - positioning statement
+      - messaging pillars
+      - landing page message
+    completionCriteria:
+      - Category, audience, promise, and differentiation are clear.
+    dependencies:
+      documents:
+        - business.business_model
+        - market.competitor_matrix
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: economics.pricing
+    phaseId: 03-economics
+    path: docs/03-economics/PRICING.md
+    title: Pricing
+    template: templates/03-economics/PRICING.md
+    purpose: Define pricing model, tiers, boundaries, and value metric.
+    primaryQuestions:
+      - What pricing model is plausible?
+      - Who pays?
+      - What value metric drives pricing?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: pricing_model, title: Pricing Model, required: true }
+      - { id: pricing_tiers, title: Pricing Tiers, required: false }
+      - { id: free_vs_paid_boundaries, title: Free vs Paid Boundaries, required: false }
+      - { id: value_metric, title: Value Metric, required: true }
+      - { id: willingness_to_pay_assumptions, title: Willingness to Pay Assumptions, required: true }
+      - { id: validation_plan, title: Validation Plan, required: true }
+    generatedOutputs:
+      - pricing model
+      - pricing assumptions
+      - validation plan
+    completionCriteria:
+      - Pricing model, value metric, and willingness-to-pay assumptions are explicit.
+    dependencies:
+      documents:
+        - business.business_model
+        - market.icp
+      decisions: []
+    validationRules:
+      - economics.pricing_required
+    promptContext: *defaultPromptContext
+
+  - id: economics.financial_model
+    phaseId: 03-economics
+    path: docs/03-economics/FINANCIAL_MODEL.md
+    title: Financial Model
+    template: templates/03-economics/FINANCIAL_MODEL.md
+    purpose: Model revenue, costs, margin, CAC, LTV, churn, and scenarios.
+    primaryQuestions:
+      - What revenue assumptions exist?
+      - What costs matter?
+      - What scenarios should be considered?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: revenue_assumptions, title: Revenue Assumptions, required: true }
+      - { id: fixed_costs, title: Fixed Costs, required: true }
+      - { id: variable_costs, title: Variable Costs, required: true }
+      - { id: gross_margin, title: Gross Margin, required: true }
+      - { id: cac_assumptions, title: CAC Assumptions, required: false }
+      - { id: ltv_assumptions, title: LTV Assumptions, required: false }
+      - { id: scenario_model, title: Scenario Model, required: true }
+      - { id: financial_risks, title: Financial Risks, required: true }
+    generatedOutputs:
+      - financial assumptions
+      - scenario model
+      - financial risks
+    completionCriteria:
+      - Revenue, costs, margin, and scenarios are explicit.
+    dependencies:
+      documents:
+        - economics.pricing
+      decisions: []
+    validationRules:
+      - economics.variable_costs_required
+      - economics.cac_assumption_required
+    promptContext: *defaultPromptContext
+
+  - id: economics.break_even
+    phaseId: 03-economics
+    path: docs/03-economics/BREAK_EVEN.md
+    title: Break-Even Analysis
+    template: templates/03-economics/BREAK_EVEN.md
+    purpose: Estimate break-even users, revenue, and sensitivity.
+    primaryQuestions:
+      - What fixed costs exist?
+      - What is contribution margin?
+      - How many users are needed to break even?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: formula, title: Formula, required: true }
+      - { id: fixed_costs, title: Fixed Costs, required: true }
+      - { id: variable_cost_per_user, title: Variable Cost per User, required: true }
+      - { id: arpu, title: ARPU, required: true }
+      - { id: break_even_users, title: Break-Even Users, required: true }
+      - { id: sensitivity_analysis, title: Sensitivity Analysis, required: false }
+    generatedOutputs:
+      - break-even formula
+      - break-even user estimate
+      - sensitivity notes
+    completionCriteria:
+      - Break-even formula and assumptions are explicit.
+    dependencies:
+      documents:
+        - economics.pricing
+        - economics.financial_model
+      decisions: []
+    validationRules:
+      - economics.pricing_required
+      - economics.variable_costs_required
+    promptContext: *defaultPromptContext
+
+  - id: product.product_thesis
+    phaseId: 04-product
+    path: docs/04-product/PRODUCT_THESIS.md
+    title: Product Thesis
+    template: templates/04-product/PRODUCT_THESIS.md
+    purpose: Define the product hypothesis, core loop, activation, retention, and differentiation.
+    primaryQuestions:
+      - What product hypothesis should be tested?
+      - What is the core loop?
+      - What makes this product meaningfully different?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: problem, title: Problem, required: true }
+      - { id: target_user, title: Target User, required: true }
+      - { id: product_hypothesis, title: Product Hypothesis, required: true }
+      - { id: core_loop, title: Core Loop, required: true }
+      - { id: activation_moment, title: Activation Moment, required: true }
+      - { id: retention_hypothesis, title: Retention Hypothesis, required: false }
+      - { id: success_criteria, title: Success Criteria, required: true }
+    generatedOutputs:
+      - product thesis
+      - core loop
+      - success criteria
+    completionCriteria:
+      - Problem, target user, hypothesis, core loop, and success criteria are explicit.
+    dependencies:
+      documents:
+        - intake.idea_brief
+        - market.icp
+      decisions: []
+    validationRules:
+      - product.core_loop_required
+      - product.activation_moment_required
+    promptContext: *defaultPromptContext
+
+  - id: product.mvp_scope
+    phaseId: 04-product
+    path: docs/04-product/MVP_SCOPE.md
+    title: MVP Scope
+    template: templates/04-product/MVP_SCOPE.md
+    purpose: Define the smallest valuable version and explicit non-goals.
+    primaryQuestions:
+      - What is included in the MVP?
+      - What is excluded?
+      - What must be true for MVP success?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: mvp_hypothesis, title: MVP Hypothesis, required: true }
+      - { id: included_features, title: Included Features, required: true }
+      - { id: excluded_features, title: Excluded Features, required: true }
+      - { id: core_user_flow, title: Core User Flow, required: true }
+      - { id: acceptance_criteria, title: Acceptance Criteria, required: true }
+      - { id: risks, title: Risks, required: true }
+    generatedOutputs:
+      - MVP scope
+      - explicit non-goals
+      - acceptance criteria
+    completionCriteria:
+      - Included features, excluded features, and acceptance criteria are explicit.
+    dependencies:
+      documents:
+        - product.product_thesis
+      decisions: []
+    validationRules:
+      - product.mvp_scope_required
+    promptContext: *defaultPromptContext
+
+  - id: product.roadmap
+    phaseId: 04-product
+    path: docs/04-product/ROADMAP.md
+    title: Product Roadmap
+    template: templates/04-product/ROADMAP.md
+    purpose: Define staged product evolution and decision gates.
+    primaryQuestions:
+      - What should be validated first?
+      - What comes after MVP?
+      - What should be deferred?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: roadmap_principles, title: Roadmap Principles, required: true }
+      - { id: validation_phase, title: Phase 0 - Validation, required: true }
+      - { id: mvp_phase, title: Phase 1 - MVP, required: true }
+      - { id: beta_phase, title: Phase 2 - Beta, required: false }
+      - { id: public_launch_phase, title: Phase 3 - Public Launch, required: false }
+      - { id: feature_backlog, title: Feature Backlog, required: true }
+      - { id: decision_gates, title: Decision Gates, required: true }
+    generatedOutputs:
+      - staged roadmap
+      - feature backlog
+      - decision gates
+    completionCriteria:
+      - Phases, decision gates, and deferred ideas are explicit.
+    dependencies:
+      documents:
+        - product.mvp_scope
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: design.ux_flows
+    phaseId: 05-design
+    path: docs/05-design/UX_FLOWS.md
+    title: UX Flows
+    template: templates/05-design/UX_FLOWS.md
+    purpose: Define core user journeys and interaction logic.
+    primaryQuestions:
+      - What is the primary journey?
+      - How does onboarding work?
+      - What edge cases matter?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: primary_user_journey, title: Primary User Journey, required: true }
+      - { id: onboarding_flow, title: Onboarding Flow, required: true }
+      - { id: core_loop_flow, title: Core Loop Flow, required: true }
+      - { id: empty_states, title: Empty States, required: true }
+      - { id: error_states, title: Error States, required: true }
+      - { id: edge_cases, title: Edge Cases, required: true }
+      - { id: accessibility_considerations, title: Accessibility Considerations, required: false }
+    generatedOutputs:
+      - UX flow outline
+      - edge case list
+      - state requirements
+    completionCriteria:
+      - Onboarding, core loop, empty states, and critical edge cases are defined.
+    dependencies:
+      documents:
+        - product.product_thesis
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: design.design_direction
+    phaseId: 05-design
+    path: docs/05-design/DESIGN_DIRECTION.md
+    title: Design Direction
+    template: templates/05-design/DESIGN_DIRECTION.md
+    purpose: Define visual and interaction direction for the app.
+    primaryQuestions:
+      - What should the interface feel like?
+      - What design principles matter?
+      - What should be avoided?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: design_principles, title: Design Principles, required: true }
+      - { id: visual_tone, title: Visual Tone, required: true }
+      - { id: typography_direction, title: Typography Direction, required: false }
+      - { id: color_direction, title: Color Direction, required: false }
+      - { id: layout_principles, title: Layout Principles, required: true }
+      - { id: component_principles, title: Component Principles, required: true }
+      - { id: anti_patterns, title: Anti-Patterns, required: true }
+    generatedOutputs:
+      - design principles
+      - visual direction
+      - anti-patterns
+    completionCriteria:
+      - Visual tone, design principles, component direction, and anti-patterns are explicit.
+    dependencies:
+      documents:
+        - design.ux_flows
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: design.onboarding
+    phaseId: 05-design
+    path: docs/05-design/ONBOARDING.md
+    title: Onboarding
+    template: templates/05-design/ONBOARDING.md
+    purpose: Define how a new user reaches first value.
+    primaryQuestions:
+      - What happens on first run?
+      - What is the activation moment?
+      - Where can users drop off?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: first_run_experience, title: First-Run Experience, required: true }
+      - { id: activation_moment, title: Activation Moment, required: true }
+      - { id: required_inputs, title: Required Inputs, required: true }
+      - { id: progressive_disclosure, title: Progressive Disclosure, required: false }
+      - { id: drop_off_risks, title: Drop-Off Risks, required: true }
+      - { id: success_metrics, title: Success Metrics, required: false }
+    generatedOutputs:
+      - onboarding flow
+      - activation requirements
+      - drop-off risks
+    completionCriteria:
+      - First-run experience and activation moment are defined.
+    dependencies:
+      documents:
+        - product.product_thesis
+        - design.ux_flows
+      decisions: []
+    validationRules:
+      - product.activation_moment_required
+    promptContext: *defaultPromptContext
+
+  - id: architecture.architecture
+    phaseId: 06-architecture
+    path: docs/06-architecture/ARCHITECTURE.md
+    title: Architecture
+    template: templates/06-architecture/ARCHITECTURE.md
+    purpose: Define system architecture, runtime, data flow, security, and scalability.
+    primaryQuestions:
+      - What are the system boundaries?
+      - What runtime architecture is needed?
+      - What data and integrations matter?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: architectural_principles, title: Architectural Principles, required: true }
+      - { id: system_context, title: System Context, required: true }
+      - { id: runtime_architecture, title: Runtime Architecture, required: true }
+      - { id: application_layers, title: Application Layers, required: true }
+      - { id: data_flow, title: Data Flow, required: true }
+      - { id: persistence, title: Persistence, required: true }
+      - { id: sync_strategy, title: Sync Strategy, required: false }
+      - { id: security_considerations, title: Security Considerations, required: true }
+    generatedOutputs:
+      - architecture overview
+      - data flow
+      - security considerations
+    completionCriteria:
+      - Runtime architecture, data flow, persistence, and key trade-offs are explicit.
+    dependencies:
+      documents:
+        - product.mvp_scope
+      decisions: []
+    validationRules:
+      - architecture.offline_first_dependency
+      - architecture.multi_device_sync_dependency
+      - architecture.authentication_dependency
+    promptContext: *defaultPromptContext
+
+  - id: architecture.tech_stack
+    phaseId: 06-architecture
+    path: docs/06-architecture/TECH_STACK.md
+    title: Tech Stack
+    template: templates/06-architecture/TECH_STACK.md
+    purpose: Define platform targets, tools, infrastructure, and trade-offs.
+    primaryQuestions:
+      - What platforms are supported first?
+      - What stack will be used?
+      - What alternatives were considered?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: platform_targets, title: Platform Targets, required: true }
+      - { id: frontend_stack, title: Frontend Stack, required: false }
+      - { id: backend_stack, title: Backend Stack, required: false }
+      - { id: database, title: Database, required: false }
+      - { id: hosting_and_infrastructure, title: Hosting and Infrastructure, required: false }
+      - { id: testing_tools, title: Testing Tools, required: true }
+      - { id: trade_offs, title: Trade-Offs, required: true }
+    generatedOutputs:
+      - stack decision summary
+      - tool list
+      - trade-offs
+    completionCriteria:
+      - Platform, stack choices, alternatives, and trade-offs are explicit.
+    dependencies:
+      documents:
+        - architecture.architecture
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: architecture.data_model
+    phaseId: 06-architecture
+    path: docs/06-architecture/DATA_MODEL.md
+    title: Data Model
+    template: templates/06-architecture/DATA_MODEL.md
+    purpose: Define domain entities, ownership, lifecycle, storage, and sensitive data.
+    primaryQuestions:
+      - What data must exist?
+      - Who owns the data?
+      - What data is sensitive?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: domain_entities, title: Domain Entities, required: true }
+      - { id: entity_relationships, title: Entity Relationships, required: true }
+      - { id: data_ownership, title: Data Ownership, required: true }
+      - { id: data_lifecycle, title: Data Lifecycle, required: true }
+      - { id: sensitive_data, title: Sensitive Data, required: true }
+      - { id: migration_considerations, title: Migration Considerations, required: false }
+    generatedOutputs:
+      - entity list
+      - relationship summary
+      - sensitive data register
+    completionCriteria:
+      - Core entities, relationships, lifecycle, and sensitive data are explicit.
+    dependencies:
+      documents:
+        - architecture.architecture
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: architecture.api_spec
+    phaseId: 06-architecture
+    path: docs/06-architecture/API_SPEC.md
+    title: API Spec
+    template: templates/06-architecture/API_SPEC.md
+    purpose: Define API principles, endpoints, auth, errors, and versioning where applicable.
+    primaryQuestions:
+      - Does this app need an API?
+      - What endpoints are required?
+      - How are auth and errors handled?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: api_principles, title: API Principles, required: true }
+      - { id: authentication, title: Authentication, required: false }
+      - { id: endpoints, title: Endpoints, required: false }
+      - { id: request_and_response_shapes, title: Request and Response Shapes, required: false }
+      - { id: error_model, title: Error Model, required: true }
+      - { id: versioning, title: Versioning, required: false }
+    generatedOutputs:
+      - endpoint outline
+      - request and response shapes
+      - error model
+    completionCriteria:
+      - Required API boundaries, auth, errors, and data shapes are explicit or intentionally deferred.
+    dependencies:
+      documents:
+        - architecture.architecture
+        - architecture.data_model
+      decisions: []
+    validationRules:
+      - architecture.authentication_dependency
+    promptContext: *defaultPromptContext
+
+  - id: implementation.implementation_plan
+    phaseId: 07-implementation
+    path: docs/07-implementation/IMPLEMENTATION_PLAN.md
+    title: Implementation Plan
+    template: templates/07-implementation/IMPLEMENTATION_PLAN.md
+    purpose: Define execution sequence, milestones, dependencies, critical path, and validation gates.
+    primaryQuestions:
+      - What should be built first?
+      - What are the implementation milestones?
+      - What validation gates must exist?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: implementation_principles, title: Implementation Principles, required: true }
+      - { id: milestones, title: Milestones, required: true }
+      - { id: phase_by_phase_plan, title: Phase-by-Phase Plan, required: true }
+      - { id: technical_dependencies, title: Technical Dependencies, required: true }
+      - { id: critical_path, title: Critical Path, required: true }
+      - { id: validation_gates, title: Validation Gates, required: true }
+      - { id: definition_of_done, title: Definition of Done, required: true }
+    generatedOutputs:
+      - implementation milestones
+      - critical path
+      - validation gates
+      - definition of done
+    completionCriteria:
+      - Milestones, dependencies, critical path, and validation gates are explicit.
+    dependencies:
+      documents:
+        - product.mvp_scope
+        - architecture.architecture
+        - testing.testing_strategy
+      decisions: []
+    validationRules:
+      - product.mvp_scope_required
+    promptContext: *defaultPromptContext
+
+  - id: implementation.development_standards
+    phaseId: 07-implementation
+    path: docs/07-implementation/DEVELOPMENT_STANDARDS.md
+    title: Development Standards
+    template: templates/07-implementation/DEVELOPMENT_STANDARDS.md
+    purpose: Define code quality and development rules.
+    primaryQuestions:
+      - What coding conventions matter?
+      - What tests are required?
+      - What review rules exist?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: code_style, title: Code Style, required: true }
+      - { id: project_structure, title: Project Structure, required: true }
+      - { id: testing_requirements, title: Testing Requirements, required: true }
+      - { id: linting_and_formatting, title: Linting and Formatting, required: true }
+      - { id: review_rules, title: Review Rules, required: true }
+      - { id: security_rules, title: Security Rules, required: false }
+    generatedOutputs:
+      - development standards
+      - quality gates
+    completionCriteria:
+      - Development conventions and quality gates are explicit.
+    dependencies:
+      documents:
+        - implementation.implementation_plan
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: testing.testing_strategy
+    phaseId: 08-testing
+    path: docs/08-testing/TESTING_STRATEGY.md
+    title: Testing Strategy
+    template: templates/08-testing/TESTING_STRATEGY.md
+    purpose: Define testing principles, coverage, and release validation.
+    primaryQuestions:
+      - What must be tested from day one?
+      - What test types are required?
+      - How is release quality validated?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: testing_principles, title: Testing Principles, required: true }
+      - { id: unit_tests, title: Unit Tests, required: true }
+      - { id: integration_tests, title: Integration Tests, required: true }
+      - { id: end_to_end_tests, title: End-to-End Tests, required: false }
+      - { id: accessibility_testing, title: Accessibility Testing, required: false }
+      - { id: release_validation, title: Release Validation, required: true }
+      - { id: risks, title: Risks, required: true }
+    generatedOutputs:
+      - testing strategy
+      - release validation checklist
+    completionCriteria:
+      - Critical test types, release validation, and risk coverage are explicit.
+    dependencies:
+      documents:
+        - product.mvp_scope
+        - architecture.architecture
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: gtm.marketing_strategy
+    phaseId: 09-go-to-market
+    path: docs/09-go-to-market/MARKETING_STRATEGY.md
+    title: Marketing Strategy
+    template: templates/09-go-to-market/MARKETING_STRATEGY.md
+    purpose: Define acquisition channels, message, funnel, and metrics.
+    primaryQuestions:
+      - How will users discover the app?
+      - What promise should marketing communicate?
+      - What channels matter first?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: target_audience, title: Target Audience, required: true }
+      - { id: positioning, title: Positioning, required: true }
+      - { id: acquisition_channels, title: Acquisition Channels, required: true }
+      - { id: funnel, title: Funnel, required: true }
+      - { id: metrics, title: Metrics, required: true }
+      - { id: risks, title: Risks, required: true }
+    generatedOutputs:
+      - marketing strategy
+      - channel plan
+      - funnel outline
+    completionCriteria:
+      - Audience, message, acquisition channels, funnel, and metrics are explicit.
+    dependencies:
+      documents:
+        - business.positioning
+        - market.icp
+      decisions: []
+    validationRules:
+      - gtm.distribution_channel_required
+      - gtm.paid_acquisition_risk
+    promptContext: *defaultPromptContext
+
+  - id: gtm.launch_plan
+    phaseId: 09-go-to-market
+    path: docs/09-go-to-market/LAUNCH_PLAN.md
+    title: Launch Plan
+    template: templates/09-go-to-market/LAUNCH_PLAN.md
+    purpose: Define launch goals, phases, assets, support, and success metrics.
+    primaryQuestions:
+      - What does launch need to accomplish?
+      - What assets are required?
+      - How is launch success measured?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: launch_goals, title: Launch Goals, required: true }
+      - { id: pre_launch, title: Pre-Launch, required: true }
+      - { id: beta_launch, title: Beta Launch, required: false }
+      - { id: public_launch, title: Public Launch, required: true }
+      - { id: launch_assets, title: Launch Assets, required: true }
+      - { id: success_metrics, title: Success Metrics, required: true }
+      - { id: risks, title: Risks, required: true }
+    generatedOutputs:
+      - launch checklist
+      - launch phases
+      - success metrics
+    completionCriteria:
+      - Launch goals, phases, assets, and success metrics are explicit.
+    dependencies:
+      documents:
+        - gtm.marketing_strategy
+      decisions: []
+    validationRules:
+      - gtm.distribution_channel_required
+    promptContext: *defaultPromptContext
+
+  - id: gtm.content_strategy
+    phaseId: 09-go-to-market
+    path: docs/09-go-to-market/CONTENT_STRATEGY.md
+    title: Content Strategy
+    template: templates/09-go-to-market/CONTENT_STRATEGY.md
+    purpose: Define content goals, pillars, channels, SEO, and launch content.
+    primaryQuestions:
+      - What questions does the audience have?
+      - What content pillars matter?
+      - Which channels should be used?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: content_goals, title: Content Goals, required: true }
+      - { id: audience_questions, title: Audience Questions, required: true }
+      - { id: content_pillars, title: Content Pillars, required: true }
+      - { id: channel_strategy, title: Channel Strategy, required: true }
+      - { id: launch_content, title: Launch Content, required: true }
+      - { id: metrics, title: Metrics, required: false }
+    generatedOutputs:
+      - content strategy
+      - content pillars
+      - launch content plan
+    completionCriteria:
+      - Audience questions, pillars, channels, and launch content are explicit.
+    dependencies:
+      documents:
+        - gtm.marketing_strategy
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: operations.operations
+    phaseId: 10-operations
+    path: docs/10-operations/OPERATIONS.md
+    title: Operations
+    template: templates/10-operations/OPERATIONS.md
+    purpose: Define operating model, maintenance, monitoring, incidents, and feedback loops.
+    primaryQuestions:
+      - How will the app be operated?
+      - How are incidents handled?
+      - How is feedback processed?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: operating_model, title: Operating Model, required: true }
+      - { id: maintenance_responsibilities, title: Maintenance Responsibilities, required: true }
+      - { id: monitoring, title: Monitoring, required: true }
+      - { id: incident_response, title: Incident Response, required: true }
+      - { id: cost_monitoring, title: Cost Monitoring, required: false }
+      - { id: user_feedback_loop, title: User Feedback Loop, required: true }
+    generatedOutputs:
+      - operations plan
+      - incident response notes
+      - feedback loop
+    completionCriteria:
+      - Ownership, monitoring, incidents, costs, and feedback handling are explicit.
+    dependencies:
+      documents:
+        - gtm.launch_plan
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext
+
+  - id: operations.support_model
+    phaseId: 10-operations
+    path: docs/10-operations/SUPPORT_MODEL.md
+    title: Support Model
+    template: templates/10-operations/SUPPORT_MODEL.md
+    purpose: Define support channels, scope, response expectations, and escalation.
+    primaryQuestions:
+      - How will users get help?
+      - What support is in scope?
+      - How are issues escalated?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: support_channels, title: Support Channels, required: true }
+      - { id: support_scope, title: Support Scope, required: true }
+      - { id: response_expectations, title: Response Expectations, required: true }
+      - { id: common_issues, title: Common Issues, required: false }
+      - { id: escalation_rules, title: Escalation Rules, required: true }
+      - { id: support_metrics, title: Support Metrics, required: false }
+    generatedOutputs:
+      - support model
+      - escalation rules
+      - support metrics
+    completionCriteria:
+      - Channels, scope, response expectations, and escalation rules are explicit.
+    dependencies:
+      documents:
+        - operations.operations
+      decisions: []
+    validationRules:
+      - operations.support_model_required
+    promptContext: *defaultPromptContext
+
+  - id: operations.metrics
+    phaseId: 10-operations
+    path: docs/10-operations/METRICS.md
+    title: Metrics
+    template: templates/10-operations/METRICS.md
+    purpose: Define activation, retention, revenue, reliability, and review cadence.
+    primaryQuestions:
+      - What is the north star metric?
+      - What activation and retention metrics matter?
+      - How is reliability measured?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: north_star_metric, title: North Star Metric, required: false }
+      - { id: activation_metrics, title: Activation Metrics, required: true }
+      - { id: retention_metrics, title: Retention Metrics, required: true }
+      - { id: revenue_metrics, title: Revenue Metrics, required: true }
+      - { id: reliability_metrics, title: Reliability Metrics, required: true }
+      - { id: review_cadence, title: Review Cadence, required: true }
+    generatedOutputs:
+      - metric set
+      - review cadence
+    completionCriteria:
+      - Activation, retention, revenue, reliability, and support metrics are explicit.
+    dependencies:
+      documents:
+        - operations.operations
+      decisions: []
+    validationRules:
+      - operations.metrics_required
+    promptContext: *defaultPromptContext
+
+  - id: governance.risk_register
+    phaseId: 11-governance
+    path: docs/11-governance/RISK_REGISTER.md
+    title: Risk Register
+    template: templates/11-governance/RISK_REGISTER.md
+    purpose: Track project risks across business, product, design, engineering, launch, and operations.
+    primaryQuestions:
+      - What can go wrong?
+      - Which risks are critical?
+      - What mitigations exist?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: critical_risks, title: Critical Risks, required: true }
+      - { id: business_risks, title: Business Risks, required: false }
+      - { id: market_risks, title: Market Risks, required: false }
+      - { id: product_risks, title: Product Risks, required: false }
+      - { id: technical_risks, title: Technical Risks, required: false }
+      - { id: mitigation_plan, title: Mitigation Plan, required: true }
+      - { id: review_cadence, title: Review Cadence, required: true }
+    generatedOutputs:
+      - risk register
+      - mitigation plan
+    completionCriteria:
+      - Risks are grouped by domain, severity, and mitigation path.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules:
+      - economics.ai_cost_risk
+      - gtm.paid_acquisition_risk
+    promptContext: *defaultPromptContext
+
+  - id: governance.decision_log
+    phaseId: 11-governance
+    path: docs/11-governance/DECISION_LOG.md
+    title: Decision Log
+    template: templates/11-governance/DECISION_LOG.md
+    purpose: Track major decisions and their rationale.
+    primaryQuestions:
+      - What has been decided?
+      - What is pending?
+      - Which decisions were replaced?
+    requiredInputs: *emptyInputs
+    sections:
+      - { id: active_decisions, title: Active Decisions, required: true }
+      - { id: decision_history, title: Decision History, required: true }
+      - { id: replaced_decisions, title: Replaced Decisions, required: false }
+      - { id: pending_decisions, title: Pending Decisions, required: true }
+      - { id: decision_dependencies, title: Decision Dependencies, required: true }
+      - { id: review_cadence, title: Review Cadence, required: false }
+    generatedOutputs:
+      - decision log
+      - pending decision list
+      - decision dependency list
+    completionCriteria:
+      - Major confirmed, pending, and replaced decisions are traceable.
+    dependencies:
+      documents: []
+      decisions: []
+    validationRules: []
+    promptContext: *defaultPromptContext

@@ -30,6 +30,7 @@
 	},
 	"files": [
 		"dist",
+		"profiles",
 		"docs",
 		"README.md",
 		"LICENSE"

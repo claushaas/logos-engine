@@ -54,9 +54,29 @@ The engine should load profile contracts from structured YAML and validate them 
 
 Markdown may explain the system for humans, but Markdown should not be the primary machine-readable profile source.
 
-## V1 Profile Structure
+## Profile Storage
 
-The V1 App Business profile currently uses these contract files:
+Runtime profile contracts live under:
+
+```text
+profiles/<profile-id>/
+  profile.yml
+  documents.yml
+  questions.yml
+  validations.yml
+```
+
+The V1 App Business runtime profile lives in:
+
+```text
+profiles/app-business/
+  profile.yml
+  documents.yml
+  questions.yml
+  validations.yml
+```
+
+The documentation mirror lives in:
 
 ```text
 docs/05-profiles/app-business/
@@ -66,13 +86,9 @@ docs/05-profiles/app-business/
   validations.yml
 ```
 
-In a packaged implementation, these files may live under a runtime path such as:
+The runtime profile is the standard implementation path. The documentation mirror keeps the contract visible alongside the product documentation and must stay aligned with the runtime files.
 
-```text
-profiles/app-business/
-```
-
-The docs path is acceptable during planning because it keeps the profile contract visible while the implementation is still being designed.
+The profile loader should remain generic. App Business is the first profile, not a special engine mode.
 
 ## Contract Files
 
