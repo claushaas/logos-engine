@@ -102,6 +102,18 @@ Test:
 - user confirmation flows for AI-proposed decisions;
 - regression tests for canonical document generation.
 
+## Repository Scripts
+
+The repository foundation should expose reproducible commands through `package.json`:
+
+- `pnpm test` runs the default deterministic test suite;
+- `pnpm test:coverage` runs coverage reporting where practical;
+- `pnpm build` compiles TypeScript;
+- `pnpm typecheck` checks TypeScript without emitting files;
+- `pnpm lint:biome` checks TypeScript, JavaScript, JSON, and supported source files with Biome;
+- `pnpm lint:md` checks Markdown with markdownlint;
+- `pnpm smoke:cli` runs the Phase 0 CLI preflight until the executable `logos` TUI is implemented in Phase 1.
+
 ## AI Testing Standards
 
 AI behavior must be tested through deterministic boundaries wherever possible.
@@ -122,6 +134,13 @@ Use fixtures and mocked provider responses to validate:
 - confirmation-gated state changes.
 
 Live model tests may exist as optional integration tests, but they should not be required for the default test suite.
+
+The default test policy is:
+
+- no network access required;
+- no live AI provider credentials required;
+- no remote model calls required;
+- no raw API tokens in fixtures, project files, or generated state.
 
 ## Error Handling
 

@@ -24,6 +24,15 @@ It helps users:
 ## Repository Structure
 
 ```text
+src/
+  application/
+  ai/
+  domain/
+  foundation/
+  storage/
+  tui/
+tests/
+  fixtures/
 docs/
   00-foundation/
   01-product/
@@ -37,6 +46,41 @@ docs/
   09-implementation-roadmap/
   10-operational-playbooks/
 ```
+
+## Local Development
+
+LOGOS Engine uses Node.js, pnpm, TypeScript, Vitest, Biome, and markdownlint.
+
+Required baseline:
+
+- Node.js 22 or newer;
+- pnpm 10.33.2, as declared in `package.json`.
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Run the Phase 0 validation commands:
+
+```bash
+pnpm test
+pnpm build
+pnpm smoke:cli
+pnpm lint:md
+pnpm lint:biome
+```
+
+Additional useful commands:
+
+```bash
+pnpm typecheck
+pnpm test:coverage
+pnpm format
+```
+
+The `smoke:cli` script is a Phase 0 preflight. The executable `logos` command and Ink TUI are Phase 1 scope.
 
 ## First Outcome Profile
 
@@ -58,6 +102,19 @@ Markdown documents are rendered views of the current state of the project.
 
 ## License Direction
 
-LOGOS Engine is intended to be open source and free to use.
+LOGOS Engine is open source and free to use.
 
-Recommended license: MIT for code, Creative Commons Attribution 4.0 for documentation templates.
+Code is licensed under MIT. Documentation template licensing can be refined when generated templates are introduced.
+
+## AI Safety Baseline
+
+AI is a first-class workflow layer, but it is not a source of confirmed truth.
+
+Repository defaults follow these rules:
+
+- default tests must not call live models;
+- default tests must not require network access or AI credentials;
+- raw LLM tokens must not be stored in project files;
+- AI output must remain draft, proposed, needs_review, rejected, or explicitly confirmed;
+- AI-generated decisions may become confirmed only after user confirmation;
+- deterministic validation stays separate from AI judgment.
