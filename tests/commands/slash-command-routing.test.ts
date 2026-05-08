@@ -39,7 +39,7 @@ describe('slash command parser and router', () => {
 	it('routes core command stubs through handlers and services', () => {
 		const services = createLogosApplicationServices();
 		const context = loadCommandContext('/tmp/logos-test');
-		const result = parseSlashCommand('/init');
+		const result = parseSlashCommand('/status');
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) {
@@ -48,7 +48,7 @@ describe('slash command parser and router', () => {
 
 		const routed = handleSlashCommand(result.command, context, services);
 
-		expect(routed.title).toBe('/init stub');
+		expect(routed.title).toBe('/status stub');
 		expect(routed.exitRequested).toBe(false);
 		expect(routed.body).toContain('No files were changed.');
 	});

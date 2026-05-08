@@ -5,7 +5,9 @@
 	"dependencies": {
 		"commander": "^14.0.3",
 		"ink": "^7.0.2",
-		"react": "^19.2.6"
+		"react": "^19.2.6",
+		"yaml": "^2.8.4",
+		"zod": "^4.4.3"
 	},
 	"description": "Local-first TUI engine for AI-structured documentation and intent clarification.",
 	"devDependencies": {
@@ -28,6 +30,7 @@
 	},
 	"files": [
 		"dist",
+		"docs",
 		"README.md",
 		"LICENSE"
 	],

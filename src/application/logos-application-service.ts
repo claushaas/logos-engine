@@ -1,16 +1,23 @@
 import type { SlashCommandId } from '../commands/slash-command-registry.js';
+import { initializeWorkspace } from './workspace-initialization.js';
 
 export type ApplicationCommandResult = {
 	readonly body: readonly string[];
-	readonly status: 'ok' | 'not_implemented';
+	readonly status: 'error' | 'ok' | 'not_implemented';
 	readonly title: string;
+};
+
+export type ApplicationServiceContext = {
+	readonly cwd: string;
 };
 
 export type LogosApplicationServices = {
 	readonly continueIntake: () => ApplicationCommandResult;
 	readonly diagnoseWorkspace: () => ApplicationCommandResult;
 	readonly generateDocuments: () => ApplicationCommandResult;
-	readonly initializeWorkspace: () => ApplicationCommandResult;
+	readonly initializeWorkspace: (
+		context: ApplicationServiceContext,
+	) => ApplicationCommandResult;
 	readonly showAiConfig: () => ApplicationCommandResult;
 	readonly showHelp: () => ApplicationCommandResult;
 	readonly showStatus: () => ApplicationCommandResult;
@@ -34,11 +41,7 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				'/generate',
 				'Document rendering will create or refresh Markdown projections in a later phase.',
 			),
-		initializeWorkspace: () =>
-			createStubResult(
-				'/init',
-				'Workspace initialization will create .logos state and the canonical docs tree in Phase 2.',
-			),
+		initializeWorkspace: (context) => createInitializeWorkspaceResult(context),
 		showAiConfig: () =>
 			createStubResult(
 				'/config ai',
@@ -60,6 +63,47 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				'Deterministic validation will check readiness and profile rules in a later phase.',
 			),
 	};
+}
+
+function createInitializeWorkspaceResult(
+	context: ApplicationServiceContext,
+): ApplicationCommandResult {
+	try {
+		const result = initializeWorkspace(context.cwd);
+
+		if (result.status === 'exists') {
+			return {
+				body: [
+					`Project root: ${result.projectRoot}`,
+					'Existing .logos workspace detected and validated.',
+					'No files were changed.',
+				],
+				status: 'ok',
+				title: 'Workspace already initialized',
+			};
+		}
+
+		return {
+			body: [
+				`Project root: ${result.projectRoot}`,
+				'Created LOGOS workspace files:',
+				...result.createdPaths.map((path) => `- ${path}`),
+			],
+			status: 'ok',
+			title: 'Workspace initialized',
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+
+		return {
+			body: [
+				message,
+				'Initialization stopped before overwriting any existing workspace state.',
+			],
+			status: 'error',
+			title: 'Workspace initialization failed',
+		};
+	}
 }
 
 export function createUnknownCommandResult(

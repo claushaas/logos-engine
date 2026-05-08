@@ -12,10 +12,10 @@ export type SlashCommandHandlerResult = ApplicationCommandResult & {
 
 export function handleSlashCommand(
 	command: ParsedSlashCommand,
-	_context: CommandContext,
+	context: CommandContext,
 	services: LogosApplicationServices,
 ): SlashCommandHandlerResult {
-	const result = executeCommand(command, services);
+	const result = executeCommand(command, context, services);
 
 	return {
 		...result,
@@ -25,11 +25,12 @@ export function handleSlashCommand(
 
 function executeCommand(
 	command: ParsedSlashCommand,
+	context: CommandContext,
 	services: LogosApplicationServices,
 ): ApplicationCommandResult {
 	switch (command.definition.id) {
 		case '/init':
-			return services.initializeWorkspace();
+			return services.initializeWorkspace(context);
 		case '/continue':
 			return services.continueIntake();
 		case '/status':
