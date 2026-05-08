@@ -34,6 +34,13 @@ export function writeAnswersState(
 	atomicReplaceJsonFile(join(projectRoot, '.logos', 'answers.json'), answers);
 }
 
+export function readDecisionsState(projectRoot: string): DecisionsState {
+	return readJsonState(
+		join(projectRoot, '.logos', 'decisions.json'),
+		decisionsStateSchema,
+	);
+}
+
 export function writeDecisionsState(
 	projectRoot: string,
 	decisions: DecisionsState,
@@ -70,6 +77,13 @@ export function getCurrentSessionPath(projectRoot: string): string {
 export function createEmptyAnswersState(): AnswersState {
 	return {
 		answers: [],
+		schemaVersion: workspaceSchemaVersion,
+	};
+}
+
+export function createEmptyDecisionsState(): DecisionsState {
+	return {
+		decisions: [],
 		schemaVersion: workspaceSchemaVersion,
 	};
 }

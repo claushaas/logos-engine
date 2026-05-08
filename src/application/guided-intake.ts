@@ -1,4 +1,10 @@
 import { createMockLlmProvider } from '../ai/mock-provider.js';
+import {
+	createDecision,
+	type DecisionStore,
+	getDecisionById,
+	upsertDecision,
+} from '../domain/decision-registry.js';
 import { loadProfileById } from '../domain/profile-loader.js';
 import {
 	acceptProposedFollowUps,
@@ -186,9 +192,9 @@ function recordUnknownQuestion(
 	});
 	const answers = upsertAnswer(workspace.answers.answers, answer);
 	const openQuestions = deriveOpenQuestions({ answers, profile });
-	const decisions = upsertMappedDecisions({
+	const decisionStore = upsertMappedDecisions({
 		decisionIds: question.mapsToDecisionIds,
-		existing: workspace.decisions.decisions,
+		existing: { decisions: workspace.decisions.decisions },
 		rationale: `User marked ${question.id} as unknown during guided intake.`,
 		status: 'unknown',
 		value: null,
@@ -200,7 +206,7 @@ function recordUnknownQuestion(
 	});
 	writeDecisionsState(projectRoot, {
 		...workspace.decisions,
-		decisions,
+		decisions: decisionStore.decisions,
 	});
 
 	return {
@@ -244,9 +250,9 @@ async function recordAssumptionQuestion(
 	});
 	const answers = upsertAnswer(workspace.answers.answers, answer);
 	const assumptions = deriveAssumptions({ answers, profile });
-	const decisions = upsertMappedDecisions({
+	const decisionStore = upsertMappedDecisions({
 		decisionIds: question.mapsToDecisionIds,
-		existing: workspace.decisions.decisions,
+		existing: { decisions: workspace.decisions.decisions },
 		rationale: `User marked ${question.id} as an assumption during guided intake.`,
 		status: 'assumed',
 		value: rawAnswer,
@@ -258,7 +264,7 @@ async function recordAssumptionQuestion(
 	});
 	writeDecisionsState(projectRoot, {
 		...workspace.decisions,
-		decisions,
+		decisions: decisionStore.decisions,
 	});
 
 	return {
@@ -484,43 +490,58 @@ function formatQuestion(question: ResolvedQuestion): readonly string[] {
 
 function upsertMappedDecisions(input: {
 	readonly decisionIds: readonly string[];
-	readonly existing: readonly {
-		readonly confirmedAt: string | null;
-		readonly id: string;
-		readonly rationale: string;
-		readonly status:
-			| 'unknown'
-			| 'assumed'
-			| 'proposed'
-			| 'confirmed'
-			| 'deprecated';
-		readonly value: unknown;
-	}[];
+	readonly existing: DecisionStore;
 	readonly rationale: string;
 	readonly status: 'unknown' | 'assumed';
 	readonly value: unknown;
-}) {
+}): DecisionStore {
 	const mappedIds = new Set(input.decisionIds);
 	const confirmedIds = new Set(
-		input.existing
+		input.existing.decisions
 			.filter((decision) => decision.status === 'confirmed')
 			.map((decision) => decision.id),
 	);
-	const replacements = input.decisionIds
-		.filter((decisionId) => !confirmedIds.has(decisionId))
-		.map((decisionId) => ({
-			confirmedAt: null,
-			id: decisionId,
-			rationale: input.rationale,
-			status: input.status,
-			value: input.value,
-		}));
+	let store = input.existing;
 
-	return [
-		...input.existing.filter(
-			(decision) =>
-				!mappedIds.has(decision.id) || decision.status === 'confirmed',
-		),
-		...replacements,
-	].sort((left, right) => left.id.localeCompare(right.id));
+	for (const decisionId of input.decisionIds) {
+		if (confirmedIds.has(decisionId)) {
+			continue;
+		}
+
+		const existing = getDecisionById(store, decisionId);
+
+		if (existing) {
+			store = upsertDecision(
+				store,
+				createDecision({
+					...existing,
+					rationale: input.rationale,
+					status: input.status,
+					value: input.value,
+				}),
+			);
+		} else {
+			store = upsertDecision(
+				store,
+				createDecision({
+					id: decisionId,
+					rationale: input.rationale,
+					status: input.status,
+					title: decisionId,
+					value: input.value,
+				}),
+			);
+		}
+	}
+
+	return {
+		decisions: store.decisions
+			.filter(
+				(decision) =>
+					!mappedIds.has(decision.id) ||
+					decision.status === 'confirmed' ||
+					decision.status === input.status,
+			)
+			.sort((left, right) => left.id.localeCompare(right.id)),
+	};
 }

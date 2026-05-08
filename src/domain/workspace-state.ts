@@ -2,10 +2,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
 import { aiProviderConfigSchema } from '../ai/provider-config.js';
-import {
-	decisionStatuses,
-	validationSeverities,
-} from '../foundation/status-contracts.js';
+import { validationSeverities } from '../foundation/status-contracts.js';
+import { decisionSchema } from './decision-registry.js';
 import { answerRecordSchema } from './question-engine.js';
 
 export const workspaceSchemaVersion = '0.1.0';
@@ -35,15 +33,7 @@ export const answersStateSchema = schemaVersionSchema.extend({
 });
 
 export const decisionsStateSchema = schemaVersionSchema.extend({
-	decisions: z.array(
-		z.object({
-			confirmedAt: z.string().datetime().nullable(),
-			id: z.string().min(1),
-			rationale: z.string(),
-			status: z.enum(decisionStatuses),
-			value: z.unknown().nullable(),
-		}),
-	),
+	decisions: z.array(decisionSchema),
 });
 
 export const diagnosticsStateSchema = schemaVersionSchema.extend({

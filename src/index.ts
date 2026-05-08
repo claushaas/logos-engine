@@ -89,6 +89,20 @@ export {
 	testAiConfiguration,
 	updateAiConfiguration,
 } from './application/ai-configuration.js';
+export {
+	changeConfirmedDecision,
+	createEmptyStore,
+	createManualDecision,
+	type DecisionChangeResult,
+	DecisionServiceError,
+	deprecateDecision,
+	getPendingProposals,
+	loadDecisionStore,
+	type ProposalReviewResult,
+	receiveAiDecisionProposals,
+	reviewProposedDecision,
+	saveDecisionStore,
+} from './application/decision-service.js';
 export { continueGuidedIntake } from './application/guided-intake.js';
 export {
 	type ApplicationCommandResult,
@@ -127,6 +141,36 @@ export {
 	type SlashCommandId,
 	slashCommandDefinitions,
 } from './commands/slash-command-registry.js';
+export {
+	assertValidStatusTransition,
+	confirmDecision,
+	createDecision,
+	createDecisionFromProposal,
+	createEmptyDecisionStore,
+	type Decision,
+	type DecisionChange,
+	type DecisionConfidence,
+	type DecisionProposal,
+	DecisionRegistryError,
+	DecisionStore,
+	decisionChangeSchema,
+	decisionConfidenceLevels,
+	decisionProposalSchema,
+	decisionSchema,
+	getAffectedDocumentsOnChange,
+	getConfirmedDecisions,
+	getDecisionById,
+	getDecisionsByStatus,
+	getDownstreamImpacts,
+	getProposedDecisions,
+	InvalidStatusTransitionError,
+	isValidStatusTransition,
+	rejectDecision,
+	removeDecision,
+	transitionDecisionStatus,
+	updateDecisionValue,
+	upsertDecision,
+} from './domain/decision-registry.js';
 export {
 	type CanonicalDocument,
 	createProfileVersionLock,
@@ -213,10 +257,12 @@ export {
 export { defaultTestPolicy } from './foundation/test-policy.js';
 export {
 	createEmptyAnswersState,
+	createEmptyDecisionsState,
 	getCurrentSessionPath,
 	IntakeStateError,
 	readAnswersState,
 	readCurrentIntakeSession,
+	readDecisionsState,
 	writeAnswersState,
 	writeCurrentIntakeSession,
 	writeDecisionsState,
