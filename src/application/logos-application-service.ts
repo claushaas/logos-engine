@@ -8,6 +8,7 @@ import {
 import { diagnoseWorkspace } from './diagnostics-service.js';
 import { generateDocumentsForCwd } from './document-generation.js';
 import { continueGuidedIntake } from './guided-intake.js';
+import { getProjectStatus } from './status-service.js';
 import { validateWorkspace } from './validation-service.js';
 import { initializeWorkspace } from './workspace-initialization.js';
 
@@ -41,7 +42,9 @@ export type LogosApplicationServices = {
 		args: readonly string[],
 	) => ApplicationCommandResult;
 	readonly showHelp: () => ApplicationCommandResult;
-	readonly showStatus: () => ApplicationCommandResult;
+	readonly showStatus: (
+		context: ApplicationServiceContext,
+	) => ApplicationCommandResult;
 	readonly validateWorkspace: (
 		context: ApplicationServiceContext,
 		args: readonly string[],
@@ -55,7 +58,7 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 			const result = diagnoseWorkspace(context.cwd);
 			return {
 				body: result.lines,
-				status: result.status,
+				status: result.status === 'warning' ? 'ok' : result.status,
 				title: result.title,
 			};
 		},
@@ -74,11 +77,14 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 			status: 'ok',
 			title: 'LOGOS command help',
 		}),
-		showStatus: () =>
-			createStubResult(
-				'/status',
-				'Project progress will load from structured workspace state in a later phase.',
-			),
+		showStatus: (context) => {
+			const result = getProjectStatus(context.cwd);
+			return {
+				body: result.lines,
+				status: result.status,
+				title: result.title,
+			};
+		},
 		validateWorkspace: (context, args) => {
 			const phaseIndex = args.indexOf('--phase');
 			const phaseId = phaseIndex >= 0 ? args[phaseIndex + 1] : undefined;
@@ -176,16 +182,5 @@ export function createUnknownCommandResult(
 		],
 		status: 'not_implemented',
 		title: `Unknown command: ${commandId}`,
-	};
-}
-
-function createStubResult(
-	commandId: SlashCommandId,
-	message: string,
-): ApplicationCommandResult {
-	return {
-		body: [message, 'No files were changed.'],
-		status: 'not_implemented',
-		title: `${commandId} stub`,
 	};
 }

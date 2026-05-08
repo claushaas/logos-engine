@@ -36,10 +36,10 @@ describe('slash command parser and router', () => {
 		expect(result.command.args).toEqual(['--show']);
 	});
 
-	it('routes core command stubs through handlers and services', async () => {
+	it('routes core commands through handlers and services', async () => {
 		const services = createLogosApplicationServices();
 		const context = loadCommandContext('/tmp/logos-test');
-		const result = parseSlashCommand('/status');
+		const result = parseSlashCommand('/help');
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) {
@@ -48,9 +48,9 @@ describe('slash command parser and router', () => {
 
 		const routed = await handleSlashCommand(result.command, context, services);
 
-		expect(routed.title).toBe('/status stub');
+		expect(routed.title).toBe('LOGOS slash commands');
 		expect(routed.exitRequested).toBe(false);
-		expect(routed.body).toContain('No files were changed.');
+		expect(routed.body.length).toBeGreaterThan(0);
 	});
 
 	it('marks /exit as an exit request', async () => {

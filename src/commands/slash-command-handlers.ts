@@ -34,11 +34,11 @@ function executeCommand(
 		case '/continue':
 			return services.continueIntake(context, command.args);
 		case '/status':
-			return services.showStatus();
+			return services.showStatus(context);
 		case '/validate':
 			return services.validateWorkspace(context, command.args);
 		case '/diagnose':
-			return services.diagnoseWorkspace();
+			return services.diagnoseWorkspace(context);
 		case '/generate':
 			return services.generateDocuments(context, command.args);
 		case '/config ai':
