@@ -106,9 +106,80 @@ LOGOS Engine is open source and free to use.
 
 Code is licensed under MIT. Documentation template licensing can be refined when generated templates are introduced.
 
-## AI Safety Baseline
+## AI Behavior
 
-AI is a first-class workflow layer, but it is not a source of confirmed truth.
+AI is a first-class workflow layer in LOGOS Engine. It is used for:
+
+- Generating context-aware follow-up questions during intake
+- Summarizing user answers into structured form
+- Extracting decision proposals from answers
+- Classifying assumptions and identifying gaps
+- Identifying risks and inconsistencies
+- Drafting document sections
+- Recommending next question groups
+
+AI output always enters the system with a status that keeps it distinct from confirmed state:
+
+| Status | Meaning |
+|--------|---------|
+| `draft` | Generated but not yet reviewed |
+| `proposed` | Ready for user review |
+| `needs_review` | Flagged for attention |
+| `rejected` | Reviewed and rejected by user |
+| `confirmed` | Reviewed and accepted by user |
+
+AI-generated decisions may become `confirmed` only after explicit user confirmation. This distinction is enforced in the data model: `DecisionStatus` and `AiOutputStatus` are separate concepts.
+
+### Running Without AI
+
+LOGOS Engine is fully functional without any AI provider configured:
+
+- Profile-defined questions are asked in order
+- Document templates render with available state
+- Validation and diagnostics run deterministically
+- No network calls are made
+- Generated documents report which sections are AI-drafted and incomplete
+
+This is the default mode. Remote AI is always opt-in.
+
+## Provider Configuration
+
+LOGOS Engine supports local and remote LLM providers through a provider-agnostic abstraction. Supported presets:
+
+- **OpenAI** — `gpt-4o`, `gpt-4o-mini`, etc.
+- **Anthropic** — `claude-sonnet-4-20250514`, etc.
+- **OpenRouter** — any model available through OpenRouter
+- **Ollama** — local models (`llama3.2`, `mistral`, etc.)
+- **LM Studio** — local models via OpenAI-compatible endpoint
+- **Custom** — any OpenAI-compatible endpoint
+
+Configure via `/config ai` in the TUI or edit `.logos/config.json`:
+
+```json
+{
+  "ai": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "tokenEnv": "LOGOS_LLM_API_KEY"
+  }
+}
+```
+
+API keys are loaded from environment variables — never stored in project files. The config stores the name of the environment variable, not the key value.
+
+Full details: [Provider Configuration](./docs/07-ai-and-agent-behavior/03_PROVIDER_CONFIGURATION.md)
+
+## Privacy
+
+LOGOS Engine is local-first and does not collect telemetry, track usage, or phone home.
+
+When a remote AI provider is configured, the engine sends only relevant structured project state: answers, decisions, assumptions, open questions, document contracts, and profile phase definitions. Arbitrary source files are never sent by default.
+
+Use `/config ai --show` to inspect what context would be sent before making AI calls. Use local providers (Ollama, LM Studio) for zero-data-leaving-your-machine operation.
+
+Full details: [Privacy](./docs/07-ai-and-agent-behavior/04_PRIVACY.md)
+
+## AI Safety Baseline
 
 Repository defaults follow these rules:
 
@@ -118,3 +189,14 @@ Repository defaults follow these rules:
 - AI output must remain draft, proposed, needs_review, rejected, or explicitly confirmed;
 - AI-generated decisions may become confirmed only after user confirmation;
 - deterministic validation stays separate from AI judgment.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, contribution areas, and review guidelines.
+
+## Open Source
+
+- **Code**: MIT License
+- **Documentation Templates**: Creative Commons Attribution 4.0
+- **Code of Conduct**: [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
+- **Security Policy**: [SECURITY.md](./SECURITY.md)

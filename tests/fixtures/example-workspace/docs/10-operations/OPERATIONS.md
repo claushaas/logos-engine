@@ -2,7 +2,7 @@
 logos:
   document_id: operations.operations
   profile: app-business
-  generated_at: 2026-05-08T20:44:55.863Z
+  generated_at: 2026-05-08T20:54:49.822Z
   status: generated
 ---
 

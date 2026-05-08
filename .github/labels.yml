@@ -1,0 +1,63 @@
+# GitHub Issue Labels for LOGOS Engine
+# Apply with: gh label create -f .github/labels.yml
+# or create manually in the repo settings.
+
+# Type
+- name: bug
+  color: d73a4a
+  description: Something is not working as expected
+- name: enhancement
+  color: a2eeef
+  description: New feature or improvement request
+- name: documentation
+  color: 0075ca
+  description: Documentation improvements or additions
+
+# Priority
+- name: good-first-issue
+  color: 7057ff
+  description: Good for new contributors
+- name: help-wanted
+  color: 008672
+  description: Extra attention is needed
+
+# Scope
+- name: core-engine
+  color: fbca04
+  description: TUI, renderer, validation, storage, diagnostics
+- name: ai-llm
+  color: 1d76db
+  description: AI / LLM provider integration, prompts, context
+- name: profile
+  color: c5def5
+  description: Profile definitions, templates, questions, validations
+- name: tui
+  color: 2b67c6
+  description: TUI user interface and interaction
+- name: tests
+  color: 0e8a16
+  description: Test coverage and test infrastructure
+- name: ci-cd
+  color: d4c5f9
+  description: CI/CD, build, and tooling
+
+# Profile
+- name: profile/app-business
+  color: f9d0c4
+  description: App Business profile improvements
+
+# AI
+- name: ai/provider-config
+  color: 1d76db
+  description: Provider configuration and presets
+- name: ai/prompts
+  color: 1d76db
+  description: Prompt construction and context management
+
+# Status
+- name: needs-discussion
+  color: b60205
+  description: Needs community or maintainer discussion before implementation
+- name: blocked
+  color: b60205
+  description: Blocked by another issue or dependency

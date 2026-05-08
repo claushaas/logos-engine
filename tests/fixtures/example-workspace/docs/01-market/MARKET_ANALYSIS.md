@@ -2,7 +2,7 @@
 logos:
   document_id: market.market_analysis
   profile: app-business
-  generated_at: 2026-05-08T20:44:55.841Z
+  generated_at: 2026-05-08T20:54:49.809Z
   status: generated
 ---
 

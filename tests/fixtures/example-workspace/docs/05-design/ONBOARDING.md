@@ -2,7 +2,7 @@
 logos:
   document_id: design.onboarding
   profile: app-business
-  generated_at: 2026-05-08T20:44:55.853Z
+  generated_at: 2026-05-08T20:54:49.813Z
   status: generated
 ---
 

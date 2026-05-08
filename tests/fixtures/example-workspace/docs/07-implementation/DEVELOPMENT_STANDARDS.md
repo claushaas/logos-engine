@@ -2,7 +2,7 @@
 logos:
   document_id: implementation.development_standards
   profile: app-business
-  generated_at: 2026-05-08T20:44:55.858Z
+  generated_at: 2026-05-08T20:54:49.817Z
   status: generated
 ---
 

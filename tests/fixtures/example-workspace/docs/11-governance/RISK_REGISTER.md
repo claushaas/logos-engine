@@ -2,7 +2,7 @@
 logos:
   document_id: governance.risk_register
   profile: app-business
-  generated_at: 2026-05-08T20:44:55.868Z
+  generated_at: 2026-05-08T20:54:49.823Z
   status: generated
 ---
 
