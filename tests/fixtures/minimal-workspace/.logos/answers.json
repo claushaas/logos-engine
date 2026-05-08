@@ -1,0 +1,18 @@
+{
+	"answers": [
+		{
+			"answer": "MinimalProject — a simple task management app for remote teams.",
+			"answeredAt": "2026-05-01T10:05:00.000Z",
+			"answerType": "text",
+			"id": "answer.foundation.idea.2026-05-01T10-05-00-000Z",
+			"mapsToDecisionIds": ["foundation.initial_idea"],
+			"phaseId": "00-intake",
+			"questionId": "foundation.idea",
+			"questionSetId": "foundation",
+			"rawAnswer": "MinimalProject — a simple task management app for remote teams.",
+			"status": "answered",
+			"summary": "A simple task management app for remote teams."
+		}
+	],
+	"schemaVersion": "0.1.0"
+}
