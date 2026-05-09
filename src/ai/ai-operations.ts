@@ -13,6 +13,8 @@ export const aiOperationIds = [
 	'identify_risks',
 	'draft_document_section',
 	'recommend_next_question_group',
+	'lead_intake_turn',
+	'recommend_next_conversation_move',
 ] as const;
 
 export type AiOperationId = (typeof aiOperationIds)[number];
@@ -72,6 +74,20 @@ export const aiOperationRegistry = [
 	{
 		description: 'Recommend the next useful profile question group.',
 		id: 'recommend_next_question_group',
+		mutatesProjectState: false,
+		outputStatus: 'proposed',
+	},
+	{
+		description:
+			'Lead one conversational intake turn: respond to user input, synthesize context, and propose a next conversational move.',
+		id: 'lead_intake_turn',
+		mutatesProjectState: false,
+		outputStatus: 'proposed',
+	},
+	{
+		description:
+			'Recommend the next conversational move based on current conversation state and project coverage.',
+		id: 'recommend_next_conversation_move',
 		mutatesProjectState: false,
 		outputStatus: 'proposed',
 	},
@@ -140,6 +156,35 @@ export const aiOperationOutputSchemas = {
 	}),
 	identify_risks: outputBaseSchema.extend({
 		risks: z.array(riskSchema),
+	}),
+	lead_intake_turn: outputBaseSchema
+		.extend({
+			nextMove: z.enum(['ask_question', 'resume', 'summarize', 'done']),
+			rationale: z.string().min(1),
+			response: z.string().min(1),
+			suggestedQuestion: z.string().min(1).optional(),
+		})
+		.refine(
+			(data) =>
+				data.nextMove !== 'ask_question' || Boolean(data.suggestedQuestion),
+			{
+				message: 'suggestedQuestion is required when nextMove is ask_question.',
+			},
+		),
+	recommend_next_conversation_move: outputBaseSchema.extend({
+		move: z.enum([
+			'ask_foundation_question',
+			'ask_market_question',
+			'ask_business_question',
+			'ask_product_question',
+			'summarize_session',
+			'proceed_to_phase',
+			'generate_documents',
+		]),
+		notes: z.array(z.string().min(1)).default([]),
+		phaseId: z.string().min(1).optional(),
+		priority: z.enum(['high', 'medium', 'low']),
+		rationale: z.string().min(1),
 	}),
 	recommend_next_question_group: outputBaseSchema.extend({
 		recommendation: z.object({

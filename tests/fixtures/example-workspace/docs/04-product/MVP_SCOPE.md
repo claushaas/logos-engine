@@ -2,7 +2,7 @@
 logos:
   document_id: product.mvp_scope
   profile: app-business
-  generated_at: 2026-05-08T20:54:49.812Z
+  generated_at: 2026-05-09T02:21:01.907Z
   status: generated
 ---
 

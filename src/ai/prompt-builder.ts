@@ -48,6 +48,10 @@ const operationPromptTasks = {
 		'Identify missing, unclear, or contradictory project context against profile and document requirements.',
 	identify_risks:
 		'Identify risks implied by current facts, assumptions, open questions, validation findings, and profile requirements.',
+	lead_intake_turn:
+		'Lead one conversational intake turn. Respond naturally to user input, synthesize context from the current project and profile, and propose a next conversational move. Do not invent facts or confirm decisions.',
+	recommend_next_conversation_move:
+		'Recommend the next conversational move based on current conversation history, project coverage, profile requirements, and missing document inputs.',
 	recommend_next_question_group:
 		'Recommend the next useful profile question group and explain why it should be asked now.',
 	summarize_answer:
@@ -57,6 +61,7 @@ const operationPromptTasks = {
 const categoryHeadings = {
 	assumption: 'Assumptions',
 	confirmed_decision: 'Confirmed Decisions',
+	conversation_history: 'Conversation History',
 	document_completion_criteria: 'Document Completion Criteria',
 	open_question: 'Open Questions',
 	profile_requirement: 'Profile Requirements',

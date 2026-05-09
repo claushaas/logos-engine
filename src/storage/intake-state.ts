@@ -2,6 +2,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
 import {
+	type ConversationSession,
+	conversationSessionSchema,
+} from '../domain/conversation-model.js';
+import {
 	type IntakeSession,
 	intakeSessionSchema,
 } from '../domain/question-engine.js';
@@ -73,6 +77,35 @@ export function writeCurrentIntakeSession(
 
 export function getCurrentSessionPath(projectRoot: string): string {
 	return join(projectRoot, '.logos', 'sessions', 'current.json');
+}
+
+export function getConversationSessionPath(projectRoot: string): string {
+	return join(projectRoot, '.logos', 'sessions', 'conversation.json');
+}
+
+export function readConversationSession(
+	projectRoot: string,
+): ConversationSession | null {
+	const path = getConversationSessionPath(projectRoot);
+
+	if (!existsSync(path)) {
+		return null;
+	}
+
+	return readJsonState(path, conversationSessionSchema);
+}
+
+export function writeConversationSession(
+	projectRoot: string,
+	session: ConversationSession,
+): void {
+	atomicReplaceJsonFile(getConversationSessionPath(projectRoot), session);
+}
+
+export function readCurrentIntakeSessionLegacy(
+	projectRoot: string,
+): IntakeSession | null {
+	return readCurrentIntakeSession(projectRoot);
 }
 
 export function createEmptyAnswersState(): AnswersState {

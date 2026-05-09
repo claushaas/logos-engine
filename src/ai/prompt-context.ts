@@ -16,6 +16,7 @@ export const promptContextCategories = [
 	'profile_requirement',
 	'document_completion_criteria',
 	'validation_finding',
+	'conversation_history',
 ] as const;
 
 export type PromptContextCategory = (typeof promptContextCategories)[number];
@@ -23,6 +24,7 @@ export type PromptContextCategory = (typeof promptContextCategories)[number];
 export type ContextSelectionRule = {
 	readonly includeAssumptions: boolean;
 	readonly includeConfirmedDecisions: boolean;
+	readonly includeConversationHistory: boolean;
 	readonly includeDocumentCompletionCriteria: boolean;
 	readonly includeOpenQuestions: boolean;
 	readonly includeProfileRequirements: boolean;
@@ -59,6 +61,10 @@ export type PromptContextBundle = {
 };
 
 export type BuildPromptContextInput = {
+	readonly conversationHistory?: readonly {
+		readonly content: string;
+		readonly role: string;
+	}[];
 	readonly maxItemsPerCategory?: number;
 	readonly operationId: AiOperationId;
 	readonly profile?: ProfileContract;
@@ -71,6 +77,7 @@ export const contextSelectionRules = {
 	classify_assumptions: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: false,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -84,6 +91,7 @@ export const contextSelectionRules = {
 	draft_document_section: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: true,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -97,6 +105,7 @@ export const contextSelectionRules = {
 	extract_decision_proposals: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: false,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -110,6 +119,7 @@ export const contextSelectionRules = {
 	generate_follow_up_questions: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: false,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -123,6 +133,7 @@ export const contextSelectionRules = {
 	identify_gaps: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: true,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -136,6 +147,7 @@ export const contextSelectionRules = {
 	identify_risks: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: true,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -146,9 +158,38 @@ export const contextSelectionRules = {
 			'Risk analysis needs the confirmed context, assumptions, unresolved questions, and relevant contracts.',
 		requiresTargetDocument: false,
 	},
+	lead_intake_turn: {
+		includeAssumptions: true,
+		includeConfirmedDecisions: true,
+		includeConversationHistory: true,
+		includeDocumentCompletionCriteria: true,
+		includeOpenQuestions: true,
+		includeProfileRequirements: true,
+		includeProposedDecisions: true,
+		includeUserFacts: true,
+		includeValidationFindings: true,
+		rationale:
+			'Leading a conversational intake turn requires conversation history, profile structure, current project state, and document completion criteria to ask purposeful questions.',
+		requiresTargetDocument: false,
+	},
+	recommend_next_conversation_move: {
+		includeAssumptions: true,
+		includeConfirmedDecisions: true,
+		includeConversationHistory: true,
+		includeDocumentCompletionCriteria: true,
+		includeOpenQuestions: true,
+		includeProfileRequirements: true,
+		includeProposedDecisions: true,
+		includeUserFacts: true,
+		includeValidationFindings: true,
+		rationale:
+			'Recommending the next conversational move needs full project coverage context, conversation history, and profile-defined phases and documents.',
+		requiresTargetDocument: false,
+	},
 	recommend_next_question_group: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: false,
 		includeOpenQuestions: true,
 		includeProfileRequirements: true,
@@ -162,6 +203,7 @@ export const contextSelectionRules = {
 	summarize_answer: {
 		includeAssumptions: false,
 		includeConfirmedDecisions: false,
+		includeConversationHistory: false,
 		includeDocumentCompletionCriteria: false,
 		includeOpenQuestions: false,
 		includeProfileRequirements: false,
@@ -204,6 +246,7 @@ export function buildPromptContext(
 	const maxItemsPerCategory = input.maxItemsPerCategory ?? 12;
 	const items = limitItemsPerCategory(
 		[
+			...buildConversationHistoryItems(input, selectionRule),
 			...buildProfileRequirementItems(input, selectionRule),
 			...buildDocumentCompletionItems(input, selectionRule, targetDocument),
 			...buildWorkspaceItems(input, selectionRule),
@@ -266,6 +309,36 @@ function buildPromptContextDisclosure(
 		summary: `Prompt for ${operationId} includes ${items.length} selected context item(s): ${categorySummary}. Unrelated project files are excluded by default.`,
 		version: promptContextVersion,
 	};
+}
+
+function buildConversationHistoryItems(
+	input: BuildPromptContextInput,
+	selectionRule: ContextSelectionRule,
+): readonly PromptContextItem[] {
+	if (
+		!selectionRule.includeConversationHistory ||
+		!input.conversationHistory ||
+		input.conversationHistory.length === 0
+	) {
+		return [];
+	}
+
+	return [
+		{
+			category: 'conversation_history',
+			content: {
+				turns: input.conversationHistory.map((turn) => ({
+					content: turn.content,
+					role: turn.role,
+				})),
+			},
+			id: 'conversation-history',
+			label: `Conversation history (${input.conversationHistory.length} turns)`,
+			reason:
+				'Recent conversation context is required to maintain coherence in AI-led intake.',
+			source: '.logos/sessions/conversation.json',
+		},
+	];
 }
 
 function buildProfileRequirementItems(

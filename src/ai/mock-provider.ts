@@ -42,6 +42,25 @@ const defaultMockResponses = {
 		risks: [],
 		status: 'needs_review',
 	},
+	lead_intake_turn: {
+		nextMove: 'ask_question',
+		rationale:
+			'The mock provider uses the first unanswered profile question to guide the conversation.',
+		response:
+			"I'd like to understand your project better. What is the app idea you have in mind?",
+		status: 'proposed',
+		suggestedQuestion:
+			'What is the app idea? Describe the app in plain language. Focus on what it helps someone do.',
+	},
+	recommend_next_conversation_move: {
+		move: 'ask_foundation_question',
+		notes: [],
+		phaseId: '00-intake',
+		priority: 'high',
+		rationale:
+			'The mock provider recommends asking a foundation question to start building project context.',
+		status: 'proposed',
+	},
 	recommend_next_question_group: {
 		recommendation: {
 			priority: 'medium',

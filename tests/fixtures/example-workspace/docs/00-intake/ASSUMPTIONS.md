@@ -2,7 +2,7 @@
 logos:
   document_id: intake.assumptions
   profile: app-business
-  generated_at: 2026-05-08T20:54:49.809Z
+  generated_at: 2026-05-09T02:21:01.905Z
   status: generated
 ---
 

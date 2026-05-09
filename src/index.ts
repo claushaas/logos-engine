@@ -203,6 +203,20 @@ export {
 	TemplateRenderError,
 } from './document-renderer/template-renderer.js';
 export {
+	addConversationTurn,
+	type ConversationModelError,
+	type ConversationSession,
+	type ConversationSessionStatus,
+	type ConversationSourceLinks,
+	type ConversationTurn,
+	type ConversationTurnRole,
+	completeConversationSession,
+	conversationSessionSchema,
+	conversationTurnSchema,
+	createConversationSession,
+	saveConversationSession,
+} from './domain/conversation-model.js';
+export {
 	assertValidStatusTransition,
 	confirmDecision,
 	createDecision,
@@ -319,12 +333,16 @@ export { defaultTestPolicy } from './foundation/test-policy.js';
 export {
 	createEmptyAnswersState,
 	createEmptyDecisionsState,
+	getConversationSessionPath,
 	getCurrentSessionPath,
 	IntakeStateError,
 	readAnswersState,
+	readConversationSession,
 	readCurrentIntakeSession,
+	readCurrentIntakeSessionLegacy,
 	readDecisionsState,
 	writeAnswersState,
+	writeConversationSession,
 	writeCurrentIntakeSession,
 	writeDecisionsState,
 } from './storage/intake-state.js';

@@ -406,6 +406,12 @@ export async function generateProposedFollowUpQuestions(input: {
 	}));
 }
 
+/**
+ * @deprecated This operation is superseded by `recommend_next_conversation_move`
+ * for the conversation-first product path.  The function remains available as an
+ * internal helper for profile-coverage analysis, fixtures, and migration support,
+ * but user-facing intake should use the conversation model instead.
+ */
 export async function recommendNextQuestionGroup(input: {
 	readonly profile: ProfileContract;
 	readonly provider: LlmProvider;
