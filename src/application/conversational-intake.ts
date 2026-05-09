@@ -2,9 +2,19 @@ import {
 	type AiOperationOutput,
 	getAiOperationMetadata,
 } from '../ai/ai-operations.js';
+import {
+	createAnthropicCompatibleProvider,
+	createOllamaProvider,
+	createOpenAiCompatibleProvider,
+} from '../ai/http-adapters.js';
 import { type LlmProvider, runAiOperation } from '../ai/llm-provider.js';
 import { createMockLlmProvider } from '../ai/mock-provider.js';
 import { buildPromptForAiOperation } from '../ai/prompt-builder.js';
+import {
+	type AiProviderConfig,
+	getProviderPreset,
+	resolveProviderConfigDefaults,
+} from '../ai/provider-config.js';
 import {
 	addConversationTurn,
 	type ConversationSession,
@@ -92,7 +102,22 @@ function resolveProviderAndStatus(projectRoot: string): {
 			};
 		}
 
-		if (!config.remoteContextDisclosureAccepted) {
+		if (config.provider === 'fixture') {
+			return {
+				provider: createMockLlmProvider(),
+				providerNotice:
+					'Using fixture provider preset with deterministic local responses. No data leaves this machine.',
+				providerStatus: 'mock',
+			};
+		}
+
+		const resolvedConfig = resolveProviderConfigDefaults(config);
+		const preset = getProviderPreset(config.provider);
+
+		if (
+			preset.transmission.requiresUserAcknowledgement &&
+			!config.remoteContextDisclosureAccepted
+		) {
 			return {
 				provider: createMockLlmProvider(),
 				providerNotice: `Provider ${config.provider} configured but remote disclosure not accepted. Run /config ai --allow-remote to acknowledge that project context may be sent to the remote provider. Mock responses used for now.`,
@@ -101,8 +126,8 @@ function resolveProviderAndStatus(projectRoot: string): {
 		}
 
 		return {
-			provider: createMockLlmProvider(),
-			providerNotice: `Using ${config.provider} provider. Project context may be sent to remote endpoint. Run /config ai --show to review.`,
+			provider: createConfiguredProvider(resolvedConfig),
+			providerNotice: `Using ${config.provider} provider. ${preset.transmission.disclosure} Run /config ai --show to review.`,
 			providerStatus: 'remote_ready',
 		};
 	} catch {
@@ -112,6 +137,27 @@ function resolveProviderAndStatus(projectRoot: string): {
 				'No LOGOS workspace found. Run /init to set up a workspace, then configure a provider with /config ai.',
 			providerStatus: 'no_provider',
 		};
+	}
+}
+
+function createConfiguredProvider(config: AiProviderConfig): LlmProvider {
+	if (!config.provider) {
+		return createMockLlmProvider();
+	}
+
+	const preset = getProviderPreset(config.provider);
+
+	switch (preset.adapter) {
+		case 'anthropic-compatible':
+			return createAnthropicCompatibleProvider(config);
+		case 'fixture':
+			return createMockLlmProvider();
+		case 'mock':
+			return createMockLlmProvider();
+		case 'ollama':
+			return createOllamaProvider(config);
+		case 'openai-compatible':
+			return createOpenAiCompatibleProvider(config);
 	}
 }
 

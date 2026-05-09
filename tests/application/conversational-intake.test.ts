@@ -1,4 +1,6 @@
 import { existsSync, mkdirSync, mkdtempSync } from 'node:fs';
+import { createServer } from 'node:http';
+import type { AddressInfo } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -8,6 +10,7 @@ import {
 	initializeWorkspace,
 	readConversationSession,
 	resumeConversation,
+	updateAiConfiguration,
 } from '../../src/index.js';
 
 function createProjectRoot(): string {
@@ -102,6 +105,92 @@ describe('conversational intake service', () => {
 
 		expect(result.status).toBe('ok');
 		expect(result.aiMessage).toContain('saved');
+	});
+
+	it('uses a configured provider adapter for conversation responses', async () => {
+		const projectRoot = createProjectRoot();
+		initializeWorkspace(projectRoot);
+		let requestCount = 0;
+		const server = createServer((_request, response) => {
+			requestCount++;
+			const output =
+				requestCount === 1
+					? {
+							nextMove: 'ask_question',
+							notes: [],
+							rationale: 'The configured provider is steering the intake.',
+							response: 'Configured provider response.',
+							status: 'proposed',
+							suggestedQuestion: 'Who is the first target user?',
+						}
+					: {
+							classifiedAssumptions: [],
+							decisionProposals: [],
+							identifiedOpenQuestions: [],
+							interpretedAnswers: [
+								{
+									answerId: 'answer.configured-provider',
+									confidence: 0.9,
+									normalizedSummary: 'The project uses a configured provider.',
+									phaseId: 'foundation',
+								},
+							],
+							notes: [],
+							status: 'proposed',
+						};
+
+			response.writeHead(200, { 'content-type': 'application/json' });
+			response.end(
+				JSON.stringify({
+					choices: [
+						{
+							finish_reason: 'stop',
+							message: { content: JSON.stringify(output) },
+						},
+					],
+					model: 'test-model',
+				}),
+			);
+		});
+
+		await new Promise<void>((resolve) => {
+			server.listen(0, '127.0.0.1', resolve);
+		});
+
+		try {
+			const { port } = server.address() as AddressInfo;
+			updateAiConfiguration(projectRoot, [
+				'--provider',
+				'custom',
+				'--endpoint',
+				`http://127.0.0.1:${port}`,
+				'--model',
+				'test-model',
+				'--allow-remote',
+			]);
+
+			const result = await handleConversationMessage(
+				projectRoot,
+				'Use the configured provider for this turn.',
+			);
+
+			expect(result.status).toBe('ok');
+			expect(result.providerStatus).toBe('remote_ready');
+			expect(result.aiMessages).toContain('Configured provider response.');
+			expect(result.interpretedAnswers).toBe(1);
+			expect(requestCount).toBe(2);
+		} finally {
+			await new Promise<void>((resolve, reject) => {
+				server.close((error) => {
+					if (error) {
+						reject(error);
+						return;
+					}
+
+					resolve();
+				});
+			});
+		}
 	});
 });
 

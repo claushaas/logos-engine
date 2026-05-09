@@ -36,6 +36,8 @@ type DisplayMessage =
 	| { readonly kind: 'system'; readonly message: Message }
 	| { readonly kind: 'conversation'; readonly message: ConversationMessage };
 
+const pendingAiResponseText = 'Thinking...';
+
 export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 	const { exit } = useApp();
 	const { isRawModeSupported } = useStdin();
@@ -149,9 +151,58 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 
 	const handleConversationInput = useCallback(
 		async (text: string) => {
-			addConversationMessages(text, []);
+			addConversationMessages(text, [pendingAiResponseText]);
 
-			const result = await services.handleConversationMessage(context, text);
+			let result: Awaited<
+				ReturnType<typeof services.handleConversationMessage>
+			>;
+
+			try {
+				result = await services.handleConversationMessage(context, text);
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				setDisplayMessages((current) => {
+					const nextMessages = replacePendingAiMessage(current, [
+						`AI response failed: ${message}. Session preserved.`,
+					]);
+					const newMaxScroll = Math.max(
+						0,
+						nextMessages.length - maxVisibleMessages,
+					);
+					setScrollOffset(newMaxScroll);
+					return nextMessages;
+				});
+				return;
+			}
+
+			const aiMessages =
+				result.aiMessages.length > 0
+					? result.aiMessages
+					: [
+							'No AI response was returned. Try again or run /config ai --test.',
+						];
+
+			setDisplayMessages((current) => {
+				const nextMessages = replacePendingAiMessage(current, aiMessages);
+				const newMaxScroll = Math.max(
+					0,
+					nextMessages.length - maxVisibleMessages,
+				);
+				setScrollOffset(newMaxScroll);
+				return nextMessages;
+			});
+
+			if (result.status === 'error') {
+				addSystemMessage(
+					[
+						'The conversation turn was preserved, but the AI response failed.',
+						'Run /config ai --test to inspect provider configuration.',
+					],
+					'AI response failed',
+					'error',
+				);
+				return;
+			}
 
 			if (result.status === 'no_provider') {
 				addSystemMessage(
@@ -166,50 +217,11 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 				return;
 			}
 
-			if (result.aiMessages.length > 0) {
-				setDisplayMessages((current) => {
-					const filtered = current.filter(
-						(m) =>
-							!(
-								m.kind === 'conversation' &&
-								m.message.role === 'ai' &&
-								m.message.body.length === 0
-							),
-					);
-
-					const now = new Date().toISOString();
-
-					return [
-						...filtered,
-						{
-							kind: 'conversation',
-							message: {
-								body: [...result.aiMessages],
-								role: 'ai',
-								timestamp: now,
-							},
-						},
-					];
-				});
-
-				const newMaxScroll = Math.max(
-					0,
-					displayMessages.length + 1 - maxVisibleMessages,
-				);
-				setScrollOffset(newMaxScroll);
-			}
-
 			if (result.providerStatus !== 'remote_ready') {
 				addSystemMessage([result.providerNotice], 'Provider notice', 'info');
 			}
 		},
-		[
-			addConversationMessages,
-			addSystemMessage,
-			context,
-			services,
-			displayMessages.length,
-		],
+		[addConversationMessages, addSystemMessage, context, services],
 	);
 
 	const executeCommand = useCallback(
@@ -378,6 +390,46 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 			/>
 		</Box>
 	);
+}
+
+function replacePendingAiMessage(
+	messages: readonly DisplayMessage[],
+	aiMessages: readonly string[],
+): DisplayMessage[] {
+	let pendingIndex = -1;
+
+	for (let index = messages.length - 1; index >= 0; index -= 1) {
+		const item = messages[index];
+
+		if (
+			item?.kind === 'conversation' &&
+			item.message.role === 'ai' &&
+			item.message.body.length === 1 &&
+			item.message.body[0] === pendingAiResponseText
+		) {
+			pendingIndex = index;
+			break;
+		}
+	}
+
+	const replacement: DisplayMessage = {
+		kind: 'conversation',
+		message: {
+			body: [...aiMessages],
+			role: 'ai',
+			timestamp: new Date().toISOString(),
+		},
+	};
+
+	if (pendingIndex === -1) {
+		return [...messages, replacement];
+	}
+
+	return [
+		...messages.slice(0, pendingIndex),
+		replacement,
+		...messages.slice(pendingIndex + 1),
+	];
 }
 
 async function runCommand(

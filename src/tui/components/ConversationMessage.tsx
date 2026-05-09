@@ -18,6 +18,16 @@ export function ConversationMessage({
 }: ConversationMessageProps): React.ReactElement {
 	const isAi = message.role === 'ai';
 	const roleLabel = isAi ? 'LOGOS' : 'You';
+	const seenLines = new Map<string, number>();
+	const bodyLines = message.body.map((line) => {
+		const occurrence = seenLines.get(line) ?? 0;
+		seenLines.set(line, occurrence + 1);
+
+		return {
+			key: `${message.role}:${message.timestamp}:${occurrence}:${line.slice(0, 20)}`,
+			line,
+		};
+	});
 
 	return (
 		<Box flexDirection="column" marginBottom={1}>
@@ -32,8 +42,8 @@ export function ConversationMessage({
 				borderStyle={isAi ? 'single' : 'round'}
 				flexDirection="column"
 			>
-				{message.body.map((line) => (
-					<Text key={`${message.role}:${line.slice(0, 20)}`}>{line}</Text>
+				{bodyLines.map(({ key, line }) => (
+					<Text key={key}>{line}</Text>
 				))}
 			</Box>
 		</Box>
