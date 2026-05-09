@@ -62,7 +62,8 @@ export async function continueGuidedIntake(
 				return {
 					body: [
 						`Unknown /continue action: ${action}`,
-						'Use /continue, /continue answer <question-id> <answer>, /continue unknown <question-id>, /continue assume <question-id> <answer>, /continue skip <question-id>, /continue propose-followups, /continue accept-followups --all, or /continue save.',
+						'Use /continue alone to start or resume the AI-led conversation.',
+						'For internal/service-level usage, the following sub-actions are available: answer, unknown, assume, skip, save, propose-followups, accept-followups.',
 					],
 					status: 'error',
 					title: 'Intake command failed',
@@ -123,8 +124,7 @@ async function showNextQuestionGroup(
 			'',
 			...selection.questions.flatMap(formatQuestion),
 			'',
-			'Answer with /continue answer <question-id> <answer>.',
-			'Other actions: /continue unknown <question-id>, /continue assume <question-id> <answer>, /continue skip <question-id>, /continue propose-followups, /continue save.',
+			'Internal usage: /continue answer|unknown|assume|skip <question-id> <answer>',
 		],
 		status: 'ok',
 		title: 'Guided intake',
@@ -337,7 +337,7 @@ function saveCurrentIntake(projectRoot: string): ApplicationCommandResult {
 	return {
 		body: [
 			`Saved intake session ${nextSession.id}.`,
-			'Run /continue to resume from structured state.',
+			'Internal: Use /continue to resume from structured state.',
 		],
 		status: 'ok',
 		title: 'Intake saved',

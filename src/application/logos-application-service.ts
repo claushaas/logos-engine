@@ -5,9 +5,15 @@ import {
 	testAiConfiguration,
 	updateAiConfiguration,
 } from './ai-configuration.js';
+import {
+	type ConversationMessageResult,
+	type ConversationResumeResult,
+	endConversation,
+	handleConversationMessage,
+	resumeConversation,
+} from './conversational-intake.js';
 import { diagnoseWorkspace } from './diagnostics-service.js';
 import { generateDocumentsForCwd } from './document-generation.js';
-import { continueGuidedIntake } from './guided-intake.js';
 import { getProjectStatus } from './status-service.js';
 import { validateWorkspace } from './validation-service.js';
 import { initializeWorkspace } from './workspace-initialization.js';
@@ -25,15 +31,21 @@ export type ApplicationServiceContext = {
 export type LogosApplicationServices = {
 	readonly continueIntake: (
 		context: ApplicationServiceContext,
-		args: readonly string[],
-	) => Promise<ApplicationCommandResult>;
+	) => ApplicationCommandResult;
 	readonly diagnoseWorkspace: (
 		context: ApplicationServiceContext,
 	) => ApplicationCommandResult;
+	readonly endConversation: (
+		context: ApplicationServiceContext,
+	) => ConversationResumeResult;
 	readonly generateDocuments: (
 		context: ApplicationServiceContext,
 		args: readonly string[],
 	) => ApplicationCommandResult;
+	readonly handleConversationMessage: (
+		context: ApplicationServiceContext,
+		message: string,
+	) => Promise<ConversationMessageResult>;
 	readonly initializeWorkspace: (
 		context: ApplicationServiceContext,
 	) => ApplicationCommandResult;
@@ -53,7 +65,34 @@ export type LogosApplicationServices = {
 
 export function createLogosApplicationServices(): LogosApplicationServices {
 	return {
-		continueIntake: (context, args) => continueGuidedIntake(context.cwd, args),
+		continueIntake: (context) => {
+			const result = resumeConversation(context.cwd);
+			const lines: string[] = [];
+
+			if (result.providerNotice) {
+				lines.push(result.providerNotice);
+			}
+
+			if (result.aiMessage) {
+				lines.push(result.aiMessage);
+			}
+
+			lines.push(`Conversation: ${result.conversationId}`);
+			lines.push(`Turns: ${result.turnCount}`);
+
+			if (result.status === 'no_provider') {
+				lines.push('');
+				lines.push(
+					'Regular conversation input still works with mock responses.',
+				);
+			}
+
+			return {
+				body: lines,
+				status: 'ok',
+				title: 'Conversation resumed',
+			};
+		},
 		diagnoseWorkspace: (context) => {
 			const result = diagnoseWorkspace(context.cwd);
 			return {
@@ -62,6 +101,7 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				title: result.title,
 			};
 		},
+		endConversation: (context) => endConversation(context.cwd),
 		generateDocuments: (context, args) => {
 			const result = generateDocumentsForCwd(context.cwd, args);
 			return {
@@ -70,6 +110,8 @@ export function createLogosApplicationServices(): LogosApplicationServices {
 				title: result.title,
 			};
 		},
+		handleConversationMessage: (context, message) =>
+			handleConversationMessage(context.cwd, message),
 		initializeWorkspace: (context) => createInitializeWorkspaceResult(context),
 		showAiConfig: (context, args) => createAiConfigResult(context, args),
 		showHelp: () => ({

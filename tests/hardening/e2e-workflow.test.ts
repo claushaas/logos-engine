@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+	continueGuidedIntake,
 	createLogosApplicationServices,
 	handleSlashCommand,
 	initializeWorkspace,
@@ -24,6 +25,14 @@ async function runCommand(projectRoot: string, input: string) {
 	if (!parsed.ok) {
 		throw new Error(parsed.error.message);
 	}
+
+	if (parsed.command.definition.id === '/continue') {
+		return continueGuidedIntake(
+			projectRoot,
+			parsed.command.args.length > 0 ? parsed.command.args : ['show'],
+		);
+	}
+
 	return await handleSlashCommand(
 		parsed.command,
 		loadCommandContext(projectRoot),

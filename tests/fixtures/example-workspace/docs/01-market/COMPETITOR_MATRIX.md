@@ -2,7 +2,7 @@
 logos:
   document_id: market.competitor_matrix
   profile: app-business
-  generated_at: 2026-05-09T02:21:01.905Z
+  generated_at: 2026-05-09T02:47:50.478Z
   status: generated
 ---
 

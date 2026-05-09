@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+	continueGuidedIntake,
 	createLogosApplicationServices,
 	getCurrentSessionPath,
 	handleSlashCommand,
@@ -13,8 +14,8 @@ import {
 	readWorkspaceState,
 } from '../../src/index.js';
 
-describe('/continue guided intake command', () => {
-	it('renders foundation questions with help, examples, and action hints', async () => {
+describe('/continue conversation resume', () => {
+	it('starts a new conversation when no session exists', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 
@@ -23,16 +24,43 @@ describe('/continue guided intake command', () => {
 		expect(result).toMatchObject({
 			exitRequested: false,
 			status: 'ok',
+			title: 'Conversation resumed',
+		});
+		expect(result.body.join('\n')).toContain('Conversation:');
+	});
+
+	it('does not render question-id hints in user-facing output', async () => {
+		const projectRoot = createProjectRoot();
+		initializeWorkspace(projectRoot);
+
+		const result = await runCommand(projectRoot, '/continue');
+
+		expect(result.body.join('\n')).not.toContain(
+			'/continue answer <question-id>',
+		);
+		expect(result.body.join('\n')).not.toContain('<question-id>');
+	});
+});
+
+describe('guided intake — internal service API', () => {
+	it('selects foundation questions with help and examples', async () => {
+		const projectRoot = createProjectRoot();
+		initializeWorkspace(projectRoot);
+
+		const result = await continueGuidedIntake(projectRoot, ['show']);
+
+		expect(result).toMatchObject({
+			status: 'ok',
 			title: 'Guided intake',
 		});
 		expect(result.body.join('\n')).toContain('[foundation.idea]');
 		expect(result.body.join('\n')).toContain('Help:');
 		expect(result.body.join('\n')).toContain('Examples:');
-		expect(result.body.join('\n')).toContain('/continue answer <question-id>');
+		expect(result.body.join('\n')).toContain('Internal usage:');
 		expect(existsSync(getCurrentSessionPath(projectRoot))).toBe(true);
 	});
 
-	it('renders choice and multi-choice options when the selected group defines them', async () => {
+	it('renders choice and multi-choice options', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 
@@ -44,10 +72,14 @@ describe('/continue guided intake command', () => {
 			'foundation.why_now',
 			'foundation.smallest_valuable_version',
 		]) {
-			await runCommand(projectRoot, `/continue answer ${questionId} answer`);
+			await continueGuidedIntake(projectRoot, [
+				'answer',
+				questionId,
+				'test answer',
+			]);
 		}
 
-		const result = await runCommand(projectRoot, '/continue');
+		const result = await continueGuidedIntake(projectRoot, ['show']);
 
 		expect(result.body.join('\n')).toContain('[market.alternative_types]');
 		expect(result.body.join('\n')).toContain('Options:');
@@ -60,10 +92,11 @@ describe('/continue guided intake command', () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 
-		const result = await runCommand(
-			projectRoot,
-			'/continue answer foundation.idea A local-first app planner',
-		);
+		const result = await continueGuidedIntake(projectRoot, [
+			'answer',
+			'foundation.idea',
+			'A local-first app planner',
+		]);
 		const state = readWorkspaceState(projectRoot);
 
 		expect(result.status).toBe('ok');
@@ -83,10 +116,10 @@ describe('/continue guided intake command', () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 
-		const result = await runCommand(
-			projectRoot,
-			'/continue unknown foundation.primary_user',
-		);
+		const result = await continueGuidedIntake(projectRoot, [
+			'unknown',
+			'foundation.primary_user',
+		]);
 		const state = readWorkspaceState(projectRoot);
 
 		expect(result.title).toBe('Open question created');
@@ -110,10 +143,11 @@ describe('/continue guided intake command', () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
 
-		const result = await runCommand(
-			projectRoot,
-			'/continue assume foundation.primary_user Solo founders',
-		);
+		const result = await continueGuidedIntake(projectRoot, [
+			'assume',
+			'foundation.primary_user',
+			'Solo founders',
+		]);
 		const state = readWorkspaceState(projectRoot);
 
 		expect(result.title).toBe('Assumption stored');
@@ -137,13 +171,13 @@ describe('/continue guided intake command', () => {
 	it('saves skipped questions and resumes unfinished sessions', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
-		await runCommand(projectRoot, '/continue');
+		await continueGuidedIntake(projectRoot, ['show']);
 
-		const skipResult = await runCommand(
-			projectRoot,
-			'/continue skip foundation.primary_user',
-		);
-		const saveResult = await runCommand(projectRoot, '/continue save');
+		const skipResult = await continueGuidedIntake(projectRoot, [
+			'skip',
+			'foundation.primary_user',
+		]);
+		const saveResult = await continueGuidedIntake(projectRoot, ['save']);
 		const session = readCurrentIntakeSession(projectRoot);
 
 		expect(skipResult.title).toBe('Question skipped');
@@ -157,17 +191,16 @@ describe('/continue guided intake command', () => {
 	it('stores AI follow-ups as proposed until accepted', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);
-		await runCommand(projectRoot, '/continue');
+		await continueGuidedIntake(projectRoot, ['show']);
 
-		const proposed = await runCommand(
-			projectRoot,
-			'/continue propose-followups',
-		);
+		const proposed = await continueGuidedIntake(projectRoot, [
+			'propose-followups',
+		]);
 		const proposedSession = readCurrentIntakeSession(projectRoot);
-		const accepted = await runCommand(
-			projectRoot,
-			'/continue accept-followups --all',
-		);
+		const accepted = await continueGuidedIntake(projectRoot, [
+			'accept-followups',
+			'--all',
+		]);
 		const acceptedSession = readCurrentIntakeSession(projectRoot);
 
 		expect(proposed.title).toBe('Follow-ups proposed');

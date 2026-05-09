@@ -32,7 +32,7 @@ function executeCommand(
 		case '/init':
 			return services.initializeWorkspace(context);
 		case '/continue':
-			return services.continueIntake(context, command.args);
+			return services.continueIntake(context);
 		case '/status':
 			return services.showStatus(context);
 		case '/validate':

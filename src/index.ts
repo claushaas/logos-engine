@@ -90,6 +90,13 @@ export {
 	updateAiConfiguration,
 } from './application/ai-configuration.js';
 export {
+	type ConversationMessageResult,
+	type ConversationResumeResult,
+	endConversation,
+	handleConversationMessage,
+	resumeConversation,
+} from './application/conversational-intake.js';
+export {
 	changeConfirmedDecision,
 	createEmptyStore,
 	createManualDecision,

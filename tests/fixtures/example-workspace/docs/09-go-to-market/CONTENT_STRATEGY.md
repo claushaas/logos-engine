@@ -2,7 +2,7 @@
 logos:
   document_id: gtm.content_strategy
   profile: app-business
-  generated_at: 2026-05-09T02:21:01.908Z
+  generated_at: 2026-05-09T02:47:50.484Z
   status: generated
 ---
 

@@ -2,7 +2,7 @@
 logos:
   document_id: design.ux_flows
   profile: app-business
-  generated_at: 2026-05-09T02:21:01.907Z
+  generated_at: 2026-05-09T02:47:50.481Z
   status: generated
 ---
 

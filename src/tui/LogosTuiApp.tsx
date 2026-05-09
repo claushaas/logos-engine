@@ -11,6 +11,10 @@ import { readWorkspaceState } from '../domain/workspace-state.js';
 import { detectProjectRoot } from '../storage/project-root.js';
 import { ConfirmationPrompt } from './components/ConfirmationPrompt.js';
 import {
+	type ConversationMessage,
+	ConversationMessage as ConversationMessageComponent,
+} from './components/ConversationMessage.js';
+import {
 	type Message,
 	MessageBox,
 	type MessageTone,
@@ -28,18 +32,27 @@ type PendingConfirmation = {
 	readonly onReject: () => void;
 };
 
+type DisplayMessage =
+	| { readonly kind: 'system'; readonly message: Message }
+	| { readonly kind: 'conversation'; readonly message: ConversationMessage };
+
 export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 	const { exit } = useApp();
 	const { isRawModeSupported } = useStdin();
 	const [input, setInput] = useState('');
-	const [messages, setMessages] = useState<readonly Message[]>([
+	const [displayMessages, setDisplayMessages] = useState<
+		readonly DisplayMessage[]
+	>([
 		{
-			body: [
-				'Type /help to see commands. Slash command autocomplete appears as you type.',
-				'Type /status to see project progress.',
-			],
-			title: 'LOGOS Engine',
-			tone: 'info',
+			kind: 'system',
+			message: {
+				body: [
+					'Type naturally to start an AI-led conversation about your project.',
+					'Slash commands such as /help, /continue, /status, and /generate are always available.',
+				],
+				title: 'LOGOS Engine',
+				tone: 'info',
+			},
 		},
 	]);
 	const [scrollOffset, setScrollOffset] = useState(0);
@@ -53,7 +66,6 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 		[input],
 	);
 
-	// Load workspace config for provider notice
 	const providerConfig = useMemo(() => {
 		try {
 			const projectRoot = detectProjectRoot(cwd);
@@ -73,17 +85,19 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 
 	const isInputActive = isRawModeSupported === true;
 	const maxVisibleMessages = 6;
-	const maxScroll = Math.max(0, messages.length - maxVisibleMessages);
-	const visibleMessages = messages.slice(
+	const maxScroll = Math.max(0, displayMessages.length - maxVisibleMessages);
+	const visibleMessages = displayMessages.slice(
 		Math.max(0, Math.min(scrollOffset, maxScroll)),
 		Math.max(0, Math.min(scrollOffset, maxScroll)) + maxVisibleMessages,
 	);
 
-	const addMessage = useCallback(
+	const addSystemMessage = useCallback(
 		(body: readonly string[], title: string, tone: MessageTone) => {
-			setMessages((currentMessages) => {
-				const newMessages = [...currentMessages, { body, title, tone }];
-				// Auto-scroll to bottom on new message
+			setDisplayMessages((current) => {
+				const newMessages: DisplayMessage[] = [
+					...current,
+					{ kind: 'system', message: { body, title, tone } },
+				];
 				const newMaxScroll = Math.max(
 					0,
 					newMessages.length - maxVisibleMessages,
@@ -95,18 +109,120 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 		[],
 	);
 
+	const addConversationMessages = useCallback(
+		(userText: string, aiTexts: readonly string[]) => {
+			setDisplayMessages((current) => {
+				const now = new Date().toISOString();
+				const newMessages: DisplayMessage[] = [
+					...current,
+					{
+						kind: 'conversation',
+						message: {
+							body: [userText],
+							role: 'user',
+							timestamp: now,
+						},
+					},
+				];
+
+				if (aiTexts.length > 0) {
+					newMessages.push({
+						kind: 'conversation',
+						message: {
+							body: [...aiTexts],
+							role: 'ai',
+							timestamp: now,
+						},
+					});
+				}
+
+				const newMaxScroll = Math.max(
+					0,
+					newMessages.length - maxVisibleMessages,
+				);
+				setScrollOffset(newMaxScroll);
+				return newMessages;
+			});
+		},
+		[],
+	);
+
+	const handleConversationInput = useCallback(
+		async (text: string) => {
+			addConversationMessages(text, []);
+
+			const result = await services.handleConversationMessage(context, text);
+
+			if (result.status === 'no_provider') {
+				addSystemMessage(
+					[
+						result.providerNotice,
+						'Slash commands (/init, /status, /validate, /diagnose, /generate, /config ai, /help, /exit) are available without a provider.',
+						'Type /config ai to configure a provider (local or remote).',
+					],
+					'AI Provider Required',
+					'warning',
+				);
+				return;
+			}
+
+			if (result.aiMessages.length > 0) {
+				setDisplayMessages((current) => {
+					const filtered = current.filter(
+						(m) =>
+							!(
+								m.kind === 'conversation' &&
+								m.message.role === 'ai' &&
+								m.message.body.length === 0
+							),
+					);
+
+					const now = new Date().toISOString();
+
+					return [
+						...filtered,
+						{
+							kind: 'conversation',
+							message: {
+								body: [...result.aiMessages],
+								role: 'ai',
+								timestamp: now,
+							},
+						},
+					];
+				});
+
+				const newMaxScroll = Math.max(
+					0,
+					displayMessages.length + 1 - maxVisibleMessages,
+				);
+				setScrollOffset(newMaxScroll);
+			}
+
+			if (result.providerStatus !== 'remote_ready') {
+				addSystemMessage([result.providerNotice], 'Provider notice', 'info');
+			}
+		},
+		[
+			addConversationMessages,
+			addSystemMessage,
+			context,
+			services,
+			displayMessages.length,
+		],
+	);
+
 	const executeCommand = useCallback(
 		async (commandInput: string) => {
 			const parseResult = parseSlashCommand(commandInput);
 
 			if (!parseResult.ok) {
-				addMessage([parseResult.error.message], 'Command error', 'error');
+				addSystemMessage([parseResult.error.message], 'Command error', 'error');
 				return;
 			}
 
 			const command = parseResult.command;
 
-			// Check for destructive actions that need confirmation
 			if (
 				command.definition.id === '/generate' &&
 				command.args.includes('--force')
@@ -116,11 +232,11 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 						'Force generate will overwrite all existing generated documents. This cannot be undone.',
 					onConfirm: () => {
 						setPendingConfirmation(null);
-						void runCommand(command, context, services, addMessage, exit);
+						void runCommand(command, context, services, addSystemMessage, exit);
 					},
 					onReject: () => {
 						setPendingConfirmation(null);
-						addMessage(
+						addSystemMessage(
 							['Force generate cancelled. No files were changed.'],
 							'Cancelled',
 							'warning',
@@ -130,9 +246,9 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 				return;
 			}
 
-			void runCommand(command, context, services, addMessage, exit);
+			void runCommand(command, context, services, addSystemMessage, exit);
 		},
-		[addMessage, context, exit, services],
+		[addSystemMessage, context, exit, services],
 	);
 
 	useInput(
@@ -155,7 +271,18 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 			}
 
 			if (key.return) {
-				void executeCommand(input);
+				const trimmed = input.trim();
+
+				if (trimmed.length === 0) {
+					return;
+				}
+
+				if (trimmed.startsWith('/')) {
+					void executeCommand(trimmed);
+				} else {
+					void handleConversationInput(trimmed);
+				}
+
 				setInput('');
 				return;
 			}
@@ -175,7 +302,7 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 				return;
 			}
 
-			if (key.tab && completions[0]) {
+			if (key.tab && completions[0] && input.startsWith('/')) {
 				setInput(completions[0].insertText);
 				return;
 			}
@@ -198,12 +325,22 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 			<ProviderNotice config={providerConfig} />
 
 			<Box flexDirection="column" flexGrow={1} marginY={1}>
-				{visibleMessages.map((message) => (
-					<MessageBox
-						key={`${message.title}:${message.body.join('|')}`}
-						message={message}
-					/>
-				))}
+				{visibleMessages.map((display) => {
+					if (display.kind === 'system') {
+						return (
+							<MessageBox
+								key={`sys:${display.message.title}:${display.message.body[0]?.slice(0, 20) ?? ''}`}
+								message={display.message}
+							/>
+						);
+					}
+					return (
+						<ConversationMessageComponent
+							key={`conv:${display.message.role}:${display.message.timestamp}`}
+							message={display.message}
+						/>
+					);
+				})}
 			</Box>
 
 			{pendingConfirmation ? (
@@ -223,7 +360,7 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 					<Text color="gray">_ </Text>
 				</Box>
 
-				{completions.length > 0 ? (
+				{completions.length > 0 && input.startsWith('/') ? (
 					<Box flexDirection="column" marginTop={1}>
 						{completions.map((completion) => (
 							<Text dimColor key={completion.label}>
@@ -235,7 +372,7 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 			</Box>
 
 			<StatusBar
-				messageCount={messages.length}
+				messageCount={displayMessages.length}
 				providerStatus={getProviderStatusText(providerConfig)}
 				scrollPosition={Math.min(scrollOffset, maxScroll)}
 			/>

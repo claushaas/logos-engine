@@ -90,6 +90,13 @@ describe('slash command autocomplete', () => {
 		).toEqual(['/continue', '/config ai']);
 	});
 
+	it('does not suggest question-id subcommands for /continue', () => {
+		const completions = getSlashCommandCompletions('/continue ');
+		expect(completions.map((item) => item.insertText)).not.toContain(
+			'/continue answer',
+		);
+	});
+
 	it('suggests options for commands that define them', () => {
 		expect(
 			getSlashCommandCompletions('/generate --r').map(

@@ -2,7 +2,7 @@
 logos:
   document_id: business.business_model
   profile: app-business
-  generated_at: 2026-05-09T02:21:01.906Z
+  generated_at: 2026-05-09T02:47:50.479Z
   status: generated
 ---
 

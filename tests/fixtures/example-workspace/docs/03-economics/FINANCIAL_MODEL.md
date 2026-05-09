@@ -2,7 +2,7 @@
 logos:
   document_id: economics.financial_model
   profile: app-business
-  generated_at: 2026-05-09T02:21:01.906Z
+  generated_at: 2026-05-09T02:47:50.480Z
   status: generated
 ---
 

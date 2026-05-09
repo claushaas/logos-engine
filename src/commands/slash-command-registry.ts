@@ -16,20 +16,10 @@ export const slashCommandDefinitions = [
 	},
 	{
 		aliases: [],
-		description: 'Resume the next useful intake session.',
+		description: 'Start or resume the AI-led intake conversation.',
 		id: '/continue',
-		options: [
-			'answer',
-			'unknown',
-			'assume',
-			'skip',
-			'save',
-			'propose-followups',
-			'accept-followups',
-			'--all',
-		],
-		usage:
-			'/continue [answer|unknown|assume|skip|save|propose-followups|accept-followups]',
+		options: [],
+		usage: '/continue',
 	},
 	{
 		aliases: [],

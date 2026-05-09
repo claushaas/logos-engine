@@ -2,7 +2,7 @@
 logos:
   document_id: architecture.api_spec
   profile: app-business
-  generated_at: 2026-05-09T02:21:01.908Z
+  generated_at: 2026-05-09T02:47:50.482Z
   status: generated
 ---
 
