@@ -289,14 +289,14 @@ async function runAiDiagnostics(
 		},
 		messages: [
 			{
-				content: `Recommend the next useful question group based on ${
+				content: `Recommend the next conversational move based on ${
 					_validationResult.summary.criticalCount +
 					_validationResult.summary.errorCount
-				} critical/error findings.`,
+				} critical/error findings. Consider which phase needs attention, what questions remain open, and what decisions are missing.`,
 				role: 'user' as const,
 			},
 		],
-		operationId: 'recommend_next_question_group' as const,
+		operationId: 'recommend_next_conversation_move' as const,
 	};
 
 	for (const operation of [
@@ -375,31 +375,32 @@ async function runAiDiagnostics(
 				}
 			}
 
-			if (operation.operationId === 'recommend_next_question_group') {
+			if (operation.operationId === 'recommend_next_conversation_move') {
 				const output = response.output as {
-					recommendation?: {
-						priority: 'high' | 'medium' | 'low';
-						questionSetId: string;
-						rationale: string;
-					};
+					move?: string;
+					phaseId?: string;
+					priority?: 'high' | 'medium' | 'low';
+					rationale?: string;
 					status?: string;
 					notes?: string[];
 				};
 
-				if (output.recommendation) {
+				if (output.move || output.rationale) {
 					contributions.push({
 						finding: {
 							affectedDecisionIds: [],
 							affectedDocuments: [],
 							category: 'next_step',
-							description: output.recommendation.rationale,
-							id: 'ai.recommendation.next_question_group',
+							description:
+								output.rationale ??
+								'Continue the conversation to address gaps.',
+							id: 'ai.recommendation.next_conversation_move',
 							severity: 'info',
 							source: 'ai',
-							suggestedNextAction: `Answer question group: ${output.recommendation.questionSetId} (priority: ${output.recommendation.priority})`,
-							title: 'AI Recommendation: Next Question Group',
+							suggestedNextAction: `Next conversational move: ${output.move ?? 'address open questions'} (phase: ${output.phaseId ?? 'current'}, priority: ${output.priority ?? 'medium'})`,
+							title: 'AI Recommendation: Next Conversational Move',
 						},
-						operationId: 'recommend_next_question_group',
+						operationId: 'recommend_next_conversation_move',
 						status: 'proposed',
 					});
 				}
@@ -423,7 +424,7 @@ function buildDeterministicNextAction(
 		if (firstCritical?.suggestedNextAction) {
 			return firstCritical.suggestedNextAction;
 		}
-		return `Address ${validationResult.summary.criticalCount} critical issue(s) before proceeding.`;
+		return `Address ${validationResult.summary.criticalCount} critical issue(s) during your next conversation turn.`;
 	}
 
 	if (validationResult.summary.errorCount > 0) {
@@ -434,15 +435,15 @@ function buildDeterministicNextAction(
 		if (firstError?.suggestedNextAction) {
 			return firstError.suggestedNextAction;
 		}
-		return `Resolve ${validationResult.summary.errorCount} error(s) to unblock progress.`;
+		return `Resolve ${validationResult.summary.errorCount} error(s) to unblock progress — continue the conversation to address these.`;
 	}
 
 	if (validationResult.summary.warningCount > 0) {
-		return `Review ${validationResult.summary.warningCount} warning(s) to improve completeness.`;
+		return `Review ${validationResult.summary.warningCount} warning(s) and address them in your next conversation turn.`;
 	}
 
 	if (validationResult.summary.infoCount > 0) {
-		return `Review ${validationResult.summary.infoCount} informational note(s).`;
+		return `Review ${validationResult.summary.infoCount} informational note(s). Continue the conversation to fill remaining gaps.`;
 	}
 
 	return 'Project looks complete. Run /generate to create documentation.';
@@ -450,15 +451,15 @@ function buildDeterministicNextAction(
 
 function buildFallbackNextAction(diagnosticsResult: DiagnosticsResult): string {
 	if (diagnosticsResult.summary.criticalCount > 0) {
-		return `Address ${diagnosticsResult.summary.criticalCount} critical issue(s) before proceeding.`;
+		return `Address ${diagnosticsResult.summary.criticalCount} critical issue(s) during your next conversation turn.`;
 	}
 
 	if (diagnosticsResult.summary.errorCount > 0) {
-		return `Resolve ${diagnosticsResult.summary.errorCount} error(s) to unblock progress.`;
+		return `Resolve ${diagnosticsResult.summary.errorCount} error(s) to unblock progress — continue the conversation to address these.`;
 	}
 
 	if (diagnosticsResult.summary.warningCount > 0) {
-		return `Review ${diagnosticsResult.summary.warningCount} warning(s) to improve completeness.`;
+		return `Review ${diagnosticsResult.summary.warningCount} warning(s) and address them in your next conversation turn.`;
 	}
 
 	return 'Project looks complete. Run /generate to create documentation.';

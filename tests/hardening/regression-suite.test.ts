@@ -128,6 +128,29 @@ describe('regression suite', () => {
 		});
 	});
 
+	describe('no live provider calls', () => {
+		it('generates all canonical documents from fixture without provider calls', () => {
+			const workspace = readWorkspaceState(fixturePath);
+			const profile = loadProfileByFixture(workspace.project.profileId);
+			const profileDirectory = join(
+				dirname(new URL(import.meta.url).pathname),
+				'..',
+				'..',
+				'profiles',
+				'app-business',
+			);
+
+			for (const document of profile.documents) {
+				const content = generateDocumentContent(profile, workspace, document, {
+					profileDirectory,
+					projectRoot: fixturePath,
+				});
+				expect(content).toBeDefined();
+				expect(content.length).toBeGreaterThan(0);
+			}
+		});
+	});
+
 	describe('canonical tree structure', () => {
 		it('all canonical documents belong to recognized phases', () => {
 			const workspace = readWorkspaceState(fixturePath);

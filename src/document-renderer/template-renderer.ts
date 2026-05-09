@@ -4,9 +4,14 @@ import type { CanonicalDocument } from '../domain/profile-loader.js';
 
 export type TemplateContext = {
 	readonly assumptions: readonly string[];
+	readonly conversationId?: string | undefined;
 	readonly decisions: Readonly<Record<string, unknown>>;
 	readonly document: CanonicalDocument;
 	readonly openQuestions: readonly string[];
+	readonly sourceTurnIds: Readonly<Record<string, readonly string[]>>;
+	readonly uncertainSections: Readonly<
+		Record<string, 'assumption' | 'unknown'>
+	>;
 };
 
 export class TemplateRenderError extends Error {
@@ -41,6 +46,11 @@ export function renderTemplate(
 		context.document.purpose,
 	);
 	result = replaceVariable(result, 'document.id', context.document.id);
+	result = replaceVariable(
+		result,
+		'conversation.id',
+		context.conversationId ?? 'no-conversation-session',
+	);
 
 	for (const section of context.document.sections) {
 		const sectionContent = renderSection(section.id, section.title, context);
@@ -68,18 +78,57 @@ export function renderSection(
 ): string {
 	const decisionKey = `section.${sectionId}`;
 	const decisionValue = context.decisions[decisionKey];
+	const uncertainty =
+		context.uncertainSections[sectionId] ??
+		context.uncertainSections[decisionKey];
+	const sourceTurns =
+		context.sourceTurnIds[sectionId] ??
+		context.sourceTurnIds[decisionKey] ??
+		[];
+
+	let content = '';
 
 	if (decisionValue !== undefined) {
-		return `## ${sectionTitle}\n\n${String(decisionValue)}\n\n<!-- logos:section:manual:${sectionId} -->`;
+		content = `${uncertaintyPrefix(uncertainty)}${String(decisionValue)}${sourceTurnSuffix(sourceTurns)}`;
+	} else {
+		const genericDecision = context.decisions[sectionId];
+
+		if (genericDecision !== undefined) {
+			content = `${uncertaintyPrefix(uncertainty)}${String(genericDecision)}${sourceTurnSuffix(sourceTurns)}`;
+		} else {
+			content = '_Awaiting input._';
+		}
 	}
 
-	const genericDecision = context.decisions[sectionId];
+	return `## ${sectionTitle}\n\n${content}\n\n<!-- logos:section:manual:${sectionId} -->`;
+}
 
-	if (genericDecision !== undefined) {
-		return `## ${sectionTitle}\n\n${String(genericDecision)}\n\n<!-- logos:section:manual:${sectionId} -->`;
+function uncertaintyPrefix(uncertainty: string | undefined): string {
+	if (uncertainty === 'assumption') {
+		return '> **Note:** This content is based on an _assumption_ and has not been confirmed.\n\n';
 	}
 
-	return `## ${sectionTitle}\n\n_Awaiting input._\n\n<!-- logos:section:manual:${sectionId} -->`;
+	if (uncertainty === 'unknown') {
+		return '> **Note:** This content is based on an _unknown or unresolved_ input.\n\n';
+	}
+
+	return '';
+}
+
+function sourceTurnSuffix(sourceTurns: readonly string[]): string {
+	if (sourceTurns.length === 0) {
+		return '';
+	}
+
+	const turnList = [...new Set(sourceTurns)]
+		.slice(0, 3)
+		.map((id) => `\`${id}\``)
+		.join(', ');
+
+	const more =
+		sourceTurns.length > 3 ? ` (and ${sourceTurns.length - 3} more)` : '';
+
+	return `\n\n_Conversation sources: ${turnList}${more}_`;
 }
 
 export function generateDefaultTemplate(document: CanonicalDocument): string {

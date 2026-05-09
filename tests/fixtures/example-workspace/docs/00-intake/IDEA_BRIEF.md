@@ -2,7 +2,7 @@
 logos:
   document_id: intake.idea_brief
   profile: app-business
-  generated_at: 2026-05-09T03:26:27.371Z
+  generated_at: 2026-05-09T04:00:32.297Z
   status: generated
 ---
 

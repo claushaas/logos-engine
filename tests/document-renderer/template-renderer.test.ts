@@ -39,6 +39,8 @@ describe('template-renderer', () => {
 				decisions: {},
 				document: mockDocument,
 				openQuestions: [],
+				sourceTurnIds: {},
+				uncertainSections: {},
 			};
 
 			const result = renderTemplate(template, context, '/tmp');
@@ -55,6 +57,8 @@ describe('template-renderer', () => {
 				decisions: { purpose: 'This is the purpose' },
 				document: mockDocument,
 				openQuestions: [],
+				sourceTurnIds: {},
+				uncertainSections: {},
 			};
 
 			const result = renderSection('purpose', 'Purpose', context);
@@ -70,6 +74,8 @@ describe('template-renderer', () => {
 				decisions: {},
 				document: mockDocument,
 				openQuestions: [],
+				sourceTurnIds: {},
+				uncertainSections: {},
 			};
 
 			const result = renderSection('purpose', 'Purpose', context);

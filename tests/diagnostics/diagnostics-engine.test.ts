@@ -242,7 +242,7 @@ describe('diagnostics engine - runDeterministicDiagnostics', () => {
 		expect(result.findings[0].source).toBe('deterministic');
 		expect(result.summary.errorCount).toBe(1);
 		expect(result.nextRecommendedAction).toBe(
-			'Resolve 1 error(s) to unblock progress.',
+			'Resolve 1 error(s) to unblock progress — continue the conversation to address these.',
 		);
 	});
 
@@ -398,7 +398,7 @@ describe('diagnostics engine - runDeterministicDiagnostics', () => {
 		);
 
 		expect(result.nextRecommendedAction).toBe(
-			'Resolve 1 error(s) to unblock progress.',
+			'Resolve 1 error(s) to unblock progress — continue the conversation to address these.',
 		);
 	});
 
@@ -420,7 +420,7 @@ describe('diagnostics engine - runDeterministicDiagnostics', () => {
 		);
 
 		expect(result.nextRecommendedAction).toBe(
-			'Review 1 warning(s) to improve completeness.',
+			'Review 1 warning(s) and address them in your next conversation turn.',
 		);
 	});
 });
@@ -503,8 +503,9 @@ describe('diagnostics engine - runDiagnostics with mocked AI', () => {
 		const mockProvider = createMockLlmProvider({
 			identify_gaps: { gaps: 'not_an_array', status: 'needs_review' },
 			identify_risks: { risks: 'not_an_array', status: 'needs_review' },
-			recommend_next_question_group: {
-				recommendation: 'not_an_object',
+			recommend_next_conversation_move: {
+				move: 'not_an_object',
+				rationale: null,
 				status: 'proposed',
 			},
 		});

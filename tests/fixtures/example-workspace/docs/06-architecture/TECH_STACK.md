@@ -2,7 +2,7 @@
 logos:
   document_id: architecture.tech_stack
   profile: app-business
-  generated_at: 2026-05-09T03:26:27.376Z
+  generated_at: 2026-05-09T04:00:32.354Z
   status: generated
 ---
 

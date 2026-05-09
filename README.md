@@ -90,7 +90,21 @@ The first canonical profile is:
 app-business
 ```
 
-This profile guides the user through the complete documentation needed to design and execute an app-based business, including ideation, market analysis, business model, financial reasoning, marketing strategy, product thesis, UX, architecture, implementation, testing, launch, and operations.
+This profile guides you through the complete documentation needed to design and execute an app-based business. Start a conversation with AI in the TUI — describe your idea, answer follow-up questions naturally, and LOGOS builds a structured workspace of decisions, assumptions, and generated documentation.
+
+### Usage
+
+```bash
+logos           # Open the TUI
+/init           # Create a workspace (select app-business profile)
+/continue       # Resume or start the AI-led conversation
+# Type freely: "I'm building a fitness app for personal trainers..."
+/generate       # Render the canonical document tree
+/validate       # Check for missing decisions and gaps
+/diagnose       # Get AI-assisted diagnostics and next-step recommendations
+```
+
+All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) remain available for explicit system operations while ordinary text input drives the AI conversation.
 
 ## Core Principle
 

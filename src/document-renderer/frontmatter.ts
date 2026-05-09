@@ -1,4 +1,5 @@
 export type DocumentFrontmatter = {
+	conversationId?: string | undefined;
 	documentId: string;
 	generatedAt: string;
 	profile: string;
@@ -8,13 +9,18 @@ export type DocumentFrontmatter = {
 export function generateFrontmatter(frontmatter: DocumentFrontmatter): string {
 	const lines = [
 		'---',
-		`logos:`,
+		'logos:',
 		`  document_id: ${frontmatter.documentId}`,
 		`  profile: ${frontmatter.profile}`,
 		`  generated_at: ${frontmatter.generatedAt}`,
 		`  status: ${frontmatter.status}`,
-		'---',
 	];
+
+	if (frontmatter.conversationId) {
+		lines.push(`  conversation_id: ${frontmatter.conversationId}`);
+	}
+
+	lines.push('---');
 
 	return lines.join('\n');
 }

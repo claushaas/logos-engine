@@ -2,7 +2,7 @@
 logos:
   document_id: architecture.data_model
   profile: app-business
-  generated_at: 2026-05-09T03:26:27.382Z
+  generated_at: 2026-05-09T04:00:32.354Z
   status: generated
 ---
 

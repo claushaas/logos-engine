@@ -13,9 +13,9 @@ This example demonstrates the current structured workspace shape:
 - A fully populated canonical document tree
 - Workspace state files (`.logos/project.json`, `.logos/answers.json`, `.logos/decisions.json`)
 
-The roadmap now targets AI-led conversational intake as the normal product flow.
-Phase 18 updates examples and fixtures so they demonstrate conversation-first
-usage instead of deterministic question answering.
+LOGOS Engine uses AI-led conversational intake as the normal product flow.
+Start a conversation with AI in the TUI — describe your idea, answer follow-up
+questions naturally, and LOGOS builds structured state from the conversation.
 
 Location: `tests/fixtures/example-workspace/`
 
@@ -46,8 +46,8 @@ Location: `tests/fixtures/example-workspace/docs/`
 logos
 /init
 # Select app-business profile
-# Continue the AI-led conversation or inspect the example state
-/generate
+# Type your idea in the TUI — the AI conversation starts naturally
+# Review generated documents with /generate
 ```
 
 ## Minimal Workspace
