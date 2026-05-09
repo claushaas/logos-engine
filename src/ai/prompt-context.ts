@@ -158,6 +158,20 @@ export const contextSelectionRules = {
 			'Risk analysis needs the confirmed context, assumptions, unresolved questions, and relevant contracts.',
 		requiresTargetDocument: false,
 	},
+	interpret_conversation_turn: {
+		includeAssumptions: true,
+		includeConfirmedDecisions: true,
+		includeConversationHistory: true,
+		includeDocumentCompletionCriteria: true,
+		includeOpenQuestions: true,
+		includeProfileRequirements: true,
+		includeProposedDecisions: true,
+		includeUserFacts: true,
+		includeValidationFindings: true,
+		rationale:
+			'Interpreting a conversation turn needs full context: conversation history, profile requirements, current decisions, assumptions, and missing document inputs to extract accurate structured records.',
+		requiresTargetDocument: false,
+	},
 	lead_intake_turn: {
 		includeAssumptions: true,
 		includeConfirmedDecisions: true,

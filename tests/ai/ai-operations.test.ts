@@ -21,6 +21,7 @@ describe('AI operation contracts', () => {
 			'recommend_next_question_group',
 			'lead_intake_turn',
 			'recommend_next_conversation_move',
+			'interpret_conversation_turn',
 		]);
 		expect(
 			aiOperationRegistry.every((operation) => !operation.mutatesProjectState),
@@ -129,5 +130,81 @@ describe('AI operation contracts', () => {
 			move: 'ask_foundation_question',
 			status: 'proposed',
 		});
+	});
+
+	it('includes interpret_conversation_turn in the operation registry', () => {
+		const interpOp = aiOperationRegistry.find(
+			(op) => op.id === 'interpret_conversation_turn',
+		);
+
+		expect(interpOp).toBeDefined();
+		expect(interpOp?.outputStatus).toBe('proposed');
+		expect(interpOp?.mutatesProjectState).toBe(false);
+		expect(interpOp?.description).toContain('Interpret');
+	});
+
+	it('validates interpret_conversation_turn output schema', () => {
+		const result = validateAiOperationOutput('interpret_conversation_turn', {
+			classifiedAssumptions: [
+				{
+					assumptionId: 'assumption.1',
+					confidence: 0.6,
+					relatedDecisionIds: ['product.target_audience'],
+					text: 'Assuming the target audience is college students.',
+				},
+			],
+			decisionProposals: [
+				{
+					confidence: 0.9,
+					decisionId: 'product.platform',
+					rationale: 'User mentioned mobile focus.',
+					suggestedTitle: 'Platform is mobile-first',
+					suggestedValue: 'mobile',
+				},
+			],
+			identifiedOpenQuestions: [
+				{
+					openQuestionId: 'open.1',
+					relatedDecisionIds: ['business.pricing'],
+					text: 'How will the app generate revenue?',
+				},
+			],
+			interpretedAnswers: [
+				{
+					answerId: 'answer.conv.1.0',
+					confidence: 0.9,
+					normalizedSummary: 'User wants to build a study tool for mobile.',
+					phaseId: '00-intake',
+				},
+			],
+			notes: ['Interpretation complete.'],
+			status: 'proposed',
+		});
+
+		expect(result.status).toBe('proposed');
+		expect(result.interpretedAnswers).toHaveLength(1);
+		expect(result.decisionProposals).toHaveLength(1);
+		expect(result.classifiedAssumptions).toHaveLength(1);
+		expect(result.identifiedOpenQuestions).toHaveLength(1);
+	});
+
+	it('rejects interpret_conversation_turn output with confirmed status', () => {
+		expect(() =>
+			validateAiOperationOutput('interpret_conversation_turn', {
+				classifiedAssumptions: [],
+				decisionProposals: [],
+				identifiedOpenQuestions: [],
+				interpretedAnswers: [],
+				status: 'confirmed',
+			}),
+		).toThrow(AiResponseValidationError);
+	});
+
+	it('rejects malformed interpret_conversation_turn output', () => {
+		expect(() =>
+			validateAiOperationOutput('interpret_conversation_turn', {
+				status: 'proposed',
+			}),
+		).toThrow(AiResponseValidationError);
 	});
 });

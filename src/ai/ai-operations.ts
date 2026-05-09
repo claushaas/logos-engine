@@ -15,6 +15,7 @@ export const aiOperationIds = [
 	'recommend_next_question_group',
 	'lead_intake_turn',
 	'recommend_next_conversation_move',
+	'interpret_conversation_turn',
 ] as const;
 
 export type AiOperationId = (typeof aiOperationIds)[number];
@@ -91,6 +92,13 @@ export const aiOperationRegistry = [
 		mutatesProjectState: false,
 		outputStatus: 'proposed',
 	},
+	{
+		description:
+			'Interpret a user conversation turn to extract structured answers, decision proposals, assumptions, and open questions.',
+		id: 'interpret_conversation_turn',
+		mutatesProjectState: false,
+		outputStatus: 'proposed',
+	},
 ] as const satisfies readonly z.infer<typeof operationMetadataSchema>[];
 
 const outputBaseSchema = z.object({
@@ -156,6 +164,41 @@ export const aiOperationOutputSchemas = {
 	}),
 	identify_risks: outputBaseSchema.extend({
 		risks: z.array(riskSchema),
+	}),
+	interpret_conversation_turn: outputBaseSchema.extend({
+		classifiedAssumptions: z.array(
+			z.object({
+				assumptionId: z.string().min(1),
+				confidence: z.number().min(0).max(1),
+				relatedDecisionIds: z.array(z.string().min(1)).default([]),
+				text: z.string().min(1),
+			}),
+		),
+		decisionProposals: z.array(
+			z.object({
+				confidence: z.number().min(0).max(1),
+				decisionId: z.string().min(1),
+				rationale: z.string().min(1),
+				suggestedTitle: z.string().min(1),
+				suggestedValue: z.unknown(),
+			}),
+		),
+		identifiedOpenQuestions: z.array(
+			z.object({
+				openQuestionId: z.string().min(1),
+				relatedDecisionIds: z.array(z.string().min(1)).default([]),
+				text: z.string().min(1),
+			}),
+		),
+		interpretedAnswers: z.array(
+			z.object({
+				answerId: z.string().min(1),
+				confidence: z.number().min(0).max(1),
+				matchedQuestionId: z.string().min(1).optional(),
+				normalizedSummary: z.string().min(1),
+				phaseId: z.string().min(1).optional(),
+			}),
+		),
 	}),
 	lead_intake_turn: outputBaseSchema
 		.extend({

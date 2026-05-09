@@ -8,20 +8,39 @@ import { buildPromptForAiOperation } from '../ai/prompt-builder.js';
 import {
 	addConversationTurn,
 	type ConversationSession,
+	type ConversationSourceLinks,
+	type ConversationTurn,
 	createConversationSession,
 	saveConversationSession,
 } from '../domain/conversation-model.js';
 import { loadProfileById } from '../domain/profile-loader.js';
-import { readWorkspaceState } from '../domain/workspace-state.js';
+import type { AnswerRecord } from '../domain/question-engine.js';
 import {
+	type AnswersState,
+	readWorkspaceState,
+} from '../domain/workspace-state.js';
+import {
+	readAnswersState,
 	readConversationSession,
+	writeAnswersState,
 	writeConversationSession,
 } from '../storage/intake-state.js';
 import { detectProjectRoot } from '../storage/project-root.js';
+import {
+	type ConversationTurnInterpretation,
+	interpretConversationTurn,
+} from './conversation-interpreter.js';
+import {
+	loadDecisionStore,
+	receiveAiDecisionProposals,
+	saveDecisionStore,
+} from './decision-service.js';
 
 export type ConversationMessageResult = {
 	readonly aiMessages: readonly string[];
 	readonly conversationId: string;
+	readonly interpretedDecisions: number;
+	readonly interpretedAnswers: number;
 	readonly providerStatus:
 		| 'mock'
 		| 'no_provider'
@@ -113,8 +132,18 @@ export async function handleConversationMessage(
 		session,
 	});
 
+	const lastTurn = session.turns[session.turns.length - 1];
+
+	if (!lastTurn) {
+		throw new Error('Expected a conversation turn after adding user message.');
+	}
+
+	const userTurn = lastTurn;
+
 	const aiMessages: string[] = [];
 	let status: ConversationMessageResult['status'] = 'ok';
+	let interpretedAnswers = 0;
+	let interpretedDecisions = 0;
 
 	try {
 		const workspace = readWorkspaceState(projectRoot);
@@ -155,6 +184,39 @@ export async function handleConversationMessage(
 		aiMessages.push(
 			`Next move: ${intakeOutput.nextMove} — ${intakeOutput.rationale}`,
 		);
+
+		const interpretationResult = await interpretConversationTurn({
+			conversationHistory: updatedConversationHistory(session),
+			profile,
+			provider,
+			turn: userTurn,
+			workspace,
+		});
+
+		if (
+			interpretationResult.status === 'ok' &&
+			interpretationResult.interpretation
+		) {
+			const applied = applyInterpretation(
+				projectRoot,
+				session,
+				userTurn,
+				interpretationResult.interpretation,
+			);
+
+			session = applied.session;
+			interpretedAnswers = applied.answerCount;
+			interpretedDecisions = applied.decisionCount;
+
+			if (interpretedAnswers > 0 || interpretedDecisions > 0) {
+				aiMessages.push(
+					`Interpreted: ${interpretedAnswers} answer(s), ${interpretedDecisions} decision proposal(s).`,
+				);
+				aiMessages.push(
+					'Review proposals with /status. Confirm or reject them before generating documents.',
+				);
+			}
+		}
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
 		aiMessages.push(`AI response failed: ${message}. Session preserved.`);
@@ -174,11 +236,105 @@ export async function handleConversationMessage(
 	return {
 		aiMessages,
 		conversationId: session.id,
+		interpretedAnswers,
+		interpretedDecisions,
 		providerNotice,
 		providerStatus,
 		sessionExists,
 		status,
 		turnCount: session.turns.length,
+	};
+}
+
+function applyInterpretation(
+	projectRoot: string,
+	session: ConversationSession,
+	userTurn: ConversationTurn,
+	interpretation: ConversationTurnInterpretation,
+): {
+	readonly answerCount: number;
+	readonly decisionCount: number;
+	readonly session: ConversationSession;
+} {
+	const sourceLinks: ConversationSourceLinks = {
+		answerIds: [],
+		assumptionIds: [],
+		openQuestionIds: [],
+		proposalIds: [],
+	};
+
+	let answerRecords = readAnswersState(projectRoot);
+	let answerCount = 0;
+
+	for (const record of interpretation.answerRecords) {
+		answerRecords = upsertAnswerRecord(answerRecords, record);
+		sourceLinks.answerIds = [...sourceLinks.answerIds, record.id];
+		answerCount++;
+	}
+
+	for (const assumption of interpretation.assumptions) {
+		const assumptionRecord: AnswerRecord = {
+			answer: assumption.value,
+			answeredAt: assumption.createdAt,
+			id: assumption.sourceAnswerId,
+			mapsToDecisionIds: [],
+			questionId: assumption.questionId,
+			rawAnswer: assumption.text,
+			status: 'assumption',
+			summary: assumption.text,
+		};
+		answerRecords = upsertAnswerRecord(answerRecords, assumptionRecord);
+		sourceLinks.assumptionIds = [
+			...sourceLinks.assumptionIds,
+			assumptionRecord.id,
+		];
+	}
+
+	for (const openQuestion of interpretation.openQuestions) {
+		const openRecord: AnswerRecord = {
+			answer: null,
+			answeredAt: openQuestion.createdAt,
+			id: openQuestion.sourceAnswerId,
+			mapsToDecisionIds: [],
+			questionId: openQuestion.questionId,
+			status: 'unknown',
+			summary: openQuestion.text,
+		};
+		answerRecords = upsertAnswerRecord(answerRecords, openRecord);
+		sourceLinks.openQuestionIds = [
+			...sourceLinks.openQuestionIds,
+			openRecord.id,
+		];
+	}
+
+	writeAnswersState(projectRoot, answerRecords);
+
+	let decisionCount = 0;
+
+	if (interpretation.decisionProposals.length > 0) {
+		const decisionStore = loadDecisionStore(projectRoot);
+		const { store: updatedStore, createdIds } = receiveAiDecisionProposals(
+			decisionStore,
+			interpretation.decisionProposals,
+		);
+
+		saveDecisionStore(projectRoot, updatedStore);
+		sourceLinks.proposalIds = [...createdIds];
+		decisionCount = createdIds.length;
+	}
+
+	const updatedTurns = session.turns.map((turn) => {
+		if (turn.id !== userTurn.id) {
+			return turn;
+		}
+
+		return { ...turn, sourceLinks };
+	});
+
+	return {
+		answerCount,
+		decisionCount,
+		session: { ...session, turns: updatedTurns },
 	};
 }
 
@@ -283,4 +439,25 @@ function persistSession(
 	} catch {
 		// Session persistence failure is non-fatal for conversation experience
 	}
+}
+
+function upsertAnswerRecord(
+	state: AnswersState,
+	record: AnswerRecord,
+): AnswersState {
+	const filtered = state.answers.filter((a) => a.id !== record.id);
+
+	return {
+		answers: [...filtered, record],
+		schemaVersion: state.schemaVersion,
+	};
+}
+
+function updatedConversationHistory(
+	session: ConversationSession,
+): { content: string; role: string }[] {
+	return session.turns.map((turn) => ({
+		content: turn.content,
+		role: turn.role,
+	}));
 }

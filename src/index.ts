@@ -90,6 +90,12 @@ export {
 	updateAiConfiguration,
 } from './application/ai-configuration.js';
 export {
+	type ConversationTurnInterpretation,
+	InterpretationError,
+	type InterpretationResult,
+	interpretConversationTurn,
+} from './application/conversation-interpreter.js';
+export {
 	type ConversationMessageResult,
 	type ConversationResumeResult,
 	endConversation,

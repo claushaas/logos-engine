@@ -42,6 +42,21 @@ const defaultMockResponses = {
 		risks: [],
 		status: 'needs_review',
 	},
+	interpret_conversation_turn: {
+		classifiedAssumptions: [],
+		decisionProposals: [],
+		identifiedOpenQuestions: [],
+		interpretedAnswers: [
+			{
+				answerId: 'mock.answer.conv.1',
+				confidence: 0.9,
+				normalizedSummary:
+					'User described a new app idea (mock interpretation).',
+			},
+		],
+		notes: ['Mock interpretation — no live AI used.'],
+		status: 'proposed',
+	},
 	lead_intake_turn: {
 		nextMove: 'ask_question',
 		rationale:

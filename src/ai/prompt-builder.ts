@@ -48,6 +48,8 @@ const operationPromptTasks = {
 		'Identify missing, unclear, or contradictory project context against profile and document requirements.',
 	identify_risks:
 		'Identify risks implied by current facts, assumptions, open questions, validation findings, and profile requirements.',
+	interpret_conversation_turn:
+		'Interpret a user conversation turn. Extract structured answer summaries, decision proposals, assumptions, and open questions. Never confirm decisions; all proposals must remain proposed.',
 	lead_intake_turn:
 		'Lead one conversational intake turn. Respond naturally to user input, synthesize context from the current project and profile, and propose a next conversational move. Do not invent facts or confirm decisions.',
 	recommend_next_conversation_move:

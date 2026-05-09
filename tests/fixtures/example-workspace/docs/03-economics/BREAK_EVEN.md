@@ -2,7 +2,7 @@
 logos:
   document_id: economics.break_even
   profile: app-business
-  generated_at: 2026-05-09T02:47:50.480Z
+  generated_at: 2026-05-09T03:26:27.373Z
   status: generated
 ---
 
