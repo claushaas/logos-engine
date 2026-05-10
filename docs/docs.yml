@@ -1,0 +1,37 @@
+version: 1
+project:
+  id: logos-engine-documentation-registry
+  title: LOGOS Engine Documentation Registry
+  purpose: Define the normative documentation skeleton used by LOGOS Engine to generate, review, validate, and maintain project
+    documentation.
+axes:
+- id: normative
+  title: Normative Axis
+  description: Defines the structural, strategic, product, technical, market, and operational foundations of a project.
+  phases:
+  - 01-foundation
+  - 02-validation
+  - 03-product
+  - 04-engineering
+  - 05-go-to-market
+  - 06-operations
+phaseFiles:
+- phases/01-foundation.yml
+- phases/02-validation.yml
+- phases/03-product.yml
+- phases/04-engineering.yml
+- phases/05-go-to-market.yml
+- phases/06-operations.yml
+globalRules:
+  questionsLocation: Guiding questions are stored locally inside each document definition. No question banks are used in this
+    version.
+  yamlRole: YAML defines structure, metadata, dependencies, questions, sections, quality gates, and agent instructions.
+  markdownRole: Markdown documents contain the actual project decisions and generated content.
+  boundaryRule: Each phase must preserve its responsibility boundary and avoid duplicating downstream phases.
+statusWorkflow:
+  allowed:
+  - not_started
+  - drafted
+  - reviewed
+  - approved
+  - deprecated
