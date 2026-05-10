@@ -65,7 +65,7 @@ export const slashCommandDefinitions = [
 			'--allow-remote',
 		],
 		usage:
-			'/config ai [--show|--test|--disable|--provider <preset> --model <id> --token-env <name> --allow-remote]',
+			'/config ai [--show|--test|--disable|--provider <preset> --model <id> --token-env <name> --timeout-ms <ms> --allow-remote]',
 	},
 	{
 		aliases: [],

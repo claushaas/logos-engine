@@ -130,6 +130,7 @@ export function updateAiConfiguration(
 			`Provider: ${nextAiConfig.provider ?? '(not configured)'}`,
 			`Endpoint: ${nextAiConfig.endpoint ?? '(provider default)'}`,
 			`Model: ${nextAiConfig.model ?? '(not configured)'}`,
+			`Timeout: ${nextAiConfig.timeoutMs ?? '(provider default)'} ms`,
 			`Token source: ${formatTokenSource(nextAiConfig.tokenSource)}`,
 			'Raw tokens were not written to .logos/config.json.',
 		],

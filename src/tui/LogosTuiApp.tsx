@@ -1,6 +1,7 @@
 import { Box, Text, useApp, useInput, useStdin } from 'ink';
 import type React from 'react';
 import { useCallback, useMemo, useState } from 'react';
+import type { AiProviderConfig } from '../ai/provider-config.js';
 import { createLogosApplicationServices } from '../application/logos-application-service.js';
 import { loadCommandContext } from '../commands/command-context.js';
 import { getSlashCommandCompletions } from '../commands/slash-command-autocomplete.js';
@@ -68,21 +69,11 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 		[input],
 	);
 
-	const providerConfig = useMemo(() => {
-		try {
-			const projectRoot = detectProjectRoot(cwd);
-			if (projectRoot) {
-				const workspace = readWorkspaceState(projectRoot);
-				return workspace.config.ai;
-			}
-		} catch {
-			// No workspace yet
-		}
-		return {
-			enabled: false,
-			provider: null,
-			remoteContextDisclosureAccepted: false,
-		};
+	const [providerConfig, setProviderConfig] = useState(() =>
+		readProviderConfigForCwd(cwd),
+	);
+	const refreshProviderConfig = useCallback(() => {
+		setProviderConfig(readProviderConfigForCwd(cwd));
 	}, [cwd]);
 
 	const isInputActive = isRawModeSupported === true;
@@ -196,7 +187,8 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 				addSystemMessage(
 					[
 						'The conversation turn was preserved, but the AI response failed.',
-						'Run /config ai --test to inspect provider configuration.',
+						'Check the LOGOS message above for provider-specific guidance.',
+						'After adjusting configuration or waiting for the provider, run /continue.',
 					],
 					'AI response failed',
 					'error',
@@ -244,7 +236,16 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 						'Force generate will overwrite all existing generated documents. This cannot be undone.',
 					onConfirm: () => {
 						setPendingConfirmation(null);
-						void runCommand(command, context, services, addSystemMessage, exit);
+						void (async () => {
+							await runCommand(
+								command,
+								context,
+								services,
+								addSystemMessage,
+								exit,
+							);
+							refreshProviderConfig();
+						})();
 					},
 					onReject: () => {
 						setPendingConfirmation(null);
@@ -258,9 +259,10 @@ export function LogosTuiApp({ cwd }: LogosTuiAppProps): React.ReactElement {
 				return;
 			}
 
-			void runCommand(command, context, services, addSystemMessage, exit);
+			await runCommand(command, context, services, addSystemMessage, exit);
+			refreshProviderConfig();
 		},
-		[addSystemMessage, context, exit, services],
+		[addSystemMessage, context, exit, refreshProviderConfig, services],
 	);
 
 	useInput(
@@ -430,6 +432,28 @@ function replacePendingAiMessage(
 		replacement,
 		...messages.slice(pendingIndex + 1),
 	];
+}
+
+function readProviderConfigForCwd(
+	cwd: string,
+): Pick<
+	AiProviderConfig,
+	'enabled' | 'provider' | 'remoteContextDisclosureAccepted'
+> {
+	try {
+		const projectRoot = detectProjectRoot(cwd);
+		if (projectRoot) {
+			const workspace = readWorkspaceState(projectRoot);
+			return workspace.config.ai;
+		}
+	} catch {
+		// No workspace yet
+	}
+	return {
+		enabled: false,
+		provider: null,
+		remoteContextDisclosureAccepted: false,
+	};
 }
 
 async function runCommand(

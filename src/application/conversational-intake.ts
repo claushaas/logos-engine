@@ -7,7 +7,11 @@ import {
 	createOllamaProvider,
 	createOpenAiCompatibleProvider,
 } from '../ai/http-adapters.js';
-import { type LlmProvider, runAiOperation } from '../ai/llm-provider.js';
+import {
+	type LlmProvider,
+	LlmProviderError,
+	runAiOperation,
+} from '../ai/llm-provider.js';
 import { createMockLlmProvider } from '../ai/mock-provider.js';
 import { buildPromptForAiOperation } from '../ai/prompt-builder.js';
 import {
@@ -264,8 +268,7 @@ export async function handleConversationMessage(
 			}
 		}
 	} catch (error) {
-		const message = error instanceof Error ? error.message : String(error);
-		aiMessages.push(`AI response failed: ${message}. Session preserved.`);
+		aiMessages.push(formatConversationAiFailure(error, projectRoot));
 		status = 'error';
 	}
 
@@ -290,6 +293,36 @@ export async function handleConversationMessage(
 		status,
 		turnCount: session.turns.length,
 	};
+}
+
+function formatConversationAiFailure(
+	error: unknown,
+	projectRoot: string,
+): string {
+	if (error instanceof LlmProviderError && error.code === 'timeout') {
+		const timeoutMs = readConfiguredTimeoutMs(projectRoot);
+		const nextTimeoutMs = Math.max(timeoutMs * 3, 180_000);
+
+		return [
+			`AI response failed: Provider request timed out after ${timeoutMs} ms. Session preserved.`,
+			`Try /config ai --timeout-ms ${nextTimeoutMs} and then /continue, or switch to a faster model/provider.`,
+		].join('\n');
+	}
+
+	const message = error instanceof Error ? error.message : String(error);
+
+	return `AI response failed: ${message}. Session preserved.`;
+}
+
+function readConfiguredTimeoutMs(projectRoot: string): number {
+	try {
+		const workspace = readWorkspaceState(projectRoot);
+		const config = resolveProviderConfigDefaults(workspace.config.ai);
+
+		return config.timeoutMs ?? 60_000;
+	} catch {
+		return 60_000;
+	}
 }
 
 function applyInterpretation(

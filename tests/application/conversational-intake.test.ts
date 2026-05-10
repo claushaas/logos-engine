@@ -192,6 +192,57 @@ describe('conversational intake service', () => {
 			});
 		}
 	});
+
+	it('shows timeout-specific recovery guidance when provider is too slow', async () => {
+		const projectRoot = createProjectRoot();
+		initializeWorkspace(projectRoot);
+		const server = createServer((_request, _response) => {
+			// Keep the request open until the provider adapter aborts it.
+		});
+
+		await new Promise<void>((resolve) => {
+			server.listen(0, '127.0.0.1', resolve);
+		});
+
+		try {
+			const { port } = server.address() as AddressInfo;
+			updateAiConfiguration(projectRoot, [
+				'--provider',
+				'custom',
+				'--endpoint',
+				`http://127.0.0.1:${port}`,
+				'--model',
+				'test-model',
+				'--timeout-ms',
+				'25',
+				'--allow-remote',
+			]);
+
+			const result = await handleConversationMessage(
+				projectRoot,
+				'This provider will time out.',
+			);
+
+			expect(result.status).toBe('error');
+			expect(result.aiMessages.join('\n')).toContain(
+				'Provider request timed out after 25 ms',
+			);
+			expect(result.aiMessages.join('\n')).toContain(
+				'/config ai --timeout-ms 180000',
+			);
+		} finally {
+			await new Promise<void>((resolve, reject) => {
+				server.close((error) => {
+					if (error) {
+						reject(error);
+						return;
+					}
+
+					resolve();
+				});
+			});
+		}
+	});
 });
 
 describe('conversation input routing through slash command handler', () => {

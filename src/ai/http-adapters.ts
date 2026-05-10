@@ -322,11 +322,13 @@ function createJsonResponse(input: {
 	}
 
 	try {
+		const output = parseProviderJsonContent(input.content);
+
 		return {
 			finishReason: input.finishReason,
 			model: input.model,
 			operationId: input.operationId,
-			output: JSON.parse(input.content),
+			output,
 			providerId: input.providerId,
 			rawText: input.content,
 			usage: input.usage,
@@ -338,6 +340,95 @@ function createJsonResponse(input: {
 			false,
 		);
 	}
+}
+
+function parseProviderJsonContent(content: string): unknown {
+	const trimmed = content.trim();
+
+	try {
+		return JSON.parse(trimmed);
+	} catch {
+		// Some OpenAI-compatible providers still wrap JSON output in Markdown.
+	}
+
+	const fencedJson = extractWholeCodeFence(trimmed);
+
+	if (fencedJson) {
+		try {
+			return JSON.parse(fencedJson);
+		} catch {
+			// Fall through to balanced-object extraction below.
+		}
+	}
+
+	for (const candidate of extractBalancedJsonObjects(trimmed)) {
+		try {
+			return JSON.parse(candidate);
+		} catch {
+			// Keep looking; prose can contain braces before the real JSON object.
+		}
+	}
+
+	throw new SyntaxError('No parseable JSON object found in provider content.');
+}
+
+function extractWholeCodeFence(content: string): string | null {
+	const match = content.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/i);
+
+	return match?.[1]?.trim() ?? null;
+}
+
+function extractBalancedJsonObjects(content: string): string[] {
+	const candidates: string[] = [];
+
+	for (let start = 0; start < content.length; start++) {
+		if (content[start] !== '{') {
+			continue;
+		}
+
+		let depth = 0;
+		let inString = false;
+		let escaped = false;
+
+		for (let index = start; index < content.length; index++) {
+			const char = content[index];
+
+			if (escaped) {
+				escaped = false;
+				continue;
+			}
+
+			if (char === '\\' && inString) {
+				escaped = true;
+				continue;
+			}
+
+			if (char === '"') {
+				inString = !inString;
+				continue;
+			}
+
+			if (inString) {
+				continue;
+			}
+
+			if (char === '{') {
+				depth++;
+				continue;
+			}
+
+			if (char === '}') {
+				depth--;
+
+				if (depth === 0) {
+					candidates.push(content.slice(start, index + 1));
+					break;
+				}
+			}
+		}
+	}
+
+	return candidates;
 }
 
 function getArray(value: unknown): readonly unknown[] {

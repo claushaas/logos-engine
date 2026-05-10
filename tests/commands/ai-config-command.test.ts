@@ -61,6 +61,20 @@ describe('/config ai command', () => {
 		expect(configText).not.toContain('sk-test-secret-value');
 	});
 
+	it('updates and reports request timeout settings', async () => {
+		const projectRoot = createProjectRoot();
+		initializeWorkspace(projectRoot);
+
+		const result = await runCommand(
+			projectRoot,
+			'/config ai --provider openai-compatible --endpoint https://api.example.test/v1 --model gpt-test --timeout-ms 180000 --allow-remote',
+		);
+
+		expect(result.status).toBe('ok');
+		expect(result.body.join('\n')).toContain('Timeout: 180000 ms');
+		expect(readWorkspaceState(projectRoot).config.ai.timeoutMs).toBe(180_000);
+	});
+
 	it('checks provider configuration deterministically without live model calls', async () => {
 		const projectRoot = createProjectRoot();
 		initializeWorkspace(projectRoot);

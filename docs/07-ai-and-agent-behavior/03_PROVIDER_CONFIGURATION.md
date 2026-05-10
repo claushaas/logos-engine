@@ -114,12 +114,13 @@ No API key needed. LM Studio must be running locally.
 
 ```text
 /config ai                          Show current AI config with tokens redacted
-/config ai --set provider=openai    Set the provider
-/config ai --set model=gpt-4o       Set the model
-/config ai --set token-env=MY_VAR   Set the token environment variable name
-/config ai --test                   Test provider connectivity
+/config ai --provider openai        Set the provider
+/config ai --model gpt-4o           Set the model
+/config ai --token-env MY_VAR       Set the token environment variable name
+/config ai --timeout-ms 180000      Set the request timeout in milliseconds
+/config ai --test                   Check provider configuration deterministically
 /config ai --show                   Show full config with redacted token
-/config ai --clear                  Remove AI configuration
+/config ai --disable                Remove AI configuration
 ```
 
 ## Running Without a Live Remote Provider
@@ -136,7 +137,7 @@ The normal intake and document drafting workflow is AI-led. For an actual worksp
 
 ## Testing a Provider
 
-Use `/config ai --test` to verify connectivity. The engine sends a minimal test request and reports success or failure.
+Use `/config ai --test` to verify configuration shape, remote disclosure, and token resolution without making a live model call. A configured provider can still time out during normal conversation if the model is slow; increase the request limit with `/config ai --timeout-ms <milliseconds>` or choose a faster model/provider.
 
 ## Privacy Considerations
 

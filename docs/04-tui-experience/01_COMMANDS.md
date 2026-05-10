@@ -230,7 +230,7 @@ Configures LLM access for AI-led workflows.
 /config ai --show
 /config ai --test
 /config ai --disable
-/config ai --provider <preset> --endpoint <url> --model <model-id> --token-env <env-var>
+/config ai --provider <preset> --endpoint <url> --model <model-id> --token-env <env-var> --timeout-ms <milliseconds>
 /config ai --allow-remote
 ```
 
