@@ -1,0 +1,53 @@
+document:
+  id: "01-go-to-market-brief"
+  title: "Go-to-Market Brief"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Commercial axis synthesis defining the market entry thesis."
+  centralQuestion: "What is the market entry thesis?"
+  sections:
+    - id: "gtm-objective"
+      title: "GTM Objective"
+      questions:
+        - "What commercial outcome must this launch achieve?"
+        - "Is the priority acquisition, revenue, awareness, or validation?"
+    - id: "product-context"
+      title: "Product Context"
+      questions:
+        - "What is the product and what does it do?"
+        - "What stage is the product at (pre-alpha, alpha, beta, GA)?"
+    - id: "target-market"
+      title: "Target Market"
+      questions:
+        - "Who is the initial beachhead segment?"
+        - "Why start here instead of elsewhere?"
+    - id: "primary-customer"
+      title: "Primary Customer"
+      questions:
+        - "Who is the ideal first customer?"
+        - "What observable signal makes them a good fit?"
+    - id: "core-positioning"
+      title: "Core Positioning"
+      questions:
+        - "How will the product be perceived relative to alternatives?"
+        - "What category does it claim?"
+    - id: "primary-channel"
+      title: "Primary Channel"
+      questions:
+        - "Through which channel will the first customers arrive?"
+        - "Why is this channel defensible or repeatable?"
+    - id: "launch-strategy"
+      title: "Launch Strategy"
+      questions:
+        - "What type of launch is planned?"
+        - "What is the launch sequence and timeline?"
+    - id: "revenue-motion"
+      title: "Revenue Motion"
+      questions:
+        - "How will the product generate revenue?"
+        - "Is the motion self-serve, sales-led, or hybrid?"
+    - id: "gtm-success-criteria"
+      title: "GTM Success Criteria"
+      questions:
+        - "What metrics define a successful market entry?"
+        - "What is the threshold for go / no-go after the initial push?"

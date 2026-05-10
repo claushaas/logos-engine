@@ -1,0 +1,63 @@
+document:
+  id: "06-business-processes"
+  title: "Business Processes"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define the recurring business processes that must operate repeatably."
+  centralQuestion: "What operations need to happen repeatably?"
+  sections:
+    - id: "process-inventory"
+      title: "Process Inventory"
+      questions:
+        - "What is the complete list of recurring business processes?"
+        - "How are processes categorized and prioritized?"
+    - id: "user-onboarding-process"
+      title: "User Onboarding Process"
+      questions:
+        - "What steps does a new user go through from signup to activation?"
+        - "Who is responsible for each onboarding step?"
+    - id: "billing-process"
+      title: "Billing Process"
+      questions:
+        - "How are recurring charges calculated, applied, and collected?"
+        - "What happens when a payment succeeds or fails?"
+    - id: "cancellation-process"
+      title: "Cancellation Process"
+      questions:
+        - "How does a user cancel their subscription or account?"
+        - "What offboarding steps occur after cancellation?"
+    - id: "refund-process"
+      title: "Refund Process"
+      questions:
+        - "How are refund requests evaluated and processed?"
+        - "What approvals are required for refunds?"
+    - id: "feature-request-process"
+      title: "Feature Request Process"
+      questions:
+        - "How are feature requests submitted, tracked, and reviewed?"
+        - "How do feature requests flow into the product roadmap?"
+    - id: "bug-triage-process"
+      title: "Bug Triage Process"
+      questions:
+        - "How are bugs reported, triaged, and prioritized?"
+        - "What is the lifecycle of a bug from report to resolution?"
+    - id: "release-communication-process"
+      title: "Release Communication Process"
+      questions:
+        - "How are releases communicated to users and internal teams?"
+        - "What artifacts accompany each release?"
+    - id: "vendor-management-process"
+      title: "Vendor Management Process"
+      questions:
+        - "How are third-party vendors selected, onboarded, and reviewed?"
+        - "What ongoing vendor management tasks are required?"
+    - id: "data-export-deletion-process"
+      title: "Data Export/Deletion Process"
+      questions:
+        - "How do users request data exports or account deletion?"
+        - "How are these requests fulfilled within regulatory timelines?"
+    - id: "process-review"
+      title: "Process Review"
+      questions:
+        - "How often are business processes reviewed for efficiency?"
+        - "Who is responsible for process improvement?"

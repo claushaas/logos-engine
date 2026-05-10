@@ -1,0 +1,68 @@
+document:
+  id: "11-marketing-assets"
+  title: "Marketing Assets"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define the materials needed to launch, communicate, and sell the product."
+  centralQuestion: "What pieces need to exist to launch, communicate, and sell?"
+  sections:
+    - id: "asset-inventory"
+      title: "Asset Inventory"
+      questions:
+        - "What is the complete list of marketing assets needed?"
+        - "What is the priority order for creation?"
+    - id: "landing-page"
+      title: "Landing Page"
+      questions:
+        - "What must the landing page communicate?"
+        - "What is the primary call to action?"
+    - id: "website-copy"
+      title: "Website Copy"
+      questions:
+        - "What pages are needed beyond the landing page?"
+        - "What is the structure of the marketing site?"
+    - id: "email-sequences"
+      title: "Email Sequences"
+      questions:
+        - "What email sequences are needed (onboarding, nurture, re-engagement, transactional)?"
+        - "What is the cadence and trigger for each?"
+    - id: "social-posts"
+      title: "Social Posts"
+      questions:
+        - "What social platforms will be used?"
+        - "What is the launch announcement plan?"
+    - id: "demo-script"
+      title: "Demo Script"
+      questions:
+        - "What is the standard demo narrative?"
+        - "What are the key moments in the demo?"
+    - id: "product-screenshots"
+      title: "Product Screenshots"
+      questions:
+        - "What screens or flows must be captured?"
+        - "What format and resolution are required?"
+    - id: "explainer-video"
+      title: "Explainer Video"
+      questions:
+        - "Is an explainer video needed?"
+        - "What is the script, format, and length?"
+    - id: "pitch-materials"
+      title: "Pitch Materials"
+      questions:
+        - "What pitch materials are needed (deck, one-pager, investor update)?"
+        - "Who is the audience for each?"
+    - id: "press-kit"
+      title: "Press Kit"
+      questions:
+        - "What goes in the press kit?"
+        - "Who are the target press contacts?"
+    - id: "app-store-marketplace-listing"
+      title: "App Store / Marketplace Listing"
+      questions:
+        - "What app stores or marketplaces will the product be listed on?"
+        - "What assets are required for each listing?"
+    - id: "asset-readiness-checklist"
+      title: "Asset Readiness Checklist"
+      questions:
+        - "What is the status of each asset?"
+        - "Who owns each asset and what is the deadline?"

@@ -1,0 +1,49 @@
+document:
+  id: "02-core-assumptions"
+  title: "Core Assumptions"
+  phase: "02-validation"
+  status: "not_started"
+  purpose: "Map every assumption the project depends on and identify which can kill it if false."
+  centralQuestion: "What must be true for the project to make sense?"
+  sections:
+    - id: "assumption-map"
+      title: "Assumption Map"
+      questions:
+        - "What are all the assumptions the project rests on?"
+        - "How are assumptions grouped by domain: problem, audience, solution, market, economics?"
+        - "What is the status of each assumption: known, unknown, or intuited?"
+    - id: "critical-assumptions"
+      title: "Critical Assumptions"
+      questions:
+        - "Which assumptions are most dangerous?"
+        - "Which assumptions carry the most uncertainty and the highest impact?"
+        - "Which assumptions, if false, kill the project?"
+    - id: "secondary-assumptions"
+      title: "Secondary Assumptions"
+      questions:
+        - "Which assumptions only alter positioning or tactics if false?"
+        - "Which assumptions are important but not existential?"
+        - "Which assumptions can be refined later without blocking progress?"
+    - id: "unknowns"
+      title: "Unknowns"
+      questions:
+        - "Which assumptions are currently unknown or unvalidated?"
+        - "What is the plan to move unknowns into knowns?"
+        - "Which unknowns are acceptable to carry forward?"
+    - id: "dependency-between-assumptions"
+      title: "Dependency Between Assumptions"
+      questions:
+        - "How do assumptions depend on each other?"
+        - "Which assumptions, if validated, strengthen or weaken others?"
+        - "What is the causal chain connecting assumptions?"
+    - id: "assumptions-that-can-kill-the-project"
+      title: "Assumptions That Can Kill the Project"
+      questions:
+        - "Which assumptions, if false, kill the project?"
+        - "What is the evidence threshold for each killing assumption?"
+        - "Are there mitigations or pivots available if a killing assumption is refuted?"
+    - id: "assumptions-that-only-change-direction"
+      title: "Assumptions That Only Change Direction"
+      questions:
+        - "Which assumptions only alter positioning if proven false?"
+        - "What directional changes would be triggered by each refuted non-critical assumption?"

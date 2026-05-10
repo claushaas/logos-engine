@@ -1,0 +1,63 @@
+document:
+  id: "08-conversion-funnel"
+  title: "Conversion Funnel"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define the pathway from unknown to user or customer, with stages and metrics."
+  centralQuestion: "What pathway takes someone from unknown to user or customer?"
+  sections:
+    - id: "funnel-objective"
+      title: "Funnel Objective"
+      questions:
+        - "What is the purpose of defining the conversion funnel?"
+        - "What single funnel metric matters most right now?"
+    - id: "awareness"
+      title: "Awareness"
+      questions:
+        - "How do people first learn about the product?"
+        - "What is the target awareness volume?"
+    - id: "acquisition"
+      title: "Acquisition"
+      questions:
+        - "How does someone move from awareness to entering the funnel?"
+        - "Examples: Visit landing page, Join waitlist, Sign up?"
+    - id: "activation"
+      title: "Activation"
+      questions:
+        - "What is the first meaningful action a user takes?"
+        - "Examples: Complete onboarding, First meaningful action?"
+    - id: "engagement"
+      title: "Engagement"
+      questions:
+        - "What behaviour indicates sustained use?"
+        - "Examples: Return within 7 days, Second session completed?"
+    - id: "conversion"
+      title: "Conversion"
+      questions:
+        - "What is the conversion event?"
+        - "Examples: Start trial, Convert to paid?"
+    - id: "retention"
+      title: "Retention"
+      questions:
+        - "What indicates a retained user or customer?"
+        - "Examples: Retain after first billing cycle, Monthly active usage?"
+    - id: "referral"
+      title: "Referral"
+      questions:
+        - "What turns a customer into a growth engine?"
+        - "What is the referral path?"
+    - id: "funnel-events"
+      title: "Funnel Events"
+      questions:
+        - "What specific events must be instrumented at each stage?"
+        - "Who owns event instrumentation?"
+    - id: "drop-off-risks"
+      title: "Drop-off Risks"
+      questions:
+        - "Where is the biggest expected drop-off?"
+        - "What mitigates each drop-off risk?"
+    - id: "funnel-metrics"
+      title: "Funnel Metrics"
+      questions:
+        - "What are the target conversion rates between each stage?"
+        - "What is the benchmark for acceptable vs. concerning performance?"

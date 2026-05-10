@@ -1,0 +1,63 @@
+document:
+  id: "05-customer-success"
+  title: "Customer Success"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how to proactively ensure users and clients obtain continuous value."
+  centralQuestion: "How to ensure users/clients obtain continuous value?"
+  sections:
+    - id: "customer-success-objective"
+      title: "Customer Success Objective"
+      questions:
+        - "What is the goal of the customer success function?"
+        - "How does customer success differ from customer support?"
+    - id: "activation-milestones"
+      title: "Activation Milestones"
+      questions:
+        - "What milestones define a successfully activated user?"
+        - "How is progress toward activation tracked?"
+    - id: "onboarding-follow-up"
+      title: "Onboarding Follow-up"
+      questions:
+        - "What follow-up occurs after a user signs up?"
+        - "What signals indicate a user is stuck in onboarding?"
+    - id: "health-signals"
+      title: "Health Signals"
+      questions:
+        - "What signals indicate a healthy, engaged user?"
+        - "How are health scores calculated and reviewed?"
+    - id: "at-risk-user-signals"
+      title: "At-Risk User Signals"
+      questions:
+        - "What signals indicate a user is at risk of churning?"
+        - "How quickly are at-risk signals acted upon?"
+    - id: "retention-actions"
+      title: "Retention Actions"
+      questions:
+        - "What proactive actions are taken to retain users?"
+        - "What is the escalation path for high-value at-risk accounts?"
+    - id: "expansion-opportunities"
+      title: "Expansion Opportunities"
+      questions:
+        - "How are expansion and upgrade opportunities identified?"
+        - "What is the handoff process to sales or account management?"
+    - id: "feedback-loops"
+      title: "Feedback Loops"
+      questions:
+        - "How is user feedback collected, categorized, and routed?"
+        - "How does feedback influence the product roadmap?"
+    - id: "satisfaction-measurement"
+      title: "Satisfaction Measurement"
+      questions:
+        - "How is customer satisfaction measured (NPS, CSAT, etc.)?"
+        - "What cadence and methodology are used for satisfaction surveys?"
+    - id: "churn-prevention"
+      title: "Churn Prevention"
+      questions:
+        - "What systematic churn prevention measures are in place?"
+        - "How is churn analyzed and learned from?"
+    - id: "customer-success-risks"
+      title: "Customer Success Risks"
+      questions:
+        - "What could cause the customer success function to fail?"
+        - "How are customer success risks detected and mitigated?"

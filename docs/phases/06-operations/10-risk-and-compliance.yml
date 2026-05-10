@@ -1,0 +1,63 @@
+document:
+  id: "10-risk-and-compliance"
+  title: "Risk and Compliance"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how regulatory, legal, contractual, and governance risks are handled operationally."
+  centralQuestion: "How are regulatory, legal, contractual, and governance risks handled?"
+  sections:
+    - id: "compliance-scope"
+      title: "Compliance Scope"
+      questions:
+        - "Which regulations, standards, and frameworks apply to this project?"
+        - "What is the boundary between operational compliance and engineering security?"
+    - id: "legal-requirements"
+      title: "Legal Requirements"
+      questions:
+        - "What legal obligations does the project have?"
+        - "How are legal requirements monitored and updated?"
+    - id: "privacy-requirements"
+      title: "Privacy Requirements"
+      questions:
+        - "What privacy regulations apply (GDPR, CCPA, etc.)?"
+        - "How are privacy requirements operationalized?"
+    - id: "data-protection-requirements"
+      title: "Data Protection Requirements"
+      questions:
+        - "What data protection and retention requirements exist?"
+        - "How is data handling compliance verified?"
+    - id: "terms-and-policies"
+      title: "Terms and Policies"
+      questions:
+        - "What terms of service, privacy policy, and other policies are published?"
+        - "How are policies reviewed and updated?"
+    - id: "vendor-compliance"
+      title: "Vendor Compliance"
+      questions:
+        - "How is vendor compliance with relevant regulations verified?"
+        - "What vendor due diligence is performed and how often?"
+    - id: "contractual-obligations"
+      title: "Contractual Obligations"
+      questions:
+        - "What contractual obligations affect operations?"
+        - "How is compliance with contractual obligations tracked?"
+    - id: "audit-trail"
+      title: "Audit Trail"
+      questions:
+        - "What operational actions are recorded for audit purposes?"
+        - "How are audit logs stored, protected, and reviewed?"
+    - id: "governance-rules"
+      title: "Governance Rules"
+      questions:
+        - "What governance rules apply to operational decisions?"
+        - "How are governance violations detected and addressed?"
+    - id: "compliance-review-cadence"
+      title: "Compliance Review Cadence"
+      questions:
+        - "How often are compliance obligations reviewed?"
+        - "Who is responsible for compliance reviews?"
+    - id: "compliance-risks"
+      title: "Compliance Risks"
+      questions:
+        - "What could cause a compliance failure?"
+        - "How are compliance risks detected and mitigated?"

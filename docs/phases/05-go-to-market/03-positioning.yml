@@ -1,0 +1,53 @@
+document:
+  id: "03-positioning"
+  title: "Positioning"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define how the product should be perceived as different, relevant, and preferable."
+  centralQuestion: "Why is this product different, relevant, and preferable?"
+  sections:
+    - id: "positioning-statement"
+      title: "Positioning Statement"
+      questions:
+        - "What is the full positioning statement?"
+        - "Formula: For [target customer], who struggles with [problem], [product] is a [category] that provides [unique value], unlike [alternative], because [reason to believe]."
+    - id: "category"
+      title: "Category"
+      questions:
+        - "What category does the product claim?"
+        - "Is this category contested or open?"
+    - id: "target-customer"
+      title: "Target Customer"
+      questions:
+        - "Who is the primary audience for this positioning?"
+        - "What does this customer value most?"
+    - id: "primary-pain"
+      title: "Primary Pain"
+      questions:
+        - "What acute problem does the product solve?"
+        - "How is this pain experienced today?"
+    - id: "unique-value"
+      title: "Unique Value"
+      questions:
+        - "What single value proposition is most defensible?"
+        - "What can the product do that no alternative does?"
+    - id: "differentiators"
+      title: "Differentiators"
+      questions:
+        - "What are the top three differentiators?"
+        - "Which differentiator matters most to the target customer?"
+    - id: "alternatives"
+      title: "Alternatives"
+      questions:
+        - "What will the customer compare this to?"
+        - "Why is each alternative insufficient?"
+    - id: "reasons-to-believe"
+      title: "Reasons to Believe"
+      questions:
+        - "What proof makes the positioning credible?"
+        - "What evidence, design choice, or constraint backs each claim?"
+    - id: "positioning-anti-patterns"
+      title: "Positioning Anti-Patterns"
+      questions:
+        - "What must the product NOT be positioned as?"
+        - "What claims would create false expectations?"

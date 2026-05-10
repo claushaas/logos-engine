@@ -1,0 +1,68 @@
+document:
+  id: "10-pricing-and-packaging"
+  title: "Pricing and Packaging"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define how the offer is presented and purchased, distinct from the economic model."
+  centralQuestion: "How will the offer be presented and purchased?"
+  sections:
+    - id: "pricing-objective"
+      title: "Pricing Objective"
+      questions:
+        - "What is the primary goal of the pricing strategy?"
+        - "Is the focus acquisition, revenue, retention, or competitive positioning?"
+    - id: "pricing-model"
+      title: "Pricing Model"
+      questions:
+        - "What is the pricing model (freemium, subscription, usage-based, tiered, flat-rate, per-seat)?"
+        - "Why this model?"
+    - id: "packages"
+      title: "Packages"
+      questions:
+        - "What packages or plans are offered?"
+        - "What is included in each package?"
+    - id: "plan-structure"
+      title: "Plan Structure"
+      questions:
+        - "What is the structure of each plan (features, limits, price)?"
+        - "How do plans compare side by side?"
+    - id: "free-trial-strategy"
+      title: "Free / Trial Strategy"
+      questions:
+        - "Is there a free tier, trial, or both?"
+        - "What are the trial terms (duration, features, conversion path)?"
+    - id: "subscription-terms"
+      title: "Subscription Terms"
+      questions:
+        - "What are the billing cycles (monthly, annual)?"
+        - "Are there contracts or commitments?"
+    - id: "discounts"
+      title: "Discounts"
+      questions:
+        - "What discount strategies exist (early adopter, annual, volume, non-profit)?"
+        - "Under what conditions are discounts offered?"
+    - id: "payment-flow"
+      title: "Payment Flow"
+      questions:
+        - "How does the customer pay?"
+        - "What payment methods and processors are used?"
+    - id: "upgrade-and-downgrade-logic"
+      title: "Upgrade and Downgrade Logic"
+      questions:
+        - "How does a customer upgrade or downgrade?"
+        - "What happens to data, features, and billing on plan change?"
+    - id: "cancellation-logic"
+      title: "Cancellation Logic"
+      questions:
+        - "What is the cancellation flow?"
+        - "What offboarding or data export is offered?"
+    - id: "pricing-objections"
+      title: "Pricing Objections"
+      questions:
+        - "What pricing objections are anticipated?"
+        - "How are they handled?"
+    - id: "pricing-risks"
+      title: "Pricing Risks"
+      questions:
+        - "What could make the pricing model fail?"
+        - "What would trigger a pricing review?"

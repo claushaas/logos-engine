@@ -1,0 +1,73 @@
+document:
+  id: "06-api-contracts"
+  title: "API Contracts"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines how client, backend, agents, adapters, and services communicate without ambiguity."
+  centralQuestion: "How do client, backend, agents, adapters, and services communicate without ambiguity?"
+  sections:
+    - id: "api-strategy"
+      title: "API Strategy"
+      questions:
+        - "What API styles and protocols are used? REST, GraphQL, gRPC, WebSocket?"
+        - "What is the overall API design philosophy?"
+    - id: "public-apis"
+      title: "Public APIs"
+      questions:
+        - "What public APIs are exposed to clients or external consumers?"
+        - "What are the rate limits and authentication requirements for public APIs?"
+    - id: "internal-apis"
+      title: "Internal APIs"
+      questions:
+        - "What internal APIs exist between application modules?"
+        - "How are internal contracts versioned and documented?"
+    - id: "endpoint-register"
+      title: "Endpoint Register"
+      questions:
+        - "What is the complete register of all API endpoints?"
+        - "What HTTP methods, paths, and parameters does each endpoint accept?"
+    - id: "request-formats"
+      title: "Request Formats"
+      questions:
+        - "What request body formats are accepted? JSON, multipart, binary?"
+        - "What are the content-type and encoding requirements?"
+    - id: "response-formats"
+      title: "Response Formats"
+      questions:
+        - "What is the standard response envelope structure?"
+        - "How are successful and error responses distinguished?"
+    - id: "error-model"
+      title: "Error Model"
+      questions:
+        - "What error codes and categories exist?"
+        - "How are validation errors, auth errors, and server errors represented?"
+    - id: "pagination"
+      title: "Pagination"
+      questions:
+        - "What pagination strategy is used? Cursor-based, offset-based, page-based?"
+        - "What is the default and maximum page size?"
+    - id: "idempotency"
+      title: "Idempotency"
+      questions:
+        - "Which endpoints support idempotency?"
+        - "How are idempotency keys passed and validated?"
+    - id: "versioning"
+      title: "Versioning"
+      questions:
+        - "How are API versions managed? URL path, header, content negotiation?"
+        - "What is the deprecation policy for old versions?"
+    - id: "authentication-requirements"
+      title: "Authentication Requirements"
+      questions:
+        - "How is authentication enforced at the API level?"
+        - "What token or credential formats are used?"
+    - id: "contract-testing"
+      title: "Contract Testing"
+      questions:
+        - "How are API contracts tested between producers and consumers?"
+        - "What tools are used for contract testing?"
+    - id: "api-risks"
+      title: "API Risks"
+      questions:
+        - "What are the risks of the API design?"
+        - "What breaking changes are anticipated or must be avoided?"

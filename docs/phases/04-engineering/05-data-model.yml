@@ -1,0 +1,77 @@
+document:
+  id: "05-data-model"
+  title: "Data Model"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines how data will be stored, related, versioned, and migrated."
+  centralQuestion: "How will data be stored, related, versioned, and migrated?"
+  sections:
+    - id: "data-storage-strategy"
+      title: "Data Storage Strategy"
+      questions:
+        - "What storage engines are used and why?"
+        - "How is local and remote data partitioned?"
+    - id: "entity-relationship-overview"
+      title: "Entity Relationship Overview"
+      questions:
+        - "What are the primary data entities and their relationships?"
+        - "What is the cardinality of each relationship?"
+    - id: "tables-collections"
+      title: "Tables / Collections"
+      questions:
+        - "What tables or collections exist?"
+        - "What is the naming convention for data structures?"
+    - id: "fields"
+      title: "Fields"
+      questions:
+        - "What fields exist on each table or collection?"
+        - "What are the data types, nullability, and defaults for each field?"
+    - id: "constraints"
+      title: "Constraints"
+      questions:
+        - "What unique, foreign key, and check constraints apply?"
+        - "How are constraints enforced at the application level?"
+    - id: "indexes"
+      title: "Indexes"
+      questions:
+        - "What indexes are required for query performance?"
+        - "What are the expected query patterns driving index design?"
+    - id: "local-data"
+      title: "Local Data"
+      questions:
+        - "What data lives locally on the client?"
+        - "How is local data structured and synchronised?"
+    - id: "remote-data"
+      title: "Remote Data"
+      questions:
+        - "What data lives on the remote server or service?"
+        - "How is remote data accessed and cached?"
+    - id: "migration-strategy"
+      title: "Migration Strategy"
+      questions:
+        - "How are schema migrations authored, tested, and applied?"
+        - "What is the rollback strategy for failed migrations?"
+    - id: "data-retention"
+      title: "Data Retention"
+      questions:
+        - "How long is data retained? What is the archival policy?"
+        - "What data is soft-deleted versus hard-deleted?"
+    - id: "data-sensitivity"
+      title: "Data Sensitivity"
+      questions:
+        - "What data is classified as sensitive or PII?"
+        - "How is sensitive data protected at rest and in transit?"
+    - id: "event-sourcing-considerations"
+      title: "Event Sourcing Considerations"
+      questions:
+        - "What is the event envelope structure?"
+        - "What does the event payload schema look like?"
+        - "What cursor or checkpoint mechanism is used?"
+        - "How are idempotency keys generated and verified?"
+        - "What conflict metadata is stored with each event?"
+        - "What schema version is attached to events and how is it managed?"
+    - id: "data-model-risks"
+      title: "Data Model Risks"
+      questions:
+        - "What are the risks of the chosen data model?"
+        - "What query patterns could become bottlenecks?"

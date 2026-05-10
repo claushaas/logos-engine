@@ -1,0 +1,41 @@
+document:
+  id: "01-thesis"
+  title: "Founding Thesis"
+  phase: "01-foundation"
+  status: "not_started"
+  purpose: "Articulate the founding conviction that justifies the project's existence."
+  centralQuestion: "What truth, hypothesis, or conviction justifies this project's existence?"
+  sections:
+    - id: "core-thesis"
+      title: "Core Thesis"
+      questions:
+        - "What is the central thesis?"
+        - "What change in the world, market, or human behavior makes this relevant?"
+        - "What tension does the project try to resolve?"
+        - "What does this project assert that other systems neglect?"
+        - "What is the essential promise, without marketing?"
+    - id: "context"
+      title: "Context"
+      questions:
+        - "What broader conditions surround this thesis?"
+        - "What timing or trends make the thesis urgent now?"
+    - id: "central-tension"
+      title: "Central Tension"
+      questions:
+        - "What two or more forces are in conflict?"
+        - "Why has this tension gone unresolved?"
+    - id: "foundational-claim"
+      title: "Foundational Claim"
+      questions:
+        - "What is the single sentence that captures the project's assertion?"
+        - "What evidence supports this claim?"
+    - id: "what-this-project-makes-possible"
+      title: "What This Project Makes Possible"
+      questions:
+        - "What becomes possible that was not possible before?"
+        - "What changes downstream if the thesis holds?"
+    - id: "what-this-project-is-not"
+      title: "What This Project Is Not"
+      questions:
+        - "What misinterpretations of the thesis should be preempted?"
+        - "What adjacent ideas are out of scope for this conviction?"

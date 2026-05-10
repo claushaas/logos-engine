@@ -1,0 +1,63 @@
+document:
+  id: "13-continuous-improvement"
+  title: "Continuous Improvement"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how the operational system improves without becoming chaotic."
+  centralQuestion: "How does the system improve without becoming chaotic?"
+  sections:
+    - id: "improvement-objective"
+      title: "Improvement Objective"
+      questions:
+        - "What is the goal of continuous operational improvement?"
+        - "How is improvement balanced against stability?"
+    - id: "feedback-sources"
+      title: "Feedback Sources"
+      questions:
+        - "What sources of feedback drive operational improvements?"
+        - "How is feedback collected, categorized, and prioritized?"
+    - id: "improvement-backlog"
+      title: "Improvement Backlog"
+      questions:
+        - "How is the operational improvement backlog maintained?"
+        - "Who can propose improvements and how are they evaluated?"
+    - id: "prioritization-rules"
+      title: "Prioritization Rules"
+      questions:
+        - "How are improvement ideas prioritized?"
+        - "What criteria determine which improvements are implemented first?"
+    - id: "process-review"
+      title: "Process Review"
+      questions:
+        - "How are existing processes reviewed for improvement opportunities?"
+        - "What triggers a process redesign?"
+    - id: "automation-candidates"
+      title: "Automation Candidates"
+      questions:
+        - "How are manual operations evaluated for automation?"
+        - "What is the process for implementing automation?"
+    - id: "quality-improvement"
+      title: "Quality Improvement"
+      questions:
+        - "How is operational quality systematically improved?"
+        - "What quality improvement methodologies are used?"
+    - id: "cost-reduction"
+      title: "Cost Reduction"
+      questions:
+        - "How are operational cost reduction opportunities identified?"
+        - "How are cost reductions validated to avoid degrading service?"
+    - id: "churn-learning"
+      title: "Churn Learning"
+      questions:
+        - "How is churn analyzed to identify operational improvements?"
+        - "What feedback loop exists between churn analysis and process changes?"
+    - id: "incident-learning"
+      title: "Incident Learning"
+      questions:
+        - "How do incident postmortems feed into operational improvements?"
+        - "How is the completion of incident corrective actions tracked?"
+    - id: "improvement-cadence"
+      title: "Improvement Cadence"
+      questions:
+        - "How often are improvement initiatives reviewed?"
+        - "Who is accountable for driving continuous improvement?"

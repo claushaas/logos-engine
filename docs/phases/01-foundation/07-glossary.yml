@@ -1,0 +1,15 @@
+document:
+  id: "07-glossary"
+  title: "Glossary of Terms"
+  phase: "01-foundation"
+  status: "not_started"
+  purpose: "Provide canonical semantic control over key project terminology."
+  centralQuestion: "When we use an important word, exactly what does it mean in this project?"
+  sections:
+    - id: "terms"
+      title: "Terms"
+      questions:
+        - "What are the fundamental terms?"
+        - "What is the exact definition of each term in project context?"
+        - "Where is each term used?"
+        - "What is each term not to be confused with?"

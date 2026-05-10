@@ -1,0 +1,58 @@
+document:
+  id: "09-sales-strategy"
+  title: "Sales Strategy"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define whether and how to sell actively, including motion type, qualification, process, and assets."
+  centralQuestion: "Will the product be self-serve, sales-led, product-led, founder-led, or hybrid?"
+  sections:
+    - id: "sales-motion"
+      title: "Sales Motion"
+      questions:
+        - "What is the primary sales motion?"
+        - "Options: Self-Serve, Product-Led, Founder-Led, Sales-Led, Hybrid?"
+    - id: "selfserve-sales"
+      title: "Self-Serve Sales"
+      questions:
+        - "What parts of the purchase can be completed without human interaction?"
+        - "What is the self-serve checkout flow?"
+    - id: "founder-led-sales"
+      title: "Founder-Led Sales"
+      questions:
+        - "What role does the founder play in sales?"
+        - "How long will founder-led sales continue before handing off?"
+    - id: "sales-led-motion"
+      title: "Sales-Led Motion"
+      questions:
+        - "If a sales team is involved, what is the sales process?"
+        - "What is the target sales cycle length?"
+    - id: "lead-qualification"
+      title: "Lead Qualification"
+      questions:
+        - "What criteria qualify a lead?"
+        - "What is the lead scoring model?"
+    - id: "sales-process"
+      title: "Sales Process"
+      questions:
+        - "What are the stages from lead to close?"
+        - "What triggers movement between stages?"
+    - id: "objection-handling"
+      title: "Objection Handling"
+      questions:
+        - "What are the most common sales objections?"
+        - "What are the standard responses?"
+    - id: "demo-strategy"
+      title: "Demo Strategy"
+      questions:
+        - "Is a demo required to close?"
+        - "What is the standard demo flow and narrative?"
+    - id: "sales-assets"
+      title: "Sales Assets"
+      questions:
+        - "What materials support the sales process?"
+        - "Examples: One-pager, pitch deck, case studies, ROI calculator?"
+    - id: "sales-risks"
+      title: "Sales Risks"
+      questions:
+        - "What could prevent the sales motion from working?"
+        - "What is the contingency if conversion is too low?"

@@ -1,0 +1,83 @@
+document:
+  id: "03-technical-stack"
+  title: "Technical Stack"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines the specific implementation technologies to be used across the system."
+  centralQuestion: "What specific implementation technologies will be used?"
+  sections:
+    - id: "runtime"
+      title: "Runtime"
+      questions:
+        - "What runtimes will the system execute on? Node.js, browser, native mobile?"
+        - "What runtime versions are required?"
+    - id: "languages"
+      title: "Languages"
+      questions:
+        - "What programming languages will be used for each part of the system?"
+        - "Are there any language-level constraints?"
+    - id: "frameworks"
+      title: "Frameworks"
+      questions:
+        - "What frameworks are selected for the TUI, API, and any other frontends?"
+        - "What framework constraints apply?"
+    - id: "package-management"
+      title: "Package Management"
+      questions:
+        - "What package manager and registry will be used?"
+        - "What is the strategy for managing transitive dependencies?"
+    - id: "database"
+      title: "Database"
+      questions:
+        - "What database(s) will be used for local and remote persistence?"
+        - "What is the data storage engine?"
+    - id: "storage"
+      title: "Storage"
+      questions:
+        - "What file storage, blob storage, or object storage is needed?"
+        - "How are large assets handled?"
+    - id: "authentication"
+      title: "Authentication"
+      questions:
+        - "What authentication mechanism and libraries will be used?"
+        - "How are credentials managed at the application level?"
+    - id: "api-layer"
+      title: "API Layer"
+      questions:
+        - "What API protocols and libraries will be used? REST, GraphQL, gRPC?"
+        - "How is the API layer implemented?"
+    - id: "background-jobs"
+      title: "Background Jobs"
+      questions:
+        - "What job queue or background processing system will be used?"
+        - "How are long-running tasks handled?"
+    - id: "testing-tools"
+      title: "Testing Tools"
+      questions:
+        - "What test runner, assertion library, and mocking framework?"
+        - "What tools for integration and end-to-end testing?"
+    - id: "deployment-platform"
+      title: "Deployment Platform"
+      questions:
+        - "Where will the system be deployed? Cloud, on-premise, local?"
+        - "What platform services are consumed?"
+    - id: "monitoring-tools"
+      title: "Monitoring Tools"
+      questions:
+        - "What tools for logging, metrics, tracing, and alerting?"
+        - "What dashboards are required?"
+    - id: "local-development-tools"
+      title: "Local Development Tools"
+      questions:
+        - "What dev tools are required? Linters, formatters, type-checkers?"
+        - "What editor integrations are expected?"
+    - id: "version-constraints"
+      title: "Version Constraints"
+      questions:
+        - "What are the minimum, maximum, and pinned versions for key dependencies?"
+        - "What is the upgrade policy?"
+    - id: "stack-risks"
+      title: "Stack Risks"
+      questions:
+        - "What are the risks associated with the chosen stack?"
+        - "Are any dependencies unmaintained, experimental, or unsupported?"

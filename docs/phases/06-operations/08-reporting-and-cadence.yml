@@ -1,0 +1,63 @@
+document:
+  id: "08-reporting-and-cadence"
+  title: "Reporting and Cadence"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define the review rhythm for operational health and decision-making."
+  centralQuestion: "When do we look at what and decide what?"
+  sections:
+    - id: "reporting-objective"
+      title: "Reporting Objective"
+      questions:
+        - "What is the purpose of operational reporting?"
+        - "Who consumes operational reports?"
+    - id: "daily-checks"
+      title: "Daily Checks"
+      questions:
+        - "What metrics and signals are checked daily?"
+        - "Who performs daily checks and what actions do they trigger?"
+    - id: "weekly-review"
+      title: "Weekly Review"
+      questions:
+        - "What is reviewed on a weekly basis?"
+        - "Who participates in the weekly review?"
+    - id: "monthly-review"
+      title: "Monthly Review"
+      questions:
+        - "What is reviewed on a monthly basis?"
+        - "How does the monthly review feed into operational planning?"
+    - id: "quarterly-review"
+      title: "Quarterly Review"
+      questions:
+        - "What is reviewed on a quarterly basis?"
+        - "How does the quarterly review connect to strategic planning?"
+    - id: "metrics-dashboard"
+      title: "Metrics Dashboard"
+      questions:
+        - "What dashboards exist for operational metrics?"
+        - "Who has access and how are dashboards maintained?"
+    - id: "decision-meetings"
+      title: "Decision Meetings"
+      questions:
+        - "What recurring meetings are dedicated to operational decisions?"
+        - "What decisions are made in each meeting?"
+    - id: "review-artifacts"
+      title: "Review Artifacts"
+      questions:
+        - "What artifacts are produced by each review cadence?"
+        - "How are artifacts stored and shared?"
+    - id: "reporting-responsibilities"
+      title: "Reporting Responsibilities"
+      questions:
+        - "Who is responsible for producing each report?"
+        - "Who is accountable for acting on report findings?"
+    - id: "escalation-triggers"
+      title: "Escalation Triggers"
+      questions:
+        - "What metric thresholds or events trigger out-of-cycle escalation?"
+        - "Who is notified when an escalation trigger fires?"
+    - id: "cadence-risks"
+      title: "Cadence Risks"
+      questions:
+        - "What could cause the review cadence to fail?"
+        - "How are cadence risks mitigated?"

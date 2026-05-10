@@ -1,0 +1,46 @@
+document:
+  id: "05-boundaries"
+  title: "Project Boundaries"
+  phase: "01-foundation"
+  status: "not_started"
+  purpose: "Define what the project is not and what it does not promise."
+  centralQuestion: "What temptations should this project resist?"
+  sections:
+    - id: "what-this-project-is-not"
+      title: "What This Project Is Not"
+      questions:
+        - "What is explicitly out of scope?"
+        - "What types of solutions seem attractive but violate the thesis?"
+        - "What promises should the project not make?"
+        - "What behaviors would be unethical, fragile, or misaligned?"
+        - "What responsibilities remain with the user?"
+    - id: "out-of-scope"
+      title: "Out of Scope"
+      questions:
+        - "What features or capabilities are explicitly excluded?"
+        - "What problems will the project never attempt to solve?"
+    - id: "anti-patterns"
+      title: "Anti-Patterns"
+      questions:
+        - "What solution patterns should be actively avoided?"
+        - "What approaches would undermine the project's intent?"
+    - id: "ethical-boundaries"
+      title: "Ethical Boundaries"
+      questions:
+        - "What uses of the project would be unethical?"
+        - "What data or surveillance patterns are prohibited?"
+    - id: "product-boundaries"
+      title: "Product Boundaries"
+      questions:
+        - "What market segments are not targeted?"
+        - "What adjacent products should not be built from this codebase?"
+    - id: "user-responsibility-boundaries"
+      title: "User Responsibility Boundaries"
+      questions:
+        - "What decisions remain the user's responsibility?"
+        - "What the project will never automate or decide on behalf of the user?"
+    - id: "future-temptations-to-resist"
+      title: "Future Temptations to Resist"
+      questions:
+        - "What feature requests would be seductive but misaligned?"
+        - "What growth paths would dilute the core thesis?"

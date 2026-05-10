@@ -1,0 +1,68 @@
+document:
+  id: "11-financial-operations"
+  title: "Financial Operations"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how money is operated day to day, including billing, payments, and cost control."
+  centralQuestion: "How is money operated day to day?"
+  sections:
+    - id: "financial-operations-objective"
+      title: "Financial Operations Objective"
+      questions:
+        - "What is the goal of financial operations?"
+        - "How does financial operations connect to the economic model and pricing?"
+    - id: "billing-operations"
+      title: "Billing Operations"
+      questions:
+        - "How are charges calculated, invoiced, and collected?"
+        - "What billing cycles and payment methods are supported?"
+    - id: "subscription-management"
+      title: "Subscription Management"
+      questions:
+        - "How are subscriptions created, modified, and cancelled?"
+        - "How are plan changes and proration handled?"
+    - id: "payment-failures"
+      title: "Payment Failures"
+      questions:
+        - "What happens when a payment fails?"
+        - "What retry logic and dunning process is in place?"
+    - id: "refund-process"
+      title: "Refund Process"
+      questions:
+        - "How are refunds evaluated, approved, and processed?"
+        - "What refund policies apply and who can override them?"
+    - id: "revenue-recognition-notes"
+      title: "Revenue Recognition Notes"
+      questions:
+        - "How is revenue recognized for reporting purposes?"
+        - "What accounting interface exists for revenue data?"
+    - id: "cost-monitoring"
+      title: "Cost Monitoring"
+      questions:
+        - "How are operational costs tracked and monitored?"
+        - "What cost anomalies trigger alerts?"
+    - id: "margin-monitoring"
+      title: "Margin Monitoring"
+      questions:
+        - "How is gross and net margin calculated and monitored?"
+        - "What margin thresholds trigger action?"
+    - id: "vendor-costs"
+      title: "Vendor Costs"
+      questions:
+        - "How are third-party vendor costs tracked?"
+        - "What vendor cost review cadence exists?"
+    - id: "tax-accounting-interface"
+      title: "Tax/Accounting Interface"
+      questions:
+        - "How does financial operations interface with tax and accounting functions?"
+        - "What data is shared with accounting systems?"
+    - id: "financial-reporting"
+      title: "Financial Reporting"
+      questions:
+        - "What financial reports are produced and at what cadence?"
+        - "Who consumes financial operations reports?"
+    - id: "financial-operations-risks"
+      title: "Financial Operations Risks"
+      questions:
+        - "What could cause financial operations to fail?"
+        - "How are financial risks detected and mitigated?"

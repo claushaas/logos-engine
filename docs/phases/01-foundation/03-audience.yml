@@ -1,0 +1,48 @@
+document:
+  id: "03-audience"
+  title: "Audience Definition"
+  phase: "01-foundation"
+  status: "not_started"
+  purpose: "Define who should recognize this project as useful, necessary, or inevitable."
+  centralQuestion: "Who should recognize this project as useful, necessary, or inevitable?"
+  sections:
+    - id: "primary-audience"
+      title: "Primary Audience"
+      questions:
+        - "Who is the primary user?"
+        - "What situation are they in?"
+        - "What have they already tried?"
+        - "What capabilities do they have?"
+        - "What limitations do they have?"
+        - "What do they value?"
+        - "What should the project not presume about them?"
+    - id: "context-of-use"
+      title: "Context of Use"
+      questions:
+        - "In what environment or situation will the project be used?"
+        - "What constraints does the context impose?"
+    - id: "user-capabilities"
+      title: "User Capabilities"
+      questions:
+        - "What skills or knowledge are assumed?"
+        - "What tools or infrastructure do users already have?"
+    - id: "user-constraints"
+      title: "User Constraints"
+      questions:
+        - "What limitations do users operate under?"
+        - "What resources are scarce for the user?"
+    - id: "user-motivations"
+      title: "User Motivations"
+      questions:
+        - "What drives the user to seek a solution?"
+        - "What outcomes does the user value?"
+    - id: "user-risks"
+      title: "User Risks"
+      questions:
+        - "What happens to the user if the solution fails?"
+        - "What is the user's tolerance for friction or complexity?"
+    - id: "excluded-audiences"
+      title: "Excluded Audiences"
+      questions:
+        - "Who is explicitly not the target audience?"
+        - "What use cases are out of scope for the initial audience?"

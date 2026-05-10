@@ -1,0 +1,69 @@
+document:
+  id: "11-observability"
+  title: "Observability"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines logging, metrics, tracing, and error reporting to understand system behaviour."
+  centralQuestion: "When something fails, how will we know what happened?"
+  sections:
+    - id: "observability-objective"
+      title: "Observability Objective"
+      questions:
+        - "What is the observability maturity target?"
+        - "What signals are most important to monitor?"
+    - id: "logging-strategy"
+      title: "Logging Strategy"
+      questions:
+        - "What log levels are used and when?"
+        - "What is the standard log format? Structured JSON?"
+        - "What context is attached to every log entry? Trace ID, user ID, session ID?"
+    - id: "metrics-strategy"
+      title: "Metrics Strategy"
+      questions:
+        - "What metrics are collected? Counters, gauges, histograms, summaries?"
+        - "What are the key business and technical metrics?"
+    - id: "tracing-strategy"
+      title: "Tracing Strategy"
+      questions:
+        - "How is distributed tracing implemented?"
+        - "What trace propagation format is used? W3C Trace Context?"
+    - id: "error-reporting"
+      title: "Error Reporting"
+      questions:
+        - "How are errors captured, enriched, and reported?"
+        - "What error aggregation and deduplication is used?"
+    - id: "audit-events"
+      title: "Audit Events"
+      questions:
+        - "What events are audited for compliance or security?"
+        - "What is the audit event schema and retention period?"
+    - id: "health-checks"
+      title: "Health Checks"
+      questions:
+        - "What health check endpoints exist?"
+        - "How are health checks used for deployment and alerting?"
+    - id: "dashboards"
+      title: "Dashboards"
+      questions:
+        - "What dashboards are required? Operational, business, performance?"
+        - "Who owns and maintains each dashboard?"
+    - id: "alerts"
+      title: "Alerts"
+      questions:
+        - "What alert rules are defined? Thresholds, anomalies, error rates?"
+        - "What is the alert routing and escalation process?"
+    - id: "slos"
+      title: "SLOs"
+      questions:
+        - "What service level objectives are defined?"
+        - "What is the error budget and how is it consumed?"
+    - id: "sensitive-data-rules"
+      title: "Sensitive Data Rules"
+      questions:
+        - "What data must never appear in logs, metrics, or traces?"
+        - "How is sensitive data scrubbing enforced?"
+    - id: "observability-risks"
+      title: "Observability Risks"
+      questions:
+        - "What are the risks of the observability strategy?"
+        - "What blind spots exist in the current observability design?"

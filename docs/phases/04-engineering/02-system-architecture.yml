@@ -1,0 +1,65 @@
+document:
+  id: "02-system-architecture"
+  title: "System Architecture"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Macro architecture defining the main technical blocks and their relationships."
+  centralQuestion: "What are the main technical blocks and how do they relate?"
+  sections:
+    - id: "architecture-overview"
+      title: "Architecture Overview"
+      questions:
+        - "What is the high-level architecture diagram showing major components?"
+        - "What are the primary architectural drivers?"
+    - id: "architectural-style"
+      title: "Architectural Style"
+      questions:
+        - "Monolith, modular monolith, services, serverless, local-first, offline-first?"
+        - "What architectural style best serves the product goals?"
+    - id: "system-context"
+      title: "System Context"
+      questions:
+        - "What external systems and actors interact with the system?"
+        - "What is the system boundary?"
+    - id: "application-layers"
+      title: "Application Layers"
+      questions:
+        - "What layers exist?"
+        - "How are concerns separated across layers?"
+    - id: "module-boundaries"
+      title: "Module Boundaries"
+      questions:
+        - "Which boundaries are rigid?"
+        - "Which modules are allowed to depend on which other modules?"
+    - id: "dependency-rules"
+      title: "Dependency Rules"
+      questions:
+        - "What are the rules governing imports and dependencies between modules?"
+        - "How are circular dependencies prevented?"
+    - id: "runtime-architecture"
+      title: "Runtime Architecture"
+      questions:
+        - "How does the system run at runtime? Processes, threads, workers?"
+        - "What is the concurrency model?"
+    - id: "data-flow"
+      title: "Data Flow"
+      questions:
+        - "How does data move through the system?"
+        - "How does client talk to backend?"
+        - "Where do domain rules live?"
+        - "Where do adapters live?"
+    - id: "failure-modes"
+      title: "Failure Modes"
+      questions:
+        - "What are the primary failure scenarios and how are they handled?"
+        - "What is the resilience strategy?"
+    - id: "architecture-decisions"
+      title: "Architecture Decisions"
+      questions:
+        - "What are the key ADRs already made or expected?"
+        - "What trade-offs have been accepted?"
+    - id: "architecture-risks"
+      title: "Architecture Risks"
+      questions:
+        - "What are the biggest risks in the chosen architecture?"
+        - "What assumptions could prove wrong?"

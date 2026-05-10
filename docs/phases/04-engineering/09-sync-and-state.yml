@@ -1,0 +1,74 @@
+document:
+  id: "09-sync-and-state"
+  title: "Sync and State"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines what is local state, remote state, cache, and how sync works."
+  centralQuestion: "What is local state, remote state, cache, and how does sync work?"
+  note: "Required for mobile, offline-first, sync engine, event sourcing, complex cache, agents, multiple clients, collaboration, financial data."
+  sections:
+    - id: "state-strategy"
+      title: "State Strategy"
+      questions:
+        - "What is the overall state management strategy?"
+        - "How is state separated into local, remote, and derived categories?"
+    - id: "source-of-truth"
+      title: "Source of Truth"
+      questions:
+        - "What system or store is the authoritative source of truth for each data type?"
+        - "How is the source of truth enforced during conflicts?"
+    - id: "local-state"
+      title: "Local State"
+      questions:
+        - "What state is stored locally on the client?"
+        - "What local storage engine is used and what are its limits?"
+    - id: "remote-state"
+      title: "Remote State"
+      questions:
+        - "What state is stored remotely?"
+        - "How is remote state accessed and mutated?"
+    - id: "cache-strategy"
+      title: "Cache Strategy"
+      questions:
+        - "What is the caching strategy? Write-through, write-back, read-through?"
+        - "What are the cache invalidation rules and TTLs?"
+    - id: "offline-behavior"
+      title: "Offline Behavior"
+      questions:
+        - "What capabilities are available when the system is offline?"
+        - "How are offline mutations queued, ordered, and replayed?"
+    - id: "sync-model"
+      title: "Sync Model"
+      questions:
+        - "What is the sync model? Last-write-wins, CRDT, event sourcing, operational transform?"
+        - "How is sync triggered? Polling, push, WebSocket, manual?"
+    - id: "conflict-resolution"
+      title: "Conflict Resolution"
+      questions:
+        - "How are conflicts detected and resolved?"
+        - "What data can diverge and what merges are automatic versus manual?"
+    - id: "idempotency"
+      title: "Idempotency"
+      questions:
+        - "How is idempotency guaranteed during sync operations?"
+        - "What happens when a sync operation is retried?"
+    - id: "hydration"
+      title: "Hydration"
+      questions:
+        - "How is client state hydrated from remote on first launch or after logout?"
+        - "What is the hydration sequence and error handling?"
+    - id: "derived-state"
+      title: "Derived State"
+      questions:
+        - "What state is derived or computed rather than stored?"
+        - "How is derived state kept consistent with source state?"
+    - id: "state-recovery"
+      title: "State Recovery"
+      questions:
+        - "How is state recovered after corruption, failed sync, or data loss?"
+        - "What backup or snapshot mechanisms exist?"
+    - id: "sync-risks"
+      title: "Sync Risks"
+      questions:
+        - "What are the risks of the sync strategy?"
+        - "What failure modes could cause data loss or permanent divergence?"

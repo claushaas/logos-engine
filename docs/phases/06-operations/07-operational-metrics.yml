@@ -1,0 +1,58 @@
+document:
+  id: "07-operational-metrics"
+  title: "Operational Metrics"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how to measure operational health with quantitative metrics."
+  centralQuestion: "How to measure operational health?"
+  sections:
+    - id: "operational-health-objective"
+      title: "Operational Health Objective"
+      questions:
+        - "What does a healthy operation look like in numbers?"
+        - "How are metrics used to drive operational decisions?"
+    - id: "support-metrics"
+      title: "Support Metrics"
+      questions:
+        - "What ticket volume, first response time, and resolution time targets exist?"
+        - "How is customer satisfaction with support measured?"
+    - id: "reliability-metrics"
+      title: "Reliability Metrics"
+      questions:
+        - "What uptime, error rate, and incident count targets exist?"
+        - "How is reliability trended and reviewed?"
+    - id: "quality-metrics"
+      title: "Quality Metrics"
+      questions:
+        - "What bug reopen rate, defect density, and regression rate targets exist?"
+        - "How is quality trended over time?"
+    - id: "financial-operations-metrics"
+      title: "Financial Operations Metrics"
+      questions:
+        - "What failed payment rate, refund rate, and chargeback rate targets exist?"
+        - "How is financial operational health measured?"
+    - id: "customer-success-metrics"
+      title: "Customer Success Metrics"
+      questions:
+        - "What churn rate, retention rate, and expansion rate targets exist?"
+        - "How is account health scored and trended?"
+    - id: "process-metrics"
+      title: "Process Metrics"
+      questions:
+        - "What manual intervention rate and process cycle time targets exist?"
+        - "How is process efficiency measured?"
+    - id: "cost-metrics"
+      title: "Cost Metrics"
+      questions:
+        - "What support cost per customer and infrastructure cost per active user targets exist?"
+        - "How are operational costs tracked against budget?"
+    - id: "sla-slo-metrics"
+      title: "SLA/SLO Metrics"
+      questions:
+        - "What service level objectives and agreements are in place?"
+        - "How is SLA/SLO compliance measured and reported?"
+    - id: "metric-review-rules"
+      title: "Metric Review Rules"
+      questions:
+        - "How often are metrics reviewed and by whom?"
+        - "What thresholds trigger action or escalation?"

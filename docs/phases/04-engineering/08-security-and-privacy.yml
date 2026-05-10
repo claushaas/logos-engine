@@ -1,0 +1,78 @@
+document:
+  id: "08-security-and-privacy"
+  title: "Security and Privacy"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines how the system protects access, data, identity, and privacy."
+  centralQuestion: "How does the system protect access, data, identity, and privacy?"
+  sections:
+    - id: "security-objective"
+      title: "Security Objective"
+      questions:
+        - "What is the security posture and threat tolerance of the system?"
+        - "What compliance requirements apply? SOC2, GDPR, HIPAA?"
+    - id: "threat-model"
+      title: "Threat Model"
+      questions:
+        - "What are the primary threat actors and attack vectors?"
+        - "What assets are most valuable and most exposed?"
+    - id: "authentication"
+      title: "Authentication"
+      questions:
+        - "How are users and services authenticated?"
+        - "What authentication flows are supported? OAuth, API keys, SSO?"
+    - id: "authorization"
+      title: "Authorization"
+      questions:
+        - "How is authorization enforced? RBAC, ABAC, ReBAC?"
+        - "What are the permission levels and how are they assigned?"
+    - id: "data-classification"
+      title: "Data Classification"
+      questions:
+        - "How is data classified? Public, internal, confidential, restricted?"
+        - "What handling rules apply per classification level?"
+    - id: "encryption"
+      title: "Encryption"
+      questions:
+        - "What encryption standards apply for data at rest and in transit?"
+        - "How are encryption keys managed and rotated?"
+    - id: "secrets-management"
+      title: "Secrets Management"
+      questions:
+        - "Where are secrets stored and how are they accessed at runtime?"
+        - "How are secrets rotated and revoked?"
+    - id: "secure-logging"
+      title: "Secure Logging"
+      questions:
+        - "How are logs scrubbed of sensitive data?"
+        - "What access controls apply to log storage?"
+    - id: "backup-security"
+      title: "Backup Security"
+      questions:
+        - "How are backups encrypted and access-controlled?"
+        - "What is the backup retention and destruction policy?"
+    - id: "data-export"
+      title: "Data Export"
+      questions:
+        - "How can users export their data?"
+        - "What format and completeness guarantees apply?"
+    - id: "data-deletion"
+      title: "Data Deletion"
+      questions:
+        - "How is user data permanently deleted upon request?"
+        - "What is the deletion timeline and verification process?"
+    - id: "abuse-prevention"
+      title: "Abuse Prevention"
+      questions:
+        - "How are abuse vectors like spam, scraping, and DoS mitigated?"
+        - "What rate limiting, CAPTCHA, or other controls are in place?"
+    - id: "security-testing"
+      title: "Security Testing"
+      questions:
+        - "What security testing is performed? SAST, DAST, penetration testing?"
+        - "What is the cadence and ownership of security testing?"
+    - id: "security-risks"
+      title: "Security Risks"
+      questions:
+        - "What are the top security risks and unresolved threats?"
+        - "What is the risk acceptance process?"

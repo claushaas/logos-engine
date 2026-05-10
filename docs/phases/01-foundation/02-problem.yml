@@ -1,0 +1,47 @@
+document:
+  id: "02-problem"
+  title: "The Real Problem"
+  phase: "01-foundation"
+  status: "not_started"
+  purpose: "Define the pain, friction, confusion, or limitation this project exists to confront."
+  centralQuestion: "What pain, friction, confusion, or limitation does this project exist to confront?"
+  sections:
+    - id: "problem-statement"
+      title: "Problem Statement"
+      questions:
+        - "What problem is being solved?"
+        - "How does this problem appear in real life?"
+        - "Who suffers from this problem?"
+        - "What current solutions are insufficient?"
+        - "What happens if this problem is not solved?"
+        - "What part of the problem is within initial scope?"
+    - id: "symptoms"
+      title: "Symptoms"
+      questions:
+        - "What observable signs indicate the problem exists?"
+        - "What do people say when they experience the problem?"
+    - id: "root-causes"
+      title: "Root Causes"
+      questions:
+        - "Why does the problem exist in the first place?"
+        - "What systemic conditions sustain the problem?"
+    - id: "existing-alternatives"
+      title: "Existing Alternatives"
+      questions:
+        - "What do people currently do to cope with the problem?"
+        - "What tools or processes are in use today?"
+    - id: "why-current-solutions-are-insufficient"
+      title: "Why Current Solutions Are Insufficient"
+      questions:
+        - "What structural gaps do current solutions leave?"
+        - "What trade-offs do current solutions force?"
+    - id: "scope-of-the-problem"
+      title: "Scope of the Problem"
+      questions:
+        - "How large is the affected population?"
+        - "How severe is the pain for the most affected?"
+    - id: "non-problems"
+      title: "Non-Problems"
+      questions:
+        - "What problems are adjacent but not the target?"
+        - "What should this project not claim to solve?"

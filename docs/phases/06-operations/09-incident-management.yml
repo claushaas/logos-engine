@@ -1,0 +1,63 @@
+document:
+  id: "09-incident-management"
+  title: "Incident Management"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how to respond when something breaks, including severity levels and postmortems."
+  centralQuestion: "How to respond when something breaks?"
+  sections:
+    - id: "incident-definition"
+      title: "Incident Definition"
+      questions:
+        - "What constitutes an incident versus a bug or support ticket?"
+        - "Who declares an incident?"
+    - id: "severity-levels"
+      title: "Severity Levels"
+      questions:
+        - "How are SEV-1, SEV-2, SEV-3, and SEV-4 defined?"
+        - "What response times apply to each severity level?"
+    - id: "incident-roles"
+      title: "Incident Roles"
+      questions:
+        - "What roles are activated during an incident (commander, responder, communicator)?"
+        - "How are roles assigned and handed off during an incident?"
+    - id: "detection-sources"
+      title: "Detection Sources"
+      questions:
+        - "How are incidents detected (monitoring, user reports, internal discovery)?"
+        - "What automated alerting is in place?"
+    - id: "response-process"
+      title: "Response Process"
+      questions:
+        - "What is the step-by-step incident response process?"
+        - "How is the response coordinated across teams?"
+    - id: "communication-rules"
+      title: "Communication Rules"
+      questions:
+        - "What communication channels are used during an incident?"
+        - "How and when are users notified of incidents?"
+    - id: "status-updates"
+      title: "Status Updates"
+      questions:
+        - "How often are status updates provided during an incident?"
+        - "Where are status updates published?"
+    - id: "mitigation-steps"
+      title: "Mitigation Steps"
+      questions:
+        - "What standard mitigation steps apply to common incident types?"
+        - "How is mitigation validated before resolution?"
+    - id: "postmortem-process"
+      title: "Postmortem Process"
+      questions:
+        - "What is the postmortem process after an incident is resolved?"
+        - "Who participates in the postmortem and what artifacts are produced?"
+    - id: "corrective-actions"
+      title: "Corrective Actions"
+      questions:
+        - "How are corrective actions identified, assigned, and tracked?"
+        - "How is completion of corrective actions verified?"
+    - id: "incident-archive"
+      title: "Incident Archive"
+      questions:
+        - "Where are incident records and postmortems stored?"
+        - "How is the incident archive used for learning and improvement?"

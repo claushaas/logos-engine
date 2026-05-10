@@ -1,0 +1,61 @@
+document:
+  id: "06-channel-strategy"
+  title: "Channel Strategy"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define how the product reaches the market and how the right people discover it."
+  centralQuestion: "How will the right people discover this product?"
+  sections:
+    - id: "channel-objective"
+      title: "Channel Objective"
+      questions:
+        - "What is the primary goal of the channel strategy?"
+    - id: "primary-channel"
+      title: "Primary Channel"
+      questions:
+        - "What is the single primary acquisition channel?"
+        - "Why is this channel the best bet?"
+    - id: "secondary-channels"
+      title: "Secondary Channels"
+      questions:
+        - "What channels support the primary channel?"
+        - "How do they reinforce each other?"
+    - id: "organic-channels"
+      title: "Organic Channels"
+      questions:
+        - "What organic channels will be used?"
+        - "Examples: SEO, Content, Community, GitHub, Referrals?"
+    - id: "paid-channels"
+      title: "Paid Channels"
+      questions:
+        - "What paid channels will be tested?"
+        - "Under what conditions would paid channels scale?"
+    - id: "partnership-channels"
+      title: "Partnership Channels"
+      questions:
+        - "What partnership or affiliate channels exist?"
+        - "What makes a potential partner a good fit?"
+    - id: "community-channels"
+      title: "Community Channels"
+      questions:
+        - "What communities does the target audience already inhabit?"
+        - "How will the product participate authentically?"
+    - id: "sales-channels"
+      title: "Sales Channels"
+      questions:
+        - "What direct or indirect sales channels will be used?"
+        - "Examples: Direct Sales, Marketplaces, App Store?"
+    - id: "channel-experiments"
+      title: "Channel Experiments"
+      questions:
+        - "What channel experiments are planned?"
+        - "What is the success threshold for each experiment?"
+    - id: "channel-constraints"
+      title: "Channel Constraints"
+      questions:
+        - "What constraints limit channel choice (budget, team, compliance, platform rules)?"
+    - id: "channel-risks"
+      title: "Channel Risks"
+      questions:
+        - "What could cause a channel to fail?"
+        - "What is the fallback if the primary channel underperforms?"

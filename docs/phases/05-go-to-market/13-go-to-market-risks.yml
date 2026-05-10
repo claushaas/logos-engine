@@ -1,0 +1,63 @@
+document:
+  id: "13-go-to-market-risks"
+  title: "Go-to-Market Risks"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Identify and mitigate commercial risks across all GTM dimensions."
+  centralQuestion: "What can fail in the market?"
+  sections:
+    - id: "risk-register"
+      title: "Risk Register"
+      questions:
+        - "What is the full risk register?"
+        - "Format: GTMR-XXX, Category, Description, Likelihood, Impact, Detection Signal, Mitigation, Status."
+    - id: "market-risks"
+      title: "Market Risks"
+      questions:
+        - "What market-level risks exist?"
+        - "Examples: Market too small, Market not ready, Wrong timing?"
+    - id: "positioning-risks"
+      title: "Positioning Risks"
+      questions:
+        - "What positioning risks exist?"
+        - "Examples: Confusing category, Weak differentiation, Overpromising?"
+    - id: "messaging-risks"
+      title: "Messaging Risks"
+      questions:
+        - "What messaging risks exist?"
+        - "Examples: Wrong tone, Unclear value prop, Language that repels target audience?"
+    - id: "channel-risks"
+      title: "Channel Risks"
+      questions:
+        - "What channel risks exist?"
+        - "Examples: Channel dependency, Algorithm changes, Platform bans?"
+    - id: "launch-risks"
+      title: "Launch Risks"
+      questions:
+        - "What launch risks exist?"
+        - "Examples: Technical failure, No audience, Negative press?"
+    - id: "sales-risks"
+      title: "Sales Risks"
+      questions:
+        - "What sales risks exist?"
+        - "Examples: Long sales cycle, High CAC, Founder dependency?"
+    - id: "pricing-risks"
+      title: "Pricing Risks"
+      questions:
+        - "What pricing risks exist?"
+        - "Examples: Too expensive, Too cheap, Wrong model, Hidden costs?"
+    - id: "competitive-risks"
+      title: "Competitive Risks"
+      questions:
+        - "What competitive risks exist?"
+        - "Examples: Incumbent retaliation, Fast follower, Feature copying?"
+    - id: "trust-risks"
+      title: "Trust Risks"
+      questions:
+        - "What trust risks exist?"
+        - "Examples: Data privacy concerns, Security incidents, Brand perception?"
+    - id: "mitigation-plan"
+      title: "Mitigation Plan"
+      questions:
+        - "What is the overall mitigation strategy?"
+        - "Who owns risk monitoring and response?"

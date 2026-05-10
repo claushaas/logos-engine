@@ -1,0 +1,41 @@
+document:
+  id: "06-success-definition"
+  title: "Success Definition"
+  phase: "01-foundation"
+  status: "not_started"
+  purpose: "Define the criteria by which the project is judged to be working."
+  centralQuestion: "What must be true for us to say this project works?"
+  sections:
+    - id: "foundational-success"
+      title: "Foundational Success"
+      questions:
+        - "How will success be recognized?"
+        - "What change should the user experience?"
+        - "What minimum result would validate the thesis?"
+        - "What signals indicate misalignment?"
+        - "What apparent success would be false success?"
+    - id: "user-level-success"
+      title: "User-Level Success"
+      questions:
+        - "What observable outcomes indicate the user is succeeding?"
+        - "What does the user say when the project works for them?"
+    - id: "system-level-success"
+      title: "System-Level Success"
+      questions:
+        - "What technical or structural measures indicate health?"
+        - "What metrics matter for the system itself?"
+    - id: "failure-signals"
+      title: "Failure Signals"
+      questions:
+        - "What early indicators suggest the project is not working?"
+        - "What user behaviors or feedback patterns signal misalignment?"
+    - id: "false-success"
+      title: "False Success"
+      questions:
+        - "What metrics could look good while masking failure?"
+        - "What adoption patterns would be vanity metrics?"
+    - id: "minimum-validation-threshold"
+      title: "Minimum Validation Threshold"
+      questions:
+        - "What is the smallest result that would count as validation?"
+        - "What conditions must be met to declare the thesis tested?"

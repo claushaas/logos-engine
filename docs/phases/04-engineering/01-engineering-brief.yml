@@ -1,0 +1,48 @@
+document:
+  id: "01-engineering-brief"
+  title: "Engineering Brief"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Executive technical synthesis of what Engineering needs to deliver."
+  centralQuestion: "What does Engineering need to deliver?"
+  sections:
+    - id: "engineering-objective"
+      title: "Engineering Objective"
+      questions:
+        - "What is the single most important engineering outcome for this phase?"
+        - "What defines engineering success versus failure?"
+    - id: "product-inputs"
+      title: "Product Inputs"
+      questions:
+        - "Which product decisions and requirements directly shape the engineering scope?"
+        - "What user-facing outcomes must the engineering work enable?"
+    - id: "technical-scope"
+      title: "Technical Scope"
+      questions:
+        - "What systems, modules, and services are in scope for initial delivery?"
+        - "What is explicitly out of scope for this phase?"
+    - id: "engineering-constraints"
+      title: "Engineering Constraints"
+      questions:
+        - "What technical, organisational, or regulatory constraints apply?"
+        - "What budget, time, or resource limits exist?"
+    - id: "core-technical-capabilities"
+      title: "Core Technical Capabilities"
+      questions:
+        - "What are the non-negotiable technical capabilities the system must provide?"
+        - "What cross-cutting concerns must be addressed?"
+    - id: "initial-implementation-strategy"
+      title: "Initial Implementation Strategy"
+      questions:
+        - "How should the first iteration be structured?"
+        - "What is the recommended build order for core modules?"
+    - id: "deferred-technical-decisions"
+      title: "Deferred Technical Decisions"
+      questions:
+        - "Which architectural decisions can be postponed and why?"
+        - "What triggers would bring a deferred decision forward?"
+    - id: "engineering-success-criteria"
+      title: "Engineering Success Criteria"
+      questions:
+        - "What measurable outcomes confirm the engineering work is complete?"
+        - "What quality gates must be passed?"

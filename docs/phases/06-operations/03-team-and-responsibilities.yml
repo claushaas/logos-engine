@@ -1,0 +1,63 @@
+document:
+  id: "03-team-and-responsibilities"
+  title: "Team and Responsibilities"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define who does what across all operational domains."
+  centralQuestion: "Who does what?"
+  sections:
+    - id: "responsibility-model"
+      title: "Responsibility Model"
+      questions:
+        - "What framework is used to assign and track responsibilities (RACI, etc.)?"
+        - "How are responsibilities documented and communicated?"
+    - id: "current-team"
+      title: "Current Team"
+      questions:
+        - "Who is currently on the team and what are their primary skills?"
+        - "What capacity does the current team have?"
+    - id: "operational-roles"
+      title: "Operational Roles"
+      questions:
+        - "What operational roles exist (on-call, support lead, incident commander)?"
+        - "How are roles rotated and handed off?"
+    - id: "product-responsibilities"
+      title: "Product Responsibilities"
+      questions:
+        - "Who owns product availability, performance, and correctness?"
+        - "Who owns the product roadmap and feature backlog?"
+    - id: "engineering-responsibilities"
+      title: "Engineering Responsibilities"
+      questions:
+        - "Who owns infrastructure, deployments, and technical debt?"
+        - "Who owns code quality and security?"
+    - id: "support-responsibilities"
+      title: "Support Responsibilities"
+      questions:
+        - "Who handles customer-facing support?"
+        - "Who triages bugs and technical issues?"
+    - id: "commercial-responsibilities"
+      title: "Commercial Responsibilities"
+      questions:
+        - "Who owns pricing, billing, and revenue operations?"
+        - "Who manages vendor and partner relationships?"
+    - id: "financial-responsibilities"
+      title: "Financial Responsibilities"
+      questions:
+        - "Who owns financial reporting, budgeting, and cost control?"
+        - "Who manages payment processing and refunds?"
+    - id: "decision-authority"
+      title: "Decision Authority"
+      questions:
+        - "What decisions can each role make independently?"
+        - "Which decisions require escalation or consensus?"
+    - id: "escalation-rules"
+      title: "Escalation Rules"
+      questions:
+        - "What triggers an escalation?"
+        - "What is the escalation path for each type of issue?"
+    - id: "future-hiring-needs"
+      title: "Future Hiring Needs"
+      questions:
+        - "What roles are missing or will be needed as the project scales?"
+        - "What is the hiring priority and timeline?"

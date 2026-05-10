@@ -1,0 +1,68 @@
+document:
+  id: "04-customer-support"
+  title: "Customer Support"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how reactive user problems, questions, and complaints are handled."
+  centralQuestion: "How are user questions, problems, and complaints handled?"
+  sections:
+    - id: "support-objective"
+      title: "Support Objective"
+      questions:
+        - "What is the goal of the customer support function?"
+        - "How does support differ from customer success?"
+    - id: "support-channels"
+      title: "Support Channels"
+      questions:
+        - "Which channels are available for users to request support?"
+        - "What are the operating hours and response expectations per channel?"
+    - id: "support-scope"
+      title: "Support Scope"
+      questions:
+        - "What types of issues are in scope for support?"
+        - "What is explicitly out of scope?"
+    - id: "ticket-categories"
+      title: "Ticket Categories"
+      questions:
+        - "What categories are used to classify support tickets?"
+        - "How are tickets routed based on category?"
+    - id: "priority-levels"
+      title: "Priority Levels"
+      questions:
+        - "What priority levels exist and how are they defined?"
+        - "How is priority assigned at triage?"
+    - id: "response-time-targets"
+      title: "Response Time Targets"
+      questions:
+        - "What are the first-response time targets per priority?"
+        - "What are the resolution time targets per priority?"
+    - id: "escalation-rules"
+      title: "Escalation Rules"
+      questions:
+        - "When should a support ticket be escalated?"
+        - "Who receives escalated tickets by category?"
+    - id: "bug-reporting-flow"
+      title: "Bug Reporting Flow"
+      questions:
+        - "How do support-reported bugs enter the engineering backlog?"
+        - "How is the reporter notified of progress and resolution?"
+    - id: "refund-and-billing-support"
+      title: "Refund and Billing Support"
+      questions:
+        - "How are billing questions and refund requests handled?"
+        - "What refund policy applies and who can authorize exceptions?"
+    - id: "support-macros-templates"
+      title: "Support Macros/Templates"
+      questions:
+        - "What templated responses exist for common issues?"
+        - "How are macros maintained and improved?"
+    - id: "unsupported-requests"
+      title: "Unsupported Requests"
+      questions:
+        - "What types of requests are explicitly unsupported?"
+        - "How are users redirected when they make unsupported requests?"
+    - id: "support-risks"
+      title: "Support Risks"
+      questions:
+        - "What could cause the support function to fail?"
+        - "How are support risks detected and mitigated?"

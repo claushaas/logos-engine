@@ -1,0 +1,63 @@
+document:
+  id: "12-knowledge-management"
+  title: "Knowledge Management"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Define how operational knowledge is preserved, documented, and shared."
+  centralQuestion: "How is operational knowledge preserved?"
+  sections:
+    - id: "knowledge-objective"
+      title: "Knowledge Objective"
+      questions:
+        - "What is the goal of operational knowledge management?"
+        - "What happens if operational knowledge is lost?"
+    - id: "documentation-sources"
+      title: "Documentation Sources"
+      questions:
+        - "What are the primary sources of operational documentation?"
+        - "How are documentation sources kept synchronized?"
+    - id: "runbooks"
+      title: "Runbooks"
+      questions:
+        - "What runbooks exist for common operational procedures?"
+        - "How are runbooks tested, maintained, and improved?"
+    - id: "decision-records"
+      title: "Decision Records"
+      questions:
+        - "How are operational decisions recorded and archived?"
+        - "What format is used for decision records?"
+    - id: "support-knowledge-base"
+      title: "Support Knowledge Base"
+      questions:
+        - "What internal knowledge base exists for support staff?"
+        - "How is the knowledge base kept current?"
+    - id: "internal-notes"
+      title: "Internal Notes"
+      questions:
+        - "How are internal operational notes captured and organized?"
+        - "What distinguishes a note from formal documentation?"
+    - id: "customer-facing-documentation"
+      title: "Customer-Facing Documentation"
+      questions:
+        - "What customer-facing documentation exists (help center, FAQs, guides)?"
+        - "How is customer-facing documentation maintained and updated?"
+    - id: "documentation-ownership"
+      title: "Documentation Ownership"
+      questions:
+        - "Who owns each category of operational documentation?"
+        - "How is documentation ownership transferred when roles change?"
+    - id: "review-cadence"
+      title: "Review Cadence"
+      questions:
+        - "How often is operational documentation reviewed for accuracy?"
+        - "Who performs documentation reviews?"
+    - id: "archival-rules"
+      title: "Archival Rules"
+      questions:
+        - "When is operational documentation archived or deprecated?"
+        - "How is archived documentation preserved and discoverable?"
+    - id: "knowledge-risks"
+      title: "Knowledge Risks"
+      questions:
+        - "What could cause operational knowledge to be lost or become stale?"
+        - "How are knowledge risks mitigated (bus factor, documentation rot)?"

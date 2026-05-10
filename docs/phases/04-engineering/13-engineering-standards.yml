@@ -1,0 +1,73 @@
+document:
+  id: "13-engineering-standards"
+  title: "Engineering Standards"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines code and collaboration standards to maintain technical consistency as the system grows."
+  centralQuestion: "How to maintain technical consistency as the system grows?"
+  sections:
+    - id: "repository-structure"
+      title: "Repository Structure"
+      questions:
+        - "What is the top-level directory layout? Monorepo or polyrepo?"
+        - "How are packages, apps, and shared code organised?"
+    - id: "code-organization"
+      title: "Code Organization"
+      questions:
+        - "What are the module and file organisation conventions?"
+        - "How are imports grouped and ordered?"
+    - id: "naming-conventions"
+      title: "Naming Conventions"
+      questions:
+        - "What naming conventions apply to files, folders, variables, functions, and types?"
+        - "What casing conventions are used? camelCase, PascalCase, kebab-case, snake_case?"
+    - id: "type-safety"
+      title: "Type Safety"
+      questions:
+        - "What type system is used? TypeScript strict mode, Zod schemas?"
+        - "How are types shared between modules? Generated, manual, imported?"
+    - id: "error-handling"
+      title: "Error Handling"
+      questions:
+        - "What is the error handling pattern? Result types, exceptions, error codes?"
+        - "How are errors propagated, logged, and surfaced to users?"
+    - id: "logging-conventions"
+      title: "Logging Conventions"
+      questions:
+        - "What logging conventions apply in application code?"
+        - "What should and should not be logged?"
+    - id: "dependency-management"
+      title: "Dependency Management"
+      questions:
+        - "How are dependencies added, updated, and removed?"
+        - "What is the policy on transitive dependency pinning and auditing?"
+    - id: "migration-rules"
+      title: "Migration Rules"
+      questions:
+        - "How are data migration scripts authored and reviewed?"
+        - "What backward-compatibility guarantees are required?"
+    - id: "git-workflow"
+      title: "Git Workflow"
+      questions:
+        - "What branching strategy is used? Trunk-based, GitFlow, feature branches?"
+        - "What are the commit message conventions?"
+    - id: "pull-request-rules"
+      title: "Pull Request Rules"
+      questions:
+        - "What are the PR requirements? Approvals, CI checks, linked issues?"
+        - "What is the PR size guideline and review SLA?"
+    - id: "documentation-rules"
+      title: "Documentation Rules"
+      questions:
+        - "What documentation is required alongside code? README, ADRs, API docs?"
+        - "Where does documentation live and how is it kept current?"
+    - id: "review-checklist"
+      title: "Review Checklist"
+      questions:
+        - "What do reviewers check for? Correctness, style, security, performance?"
+        - "What is the review checklist for different change types?"
+    - id: "standards-risks"
+      title: "Standards Risks"
+      questions:
+        - "What are the risks of the chosen standards?"
+        - "Which standards are most likely to be inconsistently applied?"

@@ -1,0 +1,48 @@
+document:
+  id: "01-operations-brief"
+  title: "Operations Brief"
+  phase: "06-operations"
+  status: "not_started"
+  purpose: "Synthesize the operational axis of the project into a single reference document."
+  centralQuestion: "What needs to function continuously for the project to remain healthy?"
+  sections:
+    - id: "operations-objective"
+      title: "Operations Objective"
+      questions:
+        - "What is the core purpose of the operations function for this project?"
+        - "What does healthy day-to-day operation look like?"
+    - id: "product-context"
+      title: "Product Context"
+      questions:
+        - "What product or service is being operated?"
+        - "Which product components require operational attention?"
+    - id: "business-context"
+      title: "Business Context"
+      questions:
+        - "What is the business model behind the product?"
+        - "How do revenue, costs, and margin relate to operations?"
+    - id: "operational-scope"
+      title: "Operational Scope"
+      questions:
+        - "What falls inside the operations function and what falls outside?"
+        - "Which teams or individuals own operational responsibilities?"
+    - id: "critical-operational-functions"
+      title: "Critical Operational Functions"
+      questions:
+        - "Which functions must never fail for the project to remain viable?"
+        - "What is the blast radius of each critical function?"
+    - id: "service-expectations"
+      title: "Service Expectations"
+      questions:
+        - "What availability, latency, and correctness targets exist?"
+        - "What are the user-facing promises about reliability?"
+    - id: "operational-constraints"
+      title: "Operational Constraints"
+      questions:
+        - "What budget, headcount, or tooling constraints apply?"
+        - "What regulatory or contractual constraints shape operations?"
+    - id: "operational-success-criteria"
+      title: "Operational Success Criteria"
+      questions:
+        - "How will the team know that operations are successful?"
+        - "What metrics define operational health?"

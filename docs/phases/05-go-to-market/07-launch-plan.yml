@@ -1,0 +1,58 @@
+document:
+  id: "07-launch-plan"
+  title: "Launch Plan"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define the initial controlled market entry sequence, assets, and success criteria."
+  centralQuestion: "How will the product be launched?"
+  sections:
+    - id: "launch-objective"
+      title: "Launch Objective"
+      questions:
+        - "What does a successful launch achieve?"
+        - "What is the single most important launch outcome?"
+    - id: "launch-type"
+      title: "Launch Type"
+      questions:
+        - "What type of launch: Waitlist, Closed Beta, Public Beta, Soft Launch, or Public Launch?"
+        - "Why this type over others?"
+    - id: "launch-audience"
+      title: "Launch Audience"
+      questions:
+        - "Who is the launch audience?"
+        - "How many people are targeted for the initial launch?"
+    - id: "pre-launch-phase"
+      title: "Pre-launch Phase"
+      questions:
+        - "What happens before the launch date?"
+        - "What must be ready before launch?"
+    - id: "launch-phase"
+      title: "Launch Phase"
+      questions:
+        - "What happens on and immediately after launch day?"
+        - "What is the launch sequence?"
+    - id: "post-launch-phase"
+      title: "Post-launch Phase"
+      questions:
+        - "What happens after the initial launch window?"
+        - "How does the launch transition into ongoing operations?"
+    - id: "launch-assets"
+      title: "Launch Assets"
+      questions:
+        - "What content and materials are needed for launch?"
+        - "Who is responsible for each asset?"
+    - id: "launch-checklist"
+      title: "Launch Checklist"
+      questions:
+        - "What are the concrete items that must be completed before launch?"
+        - "Who owns each checklist item?"
+    - id: "launch-success-criteria"
+      title: "Launch Success Criteria"
+      questions:
+        - "What metrics define launch success?"
+        - "What is the go / no-go threshold after launch?"
+    - id: "launch-risks"
+      title: "Launch Risks"
+      questions:
+        - "What could go wrong during launch?"
+        - "What is the contingency plan for each risk?"

@@ -1,0 +1,68 @@
+document:
+  id: "12-growth-metrics"
+  title: "Growth Metrics"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define the metrics that indicate commercial traction and market response."
+  centralQuestion: "What signals indicate the market is responding?"
+  sections:
+    - id: "growth-objective"
+      title: "Growth Objective"
+      questions:
+        - "What is the primary growth objective?"
+        - "How does growth relate to the GTM success criteria?"
+    - id: "north-star-metric"
+      title: "North Star Metric"
+      questions:
+        - "What single metric best captures delivered value?"
+        - "Why this metric?"
+    - id: "acquisition-metrics"
+      title: "Acquisition Metrics"
+      questions:
+        - "What metrics track new user or customer arrival?"
+        - "Metrics: Visitors, Waitlist conversion, Signup conversion?"
+    - id: "activation-metrics"
+      title: "Activation Metrics"
+      questions:
+        - "What metrics track first meaningful use?"
+        - "What is the activation rate target?"
+    - id: "conversion-metrics"
+      title: "Conversion Metrics"
+      questions:
+        - "What metrics track movement to revenue?"
+        - "Metrics: Trial start rate, Trial-to-paid rate?"
+    - id: "retention-metrics"
+      title: "Retention Metrics"
+      questions:
+        - "What metrics track continued use and revenue?"
+        - "Metrics: Churn, Retention rate?"
+    - id: "referral-metrics"
+      title: "Referral Metrics"
+      questions:
+        - "What metrics track organic growth?"
+        - "What is the referral rate target?"
+    - id: "revenue-metrics"
+      title: "Revenue Metrics"
+      questions:
+        - "What metrics track financial performance?"
+        - "Metrics: MRR, ARR, ARPU?"
+    - id: "channel-metrics"
+      title: "Channel Metrics"
+      questions:
+        - "What metrics track per-channel performance?"
+        - "Metrics: CAC, LTV, Payback period, Revenue per channel?"
+    - id: "cohort-metrics"
+      title: "Cohort Metrics"
+      questions:
+        - "What cohort analyses are needed?"
+        - "How are cohorts defined and compared?"
+    - id: "reporting-cadence"
+      title: "Reporting Cadence"
+      questions:
+        - "How often are metrics reviewed?"
+        - "Who receives which reports?"
+    - id: "metric-risks"
+      title: "Metric Risks"
+      questions:
+        - "What could make metrics misleading?"
+        - "What vanity metrics should be avoided?"

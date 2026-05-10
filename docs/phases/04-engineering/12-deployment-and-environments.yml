@@ -1,0 +1,73 @@
+document:
+  id: "12-deployment-and-environments"
+  title: "Deployment and Environments"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines how the system runs and gets published across environments."
+  centralQuestion: "How does the system run and get published?"
+  sections:
+    - id: "environment-strategy"
+      title: "Environment Strategy"
+      questions:
+        - "What environments exist? Local, preview, staging, production?"
+        - "What is the purpose and isolation level of each environment?"
+    - id: "local-development"
+      title: "Local Development"
+      questions:
+        - "How do developers run the full system locally?"
+        - "What are the local setup prerequisites and bootstrap steps?"
+    - id: "preview-environments"
+      title: "Preview Environments"
+      questions:
+        - "How are preview or ephemeral environments provisioned?"
+        - "What is the lifecycle of a preview environment?"
+    - id: "staging"
+      title: "Staging"
+      questions:
+        - "How closely does staging mirror production?"
+        - "What data is used in staging and how is it seeded?"
+    - id: "production"
+      title: "Production"
+      questions:
+        - "What is the production infrastructure topology?"
+        - "What is the scaling strategy for production?"
+    - id: "environment-variables"
+      title: "Environment Variables"
+      questions:
+        - "What environment variables exist per environment?"
+        - "How are environment variables documented and validated?"
+    - id: "secrets-per-environment"
+      title: "Secrets Per Environment"
+      questions:
+        - "How are secrets managed per environment?"
+        - "How are secrets injected at build time versus runtime?"
+    - id: "build-process"
+      title: "Build Process"
+      questions:
+        - "What is the build process? Steps, outputs, cache strategy?"
+        - "How are build artifacts versioned and stored?"
+    - id: "migration-process"
+      title: "Migration Process"
+      questions:
+        - "How are database or data migrations run during deployment?"
+        - "What is the rollback strategy for failed migrations?"
+    - id: "release-process"
+      title: "Release Process"
+      questions:
+        - "What is the release cadence and process?"
+        - "How are releases versioned and changelogs generated?"
+    - id: "rollback-strategy"
+      title: "Rollback Strategy"
+      questions:
+        - "How is a production rollback executed?"
+        - "What is the rollback decision authority and communication plan?"
+    - id: "feature-flags"
+      title: "Feature Flags"
+      questions:
+        - "What feature flag system is used?"
+        - "How are feature flags managed, tested, and removed?"
+    - id: "deployment-risks"
+      title: "Deployment Risks"
+      questions:
+        - "What are the top deployment risks?"
+        - "What is the blast radius of a failed deployment?"

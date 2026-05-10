@@ -1,0 +1,54 @@
+document:
+  id: "04-messaging"
+  title: "Messaging"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define what we say to the market without distorting the product."
+  centralQuestion: "What do we say without distorting the product?"
+  sections:
+    - id: "messaging-objective"
+      title: "Messaging Objective"
+      questions:
+        - "What should the audience think, feel, or do after encountering the message?"
+    - id: "core-message"
+      title: "Core Message"
+      questions:
+        - "What is the single most important sentence the market must hear?"
+    - id: "oneliner"
+      title: "One-liner"
+      questions:
+        - "What is the 10-15 word description?"
+    - id: "short-description"
+      title: "Short Description"
+      questions:
+        - "What is the 2-3 sentence description for listings and bios?"
+    - id: "long-description"
+      title: "Long Description"
+      questions:
+        - "What is the full paragraph-level description?"
+    - id: "pain-messages"
+      title: "Pain Messages"
+      questions:
+        - "What messages speak directly to the problem the customer feels?"
+    - id: "outcome-messages"
+      title: "Outcome Messages"
+      questions:
+        - "What messages describe the after state?"
+    - id: "objection-responses"
+      title: "Objection Responses"
+      questions:
+        - "What are the top objections and how are they answered?"
+    - id: "proof-points"
+      title: "Proof Points"
+      questions:
+        - "What facts, quotes, numbers, or demonstrations back the messaging?"
+    - id: "tone-and-voice"
+      title: "Tone and Voice"
+      questions:
+        - "What is the brand voice?"
+        - "What emotional register does the messaging use?"
+    - id: "forbidden-claims"
+      title: "Forbidden Claims"
+      questions:
+        - "What must never be said about the product?"
+        - "What claims are untrue, unproven, or misleading?"

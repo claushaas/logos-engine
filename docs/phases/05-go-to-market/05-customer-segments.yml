@@ -1,0 +1,63 @@
+document:
+  id: "05-customer-segments"
+  title: "Customer Segments"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Refine the audience for acquisition, distinguishing users, payers, buyers, decision makers, influencers, and blockers."
+  centralQuestion: "Who uses, who pays, who decides, who influences, who blocks?"
+  sections:
+    - id: "segment-overview"
+      title: "Segment Overview"
+      questions:
+        - "What is the total addressable audience structure?"
+        - "How do segments relate to each other?"
+    - id: "primary-segment"
+      title: "Primary Segment"
+      questions:
+        - "Who is the primary segment?"
+        - "What makes them the highest-priority beachhead?"
+    - id: "secondary-segments"
+      title: "Secondary Segments"
+      questions:
+        - "What segments will be targeted after the primary?"
+        - "What triggers expansion into each?"
+    - id: "early-adopters"
+      title: "Early Adopters"
+      questions:
+        - "Who are the likely early adopters?"
+        - "What observable trait or behaviour identifies them?"
+    - id: "buyers"
+      title: "Buyers"
+      questions:
+        - "Who pays for the product?"
+        - "What is their procurement process?"
+    - id: "users"
+      title: "Users"
+      questions:
+        - "Who uses the product day to day?"
+        - "What is their primary job to be done?"
+    - id: "decision-makers"
+      title: "Decision Makers"
+      questions:
+        - "Who decides whether to adopt the product?"
+        - "What criteria do they use?"
+    - id: "influencers"
+      title: "Influencers"
+      questions:
+        - "Who influences the adoption decision without authority?"
+        - "What channels reach them?"
+    - id: "segment-prioritization"
+      title: "Segment Prioritization"
+      questions:
+        - "What is the ranked order of segment priority?"
+        - "What is the rationale for the ordering?"
+    - id: "excluded-segments"
+      title: "Excluded Segments"
+      questions:
+        - "Which segments are explicitly out of scope?"
+        - "Why exclude them at this stage?"
+    - id: "segment-risks"
+      title: "Segment Risks"
+      questions:
+        - "What could make the chosen segment unattractive?"
+        - "What would signal the segment is wrong?"

@@ -1,0 +1,63 @@
+document:
+  id: "04-domain-model"
+  title: "Domain Model"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Defines the core objects, rules, and invariants at the heart of the system."
+  centralQuestion: "What objects, rules, and invariants exist at the heart of the system?"
+  sections:
+    - id: "domain-overview"
+      title: "Domain Overview"
+      questions:
+        - "What is the domain? What real-world problem does it model?"
+        - "What is the ubiquitous language for this domain?"
+    - id: "core-entities"
+      title: "Core Entities"
+      questions:
+        - "What are the primary entities with identity and lifecycle?"
+        - "How are entities identified and referenced?"
+    - id: "value-objects"
+      title: "Value Objects"
+      questions:
+        - "What value objects exist that describe properties but have no identity?"
+        - "How is equality defined for each value object?"
+    - id: "aggregates"
+      title: "Aggregates"
+      questions:
+        - "What are the aggregate roots and their boundaries?"
+        - "What consistency rules apply within each aggregate?"
+    - id: "domain-events"
+      title: "Domain Events"
+      questions:
+        - "What domain events signal meaningful state changes?"
+        - "What metadata does each event carry?"
+    - id: "commands"
+      title: "Commands"
+      questions:
+        - "What commands can be issued against the domain model?"
+        - "What validation applies to each command?"
+    - id: "invariants"
+      title: "Invariants"
+      questions:
+        - "What conditions must always hold true for the system to be valid?"
+        - "How are invariants enforced?"
+    - id: "business-rules"
+      title: "Business Rules"
+      questions:
+        - "What are the explicit business rules that govern state transitions?"
+        - "How are rules versioned as the domain evolves?"
+    - id: "state-machines"
+      title: "State Machines"
+      questions:
+        - "What entities have formal state machines?"
+        - "What are the valid state transitions for each?"
+    - id: "domain-boundaries"
+      title: "Domain Boundaries"
+      questions:
+        - "Where does the core domain end and supporting/infrastructure logic begin?"
+        - "What is a bounded context map?"
+    - id: "domain-risks"
+      title: "Domain Risks"
+      questions:
+        - "What domain complexities could cause modelling mistakes?"
+        - "What areas need deeper domain exploration?"

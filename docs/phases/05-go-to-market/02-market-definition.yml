@@ -1,0 +1,53 @@
+document:
+  id: "02-market-definition"
+  title: "Market Definition"
+  phase: "05-go-to-market"
+  status: "not_started"
+  purpose: "Define the market where the product competes and how it will be understood."
+  centralQuestion: "In what category will this product be understood?"
+  sections:
+    - id: "market-category"
+      title: "Market Category"
+      questions:
+        - "What category does this product belong to?"
+        - "Is this an existing category or a new one?"
+    - id: "primary-market"
+      title: "Primary Market"
+      questions:
+        - "What is the primary market?"
+        - "What is the estimated size (TAM, SAM, SOM)?"
+    - id: "secondary-markets"
+      title: "Secondary Markets"
+      questions:
+        - "What is the secondary market?"
+        - "When would the product expand into adjacent markets?"
+    - id: "existing-alternatives"
+      title: "Existing Alternatives"
+      questions:
+        - "What alternatives exist?"
+        - "What category would the user use to compare the product?"
+    - id: "substitute-behaviors"
+      title: "Substitute Behaviors"
+      questions:
+        - "What current behavior are we replacing?"
+        - "Why is the current behavior insufficient?"
+    - id: "market-maturity"
+      title: "Market Maturity"
+      questions:
+        - "Is the market existing, emerging, or needs education?"
+        - "What evidence supports this maturity assessment?"
+    - id: "timing-rationale"
+      title: "Timing Rationale"
+      questions:
+        - "What is the timing?"
+        - "Why now and not earlier or later?"
+    - id: "market-constraints"
+      title: "Market Constraints"
+      questions:
+        - "What regulatory, cultural, or structural constraints exist?"
+        - "How do constraints shape the go-to-market approach?"
+    - id: "market-risks"
+      title: "Market Risks"
+      questions:
+        - "What could make the market unfavourable?"
+        - "What would signal the market is not ready?"

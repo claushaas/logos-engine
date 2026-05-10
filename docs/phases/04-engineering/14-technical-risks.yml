@@ -1,0 +1,63 @@
+document:
+  id: "14-technical-risks"
+  title: "Technical Risks"
+  phase: "04-engineering"
+  status: "not_started"
+  purpose: "Technical risk register tracking what could make the system difficult, expensive, unstable, or unviable."
+  centralQuestion: "What could make the system difficult, expensive, unstable, or unviable?"
+  sections:
+    - id: "risk-register"
+      title: "Risk Register"
+      questions:
+        - "What is the format for risk entries? TR-XXX, Category, Description, Likelihood, Impact, Detection Signal, Mitigation, Owner, Status."
+        - "What is the process for adding and retiring risks?"
+    - id: "architecture-risks"
+      title: "Architecture Risks"
+      questions:
+        - "What architecture decisions carry the most risk?"
+        - "Which architectural assumptions are least validated?"
+    - id: "data-risks"
+      title: "Data Risks"
+      questions:
+        - "What data modelling or storage decisions could cause problems?"
+        - "What data consistency or integrity risks exist?"
+    - id: "sync-risks"
+      title: "Sync Risks"
+      questions:
+        - "What sync-related risks exist? Data loss, divergence, conflict storms?"
+        - "How is sync correctness verified under adverse conditions?"
+    - id: "security-risks"
+      title: "Security Risks"
+      questions:
+        - "What unresolved security risks exist?"
+        - "What attack surfaces are most exposed?"
+    - id: "performance-risks"
+      title: "Performance Risks"
+      questions:
+        - "What are the performance risks? Bottlenecks, scaling limits, resource exhaustion?"
+        - "What load profiles are untested?"
+    - id: "integration-risks"
+      title: "Integration Risks"
+      questions:
+        - "What external integrations carry the most risk?"
+        - "What happens if a critical integration fails permanently?"
+    - id: "vendor-risks"
+      title: "Vendor Risks"
+      questions:
+        - "What vendor-related risks exist? Pricing changes, deprecation, outages?"
+        - "What is the vendor substitution plan?"
+    - id: "maintenance-risks"
+      title: "Maintenance Risks"
+      questions:
+        - "What parts of the system will be hardest to maintain?"
+        - "What knowledge silos or single points of failure exist in the team?"
+    - id: "required-technical-spikes"
+      title: "Required Technical Spikes"
+      questions:
+        - "What unknowns require dedicated spikes before committing to an approach?"
+        - "What is the spike scope and decision criteria for each?"
+    - id: "risk-mitigation-plan"
+      title: "Risk Mitigation Plan"
+      questions:
+        - "What is the overall risk mitigation approach? Avoid, transfer, mitigate, accept?"
+        - "How are risks reviewed and escalated?"
