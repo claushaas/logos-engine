@@ -3,66 +3,136 @@ document:
   title: "Growth Metrics"
   phase: "05-go-to-market"
   status: "not_started"
+  order: 12
+  type: "growth_metrics"
   purpose: "Define the metrics that indicate commercial traction and market response."
   centralQuestion: "What signals indicate the market is responding?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/12-growth-metrics.md"
+      purpose: "Growth metrics document with north star, funnel metrics, reporting cadence, and risks."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "growth-objective"
       title: "Growth Objective"
+      intent: "Define the primary growth objective and its relationship to GTM success criteria."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the primary growth objective?"
         - "How does growth relate to the GTM success criteria?"
     - id: "north-star-metric"
       title: "North Star Metric"
+      intent: "Identify the single metric that best captures delivered value."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What single metric best captures delivered value?"
         - "Why this metric?"
     - id: "acquisition-metrics"
       title: "Acquisition Metrics"
+      intent: "Define metrics tracking new user or customer arrival."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track new user or customer arrival?"
         - "Metrics: Visitors, Waitlist conversion, Signup conversion?"
     - id: "activation-metrics"
       title: "Activation Metrics"
+      intent: "Define metrics tracking first meaningful use and target activation rate."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track first meaningful use?"
         - "What is the activation rate target?"
     - id: "conversion-metrics"
       title: "Conversion Metrics"
+      intent: "Define metrics tracking movement to revenue."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track movement to revenue?"
         - "Metrics: Trial start rate, Trial-to-paid rate?"
     - id: "retention-metrics"
       title: "Retention Metrics"
+      intent: "Define metrics tracking continued use and revenue."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track continued use and revenue?"
         - "Metrics: Churn, Retention rate?"
     - id: "referral-metrics"
       title: "Referral Metrics"
+      intent: "Define metrics tracking organic growth and referral rate target."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track organic growth?"
         - "What is the referral rate target?"
     - id: "revenue-metrics"
       title: "Revenue Metrics"
+      intent: "Define metrics tracking financial performance."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track financial performance?"
         - "Metrics: MRR, ARR, ARPU?"
     - id: "channel-metrics"
       title: "Channel Metrics"
+      intent: "Define per-channel performance metrics."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics track per-channel performance?"
         - "Metrics: CAC, LTV, Payback period, Revenue per channel?"
     - id: "cohort-metrics"
       title: "Cohort Metrics"
+      intent: "Define cohort analyses, definitions, and comparison methods."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What cohort analyses are needed?"
         - "How are cohorts defined and compared?"
     - id: "reporting-cadence"
       title: "Reporting Cadence"
+      intent: "Define review frequency and report distribution."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How often are metrics reviewed?"
         - "Who receives which reports?"
     - id: "metric-risks"
       title: "Metric Risks"
+      intent: "Identify what could make metrics misleading and vanity metrics to avoid."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What could make metrics misleading?"
         - "What vanity metrics should be avoided?"

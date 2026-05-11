@@ -3,68 +3,133 @@ document:
   title: "Hypotheses"
   phase: "02-validation"
   status: "not_started"
+  order: 3
+  type: "hypotheses"
   purpose: "Register testable propositions with required evidence and refutation signals."
   centralQuestion: "What specific hypotheses will be tested?"
-  sections:
-    - id: "hypothesis-register"
-      title: "Hypothesis Register"
-      description: "Master list of all hypotheses. Each entry uses the format below."
-      format:
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/03-hypotheses.md"
+      purpose: "Registers testable propositions with required evidence and refutation signals."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  specializedFormats:
+    hypothesisFormat:
+      description: "Reusable format for each hypothesis entry."
+      fields:
         - "Type"
         - "Statement (We believe that...)"
         - "Evidence Required"
         - "Refutation Signal"
         - "Priority (Critical/High/Medium/Low)"
         - "Status (Untested/Testing/Supported/Refuted/Inconclusive)"
+  sections:
+    - id: "hypothesis-register"
+      title: "Hypothesis Register"
+      intent: "Maintain the master list of all testable hypotheses with status and outcomes."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the complete list of testable hypotheses?"
         - "Which hypotheses have been tested and what was the outcome?"
         - "Which hypotheses remain untested?"
     - id: "problem-hypotheses"
       title: "Problem Hypotheses"
-      description: "Hypotheses about the problem's existence, severity, and urgency."
+      intent: "Clarify whether the problem exists, is severe, and is urgent."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Do people experience this problem?"
         - "Is the problem severe enough to motivate action?"
         - "How do people currently cope with the problem?"
     - id: "audience-hypotheses"
       title: "Audience Hypotheses"
-      description: "Hypotheses about who has the problem and their characteristics."
+      intent: "Identify who has the problem and whether they can be reached."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Who specifically has this problem?"
         - "How large is the addressable audience?"
         - "Can the audience be reached effectively?"
     - id: "behavior-hypotheses"
       title: "Behavior Hypotheses"
-      description: "Hypotheses about how the audience currently behaves."
+      intent: "Map current audience behavior and alternatives in use."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What do people currently do to address the problem?"
         - "What triggers the problem-solving behavior?"
         - "What alternatives are currently in use?"
     - id: "solution-hypotheses"
       title: "Solution Hypotheses"
-      description: "Hypotheses about whether the proposed solution works."
+      intent: "Determine whether the proposed solution works and produces meaningful improvement."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Does the solution actually solve the problem?"
         - "Is the solution usable by the target audience?"
         - "Does the solution produce a meaningful improvement?"
     - id: "willingness-to-pay-hypotheses"
       title: "Willingness-to-Pay Hypotheses"
-      description: "Hypotheses about whether people will pay for the solution."
+      intent: "Assess whether and how much people will pay for the solution."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Will people pay for this solution?"
         - "How much are people willing to pay?"
         - "What payment model is most acceptable?"
     - id: "adoption-hypotheses"
       title: "Adoption Hypotheses"
-      description: "Hypotheses about how people will discover and start using the solution."
+      intent: "Evaluate how people will discover, adopt, and overcome barriers to using the solution."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How will people learn about the solution?"
         - "What is the expected adoption rate?"
         - "What barriers exist to initial adoption?"
     - id: "retention-hypotheses"
       title: "Retention Hypotheses"
-      description: "Hypotheses about whether people will continue using the solution."
+      intent: "Determine whether people will continue using the solution over time."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Will people continue using the solution over time?"
         - "What drives ongoing engagement?"

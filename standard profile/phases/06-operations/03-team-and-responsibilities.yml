@@ -3,61 +3,127 @@ document:
   title: "Team and Responsibilities"
   phase: "06-operations"
   status: "not_started"
+  order: 3
+  type: "team_responsibilities"
   purpose: "Define who does what across all operational domains."
   centralQuestion: "Who does what?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/03-team-and-responsibilities.md"
+      purpose: "Complete responsibility assignment across all operational domains including current team, roles, escalation rules, and future hiring needs."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "responsibility-model"
       title: "Responsibility Model"
+      intent: "Define the framework used to assign and track responsibilities across the team."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What framework is used to assign and track responsibilities (RACI, etc.)?"
         - "How are responsibilities documented and communicated?"
     - id: "current-team"
       title: "Current Team"
+      intent: "Document the current team composition, primary skills, and available capacity."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who is currently on the team and what are their primary skills?"
         - "What capacity does the current team have?"
     - id: "operational-roles"
       title: "Operational Roles"
+      intent: "Define all operational roles, their responsibilities, rotation schedule, and handoff procedures."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What operational roles exist (on-call, support lead, incident commander)?"
         - "How are roles rotated and handed off?"
     - id: "product-responsibilities"
       title: "Product Responsibilities"
+      intent: "Assign ownership for product availability, performance, correctness, and roadmap."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who owns product availability, performance, and correctness?"
         - "Who owns the product roadmap and feature backlog?"
     - id: "engineering-responsibilities"
       title: "Engineering Responsibilities"
+      intent: "Assign ownership for infrastructure, deployments, technical debt, code quality, and security."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who owns infrastructure, deployments, and technical debt?"
         - "Who owns code quality and security?"
     - id: "support-responsibilities"
       title: "Support Responsibilities"
+      intent: "Assign ownership for customer-facing support and bug/triage handling."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who handles customer-facing support?"
         - "Who triages bugs and technical issues?"
     - id: "commercial-responsibilities"
       title: "Commercial Responsibilities"
+      intent: "Assign ownership for pricing, billing, revenue operations, and vendor/partner relationships."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who owns pricing, billing, and revenue operations?"
         - "Who manages vendor and partner relationships?"
     - id: "financial-responsibilities"
       title: "Financial Responsibilities"
+      intent: "Assign ownership for financial reporting, budgeting, cost control, payment processing, and refunds."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who owns financial reporting, budgeting, and cost control?"
         - "Who manages payment processing and refunds?"
     - id: "decision-authority"
       title: "Decision Authority"
+      intent: "Define which decisions each role can make independently and which require escalation or consensus."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What decisions can each role make independently?"
         - "Which decisions require escalation or consensus?"
     - id: "escalation-rules"
       title: "Escalation Rules"
+      intent: "Define triggers for escalation and the escalation path for each issue type."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What triggers an escalation?"
         - "What is the escalation path for each type of issue?"
     - id: "future-hiring-needs"
       title: "Future Hiring Needs"
+      intent: "Identify missing roles, scaling needs, and hiring priority and timeline."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What roles are missing or will be needed as the project scales?"
         - "What is the hiring priority and timeline?"

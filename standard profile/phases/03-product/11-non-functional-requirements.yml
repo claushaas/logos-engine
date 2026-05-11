@@ -3,11 +3,37 @@ document:
   title: "Non-Functional Requirements"
   phase: "03-product"
   status: "not_started"
+  order: 11
+  type: "non_functional_requirements"
   purpose: "Define the quality attributes the product must possess."
   centralQuestion: "What qualities must the product have?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/11-non-functional-requirements.md"
+      purpose: "Quality attributes and non-functional requirements for the product"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
   sections:
     - id: "performance"
       title: "Performance"
+      intent: "Define response time, throughput, startup, and resource usage targets"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the response time targets (p50, p95, p99)?"
         - "What are the throughput requirements?"
@@ -16,6 +42,10 @@ document:
         - "What is the perceived performance target?"
     - id: "accessibility"
       title: "Accessibility"
+      intent: "Define accessibility standards, assistive technology support, and input requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What accessibility standards must be met (WCAG 2.1 AA, etc)?"
         - "What assistive technologies must be supported?"
@@ -24,6 +54,10 @@ document:
         - "What are the color contrast and text sizing requirements?"
     - id: "privacy"
       title: "Privacy"
+      intent: "Define data privacy regulations, data collection, consent, and user rights"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What data privacy regulations apply (GDPR, CCPA, etc)?"
         - "What user data is collected and for what purpose?"
@@ -32,6 +66,10 @@ document:
         - "How are data deletion and export requests handled?"
     - id: "security"
       title: "Security"
+      intent: "Define authentication, authorization, encryption, audit, and vulnerability management"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What authentication mechanisms are required?"
         - "What authorization model is used?"
@@ -40,6 +78,10 @@ document:
         - "What vulnerability management practices apply?"
     - id: "reliability"
       title: "Reliability"
+      intent: "Define uptime, data loss window, recovery time, and fault tolerance targets"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the uptime or availability target?"
         - "What is the acceptable data loss window (RPO)?"
@@ -48,6 +90,10 @@ document:
         - "How are partial failures handled gracefully?"
     - id: "availability"
       title: "Availability"
+      intent: "Define SLA, planned maintenance, degradation model, and offline capabilities"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the SLA for product availability?"
         - "What are the planned maintenance windows?"
@@ -55,6 +101,10 @@ document:
         - "What offline or disconnected operation is supported?"
     - id: "scalability"
       title: "Scalability"
+      intent: "Define expected user and data scale, scaling model, and limits"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the expected user scale at launch and at 12 months?"
         - "What is the expected data scale?"
@@ -62,6 +112,10 @@ document:
         - "What are the scaling limits and what happens at the limit?"
     - id: "compatibility"
       title: "Compatibility"
+      intent: "Define browser, OS, device, and backward compatibility requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What browsers and versions must be supported?"
         - "What operating systems and versions must be supported?"
@@ -69,6 +123,10 @@ document:
         - "What backward compatibility is required?"
     - id: "observability"
       title: "Observability"
+      intent: "Define logging, metrics, alerting, monitoring, and debugging requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What logging is required and at what levels?"
         - "What metrics must be collected?"
@@ -76,6 +134,10 @@ document:
         - "What tracing or debugging capabilities are needed?"
     - id: "internationalization"
       title: "Internationalization"
+      intent: "Define language support, locale formatting, RTL, and translation architecture"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What languages must be supported and when?"
         - "What locale-specific formatting is required?"
@@ -83,6 +145,10 @@ document:
         - "What is the internationalization architecture (i18n library, translation workflow)?"
     - id: "compliance"
       title: "Compliance"
+      intent: "Define regulatory, industry, certification, and data sovereignty requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What regulatory compliance requirements apply?"
         - "What industry standards must be met?"
@@ -90,6 +156,10 @@ document:
         - "What data residency or sovereignty requirements apply?"
     - id: "operational-constraints"
       title: "Operational Constraints"
+      intent: "Define deployment, hosting, build, release, and support constraints"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the deployment environment constraints?"
         - "What are the hosting or infrastructure constraints?"

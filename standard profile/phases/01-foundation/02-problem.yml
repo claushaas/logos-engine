@@ -3,11 +3,44 @@ document:
   title: "The Real Problem"
   phase: "01-foundation"
   status: "not_started"
+  order: 2
+  type: "problem"
   purpose: "Define the pain, friction, confusion, or limitation this project exists to confront."
   centralQuestion: "What pain, friction, confusion, or limitation does this project exist to confront?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "01-foundation/02-problem.md"
+      purpose: "Rendered problem definition document"
+  dependsOn:
+    - "01-thesis"
+  feeds:
+    - "03-audience"
+    - "04-principles"
+    - "05-boundaries"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+    - "The problem is distinguishable from adjacent non-problems."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Ground problem statements in observable symptoms."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Prefer concrete examples over abstract descriptions."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+    - "Verify that root causes are distinguished from symptoms."
   sections:
     - id: "problem-statement"
       title: "Problem Statement"
+      intent: "Define the core problem in concrete, observable terms."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What problem is being solved?"
         - "How does this problem appear in real life?"
@@ -17,31 +50,55 @@ document:
         - "What part of the problem is within initial scope?"
     - id: "symptoms"
       title: "Symptoms"
+      intent: "List the observable signs that the problem exists."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What observable signs indicate the problem exists?"
         - "What do people say when they experience the problem?"
     - id: "root-causes"
       title: "Root Causes"
+      intent: "Identify the systemic reasons the problem persists."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Why does the problem exist in the first place?"
         - "What systemic conditions sustain the problem?"
     - id: "existing-alternatives"
       title: "Existing Alternatives"
+      intent: "Survey what people currently do to cope with the problem."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What do people currently do to cope with the problem?"
         - "What tools or processes are in use today?"
     - id: "why-current-solutions-are-insufficient"
       title: "Why Current Solutions Are Insufficient"
+      intent: "Articulate the structural gaps left by current approaches."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What structural gaps do current solutions leave?"
         - "What trade-offs do current solutions force?"
     - id: "scope-of-the-problem"
       title: "Scope of the Problem"
+      intent: "Quantify the affected population and severity of the problem."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How large is the affected population?"
         - "How severe is the pain for the most affected?"
     - id: "non-problems"
       title: "Non-Problems"
+      intent: "Identify adjacent problems that the project does not target."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What problems are adjacent but not the target?"
         - "What should this project not claim to solve?"

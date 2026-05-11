@@ -3,23 +3,62 @@ document:
   title: "Business Model"
   phase: "02-validation"
   status: "not_started"
+  order: 7
+  type: "business_model"
   purpose: "Define the integrated mechanism by which the project becomes economically, operationally, and strategically viable."
   centralQuestion: "What is the mechanism by which this project becomes economically, operationally, and strategically viable?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/07-business-model.md"
+      purpose: "Defines the integrated mechanism by which the project becomes economically, operationally, and strategically viable."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "business-model-objective"
       title: "Business Model Objective"
+      intent: "State the overall business logic that makes the project viable as a coherent whole."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the overall business logic that makes the project viable?"
         - "How do the pieces fit together into a coherent whole?"
     - id: "value-proposition"
       title: "Value Proposition"
+      intent: "Define the unique value created, for whom, and why it is defensible."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What unique value does the project create?"
         - "For whom does it create value?"
         - "Why is this value proposition defensible?"
     - id: "customer-segments"
       title: "Customer Segments"
-      description: "Distinguish between users, customers, buyers, and beneficiaries."
+      intent: "Distinguish users, customers, buyers, and beneficiaries."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Who are the users (people who interact with the product)?"
         - "Who are the customers (people who pay)?"
@@ -28,52 +67,106 @@ document:
         - "Are these the same people or different groups?"
     - id: "revenue-streams"
       title: "Revenue Streams"
+      intent: "Identify all revenue sources, their contribution, and interactions."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What are all sources of revenue?"
         - "What is the expected contribution of each revenue stream?"
         - "How do revenue streams interact?"
     - id: "pricing-logic"
       title: "Pricing Logic"
+      intent: "Explain the rationale, value alignment, and structure of pricing."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the rationale behind the chosen pricing model?"
         - "How does pricing align with perceived value?"
         - "What pricing tiers or options exist?"
     - id: "distribution-channels"
       title: "Distribution Channels"
+      intent: "Define how the product reaches customers and the cost/conversion of each channel."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How will the product reach customers?"
         - "What are the primary and secondary channels?"
         - "What is the cost and conversion rate of each channel?"
     - id: "customer-relationships"
       title: "Customer Relationships"
+      intent: "Define the type of relationship, support model, and feedback collection."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What type of relationship will be established with customers?"
         - "How will customers be supported?"
         - "How will customer feedback be collected and used?"
     - id: "key-activities"
       title: "Key Activities"
+      intent: "Identify the most important activities for delivering value and operating the business."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What are the most important activities required to deliver the value proposition?"
         - "What activities are needed to operate the business?"
     - id: "key-resources"
       title: "Key Resources"
+      intent: "Identify essential intellectual, human, financial, and physical resources."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What resources are essential to deliver the value proposition?"
         - "What intellectual, human, financial, and physical resources are needed?"
     - id: "key-partners"
       title: "Key Partners"
+      intent: "Identify key partners and suppliers and what they provide."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Who are the key partners and suppliers?"
         - "What activities or resources do partners provide?"
         - "What is the nature of each partnership?"
     - id: "cost-drivers"
       title: "Cost Drivers"
+      intent: "Identify the most significant costs, fixed vs. variable, and scaling behavior."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What are the most significant costs?"
         - "Which costs are fixed vs. variable?"
         - "How do costs scale with growth?"
     - id: "competitive-advantage"
       title: "Competitive Advantage"
+      intent: "Identify the source, sustainability, and barriers protecting competitive advantage."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the source of competitive advantage?"
         - "How sustainable is the advantage?"
@@ -81,29 +174,59 @@ document:
         - "What are the barriers to exit for customers?"
     - id: "scalability-logic"
       title: "Scalability Logic"
+      intent: "Describe how the business model scales, its limits, and changes at each order of magnitude."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How does the business model scale?"
         - "What are the limits to scaling?"
         - "What changes at each order of magnitude of scale?"
     - id: "investor-stakeholder-narrative"
       title: "Investor/Stakeholder Narrative"
+      intent: "Articulate the investable story, key metrics, and expected return profile."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the story that makes this project investable?"
         - "What metrics matter most to stakeholders?"
         - "What is the expected return profile?"
     - id: "business-model-risks"
       title: "Business Model Risks"
+      intent: "Identify the biggest risks, least-validated assumptions, and external threats."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What are the biggest risks to the business model?"
         - "What assumptions about the business model are least validated?"
         - "What competitive or market changes could undermine the model?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
+      intent: "Define conditions that would prove the business model unworkable and trigger a fundamental rethink."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What conditions would prove the business model unworkable?"
         - "What specific evidence would trigger a fundamental rethink?"
     - id: "business-model-summary"
       title: "Business Model Summary"
+      intent: "Synthesize viability verdict, strongest evidence, and weakest point in the model."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Is the business model viable based on current evidence?"
         - "What is the single strongest piece of evidence supporting the model?"

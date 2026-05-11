@@ -3,46 +3,100 @@ document:
   title: "Engineering Brief"
   phase: "04-engineering"
   status: "not_started"
+  order: 1
+  type: "brief"
   purpose: "Executive technical synthesis of what Engineering needs to deliver."
   centralQuestion: "What does Engineering need to deliver?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/engineering-brief.md"
+      purpose: "Executive technical synthesis of engineering scope and delivery plan."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "engineering-objective"
       title: "Engineering Objective"
+      intent: "Clarify the single most important engineering outcome and the definition of success versus failure for this phase."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the single most important engineering outcome for this phase?"
         - "What defines engineering success versus failure?"
     - id: "product-inputs"
       title: "Product Inputs"
+      intent: "Identify which product decisions and requirements directly shape the engineering scope and what user-facing outcomes the engineering work must enable."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Which product decisions and requirements directly shape the engineering scope?"
         - "What user-facing outcomes must the engineering work enable?"
     - id: "technical-scope"
       title: "Technical Scope"
+      intent: "Define the systems, modules, and services in scope for initial delivery, and what is explicitly out of scope."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What systems, modules, and services are in scope for initial delivery?"
         - "What is explicitly out of scope for this phase?"
     - id: "engineering-constraints"
       title: "Engineering Constraints"
+      intent: "Enumerate technical, organisational, and regulatory constraints along with budget, time, and resource limits."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What technical, organisational, or regulatory constraints apply?"
         - "What budget, time, or resource limits exist?"
     - id: "core-technical-capabilities"
       title: "Core Technical Capabilities"
+      intent: "List the non-negotiable technical capabilities and cross-cutting concerns the system must provide."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the non-negotiable technical capabilities the system must provide?"
         - "What cross-cutting concerns must be addressed?"
     - id: "initial-implementation-strategy"
       title: "Initial Implementation Strategy"
+      intent: "Describe how the first iteration should be structured and the recommended build order for core modules."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How should the first iteration be structured?"
         - "What is the recommended build order for core modules?"
     - id: "deferred-technical-decisions"
       title: "Deferred Technical Decisions"
+      intent: "Identify architectural decisions that can be postponed, explain why, and describe triggers that would bring them forward."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Which architectural decisions can be postponed and why?"
         - "What triggers would bring a deferred decision forward?"
     - id: "engineering-success-criteria"
       title: "Engineering Success Criteria"
+      intent: "Define the measurable outcomes that confirm the engineering work is complete and the quality gates that must be passed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What measurable outcomes confirm the engineering work is complete?"
         - "What quality gates must be passed?"

@@ -3,11 +3,44 @@ document:
   title: "Audience Definition"
   phase: "01-foundation"
   status: "not_started"
+  order: 3
+  type: "audience"
   purpose: "Define who should recognize this project as useful, necessary, or inevitable."
   centralQuestion: "Who should recognize this project as useful, necessary, or inevitable?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "01-foundation/03-audience.md"
+      purpose: "Rendered audience definition document"
+  dependsOn:
+    - "01-thesis"
+    - "02-problem"
+  feeds:
+    - "04-principles"
+    - "05-boundaries"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+    - "The primary user persona is described with sufficient specificity to guide design decisions."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Audience description must be specific enough to exclude plausible but wrong audiences."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Prefer behavioral descriptions over demographic stereotypes."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+    - "Confirm excluded audiences are justified by the thesis and problem."
   sections:
     - id: "primary-audience"
       title: "Primary Audience"
+      intent: "Describe the primary user in terms of situation, capabilities, and values."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who is the primary user?"
         - "What situation are they in?"
@@ -18,31 +51,55 @@ document:
         - "What should the project not presume about them?"
     - id: "context-of-use"
       title: "Context of Use"
+      intent: "Describe the environment and constraints in which the project will be used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "In what environment or situation will the project be used?"
         - "What constraints does the context impose?"
     - id: "user-capabilities"
       title: "User Capabilities"
+      intent: "Specify the skills, knowledge, and infrastructure users are assumed to have."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What skills or knowledge are assumed?"
         - "What tools or infrastructure do users already have?"
     - id: "user-constraints"
       title: "User Constraints"
+      intent: "Identify limitations and scarce resources users operate under."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What limitations do users operate under?"
         - "What resources are scarce for the user?"
     - id: "user-motivations"
       title: "User Motivations"
+      intent: "Clarify what drives users to seek a solution and what outcomes they value."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What drives the user to seek a solution?"
         - "What outcomes does the user value?"
     - id: "user-risks"
       title: "User Risks"
+      intent: "Assess what happens to users if the solution fails and their tolerance for friction."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What happens to the user if the solution fails?"
         - "What is the user's tolerance for friction or complexity?"
     - id: "excluded-audiences"
       title: "Excluded Audiences"
+      intent: "Identify who is explicitly not the target and which use cases are out of scope."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who is explicitly not the target audience?"
         - "What use cases are out of scope for the initial audience?"

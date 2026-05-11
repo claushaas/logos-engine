@@ -3,46 +3,110 @@ document:
   title: "Validation Strategy"
   phase: "02-validation"
   status: "not_started"
+  order: 1
+  type: "strategy"
   purpose: "Define what needs to be validated, in what order, and to what standard of evidence."
   centralQuestion: "What needs to be validated, in what order, to what standard?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/01-validation-strategy.md"
+      purpose: "Defines what needs to be validated, in what order, and to what standard of evidence."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "validation-objective"
       title: "Validation Objective"
+      intent: "Clarify what outcome this validation phase seeks to confirm or refute."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the outcome we are trying to validate?"
         - "What does success look like for this validation phase?"
     - id: "validation-scope"
       title: "Validation Scope"
+      intent: "Define the boundaries of what will and will not be validated."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What needs to be validated?"
         - "What does not need to be validated now?"
         - "What is explicitly out of scope for this phase?"
     - id: "validation-priorities"
       title: "Validation Priorities"
+      intent: "Establish the priority order for testing assumptions and risks."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Which risk comes first: problem, audience, solution, willingness to use, willingness to pay?"
         - "What is the priority order for testing assumptions?"
         - "Which validations are prerequisites for others?"
     - id: "evidence-standards"
       title: "Evidence Standards"
+      intent: "Define what constitutes sufficient evidence for different types of claims."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What level of evidence is sufficient for each type of claim?"
         - "What distinguishes strong evidence from weak evidence?"
         - "When is qualitative evidence enough vs. needing quantitative evidence?"
     - id: "validation-sequence"
       title: "Validation Sequence"
+      intent: "Map the dependency chain and execution order of validation activities."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "In what order will validations be executed?"
         - "What is the dependency chain between validation activities?"
         - "What can be parallelized vs. what must be sequential?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
+      intent: "Identify specific conditions that would prevent the project from advancing."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What would prevent the project from advancing?"
         - "What specific results would kill the project?"
         - "What results would trigger a significant pivot?"
     - id: "decision-gates"
       title: "Decision Gates"
+      intent: "Define the go/no-go decision points, criteria, and decision-makers."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "At what points are go/no-go decisions made?"
         - "Who makes each decision and with what criteria?"

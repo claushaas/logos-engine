@@ -3,52 +3,118 @@ document:
   title: "Messaging"
   phase: "05-go-to-market"
   status: "not_started"
+  order: 4
+  type: "messaging"
   purpose: "Define what we say to the market without distorting the product."
   centralQuestion: "What do we say without distorting the product?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/04-messaging.md"
+      purpose: "Messaging document with core message, descriptions, tone, and forbidden claims."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "messaging-objective"
       title: "Messaging Objective"
+      intent: "Define what the audience should think, feel, or do after encountering the message."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What should the audience think, feel, or do after encountering the message?"
     - id: "core-message"
       title: "Core Message"
+      intent: "Craft the single most important sentence the market must hear."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the single most important sentence the market must hear?"
     - id: "oneliner"
       title: "One-liner"
+      intent: "Write the 10-15 word description."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the 10-15 word description?"
     - id: "short-description"
       title: "Short Description"
+      intent: "Write the 2-3 sentence description for listings and bios."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the 2-3 sentence description for listings and bios?"
     - id: "long-description"
       title: "Long Description"
+      intent: "Write the full paragraph-level description."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the full paragraph-level description?"
     - id: "pain-messages"
       title: "Pain Messages"
+      intent: "Craft messages that speak directly to the customer's problem."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What messages speak directly to the problem the customer feels?"
     - id: "outcome-messages"
       title: "Outcome Messages"
+      intent: "Craft messages that describe the after state."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What messages describe the after state?"
     - id: "objection-responses"
       title: "Objection Responses"
+      intent: "List top objections and their answers."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the top objections and how are they answered?"
     - id: "proof-points"
       title: "Proof Points"
+      intent: "Gather facts, quotes, numbers, or demonstrations backing messaging."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What facts, quotes, numbers, or demonstrations back the messaging?"
     - id: "tone-and-voice"
       title: "Tone and Voice"
+      intent: "Define brand voice and emotional register."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the brand voice?"
         - "What emotional register does the messaging use?"
     - id: "forbidden-claims"
       title: "Forbidden Claims"
+      intent: "Define what must never be said about the product."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What must never be said about the product?"
         - "What claims are untrue, unproven, or misleading?"

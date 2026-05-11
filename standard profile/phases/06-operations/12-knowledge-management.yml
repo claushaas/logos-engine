@@ -3,61 +3,127 @@ document:
   title: "Knowledge Management"
   phase: "06-operations"
   status: "not_started"
+  order: 12
+  type: "knowledge_management"
   purpose: "Define how operational knowledge is preserved, documented, and shared."
   centralQuestion: "How is operational knowledge preserved?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/12-knowledge-management.md"
+      purpose: "Complete knowledge management definition covering objectives, documentation sources, runbooks, decision records, knowledge base, notes, customer-facing docs, ownership, review cadence, archival, and knowledge risks."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "knowledge-objective"
       title: "Knowledge Objective"
+      intent: "Define the goal of operational knowledge management and the consequences of knowledge loss."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the goal of operational knowledge management?"
         - "What happens if operational knowledge is lost?"
     - id: "documentation-sources"
       title: "Documentation Sources"
+      intent: "Identify primary sources of operational documentation and how they are kept synchronized."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the primary sources of operational documentation?"
         - "How are documentation sources kept synchronized?"
     - id: "runbooks"
       title: "Runbooks"
+      intent: "Define what runbooks exist for common procedures and how they are tested, maintained, and improved."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What runbooks exist for common operational procedures?"
         - "How are runbooks tested, maintained, and improved?"
     - id: "decision-records"
       title: "Decision Records"
+      intent: "Define how operational decisions are recorded, archived, and what format is used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are operational decisions recorded and archived?"
         - "What format is used for decision records?"
     - id: "support-knowledge-base"
       title: "Support Knowledge Base"
+      intent: "Define the internal knowledge base for support staff and how it is kept current."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What internal knowledge base exists for support staff?"
         - "How is the knowledge base kept current?"
     - id: "internal-notes"
       title: "Internal Notes"
+      intent: "Define how internal operational notes are captured, organized, and distinguished from formal documentation."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are internal operational notes captured and organized?"
         - "What distinguishes a note from formal documentation?"
     - id: "customer-facing-documentation"
       title: "Customer-Facing Documentation"
+      intent: "Define what customer-facing documentation exists and how it is maintained and updated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What customer-facing documentation exists (help center, FAQs, guides)?"
         - "How is customer-facing documentation maintained and updated?"
     - id: "documentation-ownership"
       title: "Documentation Ownership"
+      intent: "Define who owns each category of operational documentation and how ownership transfers with role changes."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who owns each category of operational documentation?"
         - "How is documentation ownership transferred when roles change?"
     - id: "review-cadence"
       title: "Review Cadence"
+      intent: "Define how often operational documentation is reviewed for accuracy and who performs reviews."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How often is operational documentation reviewed for accuracy?"
         - "Who performs documentation reviews?"
     - id: "archival-rules"
       title: "Archival Rules"
+      intent: "Define when documentation is archived or deprecated and how archived documentation is preserved and discoverable."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "When is operational documentation archived or deprecated?"
         - "How is archived documentation preserved and discoverable?"
     - id: "knowledge-risks"
       title: "Knowledge Risks"
+      intent: "Identify risks of knowledge loss or staleness and mitigation strategies including bus factor and documentation rot."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What could cause operational knowledge to be lost or become stale?"
         - "How are knowledge risks mitigated (bus factor, documentation rot)?"

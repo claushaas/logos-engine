@@ -3,61 +3,127 @@ document:
   title: "Domain Model"
   phase: "04-engineering"
   status: "not_started"
+  order: 4
+  type: "domain_model"
   purpose: "Defines the core objects, rules, and invariants at the heart of the system."
   centralQuestion: "What objects, rules, and invariants exist at the heart of the system?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/domain-model.md"
+      purpose: "Domain model defining core objects, rules, invariants, and state machines."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "domain-overview"
       title: "Domain Overview"
+      intent: "Define the domain, the real-world problem it models, and establish the ubiquitous language."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the domain? What real-world problem does it model?"
         - "What is the ubiquitous language for this domain?"
     - id: "core-entities"
       title: "Core Entities"
+      intent: "Identify primary entities with identity and lifecycle, and how they are identified and referenced."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the primary entities with identity and lifecycle?"
         - "How are entities identified and referenced?"
     - id: "value-objects"
       title: "Value Objects"
+      intent: "Define value objects that describe properties without identity and how equality is defined for each."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What value objects exist that describe properties but have no identity?"
         - "How is equality defined for each value object?"
     - id: "aggregates"
       title: "Aggregates"
+      intent: "Identify aggregate roots, their boundaries, and the consistency rules within each aggregate."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the aggregate roots and their boundaries?"
         - "What consistency rules apply within each aggregate?"
     - id: "domain-events"
       title: "Domain Events"
+      intent: "Define domain events that signal meaningful state changes and the metadata each event carries."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What domain events signal meaningful state changes?"
         - "What metadata does each event carry?"
     - id: "commands"
       title: "Commands"
+      intent: "List commands that can be issued against the domain model and the validation that applies to each."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What commands can be issued against the domain model?"
         - "What validation applies to each command?"
     - id: "invariants"
       title: "Invariants"
+      intent: "Enumerate conditions that must always hold true for the system to be valid and how invariants are enforced."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What conditions must always hold true for the system to be valid?"
         - "How are invariants enforced?"
     - id: "business-rules"
       title: "Business Rules"
+      intent: "Document explicit business rules that govern state transitions and how rules are versioned."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the explicit business rules that govern state transitions?"
         - "How are rules versioned as the domain evolves?"
     - id: "state-machines"
       title: "State Machines"
+      intent: "Identify entities that have formal state machines and their valid state transitions."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What entities have formal state machines?"
         - "What are the valid state transitions for each?"
     - id: "domain-boundaries"
       title: "Domain Boundaries"
+      intent: "Clarify where the core domain ends and supporting/infrastructure logic begins, with a bounded context map."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Where does the core domain end and supporting/infrastructure logic begin?"
         - "What is a bounded context map?"
     - id: "domain-risks"
       title: "Domain Risks"
+      intent: "Identify domain complexities that could cause modelling mistakes and areas needing deeper domain exploration."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What domain complexities could cause modelling mistakes?"
         - "What areas need deeper domain exploration?"

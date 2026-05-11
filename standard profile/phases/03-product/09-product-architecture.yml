@@ -3,11 +3,37 @@ document:
   title: "Product Architecture"
   phase: "03-product"
   status: "not_started"
+  order: 9
+  type: "product_architecture"
   purpose: "Define the modular structure of the product and its capabilities."
   centralQuestion: "What modules, areas, and capabilities compose the product?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/09-product-architecture.md"
+      purpose: "Modular architecture of product areas and capabilities"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
   sections:
     - id: "product-modules"
       title: "Product Modules"
+      intent: "Identify top-level product modules with responsibilities and user-facing names"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the top-level product modules or areas?"
         - "What is the responsibility of each module?"
@@ -15,6 +41,10 @@ document:
         - "How are modules organized and related?"
     - id: "core-capabilities"
       title: "Core Capabilities"
+      intent: "Define capabilities essential to delivering the core product promise"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What capabilities are essential to the product?"
         - "Which capabilities directly deliver the core product promise?"
@@ -22,6 +52,10 @@ document:
         - "What is the MVP scope of each core capability?"
     - id: "supporting-capabilities"
       title: "Supporting Capabilities"
+      intent: "Define capabilities that support the core experience"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What capabilities support the core experience?"
         - "Which supporting capabilities are required at MVP?"
@@ -29,6 +63,10 @@ document:
         - "How do supporting capabilities enhance the core promise?"
     - id: "cross-cutting-capabilities"
       title: "Cross-Cutting Capabilities"
+      intent: "Define capabilities spanning multiple modules and shared services"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What capabilities span multiple modules?"
         - "How are cross-cutting concerns managed?"
@@ -36,6 +74,10 @@ document:
         - "How is consistency maintained across cross-cutting capabilities?"
     - id: "module-relationships"
       title: "Module Relationships"
+      intent: "Define dependencies, integration points, and data flows between modules"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How do modules depend on each other?"
         - "What are the integration points between modules?"
@@ -43,6 +85,10 @@ document:
         - "What are the coupling constraints between modules?"
     - id: "capability-map"
       title: "Capability Map"
+      intent: "Provide the complete inventory of capabilities mapped to modules and prioritized"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the complete inventory of product capabilities?"
         - "How are capabilities mapped to modules?"
@@ -50,6 +96,10 @@ document:
         - "What is the capability delivery sequence?"
     - id: "product-dependencies"
       title: "Product Dependencies"
+      intent: "Enumerate external systems, services, and third-party dependencies"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What external systems or services does the product depend on?"
         - "What are the critical vs non-critical dependencies?"
@@ -57,6 +107,10 @@ document:
         - "What licensing or third-party dependencies exist?"
     - id: "product-architecture-risks"
       title: "Product Architecture Risks"
+      intent: "Identify highest-risk architectural decisions and untested assumptions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What architectural decisions carry the most risk?"
         - "Where might the architecture fail under scale or complexity?"

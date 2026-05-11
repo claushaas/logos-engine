@@ -3,62 +3,128 @@ document:
   title: "Integration Architecture"
   phase: "04-engineering"
   status: "not_started"
+  order: 7
+  type: "integration_architecture"
   purpose: "Defines how the system connects with external services."
   centralQuestion: "How does the system connect with external services?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/integration-architecture.md"
+      purpose: "Integration architecture defining how the system connects with external services."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "integration-overview"
       title: "Integration Overview"
+      intent: "Describe the overall integration landscape and identify which integrations are critical path versus optional."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the overall integration landscape?"
         - "Which integrations are critical path versus optional?"
     - id: "external-services"
       title: "External Services"
+      intent: "List external services the system depends on, their purpose, and criticality."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What external services does the system depend on?"
         - "What is the purpose and criticality of each external service?"
     - id: "integration-boundaries"
       title: "Integration Boundaries"
+      intent: "Define integration boundaries in the architecture and how external dependencies are isolated from core logic."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Where are the integration boundaries in the architecture?"
         - "How are external dependencies isolated from core logic?"
     - id: "authentication-with-external-services"
       title: "Authentication with External Services"
+      intent: "Specify how the system authenticates with each external service and how credentials are stored and rotated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How does the system authenticate with each external service?"
         - "How are external service credentials stored and rotated?"
     - id: "webhooks"
       title: "Webhooks"
+      intent: "List webhooks the system consumes and emits, and how webhook payloads are validated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What webhooks does the system consume?"
         - "What webhooks does the system emit?"
         - "How are webhook payloads validated?"
     - id: "rate-limits"
       title: "Rate Limits"
+      intent: "Document rate limits for each external service and how rate limiting is handled client-side."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What rate limits apply to each external service?"
         - "How is rate limiting handled client-side?"
     - id: "retry-strategy"
       title: "Retry Strategy"
+      intent: "Define the retry strategy for failed external calls, backoff algorithm, and maximum retry count."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the retry strategy for failed external calls?"
         - "What backoff algorithm is used? What is the maximum retry count?"
     - id: "fallback-strategy"
       title: "Fallback Strategy"
+      intent: "Describe what happens when an external service is unavailable and any graceful degradation or fallback paths."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What happens when an external service is unavailable?"
         - "Are there graceful degradation or fallback paths?"
     - id: "vendor-lock-in-risks"
       title: "Vendor Lock-in Risks"
+      intent: "Identify integrations that pose vendor lock-in risk and the mitigation or abstraction strategy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Which integrations pose vendor lock-in risk?"
         - "What is the mitigation or abstraction strategy?"
     - id: "mocking-strategy"
       title: "Mocking Strategy"
+      intent: "Describe how external services are mocked for testing and development and what mocking tools or service virtualisation is used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are external services mocked for testing and development?"
         - "What mocking tools or service virtualisation is used?"
     - id: "integration-risks"
       title: "Integration Risks"
+      intent: "Identify top integration risks and what happens if a critical external service is deprecated or changes its API."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the top integration risks?"
         - "What happens if a critical external service is deprecated or changes its API?"

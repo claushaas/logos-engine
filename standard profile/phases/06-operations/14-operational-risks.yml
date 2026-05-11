@@ -3,61 +3,138 @@ document:
   title: "Operational Risks"
   phase: "06-operations"
   status: "not_started"
+  order: 14
+  type: "risk_register"
   purpose: "Maintain the operational risk register identifying what can break the operation."
   centralQuestion: "What can break the operation?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/14-operational-risks.md"
+      purpose: "Complete operational risk register covering risk inventory by domain (support, reliability, financial, compliance, vendor, team, process, customer success, knowledge) and an overall mitigation plan."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  specializedFormats:
+    riskFormat:
+      - id
+      - category
+      - description
+      - likelihood
+      - impact
+      - detectionSignal
+      - mitigation
+      - owner
+      - status
   sections:
     - id: "risk-register"
       title: "Risk Register"
+      intent: "Provide the complete inventory of operational risks and define how risks are identified, assessed, and updated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the complete inventory of operational risks?"
         - "How are risks identified, assessed, and updated?"
     - id: "support-risks"
       title: "Support Risks"
+      intent: "Identify risks that could degrade or break the support function and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks could degrade or break the support function?"
         - "What mitigations are in place for support risks?"
     - id: "reliability-risks"
       title: "Reliability Risks"
+      intent: "Identify risks that threaten product reliability and availability and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks threaten product reliability and availability?"
         - "What mitigations are in place for reliability risks?"
     - id: "financial-risks"
       title: "Financial Risks"
+      intent: "Identify risks that threaten financial operations and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks threaten financial operations (billing errors, payment failures)?"
         - "What mitigations are in place for financial risks?"
     - id: "compliance-risks"
       title: "Compliance Risks"
+      intent: "Identify risks that threaten regulatory or contractual compliance and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks threaten regulatory or contractual compliance?"
         - "What mitigations are in place for compliance risks?"
     - id: "vendor-risks"
       title: "Vendor Risks"
+      intent: "Identify risks arising from third-party vendor dependencies and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks arise from third-party vendor dependencies?"
         - "What mitigations are in place for vendor risks?"
     - id: "team-risks"
       title: "Team Risks"
+      intent: "Identify risks arising from team composition, capacity, or knowledge gaps and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks arise from team composition, capacity, or knowledge gaps?"
         - "What mitigations are in place for team risks?"
     - id: "process-risks"
       title: "Process Risks"
+      intent: "Identify risks arising from process failures or gaps and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks arise from process failures or gaps?"
         - "What mitigations are in place for process risks?"
     - id: "customer-success-risks"
       title: "Customer Success Risks"
+      intent: "Identify risks that threaten the customer success function and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks threaten the customer success function?"
         - "What mitigations are in place for customer success risks?"
     - id: "knowledge-risks"
       title: "Knowledge Risks"
+      intent: "Identify risks arising from knowledge loss or documentation gaps and the mitigations in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What risks arise from knowledge loss or documentation gaps?"
         - "What mitigations are in place for knowledge risks?"
     - id: "mitigation-plan"
       title: "Mitigation Plan"
+      intent: "Define the overall plan for mitigating operational risks and how mitigation actions are tracked and verified."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the overall plan for mitigating operational risks?"
         - "How are mitigation actions tracked and verified?"

@@ -3,29 +3,75 @@ document:
   title: "Research Plan"
   phase: "02-validation"
   status: "not_started"
+  order: 4
+  type: "research_plan"
   purpose: "Plan qualitative and contextual evidence gathering through listening and observation."
   centralQuestion: "How will we listen and observe?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/04-research-plan.md"
+      purpose: "Plans qualitative and contextual evidence gathering through listening and observation."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "research-goals"
       title: "Research Goals"
+      intent: "Define the specific questions and decisions the research will inform."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What specific questions is this research trying to answer?"
         - "What decisions will this research inform?"
         - "How will research findings be used?"
     - id: "participant-profile"
       title: "Participant Profile"
+      intent: "Define who will be interviewed or observed and why."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Who will be interviewed or observed?"
         - "What are the inclusion and exclusion criteria for participants?"
         - "How many participants are needed and why?"
     - id: "recruitment-criteria"
       title: "Recruitment Criteria"
+      intent: "Describe how participants will be recruited and screened."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How will participants be recruited?"
         - "What screening process will be used?"
         - "How will diversity of perspective be ensured?"
     - id: "interview-guide"
       title: "Interview Guide"
+      intent: "Provide the interview structure, questions, and follow-up handling."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What questions will be asked?"
         - "What is the interview structure and flow?"
@@ -33,12 +79,24 @@ document:
         - "What topics must be covered in every interview?"
     - id: "observation-criteria"
       title: "Observation Criteria"
+      intent: "Define what behaviors, signals, and contextual factors to observe."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What behaviors will be observed?"
         - "What signals indicate success or failure?"
         - "What contextual factors should be noted?"
     - id: "bias-risks"
       title: "Bias Risks"
+      intent: "Identify and mitigate biases in research design and execution."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What biases need to be avoided?"
         - "How to avoid only confirming what we already want to believe?"
@@ -47,6 +105,12 @@ document:
         - "How will selection bias be addressed?"
     - id: "data-capture-format"
       title: "Data Capture Format"
+      intent: "Define how data will be recorded, formatted, and stored."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How will data be recorded?"
         - "What format will interview notes use?"
@@ -54,6 +118,12 @@ document:
         - "How will audio, video, or screen recordings be handled?"
     - id: "synthesis-method"
       title: "Synthesis Method"
+      intent: "Define how raw data will be synthesized into structured findings."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How will data be synthesized into findings?"
         - "What signals should be captured during synthesis?"

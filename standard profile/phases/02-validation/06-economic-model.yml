@@ -3,29 +3,75 @@ document:
   title: "Economic Model"
   phase: "02-validation"
   status: "not_started"
+  order: 6
+  type: "economic_model"
   purpose: "Determine whether the project can pay its own costs and generate enough margin to continue existing."
   centralQuestion: "Is there a plausible configuration where this project pays its own costs and generates enough margin to continue existing?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/06-economic-model.md"
+      purpose: "Determines whether the project can pay its own costs and generate enough margin to continue existing."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "economic-validation-objective"
       title: "Economic Validation Objective"
+      intent: "Define the financial goal and minimum viable economic outcome."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the financial goal for this project?"
         - "What economic assumptions must hold true?"
         - "What is the minimum viable economic outcome?"
     - id: "revenue-model"
       title: "Revenue Model"
+      intent: "Define how the project generates revenue and identify revenue streams."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How can the project generate revenue?"
         - "What are the primary and secondary revenue streams?"
         - "What is the pricing model: subscription, one-time, usage-based, freemium?"
     - id: "pricing-assumptions"
       title: "Pricing Assumptions"
+      intent: "Establish price points, willingness-to-pay evidence, and competitive comparisons."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What price points are being considered?"
         - "What is the willingness-to-pay evidence supporting each price point?"
         - "How does pricing compare to alternatives and substitutes?"
     - id: "cost-structure"
       title: "Cost Structure"
+      intent: "Map fixed costs, variable costs, one-time costs, and infrastructure costs at scale."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What are fixed monthly costs?"
         - "What are variable costs per customer?"
@@ -33,6 +79,12 @@ document:
         - "What infrastructure costs are expected at each scale?"
     - id: "unit-economics"
       title: "Unit Economics"
+      intent: "Calculate gross margin, LTV, CAC, and LTV:CAC ratio per customer."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What is the estimated gross margin per customer?"
         - "What is the customer lifetime value (LTV)?"
@@ -40,12 +92,24 @@ document:
         - "What is the LTV:CAC ratio?"
     - id: "break-even-analysis"
       title: "Break-even Analysis"
+      intent: "Determine the number of paying customers and time required to break even."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How many paying customers are needed to break even?"
         - "What is the time to break-even under different scenarios?"
         - "What is the required conversion rate from free to paid?"
     - id: "scenario-analysis"
       title: "Scenario Analysis"
+      intent: "Model conservative, realistic, optimistic, and failure scenarios."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Conservative scenario: what are the assumptions and outcome?"
         - "Realistic scenario: what are the assumptions and outcome?"
@@ -53,6 +117,12 @@ document:
         - "Failure scenario: what are the assumptions and outcome?"
     - id: "sensitivity-analysis"
       title: "Sensitivity Analysis"
+      intent: "Test how sensitive the model is to changes in price, churn, CAC, and infrastructure cost."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "How sensitive is the model to price changes?"
         - "How sensitive is the model to churn rate?"
@@ -61,17 +131,35 @@ document:
         - "What is the maximum tolerable churn?"
     - id: "economic-risks"
       title: "Economic Risks"
+      intent: "Identify top economic risks, non-viability conditions, and competitive threats."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What are the top economic risks?"
         - "What economic conditions would make the project non-viable?"
         - "What competitive responses could undermine the economic model?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
+      intent: "Define economic results that would invalidate the project or trigger a pivot."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "What economic results would invalidate the project?"
         - "At what thresholds is a pivot required?"
     - id: "economic-validation-summary"
       title: "Economic Validation Summary"
+      intent: "Synthesize the overall economic viability verdict, confidence, and evidence gaps."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
       questions:
         - "Is the project economically viable based on current evidence?"
         - "What is the confidence level in the economic model?"

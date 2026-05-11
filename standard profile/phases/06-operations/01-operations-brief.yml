@@ -3,46 +3,100 @@ document:
   title: "Operations Brief"
   phase: "06-operations"
   status: "not_started"
+  order: 1
+  type: "operations"
   purpose: "Synthesize the operational axis of the project into a single reference document."
   centralQuestion: "What needs to function continuously for the project to remain healthy?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/01-operations-brief.md"
+      purpose: "Synthesized operational reference document covering scope, critical functions, expectations, constraints, and success criteria."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "operations-objective"
       title: "Operations Objective"
+      intent: "Clarify the core purpose and healthy-state definition of the operations function."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the core purpose of the operations function for this project?"
         - "What does healthy day-to-day operation look like?"
     - id: "product-context"
       title: "Product Context"
+      intent: "Define the product or service being operated and its operationally relevant components."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What product or service is being operated?"
         - "Which product components require operational attention?"
     - id: "business-context"
       title: "Business Context"
+      intent: "Explain how the business model intersects with operations, including revenue, costs, and margin."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the business model behind the product?"
         - "How do revenue, costs, and margin relate to operations?"
     - id: "operational-scope"
       title: "Operational Scope"
+      intent: "Delineate what falls inside and outside the operations function and who owns each area."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What falls inside the operations function and what falls outside?"
         - "Which teams or individuals own operational responsibilities?"
     - id: "critical-operational-functions"
       title: "Critical Operational Functions"
+      intent: "Identify functions that must never fail and assess the blast radius of each."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Which functions must never fail for the project to remain viable?"
         - "What is the blast radius of each critical function?"
     - id: "service-expectations"
       title: "Service Expectations"
+      intent: "Define availability, latency, correctness targets and user-facing reliability promises."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What availability, latency, and correctness targets exist?"
         - "What are the user-facing promises about reliability?"
     - id: "operational-constraints"
       title: "Operational Constraints"
+      intent: "Identify budget, headcount, tooling, regulatory, and contractual constraints on operations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What budget, headcount, or tooling constraints apply?"
         - "What regulatory or contractual constraints shape operations?"
     - id: "operational-success-criteria"
       title: "Operational Success Criteria"
+      intent: "Define how the team will know that operations are successful and what metrics define health."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How will the team know that operations are successful?"
         - "What metrics define operational health?"

@@ -3,71 +3,145 @@ document:
   title: "Deployment and Environments"
   phase: "04-engineering"
   status: "not_started"
+  order: 12
+  type: "deployment_environments"
   purpose: "Defines how the system runs and gets published across environments."
   centralQuestion: "How does the system run and get published?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/deployment-and-environments.md"
+      purpose: "Deployment and environments design covering environments, build process, release process, and feature flags."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "environment-strategy"
       title: "Environment Strategy"
+      intent: "Define the environments that exist, their purpose, and isolation levels."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What environments exist? Local, preview, staging, production?"
         - "What is the purpose and isolation level of each environment?"
     - id: "local-development"
       title: "Local Development"
+      intent: "Describe how developers run the full system locally and the local setup prerequisites and bootstrap steps."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How do developers run the full system locally?"
         - "What are the local setup prerequisites and bootstrap steps?"
     - id: "preview-environments"
       title: "Preview Environments"
+      intent: "Specify how preview or ephemeral environments are provisioned and their lifecycle."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are preview or ephemeral environments provisioned?"
         - "What is the lifecycle of a preview environment?"
     - id: "staging"
       title: "Staging"
+      intent: "Define how closely staging mirrors production and what data is used and how it is seeded."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How closely does staging mirror production?"
         - "What data is used in staging and how is it seeded?"
     - id: "production"
       title: "Production"
+      intent: "Describe the production infrastructure topology and scaling strategy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the production infrastructure topology?"
         - "What is the scaling strategy for production?"
     - id: "environment-variables"
       title: "Environment Variables"
+      intent: "List environment variables per environment and how they are documented and validated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What environment variables exist per environment?"
         - "How are environment variables documented and validated?"
     - id: "secrets-per-environment"
       title: "Secrets Per Environment"
+      intent: "Define how secrets are managed per environment and injected at build time versus runtime."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are secrets managed per environment?"
         - "How are secrets injected at build time versus runtime?"
     - id: "build-process"
       title: "Build Process"
+      intent: "Define the build process steps, outputs, cache strategy, and how build artifacts are versioned and stored."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the build process? Steps, outputs, cache strategy?"
         - "How are build artifacts versioned and stored?"
     - id: "migration-process"
       title: "Migration Process"
+      intent: "Specify how database or data migrations are run during deployment and the rollback strategy for failed migrations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are database or data migrations run during deployment?"
         - "What is the rollback strategy for failed migrations?"
     - id: "release-process"
       title: "Release Process"
+      intent: "Define the release cadence and process and how releases are versioned and changelogs generated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the release cadence and process?"
         - "How are releases versioned and changelogs generated?"
     - id: "rollback-strategy"
       title: "Rollback Strategy"
+      intent: "Specify how a production rollback is executed and the rollback decision authority and communication plan."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How is a production rollback executed?"
         - "What is the rollback decision authority and communication plan?"
     - id: "feature-flags"
       title: "Feature Flags"
+      intent: "Define the feature flag system used and how feature flags are managed, tested, and removed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What feature flag system is used?"
         - "How are feature flags managed, tested, and removed?"
     - id: "deployment-risks"
       title: "Deployment Risks"
+      intent: "Identify top deployment risks and the blast radius of a failed deployment."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the top deployment risks?"
         - "What is the blast radius of a failed deployment?"

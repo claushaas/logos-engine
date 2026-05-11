@@ -3,11 +3,37 @@ document:
   title: "Product Stack"
   phase: "03-product"
   status: "not_started"
+  order: 12
+  type: "stack"
   purpose: "Define technology choices that directly shape product experience, scope, and constraints."
   centralQuestion: "What technology choices directly shape the experience, scope, and constraints of the product?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/12-product-stack.md"
+      purpose: "Technology stack choices shaping the product"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
   sections:
     - id: "platform-strategy"
       title: "Platform Strategy"
+      intent: "Define targeted platforms, primary platform, release order, and platform-driven constraints"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What platforms are targeted (web, desktop, mobile, CLI, API)?"
         - "What is the primary platform?"
@@ -15,6 +41,10 @@ document:
         - "What platform constraints drive product decisions?"
     - id: "primary-client"
       title: "Primary Client"
+      intent: "Define the primary client technology, rationale, strengths, limitations, and essential capabilities"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the primary client technology?"
         - "Why was this client technology chosen?"
@@ -22,6 +52,10 @@ document:
         - "What client-side capabilities are essential?"
     - id: "secondary-clients"
       title: "Secondary Clients"
+      intent: "Define secondary clients, their differences, shared behavior model, and introduction timing"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What secondary clients exist?"
         - "How do secondary clients differ from the primary client?"
@@ -29,6 +63,10 @@ document:
         - "When are secondary clients introduced?"
     - id: "product-level-technology-choices"
       title: "Product-Level Technology Choices"
+      intent: "Define technology choices affecting the product at the conceptual level"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What technology choices affect the product at the conceptual level?"
         - "What data storage and synchronization approaches are used?"
@@ -36,6 +74,10 @@ document:
         - "What rendering or presentation technologies are used?"
     - id: "ux-relevant-technical-constraints"
       title: "UX-Relevant Technical Constraints"
+      intent: "Define technical constraints that directly impact user experience"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What technical constraints directly impact user experience?"
         - "What latency, bandwidth, or connectivity constraints apply?"
@@ -43,6 +85,10 @@ document:
         - "What offline or local-first capabilities are technically constrained?"
     - id: "integration-surface"
       title: "Integration Surface"
+      intent: "Define external systems, integration protocols, auth models, and failure modes"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What external systems must the product integrate with?"
         - "What integration protocols and patterns are used?"
@@ -50,6 +96,10 @@ document:
         - "What are the integration failure modes and fallbacks?"
     - id: "tooling-assumptions"
       title: "Tooling Assumptions"
+      intent: "Define development, build, test, deployment, observability, and debugging tooling"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What development tools are assumed?"
         - "What build, test, and deployment tooling is used?"
@@ -57,6 +107,10 @@ document:
         - "What tooling constraints affect the product?"
     - id: "deferred-engineering-decisions"
       title: "Deferred Engineering Decisions"
+      intent: "Track engineering decisions intentionally deferred with rationale and risks"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What engineering decisions are intentionally deferred to later phases?"
         - "What information is needed to make these decisions?"
@@ -64,6 +118,10 @@ document:
         - "What is the risk of deferring each decision?"
     - id: "stack-risks"
       title: "Stack Risks"
+      intent: "Identify highest-risk technology choices, unknowns, and dependency uncertainties"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What technology choices carry the highest risk?"
         - "What are the key unknowns in the technology stack?"

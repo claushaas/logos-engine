@@ -3,56 +3,118 @@ document:
   title: "Operational Metrics"
   phase: "06-operations"
   status: "not_started"
+  order: 7
+  type: "operational_metrics"
   purpose: "Define how to measure operational health with quantitative metrics."
   centralQuestion: "How to measure operational health?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/07-operational-metrics.md"
+      purpose: "Complete operational metrics definition covering support, reliability, quality, financial, customer success, process, cost, SLA/SLO metrics, and review rules."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "operational-health-objective"
       title: "Operational Health Objective"
+      intent: "Define what a healthy operation looks like in quantitative terms and how metrics drive decisions."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What does a healthy operation look like in numbers?"
         - "How are metrics used to drive operational decisions?"
     - id: "support-metrics"
       title: "Support Metrics"
+      intent: "Define ticket volume, first response time, resolution time, and customer satisfaction targets for support."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What ticket volume, first response time, and resolution time targets exist?"
         - "How is customer satisfaction with support measured?"
     - id: "reliability-metrics"
       title: "Reliability Metrics"
+      intent: "Define uptime, error rate, and incident count targets and how reliability is trended and reviewed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What uptime, error rate, and incident count targets exist?"
         - "How is reliability trended and reviewed?"
     - id: "quality-metrics"
       title: "Quality Metrics"
+      intent: "Define bug reopen rate, defect density, regression rate targets and quality trending."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What bug reopen rate, defect density, and regression rate targets exist?"
         - "How is quality trended over time?"
     - id: "financial-operations-metrics"
       title: "Financial Operations Metrics"
+      intent: "Define failed payment, refund, and chargeback rate targets for financial operational health."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What failed payment rate, refund rate, and chargeback rate targets exist?"
         - "How is financial operational health measured?"
     - id: "customer-success-metrics"
       title: "Customer Success Metrics"
+      intent: "Define churn rate, retention rate, expansion rate targets and account health scoring and trending."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What churn rate, retention rate, and expansion rate targets exist?"
         - "How is account health scored and trended?"
     - id: "process-metrics"
       title: "Process Metrics"
+      intent: "Define manual intervention rate and process cycle time targets and process efficiency measurement."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What manual intervention rate and process cycle time targets exist?"
         - "How is process efficiency measured?"
     - id: "cost-metrics"
       title: "Cost Metrics"
+      intent: "Define support cost per customer, infrastructure cost per active user targets, and budget tracking."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What support cost per customer and infrastructure cost per active user targets exist?"
         - "How are operational costs tracked against budget?"
     - id: "sla-slo-metrics"
       title: "SLA/SLO Metrics"
+      intent: "Define service level objectives and agreements and how compliance is measured and reported."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What service level objectives and agreements are in place?"
         - "How is SLA/SLO compliance measured and reported?"
     - id: "metric-review-rules"
       title: "Metric Review Rules"
+      intent: "Define metric review cadence, ownership, and thresholds that trigger action or escalation."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How often are metrics reviewed and by whom?"
         - "What thresholds trigger action or escalation?"

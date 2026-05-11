@@ -3,66 +3,136 @@ document:
   title: "Marketing Assets"
   phase: "05-go-to-market"
   status: "not_started"
+  order: 11
+  type: "marketing_assets"
   purpose: "Define the materials needed to launch, communicate, and sell the product."
   centralQuestion: "What pieces need to exist to launch, communicate, and sell?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/11-marketing-assets.md"
+      purpose: "Marketing assets inventory with descriptions, ownership, and readiness checklist."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "asset-inventory"
       title: "Asset Inventory"
+      intent: "List all marketing assets needed with priority order."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the complete list of marketing assets needed?"
         - "What is the priority order for creation?"
     - id: "landing-page"
       title: "Landing Page"
+      intent: "Define what the landing page must communicate and its primary call to action."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What must the landing page communicate?"
         - "What is the primary call to action?"
     - id: "website-copy"
       title: "Website Copy"
+      intent: "List pages beyond the landing page and define site structure."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What pages are needed beyond the landing page?"
         - "What is the structure of the marketing site?"
     - id: "email-sequences"
       title: "Email Sequences"
+      intent: "Define email sequences with cadence and triggers."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What email sequences are needed (onboarding, nurture, re-engagement, transactional)?"
         - "What is the cadence and trigger for each?"
     - id: "social-posts"
       title: "Social Posts"
+      intent: "List social platforms and launch announcement plan."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What social platforms will be used?"
         - "What is the launch announcement plan?"
     - id: "demo-script"
       title: "Demo Script"
+      intent: "Define the standard demo narrative and key moments."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the standard demo narrative?"
         - "What are the key moments in the demo?"
     - id: "product-screenshots"
       title: "Product Screenshots"
+      intent: "List screens or flows to capture with format and resolution."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What screens or flows must be captured?"
         - "What format and resolution are required?"
     - id: "explainer-video"
       title: "Explainer Video"
+      intent: "Determine if an explainer video is needed and define script, format, and length."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Is an explainer video needed?"
         - "What is the script, format, and length?"
     - id: "pitch-materials"
       title: "Pitch Materials"
+      intent: "List pitch materials and their audiences."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What pitch materials are needed (deck, one-pager, investor update)?"
         - "Who is the audience for each?"
     - id: "press-kit"
       title: "Press Kit"
+      intent: "Define press kit contents and target press contacts."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What goes in the press kit?"
         - "Who are the target press contacts?"
     - id: "app-store-marketplace-listing"
       title: "App Store / Marketplace Listing"
+      intent: "List app stores or marketplaces and required assets per listing."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What app stores or marketplaces will the product be listed on?"
         - "What assets are required for each listing?"
     - id: "asset-readiness-checklist"
       title: "Asset Readiness Checklist"
+      intent: "Track asset status, ownership, and deadlines."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the status of each asset?"
         - "Who owns each asset and what is the deadline?"

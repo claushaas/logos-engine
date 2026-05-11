@@ -3,76 +3,154 @@ document:
   title: "Testing Strategy"
   phase: "04-engineering"
   status: "not_started"
+  order: 10
+  type: "testing_strategy"
   purpose: "Defines how to verify the system works, keeps working, and hasn't broken silently."
   centralQuestion: "How will we know the system works, keeps working, and hasn't broken silently?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/testing-strategy.md"
+      purpose: "Testing strategy covering test pyramid, CI requirements, release gates, and quality verification."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
   sections:
     - id: "testing-objective"
       title: "Testing Objective"
+      intent: "Define the overall testing philosophy, quality bar, and acceptable level of test coverage."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the overall testing philosophy and quality bar?"
         - "What is the acceptable level of test coverage?"
     - id: "test-pyramid"
       title: "Test Pyramid"
+      intent: "Specify the expected distribution across unit, integration, and E2E tests, and the rationale."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the expected distribution across unit, integration, and E2E tests?"
         - "What is the rationale for the chosen distribution?"
     - id: "unit-tests"
       title: "Unit Tests"
+      intent: "Define what is considered a unit and what mocking or stubbing conventions apply."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is considered a unit? Pure functions, modules, classes?"
         - "What mocking or stubbing conventions apply?"
     - id: "integration-tests"
       title: "Integration Tests"
+      intent: "Specify which integrations are tested, at what scope, and how external dependencies are handled."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Which integrations are tested and at what scope?"
         - "How are external dependencies handled in integration tests?"
     - id: "end-to-end-tests"
       title: "End-to-End Tests"
+      intent: "Define the end-to-end workflows tested and the required test environment and data fixtures."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What end-to-end workflows are tested?"
         - "What test environment and data fixtures are required?"
     - id: "contract-tests"
       title: "Contract Tests"
+      intent: "Define how API contracts are tested between producers and consumers and the contract testing framework used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are API contracts tested between producers and consumers?"
         - "What contract testing framework is used?"
     - id: "domain-tests"
       title: "Domain Tests"
+      intent: "Specify how domain rules, invariants, and state machines are tested and what test patterns are used for business logic."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are domain rules, invariants, and state machines tested?"
         - "What test patterns are used for business logic?"
     - id: "sync-tests"
       title: "Sync Tests"
+      intent: "Define how sync, conflict resolution, and offline behaviour are tested and what simulation or replay tools are used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are sync, conflict resolution, and offline behaviour tested?"
         - "What simulation or replay tools are used for sync testing?"
     - id: "security-tests"
       title: "Security Tests"
+      intent: "Specify automated security tests run in CI and any manual security testing performed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What automated security tests are run in CI?"
         - "What manual security testing is performed and by whom?"
     - id: "performance-tests"
       title: "Performance Tests"
+      intent: "Define performance benchmarks, load tests, and performance acceptance criteria."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What performance benchmarks and load tests exist?"
         - "What are the performance acceptance criteria?"
     - id: "regression-strategy"
       title: "Regression Strategy"
+      intent: "Describe how regressions are detected and prevented and the process for adding regression tests for bugs."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How are regressions detected and prevented?"
         - "What is the process for adding regression tests for bugs?"
     - id: "ci-requirements"
       title: "CI Requirements"
+      intent: "Specify which tests run on every commit, PR, and merge, and the CI pipeline structure and time budget."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What tests run on every commit, PR, and merge?"
         - "What is the CI pipeline structure and time budget?"
     - id: "release-gates"
       title: "Release Gates"
+      intent: "Define which tests must pass before a release can proceed and what manual approval steps are required."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What tests must pass before a release can proceed?"
         - "What manual approval steps are required?"
     - id: "testing-risks"
       title: "Testing Risks"
+      intent: "Identify risks of the testing strategy and areas that are hardest to test and may have gaps."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the risks of the testing strategy?"
         - "What areas are hardest to test and may have gaps?"

@@ -3,11 +3,37 @@ document:
   title: "Product Executive Synthesis"
   phase: "03-product"
   status: "not_started"
+  order: 1
+  type: "brief"
   purpose: "Define the product to be built given all validated inputs."
   centralQuestion: "Given everything validated, what product will be built?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/01-product-brief.md"
+      purpose: "Executive synthesis of the product to be built"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
   sections:
     - id: "product-summary"
       title: "Product Summary"
+      intent: "Clarify what the product is at the highest level"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the product in one paragraph?"
         - "Who is the product for?"
@@ -16,6 +42,10 @@ document:
         - "What is the product not?"
     - id: "validated-problem"
       title: "Validated Problem"
+      intent: "Restate the validated problem evidence from discovery"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What problem has been validated through discovery?"
         - "What evidence supports the existence and severity of this problem?"
@@ -23,6 +53,10 @@ document:
         - "How is this problem currently solved in suboptimal ways?"
     - id: "target-user"
       title: "Target User"
+      intent: "Define the primary and secondary user personas"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "Who is the primary target user persona?"
         - "What is their context, skill level, and environment?"
@@ -30,6 +64,10 @@ document:
         - "Are there secondary user personas to consider?"
     - id: "core-product-promise"
       title: "Core Product Promise"
+      intent: "Articulate the single most important promise to users"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the single most important promise the product makes to users?"
         - "What outcome does the user get after using the product?"
@@ -37,6 +75,10 @@ document:
         - "What would cause the promise to break?"
     - id: "product-thesis"
       title: "Product Thesis"
+      intent: "State the reason the product should exist and how it will be tested"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the product's reason for existing?"
         - "What worldview or assumption about the market does the product represent?"
@@ -44,6 +86,10 @@ document:
         - "How will the thesis be tested in-market?"
     - id: "primary-use-case"
       title: "Primary Use Case"
+      intent: "Describe the one use case the product must nail"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What is the one use case the product must nail?"
         - "What is the user's trigger for this use case?"
@@ -51,6 +97,10 @@ document:
         - "What are the key steps in this use case?"
     - id: "product-differentiation"
       title: "Product Differentiation"
+      intent: "Identify how the product differs from alternatives"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "How does this product differ from alternatives?"
         - "What are the top three competitive differentiators?"
@@ -58,6 +108,10 @@ document:
         - "What can competitors easily copy?"
     - id: "product-constraints"
       title: "Product Constraints"
+      intent: "Enumerate non-negotiable and negotiable constraints"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What are the hard non-negotiable constraints?"
         - "What platform, regulatory, or resource constraints apply?"
@@ -65,6 +119,10 @@ document:
         - "What constraints are self-imposed vs external?"
     - id: "product-success-criteria"
       title: "Product Success Criteria"
+      intent: "Define the metrics and thresholds for product success"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
       questions:
         - "What metrics define product success?"
         - "What is the leading indicator of product-market fit?"
