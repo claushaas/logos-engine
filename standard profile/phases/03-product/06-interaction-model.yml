@@ -1,0 +1,138 @@
+document:
+  id: "06-interaction-model"
+  title: "Interaction Model"
+  phase: "03-product"
+  status: "not_started"
+  order: 6
+  type: "interaction_model"
+  purpose: "Define how the user acts within the product and what happens after each action."
+  centralQuestion: "What actions can the user take and what happens after each action?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/06-interaction-model.md"
+      purpose: "Interaction model for user actions in the product"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  sections:
+    - id: "interaction-principles"
+      title: "Interaction Principles"
+      intent: "Define the principles guiding all interaction design"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What principles guide all interaction design in the product?"
+        - "What is the interaction philosophy (direct manipulation, command, conversational)?"
+        - "How are interactions made predictable and learnable?"
+    - id: "primary-interaction-patterns"
+      title: "Primary Interaction Patterns"
+      intent: "Define the primary ways users interact and supported input modalities"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the primary ways the user interacts with the product?"
+        - "What input modalities are supported?"
+        - "How are compound or multi-step interactions structured?"
+        - "How are keyboard, pointer, and touch interactions balanced?"
+    - id: "commands-and-actions"
+      title: "Commands and Actions"
+      intent: "Enumerate available commands and define their invocation model"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What commands and actions are available to the user?"
+        - "How are commands discovered?"
+        - "What is the command invocation model (menus, shortcuts, slash commands, etc)?"
+        - "How are destructive vs non-destructive actions distinguished?"
+    - id: "confirmation-rules"
+      title: "Confirmation Rules"
+      intent: "Define when confirmation is required or skipped"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "When is confirmation required before an action executes?"
+        - "When is confirmation skipped?"
+        - "What form do confirmations take?"
+        - "How are batch or bulk action confirmations handled?"
+    - id: "undo-and-recovery"
+      title: "Undo and Recovery"
+      intent: "Define the undo model and recovery paths for user actions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What actions are undoable?"
+        - "What is the undo model (immediate undo, history-based, snapshot-based)?"
+        - "How far back can the user undo?"
+        - "What happens to undo state across sessions?"
+    - id: "ambiguity-handling"
+      title: "Ambiguity Handling"
+      intent: "Define how ambiguous user intent is resolved"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the product handle ambiguous user intent?"
+        - "When does the product ask for clarification?"
+        - "When does the product make a best-guess and allow correction?"
+        - "How are ambiguous inputs resolved without frustrating the user?"
+    - id: "system-suggestions"
+      title: "System Suggestions"
+      intent: "Define what suggestions the system offers and how they are presented"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What types of suggestions does the system offer?"
+        - "How are suggestions presented (inline, notification, sidebar)?"
+        - "How are suggestions prioritized?"
+        - "How can the user accept, reject, or dismiss suggestions?"
+    - id: "user-corrections"
+      title: "User Corrections"
+      intent: "Define how users correct their own input and system output"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the user correct their own input or actions?"
+        - "How does the user correct system output?"
+        - "What is the correction loop (identify, correct, confirm)?"
+        - "How is correction data used to improve the product?"
+    - id: "state-transitions"
+      title: "State Transitions"
+      intent: "Define object states and what triggers transitions between them"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What states can each core object be in?"
+        - "What triggers a state transition?"
+        - "What transitions are user-initiated vs system-initiated?"
+        - "What transitions are irreversible?"
+    - id: "interaction-anti-patterns"
+      title: "Interaction Anti-Patterns"
+      intent: "Enumerate interaction patterns explicitly avoided"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What interaction patterns are avoided?"
+        - "What patterns cause unnecessary friction or confusion?"
+        - "What accessibility-hostile patterns are prohibited?"

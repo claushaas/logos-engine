@@ -1,0 +1,139 @@
+document:
+  id: "11-observability"
+  title: "Observability"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 11
+  type: "observability"
+  purpose: "Defines logging, metrics, tracing, and error reporting to understand system behaviour."
+  centralQuestion: "When something fails, how will we know what happened?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/observability.md"
+      purpose: "Observability design covering logging, metrics, tracing, error reporting, alerting, and SLOs."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "observability-objective"
+      title: "Observability Objective"
+      intent: "Define the observability maturity target and the signals most important to monitor."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the observability maturity target?"
+        - "What signals are most important to monitor?"
+    - id: "logging-strategy"
+      title: "Logging Strategy"
+      intent: "Specify log levels, standard log format, and context attached to every log entry."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What log levels are used and when?"
+        - "What is the standard log format? Structured JSON?"
+        - "What context is attached to every log entry? Trace ID, user ID, session ID?"
+    - id: "metrics-strategy"
+      title: "Metrics Strategy"
+      intent: "Define the metrics collected, their types, and the key business and technical metrics."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What metrics are collected? Counters, gauges, histograms, summaries?"
+        - "What are the key business and technical metrics?"
+    - id: "tracing-strategy"
+      title: "Tracing Strategy"
+      intent: "Describe how distributed tracing is implemented and the trace propagation format used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is distributed tracing implemented?"
+        - "What trace propagation format is used? W3C Trace Context?"
+    - id: "error-reporting"
+      title: "Error Reporting"
+      intent: "Define how errors are captured, enriched, and reported, including error aggregation and deduplication."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are errors captured, enriched, and reported?"
+        - "What error aggregation and deduplication is used?"
+    - id: "audit-events"
+      title: "Audit Events"
+      intent: "Identify events audited for compliance or security and define the audit event schema and retention period."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What events are audited for compliance or security?"
+        - "What is the audit event schema and retention period?"
+    - id: "health-checks"
+      title: "Health Checks"
+      intent: "Specify health check endpoints and how they are used for deployment and alerting."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What health check endpoints exist?"
+        - "How are health checks used for deployment and alerting?"
+    - id: "dashboards"
+      title: "Dashboards"
+      intent: "Define required dashboards and who owns and maintains each."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What dashboards are required? Operational, business, performance?"
+        - "Who owns and maintains each dashboard?"
+    - id: "alerts"
+      title: "Alerts"
+      intent: "Define alert rules, thresholds, anomalies, and error rates, and the alert routing and escalation process."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What alert rules are defined? Thresholds, anomalies, error rates?"
+        - "What is the alert routing and escalation process?"
+    - id: "slos"
+      title: "SLOs"
+      intent: "Define service level objectives and the error budget and how it is consumed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What service level objectives are defined?"
+        - "What is the error budget and how is it consumed?"
+    - id: "sensitive-data-rules"
+      title: "Sensitive Data Rules"
+      intent: "Specify data that must never appear in logs, metrics, or traces and how sensitive data scrubbing is enforced."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What data must never appear in logs, metrics, or traces?"
+        - "How is sensitive data scrubbing enforced?"
+    - id: "observability-risks"
+      title: "Observability Risks"
+      intent: "Identify risks of the observability strategy and blind spots in the current observability design."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the risks of the observability strategy?"
+        - "What blind spots exist in the current observability design?"

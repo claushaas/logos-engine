@@ -1,0 +1,104 @@
+document:
+  id: "05-boundaries"
+  title: "Project Boundaries"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 5
+  type: "boundaries"
+  purpose: "Define what the project is not and what it does not promise."
+  centralQuestion: "What temptations should this project resist?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "01-foundation/05-boundaries.md"
+      purpose: "Rendered project boundaries document"
+  dependsOn:
+    - "01-thesis"
+    - "02-problem"
+    - "03-audience"
+    - "04-principles"
+  feeds:
+    - "06-success-definition"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+    - "Each anti-pattern is tied to a specific principle it would violate."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Boundaries must be stated positively: what the project does not do."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Each boundary should reference the thesis or principle it protects."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+    - "Verify that excluded items are genuinely out of scope, not deferred."
+  sections:
+    - id: "what-this-project-is-not"
+      title: "What This Project Is Not"
+      intent: "State what is explicitly out of scope and what promises the project does not make."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is explicitly out of scope?"
+        - "What types of solutions seem attractive but violate the thesis?"
+        - "What promises should the project not make?"
+        - "What behaviors would be unethical, fragile, or misaligned?"
+        - "What responsibilities remain with the user?"
+    - id: "out-of-scope"
+      title: "Out of Scope"
+      intent: "List features and capabilities the project will never attempt."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What features or capabilities are explicitly excluded?"
+        - "What problems will the project never attempt to solve?"
+    - id: "anti-patterns"
+      title: "Anti-Patterns"
+      intent: "Identify solution patterns that would undermine the project's intent."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What solution patterns should be actively avoided?"
+        - "What approaches would undermine the project's intent?"
+    - id: "ethical-boundaries"
+      title: "Ethical Boundaries"
+      intent: "Define uses, data patterns, and surveillance that are prohibited."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What uses of the project would be unethical?"
+        - "What data or surveillance patterns are prohibited?"
+    - id: "product-boundaries"
+      title: "Product Boundaries"
+      intent: "Specify market segments and adjacent products that are not targeted."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What market segments are not targeted?"
+        - "What adjacent products should not be built from this codebase?"
+    - id: "user-responsibility-boundaries"
+      title: "User Responsibility Boundaries"
+      intent: "Identify decisions that remain the user's responsibility and will never be automated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What decisions remain the user's responsibility?"
+        - "What the project will never automate or decide on behalf of the user?"
+    - id: "future-temptations-to-resist"
+      title: "Future Temptations to Resist"
+      intent: "Anticipate seductive but misaligned feature requests and growth paths."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What feature requests would be seductive but misaligned?"
+        - "What growth paths would dilute the core thesis?"

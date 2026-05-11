@@ -1,0 +1,111 @@
+document:
+  id: "03-positioning"
+  title: "Positioning"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 3
+  type: "positioning"
+  purpose: "Define how the product should be perceived as different, relevant, and preferable."
+  centralQuestion: "Why is this product different, relevant, and preferable?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/03-positioning.md"
+      purpose: "Positioning document with statement, differentiators, and evidence."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "positioning-statement"
+      title: "Positioning Statement"
+      intent: "Craft the full positioning statement using the standard formula."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the full positioning statement?"
+        - "Formula: For [target customer], who struggles with [problem], [product] is a [category] that provides [unique value], unlike [alternative], because [reason to believe]."
+    - id: "category"
+      title: "Category"
+      intent: "Name the category the product claims and assess contestation."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What category does the product claim?"
+        - "Is this category contested or open?"
+    - id: "target-customer"
+      title: "Target Customer"
+      intent: "Define the primary audience and what they value most."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Who is the primary audience for this positioning?"
+        - "What does this customer value most?"
+    - id: "primary-pain"
+      title: "Primary Pain"
+      intent: "Describe the acute problem and how it is experienced today."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What acute problem does the product solve?"
+        - "How is this pain experienced today?"
+    - id: "unique-value"
+      title: "Unique Value"
+      intent: "Articulate the single most defensible value proposition."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What single value proposition is most defensible?"
+        - "What can the product do that no alternative does?"
+    - id: "differentiators"
+      title: "Differentiators"
+      intent: "List the top three differentiators and which matters most."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the top three differentiators?"
+        - "Which differentiator matters most to the target customer?"
+    - id: "alternatives"
+      title: "Alternatives"
+      intent: "Identify what customers compare to and why each is insufficient."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What will the customer compare this to?"
+        - "Why is each alternative insufficient?"
+    - id: "reasons-to-believe"
+      title: "Reasons to Believe"
+      intent: "Provide proof that makes the positioning credible."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What proof makes the positioning credible?"
+        - "What evidence, design choice, or constraint backs each claim?"
+    - id: "positioning-anti-patterns"
+      title: "Positioning Anti-Patterns"
+      intent: "Define what the product must not be positioned as."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What must the product NOT be positioned as?"
+        - "What claims would create false expectations?"

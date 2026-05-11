@@ -1,0 +1,111 @@
+document:
+  id: "02-market-definition"
+  title: "Market Definition"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 2
+  type: "market_definition"
+  purpose: "Define the market where the product competes and how it will be understood."
+  centralQuestion: "In what category will this product be understood?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/02-market-definition.md"
+      purpose: "Market definition document with category, sizing, alternatives, and maturity."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "market-category"
+      title: "Market Category"
+      intent: "Identify the category and whether it is existing or new."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What category does this product belong to?"
+        - "Is this an existing category or a new one?"
+    - id: "primary-market"
+      title: "Primary Market"
+      intent: "Define the primary market and estimate TAM, SAM, and SOM."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the primary market?"
+        - "What is the estimated size (TAM, SAM, SOM)?"
+    - id: "secondary-markets"
+      title: "Secondary Markets"
+      intent: "Identify secondary markets and expansion triggers."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the secondary market?"
+        - "When would the product expand into adjacent markets?"
+    - id: "existing-alternatives"
+      title: "Existing Alternatives"
+      intent: "List the alternatives and the comparison lens customers use."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What alternatives exist?"
+        - "What category would the user use to compare the product?"
+    - id: "substitute-behaviors"
+      title: "Substitute Behaviors"
+      intent: "Describe the current behaviour being replaced and its insufficiency."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What current behavior are we replacing?"
+        - "Why is the current behavior insufficient?"
+    - id: "market-maturity"
+      title: "Market Maturity"
+      intent: "Assess whether the market is existing, emerging, or needs education."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Is the market existing, emerging, or needs education?"
+        - "What evidence supports this maturity assessment?"
+    - id: "timing-rationale"
+      title: "Timing Rationale"
+      intent: "Justify why now is the right time to enter."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the timing?"
+        - "Why now and not earlier or later?"
+    - id: "market-constraints"
+      title: "Market Constraints"
+      intent: "Identify regulatory, cultural, or structural constraints."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What regulatory, cultural, or structural constraints exist?"
+        - "How do constraints shape the go-to-market approach?"
+    - id: "market-risks"
+      title: "Market Risks"
+      intent: "Surface factors that could make the market unfavourable."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could make the market unfavourable?"
+        - "What would signal the market is not ready?"

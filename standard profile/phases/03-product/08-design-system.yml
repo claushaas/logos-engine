@@ -1,0 +1,161 @@
+document:
+  id: "08-design-system"
+  title: "Design System"
+  phase: "03-product"
+  status: "not_started"
+  order: 8
+  type: "design_system"
+  purpose: "Define the visual language and standards for consistent sensory experience."
+  centralQuestion: "What visual and sensory consistency must the product maintain?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/08-design-system.md"
+      purpose: "Design system defining visual language and standards"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  sections:
+    - id: "design-principles"
+      title: "Design Principles"
+      intent: "Define foundational design principles and how they translate to visual decisions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the foundational design principles for the product?"
+        - "How do principles translate into visual decisions?"
+        - "What principles govern trade-offs between aesthetics and function?"
+    - id: "visual-language"
+      title: "Visual Language"
+      intent: "Describe the mood, tone, personality, and inspirations of the visual language"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How would the visual language be described in a few words?"
+        - "What mood, tone, and personality does the visual language convey?"
+        - "What visual references or inspirations inform the language?"
+        - "What visual styles are explicitly rejected?"
+    - id: "typography"
+      title: "Typography"
+      intent: "Define typefaces, type scale, hierarchy rules, and platform adaptations"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What typefaces are used and for what purposes?"
+        - "What is the type scale (sizes, weights, line heights)?"
+        - "What are the typographic hierarchy rules?"
+        - "How does typography adapt across platforms?"
+    - id: "color-system"
+      title: "Color System"
+      intent: "Define the color palette, semantic roles, and accessibility standards"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the color palette?"
+        - "What are the semantic color roles (primary, danger, success, etc)?"
+        - "How is color used to communicate state and meaning?"
+        - "How are color accessibility standards met?"
+    - id: "spacing-system"
+      title: "Spacing System"
+      intent: "Define the spatial scale, spacing rules, and adaptive behavior"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the spatial scale (base unit, multipliers)?"
+        - "What are the spacing rules between and within components?"
+        - "How does spacing contribute to visual hierarchy?"
+        - "How does spacing adapt across viewport sizes?"
+    - id: "layout-grid"
+      title: "Layout Grid"
+      intent: "Define the grid system, columns, breakpoints, and alignment rules"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What grid system is used?"
+        - "What are the column and breakpoint definitions?"
+        - "How are alignment and distribution rules defined?"
+        - "When are grid exceptions permitted?"
+    - id: "shape-and-radius"
+      title: "Shape and Radius"
+      intent: "Define border radius scale, shape usage rules, shadows, and borders"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What border radius scale is used?"
+        - "How are shapes used to differentiate component types?"
+        - "What rules govern the use of shadows and elevation?"
+        - "What rules govern borders and dividers?"
+    - id: "iconography"
+      title: "Iconography"
+      intent: "Define icon system, sizing, styling rules, and custom icon maintenance"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What icon system or library is used?"
+        - "What are the icon sizing and styling rules?"
+        - "When are icons used vs text labels?"
+        - "How are custom icons created and maintained?"
+    - id: "motion"
+      title: "Motion"
+      intent: "Define motion principles, durations, easing, and accessibility accommodations"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What role does motion play in the product?"
+        - "What are the motion principles?"
+        - "What animation durations and easing curves are used?"
+        - "When is motion disabled (accessibility, performance)?"
+    - id: "component-principles"
+      title: "Component Principles"
+      intent: "Define what makes a good component, variant management, and composability"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What makes a good component in this design system?"
+        - "How are component variants managed?"
+        - "What is the composability model for components?"
+        - "How is component state visually communicated?"
+    - id: "accessibility-rules"
+      title: "Accessibility Rules"
+      intent: "Define targeted accessibility standards, contrast ratios, and assistive requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What accessibility standard is targeted (WCAG level)?"
+        - "What are the minimum contrast ratios?"
+        - "What are the keyboard navigation requirements?"
+        - "What are the screen reader support requirements?"
+        - "How are motion and animation accommodations handled?"
+    - id: "design-anti-patterns"
+      title: "Design Anti-Patterns"
+      intent: "Enumerate visual patterns explicitly avoided"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What visual patterns are explicitly avoided?"
+        - "What common design trends are rejected?"
+        - "What patterns create accessibility or usability problems?"

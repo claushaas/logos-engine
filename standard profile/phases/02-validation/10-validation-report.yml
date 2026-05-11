@@ -1,0 +1,141 @@
+document:
+  id: "10-validation-report"
+  title: "Validation Report"
+  phase: "02-validation"
+  status: "not_started"
+  order: 10
+  type: "report"
+  purpose: "Synthesize all validation findings into a recommendation on whether to advance."
+  centralQuestion: "Has the idea been validated enough to advance?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/10-validation-report.md"
+      purpose: "Synthesizes all validation findings into a recommendation on whether to advance."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "executive-summary"
+      title: "Executive Summary"
+      intent: "Summarize the overall validation outcome, recommendation, and single most important finding."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What is the overall validation outcome in one paragraph?"
+        - "What is the recommendation: proceed, pivot, or stop?"
+        - "What is the single most important finding?"
+    - id: "validation-status"
+      title: "Validation Status"
+      intent: "Report status of each validation track and overall completion percentage."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What is the status of each validation track?"
+        - "Which validations are complete, in progress, or not started?"
+        - "What is the overall percentage of validations completed?"
+    - id: "supported-claims"
+      title: "Supported Claims"
+      intent: "List claims supported by evidence, with strength and confidence ratings."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which claims have been supported by evidence?"
+        - "What is the strength of evidence for each supported claim?"
+        - "What claims have the highest confidence?"
+    - id: "refuted-claims"
+      title: "Refuted Claims"
+      intent: "List claims refuted by evidence, their impact, and whether addressed through changes."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which claims have been refuted by evidence?"
+        - "What was the impact of each refutation?"
+        - "Have any refutations been addressed through changes to the project?"
+    - id: "inconclusive-claims"
+      title: "Inconclusive Claims"
+      intent: "List claims that remain inconclusive, why, and what additional evidence would resolve uncertainty."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which claims remain inconclusive?"
+        - "Why is the evidence inconclusive for each?"
+        - "What additional evidence would resolve the uncertainty?"
+    - id: "key-evidence"
+      title: "Key Evidence"
+      intent: "Highlight the 5-10 most important pieces of evidence, the strongest, and the most concerning."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What are the top 5-10 pieces of evidence that matter most?"
+        - "What is the single strongest piece of evidence?"
+        - "What is the single most concerning piece of evidence?"
+    - id: "remaining-risks"
+      title: "Remaining Risks"
+      intent: "Identify risks that remain after validation, which are acceptable, and which need mitigation."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What risks remain after validation?"
+        - "Which risks are acceptable to carry forward?"
+        - "Which risks require mitigation before advancing?"
+        - "What is the risk of being wrong about the recommendation?"
+    - id: "recommendation"
+      title: "Recommendation"
+      intent: "State the explicit recommendation with rationale, conditions, and required approvals."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What is the explicit recommendation: proceed, pivot, or stop?"
+        - "What is the rationale for this recommendation?"
+        - "What conditions or caveats apply to this recommendation?"
+        - "Who needs to approve this recommendation?"
+    - id: "required-changes-before-product"
+      title: "Required Changes Before Product"
+      intent: "List what must change before product development begins and what needs further validation."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What must change before product development begins?"
+        - "What assumptions must be further validated?"
+        - "What scope, audience, or solution changes are required?"
+        - "What is the minimum viable next step?"

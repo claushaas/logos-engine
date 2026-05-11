@@ -1,0 +1,149 @@
+document:
+  id: "04-ux-model"
+  title: "UX Model"
+  phase: "03-product"
+  status: "not_started"
+  order: 4
+  type: "ux_model"
+  purpose: "Define the conceptual experience model and how the product should be felt, understood, and used."
+  centralQuestion: "How should this product be felt, understood, and used?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/04-ux-model.md"
+      purpose: "Conceptual experience model for the product"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  sections:
+    - id: "ux-thesis"
+      title: "UX Thesis"
+      intent: "State the core experience philosophy of the product"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the core experience philosophy of the product?"
+        - "How does the experience differentiate from alternatives?"
+        - "What emotion should the user feel most often while using the product?"
+    - id: "experience-principles"
+      title: "Experience Principles"
+      intent: "Define immutable principles that guide all experience decisions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the 3-5 immutable experience principles?"
+        - "How are trade-offs between principles resolved when they conflict?"
+        - "What principles are aspirational vs mandatory?"
+    - id: "primary-ux-paradigm"
+      title: "Primary UX Paradigm"
+      intent: "Choose the dominant interaction and navigation paradigm"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Is the product chat-first, dashboard-first, canvas-first, or something else?"
+        - "Does the user navigate by tasks, objects, conversations, documents, or projects?"
+        - "What is the dominant input mode?"
+        - "What is the dominant output mode?"
+    - id: "user-mental-model"
+      title: "User Mental Model"
+      intent: "Define how users should conceptualize the product's core abstraction"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What existing mental model will users bring to this product?"
+        - "How should users conceptualize the product's core abstraction?"
+        - "What metaphors or analogies are appropriate?"
+        - "What metaphors or analogies should be avoided?"
+    - id: "cognitive-load-rules"
+      title: "Cognitive Load Rules"
+      intent: "Define how complexity is managed and progressively disclosed"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How many choices should the user face at any moment?"
+        - "How is complexity progressively disclosed?"
+        - "What information is hidden by default and revealed on demand?"
+        - "How is information prioritized on each screen?"
+    - id: "guidance-model"
+      title: "Guidance Model"
+      intent: "Define how the product guides both new and experienced users"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the product guide first-time users?"
+        - "How does the product guide experienced users toward advanced features?"
+        - "What guidance is ambient vs explicit?"
+        - "Is the product proactive or reactive in its guidance?"
+        - "Does the product require configuration or learn through use?"
+    - id: "feedback-model"
+      title: "Feedback Model"
+      intent: "Define how the product communicates the result of user actions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the product provide feedback on user actions?"
+        - "What is the latency tolerance for different types of feedback?"
+        - "How are successes confirmed?"
+        - "How are partial or in-progress states communicated?"
+    - id: "error-and-recovery-model"
+      title: "Error and Recovery Model"
+      intent: "Define error prevention, surfacing, and recovery strategies"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the product prevent errors?"
+        - "How does the product surface errors when they occur?"
+        - "What recovery paths are available for each error class?"
+        - "How does the product maintain user trust during errors?"
+    - id: "proactivity-model"
+      title: "Proactivity Model"
+      intent: "Define when the product acts without user initiation"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Is the product primarily proactive or reactive?"
+        - "What actions does the product take without user initiation?"
+        - "How are proactive actions communicated to the user?"
+        - "How is proactivity balanced against user control?"
+    - id: "trust-model"
+      title: "Trust Model"
+      intent: "Define how the product earns and maintains user trust"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the product earn and maintain user trust?"
+        - "What data or actions require explicit user consent?"
+        - "How is uncertainty or low-confidence output communicated?"
+        - "How does the product avoid overpromising?"
+    - id: "ux-anti-patterns"
+      title: "UX Anti-Patterns"
+      intent: "Enumerate UX patterns explicitly avoided"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What UX patterns are explicitly avoided?"
+        - "What dark patterns or manipulative patterns are prohibited?"
+        - "What UX patterns common in competitor products are rejected?"

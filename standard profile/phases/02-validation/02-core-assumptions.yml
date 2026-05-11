@@ -1,0 +1,113 @@
+document:
+  id: "02-core-assumptions"
+  title: "Core Assumptions"
+  phase: "02-validation"
+  status: "not_started"
+  order: 2
+  type: "assumptions"
+  purpose: "Map every assumption the project depends on and identify which can kill it if false."
+  centralQuestion: "What must be true for the project to make sense?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/02-core-assumptions.md"
+      purpose: "Maps every assumption the project depends on and identifies which can kill it if false."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "assumption-map"
+      title: "Assumption Map"
+      intent: "Catalog all assumptions grouped by domain and status."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What are all the assumptions the project rests on?"
+        - "How are assumptions grouped by domain: problem, audience, solution, market, economics?"
+        - "What is the status of each assumption: known, unknown, or intuited?"
+    - id: "critical-assumptions"
+      title: "Critical Assumptions"
+      intent: "Identify the most dangerous, highest-impact assumptions."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which assumptions are most dangerous?"
+        - "Which assumptions carry the most uncertainty and the highest impact?"
+        - "Which assumptions, if false, kill the project?"
+    - id: "secondary-assumptions"
+      title: "Secondary Assumptions"
+      intent: "Identify assumptions that affect positioning but are not existential."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which assumptions only alter positioning or tactics if false?"
+        - "Which assumptions are important but not existential?"
+        - "Which assumptions can be refined later without blocking progress?"
+    - id: "unknowns"
+      title: "Unknowns"
+      intent: "Identify which assumptions are unvalidated and how to resolve them."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which assumptions are currently unknown or unvalidated?"
+        - "What is the plan to move unknowns into knowns?"
+        - "Which unknowns are acceptable to carry forward?"
+    - id: "dependency-between-assumptions"
+      title: "Dependency Between Assumptions"
+      intent: "Map causal and dependency relationships between assumptions."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "How do assumptions depend on each other?"
+        - "Which assumptions, if validated, strengthen or weaken others?"
+        - "What is the causal chain connecting assumptions?"
+    - id: "assumptions-that-can-kill-the-project"
+      title: "Assumptions That Can Kill the Project"
+      intent: "Identify assumptions that are fatal if false and assess mitigations."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which assumptions, if false, kill the project?"
+        - "What is the evidence threshold for each killing assumption?"
+        - "Are there mitigations or pivots available if a killing assumption is refuted?"
+    - id: "assumptions-that-only-change-direction"
+      title: "Assumptions That Only Change Direction"
+      intent: "Identify assumptions that alter positioning rather than viability if false."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which assumptions only alter positioning if proven false?"
+        - "What directional changes would be triggered by each refuted non-critical assumption?"

@@ -1,0 +1,127 @@
+document:
+  id: "06-channel-strategy"
+  title: "Channel Strategy"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 6
+  type: "channel_strategy"
+  purpose: "Define how the product reaches the market and how the right people discover it."
+  centralQuestion: "How will the right people discover this product?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/06-channel-strategy.md"
+      purpose: "Channel strategy document with primary, secondary, organic, paid, and partnership channels."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "channel-objective"
+      title: "Channel Objective"
+      intent: "Define the primary goal of the channel strategy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the primary goal of the channel strategy?"
+    - id: "primary-channel"
+      title: "Primary Channel"
+      intent: "Identify the single primary acquisition channel and its rationale."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the single primary acquisition channel?"
+        - "Why is this channel the best bet?"
+    - id: "secondary-channels"
+      title: "Secondary Channels"
+      intent: "List supporting channels and how they reinforce each other."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What channels support the primary channel?"
+        - "How do they reinforce each other?"
+    - id: "organic-channels"
+      title: "Organic Channels"
+      intent: "Enumerate organic channels such as SEO, content, community, and referrals."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What organic channels will be used?"
+        - "Examples: SEO, Content, Community, GitHub, Referrals?"
+    - id: "paid-channels"
+      title: "Paid Channels"
+      intent: "List paid channels to test and conditions for scaling."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What paid channels will be tested?"
+        - "Under what conditions would paid channels scale?"
+    - id: "partnership-channels"
+      title: "Partnership Channels"
+      intent: "Identify partnership or affiliate channels and partner fit criteria."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What partnership or affiliate channels exist?"
+        - "What makes a potential partner a good fit?"
+    - id: "community-channels"
+      title: "Community Channels"
+      intent: "Map communities the target audience inhabits and authentic participation plans."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What communities does the target audience already inhabit?"
+        - "How will the product participate authentically?"
+    - id: "sales-channels"
+      title: "Sales Channels"
+      intent: "List direct or indirect sales channels including marketplaces and app stores."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What direct or indirect sales channels will be used?"
+        - "Examples: Direct Sales, Marketplaces, App Store?"
+    - id: "channel-experiments"
+      title: "Channel Experiments"
+      intent: "Plan channel experiments with success thresholds."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What channel experiments are planned?"
+        - "What is the success threshold for each experiment?"
+    - id: "channel-constraints"
+      title: "Channel Constraints"
+      intent: "Identify constraints limiting channel choice."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What constraints limit channel choice (budget, team, compliance, platform rules)?"
+    - id: "channel-risks"
+      title: "Channel Risks"
+      intent: "Surface channel failure risks and fallback plans."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could cause a channel to fail?"
+        - "What is the fallback if the primary channel underperforms?"

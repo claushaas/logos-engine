@@ -1,0 +1,138 @@
+document:
+  id: "11-financial-operations"
+  title: "Financial Operations"
+  phase: "06-operations"
+  status: "not_started"
+  order: 11
+  type: "financial_operations"
+  purpose: "Define how money is operated day to day, including billing, payments, and cost control."
+  centralQuestion: "How is money operated day to day?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/11-financial-operations.md"
+      purpose: "Complete financial operations definition covering objectives, billing, subscription management, payment failures, refunds, revenue recognition, cost and margin monitoring, vendor costs, tax/accounting interface, financial reporting, and risks."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "financial-operations-objective"
+      title: "Financial Operations Objective"
+      intent: "Define the goal of financial operations and its connection to the economic model and pricing."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the goal of financial operations?"
+        - "How does financial operations connect to the economic model and pricing?"
+    - id: "billing-operations"
+      title: "Billing Operations"
+      intent: "Define how charges are calculated, invoiced, collected, and what billing cycles and payment methods are supported."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are charges calculated, invoiced, and collected?"
+        - "What billing cycles and payment methods are supported?"
+    - id: "subscription-management"
+      title: "Subscription Management"
+      intent: "Define how subscriptions are created, modified, cancelled, and how plan changes and proration are handled."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are subscriptions created, modified, and cancelled?"
+        - "How are plan changes and proration handled?"
+    - id: "payment-failures"
+      title: "Payment Failures"
+      intent: "Define what happens when payments fail, including retry logic and dunning process."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What happens when a payment fails?"
+        - "What retry logic and dunning process is in place?"
+    - id: "refund-process"
+      title: "Refund Process"
+      intent: "Define how refunds are evaluated, approved, processed, and what policies apply."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are refunds evaluated, approved, and processed?"
+        - "What refund policies apply and who can override them?"
+    - id: "revenue-recognition-notes"
+      title: "Revenue Recognition Notes"
+      intent: "Define how revenue is recognized for reporting and what accounting interface exists for revenue data."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is revenue recognized for reporting purposes?"
+        - "What accounting interface exists for revenue data?"
+    - id: "cost-monitoring"
+      title: "Cost Monitoring"
+      intent: "Define how operational costs are tracked, monitored, and what cost anomalies trigger alerts."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are operational costs tracked and monitored?"
+        - "What cost anomalies trigger alerts?"
+    - id: "margin-monitoring"
+      title: "Margin Monitoring"
+      intent: "Define how gross and net margin are calculated, monitored, and what thresholds trigger action."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is gross and net margin calculated and monitored?"
+        - "What margin thresholds trigger action?"
+    - id: "vendor-costs"
+      title: "Vendor Costs"
+      intent: "Define how third-party vendor costs are tracked and the review cadence."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are third-party vendor costs tracked?"
+        - "What vendor cost review cadence exists?"
+    - id: "tax-accounting-interface"
+      title: "Tax/Accounting Interface"
+      intent: "Define how financial operations interfaces with tax and accounting functions and what data is shared."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does financial operations interface with tax and accounting functions?"
+        - "What data is shared with accounting systems?"
+    - id: "financial-reporting"
+      title: "Financial Reporting"
+      intent: "Define what financial reports are produced, at what cadence, and who consumes them."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What financial reports are produced and at what cadence?"
+        - "Who consumes financial operations reports?"
+    - id: "financial-operations-risks"
+      title: "Financial Operations Risks"
+      intent: "Identify failure modes of financial operations and how financial risks are detected and mitigated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could cause financial operations to fail?"
+        - "How are financial risks detected and mitigated?"

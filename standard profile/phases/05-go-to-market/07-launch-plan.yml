@@ -1,0 +1,120 @@
+document:
+  id: "07-launch-plan"
+  title: "Launch Plan"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 7
+  type: "launch_plan"
+  purpose: "Define the initial controlled market entry sequence, assets, and success criteria."
+  centralQuestion: "How will the product be launched?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/07-launch-plan.md"
+      purpose: "Launch plan document with phases, checklist, assets, and success criteria."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "launch-objective"
+      title: "Launch Objective"
+      intent: "Define what a successful launch achieves and the single most important outcome."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What does a successful launch achieve?"
+        - "What is the single most important launch outcome?"
+    - id: "launch-type"
+      title: "Launch Type"
+      intent: "Choose the launch type and justify why over other options."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What type of launch: Waitlist, Closed Beta, Public Beta, Soft Launch, or Public Launch?"
+        - "Why this type over others?"
+    - id: "launch-audience"
+      title: "Launch Audience"
+      intent: "Identify the launch audience and target size."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Who is the launch audience?"
+        - "How many people are targeted for the initial launch?"
+    - id: "pre-launch-phase"
+      title: "Pre-launch Phase"
+      intent: "Define tasks and readiness criteria before launch day."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What happens before the launch date?"
+        - "What must be ready before launch?"
+    - id: "launch-phase"
+      title: "Launch Phase"
+      intent: "Define the launch sequence on and immediately after launch day."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What happens on and immediately after launch day?"
+        - "What is the launch sequence?"
+    - id: "post-launch-phase"
+      title: "Post-launch Phase"
+      intent: "Define post-launch activities and transition to ongoing operations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What happens after the initial launch window?"
+        - "How does the launch transition into ongoing operations?"
+    - id: "launch-assets"
+      title: "Launch Assets"
+      intent: "List content and materials needed for launch with ownership."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What content and materials are needed for launch?"
+        - "Who is responsible for each asset?"
+    - id: "launch-checklist"
+      title: "Launch Checklist"
+      intent: "Enumerate concrete pre-launch items and owners."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the concrete items that must be completed before launch?"
+        - "Who owns each checklist item?"
+    - id: "launch-success-criteria"
+      title: "Launch Success Criteria"
+      intent: "Define metrics and go / no-go thresholds for launch success."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What metrics define launch success?"
+        - "What is the go / no-go threshold after launch?"
+    - id: "launch-risks"
+      title: "Launch Risks"
+      intent: "Identify launch risks and contingency plans."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could go wrong during launch?"
+        - "What is the contingency plan for each risk?"

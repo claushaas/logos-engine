@@ -1,0 +1,125 @@
+document:
+  id: "09-decision-record"
+  title: "Decision Record"
+  phase: "02-validation"
+  status: "not_started"
+  order: 9
+  type: "decision_record"
+  purpose: "Record all decisions made from evidence, including reasoning, alternatives, and remaining risk."
+  centralQuestion: "What was decided based on what evidence?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/09-decision-record.md"
+      purpose: "Records all decisions made from evidence, including reasoning, alternatives, and remaining risk."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  specializedFormats:
+    decisionRecordFormat:
+      description: "Standardized format for each decision entry."
+      fields:
+        - id
+        - decision
+        - context
+        - optionsConsidered
+        - rationale
+        - consequences
+        - status
+        - date
+  sections:
+    - id: "decision-register"
+      title: "Decision Register"
+      intent: "Maintain the master log of all validation-driven decisions and complete decision history."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What decisions have been made based on evidence?"
+        - "What is the complete decision history?"
+    - id: "accepted-hypotheses"
+      title: "Accepted Hypotheses"
+      intent: "List hypotheses accepted as supported, with evidence and confidence levels."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which hypotheses have been accepted as supported?"
+        - "What evidence supports each accepted hypothesis?"
+        - "What is the confidence level in each accepted hypothesis?"
+    - id: "refuted-hypotheses"
+      title: "Refuted Hypotheses"
+      intent: "List refuted hypotheses, the evidence that refuted them, and their impact on the project."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which hypotheses have been refuted?"
+        - "What evidence refuted each hypothesis?"
+        - "What was the impact of each refutation on the project?"
+    - id: "pivot-decisions"
+      title: "Pivot Decisions"
+      intent: "Document pivot decisions, triggers, and resulting changes."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What pivot decisions have been made?"
+        - "What triggered each pivot?"
+        - "What changed as a result of each pivot?"
+    - id: "proceed-decisions"
+      title: "Proceed Decisions"
+      intent: "Document go-forward decisions, justifying evidence, and attached conditions."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What proceed/go-forward decisions have been made?"
+        - "What evidence justified proceeding?"
+        - "What conditions were attached to proceeding?"
+    - id: "stop-decisions"
+      title: "Stop Decisions"
+      intent: "Document stop/kill decisions, triggering evidence, and lessons learned."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What stop/kill decisions have been made?"
+        - "What evidence triggered the decision to stop?"
+        - "What can be learned from the stopped initiative?"
+    - id: "open-risks"
+      title: "Open Risks"
+      intent: "Identify remaining open risks, those under monitoring, and those needing more evidence."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What risks remain open and unaddressed?"
+        - "Which risks are being actively monitored?"
+        - "Which risks require further evidence before a decision can be made?"

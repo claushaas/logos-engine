@@ -1,0 +1,129 @@
+document:
+  id: "05-customer-success"
+  title: "Customer Success"
+  phase: "06-operations"
+  status: "not_started"
+  order: 5
+  type: "customer_success"
+  purpose: "Define how to proactively ensure users and clients obtain continuous value."
+  centralQuestion: "How to ensure users/clients obtain continuous value?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/05-customer-success.md"
+      purpose: "Complete customer success definition including activation, onboarding, health signals, retention, expansion, feedback, satisfaction measurement, and churn prevention."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "customer-success-objective"
+      title: "Customer Success Objective"
+      intent: "Define the goal of customer success and how it differs from customer support."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the goal of the customer success function?"
+        - "How does customer success differ from customer support?"
+    - id: "activation-milestones"
+      title: "Activation Milestones"
+      intent: "Define what constitutes a successfully activated user and how activation progress is tracked."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What milestones define a successfully activated user?"
+        - "How is progress toward activation tracked?"
+    - id: "onboarding-follow-up"
+      title: "Onboarding Follow-up"
+      intent: "Define post-signup follow-up procedures and signals indicating a user is stuck in onboarding."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What follow-up occurs after a user signs up?"
+        - "What signals indicate a user is stuck in onboarding?"
+    - id: "health-signals"
+      title: "Health Signals"
+      intent: "Define signals of a healthy, engaged user and how health scores are calculated and reviewed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What signals indicate a healthy, engaged user?"
+        - "How are health scores calculated and reviewed?"
+    - id: "at-risk-user-signals"
+      title: "At-Risk User Signals"
+      intent: "Define signals that indicate churn risk and the expected speed of response."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What signals indicate a user is at risk of churning?"
+        - "How quickly are at-risk signals acted upon?"
+    - id: "retention-actions"
+      title: "Retention Actions"
+      intent: "Define proactive retention actions and escalation path for high-value at-risk accounts."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What proactive actions are taken to retain users?"
+        - "What is the escalation path for high-value at-risk accounts?"
+    - id: "expansion-opportunities"
+      title: "Expansion Opportunities"
+      intent: "Define how expansion and upgrade opportunities are identified and handed off to sales or account management."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are expansion and upgrade opportunities identified?"
+        - "What is the handoff process to sales or account management?"
+    - id: "feedback-loops"
+      title: "Feedback Loops"
+      intent: "Define how user feedback is collected, categorized, routed, and influences the product roadmap."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is user feedback collected, categorized, and routed?"
+        - "How does feedback influence the product roadmap?"
+    - id: "satisfaction-measurement"
+      title: "Satisfaction Measurement"
+      intent: "Define how customer satisfaction is measured, including methodology, cadence, and survey approach."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is customer satisfaction measured (NPS, CSAT, etc.)?"
+        - "What cadence and methodology are used for satisfaction surveys?"
+    - id: "churn-prevention"
+      title: "Churn Prevention"
+      intent: "Define systematic churn prevention measures and how churn is analyzed for learning."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What systematic churn prevention measures are in place?"
+        - "How is churn analyzed and learned from?"
+    - id: "customer-success-risks"
+      title: "Customer Success Risks"
+      intent: "Identify failure modes of the customer success function and how they are detected and mitigated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could cause the customer success function to fail?"
+        - "How are customer success risks detected and mitigated?"

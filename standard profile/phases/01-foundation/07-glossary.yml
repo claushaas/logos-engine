@@ -1,0 +1,58 @@
+document:
+  id: "07-glossary"
+  title: "Glossary of Terms"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 7
+  type: "glossary"
+  purpose: "Provide canonical semantic control over key project terminology."
+  centralQuestion: "When we use an important word, exactly what does it mean in this project?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "01-foundation/07-glossary.md"
+      purpose: "Rendered glossary of terms document"
+  dependsOn:
+    - "01-thesis"
+    - "02-problem"
+    - "03-audience"
+    - "04-principles"
+    - "05-boundaries"
+    - "06-success-definition"
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+    - "Every term used in other foundation documents is defined here."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Every term must have a definition that constrains its meaning."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Define terms in project-context, not generic dictionary sense."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+    - "Verify that no term used in definitions is itself undefined."
+  specializedFormats:
+    glossaryFormat:
+      description: "Used by glossary documents."
+      fields:
+        - term
+        - definition
+        - usedIn
+        - notToBeConfusedWith
+  sections:
+    - id: "terms"
+      title: "Terms"
+      intent: "Define each fundamental term with its project-specific meaning, usage context, and distinctions."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the fundamental terms?"
+        - "What is the exact definition of each term in project context?"
+        - "Where is each term used?"
+        - "What is each term not to be confused with?"

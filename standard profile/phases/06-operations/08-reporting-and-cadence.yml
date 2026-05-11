@@ -1,0 +1,129 @@
+document:
+  id: "08-reporting-and-cadence"
+  title: "Reporting and Cadence"
+  phase: "06-operations"
+  status: "not_started"
+  order: 8
+  type: "reporting_cadence"
+  purpose: "Define the review rhythm for operational health and decision-making."
+  centralQuestion: "When do we look at what and decide what?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/08-reporting-and-cadence.md"
+      purpose: "Complete reporting and cadence definition covering daily, weekly, monthly, quarterly reviews, dashboards, decision meetings, artifacts, responsibilities, escalation triggers, and cadence risks."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "reporting-objective"
+      title: "Reporting Objective"
+      intent: "Define the purpose of operational reporting and who consumes operational reports."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the purpose of operational reporting?"
+        - "Who consumes operational reports?"
+    - id: "daily-checks"
+      title: "Daily Checks"
+      intent: "Define which metrics and signals are checked daily, by whom, and what actions they trigger."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What metrics and signals are checked daily?"
+        - "Who performs daily checks and what actions do they trigger?"
+    - id: "weekly-review"
+      title: "Weekly Review"
+      intent: "Define the weekly review scope and participants."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is reviewed on a weekly basis?"
+        - "Who participates in the weekly review?"
+    - id: "monthly-review"
+      title: "Monthly Review"
+      intent: "Define the monthly review scope and how it feeds into operational planning."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is reviewed on a monthly basis?"
+        - "How does the monthly review feed into operational planning?"
+    - id: "quarterly-review"
+      title: "Quarterly Review"
+      intent: "Define the quarterly review scope and how it connects to strategic planning."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is reviewed on a quarterly basis?"
+        - "How does the quarterly review connect to strategic planning?"
+    - id: "metrics-dashboard"
+      title: "Metrics Dashboard"
+      intent: "Define the operational metrics dashboards, access controls, and maintenance."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What dashboards exist for operational metrics?"
+        - "Who has access and how are dashboards maintained?"
+    - id: "decision-meetings"
+      title: "Decision Meetings"
+      intent: "Define recurring meetings dedicated to operational decisions and what decisions are made in each."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What recurring meetings are dedicated to operational decisions?"
+        - "What decisions are made in each meeting?"
+    - id: "review-artifacts"
+      title: "Review Artifacts"
+      intent: "Define artifacts produced by each review cadence, how they are stored, and how they are shared."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What artifacts are produced by each review cadence?"
+        - "How are artifacts stored and shared?"
+    - id: "reporting-responsibilities"
+      title: "Reporting Responsibilities"
+      intent: "Assign responsibility for producing each report and accountability for acting on findings."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Who is responsible for producing each report?"
+        - "Who is accountable for acting on report findings?"
+    - id: "escalation-triggers"
+      title: "Escalation Triggers"
+      intent: "Define metric thresholds and events that trigger out-of-cycle escalation and notification rules."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What metric thresholds or events trigger out-of-cycle escalation?"
+        - "Who is notified when an escalation trigger fires?"
+    - id: "cadence-risks"
+      title: "Cadence Risks"
+      intent: "Identify failure modes of the review cadence and how cadence risks are mitigated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could cause the review cadence to fail?"
+        - "How are cadence risks mitigated?"

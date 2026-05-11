@@ -1,0 +1,119 @@
+document:
+  id: "04-principles"
+  title: "Design Principles"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 4
+  type: "principles"
+  purpose: "Establish normative rules that govern decisions when there is conflict."
+  centralQuestion: "What rules govern decisions when there is conflict?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "01-foundation/04-principles.md"
+      purpose: "Rendered design principles document"
+  dependsOn:
+    - "01-thesis"
+    - "02-problem"
+    - "03-audience"
+  feeds:
+    - "05-boundaries"
+    - "06-success-definition"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+    - "Each principle includes a decision rule, acceptable trade-offs, and violations."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Each principle must be falsifiable: it must be possible to identify a violation."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "State each principle in positive, actionable terms."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+    - "Verify that no two principles directly contradict each other."
+  specializedFormats:
+    principleFormat:
+      description: "Used by principles documents."
+      fields:
+        - name
+        - meaning
+        - decisionRule
+        - acceptableTradeoffs
+        - violations
+  sections:
+    - id: "principle-local-first"
+      title: "Principle: Local First"
+      intent: "Define the local-first principle as a decision rule with trade-offs and violations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which decisions should the project favor?"
+        - "What should be prioritized when there is conflict?"
+        - "What behaviors should the system have?"
+        - "What patterns should be avoided?"
+        - "What trade-offs are accepted?"
+    - id: "principle-structure-over-presentation"
+      title: "Principle: Structure Over Presentation"
+      intent: "Define the structure-over-presentation principle as a decision rule with trade-offs and violations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which decisions should the project favor?"
+        - "What should be prioritized when there is conflict?"
+        - "What behaviors should the system have?"
+        - "What patterns should be avoided?"
+        - "What trade-offs are accepted?"
+    - id: "principle-explicit-over-assumed"
+      title: "Principle: Explicit Over Assumed"
+      intent: "Define the explicit-over-assumed principle as a decision rule with trade-offs and violations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which decisions should the project favor?"
+        - "What should be prioritized when there is conflict?"
+        - "What behaviors should the system have?"
+        - "What patterns should be avoided?"
+        - "What trade-offs are accepted?"
+    - id: "principle-git-friendly"
+      title: "Principle: Git Friendly"
+      intent: "Define the git-friendly principle as a decision rule with trade-offs and violations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which decisions should the project favor?"
+        - "What should be prioritized when there is conflict?"
+        - "What behaviors should the system have?"
+        - "What patterns should be avoided?"
+        - "What trade-offs are accepted?"
+    - id: "principle-ai-as-layer"
+      title: "Principle: AI as a Layer"
+      intent: "Define the AI-as-a-layer principle as a decision rule with trade-offs and violations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which decisions should the project favor?"
+        - "What should be prioritized when there is conflict?"
+        - "What behaviors should the system have?"
+        - "What patterns should be avoided?"
+        - "What trade-offs are accepted?"
+    - id: "principle-safe-by-default"
+      title: "Principle: Safe by Default"
+      intent: "Define the safe-by-default principle as a decision rule with trade-offs and violations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which decisions should the project favor?"
+        - "What should be prioritized when there is conflict?"
+        - "What behaviors should the system have?"
+        - "What patterns should be avoided?"
+        - "What trade-offs are accepted?"

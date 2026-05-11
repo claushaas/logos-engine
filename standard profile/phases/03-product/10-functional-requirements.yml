@@ -1,0 +1,140 @@
+document:
+  id: "10-functional-requirements"
+  title: "Functional Requirements"
+  phase: "03-product"
+  status: "not_started"
+  order: 10
+  type: "functional_requirements"
+  purpose: "Define all mandatory functionalities the product must provide."
+  centralQuestion: "What functionalities are mandatory?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/10-functional-requirements.md"
+      purpose: "Mandatory functional requirements for the product"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  specializedFormats:
+    requirementFormat:
+      - id
+      - description
+      - userValue
+      - priority
+      - relatedJourney
+      - relatedModule
+      - acceptanceCriteria
+      - dependencies
+      - notes
+  sections:
+    - id: "requirement-format"
+      title: "Requirement Format"
+      intent: "Define the structure, taxonomy, traceability, and acceptance criteria format for requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are requirements structured (ID, description, value, priority)?"
+        - "What is the taxonomy for requirement priority (Must, Should, Could, Won't)?"
+        - "How are requirements traced to user journeys and product modules?"
+        - "What constitutes a well-formed acceptance criterion?"
+    - id: "core-requirements"
+      title: "Core Requirements"
+      intent: "Enumerate must-have functional requirements essential to the core product promise"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the must-have functional requirements?"
+        - "Which requirements are essential to the core product promise?"
+        - "What is the dependency chain among core requirements?"
+        - "What requirements have the highest user impact?"
+    - id: "user-requirements"
+      title: "User Requirements"
+      intent: "Define functions end users need, supported actions, outputs, and preferences"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What functions do end users need from the product?"
+        - "What user actions must be supported?"
+        - "What user-facing outputs must the product produce?"
+        - "What user preferences and settings are required?"
+    - id: "system-requirements"
+      title: "System Requirements"
+      intent: "Define background, automated, data, scheduling, and maintenance functions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What background or automated functions are required?"
+        - "What data processing, storage, and retrieval functions are needed?"
+        - "What scheduling, queuing, or batch processing is required?"
+        - "What system health and maintenance functions are required?"
+    - id: "admin-requirements"
+      title: "Admin Requirements"
+      intent: "Define administrative functions, access roles, and management capabilities"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What administrative functions are required?"
+        - "Who needs admin access and for what purposes?"
+        - "What configuration, monitoring, and management functions are needed?"
+        - "What admin functions can be deferred post-MVP?"
+    - id: "integration-requirements"
+      title: "Integration Requirements"
+      intent: "Define external integrations, data flows, auth, and failure handling"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What external integrations are required?"
+        - "What data must flow in and out of the product?"
+        - "What authentication and authorization integrations are needed?"
+        - "What are the integration failure-handling requirements?"
+    - id: "data-requirements"
+      title: "Data Requirements"
+      intent: "Define data storage, processing, retention, export, and consistency requirements"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What data must the product store, process, and retrieve?"
+        - "What are the data retention and deletion requirements?"
+        - "What data export and portability requirements exist?"
+        - "What data accuracy and consistency requirements apply?"
+    - id: "business-rules"
+      title: "Business Rules"
+      intent: "Define business rules, validation, constraints, workflow rules, and configurability"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What business rules must the product enforce?"
+        - "What validation, constraint, and workflow rules apply?"
+        - "What rules are configurable vs hard-coded?"
+        - "How are rule conflicts resolved?"
+    - id: "requirement-traceability"
+      title: "Requirement Traceability"
+      intent: "Define how requirements trace to journeys and modules, and how changes are managed"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is each requirement traced to a user journey?"
+        - "How is each requirement traced to a product module?"
+        - "How is requirement completeness verified?"
+        - "How are requirement changes tracked and propagated?"

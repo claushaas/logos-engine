@@ -1,0 +1,129 @@
+document:
+  id: "06-business-processes"
+  title: "Business Processes"
+  phase: "06-operations"
+  status: "not_started"
+  order: 6
+  type: "business_processes"
+  purpose: "Define the recurring business processes that must operate repeatably."
+  centralQuestion: "What operations need to happen repeatably?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/06-business-processes.md"
+      purpose: "Complete inventory and definition of recurring business processes including onboarding, billing, cancellation, refunds, feature requests, bug triage, release communication, vendor management, data handling, and process review."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "process-inventory"
+      title: "Process Inventory"
+      intent: "Provide the complete list of recurring business processes with categorization and prioritization."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the complete list of recurring business processes?"
+        - "How are processes categorized and prioritized?"
+    - id: "user-onboarding-process"
+      title: "User Onboarding Process"
+      intent: "Define the end-to-end onboarding process from signup to activation with clear accountability."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What steps does a new user go through from signup to activation?"
+        - "Who is responsible for each onboarding step?"
+    - id: "billing-process"
+      title: "Billing Process"
+      intent: "Define how recurring charges are calculated, applied, collected, and what happens on success or failure."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are recurring charges calculated, applied, and collected?"
+        - "What happens when a payment succeeds or fails?"
+    - id: "cancellation-process"
+      title: "Cancellation Process"
+      intent: "Define the user cancellation flow and what offboarding steps occur after cancellation."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does a user cancel their subscription or account?"
+        - "What offboarding steps occur after cancellation?"
+    - id: "refund-process"
+      title: "Refund Process"
+      intent: "Define how refund requests are evaluated, approved, and processed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are refund requests evaluated and processed?"
+        - "What approvals are required for refunds?"
+    - id: "feature-request-process"
+      title: "Feature Request Process"
+      intent: "Define how feature requests are submitted, tracked, reviewed, and flow into the product roadmap."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are feature requests submitted, tracked, and reviewed?"
+        - "How do feature requests flow into the product roadmap?"
+    - id: "bug-triage-process"
+      title: "Bug Triage Process"
+      intent: "Define the full lifecycle of bug reporting, triage, prioritization, and resolution."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are bugs reported, triaged, and prioritized?"
+        - "What is the lifecycle of a bug from report to resolution?"
+    - id: "release-communication-process"
+      title: "Release Communication Process"
+      intent: "Define how releases are communicated to users and internal teams and what artifacts accompany each release."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are releases communicated to users and internal teams?"
+        - "What artifacts accompany each release?"
+    - id: "vendor-management-process"
+      title: "Vendor Management Process"
+      intent: "Define vendor selection, onboarding, review, and ongoing management tasks."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are third-party vendors selected, onboarded, and reviewed?"
+        - "What ongoing vendor management tasks are required?"
+    - id: "data-export-deletion-process"
+      title: "Data Export/Deletion Process"
+      intent: "Define how users request data exports or deletion and how requests are fulfilled within regulatory timelines."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How do users request data exports or account deletion?"
+        - "How are these requests fulfilled within regulatory timelines?"
+    - id: "process-review"
+      title: "Process Review"
+      intent: "Define the cadence and ownership for reviewing business process efficiency and driving improvements."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How often are business processes reviewed for efficiency?"
+        - "Who is responsible for process improvement?"

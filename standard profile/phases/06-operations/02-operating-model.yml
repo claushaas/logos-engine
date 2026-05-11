@@ -1,0 +1,120 @@
+document:
+  id: "02-operating-model"
+  title: "Operating Model"
+  phase: "06-operations"
+  status: "not_started"
+  order: 2
+  type: "operating_model"
+  purpose: "Define how the project functions day to day, including manual and automated operations."
+  centralQuestion: "How does the project function day to day?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/02-operating-model.md"
+      purpose: "Definitive description of the day-to-day operating model including principles, functions, workflows, decisions, and escalation paths."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "operating-principles"
+      title: "Operating Principles"
+      intent: "Establish principles that guide day-to-day operational decisions and tradeoff resolution."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What principles guide day-to-day operational decisions?"
+        - "How are tradeoffs between speed, cost, and quality resolved?"
+    - id: "core-operational-functions"
+      title: "Core Operational Functions"
+      intent: "Enumerate functions performed daily, weekly, and monthly with clear accountability."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which functions must be performed daily, weekly, and monthly?"
+        - "Who is accountable for each function?"
+    - id: "manual-operations"
+      title: "Manual Operations"
+      intent: "Identify operations requiring human intervention and how they are documented and executed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which operations require human intervention?"
+        - "How are manual steps documented and executed?"
+    - id: "automated-operations"
+      title: "Automated Operations"
+      intent: "Identify automated operations, candidates for automation, and the tools that run them."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which operations are automated or should be automated?"
+        - "What tools, scripts, or platforms run automated operations?"
+    - id: "third-party-dependencies"
+      title: "Third-Party Dependencies"
+      intent: "List critical third-party services and the impact of each dependency being unavailable."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which third-party services are critical to daily operations?"
+        - "What happens when each dependency is unavailable?"
+    - id: "operational-workflows"
+      title: "Operational Workflows"
+      intent: "Define standard workflows for recurring operational tasks and how they are triggered, tracked, and reviewed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the standard workflows for recurring operational tasks?"
+        - "How are workflows triggered, tracked, and reviewed?"
+    - id: "decision-points"
+      title: "Decision Points"
+      intent: "Identify operational decisions requiring approval and who holds decision authority per category."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which operational decisions require approval?"
+        - "Who has the authority to make each category of decision?"
+    - id: "escalation-paths"
+      title: "Escalation Paths"
+      intent: "Define how operational issues escalate and the chain of communication per escalation level."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How do operational issues escalate?"
+        - "What is the chain of communication for each escalation level?"
+    - id: "operating-constraints"
+      title: "Operating Constraints"
+      intent: "Catalog budget, tooling, staffing, compliance, and contractual constraints on operations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What budget, tooling, or staffing constraints limit operations?"
+        - "What compliance or contractual constraints apply?"
+    - id: "operating-model-risks"
+      title: "Operating Model Risks"
+      intent: "Identify failure modes of the operating model and how they are detected and mitigated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could cause the operating model to fail?"
+        - "How are operating model risks detected and mitigated?"

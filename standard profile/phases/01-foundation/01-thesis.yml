@@ -1,0 +1,93 @@
+document:
+  id: "01-thesis"
+  title: "Founding Thesis"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 1
+  type: "thesis"
+  purpose: "Articulate the founding conviction that justifies the project's existence."
+  centralQuestion: "What truth, hypothesis, or conviction justifies this project's existence?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "01-foundation/01-thesis.md"
+      purpose: "Rendered founding thesis document"
+  dependsOn: []
+  feeds:
+    - "02-problem"
+    - "03-audience"
+    - "04-principles"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+    - "The foundational claim is reduced to a single defensible sentence."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "The thesis must be falsifiable."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Anchor every claim in observable evidence or reasoned argument."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+    - "Verify the thesis can be stated without relying on undefined terms."
+  sections:
+    - id: "core-thesis"
+      title: "Core Thesis"
+      intent: "State the central thesis and its essential supporting elements."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the central thesis?"
+        - "What change in the world, market, or human behavior makes this relevant?"
+        - "What tension does the project try to resolve?"
+        - "What does this project assert that other systems neglect?"
+        - "What is the essential promise, without marketing?"
+    - id: "context"
+      title: "Context"
+      intent: "Describe the broader conditions that make the thesis relevant."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What broader conditions surround this thesis?"
+        - "What timing or trends make the thesis urgent now?"
+    - id: "central-tension"
+      title: "Central Tension"
+      intent: "Clarify the unresolved tension the project addresses."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What two or more forces are in conflict?"
+        - "Why has this tension gone unresolved?"
+    - id: "foundational-claim"
+      title: "Foundational Claim"
+      intent: "Reduce the thesis to a single defensible claim with supporting evidence."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the single sentence that captures the project's assertion?"
+        - "What evidence supports this claim?"
+    - id: "what-this-project-makes-possible"
+      title: "What This Project Makes Possible"
+      intent: "Describe what becomes achievable if the thesis holds."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What becomes possible that was not possible before?"
+        - "What changes downstream if the thesis holds?"
+    - id: "what-this-project-is-not"
+      title: "What This Project Is Not"
+      intent: "Preempt common misinterpretations of the thesis."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What misinterpretations of the thesis should be preempted?"
+        - "What adjacent ideas are out of scope for this conviction?"

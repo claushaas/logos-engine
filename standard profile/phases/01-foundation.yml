@@ -1,0 +1,140 @@
+phase:
+  id: 01-foundation
+  title: Foundation
+  order: 1
+  axis: normative
+  status: not_started
+  description: "Defines the normative base of the project: why it exists, what problem it addresses, who it serves, what principles guide it, what boundaries constrain it, and how success is understood."
+  purpose: "Answer why the project exists, for whom, under what principles, with what limits, and with what definition of success."
+
+  centralQuestion: "Why does this project exist, for whom, under what principles, with what limits, and with what definition of success?"
+
+  responsibilityBoundary:
+    owns:
+      - project thesis
+      - problem definition
+      - audience definition
+      - decision principles
+      - explicit boundaries
+      - foundational success definition
+      - canonical vocabulary
+    doesNotOwn:
+      - validation strategy
+      - market sizing
+      - product scope
+      - UX specification
+      - engineering architecture
+      - go-to-market execution
+      - operational processes
+
+  dependsOn: []
+
+  feedsInto:
+    - 02-validation
+    - 03-product
+    - 04-engineering
+    - 05-go-to-market
+    - 06-operations
+
+  readingOrder:
+    - 01-thesis
+    - 02-problem
+    - 03-audience
+    - 04-principles
+    - 05-boundaries
+    - 06-success-definition
+    - 07-glossary
+
+  completionCriteria:
+    - The project thesis is explicit and non-generic.
+    - The problem is stated before solution details.
+    - The audience is specific enough to constrain future product decisions.
+    - Principles are actionable decision rules, not generic values.
+    - Boundaries clearly state what the project is not and will not promise.
+    - Success is defined in foundational terms before metrics or growth targets.
+    - Key terms have stable meanings in the glossary.
+    - No Product, Engineering, Go-to-market, or Operations details are prematurely specified.
+
+  qualityChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - assumptions_explicit
+    - contradictions_flagged
+
+  generatedOutputs:
+    canonical:
+      directory: docs/01-foundation
+      format: markdown
+    structure:
+      directory: phases/01-foundation
+      format: yaml
+    presentation:
+      directory: outcomes/html
+      suggestedArtifacts:
+        - foundation-map.html
+        - thesis-problem-audience-summary.html
+    agentPacks:
+      directory: outcomes/agents
+      suggestedArtifacts:
+        - foundation-context-pack.md
+        - foundation-review-prompt.md
+
+  documents:
+    - id: 01-thesis
+      title: Thesis
+      file: phases/01-foundation/01-thesis.yml
+      output: docs/01-foundation/01-thesis.md
+      purpose: "Define the core proposition justifying the project's existence."
+      centralQuestion: "What truth, hypothesis, or conviction justifies this project existing?"
+      required: true
+
+    - id: 02-problem
+      title: Problem
+      file: phases/01-foundation/02-problem.yml
+      output: docs/01-foundation/02-problem.md
+      purpose: "Define the real problem before any solution."
+      centralQuestion: "What pain, friction, confusion, or limitation does this project exist to confront?"
+      required: true
+
+    - id: 03-audience
+      title: Audience
+      file: phases/01-foundation/03-audience.yml
+      output: docs/01-foundation/03-audience.md
+      purpose: "Define who the project exists for."
+      centralQuestion: "Who should recognize this project as useful, necessary, or inevitable?"
+      required: true
+
+    - id: 04-principles
+      title: Principles
+      file: phases/01-foundation/04-principles.yml
+      output: docs/01-foundation/04-principles.md
+      purpose: "Define actionable normative rules that guide future decisions."
+      centralQuestion: "Which decision rules should govern trade-offs when future choices conflict?"
+      required: true
+
+    - id: 05-boundaries
+      title: Boundaries
+      file: phases/01-foundation/05-boundaries.yml
+      output: docs/01-foundation/05-boundaries.md
+      purpose: "Define what the project is not, does not do, and does not promise."
+      centralQuestion: "Which temptations, promises, and expansions must this project resist?"
+      required: true
+
+    - id: 06-success-definition
+      title: Success Definition
+      file: phases/01-foundation/06-success-definition.yml
+      output: docs/01-foundation/06-success-definition.md
+      purpose: "Define how to know whether the project is fulfilling its reason to exist."
+      centralQuestion: "What must become true for this project to be considered successful at the foundational level?"
+      required: true
+
+    - id: 07-glossary
+      title: Glossary
+      file: phases/01-foundation/07-glossary.yml
+      output: docs/01-foundation/07-glossary.md
+      purpose: "Define the canonical meaning of key terms used by the project."
+      centralQuestion: "What do the project's most important words mean in this specific context?"
+      required: true

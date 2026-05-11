@@ -1,0 +1,151 @@
+document:
+  id: "07-ui-specification"
+  title: "UI Specification"
+  phase: "03-product"
+  status: "not_started"
+  order: 7
+  type: "ui_specification"
+  purpose: "Specify all screens, components, and interface states for the product."
+  centralQuestion: "What screens exist and how do they behave?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/07-ui-specification.md"
+      purpose: "Specification of all screens and interface states"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  sections:
+    - id: "screen-inventory"
+      title: "Screen Inventory"
+      intent: "Enumerate all screens and views with their purpose, hierarchy, and navigation"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What screens and views exist in the product?"
+        - "What is the purpose of each screen?"
+        - "What is the hierarchy and navigation relationship between screens?"
+        - "What are the entry and exit points for each screen?"
+    - id: "layout-rules"
+      title: "Layout Rules"
+      intent: "Define the global layout system and adaptation rules"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What layout system is used across screens?"
+        - "What are the global layout rules?"
+        - "How does layout adapt to different content types?"
+        - "How does layout adapt to different viewport sizes?"
+    - id: "component-usage"
+      title: "Component Usage"
+      intent: "Define reusable components and their usage rules"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What reusable components are used across screens?"
+        - "What are the usage rules for each component?"
+        - "What components are context-sensitive?"
+        - "What components must remain consistent globally?"
+    - id: "screen-by-screen-specification"
+      title: "Screen-by-Screen Specification"
+      intent: "Specify exact layout, content, components, interactions, and data for each screen"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "For each screen, what is the exact layout and content?"
+        - "What components appear on each screen?"
+        - "What interactions are available on each screen?"
+        - "What data drives each screen?"
+    - id: "empty-states"
+      title: "Empty States"
+      intent: "Define what each screen looks like with no data and the call to action"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What does each screen look like with no data?"
+        - "What is the empty-state call to action?"
+        - "How does the product guide the user from empty to populated?"
+        - "How are empty states visually distinct from loading states?"
+    - id: "loading-states"
+      title: "Loading States"
+      intent: "Define loading patterns, strategies, and perceived performance targets"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What loading patterns are used (skeleton, spinner, progress bar)?"
+        - "What is the loading strategy for each screen?"
+        - "How are partial loads handled?"
+        - "What is the maximum acceptable perceived loading time?"
+    - id: "error-states"
+      title: "Error States"
+      intent: "Define error states per screen with recovery actions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What error states can each screen display?"
+        - "How are errors surfaced to the user?"
+        - "What recovery actions are offered in each error state?"
+        - "How are background or non-blocking errors communicated?"
+    - id: "success-states"
+      title: "Success States"
+      intent: "Define how success is communicated and the next action after success"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What success states exist for each screen?"
+        - "How is success communicated to the user?"
+        - "What is the next action after success?"
+        - "How are transient vs persistent success states handled?"
+    - id: "responsive-behavior"
+      title: "Responsive Behavior"
+      intent: "Define supported viewport sizes, breakpoints, and adaptive behavior"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What viewport sizes are supported?"
+        - "How does the UI adapt at each breakpoint?"
+        - "What content or functionality is hidden at smaller sizes?"
+        - "What content or functionality is unavailable on certain platforms?"
+    - id: "microcopy-rules"
+      title: "Microcopy Rules"
+      intent: "Define tone, voice, standard labels, and consistent terminology"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What tone and voice guide all microcopy?"
+        - "What are the standard labels, button text, and messages?"
+        - "How are errors phrased to be helpful rather than technical?"
+        - "What terms are used consistently across all microcopy?"
+    - id: "ui-risks"
+      title: "UI Risks"
+      intent: "Identify highest-risk UI decisions and untested patterns"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What UI decisions carry the highest risk?"
+        - "Where is the UI most likely to break with scale or edge cases?"
+        - "What UI patterns have not been tested with real users?"
+        - "How will UI decisions be validated?"

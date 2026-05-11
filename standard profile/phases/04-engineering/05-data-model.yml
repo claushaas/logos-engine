@@ -1,0 +1,151 @@
+document:
+  id: "05-data-model"
+  title: "Data Model"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 5
+  type: "data_model"
+  purpose: "Defines how data will be stored, related, versioned, and migrated."
+  centralQuestion: "How will data be stored, related, versioned, and migrated?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/data-model.md"
+      purpose: "Data model defining storage, relationships, versioning, and migration strategy."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "data-storage-strategy"
+      title: "Data Storage Strategy"
+      intent: "Specify storage engines used and how local and remote data is partitioned."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What storage engines are used and why?"
+        - "How is local and remote data partitioned?"
+    - id: "entity-relationship-overview"
+      title: "Entity Relationship Overview"
+      intent: "Describe primary data entities, their relationships, and the cardinality of each relationship."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the primary data entities and their relationships?"
+        - "What is the cardinality of each relationship?"
+    - id: "tables-collections"
+      title: "Tables / Collections"
+      intent: "List all tables or collections and the naming convention for data structures."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What tables or collections exist?"
+        - "What is the naming convention for data structures?"
+    - id: "fields"
+      title: "Fields"
+      intent: "Define fields on each table or collection, including data types, nullability, and defaults."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What fields exist on each table or collection?"
+        - "What are the data types, nullability, and defaults for each field?"
+    - id: "constraints"
+      title: "Constraints"
+      intent: "Document unique, foreign key, and check constraints and how they are enforced at the application level."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What unique, foreign key, and check constraints apply?"
+        - "How are constraints enforced at the application level?"
+    - id: "indexes"
+      title: "Indexes"
+      intent: "Define indexes required for query performance and the expected query patterns driving index design."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What indexes are required for query performance?"
+        - "What are the expected query patterns driving index design?"
+    - id: "local-data"
+      title: "Local Data"
+      intent: "Specify what data lives locally on the client and how it is structured and synchronised."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What data lives locally on the client?"
+        - "How is local data structured and synchronised?"
+    - id: "remote-data"
+      title: "Remote Data"
+      intent: "Specify what data lives on the remote server or service and how it is accessed and cached."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What data lives on the remote server or service?"
+        - "How is remote data accessed and cached?"
+    - id: "migration-strategy"
+      title: "Migration Strategy"
+      intent: "Describe how schema migrations are authored, tested, and applied, and the rollback strategy for failed migrations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are schema migrations authored, tested, and applied?"
+        - "What is the rollback strategy for failed migrations?"
+    - id: "data-retention"
+      title: "Data Retention"
+      intent: "Define data retention periods, archival policy, and soft-delete versus hard-delete rules."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How long is data retained? What is the archival policy?"
+        - "What data is soft-deleted versus hard-deleted?"
+    - id: "data-sensitivity"
+      title: "Data Sensitivity"
+      intent: "Classify data as sensitive or PII and describe how sensitive data is protected at rest and in transit."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What data is classified as sensitive or PII?"
+        - "How is sensitive data protected at rest and in transit?"
+    - id: "event-sourcing-considerations"
+      title: "Event Sourcing Considerations"
+      intent: "Define the event envelope structure, payload schema, cursor/checkpoint mechanism, idempotency keys, conflict metadata, and schema versioning for events."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the event envelope structure?"
+        - "What does the event payload schema look like?"
+        - "What cursor or checkpoint mechanism is used?"
+        - "How are idempotency keys generated and verified?"
+        - "What conflict metadata is stored with each event?"
+        - "What schema version is attached to events and how is it managed?"
+    - id: "data-model-risks"
+      title: "Data Model Risks"
+      intent: "Identify risks of the chosen data model and query patterns that could become bottlenecks."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the risks of the chosen data model?"
+        - "What query patterns could become bottlenecks?"

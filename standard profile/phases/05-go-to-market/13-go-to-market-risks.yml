@@ -1,0 +1,158 @@
+document:
+  id: "13-go-to-market-risks"
+  title: "Go-to-Market Risks"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 13
+  type: "risk_register"
+  purpose: "Identify and mitigate commercial risks across all GTM dimensions."
+  centralQuestion: "What can fail in the market?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/13-go-to-market-risks.md"
+      purpose: "Go-to-market risk register with categorised risks and mitigation plan."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  specializedFormats:
+    riskFormat:
+      id:
+        type: "string"
+        description: "Unique risk identifier (e.g. GTMR-001)"
+      category:
+        type: "string"
+        description: "Risk category (market, positioning, messaging, channel, launch, sales, pricing, competitive, trust)"
+      description:
+        type: "string"
+        description: "Concise description of the risk"
+      likelihood:
+        type: "string"
+        description: "Estimated likelihood (low, medium, high, critical)"
+      impact:
+        type: "string"
+        description: "Estimated impact if realised (low, medium, high, critical)"
+      detectionSignal:
+        type: "string"
+        description: "Observable signal that indicates the risk is materialising"
+      mitigation:
+        type: "string"
+        description: "Planned mitigation or contingency"
+      owner:
+        type: "string"
+        description: "Person or role accountable for monitoring and responding"
+      status:
+        type: "string"
+        description: "Current status (identified, monitored, materialising, resolved)"
+  sections:
+    - id: "risk-register"
+      title: "Risk Register"
+      intent: "Compile the full risk register with standardised fields."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the full risk register?"
+        - "Format: GTMR-XXX, Category, Description, Likelihood, Impact, Detection Signal, Mitigation, Status."
+    - id: "market-risks"
+      title: "Market Risks"
+      intent: "Identify market-level risks such as size, readiness, or timing."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What market-level risks exist?"
+        - "Examples: Market too small, Market not ready, Wrong timing?"
+    - id: "positioning-risks"
+      title: "Positioning Risks"
+      intent: "Identify positioning risks such as confusing category or overpromising."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What positioning risks exist?"
+        - "Examples: Confusing category, Weak differentiation, Overpromising?"
+    - id: "messaging-risks"
+      title: "Messaging Risks"
+      intent: "Identify messaging risks such as wrong tone or unclear value proposition."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What messaging risks exist?"
+        - "Examples: Wrong tone, Unclear value prop, Language that repels target audience?"
+    - id: "channel-risks"
+      title: "Channel Risks"
+      intent: "Identify channel risks such as dependency, algorithm changes, or platform bans."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What channel risks exist?"
+        - "Examples: Channel dependency, Algorithm changes, Platform bans?"
+    - id: "launch-risks"
+      title: "Launch Risks"
+      intent: "Identify launch risks such as technical failure, no audience, or negative press."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What launch risks exist?"
+        - "Examples: Technical failure, No audience, Negative press?"
+    - id: "sales-risks"
+      title: "Sales Risks"
+      intent: "Identify sales risks such as long cycle, high CAC, or founder dependency."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What sales risks exist?"
+        - "Examples: Long sales cycle, High CAC, Founder dependency?"
+    - id: "pricing-risks"
+      title: "Pricing Risks"
+      intent: "Identify pricing risks such as wrong price point, model, or hidden costs."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What pricing risks exist?"
+        - "Examples: Too expensive, Too cheap, Wrong model, Hidden costs?"
+    - id: "competitive-risks"
+      title: "Competitive Risks"
+      intent: "Identify competitive risks such as incumbent retaliation or fast followers."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What competitive risks exist?"
+        - "Examples: Incumbent retaliation, Fast follower, Feature copying?"
+    - id: "trust-risks"
+      title: "Trust Risks"
+      intent: "Identify trust risks such as privacy concerns, security incidents, or brand perception."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What trust risks exist?"
+        - "Examples: Data privacy concerns, Security incidents, Brand perception?"
+    - id: "mitigation-plan"
+      title: "Mitigation Plan"
+      intent: "Define the overall mitigation strategy and ownership of risk monitoring."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the overall mitigation strategy?"
+        - "Who owns risk monitoring and response?"

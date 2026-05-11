@@ -1,0 +1,138 @@
+document:
+  id: "10-pricing-and-packaging"
+  title: "Pricing and Packaging"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 10
+  type: "pricing_packaging"
+  purpose: "Define how the offer is presented and purchased, distinct from the economic model."
+  centralQuestion: "How will the offer be presented and purchased?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/10-pricing-and-packaging.md"
+      purpose: "Pricing and packaging document with model, plans, trial, payment flow, and risks."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "pricing-objective"
+      title: "Pricing Objective"
+      intent: "Define the primary goal of the pricing strategy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the primary goal of the pricing strategy?"
+        - "Is the focus acquisition, revenue, retention, or competitive positioning?"
+    - id: "pricing-model"
+      title: "Pricing Model"
+      intent: "Choose the pricing model and justify it."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the pricing model (freemium, subscription, usage-based, tiered, flat-rate, per-seat)?"
+        - "Why this model?"
+    - id: "packages"
+      title: "Packages"
+      intent: "List packages or plans and what each includes."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What packages or plans are offered?"
+        - "What is included in each package?"
+    - id: "plan-structure"
+      title: "Plan Structure"
+      intent: "Detail features, limits, and price for each plan with side-by-side comparison."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the structure of each plan (features, limits, price)?"
+        - "How do plans compare side by side?"
+    - id: "free-trial-strategy"
+      title: "Free / Trial Strategy"
+      intent: "Define free tier or trial terms, duration, features, and conversion path."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Is there a free tier, trial, or both?"
+        - "What are the trial terms (duration, features, conversion path)?"
+    - id: "subscription-terms"
+      title: "Subscription Terms"
+      intent: "Specify billing cycles and whether contracts or commitments apply."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the billing cycles (monthly, annual)?"
+        - "Are there contracts or commitments?"
+    - id: "discounts"
+      title: "Discounts"
+      intent: "List discount strategies and conditions for offering them."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What discount strategies exist (early adopter, annual, volume, non-profit)?"
+        - "Under what conditions are discounts offered?"
+    - id: "payment-flow"
+      title: "Payment Flow"
+      intent: "Define how the customer pays and what methods and processors are used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the customer pay?"
+        - "What payment methods and processors are used?"
+    - id: "upgrade-and-downgrade-logic"
+      title: "Upgrade and Downgrade Logic"
+      intent: "Define upgrade and downgrade paths and what happens to data and billing."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does a customer upgrade or downgrade?"
+        - "What happens to data, features, and billing on plan change?"
+    - id: "cancellation-logic"
+      title: "Cancellation Logic"
+      intent: "Define the cancellation flow and offboarding or data export options."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the cancellation flow?"
+        - "What offboarding or data export is offered?"
+    - id: "pricing-objections"
+      title: "Pricing Objections"
+      intent: "Anticipate pricing objections and prepare responses."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What pricing objections are anticipated?"
+        - "How are they handled?"
+    - id: "pricing-risks"
+      title: "Pricing Risks"
+      intent: "Identify what could make the pricing model fail and review triggers."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could make the pricing model fail?"
+        - "What would trigger a pricing review?"

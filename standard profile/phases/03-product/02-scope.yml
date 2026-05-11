@@ -1,0 +1,130 @@
+document:
+  id: "02-scope"
+  title: "Product Scope Definition"
+  phase: "03-product"
+  status: "not_started"
+  order: 2
+  type: "scope"
+  purpose: "Define what belongs in the product and what does not."
+  centralQuestion: "What belongs in the product and what does not?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/02-scope.md"
+      purpose: "Definition of product scope boundaries"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  sections:
+    - id: "scope-objective"
+      title: "Scope Objective"
+      intent: "Establish why scope is being defined and how it will be governed"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the purpose of defining scope at this stage?"
+        - "What guiding principle determines inclusion or exclusion?"
+        - "How will scope be revisited and adjusted?"
+    - id: "in-scope"
+      title: "In Scope"
+      intent: "Enumerate all capabilities, features, and behaviors definitely included"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What capabilities, features, and behaviors are definitely included?"
+        - "What user types are in scope?"
+        - "What platforms and environments are in scope?"
+        - "What integrations are in scope?"
+        - "What data and content are in scope?"
+    - id: "out-of-scope"
+      title: "Out of Scope"
+      intent: "Enumerate what is explicitly excluded and why"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What capabilities are explicitly excluded?"
+        - "What user types are out of scope?"
+        - "What platforms and environments are out of scope?"
+        - "What integrations are out of scope?"
+        - "What is deferred with no current plan to address?"
+    - id: "mvp-scope"
+      title: "MVP Scope"
+      intent: "Define the absolute minimum for first release"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the absolute minimum required for first release?"
+        - "What must be present for the core product promise to hold?"
+        - "What can be added post-MVP without breaking the promise?"
+        - "What is the MVP scope boundary rationale?"
+    - id: "post-mvp-scope"
+      title: "Post-MVP Scope"
+      intent: "Outline capabilities planned for after MVP"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What capabilities are planned for after MVP?"
+        - "What is the priority order for post-MVP work?"
+        - "What triggers post-MVP scope expansion?"
+        - "What capabilities depend on MVP market feedback?"
+    - id: "explicit-non-goals"
+      title: "Explicit Non-Goals"
+      intent: "List what is actively chosen not to be built and why"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are we actively choosing not to build?"
+        - "Why are these non-goals?"
+        - "What would need to change to reconsider a non-goal?"
+        - "How are non-goals communicated to stakeholders?"
+    - id: "scope-boundaries"
+      title: "Scope Boundaries"
+      intent: "Define where the product ends and external systems or behaviors begin"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Where does the product end and external systems begin?"
+        - "Where does the product end and user behavior begin?"
+        - "Where does the product end and service/support begin?"
+        - "What gray-area decisions exist at boundaries?"
+    - id: "deferred-decisions"
+      title: "Deferred Decisions"
+      intent: "Track scope decisions intentionally deferred with rationale"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What scope decisions are intentionally deferred?"
+        - "What information is needed to make these decisions?"
+        - "When will deferred decisions be revisited?"
+        - "What is the risk of deferring each decision?"
+    - id: "scope-risks"
+      title: "Scope Risks"
+      intent: "Identify risks from the current scope definition"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the risks of the current scope definition?"
+        - "What might be missing that is actually essential?"
+        - "What might be included that creates unnecessary complexity?"
+        - "How will scope creep be detected and managed?"

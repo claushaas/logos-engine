@@ -1,0 +1,147 @@
+document:
+  id: "06-api-contracts"
+  title: "API Contracts"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 6
+  type: "api_contracts"
+  purpose: "Defines how client, backend, agents, adapters, and services communicate without ambiguity."
+  centralQuestion: "How do client, backend, agents, adapters, and services communicate without ambiguity?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/api-contracts.md"
+      purpose: "API contract definitions covering all communication between client, backend, agents, adapters, and services."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "api-strategy"
+      title: "API Strategy"
+      intent: "Define the API styles and protocols used and the overall API design philosophy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What API styles and protocols are used? REST, GraphQL, gRPC, WebSocket?"
+        - "What is the overall API design philosophy?"
+    - id: "public-apis"
+      title: "Public APIs"
+      intent: "List public APIs exposed to clients or external consumers, including rate limits and authentication requirements."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What public APIs are exposed to clients or external consumers?"
+        - "What are the rate limits and authentication requirements for public APIs?"
+    - id: "internal-apis"
+      title: "Internal APIs"
+      intent: "Define internal APIs between application modules and how internal contracts are versioned and documented."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What internal APIs exist between application modules?"
+        - "How are internal contracts versioned and documented?"
+    - id: "endpoint-register"
+      title: "Endpoint Register"
+      intent: "Provide the complete register of all API endpoints with HTTP methods, paths, and parameters."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the complete register of all API endpoints?"
+        - "What HTTP methods, paths, and parameters does each endpoint accept?"
+    - id: "request-formats"
+      title: "Request Formats"
+      intent: "Specify accepted request body formats, content-type, and encoding requirements."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What request body formats are accepted? JSON, multipart, binary?"
+        - "What are the content-type and encoding requirements?"
+    - id: "response-formats"
+      title: "Response Formats"
+      intent: "Define the standard response envelope structure and how successful and error responses are distinguished."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the standard response envelope structure?"
+        - "How are successful and error responses distinguished?"
+    - id: "error-model"
+      title: "Error Model"
+      intent: "Define error codes, categories, and how validation errors, auth errors, and server errors are represented."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What error codes and categories exist?"
+        - "How are validation errors, auth errors, and server errors represented?"
+    - id: "pagination"
+      title: "Pagination"
+      intent: "Choose the pagination strategy and define default and maximum page size."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What pagination strategy is used? Cursor-based, offset-based, page-based?"
+        - "What is the default and maximum page size?"
+    - id: "idempotency"
+      title: "Idempotency"
+      intent: "Identify endpoints that support idempotency and how idempotency keys are passed and validated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which endpoints support idempotency?"
+        - "How are idempotency keys passed and validated?"
+    - id: "versioning"
+      title: "Versioning"
+      intent: "Define how API versions are managed and the deprecation policy for old versions."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are API versions managed? URL path, header, content negotiation?"
+        - "What is the deprecation policy for old versions?"
+    - id: "authentication-requirements"
+      title: "Authentication Requirements"
+      intent: "Specify how authentication is enforced at the API level and what token or credential formats are used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is authentication enforced at the API level?"
+        - "What token or credential formats are used?"
+    - id: "contract-testing"
+      title: "Contract Testing"
+      intent: "Define how API contracts are tested between producers and consumers and what tools are used."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are API contracts tested between producers and consumers?"
+        - "What tools are used for contract testing?"
+    - id: "api-risks"
+      title: "API Risks"
+      intent: "Identify risks of the API design and breaking changes that are anticipated or must be avoided."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the risks of the API design?"
+        - "What breaking changes are anticipated or must be avoided?"

@@ -1,0 +1,131 @@
+document:
+  id: "02-system-architecture"
+  title: "System Architecture"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 2
+  type: "system_architecture"
+  purpose: "Macro architecture defining the main technical blocks and their relationships."
+  centralQuestion: "What are the main technical blocks and how do they relate?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/system-architecture.md"
+      purpose: "Macro architecture document defining main technical blocks and their relationships."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "architecture-overview"
+      title: "Architecture Overview"
+      intent: "Provide a high-level architecture diagram and identify the primary architectural drivers."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the high-level architecture diagram showing major components?"
+        - "What are the primary architectural drivers?"
+    - id: "architectural-style"
+      title: "Architectural Style"
+      intent: "Determine the architectural style that best serves the product goals — monolith, modular monolith, services, serverless, local-first, or offline-first."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Monolith, modular monolith, services, serverless, local-first, offline-first?"
+        - "What architectural style best serves the product goals?"
+    - id: "system-context"
+      title: "System Context"
+      intent: "Define the external systems and actors that interact with the system and clarify the system boundary."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What external systems and actors interact with the system?"
+        - "What is the system boundary?"
+    - id: "application-layers"
+      title: "Application Layers"
+      intent: "Describe the application layers and how concerns are separated across them."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What layers exist?"
+        - "How are concerns separated across layers?"
+    - id: "module-boundaries"
+      title: "Module Boundaries"
+      intent: "Identify rigid boundaries and define which modules are allowed to depend on which other modules."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which boundaries are rigid?"
+        - "Which modules are allowed to depend on which other modules?"
+    - id: "dependency-rules"
+      title: "Dependency Rules"
+      intent: "Establish rules governing imports and dependencies between modules and how circular dependencies are prevented."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the rules governing imports and dependencies between modules?"
+        - "How are circular dependencies prevented?"
+    - id: "runtime-architecture"
+      title: "Runtime Architecture"
+      intent: "Explain how the system runs at runtime — processes, threads, workers — and the concurrency model."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the system run at runtime? Processes, threads, workers?"
+        - "What is the concurrency model?"
+    - id: "data-flow"
+      title: "Data Flow"
+      intent: "Describe how data moves through the system, how client talks to backend, where domain rules live, and where adapters live."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does data move through the system?"
+        - "How does client talk to backend?"
+        - "Where do domain rules live?"
+        - "Where do adapters live?"
+    - id: "failure-modes"
+      title: "Failure Modes"
+      intent: "Identify primary failure scenarios, how they are handled, and the resilience strategy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the primary failure scenarios and how are they handled?"
+        - "What is the resilience strategy?"
+    - id: "architecture-decisions"
+      title: "Architecture Decisions"
+      intent: "Document key ADRs already made or expected and the trade-offs that have been accepted."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the key ADRs already made or expected?"
+        - "What trade-offs have been accepted?"
+    - id: "architecture-risks"
+      title: "Architecture Risks"
+      intent: "Identify the biggest risks in the chosen architecture and assumptions that could prove wrong."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the biggest risks in the chosen architecture?"
+        - "What assumptions could prove wrong?"

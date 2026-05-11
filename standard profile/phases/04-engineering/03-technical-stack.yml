@@ -1,0 +1,165 @@
+document:
+  id: "03-technical-stack"
+  title: "Technical Stack"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 3
+  type: "stack"
+  purpose: "Defines the specific implementation technologies to be used across the system."
+  centralQuestion: "What specific implementation technologies will be used?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/technical-stack.md"
+      purpose: "Definitive record of the specific implementation technologies selected for the system."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "runtime"
+      title: "Runtime"
+      intent: "Specify the runtimes the system will execute on and required runtime versions."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What runtimes will the system execute on? Node.js, browser, native mobile?"
+        - "What runtime versions are required?"
+    - id: "languages"
+      title: "Languages"
+      intent: "Identify programming languages for each part of the system and any language-level constraints."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What programming languages will be used for each part of the system?"
+        - "Are there any language-level constraints?"
+    - id: "frameworks"
+      title: "Frameworks"
+      intent: "Select frameworks for the TUI, API, and any other frontends, along with framework constraints."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What frameworks are selected for the TUI, API, and any other frontends?"
+        - "What framework constraints apply?"
+    - id: "package-management"
+      title: "Package Management"
+      intent: "Define the package manager, registry, and strategy for managing transitive dependencies."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What package manager and registry will be used?"
+        - "What is the strategy for managing transitive dependencies?"
+    - id: "database"
+      title: "Database"
+      intent: "Select database(s) for local and remote persistence and the data storage engine."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What database(s) will be used for local and remote persistence?"
+        - "What is the data storage engine?"
+    - id: "storage"
+      title: "Storage"
+      intent: "Specify file storage, blob storage, or object storage needs and how large assets are handled."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What file storage, blob storage, or object storage is needed?"
+        - "How are large assets handled?"
+    - id: "authentication"
+      title: "Authentication"
+      intent: "Define the authentication mechanism, libraries, and how credentials are managed at the application level."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What authentication mechanism and libraries will be used?"
+        - "How are credentials managed at the application level?"
+    - id: "api-layer"
+      title: "API Layer"
+      intent: "Select API protocols and libraries and describe how the API layer is implemented."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What API protocols and libraries will be used? REST, GraphQL, gRPC?"
+        - "How is the API layer implemented?"
+    - id: "background-jobs"
+      title: "Background Jobs"
+      intent: "Choose the job queue or background processing system and define how long-running tasks are handled."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What job queue or background processing system will be used?"
+        - "How are long-running tasks handled?"
+    - id: "testing-tools"
+      title: "Testing Tools"
+      intent: "Choose the test runner, assertion library, mocking framework, and tools for integration and end-to-end testing."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What test runner, assertion library, and mocking framework?"
+        - "What tools for integration and end-to-end testing?"
+    - id: "deployment-platform"
+      title: "Deployment Platform"
+      intent: "Specify where the system will be deployed and what platform services are consumed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Where will the system be deployed? Cloud, on-premise, local?"
+        - "What platform services are consumed?"
+    - id: "monitoring-tools"
+      title: "Monitoring Tools"
+      intent: "Select tools for logging, metrics, tracing, and alerting, and identify required dashboards."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What tools for logging, metrics, tracing, and alerting?"
+        - "What dashboards are required?"
+    - id: "local-development-tools"
+      title: "Local Development Tools"
+      intent: "Specify required dev tools — linters, formatters, type-checkers — and expected editor integrations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What dev tools are required? Linters, formatters, type-checkers?"
+        - "What editor integrations are expected?"
+    - id: "version-constraints"
+      title: "Version Constraints"
+      intent: "Define minimum, maximum, and pinned versions for key dependencies and the upgrade policy."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the minimum, maximum, and pinned versions for key dependencies?"
+        - "What is the upgrade policy?"
+    - id: "stack-risks"
+      title: "Stack Risks"
+      intent: "Identify risks associated with the chosen stack and whether any dependencies are unmaintained, experimental, or unsupported."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the risks associated with the chosen stack?"
+        - "Are any dependencies unmaintained, experimental, or unsupported?"

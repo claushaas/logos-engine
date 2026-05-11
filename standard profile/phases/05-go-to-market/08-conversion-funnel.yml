@@ -1,0 +1,129 @@
+document:
+  id: "08-conversion-funnel"
+  title: "Conversion Funnel"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 8
+  type: "conversion_funnel"
+  purpose: "Define the pathway from unknown to user or customer, with stages and metrics."
+  centralQuestion: "What pathway takes someone from unknown to user or customer?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/08-conversion-funnel.md"
+      purpose: "Conversion funnel document with stages, events, drop-off risks, and metrics."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "funnel-objective"
+      title: "Funnel Objective"
+      intent: "Define the purpose of the conversion funnel and the single most important metric."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the purpose of defining the conversion funnel?"
+        - "What single funnel metric matters most right now?"
+    - id: "awareness"
+      title: "Awareness"
+      intent: "Define how people first learn about the product and target awareness volume."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How do people first learn about the product?"
+        - "What is the target awareness volume?"
+    - id: "acquisition"
+      title: "Acquisition"
+      intent: "Define how people move from awareness to entering the funnel."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does someone move from awareness to entering the funnel?"
+        - "Examples: Visit landing page, Join waitlist, Sign up?"
+    - id: "activation"
+      title: "Activation"
+      intent: "Define the first meaningful action a user takes."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the first meaningful action a user takes?"
+        - "Examples: Complete onboarding, First meaningful action?"
+    - id: "engagement"
+      title: "Engagement"
+      intent: "Define behaviour indicating sustained use."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What behaviour indicates sustained use?"
+        - "Examples: Return within 7 days, Second session completed?"
+    - id: "conversion"
+      title: "Conversion"
+      intent: "Define the conversion event."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the conversion event?"
+        - "Examples: Start trial, Convert to paid?"
+    - id: "retention"
+      title: "Retention"
+      intent: "Define what indicates a retained user or customer."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What indicates a retained user or customer?"
+        - "Examples: Retain after first billing cycle, Monthly active usage?"
+    - id: "referral"
+      title: "Referral"
+      intent: "Define what turns a customer into a growth engine and the referral path."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What turns a customer into a growth engine?"
+        - "What is the referral path?"
+    - id: "funnel-events"
+      title: "Funnel Events"
+      intent: "List specific events to instrument at each stage with ownership."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What specific events must be instrumented at each stage?"
+        - "Who owns event instrumentation?"
+    - id: "drop-off-risks"
+      title: "Drop-off Risks"
+      intent: "Identify the biggest expected drop-off and mitigations."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Where is the biggest expected drop-off?"
+        - "What mitigates each drop-off risk?"
+    - id: "funnel-metrics"
+      title: "Funnel Metrics"
+      intent: "Set target conversion rates and benchmarks for acceptable performance."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the target conversion rates between each stage?"
+        - "What is the benchmark for acceptable vs. concerning performance?"

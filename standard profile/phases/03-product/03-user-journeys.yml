@@ -1,0 +1,131 @@
+document:
+  id: "03-user-journeys"
+  title: "User Journeys"
+  phase: "03-product"
+  status: "not_started"
+  order: 3
+  type: "user_journeys"
+  purpose: "Map how users move through the product to achieve their goals."
+  centralQuestion: "How does the user move through the product?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "03-product/03-user-journeys.md"
+      purpose: "Map of user journeys through the product"
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Identify content that should move to another document."
+  sections:
+    - id: "journey-overview"
+      title: "Journey Overview"
+      intent: "Provide a high-level map of all key journeys"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the key journeys through the product?"
+        - "How do journeys relate to each other?"
+        - "What is the primary goal of each journey?"
+        - "How are journeys discovered by the user?"
+    - id: "primary-journey"
+      title: "Primary Journey"
+      intent: "Detail the single most important journey end to end"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the single most important journey?"
+        - "What triggers the primary journey?"
+        - "What are the steps from trigger to completion?"
+        - "What does success feel like at each step?"
+        - "Where can the primary journey break down?"
+    - id: "secondary-journeys"
+      title: "Secondary Journeys"
+      intent: "Describe supporting journeys and their relationship to the primary journey"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the supporting journeys?"
+        - "How does each secondary journey relate to the primary journey?"
+        - "What triggers each secondary journey?"
+        - "What are the success criteria for each secondary journey?"
+    - id: "onboarding-journey"
+      title: "Onboarding Journey"
+      intent: "Define how a new user enters and achieves first value"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does a new user enter the product?"
+        - "What is the time-to-first-value target?"
+        - "What setup, configuration, or learning is required up front?"
+        - "What happens if the user abandons onboarding?"
+        - "How does the product handle returning after abandonment?"
+    - id: "first-value-journey"
+      title: "First Value Journey"
+      intent: "Define the moment the user first derives value"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the first moment the user derives value?"
+        - "How quickly can the user reach first value?"
+        - "What must be true for first value to occur?"
+        - "What signals does the product provide that value has been delivered?"
+    - id: "repeat-use-journey"
+      title: "Repeat Use Journey"
+      intent: "Describe how users return and continue work across sessions"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the user return to the product?"
+        - "What state is preserved between sessions?"
+        - "How does the product surface unfinished or ongoing work?"
+        - "How does the experience change with repeated use?"
+    - id: "failure-recovery-journeys"
+      title: "Failure and Recovery Journeys"
+      intent: "Map what can go wrong and how users recover"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What can go wrong at each journey step?"
+        - "How does the product detect and surface failures?"
+        - "How does the user recover from each failure mode?"
+        - "What data or state is at risk during failures?"
+    - id: "exit-completion-journeys"
+      title: "Exit and Completion Journeys"
+      intent: "Define how users exit journeys gracefully"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How does the user know a journey is complete?"
+        - "What signals confirm completion?"
+        - "How does the product gracefully handle exit or abandonment?"
+        - "What is the re-entry experience after completion?"
+    - id: "journey-risks"
+      title: "Journey Risks"
+      intent: "Identify high-risk steps and mitigation strategies"
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the highest-risk steps in each journey?"
+        - "Where is user confusion or drop-off most likely?"
+        - "What external dependencies do journeys rely on?"
+        - "How are journey risks monitored and mitigated?"

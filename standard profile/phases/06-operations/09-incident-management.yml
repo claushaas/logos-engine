@@ -1,0 +1,129 @@
+document:
+  id: "09-incident-management"
+  title: "Incident Management"
+  phase: "06-operations"
+  status: "not_started"
+  order: 9
+  type: "incident_management"
+  purpose: "Define how to respond when something breaks, including severity levels and postmortems."
+  centralQuestion: "How to respond when something breaks?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/09-incident-management.md"
+      purpose: "Complete incident management definition covering definition, severity levels, roles, detection, response, communication, mitigation, postmortems, corrective actions, and archive."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "incident-definition"
+      title: "Incident Definition"
+      intent: "Define what constitutes an incident versus a bug or support ticket and who can declare one."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What constitutes an incident versus a bug or support ticket?"
+        - "Who declares an incident?"
+    - id: "severity-levels"
+      title: "Severity Levels"
+      intent: "Define SEV-1 through SEV-4 severity levels with response time requirements for each."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are SEV-1, SEV-2, SEV-3, and SEV-4 defined?"
+        - "What response times apply to each severity level?"
+    - id: "incident-roles"
+      title: "Incident Roles"
+      intent: "Define roles activated during an incident and how they are assigned and handed off."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What roles are activated during an incident (commander, responder, communicator)?"
+        - "How are roles assigned and handed off during an incident?"
+    - id: "detection-sources"
+      title: "Detection Sources"
+      intent: "Define how incidents are detected and what automated alerting is in place."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are incidents detected (monitoring, user reports, internal discovery)?"
+        - "What automated alerting is in place?"
+    - id: "response-process"
+      title: "Response Process"
+      intent: "Define the step-by-step incident response process and how it is coordinated across teams."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the step-by-step incident response process?"
+        - "How is the response coordinated across teams?"
+    - id: "communication-rules"
+      title: "Communication Rules"
+      intent: "Define communication channels used during incidents and how and when users are notified."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What communication channels are used during an incident?"
+        - "How and when are users notified of incidents?"
+    - id: "status-updates"
+      title: "Status Updates"
+      intent: "Define the frequency of status updates during an incident and where they are published."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How often are status updates provided during an incident?"
+        - "Where are status updates published?"
+    - id: "mitigation-steps"
+      title: "Mitigation Steps"
+      intent: "Define standard mitigation steps for common incident types and how mitigation is validated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What standard mitigation steps apply to common incident types?"
+        - "How is mitigation validated before resolution?"
+    - id: "postmortem-process"
+      title: "Postmortem Process"
+      intent: "Define the postmortem process after incident resolution, participants, and artifacts produced."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the postmortem process after an incident is resolved?"
+        - "Who participates in the postmortem and what artifacts are produced?"
+    - id: "corrective-actions"
+      title: "Corrective Actions"
+      intent: "Define how corrective actions are identified, assigned, tracked, and verified as complete."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are corrective actions identified, assigned, and tracked?"
+        - "How is completion of corrective actions verified?"
+    - id: "incident-archive"
+      title: "Incident Archive"
+      intent: "Define where incident records and postmortems are stored and how they are used for learning."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Where are incident records and postmortems stored?"
+        - "How is the incident archive used for learning and improvement?"

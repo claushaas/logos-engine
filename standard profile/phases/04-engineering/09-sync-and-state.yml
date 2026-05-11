@@ -1,0 +1,148 @@
+document:
+  id: "09-sync-and-state"
+  title: "Sync and State"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 9
+  type: "sync_state"
+  purpose: "Defines what is local state, remote state, cache, and how sync works."
+  centralQuestion: "What is local state, remote state, cache, and how does sync work?"
+  note: "Required for mobile, offline-first, sync engine, event sourcing, complex cache, agents, multiple clients, collaboration, financial data."
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "04-engineering/sync-and-state.md"
+      purpose: "Sync and state design covering local state, remote state, cache, and synchronisation patterns."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "state-strategy"
+      title: "State Strategy"
+      intent: "Define the overall state management strategy and how state is separated into local, remote, and derived categories."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the overall state management strategy?"
+        - "How is state separated into local, remote, and derived categories?"
+    - id: "source-of-truth"
+      title: "Source of Truth"
+      intent: "Identify the authoritative source of truth for each data type and how it is enforced during conflicts."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What system or store is the authoritative source of truth for each data type?"
+        - "How is the source of truth enforced during conflicts?"
+    - id: "local-state"
+      title: "Local State"
+      intent: "Specify what state is stored locally on the client, the local storage engine used, and its limits."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What state is stored locally on the client?"
+        - "What local storage engine is used and what are its limits?"
+    - id: "remote-state"
+      title: "Remote State"
+      intent: "Specify what state is stored remotely and how it is accessed and mutated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What state is stored remotely?"
+        - "How is remote state accessed and mutated?"
+    - id: "cache-strategy"
+      title: "Cache Strategy"
+      intent: "Define the caching strategy, cache invalidation rules, and TTLs."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the caching strategy? Write-through, write-back, read-through?"
+        - "What are the cache invalidation rules and TTLs?"
+    - id: "offline-behavior"
+      title: "Offline Behavior"
+      intent: "Describe capabilities available when offline and how offline mutations are queued, ordered, and replayed."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What capabilities are available when the system is offline?"
+        - "How are offline mutations queued, ordered, and replayed?"
+    - id: "sync-model"
+      title: "Sync Model"
+      intent: "Choose the sync model and define how sync is triggered."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the sync model? Last-write-wins, CRDT, event sourcing, operational transform?"
+        - "How is sync triggered? Polling, push, WebSocket, manual?"
+    - id: "conflict-resolution"
+      title: "Conflict Resolution"
+      intent: "Define how conflicts are detected and resolved, and what merges are automatic versus manual."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are conflicts detected and resolved?"
+        - "What data can diverge and what merges are automatic versus manual?"
+    - id: "idempotency"
+      title: "Idempotency"
+      intent: "Specify how idempotency is guaranteed during sync operations and what happens when a sync operation is retried."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is idempotency guaranteed during sync operations?"
+        - "What happens when a sync operation is retried?"
+    - id: "hydration"
+      title: "Hydration"
+      intent: "Define how client state is hydrated from remote on first launch or after logout, including hydration sequence and error handling."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is client state hydrated from remote on first launch or after logout?"
+        - "What is the hydration sequence and error handling?"
+    - id: "derived-state"
+      title: "Derived State"
+      intent: "Identify state that is derived or computed rather than stored and how it is kept consistent with source state."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What state is derived or computed rather than stored?"
+        - "How is derived state kept consistent with source state?"
+    - id: "state-recovery"
+      title: "State Recovery"
+      intent: "Describe how state is recovered after corruption, failed sync, or data loss, and what backup or snapshot mechanisms exist."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How is state recovered after corruption, failed sync, or data loss?"
+        - "What backup or snapshot mechanisms exist?"
+    - id: "sync-risks"
+      title: "Sync Risks"
+      intent: "Identify risks of the sync strategy and failure modes that could cause data loss or permanent divergence."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the risks of the sync strategy?"
+        - "What failure modes could cause data loss or permanent divergence?"

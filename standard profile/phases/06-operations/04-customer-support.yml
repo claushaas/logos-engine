@@ -1,0 +1,138 @@
+document:
+  id: "04-customer-support"
+  title: "Customer Support"
+  phase: "06-operations"
+  status: "not_started"
+  order: 4
+  type: "customer_support"
+  purpose: "Define how reactive user problems, questions, and complaints are handled."
+  centralQuestion: "How are user questions, problems, and complaints handled?"
+  dependsOn: []
+  feeds: []
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "06-operations/04-customer-support.md"
+      purpose: "Complete customer support operations definition including channels, scope, ticketing, priorities, response targets, escalation, and risk management."
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "support-objective"
+      title: "Support Objective"
+      intent: "Define the goal of customer support and how it differs from customer success."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the goal of the customer support function?"
+        - "How does support differ from customer success?"
+    - id: "support-channels"
+      title: "Support Channels"
+      intent: "List available support channels with operating hours and response expectations per channel."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Which channels are available for users to request support?"
+        - "What are the operating hours and response expectations per channel?"
+    - id: "support-scope"
+      title: "Support Scope"
+      intent: "Define which issue types are in scope and which are explicitly out of scope for support."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What types of issues are in scope for support?"
+        - "What is explicitly out of scope?"
+    - id: "ticket-categories"
+      title: "Ticket Categories"
+      intent: "Define ticket classification categories and routing rules based on category."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What categories are used to classify support tickets?"
+        - "How are tickets routed based on category?"
+    - id: "priority-levels"
+      title: "Priority Levels"
+      intent: "Define priority levels, their definitions, and how priority is assigned at triage."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What priority levels exist and how are they defined?"
+        - "How is priority assigned at triage?"
+    - id: "response-time-targets"
+      title: "Response Time Targets"
+      intent: "Set first-response and resolution time targets per priority level."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What are the first-response time targets per priority?"
+        - "What are the resolution time targets per priority?"
+    - id: "escalation-rules"
+      title: "Escalation Rules"
+      intent: "Define when tickets should be escalated and who receives escalated tickets by category."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "When should a support ticket be escalated?"
+        - "Who receives escalated tickets by category?"
+    - id: "bug-reporting-flow"
+      title: "Bug Reporting Flow"
+      intent: "Define how support-reported bugs enter the engineering backlog and how reporters are notified."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How do support-reported bugs enter the engineering backlog?"
+        - "How is the reporter notified of progress and resolution?"
+    - id: "refund-and-billing-support"
+      title: "Refund and Billing Support"
+      intent: "Define billing question and refund handling procedures, policies, and authorization rules."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How are billing questions and refund requests handled?"
+        - "What refund policy applies and who can authorize exceptions?"
+    - id: "support-macros-templates"
+      title: "Support Macros/Templates"
+      intent: "Document templated responses for common issues and the maintenance process for macros."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What templated responses exist for common issues?"
+        - "How are macros maintained and improved?"
+    - id: "unsupported-requests"
+      title: "Unsupported Requests"
+      intent: "Define explicitly unsupported request types and how users are redirected."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What types of requests are explicitly unsupported?"
+        - "How are users redirected when they make unsupported requests?"
+    - id: "support-risks"
+      title: "Support Risks"
+      intent: "Identify failure modes of the support function and how they are detected and mitigated."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What could cause the support function to fail?"
+        - "How are support risks detected and mitigated?"

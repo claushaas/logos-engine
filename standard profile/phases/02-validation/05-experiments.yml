@@ -1,0 +1,113 @@
+document:
+  id: "05-experiments"
+  title: "Experiments"
+  phase: "02-validation"
+  status: "not_started"
+  order: 5
+  type: "experiments"
+  purpose: "Register concrete behavioral experiments with measurable success and failure criteria."
+  centralQuestion: "What experiments will be run?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "02-validation/05-experiments.md"
+      purpose: "Registers concrete behavioral experiments with measurable success and failure criteria."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  specializedFormats:
+    experimentFormat:
+      description: "Standardized format for each experiment entry."
+      fields:
+        - id
+        - hypothesis
+        - method
+        - targetAudience
+        - successCriteria
+        - dataCollected
+        - result
+        - decision
+  sections:
+    - id: "experiment-register"
+      title: "Experiment Register"
+      intent: "Maintain the master list of all experiments with status and outcomes."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What is the complete list of experiments?"
+        - "Which experiments are active, planned, or completed?"
+    - id: "active-experiments"
+      title: "Active Experiments"
+      intent: "Track currently running experiments, their status, and expected results."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which experiments are currently running?"
+        - "What is the current status of each active experiment?"
+        - "When are results expected?"
+    - id: "planned-experiments"
+      title: "Planned Experiments"
+      intent: "Identify experiments not yet started, their priority order, and dependencies."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which experiments are planned but not yet started?"
+        - "What is the priority order for planned experiments?"
+        - "What dependencies must be resolved before each experiment can start?"
+    - id: "completed-experiments"
+      title: "Completed Experiments"
+      intent: "Summarize completed experiments, their results, and resulting decisions."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "Which experiments have been completed?"
+        - "What were the results of each completed experiment?"
+        - "What decisions were made based on each result?"
+    - id: "experiment-templates"
+      title: "Experiment Templates"
+      intent: "Define reusable experiment templates and standard documentation format."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What reusable experiment templates exist?"
+        - "What is the standard structure for a new experiment?"
+        - "How should experiment results be documented?"
+    - id: "experiment-results-summary"
+      title: "Experiment Results Summary"
+      intent: "Provide an aggregate view of outcomes, supported/refuted hypotheses, and overall confidence."
+      required: true
+      outputGuidance: []
+      qualityChecks:
+        - "Answers each listed question substantively."
+        - "Avoids unsupported assertions."
+      questions:
+        - "What is the aggregate outcome across all experiments?"
+        - "Which hypotheses have been supported, and which refuted?"
+        - "What is the overall confidence level in the validation results?"

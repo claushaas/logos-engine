@@ -1,0 +1,111 @@
+document:
+  id: "01-go-to-market-brief"
+  title: "Go-to-Market Brief"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 1
+  type: "go_to_market"
+  purpose: "Commercial axis synthesis defining the market entry thesis."
+  centralQuestion: "What is the market entry thesis?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "05-go-to-market/01-go-to-market-brief.md"
+      purpose: "Synthesised go-to-market brief answering the market entry thesis."
+  dependsOn: []
+  feeds: []
+  completionCriteria:
+    - "The central question is directly answered."
+    - "All required sections contain substantive content."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Prefer decision-useful statements."
+    - "Remove content that belongs to another phase."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with upstream documents."
+  sections:
+    - id: "gtm-objective"
+      title: "GTM Objective"
+      intent: "Clarify the commercial outcome this launch must achieve."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What commercial outcome must this launch achieve?"
+        - "Is the priority acquisition, revenue, awareness, or validation?"
+    - id: "product-context"
+      title: "Product Context"
+      intent: "Establish what the product is and its development stage."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What is the product and what does it do?"
+        - "What stage is the product at (pre-alpha, alpha, beta, GA)?"
+    - id: "target-market"
+      title: "Target Market"
+      intent: "Identify the initial beachhead segment and the rationale."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Who is the initial beachhead segment?"
+        - "Why start here instead of elsewhere?"
+    - id: "primary-customer"
+      title: "Primary Customer"
+      intent: "Profile the ideal first customer and observable fit signals."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Who is the ideal first customer?"
+        - "What observable signal makes them a good fit?"
+    - id: "core-positioning"
+      title: "Core Positioning"
+      intent: "Define how the product will be perceived and categorised."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How will the product be perceived relative to alternatives?"
+        - "What category does it claim?"
+    - id: "primary-channel"
+      title: "Primary Channel"
+      intent: "Identify how first customers will arrive and why it is defensible."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "Through which channel will the first customers arrive?"
+        - "Why is this channel defensible or repeatable?"
+    - id: "launch-strategy"
+      title: "Launch Strategy"
+      intent: "Outline the launch type, sequence, and timeline."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What type of launch is planned?"
+        - "What is the launch sequence and timeline?"
+    - id: "revenue-motion"
+      title: "Revenue Motion"
+      intent: "Describe how the product generates revenue and the motion type."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "How will the product generate revenue?"
+        - "Is the motion self-serve, sales-led, or hybrid?"
+    - id: "gtm-success-criteria"
+      title: "GTM Success Criteria"
+      intent: "Define the metrics and thresholds for a successful market entry."
+      required: true
+      outputGuidance: []
+      qualityChecks: []
+      questions:
+        - "What metrics define a successful market entry?"
+        - "What is the threshold for go / no-go after the initial push?"
