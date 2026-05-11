@@ -1,58 +1,213 @@
 phase:
-  id: "03-product"
-  title: "Product"
+  id: 03-product
+  title: Product
+  order: 3
+  axis: normative
+  status: not_started
   description: "Defines what will be built, how users experience it, what belongs in scope, how the interface behaves, what product architecture supports it, and what criteria determine whether it is ready."
-  purpose: "Answer: 'What exactly will be built, for whom, with what experience, scope, visual language, and product rules?'"
+  purpose: "Answer what exactly will be built, for whom, with what experience, scope, visual language, and product rules."
+
+  centralQuestion: "What exactly will be built, for whom, with what experience, scope, visual language, product architecture, requirements, and acceptance criteria?"
+
+  responsibilityBoundary:
+    owns:
+      - product brief
+      - product scope
+      - user journeys
+      - UX model
+      - information architecture
+      - interaction model
+      - UI specification
+      - design system
+      - product architecture
+      - functional requirements
+      - non-functional requirements
+      - product-level stack decisions
+      - acceptance criteria
+    doesNotOwn:
+      - system architecture
+      - database schema
+      - API contracts
+      - sync engine implementation
+      - infrastructure design
+      - deployment process
+      - testing implementation
+      - go-to-market execution
+      - operational processes
+
+  dependsOn:
+    - 01-foundation
+    - 02-validation
+
+  feedsInto:
+    - 04-engineering
+    - 05-go-to-market
+    - 06-operations
+
+  readingOrder:
+    - 01-product-brief
+    - 02-scope
+    - 03-user-journeys
+    - 04-ux-model
+    - 05-information-architecture
+    - 06-interaction-model
+    - 07-ui-specification
+    - 08-design-system
+    - 09-product-architecture
+    - 10-functional-requirements
+    - 11-non-functional-requirements
+    - 12-product-stack
+    - 13-acceptance-criteria
+
+  completionCriteria:
+    - The product brief clearly translates validated learning into a product direction.
+    - Scope defines MVP, post-MVP, out-of-scope items, and explicit non-goals.
+    - User journeys describe human intent, context, decisions, and outcomes rather than only screens.
+    - The UX model defines the experience paradigm, mental model, guidance model, feedback model, and trust model.
+    - Information architecture defines core objects, relationships, navigation, naming, and density rules.
+    - Interaction model defines actions, confirmations, ambiguity handling, corrections, undo, and recovery.
+    - UI specification defines screens, components, states, responsive behavior, and microcopy rules.
+    - Design system defines visual language, typography, color, spacing, motion, accessibility, and anti-patterns.
+    - Product architecture defines modules, capabilities, dependencies, and product-level boundaries.
+    - Functional requirements are traceable to journeys, modules, user value, and acceptance criteria.
+    - Non-functional requirements define expected product quality without prescribing implementation details prematurely.
+    - Product stack decisions are limited to choices that shape product experience, platform, or constraints.
+    - Acceptance criteria define readiness for product, features, UX, UI, functional behavior, and release-blocking issues.
+    - Engineering implementation details are deferred to 04-engineering.
+
+  qualityChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - assumptions_explicit
+    - requirements_testable
+    - acceptance_criteria_verifiable
+    - contradictions_flagged
+
+  generatedOutputs:
+    canonical:
+      directory: docs/03-product
+      format: markdown
+    structure:
+      directory: phases/03-product
+      format: yaml
+    presentation:
+      directory: outcomes/html
+      suggestedArtifacts:
+        - product-dashboard.html
+        - ux-flow-map.html
+        - product-scope-board.html
+        - requirements-traceability-map.html
+    agentPacks:
+      directory: outcomes/agents
+      suggestedArtifacts:
+        - product-context-pack.md
+        - product-spec-review-prompt.md
+        - product-to-engineering-handoff.md
+
   documents:
-    - id: "01-product-brief"
-      title: "Product Brief"
-      file: "03-product/03-product/01-product-brief.yml"
-      purpose: "Executive synthesis of the product."
-    - id: "02-scope"
-      title: "Scope"
-      file: "03-product/03-product/02-scope.yml"
-      purpose: "What is in and out of the product."
-    - id: "03-user-journeys"
-      title: "User Journeys"
-      file: "03-product/03-product/03-user-journeys.yml"
-      purpose: "The human paths through the product."
-    - id: "04-ux-model"
-      title: "UX Model"
-      file: "03-product/03-product/04-ux-model.yml"
-      purpose: "The conceptual model of the experience."
-    - id: "05-information-architecture"
-      title: "Information Architecture"
-      file: "03-product/03-product/05-information-architecture.yml"
-      purpose: "How product concepts are organized."
-    - id: "06-interaction-model"
-      title: "Interaction Model"
-      file: "03-product/03-product/06-interaction-model.yml"
-      purpose: "How the user acts within the product."
-    - id: "07-ui-specification"
-      title: "UI Specification"
-      file: "03-product/03-product/07-ui-specification.yml"
-      purpose: "Screens, components, and interface states."
-    - id: "08-design-system"
-      title: "Design System"
-      file: "03-product/03-product/08-design-system.yml"
-      purpose: "Visual language and design standards."
-    - id: "09-product-architecture"
-      title: "Product Architecture"
-      file: "03-product/03-product/09-product-architecture.yml"
-      purpose: "Modules, areas, and capabilities that compose the product."
-    - id: "10-functional-requirements"
-      title: "Functional Requirements"
-      file: "03-product/03-product/10-functional-requirements.yml"
-      purpose: "What the product must do."
-    - id: "11-non-functional-requirements"
-      title: "Non-Functional Requirements"
-      file: "03-product/03-product/11-non-functional-requirements.yml"
-      purpose: "Qualities the product must have."
-    - id: "12-product-stack"
-      title: "Product Stack"
-      file: "03-product/03-product/12-product-stack.yml"
-      purpose: "Technology and platform choices at the product level."
-    - id: "13-acceptance-criteria"
-      title: "Acceptance Criteria"
-      file: "03-product/03-product/13-acceptance-criteria.yml"
-      purpose: "When a product, feature, or flow is ready."
+    - id: 01-product-brief
+      title: Product Brief
+      file: phases/03-product/01-product-brief.yml
+      output: docs/03-product/01-product-brief.md
+      purpose: "Define the executive synthesis of the product that will be built."
+      centralQuestion: "Given what has been validated, what product should be built first?"
+      required: true
+
+    - id: 02-scope
+      title: Scope
+      file: phases/03-product/02-scope.yml
+      output: docs/03-product/02-scope.md
+      purpose: "Define what is inside and outside the product."
+      centralQuestion: "What belongs in the MVP, what is deferred, and what should remain explicitly out of scope?"
+      required: true
+
+    - id: 03-user-journeys
+      title: User Journeys
+      file: phases/03-product/03-user-journeys.yml
+      output: docs/03-product/03-user-journeys.md
+      purpose: "Define the human paths through the product."
+      centralQuestion: "How do users move from intent to value through the product?"
+      required: true
+
+    - id: 04-ux-model
+      title: UX Model
+      file: phases/03-product/04-ux-model.yml
+      output: docs/03-product/04-ux-model.md
+      purpose: "Define the conceptual model of the experience."
+      centralQuestion: "How should this product be understood, felt, trusted, and used?"
+      required: true
+
+    - id: 05-information-architecture
+      title: Information Architecture
+      file: phases/03-product/05-information-architecture.yml
+      output: docs/03-product/05-information-architecture.md
+      purpose: "Define how product concepts, objects, and navigation are organized."
+      centralQuestion: "Which objects exist in the product, how are they related, and how does the user find and understand them?"
+      required: true
+
+    - id: 06-interaction-model
+      title: Interaction Model
+      file: phases/03-product/06-interaction-model.yml
+      output: docs/03-product/06-interaction-model.md
+      purpose: "Define how the user acts within the product and how the system responds."
+      centralQuestion: "What actions can users take, what actions can the system suggest, and how are ambiguity, confirmation, correction, and recovery handled?"
+      required: true
+
+    - id: 07-ui-specification
+      title: UI Specification
+      file: phases/03-product/07-ui-specification.yml
+      output: docs/03-product/07-ui-specification.md
+      purpose: "Define screens, components, layouts, states, and interface behavior."
+      centralQuestion: "What screens, components, states, and interface rules must exist for the product to be usable?"
+      required: true
+
+    - id: 08-design-system
+      title: Design System
+      file: phases/03-product/08-design-system.yml
+      output: docs/03-product/08-design-system.md
+      purpose: "Define the visual language and design standards of the product."
+      centralQuestion: "What visual, typographic, spatial, motion, accessibility, and component principles must remain consistent?"
+      required: true
+
+    - id: 09-product-architecture
+      title: Product Architecture
+      file: phases/03-product/09-product-architecture.yml
+      output: docs/03-product/09-product-architecture.md
+      purpose: "Define the modules, areas, capabilities, and product-level boundaries that compose the product."
+      centralQuestion: "Which product modules and capabilities exist, how do they relate, and what dependencies shape the product?"
+      required: true
+
+    - id: 10-functional-requirements
+      title: Functional Requirements
+      file: phases/03-product/10-functional-requirements.yml
+      output: docs/03-product/10-functional-requirements.md
+      purpose: "Define what the product must do."
+      centralQuestion: "Which behaviors, actions, rules, permissions, integrations, and states must the product support?"
+      required: true
+
+    - id: 11-non-functional-requirements
+      title: Non-Functional Requirements
+      file: phases/03-product/11-non-functional-requirements.yml
+      output: docs/03-product/11-non-functional-requirements.md
+      purpose: "Define the qualities the product must have to be acceptable."
+      centralQuestion: "Which performance, accessibility, privacy, security, reliability, compatibility, and quality expectations must the product meet?"
+      required: true
+
+    - id: 12-product-stack
+      title: Product Stack
+      file: phases/03-product/12-product-stack.yml
+      output: docs/03-product/12-product-stack.md
+      purpose: "Define technology and platform choices that shape product experience, scope, and constraints."
+      centralQuestion: "Which product-level technology choices affect platform strategy, UX constraints, integrations, and product surface?"
+      required: true
+
+    - id: 13-acceptance-criteria
+      title: Acceptance Criteria
+      file: phases/03-product/13-acceptance-criteria.yml
+      output: docs/03-product/13-acceptance-criteria.md
+      purpose: "Define when a product, feature, flow, or release is ready."
+      centralQuestion: "What must be true for the product, feature, UX, UI, functional behavior, and release to be accepted?"
+      required: true

@@ -1,58 +1,218 @@
 phase:
-  id: "05-go-to-market"
-  title: "Go-to-market"
+  id: 05-go-to-market
+  title: Go-to-market
+  order: 5
+  axis: normative
+  status: not_started
   description: "Defines how the product reaches its target market, communicates its value, acquires users or customers, converts demand, launches publicly, and measures commercial traction."
-  purpose: "Answer: 'How will this product reach the right market with a clear message, through viable channels, converting users/customers measurably?'"
+  purpose: "Answer how the product reaches the right market with a clear message, through viable channels, converting users or customers measurably."
+
+  centralQuestion: "How will this product reach the right market, with a clear message, through viable channels, converting users or customers measurably?"
+
+  responsibilityBoundary:
+    owns:
+      - go-to-market brief
+      - market definition
+      - positioning
+      - messaging
+      - customer segments
+      - channel strategy
+      - launch plan
+      - conversion funnel
+      - sales strategy
+      - pricing and packaging
+      - marketing assets
+      - growth metrics
+      - go-to-market risks
+    doesNotOwn:
+      - product scope
+      - UX specification
+      - engineering architecture
+      - infrastructure design
+      - customer support operations
+      - customer success operations
+      - incident management
+      - financial operations
+      - internal reporting cadence
+      - continuous improvement operations
+
+  dependsOn:
+    - 01-foundation
+    - 02-validation
+    - 03-product
+    - 04-engineering
+
+  feedsInto:
+    - 06-operations
+
+  readingOrder:
+    - 01-go-to-market-brief
+    - 02-market-definition
+    - 03-positioning
+    - 04-messaging
+    - 05-customer-segments
+    - 06-channel-strategy
+    - 07-launch-plan
+    - 08-conversion-funnel
+    - 09-sales-strategy
+    - 10-pricing-and-packaging
+    - 11-marketing-assets
+    - 12-growth-metrics
+    - 13-go-to-market-risks
+
+  completionCriteria:
+    - The go-to-market brief states the market entry thesis, target market, primary customer, positioning, channel, launch strategy, revenue motion, and success criteria.
+    - Market definition identifies the category, primary and secondary markets, alternatives, substitute behaviors, maturity, timing, constraints, and risks.
+    - Positioning explains why the product is different, relevant, preferable, and believable relative to alternatives.
+    - Messaging translates positioning into public language, including one-liner, descriptions, pain messages, outcome messages, objections, proof points, tone, and forbidden claims.
+    - Customer segments distinguish users, buyers, decision makers, influencers, early adopters, excluded segments, and prioritization logic.
+    - Channel strategy defines primary, secondary, organic, paid, partnership, community, and sales channels, including constraints and experiments.
+    - Launch plan defines launch type, audience, pre-launch, launch, post-launch, assets, checklist, success criteria, and risks.
+    - Conversion funnel defines awareness, acquisition, activation, engagement, conversion, retention, referral, events, drop-off risks, and metrics.
+    - Sales strategy defines sales motion, self-serve, founder-led, sales-led motion, lead qualification, process, objection handling, demos, assets, and risks.
+    - Pricing and packaging translates validation economics into a clear offer, plans, trial, subscription terms, discounts, payment flow, cancellation, objections, and risks.
+    - Marketing assets define the materials needed for launch, communication, sales, marketplace presence, and asset readiness.
+    - Growth metrics define commercial traction signals with hierarchy between north star, primary metrics, diagnostic metrics, reporting cadence, and metric risks.
+    - Go-to-market risks are registered with category, impact, likelihood, detection signal, mitigation, and status.
+    - Ongoing customer operations, support, success, reporting, compliance, and financial operations are deferred to 06-operations.
+
+  qualityChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - assumptions_explicit
+    - positioning_specific
+    - messaging_non_misleading
+    - funnel_measurable
+    - metrics_actionable
+    - risks_actionable
+    - contradictions_flagged
+
+  generatedOutputs:
+    canonical:
+      directory: docs/05-go-to-market
+      format: markdown
+    structure:
+      directory: phases/05-go-to-market
+      format: yaml
+    presentation:
+      directory: outcomes/html
+      suggestedArtifacts:
+        - go-to-market-dashboard.html
+        - positioning-messaging-map.html
+        - channel-funnel-board.html
+        - launch-readiness-board.html
+    agentPacks:
+      directory: outcomes/agents
+      suggestedArtifacts:
+        - go-to-market-context-pack.md
+        - messaging-review-prompt.md
+        - launch-planning-prompt.md
+        - growth-review-prompt.md
+
   documents:
-    - id: "01-go-to-market-brief"
-      title: "Go-to-market Brief"
-      file: "05-go-to-market/05-go-to-market/01-go-to-market-brief.yml"
-      purpose: "Executive synthesis of the commercial axis."
-    - id: "02-market-definition"
-      title: "Market Definition"
-      file: "05-go-to-market/05-go-to-market/02-market-definition.yml"
-      purpose: "The market where the product competes."
-    - id: "03-positioning"
-      title: "Positioning"
-      file: "05-go-to-market/05-go-to-market/03-positioning.yml"
-      purpose: "How the product should be perceived relative to alternatives."
-    - id: "04-messaging"
-      title: "Messaging"
-      file: "05-go-to-market/05-go-to-market/04-messaging.yml"
-      purpose: "What we say to the market without distorting the product."
-    - id: "05-customer-segments"
-      title: "Customer Segments"
-      file: "05-go-to-market/05-go-to-market/05-customer-segments.yml"
-      purpose: "Refined audience for acquisition, sales, and communication."
-    - id: "06-channel-strategy"
-      title: "Channel Strategy"
-      file: "05-go-to-market/05-go-to-market/06-channel-strategy.yml"
-      purpose: "Through which channels the product reaches the market."
-    - id: "07-launch-plan"
-      title: "Launch Plan"
-      file: "05-go-to-market/05-go-to-market/07-launch-plan.yml"
-      purpose: "The initial controlled market entry."
-    - id: "08-conversion-funnel"
-      title: "Conversion Funnel"
-      file: "05-go-to-market/05-go-to-market/08-conversion-funnel.yml"
-      purpose: "How attention becomes activation, usage, and revenue."
-    - id: "09-sales-strategy"
-      title: "Sales Strategy"
-      file: "05-go-to-market/05-go-to-market/09-sales-strategy.yml"
-      purpose: "Whether and how active selling works."
-    - id: "10-pricing-and-packaging"
-      title: "Pricing and Packaging"
-      file: "05-go-to-market/05-go-to-market/10-pricing-and-packaging.yml"
-      purpose: "How the offer is presented and purchased."
-    - id: "11-marketing-assets"
-      title: "Marketing Assets"
-      file: "05-go-to-market/05-go-to-market/11-marketing-assets.yml"
-      purpose: "Materials needed for launch, communication, and sales."
-    - id: "12-growth-metrics"
-      title: "Growth Metrics"
-      file: "05-go-to-market/05-go-to-market/12-growth-metrics.yml"
-      purpose: "How to measure commercial traction."
-    - id: "13-go-to-market-risks"
-      title: "Go-to-market Risks"
-      file: "05-go-to-market/05-go-to-market/13-go-to-market-risks.yml"
-      purpose: "Centralized commercial, communications, and acquisition risks."
+    - id: 01-go-to-market-brief
+      title: Go-to-market Brief
+      file: phases/05-go-to-market/01-go-to-market-brief.yml
+      output: docs/05-go-to-market/01-go-to-market-brief.md
+      purpose: "Define the executive synthesis of the commercial axis."
+      centralQuestion: "What is the thesis for entering the market?"
+      required: true
+
+    - id: 02-market-definition
+      title: Market Definition
+      file: phases/05-go-to-market/02-market-definition.yml
+      output: docs/05-go-to-market/02-market-definition.md
+      purpose: "Define the market where the product competes and how it will be categorized."
+      centralQuestion: "In which market and mental category will this product be understood and compared?"
+      required: true
+
+    - id: 03-positioning
+      title: Positioning
+      file: phases/05-go-to-market/03-positioning.yml
+      output: docs/05-go-to-market/03-positioning.md
+      purpose: "Define how the product should be perceived relative to alternatives."
+      centralQuestion: "Why is this product different, relevant, preferable, and believable for the target customer?"
+      required: true
+
+    - id: 04-messaging
+      title: Messaging
+      file: phases/05-go-to-market/04-messaging.yml
+      output: docs/05-go-to-market/04-messaging.md
+      purpose: "Translate positioning into public language without distorting the product."
+      centralQuestion: "What should be said to the market, in what language, with which proof points, and with which claims explicitly forbidden?"
+      required: true
+
+    - id: 05-customer-segments
+      title: Customer Segments
+      file: phases/05-go-to-market/05-customer-segments.yml
+      output: docs/05-go-to-market/05-customer-segments.md
+      purpose: "Refine audience into commercially useful segments for acquisition, sales, and communication."
+      centralQuestion: "Who uses, buys, decides, influences, blocks, adopts early, and should be avoided at launch?"
+      required: true
+
+    - id: 06-channel-strategy
+      title: Channel Strategy
+      file: phases/05-go-to-market/06-channel-strategy.yml
+      output: docs/05-go-to-market/06-channel-strategy.md
+      purpose: "Define through which channels the product reaches the market."
+      centralQuestion: "How will the right people discover this product through viable channels?"
+      required: true
+
+    - id: 07-launch-plan
+      title: Launch Plan
+      file: phases/05-go-to-market/07-launch-plan.yml
+      output: docs/05-go-to-market/07-launch-plan.md
+      purpose: "Define the initial controlled market entry."
+      centralQuestion: "How will the product enter the market with the right audience, assets, phases, checklist, and success criteria?"
+      required: true
+
+    - id: 08-conversion-funnel
+      title: Conversion Funnel
+      file: phases/05-go-to-market/08-conversion-funnel.yml
+      output: docs/05-go-to-market/08-conversion-funnel.md
+      purpose: "Define how attention becomes activation, usage, conversion, retention, referral, and revenue."
+      centralQuestion: "What path turns a stranger into an activated, retained, and paying user or customer?"
+      required: true
+
+    - id: 09-sales-strategy
+      title: Sales Strategy
+      file: phases/05-go-to-market/09-sales-strategy.yml
+      output: docs/05-go-to-market/09-sales-strategy.md
+      purpose: "Define whether active selling exists and how it works."
+      centralQuestion: "Will this product be self-serve, founder-led, sales-led, product-led, or hybrid, and how will leads become customers?"
+      required: true
+
+    - id: 10-pricing-and-packaging
+      title: Pricing and Packaging
+      file: phases/05-go-to-market/10-pricing-and-packaging.yml
+      output: docs/05-go-to-market/10-pricing-and-packaging.md
+      purpose: "Define how the offer is presented, packaged, purchased, upgraded, downgraded, and cancelled."
+      centralQuestion: "How does the validated economic logic become a clear, purchasable offer?"
+      required: true
+
+    - id: 11-marketing-assets
+      title: Marketing Assets
+      file: phases/05-go-to-market/11-marketing-assets.yml
+      output: docs/05-go-to-market/11-marketing-assets.md
+      purpose: "Define materials needed for launch, communication, marketing, marketplace presence, and sales."
+      centralQuestion: "Which assets must exist for the product to be launched, explained, demonstrated, listed, and sold?"
+      required: true
+
+    - id: 12-growth-metrics
+      title: Growth Metrics
+      file: phases/05-go-to-market/12-growth-metrics.yml
+      output: docs/05-go-to-market/12-growth-metrics.md
+      purpose: "Define how commercial traction is measured."
+      centralQuestion: "Which metrics show that the market is responding, and which metrics diagnose where growth is breaking?"
+      required: true
+
+    - id: 13-go-to-market-risks
+      title: Go-to-market Risks
+      file: phases/05-go-to-market/13-go-to-market-risks.yml
+      output: docs/05-go-to-market/13-go-to-market-risks.md
+      purpose: "Maintain the centralized commercial, communication, channel, launch, sales, pricing, competitive, and trust risk register."
+      centralQuestion: "What can fail in market definition, positioning, messaging, channels, launch, funnel, sales, pricing, competition, or trust?"
+      required: true

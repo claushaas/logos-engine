@@ -1,37 +1,197 @@
-version: 1
+schemaVersion: 1
+contentVersion: 0.1.0
+registryType: documentation_registry
+
 project:
+  id: logos-engine
+  title: LOGOS Engine
+  purpose: Structure the use of AI to transform unclear project ideas into canonical documentation, navigable artifacts, and executable agent outputs.
+
+documentationSystem:
   id: logos-engine-documentation-registry
   title: LOGOS Engine Documentation Registry
-  purpose: Define the normative documentation skeleton used by LOGOS Engine to generate, review, validate, and maintain project
-    documentation.
+  purpose: Define the canonical documentation skeleton used by LOGOS Engine to generate, review, validate, and maintain project documentation.
+
 axes:
-- id: normative
-  title: Normative Axis
-  description: Defines the structural, strategic, product, technical, market, and operational foundations of a project.
-  phases:
-  - 01-foundation
-  - 02-validation
-  - 03-product
-  - 04-engineering
-  - 05-go-to-market
-  - 06-operations
-phaseFiles:
-- phases/01-foundation.yml
-- phases/02-validation.yml
-- phases/03-product.yml
-- phases/04-engineering.yml
-- phases/05-go-to-market.yml
-- phases/06-operations.yml
+  - id: normative
+    title: Normative Axis
+    description: Defines the structural, strategic, product, technical, market, and operational foundations of a project.
+    phases:
+      - 01-foundation
+      - 02-validation
+      - 03-product
+      - 04-engineering
+      - 05-go-to-market
+      - 06-operations
+
+  - id: temporal
+    title: Temporal Axis
+    description: Defines sequencing, roadmap, milestones, implementation phases, validation gates, and execution history.
+    artifacts:
+      - roadmap
+      - implementation_plan
+      - changelog
+      - decision_timeline
+
+phaseDefinitions:
+  01-foundation:
+    purpose: Define why the project exists, for whom, under which principles, boundaries, and success conditions.
+  02-validation:
+    purpose: Validate assumptions, hypotheses, evidence, economic viability, and business model.
+  03-product:
+    purpose: Define what will be built, how it is experienced, and what acceptance means.
+  04-engineering:
+    purpose: Define how the product is implemented, tested, secured, deployed, and observed.
+  05-go-to-market:
+    purpose: Define how the product reaches the market, communicates value, converts demand, and measures traction.
+  06-operations:
+    purpose: Define how the product and business are supported, governed, measured, and improved after launch.
+
+phaseRegistry:
+  directory: phases
+  files:
+    - id: 01-foundation
+      path: phases/01-foundation.yml
+      required: true
+    - id: 02-validation
+      path: phases/02-validation.yml
+      required: true
+    - id: 03-product
+      path: phases/03-product.yml
+      required: true
+    - id: 04-engineering
+      path: phases/04-engineering.yml
+      required: true
+    - id: 05-go-to-market
+      path: phases/05-go-to-market.yml
+      required: true
+    - id: 06-operations
+      path: phases/06-operations.yml
+      required: true
+
+outputModel:
+  structure:
+    format: yaml
+    role: Defines document metadata, dependencies, questions, sections, quality gates, and agent instructions.
+    editable: true
+
+  canonical:
+    format: markdown
+    role: Source of truth for project decisions and generated content.
+    editable: true
+
+  presentation:
+    format: html
+    role: Derived navigable artifacts for review, understanding, and decision-making.
+    editable: false
+    regenerationRule: Always regenerate from canonical markdown and YAML.
+
+  agentPacks:
+    format: markdown
+    role: Derived execution prompts and context packs for coding, review, research, and implementation agents.
+    editable: false
+
 globalRules:
-  questionsLocation: Guiding questions are stored locally inside each document definition. No question banks are used in this
-    version.
+  questionsLocation: Guiding questions are stored locally inside each document definition. No question banks are used in this version.
   yamlRole: YAML defines structure, metadata, dependencies, questions, sections, quality gates, and agent instructions.
   markdownRole: Markdown documents contain the actual project decisions and generated content.
+  htmlRole: HTML artifacts are derived presentation outcomes and must never be treated as canonical source.
+  agentPackRole: Agent packs are derived execution artifacts generated from canonical docs.
   boundaryRule: Each phase must preserve its responsibility boundary and avoid duplicating downstream phases.
+  traceabilityRule: Every generated document must reference its phase, document id, dependencies, inputs, and generated outputs.
+  assumptionRule: Assumptions must be explicit and traceable to the document where they originated.
+  decisionRule: Decisions must be recorded in the appropriate decision record or document-specific decision section.
+  antiDuplicationRule: Concepts must not be duplicated across phases unless explicitly cross-referenced.
+  regenerationRule: Derived artifacts must be regenerated from canonical YAML and Markdown, not manually edited.
+
 statusWorkflow:
   allowed:
-  - not_started
-  - drafted
-  - reviewed
-  - approved
-  - deprecated
+    - not_started
+    - drafting
+    - drafted
+    - needs_review
+    - reviewed
+    - approved
+    - needs_revision
+    - deprecated
+
+  terminal:
+    - approved
+    - deprecated
+
+  transitions:
+    not_started:
+      - drafting
+    drafting:
+      - drafted
+    drafted:
+      - needs_review
+      - needs_revision
+    needs_review:
+      - reviewed
+      - needs_revision
+    reviewed:
+      - approved
+      - needs_revision
+    approved:
+      - needs_revision
+      - deprecated
+    needs_revision:
+      - drafting
+
+qualityModel:
+  requiredChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - unresolved_questions_marked
+    - assumptions_explicit
+    - contradictions_flagged
+
+  failurePolicy:
+    incompleteRequiredSection: block_approval
+    missingDependency: block_generation
+    unresolvedContradiction: block_approval
+    boundaryViolation: require_revision
+
+dependencyPolicy:
+  missingRequiredInput: block_generation
+  missingOptionalInput: continue_with_assumption
+  circularDependency: block_generation
+  staleDependency: warn
+  crossPhaseDependency: allowed_with_explicit_reference
+
+agentPolicy:
+  defaultMode: documentation_compiler
+  rules:
+    - Do not invent missing project facts.
+    - Mark assumptions explicitly.
+    - Preserve phase boundaries.
+    - Prefer explicit unresolved questions over silent inference.
+    - Generate canonical markdown before derived artifacts.
+    - Do not treat HTML artifacts as source of truth.
+    - Produce review notes when contradictions are detected.
+
+  requiredAgentOutputs:
+    - generated_document
+    - assumptions
+    - unresolved_questions
+    - dependency_notes
+    - quality_check_result
+
+roadmapIntegration:
+  enabled: true
+  role: Convert approved normative documentation into temporal execution plans.
+  sources:
+    - 01-foundation
+    - 02-validation
+    - 03-product
+    - 04-engineering
+    - 05-go-to-market
+    - 06-operations
+  outputs:
+    - implementation-roadmap.md
+    - milestone-plan.md
+    - agent-execution-plan.md

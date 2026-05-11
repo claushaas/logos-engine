@@ -1,46 +1,176 @@
 phase:
-  id: "02-validation"
-  title: "Validation"
-  description: "Defines how the project thesis, problem, audience, and solution direction are tested before deeper product and engineering commitments are made."
-  purpose: "Answer: 'How will we know, with evidence, that the foundational thesis deserves to become a product?'"
+  id: 02-validation
+  title: Validation
+  order: 2
+  axis: normative
+  status: not_started
+  description: "Defines how the project thesis, problem, audience, solution direction, economic viability, and business model are tested before deeper product and engineering commitments are made."
+  purpose: "Answer whether the foundational thesis deserves to become a product, using evidence rather than conviction."
+
+  centralQuestion: "Does this project deserve to advance, based on evidence, assumptions, hypotheses, experiments, economics, and business logic?"
+
+  responsibilityBoundary:
+    owns:
+      - validation strategy
+      - core assumptions
+      - testable hypotheses
+      - research planning
+      - behavioral experiments
+      - economic viability
+      - business model logic
+      - evidence registry
+      - evidence-based decisions
+      - validation synthesis
+    doesNotOwn:
+      - product scope
+      - UX specification
+      - UI specification
+      - engineering architecture
+      - implementation roadmap
+      - launch execution
+      - operational processes
+
+  dependsOn:
+    - 01-foundation
+
+  feedsInto:
+    - 03-product
+    - 04-engineering
+    - 05-go-to-market
+    - 06-operations
+
+  readingOrder:
+    - 01-validation-strategy
+    - 02-core-assumptions
+    - 03-hypotheses
+    - 04-research-plan
+    - 05-experiments
+    - 06-economic-model
+    - 07-business-model
+    - 08-evidence-log
+    - 09-decision-record
+    - 10-validation-report
+
+  completionCriteria:
+    - The validation strategy states what must be proven before product commitment.
+    - Core assumptions are explicit, ranked by risk, and tied to foundation documents.
+    - Hypotheses are testable, falsifiable, and connected to assumptions.
+    - Research and experiments define what evidence will be gathered and why.
+    - Economic viability is modeled before pricing is finalized in Go-to-market.
+    - The business model explains how value is created, delivered, captured, and sustained.
+    - Evidence is logged separately from interpretation.
+    - Decisions are traceable to evidence.
+    - The validation report clearly states whether the project should advance, pivot, pause, or stop.
+    - Product, Engineering, Go-to-market, and Operations details are not prematurely specified.
+
+  qualityChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - assumptions_explicit
+    - hypotheses_testable
+    - evidence_separated_from_opinion
+    - contradictions_flagged
+
+  generatedOutputs:
+    canonical:
+      directory: docs/02-validation
+      format: markdown
+    structure:
+      directory: phases/02-validation
+      format: yaml
+    presentation:
+      directory: outcomes/html
+      suggestedArtifacts:
+        - validation-dashboard.html
+        - assumptions-hypotheses-map.html
+        - evidence-decision-board.html
+    agentPacks:
+      directory: outcomes/agents
+      suggestedArtifacts:
+        - validation-context-pack.md
+        - validation-research-prompt.md
+        - validation-review-prompt.md
+
   documents:
-    - id: "01-validation-strategy"
-      title: "Validation Strategy"
-      file: "02-validation/02-validation/01-validation-strategy.yml"
-      purpose: "The overall validation approach and what must be proven first."
-    - id: "02-core-assumptions"
-      title: "Core Assumptions"
-      file: "02-validation/02-validation/02-core-assumptions.yml"
-      purpose: "What the project assumes to be true, ranked by risk."
-    - id: "03-hypotheses"
-      title: "Hypotheses"
-      file: "02-validation/02-validation/03-hypotheses.yml"
-      purpose: "Assumptions converted into testable propositions."
-    - id: "04-research-plan"
-      title: "Research Plan"
-      file: "02-validation/02-validation/04-research-plan.yml"
-      purpose: "How qualitative and contextual evidence will be gathered."
-    - id: "05-experiments"
-      title: "Experiments"
-      file: "02-validation/02-validation/05-experiments.yml"
-      purpose: "Concrete behavioral tests (landing pages, MVPs, prototypes, etc.)."
-    - id: "06-economic-model"
-      title: "Economic Model"
-      file: "02-validation/02-validation/06-economic-model.yml"
-      purpose: "Whether the project can plausibly become financially sustainable."
-    - id: "07-business-model"
-      title: "Business Model"
-      file: "02-validation/02-validation/07-business-model.yml"
-      purpose: "The integrated logic of how the project creates, delivers, captures, and sustains value."
-    - id: "08-evidence-log"
-      title: "Evidence Log"
-      file: "02-validation/02-validation/08-evidence-log.yml"
-      purpose: "Centralized registry of observed evidence."
-    - id: "09-decision-record"
-      title: "Decision Record"
-      file: "02-validation/02-validation/09-decision-record.yml"
-      purpose: "Registry of decisions made from evidence."
-    - id: "10-validation-report"
-      title: "Validation Report"
-      file: "02-validation/02-validation/10-validation-report.yml"
-      purpose: "Synthesis: has the idea been validated enough to advance?"
+    - id: 01-validation-strategy
+      title: Validation Strategy
+      file: phases/02-validation/01-validation-strategy.yml
+      output: docs/02-validation/01-validation-strategy.md
+      purpose: "Define the overall validation approach and what must be proven first."
+      centralQuestion: "How will this project be validated before product and engineering commitments are made?"
+      required: true
+
+    - id: 02-core-assumptions
+      title: Core Assumptions
+      file: phases/02-validation/02-core-assumptions.yml
+      output: docs/02-validation/02-core-assumptions.md
+      purpose: "Define what the project assumes to be true, ranked by risk."
+      centralQuestion: "Which assumptions must be true for this project to make sense?"
+      required: true
+
+    - id: 03-hypotheses
+      title: Hypotheses
+      file: phases/02-validation/03-hypotheses.yml
+      output: docs/02-validation/03-hypotheses.md
+      purpose: "Convert assumptions into testable propositions."
+      centralQuestion: "Which assumptions can be tested, falsified, or strengthened through evidence?"
+      required: true
+
+    - id: 04-research-plan
+      title: Research Plan
+      file: phases/02-validation/04-research-plan.yml
+      output: docs/02-validation/04-research-plan.md
+      purpose: "Define how qualitative, contextual, and market evidence will be gathered."
+      centralQuestion: "How will the project gather evidence from real users, contexts, alternatives, and constraints?"
+      required: true
+
+    - id: 05-experiments
+      title: Experiments
+      file: phases/02-validation/05-experiments.yml
+      output: docs/02-validation/05-experiments.md
+      purpose: "Define concrete behavioral tests such as landing pages, prototypes, concierge tests, MVPs, or simulations."
+      centralQuestion: "What concrete experiments will test whether users behave in ways that support the thesis?"
+      required: true
+
+    - id: 06-economic-model
+      title: Economic Model
+      file: phases/02-validation/06-economic-model.yml
+      output: docs/02-validation/06-economic-model.md
+      purpose: "Define whether the project can plausibly become financially sustainable."
+      centralQuestion: "Can the project become economically viable under realistic assumptions?"
+      required: true
+
+    - id: 07-business-model
+      title: Business Model
+      file: phases/02-validation/07-business-model.yml
+      output: docs/02-validation/07-business-model.md
+      purpose: "Define the integrated logic of how the project creates, delivers, captures, and sustains value."
+      centralQuestion: "What mechanism makes this project economically, operationally, and strategically viable?"
+      required: true
+
+    - id: 08-evidence-log
+      title: Evidence Log
+      file: phases/02-validation/08-evidence-log.yml
+      output: docs/02-validation/08-evidence-log.md
+      purpose: "Maintain a centralized registry of observed evidence."
+      centralQuestion: "What evidence has been observed, where did it come from, and what does it support or weaken?"
+      required: true
+
+    - id: 09-decision-record
+      title: Decision Record
+      file: phases/02-validation/09-decision-record.yml
+      output: docs/02-validation/09-decision-record.md
+      purpose: "Maintain a registry of decisions made from evidence."
+      centralQuestion: "What validation decisions were made, based on which evidence, and with what consequences?"
+      required: true
+
+    - id: 10-validation-report
+      title: Validation Report
+      file: phases/02-validation/10-validation-report.yml
+      output: docs/02-validation/10-validation-report.md
+      purpose: "Synthesize whether the idea has been validated enough to advance."
+      centralQuestion: "Should the project advance, pivot, pause, or stop based on the available evidence?"
+      required: true
