@@ -4,155 +4,736 @@ document:
   phase: "05-go-to-market"
   status: "not_started"
   order: 13
-  type: "risk_register"
-  purpose: "Identify and mitigate commercial risks across all GTM dimensions."
-  centralQuestion: "What can fail in the market?"
+  type: "go_to_market_risk_register"
+  purpose: "Define, classify, monitor, mitigate, accept, escalate, and hand off risks that could prevent the product from reaching, convincing, converting, retaining, supporting, or safely serving the right market."
+  centralQuestion: "What can fail in the go-to-market system, how will we detect it early, and what mitigation, contingency, ownership, or escalation is required?"
   outputs:
     canonical:
       format: "markdown"
-      path: "05-go-to-market/13-go-to-market-risks.md"
-      purpose: "Go-to-market risk register with categorised risks and mitigation plan."
-  dependsOn: []
-  feeds: []
+      path: "docs/05-go-to-market/13-go-to-market-risks.md"
+      purpose: "Store the canonical go-to-market risk register as a Markdown document."
+    artifacts:
+      - id: "gtm.go_to_market_risk_register"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/go-to-market-risk-register.html"
+        purpose: "Provide a founder-facing GTM risk register covering market, segment, positioning, messaging, channel, launch, funnel, sales, pricing, asset, metric, competitive, trust, operational, mitigation, escalation, accepted risk, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "risk objective"
+          - "risk taxonomy"
+          - "risk scoring model"
+          - "risk register"
+          - "market risks"
+          - "segment risks"
+          - "positioning risks"
+          - "messaging risks"
+          - "channel risks"
+          - "launch risks"
+          - "conversion funnel risks"
+          - "sales risks"
+          - "pricing risks"
+          - "marketing asset risks"
+          - "growth metric risks"
+          - "competitive risks"
+          - "trust risks"
+          - "operational GTM risks"
+          - "mitigation plan"
+          - "accepted risks"
+          - "risk escalation"
+          - "risk review cadence"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.go_to_market_risks_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/go-to-market-risks-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether GTM risks are complete, specific, scored, owned, detectable, mitigated, connected to GTM documents, and properly handed off to Operations/Risk Management."
+        agentRole: "reviewer"
+        includes:
+          - "canonical GTM risk register"
+          - "GTM upstream dependencies"
+          - "product readiness dependency"
+          - "technical risk dependency"
+          - "support/operations dependency"
+          - "risk formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-vision"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/04-market-scan"
+    - "02-validation/05-competitive-analysis"
+    - "02-validation/06-customer-discovery"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-user-personas"
+    - "03-product/03-user-journeys"
+    - "03-product/04-value-proposition"
+    - "03-product/08-product-scope"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/02-market-definition"
+    - "05-go-to-market/03-positioning"
+    - "05-go-to-market/04-messaging"
+    - "05-go-to-market/05-customer-segments"
+    - "05-go-to-market/06-channel-strategy"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/08-conversion-funnel"
+    - "05-go-to-market/09-sales-strategy"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/11-marketing-assets"
+    - "05-go-to-market/12-growth-metrics"
+  feeds:
+    - "05-go-to-market/14-gtm-analytics"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-customer-success"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "go-to-market-brief"
+      type: "context"
+      required: false
+      description: "GTM objective, market-entry thesis, launch strategy, revenue motion, success criteria, constraints, and GTM risks already identified."
+    - id: "market-definition"
+      type: "context"
+      required: false
+      description: "Market category, boundaries, alternatives, substitute behaviors, maturity, timing, constraints, evidence quality, and market risks."
+    - id: "positioning"
+      type: "context"
+      required: false
+      description: "Positioning statement, category frame, differentiated value, proof hierarchy, claim boundaries, anti-positioning, and positioning risks."
+    - id: "messaging"
+      type: "context"
+      required: false
+      description: "Message house, core message, audience/channel variants, proof points, objection responses, forbidden claims, and messaging risks."
+    - id: "customer-segments"
+      type: "context"
+      required: false
+      description: "ICP, primary segment, secondary segments, qualification/disqualification signals, excluded segments, expansion triggers, and segment risks."
+    - id: "channel-strategy"
+      type: "context"
+      required: false
+      description: "Primary channel, secondary channels, segment-channel fit, message-channel fit, channel economics, experiments, fallback strategy, and channel risks."
+    - id: "launch-plan"
+      type: "context"
+      required: false
+      description: "Launch type, audience, cohorts, readiness gates, communications, support readiness, analytics readiness, go/no-go criteria, contingencies, and launch risks."
+    - id: "conversion-funnel"
+      type: "context"
+      required: false
+      description: "Funnel model, stages, events, metrics, cohorts, attribution, drop-off risks, funnel experiments, and funnel risks."
+    - id: "sales-strategy"
+      type: "context"
+      required: false
+      description: "Sales motion, qualification, lead scoring, process, demo strategy, objections, assets, metrics, handoffs, constraints, and sales risks."
+    - id: "pricing-and-packaging"
+      type: "context"
+      required: false
+      description: "Pricing thesis, value metric, plans, free/trial strategy, billing, payment, discounts, cancellation, experiments, metrics, and pricing risks."
+    - id: "marketing-assets"
+      type: "context"
+      required: false
+      description: "Asset inventory, priorities, readiness, approvals, tracking assets, maintenance rules, and asset risks."
+    - id: "growth-metrics"
+      type: "context"
+      required: false
+      description: "Growth model, north star, input metrics, funnel/channel/revenue/cohort/guardrail metrics, metric ownership, and metric risks."
+    - id: "product-and-technical-readiness"
+      type: "context"
+      required: false
+      description: "Product scope, acceptance criteria, NFRs, security/privacy constraints, observability, deployment readiness, technical risks, and unsupported claims that affect GTM risk."
+    - id: "gtm-risk-notes"
+      type: "manual_note"
+      required: false
+      description: "Known commercial risks, launch concerns, market doubts, trust concerns, support burden, competitive concerns, accepted-risk candidates, and unresolved risk questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a complete GTM risk register with taxonomy, scoring, ownership, detection signals, mitigation, contingency, acceptance, escalation, review cadence, and downstream handoff."
+    - "Risk objective defines what the GTM risk register protects: focus, credibility, market learning, customer trust, conversion, retention, revenue quality, support capacity, and operational sustainability."
+    - "Risk taxonomy defines categories, likelihood levels, impact levels, confidence levels, detection states, risk states, escalation classes, launch impact classes, and accepted-risk labels."
+    - "Risk scoring model defines how likelihood, impact, confidence, detectability, reversibility, blast radius, customer trust impact, revenue impact, support impact, launch impact, and reputational impact shape priority."
+    - "Risk register includes id, title, category, source document, source assumption, description, cause, affected GTM area, affected segment/channel/funnel stage, likelihood, impact, confidence, detection signals, mitigation, contingency, owner, review date, status, launch impact, downstream target, and notes."
+    - "Market risks include wrong category, weak demand, low urgency, wrong timing, weak market evidence, overbroad market definition, low willingness to switch, and market education burden."
+    - "Segment risks include wrong ICP, broad targeting, low-fit users, unsupported segment needs, poor qualification, high support burden, low willingness to pay/adopt, and premature expansion."
+    - "Positioning risks include unclear category, weak differentiation, unsupported proof, overclaiming, wrong comparison frame, false expectations, and anti-positioning drift."
+    - "Messaging risks include unclear value proposition, wrong tone, unsupported claims, misleading outcome language, claim-boundary violations, channel-inappropriate copy, and customer misunderstanding."
+    - "Channel risks include primary-channel failure, low-quality reach, channel overextension, paid-channel waste, community reputation damage, platform dependency, partner dependency, attribution gaps, and fallback weakness."
+    - "Launch risks include readiness gaps, wrong audience, insufficient support, broken analytics, technical/deployment failure, bad communications, negative feedback, poor go/no-go discipline, and rollback/pause gaps."
+    - "Conversion funnel risks include false activation, shallow conversion, poor qualification, drop-off blind spots, weak attribution, privacy-unsafe tracking, misleading metrics, and unowned instrumentation."
+    - "Sales risks include wrong sales motion, poor qualification, long cycle, low close quality, founder dependency, overpromising, unsupported objections, demo risk, and sales/support handoff failure."
+    - "Pricing risks include wrong value metric, underpricing, overpricing, bad packaging, free/trial abuse, payment friction, tax/invoice uncertainty, refund risk, discount misuse, entitlement bugs, and support load."
+    - "Marketing asset risks include missing launch-critical assets, stale assets, unapproved claims, misleading screenshots/demos, untracked links, approval delays, platform listing gaps, and support-adjacent asset gaps."
+    - "Growth metric risks include vanity metrics, false north star, bad thresholds, small-sample distortion, attribution overconfidence, privacy risk, metric gaming, and optimization against customer value."
+    - "Competitive risks include incumbent response, fast followers, feature copying, category capture, pricing pressure, trust disadvantage, distribution disadvantage, and proof gap versus alternatives."
+    - "Trust risks include privacy concerns, security concerns, unsupported claims, poor support experience, refund/cancellation friction, brand mismatch, community backlash, and reputational damage."
+    - "Operational GTM risks include support overload, manual-process overload, founder bottleneck, content/update burden, billing operations, partner operations, analytics ownership gaps, and unresolved handoff ownership."
+    - "Mitigation plan defines risk response types: avoid, reduce, transfer, accept, monitor, test, narrow, delay, pause, fallback, rollback, escalate, or document."
+    - "Accepted risks include rationale, approver, residual risk, mitigation still required, expiration/review trigger, launch impact, contingency, and status."
+    - "Risk escalation defines triggers, severity, escalation target, decision required, response expectation, communication requirement, and launch consequence."
+    - "Risk review cadence defines how risks are reviewed during pre-launch, launch window, post-launch, experiments, incidents, and major GTM changes."
+    - "Downstream handoff clarifies what GTM Analytics, Operating Model, Customer Success, Release Management, Support, Incident Response, and Operations Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid risk-register theater: risks without cause, affected area, detection signal, mitigation, contingency, owner, review cadence, status, and launch consequence."
+    - "Avoid generic startup risks unless made specific to the product, market, segment, channel, launch, funnel, sales motion, pricing, assets, or operations."
+    - "Avoid treating unresolved assumptions as low risk simply because evidence is missing."
+    - "Avoid duplicate risks across categories unless parent/child relationship is explicit."
+    - "Avoid mitigations that are hopes rather than actions, experiments, gates, constraints, fallback paths, reviews, or ownership changes."
+    - "Avoid hiding accepted risks, deferred risks, residual risks, or transferred risks."
+    - "Avoid risks that are disconnected from GTM documents or downstream Operations documents."
+    - "Avoid invented likelihood, impact, confidence, market reaction, support burden, legal/compliance exposure, or competitor behavior."
+    - "Avoid launch-blocking risks without explicit go/no-go, escalation, acceptance, or mitigation path."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "GTM risks must preserve Foundation boundaries, validation evidence, product truth, technical truth, messaging claim boundaries, pricing truth, support capacity, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate risk, cause, source assumption, affected area, likelihood, impact, confidence, detection, mitigation, contingency, owner, status, acceptance, escalation, and downstream handoff."
+    - "Tie each material risk to GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, Marketing Assets, Growth Metrics, Product, Technical Risks, or Decision Record where possible."
+    - "Classify risks as identified, monitoring, materialising, mitigated, accepted, transferred, deferred, escalated, retired, launch-blocking, review-needed, or post-launch where useful."
+    - "State whether the next action is research, customer interview, experiment, message change, segment narrowing, channel fallback, launch delay, support prep, analytics fix, asset update, pricing change, accepted risk, escalation, or operations handoff."
+    - "Do not mark risks mitigated unless there is evidence, owner, control, gate, fallback, or completed action."
+    - "Keep operational risk procedures in Operations/Risk Management while preserving GTM-specific source context here."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Security/Privacy, Observability, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, Marketing Assets, Growth Metrics, or Decision Record."
+    - "Flag risks without source, cause, affected area, likelihood, impact, confidence, detection signal, mitigation, contingency, owner, review date, status, launch impact, or downstream target."
+    - "Flag mitigations that are vague, unactionable, unowned, untestable, or not connected to a gate, experiment, fallback, review, or control."
+    - "Flag accepted risks without rationale, approver, residual risk, review trigger, contingency, and launch consequence."
+    - "Flag launch-blocking risks without go/no-go handling, escalation path, or acceptance authority."
+    - "Flag GTM risks that should be reflected in analytics, support, release, incident response, or operations risk management but are not handed off."
+    - "Flag duplicate risks that should be consolidated or linked as parent/child risks."
+    - "Verify that severe risks have early detection signals and response owner."
+    - "Flag content that belongs better in detailed GTM strategy documents, GTM Analytics, Customer Success, Support Model, Release Management, Incident Response, or Operations Risk Management."
   specializedFormats:
     riskFormat:
-      id:
-        type: "string"
-        description: "Unique risk identifier (e.g. GTMR-001)"
-      category:
-        type: "string"
-        description: "Risk category (market, positioning, messaging, channel, launch, sales, pricing, competitive, trust)"
-      description:
-        type: "string"
-        description: "Concise description of the risk"
-      likelihood:
-        type: "string"
-        description: "Estimated likelihood (low, medium, high, critical)"
-      impact:
-        type: "string"
-        description: "Estimated impact if realised (low, medium, high, critical)"
-      detectionSignal:
-        type: "string"
-        description: "Observable signal that indicates the risk is materialising"
-      mitigation:
-        type: "string"
-        description: "Planned mitigation or contingency"
-      owner:
-        type: "string"
-        description: "Person or role accountable for monitoring and responding"
-      status:
-        type: "string"
-        description: "Current status (identified, monitored, materialising, resolved)"
+      description: "Required format for each GTM risk."
+      fields:
+        - id
+        - title
+        - category
+        - sourceDocument
+        - sourceAssumption
+        - description
+        - cause
+        - affectedGTMArea
+        - affectedSegment
+        - affectedChannel
+        - affectedFunnelStage
+        - likelihood
+        - impact
+        - confidence
+        - detectability
+        - reversibility
+        - trustImpact
+        - revenueImpact
+        - supportImpact
+        - detectionSignals
+        - mitigation
+        - contingency
+        - owner
+        - reviewDate
+        - status
+        - launchImpact
+        - downstreamTarget
+        - notes
+    scoringFormat:
+      description: "Recommended format for GTM risk scoring dimensions."
+      fields:
+        - dimension
+        - scale
+        - definition
+        - examples
+        - priorityEffect
+        - launchConsequence
+        - reviewNotes
+    mitigationFormat:
+      description: "Recommended format for mitigation actions."
+      fields:
+        - riskId
+        - mitigation
+        - mitigationType
+        - owner
+        - targetDateOrTrigger
+        - evidenceRequired
+        - linkedGateOrExperiment
+        - linkedDocument
+        - residualRisk
+        - status
+    acceptedRiskFormat:
+      description: "Recommended format for accepted GTM risks."
+      fields:
+        - riskId
+        - rationale
+        - approver
+        - residualRisk
+        - mitigationStillRequired
+        - expirationOrReviewTrigger
+        - launchImpact
+        - contingency
+        - communicationRequirement
+        - status
+    escalationFormat:
+      description: "Recommended format for GTM risk escalation rules."
+      fields:
+        - trigger
+        - severity
+        - escalationTarget
+        - responseExpectation
+        - decisionRequired
+        - launchConsequence
+        - communicationRequirement
+        - status
+    reviewCadenceFormat:
+      description: "Recommended format for GTM risk review cadence."
+      fields:
+        - reviewType
+        - cadence
+        - participants
+        - inputs
+        - outputs
+        - escalationRules
+        - retirementRules
+        - downstreamHandoff
+    riskHandoffFormat:
+      description: "Recommended format for downstream risk handoff."
+      fields:
+        - riskId
+        - handoffTarget
+        - contextToPreserve
+        - requiredAction
+        - owner
+        - timing
+        - acceptanceOrEscalationRule
+        - status
   sections:
+    - id: "risk-objective"
+      title: "Risk Objective"
+      intent: "Define why GTM risk management exists and what business, customer, trust, and operational outcomes it protects."
+      required: true
+      outputGuidance:
+        - "Open with the purpose of GTM risk management."
+        - "State what the risk register protects: focus, credibility, customer trust, learning quality, conversion, retention, support capacity, and operations."
+        - "Clarify the boundary between GTM risks, technical risks, and operations risks."
+      qualityChecks:
+        - "Objective is specific enough to reject generic risk lists."
+        - "Launch and operational handoff are explicit."
+        - "GTM risk is not confused with product or technical implementation detail."
+      questions:
+        - "Why does this GTM risk register exist?"
+        - "What outcomes does it protect?"
+        - "How does it differ from Technical Risks and Operations Risk Management?"
+        - "What risks are explicitly outside this document?"
+    - id: "risk-taxonomy"
+      title: "Risk Taxonomy"
+      intent: "Define GTM risk categories, statuses, severity classes, confidence levels, launch impact classes, escalation labels, and accepted-risk labels."
+      required: true
+      outputGuidance:
+        - "Define categories before listing risks."
+        - "Define statuses such as identified, monitoring, materialising, mitigated, accepted, transferred, deferred, escalated, retired, launch-blocking, and review-needed."
+        - "Define launch impact classes and consequences."
+      qualityChecks:
+        - "Taxonomy prevents ambiguous risk status."
+        - "Accepted, deferred, transferred, and mitigated are distinguishable."
+        - "Launch impact labels have consequences."
+      questions:
+        - "What GTM risk categories are used?"
+        - "What statuses exist?"
+        - "What severity and launch impact classes exist?"
+        - "What does accepted, transferred, deferred, escalated, retired, and launch-blocking mean?"
+        - "What confidence levels are used?"
+    - id: "risk-scoring-model"
+      title: "Risk Scoring Model"
+      intent: "Define how GTM risks are prioritized based on likelihood, impact, confidence, detectability, reversibility, blast radius, trust, revenue, support, launch, and reputation."
+      required: true
+      outputGuidance:
+        - "Use scoring records for each scoring dimension."
+        - "State how low confidence affects priority."
+        - "Define what makes a GTM risk launch-blocking."
+      qualityChecks:
+        - "Scoring model is simple enough to use."
+        - "Low confidence does not hide high risk."
+        - "Launch blockers are not based only on numeric score."
+      questions:
+        - "How are likelihood and impact scored?"
+        - "How are confidence, detectability, reversibility, trust impact, revenue impact, support impact, and reputational impact scored?"
+        - "What makes a risk launch-blocking?"
+        - "What risks require escalation even if probability is uncertain?"
     - id: "risk-register"
       title: "Risk Register"
-      intent: "Compile the full risk register with standardised fields."
+      intent: "Maintain the master GTM risk register with source, category, cause, affected area, detection signal, mitigation, contingency, owner, review date, status, and launch impact."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the risk format for every material risk."
+        - "Group risks by priority or category where useful."
+        - "Avoid duplicate risks unless parent/child structure is explicit."
+      qualityChecks:
+        - "Every risk is specific, owned, detectable, and actionable."
+        - "Every risk has launch impact and downstream target."
+        - "Risks are tied to source documents or explicit assumptions."
       questions:
-        - "What is the full risk register?"
-        - "Format: GTMR-XXX, Category, Description, Likelihood, Impact, Detection Signal, Mitigation, Status."
+        - "What is the full GTM risk register?"
+        - "What is the source of each risk?"
+        - "What caused or could cause each risk?"
+        - "What GTM area, segment, channel, or funnel stage is affected?"
+        - "How will each risk be detected?"
+        - "What is the mitigation and contingency?"
+        - "Who owns review and response?"
     - id: "market-risks"
       title: "Market Risks"
-      intent: "Identify market-level risks such as size, readiness, or timing."
+      intent: "Identify risks related to market definition, timing, demand, category, alternatives, maturity, education burden, and willingness to switch."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Market Definition and Validation."
+        - "Include evidence weakness, timing, demand, category, switching, and education risks."
+        - "State research, experiment, or fallback needed."
+      qualityChecks:
+        - "Market risks are specific to this market thesis."
+        - "Evidence quality is considered."
+        - "Wrong-market and wrong-category risks are visible."
       questions:
         - "What market-level risks exist?"
-        - "Examples: Market too small, Market not ready, Wrong timing?"
+        - "What could make the market definition wrong?"
+        - "What could make timing wrong?"
+        - "What could make demand weaker than expected?"
+        - "What could make customer education or switching too hard?"
+    - id: "segment-risks"
+      title: "Segment Risks"
+      intent: "Identify risks that the selected customer segment is wrong, too broad, unsupported, low-fit, hard to reach, or too costly to serve."
+      required: true
+      outputGuidance:
+        - "Tie risks to Customer Segments."
+        - "Include ICP, qualification, support, expansion, and exclusion risks."
+        - "State segment narrowing or exclusion mitigations."
+      qualityChecks:
+        - "Segment risks include observable signals."
+        - "Unsupported-segment risk is explicit."
+        - "Premature expansion risk is included."
+      questions:
+        - "What could make the ICP or primary segment wrong?"
+        - "What segment needs are unsupported?"
+        - "What segment could create excessive support burden?"
+        - "What disqualification signals are being ignored?"
+        - "What premature expansion risks exist?"
     - id: "positioning-risks"
       title: "Positioning Risks"
-      intent: "Identify positioning risks such as confusing category or overpromising."
+      intent: "Identify risks that positioning is unclear, unbelievable, undifferentiated, unsupported, overbroad, or misaligned with category and customer language."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Positioning and Market Definition."
+        - "Include category confusion, weak differentiation, proof gaps, overclaiming, and anti-positioning drift."
+        - "State proof, message, or category adjustment needed."
+      qualityChecks:
+        - "Positioning risks are connected to customer misunderstanding and trust."
+        - "Proof gaps are explicit."
+        - "Claim-boundary violations are treated as risk."
       questions:
         - "What positioning risks exist?"
-        - "Examples: Confusing category, Weak differentiation, Overpromising?"
+        - "Where could customers misunderstand the product?"
+        - "Where is differentiation weak or unsupported?"
+        - "Where could positioning overpromise?"
+        - "What anti-positioning drift could create false expectations?"
     - id: "messaging-risks"
       title: "Messaging Risks"
-      intent: "Identify messaging risks such as wrong tone or unclear value proposition."
+      intent: "Identify risks that messages are unclear, generic, misleading, overpromising, off-tone, unsupported, or unsafe for a channel/audience."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Messaging."
+        - "Include claim safety, tone, proof, outcome language, objection, and channel-variant risks."
+        - "State message review or asset correction needed."
+      qualityChecks:
+        - "Messaging risks include customer misunderstanding and internal misuse."
+        - "Forbidden claims and proof limits are considered."
+        - "Risks are monitorable through feedback or conversion signals."
       questions:
         - "What messaging risks exist?"
-        - "Examples: Wrong tone, Unclear value prop, Language that repels target audience?"
+        - "What messages could be misunderstood?"
+        - "What claims could mislead or overpromise?"
+        - "What tone could repel or confuse the target audience?"
+        - "What objections are not answered honestly enough?"
     - id: "channel-risks"
       title: "Channel Risks"
-      intent: "Identify channel risks such as dependency, algorithm changes, or platform bans."
+      intent: "Identify risks that channels fail, reach the wrong audience, cost too much, damage trust, lack assets, or cannot be measured."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Channel Strategy and Marketing Assets."
+        - "Include primary channel failure, low-quality reach, paid waste, community reputation, platform dependency, partner dependency, and fallback weakness."
+        - "State channel fallback or experiment needed."
+      qualityChecks:
+        - "Channel risks include fit, cost, capacity, measurement, and reputation."
+        - "Primary-channel failure has fallback."
+        - "Community and partner risks include trust dynamics."
       questions:
         - "What channel risks exist?"
-        - "Examples: Channel dependency, Algorithm changes, Platform bans?"
+        - "What could make the primary channel fail?"
+        - "What could make channels reach the wrong audience?"
+        - "What channel could damage trust or reputation?"
+        - "What fallback exists if the main channel underperforms?"
     - id: "launch-risks"
       title: "Launch Risks"
-      intent: "Identify launch risks such as technical failure, no audience, or negative press."
+      intent: "Identify risks in launch readiness, audience, cohorts, communications, support, analytics, go/no-go discipline, contingency, and pause/rollback."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Launch Plan."
+        - "Include readiness gates, wrong audience, support gaps, analytics gaps, communication issues, and pause/rollback gaps."
+        - "State launch consequence and go/no-go implication."
+      qualityChecks:
+        - "Launch risks are tied to gates or decisions."
+        - "Support and analytics readiness are included."
+        - "Pause/rollback risks are explicit."
       questions:
         - "What launch risks exist?"
-        - "Examples: Technical failure, No audience, Negative press?"
+        - "What readiness gate is most likely to fail?"
+        - "What could make the launch audience wrong?"
+        - "What could break support or analytics during launch?"
+        - "What would force pause, delay, rollback, or cohort narrowing?"
+    - id: "conversion-funnel-risks"
+      title: "Conversion Funnel Risks"
+      intent: "Identify risks that funnel stages, events, activation, conversion, retention, attribution, cohorts, or instrumentation are wrong or misleading."
+      required: true
+      outputGuidance:
+        - "Tie risks to Conversion Funnel and Growth Metrics."
+        - "Include false activation, shallow conversion, drop-off blind spots, weak attribution, privacy tracking risk, and ownerless instrumentation."
+        - "State analytics or experiment mitigation."
+      qualityChecks:
+        - "Funnel risks include measurement and behavior quality."
+        - "Activation and conversion definitions are scrutinized."
+        - "Privacy and attribution limitations are visible."
+      questions:
+        - "What conversion funnel risks exist?"
+        - "Where could activation be falsely measured?"
+        - "Where could conversion be shallow or misleading?"
+        - "Where could drop-offs be invisible?"
+        - "Where could attribution or tracking mislead decisions?"
     - id: "sales-risks"
       title: "Sales Risks"
-      intent: "Identify sales risks such as long cycle, high CAC, or founder dependency."
+      intent: "Identify risks in sales motion, qualification, process, demos, objection handling, handoffs, founder dependency, and support load."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Sales Strategy."
+        - "Include wrong sales motion, long cycle, poor qualification, founder bottleneck, demo overclaiming, unsupported objections, and handoff failure."
+        - "State process or scope mitigation."
+      qualityChecks:
+        - "Sales risks include customer quality and support implications."
+        - "Overpromising is treated as material risk."
+        - "Founder dependency is visible where relevant."
       questions:
         - "What sales risks exist?"
-        - "Examples: Long sales cycle, High CAC, Founder dependency?"
+        - "What could make the sales motion wrong?"
+        - "What could make qualification poor?"
+        - "What could make demos or objections create overpromises?"
+        - "What sales handoff could fail?"
     - id: "pricing-risks"
       title: "Pricing Risks"
-      intent: "Identify pricing risks such as wrong price point, model, or hidden costs."
+      intent: "Identify risks in value metric, price point, packaging, trial/free, payment, tax/invoice, discounts, plan changes, refunds, and entitlement operations."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Pricing and Packaging."
+        - "Include underpricing, overpricing, wrong value metric, bad packaging, trial/free abuse, payment friction, tax uncertainty, refund risk, and entitlement bugs."
+        - "State pricing experiment or review trigger."
+      qualityChecks:
+        - "Pricing risks include commercial, technical, support, and trust dimensions."
+        - "Tax/payment/review-needed risks are not hidden."
+        - "Support load is considered."
       questions:
         - "What pricing risks exist?"
-        - "Examples: Too expensive, Too cheap, Wrong model, Hidden costs?"
+        - "What could make the value metric wrong?"
+        - "What could indicate underpricing or overpricing?"
+        - "What free/trial/discount risks exist?"
+        - "What payment, refund, tax, or entitlement risks exist?"
+    - id: "marketing-asset-risks"
+      title: "Marketing Asset Risks"
+      intent: "Identify risks that launch-critical assets are missing, stale, misleading, unapproved, untracked, unsupported, or inconsistent."
+      required: true
+      outputGuidance:
+        - "Tie risks to Marketing Assets and Launch Plan."
+        - "Include missing assets, stale screenshots, unapproved claims, demo risk, listing gaps, tracking gaps, and support-adjacent asset gaps."
+        - "State asset remediation needed."
+      qualityChecks:
+        - "Asset risks include claim safety and product truth."
+        - "Launch blockers are explicit."
+        - "Tracking and support assets are included."
+      questions:
+        - "What marketing asset risks exist?"
+        - "What launch-critical asset could be missing?"
+        - "What asset could become stale or misleading?"
+        - "What asset could violate claim boundaries?"
+        - "What asset could be untracked or hard to measure?"
+    - id: "growth-metric-risks"
+      title: "Growth Metric Risks"
+      intent: "Identify risks that growth metrics mislead decisions, incentivize harmful behavior, overstate signal, or violate privacy."
+      required: true
+      outputGuidance:
+        - "Tie risks to Growth Metrics and Conversion Funnel."
+        - "Include vanity metrics, false north star, weak thresholds, small samples, bad attribution, metric gaming, privacy risks, and over-optimization."
+        - "State metric review or guardrail needed."
+      qualityChecks:
+        - "Metric risks include harmful incentives."
+        - "Small sample and attribution limits are explicit."
+        - "Guardrails are considered."
+      questions:
+        - "What growth metric risks exist?"
+        - "What metrics could mislead decisions?"
+        - "Where could vanity metrics hide poor quality?"
+        - "Where could tracking or attribution be unreliable?"
+        - "What metrics could create harmful incentives?"
     - id: "competitive-risks"
       title: "Competitive Risks"
-      intent: "Identify competitive risks such as incumbent retaliation or fast followers."
+      intent: "Identify risks from competitors, incumbents, alternatives, substitutes, category capture, pricing pressure, distribution advantage, and proof gaps."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Competitive Analysis and Market Definition."
+        - "Include direct competitors, indirect alternatives, substitutes, incumbent response, fast followers, and trust/proof gaps."
+        - "State differentiation or positioning mitigation."
+      qualityChecks:
+        - "Competitive risks include real alternatives, not only named competitors."
+        - "Distribution and trust advantages are considered."
+        - "Feature-copying is not overemphasized if switching/context matters more."
       questions:
         - "What competitive risks exist?"
-        - "Examples: Incumbent retaliation, Fast follower, Feature copying?"
+        - "What incumbent or alternative has distribution advantage?"
+        - "What proof gap exists versus alternatives?"
+        - "What pricing pressure could appear?"
+        - "What category or narrative could competitors capture?"
     - id: "trust-risks"
       title: "Trust Risks"
-      intent: "Identify trust risks such as privacy concerns, security incidents, or brand perception."
+      intent: "Identify risks that damage customer trust, including privacy, security, claims, support, cancellation/refunds, brand perception, community backlash, and reputation."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie risks to Foundation boundaries, Security/Privacy, Messaging, Pricing, Support, and Technical Risks."
+        - "Include privacy/security concerns, unsupported claims, poor support, refund/cancel friction, brand mismatch, community backlash, and reputation risk."
+        - "State prevention and response path."
+      qualityChecks:
+        - "Trust risks include both promise and experience."
+        - "Privacy/security concerns are handled carefully."
+        - "Support and cancellation trust are included."
       questions:
         - "What trust risks exist?"
-        - "Examples: Data privacy concerns, Security incidents, Brand perception?"
+        - "What could make customers distrust the product or brand?"
+        - "What privacy or security concern could affect adoption?"
+        - "What support, cancellation, refund, or claim issue could harm trust?"
+        - "What community or reputational risk exists?"
+    - id: "operational-gtm-risks"
+      title: "Operational GTM Risks"
+      intent: "Identify risks that GTM creates operational burden the team or system cannot sustainably handle."
+      required: true
+      outputGuidance:
+        - "Tie risks to Launch, Sales, Pricing, Assets, Support, Customer Success, and Operations."
+        - "Include support overload, manual process overload, founder bottleneck, content/update burden, billing operations, partner operations, analytics ownership gaps, and handoff gaps."
+        - "State Operations handoff needed."
+      qualityChecks:
+        - "Operational burden is treated as GTM risk, not afterthought."
+        - "Owner and handoff are explicit."
+        - "Manual processes are named where relevant."
+      questions:
+        - "What operational risks does GTM create?"
+        - "Where could support overload occur?"
+        - "Where could founder or manual process bottlenecks occur?"
+        - "Where could billing, partner, content, asset, or analytics operations become unsustainable?"
+        - "What must Operations inherit?"
     - id: "mitigation-plan"
       title: "Mitigation Plan"
-      intent: "Define the overall mitigation strategy and ownership of risk monitoring."
+      intent: "Define the overall mitigation strategy and concrete mitigation actions for material GTM risks."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use mitigation records for material mitigations."
+        - "Classify mitigation type: avoid, reduce, transfer, accept, monitor, test, narrow, delay, pause, fallback, rollback, escalate, document."
+        - "State evidence required to downgrade or close a risk."
+      qualityChecks:
+        - "Mitigations are actions, not wishes."
+        - "Each high-priority risk has mitigation or accepted-risk path."
+        - "Risk closure requires evidence."
       questions:
         - "What is the overall mitigation strategy?"
-        - "Who owns risk monitoring and response?"
+        - "Which risks are avoided, reduced, transferred, accepted, monitored, tested, narrowed, delayed, paused, rolled back, escalated, or documented?"
+        - "What evidence is required to downgrade or close each risk?"
+        - "What contingency exists if mitigation fails?"
+    - id: "accepted-risks"
+      title: "Accepted Risks"
+      intent: "Define risks intentionally accepted, with rationale, approver, residual risk, review trigger, contingency, and launch consequence."
+      required: true
+      outputGuidance:
+        - "Use accepted risk records for each accepted risk."
+        - "Separate accepted risk from deferred risk and ignored risk."
+        - "Define expiration or review trigger."
+      qualityChecks:
+        - "Accepted risks are explicit and auditable."
+        - "Residual risk and contingency are documented."
+        - "Acceptance authority is clear."
+      questions:
+        - "What GTM risks are intentionally accepted?"
+        - "Who accepts each risk?"
+        - "Why is the risk accepted?"
+        - "What residual risk remains?"
+        - "What mitigation still applies?"
+        - "When must acceptance be reviewed?"
+    - id: "risk-escalation"
+      title: "Risk Escalation"
+      intent: "Define when GTM risks must be escalated, to whom, with what decision, and what launch consequence applies."
+      required: true
+      outputGuidance:
+        - "Use escalation records for material escalation rules."
+        - "Include launch-blocking, trust, privacy/security, support overload, legal/compliance, pricing/payment, and reputation escalation."
+        - "State communication requirement."
+      qualityChecks:
+        - "Severe risks have clear escalation path."
+        - "Launch consequences are explicit."
+        - "Escalation does not depend on informal memory."
+      questions:
+        - "When is a GTM risk escalated?"
+        - "Who receives escalation?"
+        - "What decision is required?"
+        - "What risk levels block launch or expansion?"
+        - "What communication is required?"
+    - id: "risk-review-cadence"
+      title: "Risk Review Cadence"
+      intent: "Define how GTM risks are reviewed, updated, escalated, retired, transferred, and handed off over time."
+      required: true
+      outputGuidance:
+        - "Use review cadence records."
+        - "Define cadence during pre-launch, launch window, post-launch, experiments, pricing changes, major channel changes, incidents, and operations handoff."
+        - "State retirement and transfer rules."
+      qualityChecks:
+        - "Risks are living records."
+        - "Review triggers match GTM activity."
+        - "Risk retirement requires evidence."
+      questions:
+        - "How often are GTM risks reviewed?"
+        - "What triggers out-of-cycle review?"
+        - "Who participates?"
+        - "What inputs and outputs are required?"
+        - "When is a risk retired?"
+        - "When is a risk transferred to Operations Risk Management?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from GTM Risks and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use risk handoff records for material transferred risks."
+        - "Route risks to GTM Analytics, Operating Model, Customer Success, Release Management, Support Model, Incident Response, and Risk Management."
+        - "Preserve context, detection signals, mitigation status, accepted-risk decisions, escalation rules, and launch impact."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Operations documents are not allowed to invent missing risk context silently."
+        - "GTM-owned and Operations-owned risks are clearly distinguished."
+      questions:
+        - "What should GTM Analytics inherit?"
+        - "What should Operating Model inherit?"
+        - "What should Customer Success inherit?"
+        - "What should Release Management inherit?"
+        - "What should Support Model inherit?"
+        - "What should Incident Response inherit?"
+        - "What should Operations Risk Management inherit?"
+        - "What unresolved GTM risks must be carried forward?"

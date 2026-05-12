@@ -5,125 +5,793 @@ document:
   status: "not_started"
   order: 3
   type: "team_responsibilities"
-  purpose: "Define who does what across all operational domains."
-  centralQuestion: "Who does what?"
-  dependsOn: []
-  feeds: []
+  purpose: "Define who is responsible, accountable, consulted, informed, backup-assigned, decision-authorized, and escalation-ready across product, engineering, support, customer success, GTM, finance, data/privacy, release, incident, maintenance, vendor, and risk operations."
+  centralQuestion: "Who owns each operational responsibility, what authority do they have, who backs them up, when must they escalate, and what gaps must be resolved before operations can scale safely?"
   outputs:
     canonical:
       format: "markdown"
-      path: "06-operations/03-team-and-responsibilities.md"
-      purpose: "Complete responsibility assignment across all operational domains including current team, roles, escalation rules, and future hiring needs."
+      path: "docs/06-operations/03-team-and-responsibilities.md"
+      purpose: "Store the canonical team and responsibilities document as a Markdown document."
+    artifacts:
+      - id: "operations.team_responsibilities_matrix"
+        format: "html"
+        path: "outcomes/html/06-operations/team-responsibilities-matrix.html"
+        purpose: "Provide a founder-facing responsibility matrix covering team context, roles, RACI/DRI ownership, backups, decision authority, escalation, handoffs, capacity, gaps, hiring needs, and responsibility risks."
+        audience: "founder"
+        includes:
+          - "responsibility objective"
+          - "responsibility model"
+          - "team context"
+          - "role taxonomy"
+          - "current team"
+          - "capacity model"
+          - "responsibility matrix"
+          - "operational roles"
+          - "product responsibilities"
+          - "engineering responsibilities"
+          - "support responsibilities"
+          - "customer success responsibilities"
+          - "GTM responsibilities"
+          - "financial responsibilities"
+          - "data and privacy responsibilities"
+          - "release responsibilities"
+          - "incident responsibilities"
+          - "vendor responsibilities"
+          - "risk responsibilities"
+          - "decision authority"
+          - "handoff rules"
+          - "escalation rules"
+          - "responsibility gaps"
+          - "future hiring needs"
+          - "responsibility risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.team_responsibilities_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/team-responsibilities-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether responsibilities are complete, owner-assigned, backup-covered, authority-aware, escalation-ready, capacity-aware, and consistent with the Operating Model and downstream Operations documents."
+        agentRole: "reviewer"
+        includes:
+          - "canonical team and responsibilities"
+          - "operations brief dependency"
+          - "operating model dependency"
+          - "product dependency"
+          - "engineering dependency"
+          - "GTM dependency"
+          - "responsibility formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "03-product/08-product-scope"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/13-engineering-standards"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/09-sales-strategy"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/12-growth-metrics"
+    - "05-go-to-market/13-go-to-market-risks"
+    - "06-operations/01-operations-brief"
+    - "06-operations/02-operating-model"
+  feeds:
+    - "06-operations/04-support-model"
+    - "06-operations/05-maintenance-plan"
+    - "06-operations/06-release-management"
+    - "06-operations/07-incident-response"
+    - "06-operations/08-data-and-privacy-operations"
+    - "06-operations/09-financial-operations"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "operations-brief"
+      type: "context"
+      required: false
+      description: "Operations objective, operational scope, ownership model, critical operational functions, service expectations, support expectations, incident expectations, maintenance expectations, release expectations, data/privacy operations, cost/capacity constraints, and operational risks."
+    - id: "operating-model"
+      type: "context"
+      required: false
+      description: "Operating objective, principles, scope, ownership model, roles, cadences, workflows, manual operations, automated operations, dependencies, decision rights, escalation paths, metrics, constraints, and operating model risks."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Product scope, NFRs, acceptance criteria, supported capabilities, deferred capabilities, roadmap ownership implications, and product correctness responsibilities."
+    - id: "engineering-context"
+      type: "context"
+      required: false
+      description: "Architecture, security/privacy, testing, observability, deployment, engineering standards, technical risks, release ownership, maintenance ownership, and infrastructure responsibilities."
+    - id: "gtm-context"
+      type: "context"
+      required: false
+      description: "Launch plan, sales strategy, pricing and packaging, growth metrics, GTM risks, billing/payment responsibilities, customer promises, support load, and commercial ownership implications."
+    - id: "team-notes"
+      type: "manual_note"
+      required: false
+      description: "Current team members, names, skills, availability, constraints, role assumptions, owner gaps, backup gaps, future hiring ideas, escalation preferences, and unresolved responsibility questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through explicit responsibility ownership, backup coverage, decision authority, escalation rules, handoff rules, capacity assumptions, gaps, and future hiring needs."
+    - "Responsibility objective defines what the responsibility system protects: accountability, continuity, speed, quality, supportability, incident response, release safety, customer trust, and operational sustainability."
+    - "Responsibility model defines whether RACI, DRI, single accountable owner, backup owner, on-call rotation, approval owner, or hybrid model is used, with rules for documentation and updates."
+    - "Team context identifies current team members or roles, primary skills, constraints, availability, time zones if relevant, current responsibilities, temporary role consolidation, and unresolved unknowns."
+    - "Role taxonomy distinguishes person, role, function, owner, backup owner, accountable owner, consulted party, informed party, approver, executor, reviewer, escalation owner, incident commander, and risk owner."
+    - "Current team section documents actual current capacity and avoids inventing unavailable headcount."
+    - "Capacity model defines available capacity, critical capacity constraints, overload signals, rotation limits, founder bottlenecks, manual-work burden, and support/release/incident coverage limitations."
+    - "Responsibility matrix assigns DRI/accountable owner, executor, reviewer, consulted, informed, backup owner, escalation owner, decision authority, cadence, and downstream document for each major operational responsibility."
+    - "Operational roles include operations owner, support lead, incident commander, release owner, maintenance owner, data/privacy owner, vendor owner, billing/payment owner, customer success owner, risk owner, and backup roles where relevant."
+    - "Product responsibilities assign ownership for product correctness, roadmap, scope decisions, feature prioritization, customer promise alignment, acceptance criteria, usability issues, and product-support feedback loop."
+    - "Engineering responsibilities assign ownership for infrastructure, deployments, observability, technical debt, code quality, security, privacy implementation, performance, backups/restore, automation, and technical incidents."
+    - "Support responsibilities assign ownership for customer-facing support, triage, bug intake, known issues, support macros/docs, response expectations, escalation, feedback capture, and support reporting."
+    - "Customer success responsibilities assign ownership for onboarding, activation health, retention signals, success criteria, customer education, feedback loops, account/user health, and expansion or churn indicators where relevant."
+    - "GTM responsibilities assign ownership for launch communications, growth metrics interpretation, marketing assets, channel operations, sales follow-up, pricing communication, partnerships, and GTM experiment coordination where relevant."
+    - "Financial responsibilities assign ownership for budgeting, cost control, revenue tracking, payment processor oversight, billing, refunds, invoices/receipts, subscriptions, discounts, failed payments, and financial reporting."
+    - "Data and privacy responsibilities assign ownership for data access, retention, deletion, export, telemetry/logging review, privacy requests, security/privacy review, and privacy incident escalation."
+    - "Release responsibilities assign ownership for release readiness, approvals, deployment, smoke checks, monitoring, rollback/pause decisions, release communication, and post-release review."
+    - "Incident responsibilities assign incident commander, responders, communications owner, technical owner, support owner, customer communication owner, post-incident review owner, and escalation authority."
+    - "Vendor responsibilities assign owner for each critical vendor/tool/platform, including monitoring, billing, access, contract/account state, failure fallback, and replacement consideration."
+    - "Risk responsibilities assign owner for operational risks, GTM risks handed off to operations, risk reviews, accepted risks, mitigation tracking, escalation, and risk register updates."
+    - "Decision authority defines which decisions each role can make independently, which require review, which require escalation, which require founder/product/engineering/legal/compliance/finance approval, and which require risk acceptance."
+    - "Handoff rules define how responsibilities pass between roles, what context must be preserved, what artifact/evidence is required, what timing applies, and what failure risk exists."
+    - "Escalation rules define escalation triggers, severity, route, owner, backup, decision required, response expectation, communication requirement, and downstream procedure."
+    - "Responsibility gaps identify missing owners, missing backups, overloaded owners, missing decision rights, missing escalation paths, missing skills, and unresolved assumptions."
+    - "Future hiring needs identify role, trigger, priority, reason, responsibilities transferred, risks reduced, interim owner, and timing assumption without inventing hiring plans."
+    - "Responsibility risks identify owner gaps, single points of failure, founder bottlenecks, role overload, unclear authority, poor handoff, missing backup, unavailable expertise, support overload, and incident/release coverage risks."
+    - "Downstream handoff clarifies what Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid responsibility theater: role names without accountable owner, backup owner, decision authority, cadence, handoff, escalation path, capacity, and downstream document."
+    - "Avoid treating a responsibility as assigned when the owner, backup, decision rights, and escalation route are unknown."
+    - "Avoid inventing team members, headcount, availability, skills, capacity, rotations, on-call coverage, legal/compliance expertise, or finance/accounting ownership."
+    - "Avoid assuming one founder/person can own every operational domain indefinitely without naming overload signals and future handoff triggers."
+    - "Avoid ownerless critical functions, ownerless support, ownerless incidents, ownerless releases, ownerless data/privacy operations, ownerless vendor management, ownerless billing/payment, and ownerless risk review."
+    - "Avoid decision authority ambiguity for customer-facing promises, privacy/security issues, incidents, rollback, refunds, pricing exceptions, and accepted risks."
+    - "Avoid duplicating detailed procedures that belong in Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Responsibilities must preserve Foundation boundaries, product truth, technical truth, GTM promises, privacy/security constraints, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate person, role, responsibility, accountable owner, executor, reviewer, backup, approver, consulted party, informed party, escalation owner, decision authority, capacity, gap, risk, and handoff."
+    - "Tie responsibility assignments to Operations Brief, Operating Model, Product, Engineering, GTM, Technical Risks, GTM Risks, Launch Plan, Pricing, Growth Metrics, or Decision Record where possible."
+    - "Classify responsibilities as current, required, deferred, shared, unowned, overloaded, founder-owned, backup-missing, review-needed, launch-critical, post-launch, or downstream-owned where useful."
+    - "State where a responsibility is temporarily consolidated into one person or role and what trigger should split it later."
+    - "Route detailed execution procedures downstream instead of overloading this document."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Operations Brief, Operating Model, Foundation, Product, Acceptance Criteria, NFRs, Security/Privacy, Testing, Observability, Deployment, Technical Risks, Launch Plan, Sales Strategy, Pricing, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag responsibilities without accountable owner, backup owner, decision authority, cadence, handoff, escalation route, and downstream document."
+    - "Flag owner assignments that exceed known capacity or assume unavailable skills."
+    - "Flag role definitions that duplicate procedures better handled in downstream operations documents."
+    - "Flag decision authority gaps for incidents, releases, privacy/security, refunds, pricing exceptions, support escalations, vendor failure, and risk acceptance."
+    - "Flag missing backup coverage for critical operational functions."
+    - "Flag future hiring needs without trigger, priority, responsibility transferred, interim owner, and risk reduced."
+    - "Verify that downstream Operations documents receive concrete responsibility handoff inputs."
+    - "Flag content that belongs better in Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+  specializedFormats:
+    responsibilityFormat:
+      description: "Recommended format for responsibility assignment records."
+      fields:
+        - responsibility
+        - domain
+        - accountableOwner
+        - executor
+        - reviewer
+        - consulted
+        - informed
+        - backupOwner
+        - escalationOwner
+        - decisionAuthority
+        - cadenceOrTrigger
+        - evidenceOrOutput
+        - downstreamDocument
+        - status
+    roleFormat:
+      description: "Recommended format for operational roles."
+      fields:
+        - role
+        - purpose
+        - responsibilities
+        - authority
+        - recurringOutputs
+        - requiredSkills
+        - primaryOwner
+        - backupOwner
+        - rotationOrCoverage
+        - escalationPath
+        - downstreamDocument
+        - status
+    capacityFormat:
+      description: "Recommended format for team capacity records."
+      fields:
+        - personOrRole
+        - availability
+        - primaryResponsibilities
+        - capacityConstraints
+        - overloadSignals
+        - backupCoverage
+        - responsibilitiesToTransferLater
+        - triggerForTransfer
+        - unresolvedAssumption
+        - status
+    decisionAuthorityFormat:
+      description: "Recommended format for decision authority rules."
+      fields:
+        - decisionCategory
+        - examples
+        - defaultDecisionOwner
+        - independentAuthority
+        - reviewRequired
+        - approvalRequired
+        - escalationRequired
+        - riskAcceptanceRequired
+        - documentationRequired
+        - downstreamDocument
+        - status
+    handoffRuleFormat:
+      description: "Recommended format for responsibility handoff rules."
+      fields:
+        - handoff
+        - fromRole
+        - toRole
+        - trigger
+        - contextRequired
+        - evidenceRequired
+        - expectedTiming
+        - failureRisk
+        - escalationIfFailed
+        - downstreamDocument
+        - status
+    escalationRuleFormat:
+      description: "Recommended format for escalation rules."
+      fields:
+        - issueType
+        - trigger
+        - severity
+        - firstResponder
+        - escalationOwner
+        - backupOwner
+        - decisionRequired
+        - responseExpectation
+        - communicationRequirement
+        - downstreamProcedure
+        - status
+    responsibilityGapFormat:
+      description: "Recommended format for responsibility gaps."
+      fields:
+        - gap
+        - gapType
+        - affectedDomain
+        - currentInterimOwner
+        - riskCreated
+        - impact
+        - resolutionOption
+        - priority
+        - triggerOrDeadline
+        - downstreamDocument
+        - status
+    hiringNeedFormat:
+      description: "Recommended format for future hiring or role expansion needs."
+      fields:
+        - roleNeeded
+        - trigger
+        - priority
+        - reason
+        - responsibilitiesTransferred
+        - risksReduced
+        - interimOwner
+        - timingAssumption
+        - alternativesToHiring
+        - status
+    responsibilityRiskFormat:
+      description: "Recommended format for responsibility risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - affectedDomain
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - contingency
+        - owner
+        - downstreamDocument
+        - status
+    downstreamResponsibilityHandoffFormat:
+      description: "Recommended format for downstream responsibility handoffs."
+      fields:
+        - handoffTarget
+        - responsibilityContext
+        - ownerToPreserve
+        - backupToPreserve
+        - authorityRule
+        - unresolvedGap
+        - riskOrConstraint
+        - requiredAction
+        - status
   sections:
+    - id: "responsibility-objective"
+      title: "Responsibility Objective"
+      intent: "Define why explicit responsibilities exist and what operational outcomes they protect."
+      required: true
+      outputGuidance:
+        - "Open with the purpose of the responsibility system."
+        - "State what explicit responsibility assignment protects: accountability, continuity, speed, quality, supportability, incident response, release safety, customer trust, and sustainability."
+        - "Clarify that this document assigns responsibility architecture, not detailed procedures."
+      qualityChecks:
+        - "Objective is tied to Operations Brief and Operating Model."
+        - "The document's boundary is clear."
+        - "Accountability and backup coverage are explicit goals."
+      questions:
+        - "Why does this responsibility system exist?"
+        - "What operational outcomes does it protect?"
+        - "What should this document assign versus route downstream?"
     - id: "responsibility-model"
       title: "Responsibility Model"
-      intent: "Define the framework used to assign and track responsibilities across the team."
+      intent: "Define the framework used to assign, track, review, and update responsibilities."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State whether RACI, DRI, single accountable owner, backup owner, on-call rotation, approval owner, or hybrid model is used."
+        - "Define each responsibility label."
+        - "Explain how responsibility assignments are documented and updated."
+      qualityChecks:
+        - "Model is simple enough to maintain."
+        - "Accountable owner and backup owner are required for critical functions."
+        - "Consulted/informed parties are not confused with owners."
       questions:
-        - "What framework is used to assign and track responsibilities (RACI, etc.)?"
-        - "How are responsibilities documented and communicated?"
+        - "What framework is used to assign and track responsibilities?"
+        - "What does accountable owner mean?"
+        - "What does backup owner mean?"
+        - "What does consulted versus informed mean?"
+        - "How are responsibilities documented, communicated, and updated?"
+    - id: "team-context"
+      title: "Team Context"
+      intent: "Document the actual team context, including available people/roles, skills, constraints, availability, and unresolved unknowns."
+      required: true
+      outputGuidance:
+        - "Use current facts when known."
+        - "If names are unknown, use roles and mark as unresolved."
+        - "Do not invent headcount or availability."
+      qualityChecks:
+        - "Team context reflects reality."
+        - "Unknowns are explicit."
+        - "Temporary role consolidation is visible."
+      questions:
+        - "Who is currently involved?"
+        - "What roles exist even if one person fills multiple roles?"
+        - "What skills and constraints are known?"
+        - "What availability or capacity is known?"
+        - "What team assumptions remain unresolved?"
+    - id: "role-taxonomy"
+      title: "Role Taxonomy"
+      intent: "Define the difference between people, roles, functions, owners, backups, approvers, reviewers, responders, and escalation owners."
+      required: true
+      outputGuidance:
+        - "Define role labels used throughout the document."
+        - "Clarify difference between person and role."
+        - "Clarify difference between executor and accountable owner."
+      qualityChecks:
+        - "Taxonomy prevents responsibility ambiguity."
+        - "Role labels are operationally useful."
+        - "Temporary role consolidation remains possible."
+      questions:
+        - "How is a person different from a role?"
+        - "How is a role different from a function?"
+        - "How is an executor different from an accountable owner?"
+        - "What role labels are used in this document?"
     - id: "current-team"
       title: "Current Team"
-      intent: "Document the current team composition, primary skills, and available capacity."
+      intent: "Document the current team composition, primary skills, assigned responsibilities, and available capacity."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use capacity records for each person or role where useful."
+        - "If the project is founder-only or small-team, state role consolidation clearly."
+        - "Mark capacity assumptions as assumptions."
+      qualityChecks:
+        - "Current team is not idealized."
+        - "Capacity constraints are visible."
+        - "Assigned responsibilities do not exceed reality without gap/risk note."
       questions:
-        - "Who is currently on the team and what are their primary skills?"
+        - "Who is currently on the team?"
+        - "What are their primary skills?"
+        - "What responsibilities do they currently hold?"
         - "What capacity does the current team have?"
+        - "Where is capacity unknown or overcommitted?"
+    - id: "capacity-model"
+      title: "Capacity Model"
+      intent: "Define how available capacity, overload, coverage, and future transfer needs are assessed."
+      required: true
+      outputGuidance:
+        - "Use capacity records for material people/roles."
+        - "Identify founder bottlenecks, role overload, backup gaps, and manual-work burden."
+        - "State overload signals and transfer triggers."
+      qualityChecks:
+        - "Capacity is treated as constraint, not aspiration."
+        - "Overload signals are concrete."
+        - "Backup coverage is considered."
+      questions:
+        - "How is team capacity assessed?"
+        - "What responsibilities are most likely to overload the current team?"
+        - "What signals indicate overload?"
+        - "What responsibilities need backup coverage?"
+        - "What responsibilities should transfer later?"
+    - id: "responsibility-matrix"
+      title: "Responsibility Matrix"
+      intent: "Assign ownership, execution, review, backup, consultation, information, decision authority, cadence, evidence, and downstream document for major responsibilities."
+      required: true
+      outputGuidance:
+        - "Use responsibility records for major responsibilities."
+        - "Group responsibilities by domain."
+        - "Mark unowned, backup-missing, overloaded, or review-needed items explicitly."
+      qualityChecks:
+        - "Every major responsibility has accountable owner or explicit gap."
+        - "Every critical responsibility has backup owner or explicit gap."
+        - "Evidence/output and downstream document are identified."
+      questions:
+        - "What are the major operational responsibilities?"
+        - "Who is accountable for each?"
+        - "Who executes, reviews, is consulted, and is informed?"
+        - "Who is backup owner?"
+        - "What decision authority applies?"
+        - "What output proves the responsibility is being handled?"
     - id: "operational-roles"
       title: "Operational Roles"
-      intent: "Define all operational roles, their responsibilities, rotation schedule, and handoff procedures."
+      intent: "Define operational roles, their responsibilities, authority, outputs, skills, coverage, backup, and escalation."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use role records for each operational role."
+        - "Include operations owner, support lead, incident commander, release owner, maintenance owner, data/privacy owner, vendor owner, billing/payment owner, customer success owner, risk owner, and backup roles where relevant."
+        - "Mark roles as current, required, deferred, or missing."
+      qualityChecks:
+        - "Roles are functional, not title-only."
+        - "Coverage and backup are explicit."
+        - "Missing roles are flagged."
       questions:
-        - "What operational roles exist (on-call, support lead, incident commander)?"
-        - "How are roles rotated and handed off?"
+        - "What operational roles exist?"
+        - "What responsibilities does each role hold?"
+        - "What authority does each role have?"
+        - "What recurring output does each role produce?"
+        - "How are roles covered, rotated, backed up, or handed off?"
+        - "What roles are missing?"
     - id: "product-responsibilities"
       title: "Product Responsibilities"
-      intent: "Assign ownership for product availability, performance, correctness, and roadmap."
+      intent: "Assign ownership for product correctness, scope, roadmap, prioritization, acceptance criteria, user-facing promises, and product-support feedback."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use responsibility records for product responsibilities."
+        - "Separate roadmap ownership from operational correctness and customer promise alignment."
+        - "Tie to Product docs and Support/Customer Success feedback."
+      qualityChecks:
+        - "Product ownership is not confused with engineering implementation."
+        - "Customer-facing promise ownership is explicit."
+        - "Feedback loop ownership is assigned."
       questions:
-        - "Who owns product availability, performance, and correctness?"
-        - "Who owns the product roadmap and feature backlog?"
+        - "Who owns product correctness and customer-facing behavior?"
+        - "Who owns product scope and roadmap?"
+        - "Who owns feature prioritization and backlog decisions?"
+        - "Who owns acceptance criteria changes?"
+        - "Who owns product-support feedback loops?"
     - id: "engineering-responsibilities"
       title: "Engineering Responsibilities"
-      intent: "Assign ownership for infrastructure, deployments, technical debt, code quality, and security."
+      intent: "Assign ownership for infrastructure, deployments, observability, technical debt, code quality, security/privacy implementation, performance, backups/restore, automations, and technical incidents."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use responsibility records for engineering responsibilities."
+        - "Separate implementation owner, operational owner, reviewer, and escalation owner where useful."
+        - "Tie to Engineering docs, Release, Incident, Maintenance, and Data/Privacy Operations."
+      qualityChecks:
+        - "Engineering ownership includes operations, not only code creation."
+        - "Security/privacy implementation ownership is assigned."
+        - "Deployment and observability ownership are explicit."
       questions:
-        - "Who owns infrastructure, deployments, and technical debt?"
-        - "Who owns code quality and security?"
+        - "Who owns infrastructure, deployment, and environments?"
+        - "Who owns observability and alerting?"
+        - "Who owns technical debt and code quality?"
+        - "Who owns security/privacy implementation?"
+        - "Who owns backups, restore checks, automation, and technical incidents?"
     - id: "support-responsibilities"
       title: "Support Responsibilities"
-      intent: "Assign ownership for customer-facing support and bug/triage handling."
+      intent: "Assign ownership for customer-facing support, triage, known issues, support docs/macros, escalation, feedback capture, and support reporting."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use responsibility records for support responsibilities."
+        - "Separate first response, triage, technical escalation, product escalation, and customer communication."
+        - "Tie to Support Model and Incident Response."
+      qualityChecks:
+        - "Support ownership includes escalation and feedback loops."
+        - "Response expectations are not implied without capacity."
+        - "Known issue ownership is explicit."
       questions:
         - "Who handles customer-facing support?"
         - "Who triages bugs and technical issues?"
-    - id: "commercial-responsibilities"
-      title: "Commercial Responsibilities"
-      intent: "Assign ownership for pricing, billing, revenue operations, and vendor/partner relationships."
+        - "Who owns known issues and support documentation?"
+        - "Who escalates support issues to Product, Engineering, or Incident Response?"
+        - "Who reports support trends?"
+    - id: "customer-success-responsibilities"
+      title: "Customer Success Responsibilities"
+      intent: "Assign ownership for onboarding, activation, retention, customer education, feedback loops, health signals, expansion/churn signals, and success criteria where relevant."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use responsibility records for customer success responsibilities."
+        - "Mark as deferred or minimal if customer success is not yet a distinct function."
+        - "Tie to Customer Success and Growth Metrics."
+      qualityChecks:
+        - "Customer success is not invented if not applicable."
+        - "Activation and retention ownership are visible."
+        - "Feedback loop and customer health ownership are assigned or flagged."
       questions:
-        - "Who owns pricing, billing, and revenue operations?"
-        - "Who manages vendor and partner relationships?"
+        - "Who owns onboarding and activation health?"
+        - "Who monitors retention, churn, expansion, and customer health signals?"
+        - "Who owns customer education?"
+        - "Who captures and routes customer feedback?"
+        - "Is customer success a current function, deferred function, or shared responsibility?"
+    - id: "gtm-responsibilities"
+      title: "GTM Responsibilities"
+      intent: "Assign ownership for launch communications, marketing assets, channel operations, growth metric interpretation, sales follow-up, pricing communication, partnerships, and GTM experiments."
+      required: true
+      outputGuidance:
+        - "Use responsibility records for GTM responsibilities."
+        - "Tie to Launch Plan, Sales Strategy, Pricing, Marketing Assets, Growth Metrics, and GTM Risks."
+        - "Separate strategy owner from execution owner where useful."
+      qualityChecks:
+        - "GTM responsibilities that create operational load have owners."
+        - "Experiment ownership and metric interpretation are assigned."
+        - "Pricing/sales/partner communication authority is explicit."
+      questions:
+        - "Who owns launch communications?"
+        - "Who owns marketing assets and channel operations?"
+        - "Who interprets growth metrics?"
+        - "Who owns sales follow-up and pricing communication?"
+        - "Who owns partnerships and GTM experiments?"
     - id: "financial-responsibilities"
       title: "Financial Responsibilities"
-      intent: "Assign ownership for financial reporting, budgeting, cost control, payment processing, and refunds."
+      intent: "Assign ownership for budgeting, cost control, revenue tracking, payment processor oversight, billing, refunds, invoices/receipts, subscriptions, discounts, failed payments, and financial reporting."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use responsibility records for financial responsibilities."
+        - "Mark accounting/legal review needs instead of assuming expertise."
+        - "Tie to Pricing and Financial Operations."
+      qualityChecks:
+        - "Financial responsibilities are not hidden inside GTM or Support."
+        - "Refunds, failed payments, invoices, and discounts have owners."
+        - "Review-needed areas are explicit."
       questions:
-        - "Who owns financial reporting, budgeting, and cost control?"
-        - "Who manages payment processing and refunds?"
+        - "Who owns budgeting and cost control?"
+        - "Who owns revenue tracking and financial reporting?"
+        - "Who manages payment processing, billing, refunds, invoices, subscriptions, failed payments, and discounts?"
+        - "What requires accounting/legal review?"
+    - id: "data-and-privacy-responsibilities"
+      title: "Data and Privacy Responsibilities"
+      intent: "Assign ownership for production/customer data access, retention, deletion, export, telemetry/logging review, privacy requests, security/privacy review, and privacy incident escalation."
+      required: true
+      outputGuidance:
+        - "Use responsibility records for data/privacy responsibilities."
+        - "Tie to Security/Privacy and Data/Privacy Operations."
+        - "Mark compliance/legal review needs explicitly."
+      qualityChecks:
+        - "Data/privacy responsibilities have clear owner and escalation."
+        - "Access, deletion, export, logs, telemetry, and privacy incidents are included."
+        - "Compliance assumptions are not invented."
+      questions:
+        - "Who owns production/customer data access?"
+        - "Who owns retention, deletion, and export requests?"
+        - "Who reviews telemetry and logging privacy implications?"
+        - "Who handles privacy requests or incidents?"
+        - "What requires security, privacy, legal, or compliance review?"
+    - id: "release-responsibilities"
+      title: "Release Responsibilities"
+      intent: "Assign ownership for release readiness, approvals, deployment, smoke checks, monitoring, rollback/pause decisions, release communication, and post-release review."
+      required: true
+      outputGuidance:
+        - "Use responsibility records for release responsibilities."
+        - "Tie to Release Management, Deployment, Testing, Observability, and Support."
+        - "Separate deploy executor from release approver and rollback decision owner."
+      qualityChecks:
+        - "Release authority and rollback authority are explicit."
+        - "Smoke checks and monitoring have owners."
+        - "Customer/support communication ownership is assigned."
+      questions:
+        - "Who owns release readiness?"
+        - "Who approves releases?"
+        - "Who deploys?"
+        - "Who performs smoke checks and monitors after release?"
+        - "Who decides rollback or pause?"
+        - "Who communicates release changes?"
+    - id: "incident-responsibilities"
+      title: "Incident Responsibilities"
+      intent: "Assign incident response roles, decision authority, communication ownership, technical response, support coordination, and post-incident review ownership."
+      required: true
+      outputGuidance:
+        - "Use role and responsibility records for incident roles."
+        - "Include incident commander, technical owner, support owner, communications owner, customer communication owner, post-incident owner, and escalation authority."
+        - "Tie to Incident Response."
+      qualityChecks:
+        - "Incident roles are clear before incidents happen."
+        - "Communication ownership is assigned."
+        - "Post-incident review ownership is explicit."
+      questions:
+        - "Who acts as incident commander?"
+        - "Who owns technical response?"
+        - "Who coordinates support during incidents?"
+        - "Who owns internal and customer communication?"
+        - "Who has authority to pause, rollback, escalate, or accept residual incident risk?"
+        - "Who owns post-incident review?"
+    - id: "vendor-responsibilities"
+      title: "Vendor Responsibilities"
+      intent: "Assign ownership for critical vendors, tools, platforms, accounts, access, billing, monitoring, failure fallback, and replacement consideration."
+      required: true
+      outputGuidance:
+        - "Use responsibility records for vendor responsibilities."
+        - "Tie to Operating Model third-party dependencies and Financial Operations."
+        - "Include access and billing responsibility."
+      qualityChecks:
+        - "Critical vendors have owners."
+        - "Vendor failure and account access ownership are explicit."
+        - "Cost and replacement considerations are included."
+      questions:
+        - "Who owns each critical vendor or platform?"
+        - "Who manages account access and billing?"
+        - "Who monitors vendor health or outages?"
+        - "Who owns fallback or replacement planning?"
+        - "What vendor ownership gaps exist?"
+    - id: "risk-responsibilities"
+      title: "Risk Responsibilities"
+      intent: "Assign ownership for operational risk tracking, GTM risk handoff, accepted risks, mitigation tracking, escalation, and risk register updates."
+      required: true
+      outputGuidance:
+        - "Use responsibility records for risk responsibilities."
+        - "Tie to GTM Risks and Operations Risk Management."
+        - "State who can accept risk and who must be consulted."
+      qualityChecks:
+        - "Risk ownership is not implicit."
+        - "Accepted-risk authority is explicit."
+        - "Mitigation tracking has owner."
+      questions:
+        - "Who owns operational risk review?"
+        - "Who owns risks handed off from GTM?"
+        - "Who tracks mitigation progress?"
+        - "Who can accept operational risk?"
+        - "Who escalates risk changes?"
     - id: "decision-authority"
       title: "Decision Authority"
-      intent: "Define which decisions each role can make independently and which require escalation or consensus."
+      intent: "Define which decisions each role can make independently and which require review, approval, escalation, or risk acceptance."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use decision authority records."
+        - "Cover operational, product, engineering, support, incident, release, privacy/security, billing/refund, pricing exception, vendor, and risk decisions."
+        - "State documentation requirement."
+      qualityChecks:
+        - "Decision authority is clear and auditable."
+        - "High-risk decisions require escalation or acceptance."
+        - "Customer-facing decision authority is explicit."
       questions:
         - "What decisions can each role make independently?"
-        - "Which decisions require escalation or consensus?"
+        - "Which decisions require review?"
+        - "Which decisions require escalation or approval?"
+        - "Which decisions require risk acceptance?"
+        - "Which decisions must be documented?"
+    - id: "handoff-rules"
+      title: "Handoff Rules"
+      intent: "Define how work, context, ownership, and decisions pass between roles and documents."
+      required: true
+      outputGuidance:
+        - "Use handoff rule records."
+        - "Cover support-to-engineering, support-to-product, GTM-to-support, release-to-support, incident-to-risk, privacy-to-legal/compliance, finance-to-support, and vendor-to-incident handoffs where relevant."
+        - "State required context and evidence."
+      qualityChecks:
+        - "Handoffs preserve context."
+        - "Failed handoff risks are explicit."
+        - "Timing and escalation are defined."
+      questions:
+        - "What handoffs exist between roles?"
+        - "What triggers each handoff?"
+        - "What context must be preserved?"
+        - "What evidence or artifact is required?"
+        - "What timing applies?"
+        - "What happens if a handoff fails?"
     - id: "escalation-rules"
       title: "Escalation Rules"
-      intent: "Define triggers for escalation and the escalation path for each issue type."
+      intent: "Define escalation triggers, severity, route, owners, backup owners, decisions required, response expectations, and communication requirements."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use escalation rule records."
+        - "Cover support issues, incidents, release problems, privacy/security issues, billing/refund issues, vendor failures, risk changes, and customer trust concerns."
+        - "Route detailed procedures downstream."
+      qualityChecks:
+        - "Escalation paths are actionable."
+        - "Backup owners are included."
+        - "Communication requirements are explicit."
       questions:
         - "What triggers an escalation?"
-        - "What is the escalation path for each type of issue?"
+        - "What severity levels exist?"
+        - "What is the escalation path for each issue type?"
+        - "Who responds first?"
+        - "Who decides?"
+        - "What communication is required?"
+    - id: "responsibility-gaps"
+      title: "Responsibility Gaps"
+      intent: "Identify missing owners, missing backups, overloaded owners, missing decision rights, missing escalation paths, missing skills, and unresolved assumptions."
+      required: true
+      outputGuidance:
+        - "Use responsibility gap records."
+        - "Prioritize gaps by operational risk and launch impact."
+        - "State interim owner or resolution option."
+      qualityChecks:
+        - "Gaps are explicit, not hidden."
+        - "Each gap has risk, priority, and resolution option."
+        - "Launch-critical gaps are marked."
+      questions:
+        - "What responsibilities are unowned?"
+        - "Where is backup coverage missing?"
+        - "Where is one owner overloaded?"
+        - "Where are decision rights unclear?"
+        - "Where are escalation paths missing?"
+        - "What skills or capacity are missing?"
     - id: "future-hiring-needs"
       title: "Future Hiring Needs"
-      intent: "Identify missing roles, scaling needs, and hiring priority and timeline."
+      intent: "Identify role needs, scaling triggers, priority, responsibilities transferred, risks reduced, interim owner, alternatives to hiring, and timing assumptions."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use hiring need records."
+        - "Frame hiring as trigger-based, not fixed fantasy headcount."
+        - "Include alternatives such as contractors, vendors, automation, deferral, scope reduction, or process improvement."
+      qualityChecks:
+        - "Hiring needs are connected to responsibilities and risks."
+        - "Triggers and interim ownership are explicit."
+        - "Alternatives to hiring are considered."
       questions:
         - "What roles are missing or will be needed as the project scales?"
-        - "What is the hiring priority and timeline?"
+        - "What trigger indicates the role is needed?"
+        - "What responsibility would transfer?"
+        - "What risk would the role reduce?"
+        - "Who owns the work until then?"
+        - "What alternatives to hiring exist?"
+    - id: "responsibility-risks"
+      title: "Responsibility Risks"
+      intent: "Identify risks caused by unclear, overloaded, unavailable, unsupported, or missing responsibilities."
+      required: true
+      outputGuidance:
+        - "Use responsibility risk records."
+        - "Include owner gaps, single points of failure, founder bottlenecks, role overload, unclear authority, poor handoff, missing backup, unavailable expertise, support overload, and incident/release coverage risks."
+        - "Route risks to Risk Management when appropriate."
+      qualityChecks:
+        - "Risks are specific and monitorable."
+        - "Mitigation and contingency are distinct."
+        - "Risks are connected to owners and downstream documents."
+      questions:
+        - "What responsibility risks exist?"
+        - "Where are single points of failure?"
+        - "Where could role overload cause failure?"
+        - "Where could unclear authority block action?"
+        - "Where could missing backup coverage create risk?"
+        - "What should Risk Management inherit?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Operations documents must inherit from Team and Responsibilities and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use downstream responsibility handoff records."
+        - "Route responsibility context to Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
+        - "Preserve owners, backups, authority rules, gaps, risks, and unresolved questions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing responsibility assumptions silently."
+        - "Detailed downstream procedures remain in downstream docs."
+      questions:
+        - "What should Support Model inherit?"
+        - "What should Maintenance Plan inherit?"
+        - "What should Release Management inherit?"
+        - "What should Incident Response inherit?"
+        - "What should Data and Privacy Operations inherit?"
+        - "What should Financial Operations inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved responsibility questions must be carried forward?"

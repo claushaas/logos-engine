@@ -5,143 +5,699 @@ document:
   status: "not_started"
   order: 6
   type: "api_contracts"
-  purpose: "Defines how client, backend, agents, adapters, and services communicate without ambiguity."
-  centralQuestion: "How do client, backend, agents, adapters, and services communicate without ambiguity?"
+  purpose: "Define precise, versioned, testable communication contracts between clients, backend, agents, adapters, integrations, workers, and services, including request/response schemas, authentication, authorization, errors, pagination, idempotency, streaming, webhooks, compatibility, and contract testing."
+  centralQuestion: "How do clients, backend, agents, adapters, integrations, workers, and services communicate safely, predictably, and without ambiguity?"
   outputs:
     canonical:
       format: "markdown"
-      path: "04-engineering/api-contracts.md"
-      purpose: "API contract definitions covering all communication between client, backend, agents, adapters, and services."
-  dependsOn: []
-  feeds: []
+      path: "docs/04-engineering/06-api-contracts.md"
+      purpose: "Store the canonical API contracts as a Markdown document."
+    artifacts:
+      - id: "engineering.api_contracts_reference"
+        format: "html"
+        path: "outcomes/html/04-engineering/api-contracts-reference.html"
+        purpose: "Provide a navigable API contract reference covering API strategy, endpoint register, schemas, auth, permissions, errors, pagination, idempotency, versioning, realtime, webhooks, adapters, agents, compatibility, and contract testing."
+        audience: "founder"
+        includes:
+          - "API strategy"
+          - "contract taxonomy"
+          - "consumer-producer map"
+          - "public APIs"
+          - "internal APIs"
+          - "agent contracts"
+          - "adapter contracts"
+          - "endpoint register"
+          - "request schemas"
+          - "response schemas"
+          - "error model"
+          - "authentication"
+          - "authorization"
+          - "pagination"
+          - "filtering and sorting"
+          - "idempotency"
+          - "versioning"
+          - "realtime and streaming"
+          - "webhooks"
+          - "rate limits and quotas"
+          - "contract testing"
+          - "compatibility and deprecation"
+          - "API risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.api_contracts_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/api-contracts-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether API contracts are complete, versioned, secure, permission-aware, testable, backward-compatible, and aligned with domain, data, integration, frontend, and observability needs."
+        agentRole: "reviewer"
+        includes:
+          - "canonical API contracts"
+          - "domain model dependency"
+          - "data model dependency"
+          - "system architecture dependency"
+          - "security architecture dependency"
+          - "functional requirements dependency"
+          - "acceptance criteria dependency"
+          - "API contract formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/07-glossary"
+    - "02-validation/09-decision-record"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/12-product-stack"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+  feeds:
+    - "04-engineering/06-security-architecture"
+    - "04-engineering/07-integration-architecture"
+    - "04-engineering/08-frontend-architecture"
+    - "04-engineering/10-infrastructure-architecture"
+    - "04-engineering/11-test-strategy"
+    - "04-engineering/12-observability-plan"
+    - "04-engineering/13-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "domain-model"
+      type: "context"
+      required: false
+      description: "Entities, value objects, aggregates, commands, events, invariants, business rules, state machines, and bounded contexts that API contracts must expose, protect, or keep internal."
+    - id: "data-model"
+      type: "context"
+      required: false
+      description: "Tables, fields, relationships, constraints, indexes, local/remote data rules, event envelopes, sensitivity classifications, retention, backup, and auditability requirements that affect API schemas."
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "Components, layers, module boundaries, dependency rules, runtime architecture, deployment topology, data flow, failure modes, security/privacy hooks, and observability hooks."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "User actions, system actions, admin needs, integration needs, data requirements, business rules, and traceability that API contracts must support."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Performance, privacy, security, reliability, availability, scalability, compatibility, observability, i18n, compliance, and operational constraints that affect APIs."
+    - id: "interaction-model"
+      type: "context"
+      required: false
+      description: "Commands, actions, confirmations, undo, ambiguity handling, suggestions, corrections, state transitions, failure behavior, and recovery paths that API contracts must enable."
+    - id: "technical-stack"
+      type: "context"
+      required: false
+      description: "API protocols, validation tooling, serialization, error handling, versioning, auth, testing, observability, and deployment technology choices."
+    - id: "api-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate endpoints, schemas, consumers, producers, agents, adapters, auth rules, versioning needs, streaming needs, webhook needs, rate limits, and unresolved API questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through precise, versioned, testable contracts for all material communication surfaces."
+    - "API strategy defines protocol choices, contract style, schema source of truth, validation policy, documentation policy, compatibility policy, and contract ownership."
+    - "Contract taxonomy distinguishes public APIs, internal APIs, agent contracts, adapter contracts, integration contracts, worker/job contracts, realtime contracts, webhook contracts, and implementation-only interfaces."
+    - "Consumer-producer map identifies every material consumer, producer, contract, trust boundary, auth requirement, permission requirement, data sensitivity, and downstream owner."
+    - "Endpoint register includes method, path, purpose, consumer, producer, auth, permissions, request schema, response schema, errors, idempotency, pagination, rate limit, version, observability, and status."
+    - "Request schemas define path params, query params, headers, body, content type, encoding, validation rules, defaults, nullable fields, forbidden fields, file/binary handling, and examples where useful."
+    - "Response schemas define envelope, status codes, success payload, metadata, links, pagination, warnings, partial results, low-confidence results, error payloads, and examples where useful."
+    - "Error model defines error envelope, code taxonomy, HTTP status mapping, validation errors, auth/authz errors, domain errors, conflict errors, rate-limit errors, dependency errors, retryable errors, non-retryable errors, and user-safe messages."
+    - "Authentication and authorization define credential formats, session/token handling, scopes/claims/roles/permissions, object-level access, tenant/user boundaries, service-to-service auth, agent auth, adapter auth, and privileged operations."
+    - "Pagination, filtering, sorting, search, field selection, includes/expansion, and projection rules are explicit where listing or retrieval APIs exist."
+    - "Idempotency defines which operations require idempotency, key format, key location, uniqueness scope, retention window, replay behavior, conflict behavior, and observability."
+    - "Versioning and compatibility define version location, breaking-change policy, additive-change policy, deprecation policy, sunset policy, migration path, compatibility tests, and consumer notification."
+    - "Realtime, streaming, webhook, and async contracts define lifecycle, message envelope, event types, ordering, reconnect, replay, acknowledgements, retries, backoff, dead-letter behavior, signatures, and security where relevant."
+    - "Rate limits and quotas define scope, limits, headers, enforcement point, exceeded behavior, backoff guidance, abuse cases, and operational monitoring."
+    - "Contract testing defines producer tests, consumer tests, schema validation, generated clients, mocks, fixtures, compatibility CI gates, breaking-change detection, and release blockers."
+    - "API risks are concrete, source-linked, impact-aware, and routed to mitigation or downstream documents."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid API-contract theater: endpoint lists without schemas, error semantics, permissions, versioning, compatibility, or tests."
+    - "Avoid exposing domain internals or persistence structures directly unless intentionally part of the contract."
+    - "Avoid treating frontend convenience as API design rationale without domain, product, or performance justification."
+    - "Avoid silent breaking changes, undocumented defaults, ambiguous nullability, unbounded lists, implicit permissions, and inconsistent error shapes."
+    - "Avoid hiding sensitive data, auth, authorization, privacy, rate limits, idempotency, retry, or observability implications."
+    - "Avoid inventing endpoint behavior, auth guarantees, performance limits, compliance status, or tool capabilities."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "API contracts must preserve Domain Model invariants, Data Model sensitivity rules, System Architecture boundaries, Security requirements, NFRs, and Acceptance Criteria."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate protocol, endpoint, schema, domain command/query, data representation, auth, permission, error, version, and test concerns."
+    - "Tie API contracts to Domain Model, Data Model, Functional Requirements, NFRs, Interaction Model, System Architecture, Technical Stack, Acceptance Criteria, or Decision Record where possible."
+    - "Classify contracts as public, internal, agent, adapter, integration, webhook, realtime, worker, implementation-only, MVP, post-MVP, deferred, deprecated, or review-needed where useful."
+    - "Define contracts from consumer needs and domain semantics, not from database tables alone."
+    - "State compatibility and migration implications for every material contract."
+    - "Keep final implementation code, generated OpenAPI files, and exhaustive payload examples downstream unless explicitly required here."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Domain Model, Data Model, System Architecture, Technical Stack, Functional Requirements, NFRs, Interaction Model, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag endpoints without consumer, producer, auth, permissions, request schema, response schema, error behavior, versioning, or test implication."
+    - "Flag schemas with ambiguous nullability, defaults, validation, sensitive fields, undocumented fields, or persistence leakage."
+    - "Flag API surfaces that bypass domain invariants, module boundaries, authz rules, or data sensitivity controls."
+    - "Flag inconsistent error shapes, pagination rules, idempotency rules, versioning rules, or compatibility expectations."
+    - "Verify that realtime, webhook, async, agent, and adapter contracts include retry, ordering, idempotency, security, and failure behavior where relevant."
+    - "Verify that contract tests and breaking-change checks are explicit."
+    - "Flag content that belongs better in Security Architecture, Integration Architecture, Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or Operations."
+  specializedFormats:
+    endpointFormat:
+      description: "Required format for each endpoint or API operation."
+      fields:
+        - id
+        - name
+        - contractType
+        - method
+        - path
+        - purpose
+        - consumer
+        - producer
+        - relatedDomainCommandOrQuery
+        - relatedRequirement
+        - authRequired
+        - authorizationRule
+        - requestSchema
+        - responseSchema
+        - errorCodes
+        - idempotencyRequired
+        - pagination
+        - filteringSorting
+        - rateLimit
+        - version
+        - observabilityEvents
+        - compatibilityNotes
+        - status
+    schemaFieldFormat:
+      description: "Recommended format for request and response schema fields."
+      fields:
+        - field
+        - type
+        - location
+        - required
+        - nullable
+        - default
+        - validationRules
+        - allowedValues
+        - sensitive
+        - deprecated
+        - description
+        - example
+    errorFormat:
+      description: "Recommended format for API errors."
+      fields:
+        - code
+        - category
+        - httpStatus
+        - retryable
+        - userSafeMessage
+        - developerMessage
+        - detailsShape
+        - loggingLevel
+        - telemetryEvent
+        - remediation
+    eventMessageFormat:
+      description: "Recommended format for realtime, streaming, webhook, or async messages."
+      fields:
+        - messageType
+        - direction
+        - producer
+        - consumer
+        - envelope
+        - payload
+        - orderingRule
+        - idempotencyRule
+        - ackRule
+        - retryRule
+        - replayRule
+        - signatureOrAuth
+        - privacyClassification
+        - version
+    versionPolicyFormat:
+      description: "Recommended format for API versioning and compatibility rules."
+      fields:
+        - versionArea
+        - versionLocation
+        - breakingChangeDefinition
+        - additiveChangePolicy
+        - deprecationPolicy
+        - sunsetPolicy
+        - migrationPath
+        - consumerNotification
+        - compatibilityTest
+    contractTestFormat:
+      description: "Recommended format for contract tests."
+      fields:
+        - contract
+        - producer
+        - consumers
+        - testType
+        - fixtureOrMock
+        - schemaValidation
+        - compatibilityGate
+        - ciRequirement
+        - releaseImpact
+    apiRiskFormat:
+      description: "Recommended format for API risks."
+      fields:
+        - risk
+        - affectedContract
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - targetDocument
+        - releaseImpact
   sections:
     - id: "api-strategy"
       title: "API Strategy"
-      intent: "Define the API styles and protocols used and the overall API design philosophy."
+      intent: "Define API philosophy, protocol choices, contract ownership, schema source of truth, validation policy, documentation policy, compatibility policy, and design constraints."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State the primary API style and why it fits product, architecture, frontend, integration, agent, and NFR needs."
+        - "Separate public, internal, agent, adapter, webhook, streaming, and implementation-only contract strategies."
+        - "Define schema source of truth and validation approach."
+      qualityChecks:
+        - "Protocol choices are justified by consumer needs and system architecture."
+        - "Schema ownership and validation policy are explicit."
+        - "Compatibility and documentation policies are not deferred silently."
       questions:
-        - "What API styles and protocols are used? REST, GraphQL, gRPC, WebSocket?"
+        - "What API styles and protocols are used: REST, GraphQL, RPC, gRPC, WebSocket, SSE, webhooks, events, file exchange, or hybrid?"
+        - "Why are these protocols appropriate for each consumer and producer?"
         - "What is the overall API design philosophy?"
+        - "What is the schema source of truth?"
+        - "Where are contracts documented and generated, if applicable?"
+        - "How are contracts validated at runtime and in CI?"
+        - "What API design constraints are non-negotiable?"
+    - id: "contract-taxonomy"
+      title: "Contract Taxonomy"
+      intent: "Classify all communication contracts by type, audience, trust boundary, stability, versioning requirement, and ownership."
+      required: true
+      outputGuidance:
+        - "Define the categories of contracts used in the system."
+        - "Separate stable contracts from implementation-only interfaces."
+        - "State which contract categories require versioning and compatibility guarantees."
+      qualityChecks:
+        - "Contract categories prevent confusion between public APIs, internal APIs, and implementation details."
+        - "Trust boundaries and stability expectations are explicit."
+        - "Versioning requirements are clear by contract type."
+      questions:
+        - "What types of contracts exist in the system?"
+        - "Which contracts are public, internal, agent-facing, adapter-facing, integration-facing, webhook-based, realtime, worker/job, or implementation-only?"
+        - "Which contracts cross trust boundaries?"
+        - "Which contracts require backward compatibility guarantees?"
+        - "Which contracts are allowed to change without consumer migration?"
+        - "Who owns each contract category?"
+    - id: "consumer-producer-map"
+      title: "Consumer / Producer Map"
+      intent: "Map every material API consumer and producer, including clients, backend modules, agents, adapters, workers, integrations, and external systems."
+      required: true
+      outputGuidance:
+        - "List consumers and producers explicitly."
+        - "Identify trust boundary, auth requirement, permission implications, data sensitivity, and contract owner for each relationship."
+        - "Include downstream frontend, integration, security, observability, and testing implications."
+      qualityChecks:
+        - "No material communication relationship is omitted."
+        - "Trust and permission boundaries are visible."
+        - "Producer/consumer ownership is clear."
+      questions:
+        - "Who consumes each API contract?"
+        - "Who produces each API contract?"
+        - "What clients, backend modules, agents, adapters, workers, jobs, external integrations, and services communicate?"
+        - "What trust boundary does each communication path cross?"
+        - "What authentication and authorization is required for each path?"
+        - "What sensitive data crosses each path?"
     - id: "public-apis"
       title: "Public APIs"
-      intent: "List public APIs exposed to clients or external consumers, including rate limits and authentication requirements."
+      intent: "Define APIs exposed to product clients or external consumers, including stability expectations, authentication, authorization, rate limits, documentation, and support commitments."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "List public APIs separately from internal module contracts."
+        - "State stability, versioning, support, and deprecation expectations."
+        - "Include user-visible, external, mobile, web, CLI, extension, and third-party consumers where relevant."
+      qualityChecks:
+        - "Public APIs include auth, authorization, rate limits, versioning, and support expectations."
+        - "Public contracts do not expose internal persistence or domain internals accidentally."
+        - "Documentation and compatibility expectations are explicit."
       questions:
-        - "What public APIs are exposed to clients or external consumers?"
-        - "What are the rate limits and authentication requirements for public APIs?"
+        - "What public APIs are exposed to product clients or external consumers?"
+        - "Who consumes each public API?"
+        - "What authentication and authorization applies?"
+        - "What rate limits, quotas, and abuse protections apply?"
+        - "What compatibility and deprecation guarantees exist?"
+        - "How are public APIs documented and tested?"
     - id: "internal-apis"
       title: "Internal APIs"
-      intent: "Define internal APIs between application modules and how internal contracts are versioned and documented."
+      intent: "Define internal APIs between modules, services, workers, adapters, and application layers, including stability, versioning, and boundary rules."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate internal APIs from direct imports and implementation details."
+        - "State which internal contracts are stable boundaries and which are private implementation interfaces."
+        - "Connect internal API rules to System Architecture dependency rules."
+      qualityChecks:
+        - "Internal APIs preserve module boundaries and dependency rules."
+        - "Internal contracts have appropriate documentation and testing for their stability level."
+        - "Internal APIs do not bypass domain, security, or data constraints."
       questions:
-        - "What internal APIs exist between application modules?"
+        - "What internal APIs exist between application modules, services, workers, adapters, and layers?"
+        - "Which internal APIs are stable boundaries versus private implementation details?"
         - "How are internal contracts versioned and documented?"
+        - "How are internal API boundaries enforced?"
+        - "What internal APIs must not be consumed directly by UI or external clients?"
+    - id: "agent-contracts"
+      title: "Agent Contracts"
+      intent: "Define how AI agents or automation agents communicate with the system, including allowed operations, context payloads, tool calls, permissions, auditability, and safety boundaries."
+      required: true
+      outputGuidance:
+        - "Include this section even if agents are deferred; classify as deferred, excluded, or review-needed where appropriate."
+        - "Separate agent-readable context, agent-callable operations, agent-generated outputs, and agent-side effects."
+        - "Define consent, authorization, audit, low-confidence, and rollback implications."
+      qualityChecks:
+        - "Agent contracts preserve user agency and system boundaries."
+        - "Agent operations are permission-aware and auditable."
+        - "Agent-generated outputs do not bypass validation, review, or acceptance rules."
+      questions:
+        - "What agent-facing APIs or tool contracts exist?"
+        - "What context can agents read?"
+        - "What actions can agents suggest, prepare, or execute?"
+        - "What actions require explicit user confirmation or stronger authorization?"
+        - "How are agent calls authenticated, authorized, logged, audited, and rate-limited?"
+        - "How are low-confidence, ambiguous, or failed agent outputs represented?"
+        - "What agent contracts are MVP, post-MVP, deferred, or prohibited?"
+    - id: "adapter-contracts"
+      title: "Adapter Contracts"
+      intent: "Define contracts between domain/application layers and infrastructure adapters, external services, storage systems, queues, model providers, or integration providers."
+      required: true
+      outputGuidance:
+        - "Define adapter contracts as ports/interfaces where useful."
+        - "Separate domain-facing contract from vendor-specific implementation."
+        - "Include error mapping, retries, idempotency, timeouts, credentials, and fallback behavior."
+      qualityChecks:
+        - "Adapter contracts prevent vendor or infrastructure leakage into domain/application layers."
+        - "External errors are mapped into stable internal errors."
+        - "Fallback and degradation behavior are explicit."
+      questions:
+        - "What adapter contracts exist?"
+        - "What infrastructure or external services are hidden behind adapters?"
+        - "What methods, inputs, outputs, and errors does each adapter expose?"
+        - "How are vendor-specific errors mapped?"
+        - "How are retries, idempotency, timeouts, credentials, and fallback handled?"
+        - "What adapter contracts require mocks or fakes for testing?"
     - id: "endpoint-register"
       title: "Endpoint Register"
-      intent: "Provide the complete register of all API endpoints with HTTP methods, paths, and parameters."
+      intent: "Provide the complete register of API endpoints or operations with method, path, consumer, producer, schemas, auth, permissions, errors, idempotency, pagination, rate limits, and status."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the endpoint format for every material endpoint or operation."
+        - "Group endpoints by bounded context, module, resource, capability, or consumer."
+        - "Classify endpoints as MVP, post-MVP, deferred, deprecated, internal, public, agent, adapter, or review-needed where useful."
+      qualityChecks:
+        - "Every endpoint has consumer, producer, purpose, auth, schemas, errors, version, and test implications."
+        - "Endpoints map to domain commands, queries, requirements, or integration needs."
+        - "No endpoint exposes data or behavior outside product/security boundaries."
       questions:
-        - "What is the complete register of all API endpoints?"
-        - "What HTTP methods, paths, and parameters does each endpoint accept?"
-    - id: "request-formats"
-      title: "Request Formats"
-      intent: "Specify accepted request body formats, content-type, and encoding requirements."
+        - "What is the complete register of all endpoints or operations?"
+        - "What HTTP methods, paths, operation names, parameters, headers, and body schemas does each endpoint accept?"
+        - "What response schemas and error schemas does each endpoint return?"
+        - "Who consumes and produces each endpoint?"
+        - "What auth, authorization, rate limit, idempotency, pagination, and versioning rules apply?"
+        - "What endpoints are MVP, post-MVP, deferred, deprecated, or review-needed?"
+    - id: "request-schemas"
+      title: "Request Schemas"
+      intent: "Define accepted request formats, path/query/header/body fields, content types, encoding, validation, defaults, nullability, files, binary data, and examples."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define request schemas structurally and consistently."
+        - "State validation and normalization rules."
+        - "Mark sensitive, deprecated, forbidden, server-generated, ignored, and unknown fields explicitly."
+      qualityChecks:
+        - "Request fields have type, required/nullability/default semantics, and validation rules."
+        - "Unknown and forbidden fields behavior is defined."
+        - "Request schemas do not leak persistence details unnecessarily."
       questions:
-        - "What request body formats are accepted? JSON, multipart, binary?"
-        - "What are the content-type and encoding requirements?"
-    - id: "response-formats"
-      title: "Response Formats"
-      intent: "Define the standard response envelope structure and how successful and error responses are distinguished."
+        - "What request body formats are accepted: JSON, multipart, binary, form data, event envelope, stream, or another format?"
+        - "What path, query, header, and body fields are accepted?"
+        - "What content-type and encoding requirements apply?"
+        - "What validation, normalization, defaults, and nullability rules apply?"
+        - "How are file uploads, binary payloads, large payloads, and malformed payloads handled?"
+        - "How are unknown, deprecated, forbidden, or server-generated fields handled?"
+    - id: "response-schemas"
+      title: "Response Schemas"
+      intent: "Define standard response envelopes, success payloads, metadata, warnings, partial results, pagination, low-confidence outputs, and examples."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define response envelope and payload conventions."
+        - "Separate full success, partial success, accepted/pending, empty, not modified, low-confidence, and error responses."
+        - "State field visibility, sensitive data exclusion, and backward-compatible additions."
+      qualityChecks:
+        - "Response shape is consistent and predictable."
+        - "Partial, pending, empty, and low-confidence states are represented explicitly."
+        - "Responses do not expose sensitive fields or internal-only data."
       questions:
         - "What is the standard response envelope structure?"
-        - "How are successful and error responses distinguished?"
+        - "How are successful, partial, pending, empty, not-modified, low-confidence, and error responses distinguished?"
+        - "What metadata is returned?"
+        - "How are warnings, links, pagination, included resources, and projections represented?"
+        - "What fields are excluded from responses for privacy, security, or product reasons?"
+        - "How are response schemas evolved without breaking consumers?"
     - id: "error-model"
       title: "Error Model"
-      intent: "Define error codes, categories, and how validation errors, auth errors, and server errors are represented."
+      intent: "Define API error taxonomy, error envelope, status mapping, retry semantics, domain errors, validation errors, auth errors, dependency errors, and user-safe messages."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use a consistent error envelope across contracts unless a justified exception exists."
+        - "Separate user-safe messages from developer/debug details."
+        - "Define retryable and non-retryable errors."
+      qualityChecks:
+        - "Error model is consistent across endpoints and contract types."
+        - "Errors are safe to expose and useful to consumers."
+        - "Domain, validation, auth, authz, conflict, rate-limit, dependency, timeout, and server errors are distinguishable."
       questions:
+        - "What error envelope is used?"
         - "What error codes and categories exist?"
-        - "How are validation errors, auth errors, and server errors represented?"
-    - id: "pagination"
-      title: "Pagination"
-      intent: "Choose the pagination strategy and define default and maximum page size."
+        - "How are validation errors, auth errors, authorization errors, domain errors, conflict errors, rate-limit errors, dependency errors, timeout errors, and server errors represented?"
+        - "Which errors are retryable?"
+        - "What user-safe message and developer message rules apply?"
+        - "How are errors logged and correlated with telemetry?"
+    - id: "authentication"
+      title: "Authentication"
+      intent: "Specify how identity is proven at API boundaries, including credential formats, token formats, session handling, service-to-service auth, agent auth, and adapter auth."
       required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What pagination strategy is used? Cursor-based, offset-based, page-based?"
-        - "What is the default and maximum page size?"
-    - id: "idempotency"
-      title: "Idempotency"
-      intent: "Identify endpoints that support idempotency and how idempotency keys are passed and validated."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "Which endpoints support idempotency?"
-        - "How are idempotency keys passed and validated?"
-    - id: "versioning"
-      title: "Versioning"
-      intent: "Define how API versions are managed and the deprecation policy for old versions."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "How are API versions managed? URL path, header, content negotiation?"
-        - "What is the deprecation policy for old versions?"
-    - id: "authentication-requirements"
-      title: "Authentication Requirements"
-      intent: "Specify how authentication is enforced at the API level and what token or credential formats are used."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define authentication at contract level and route implementation detail to Security Architecture."
+        - "Separate end-user auth, admin auth, service-to-service auth, agent auth, adapter auth, and webhook auth where relevant."
+        - "State credential placement and expiration expectations."
+      qualityChecks:
+        - "Authentication requirements are explicit for every protected surface."
+        - "Credential handling does not leak into logs, URLs, analytics, or unsafe payloads."
+        - "Unauthenticated surfaces are intentional and justified."
       questions:
         - "How is authentication enforced at the API level?"
-        - "What token or credential formats are used?"
+        - "What token, credential, session, API key, signature, or service identity formats are used?"
+        - "Where are credentials passed: header, cookie, signature, mTLS, or another mechanism?"
+        - "What authentication applies to users, admins, services, agents, adapters, workers, and webhooks?"
+        - "What unauthenticated APIs exist, if any, and why?"
+        - "What should Security Architecture expand?"
+    - id: "authorization"
+      title: "Authorization"
+      intent: "Define permission checks, scopes, roles, claims, object-level access, tenant/user boundaries, privileged operations, and authorization failure behavior."
+      required: true
+      outputGuidance:
+        - "Define authorization by operation and object where relevant."
+        - "Separate authentication from authorization."
+        - "State how insufficient permission, hidden resources, and forbidden actions are represented."
+      qualityChecks:
+        - "Authorization rules are explicit and traceable to Permission/Data/Security requirements."
+        - "Object-level and tenant/user boundaries are not assumed implicitly."
+        - "Sensitive and privileged operations have stronger controls."
+      questions:
+        - "What authorization model applies to APIs?"
+        - "What roles, scopes, claims, or permissions are required for each operation?"
+        - "How is object-level access enforced?"
+        - "How are tenant, account, workspace, user, admin, service, and agent boundaries represented?"
+        - "How are forbidden, hidden, and non-existent resources distinguished or intentionally collapsed?"
+        - "What privileged operations require stronger authorization or confirmation?"
+    - id: "pagination-filtering-sorting"
+      title: "Pagination, Filtering, and Sorting"
+      intent: "Define list retrieval behavior, pagination strategy, cursors, ordering, filters, sorting, search, field selection, includes, projections, and limits."
+      required: true
+      outputGuidance:
+        - "Use cursor pagination by default when consistency and scale matter, unless another strategy is justified."
+        - "Define maximum limits and default ordering."
+        - "State behavior for unstable sorting, filtered-empty results, invalid cursors, and permission-filtered lists."
+      qualityChecks:
+        - "List APIs are bounded and predictable."
+        - "Pagination and filtering align with Data Model indexes and performance NFRs."
+        - "Permission filtering is not confused with empty data."
+      questions:
+        - "What pagination strategy is used: cursor-based, offset-based, page-based, time-window, stream, or none?"
+        - "What are default and maximum page sizes?"
+        - "What ordering guarantees exist?"
+        - "What filters, sorts, search parameters, projections, includes, and field selections are supported?"
+        - "How are invalid cursors, stale cursors, filtered-empty results, and permission-filtered results handled?"
+        - "What Data Model indexes or query constraints are required?"
+    - id: "idempotency"
+      title: "Idempotency"
+      intent: "Define which operations require idempotency and how duplicate requests, retries, key retention, conflicts, and replay behavior are handled."
+      required: true
+      outputGuidance:
+        - "Require idempotency for create, payment-like, mutation, external side-effect, job-triggering, webhook, and retry-prone operations where relevant."
+        - "Define idempotency key location, format, uniqueness scope, retention window, and response replay."
+        - "State conflict behavior when same key has different payload."
+      qualityChecks:
+        - "Idempotency protects against duplicate side effects."
+        - "Key scope and retention are explicit."
+        - "Retry behavior is consistent with error model and job model."
+      questions:
+        - "Which endpoints or operations support or require idempotency?"
+        - "How are idempotency keys passed and validated?"
+        - "What is the uniqueness scope of an idempotency key?"
+        - "How long are idempotency keys retained?"
+        - "What response is returned for duplicate requests?"
+        - "What happens if the same key is reused with a different payload?"
+    - id: "versioning-and-compatibility"
+      title: "Versioning and Compatibility"
+      intent: "Define API versioning, compatibility guarantees, breaking-change policy, additive-change policy, deprecation, sunset, migration, and consumer notification."
+      required: true
+      outputGuidance:
+        - "Use the version policy format for material API surfaces."
+        - "Define what counts as a breaking change."
+        - "State migration and consumer notification expectations."
+      qualityChecks:
+        - "Versioning policy matches public/internal stability commitments."
+        - "Breaking changes are detectable before release."
+        - "Deprecation and sunset are explicit rather than ad hoc."
+      questions:
+        - "How are API versions managed: URL path, header, content negotiation, schema version, event version, SDK version, or another strategy?"
+        - "What counts as a breaking change?"
+        - "What additive changes are allowed?"
+        - "What is the deprecation and sunset policy?"
+        - "How are consumers notified and migrated?"
+        - "What compatibility tests are required?"
+    - id: "realtime-and-streaming"
+      title: "Realtime and Streaming"
+      intent: "Define realtime or streaming contracts, including transport, lifecycle, message envelope, reconnect, replay, ordering, acknowledgements, backpressure, and failure behavior."
+      required: true
+      outputGuidance:
+        - "Include this section even if realtime/streaming is deferred or explicitly unsupported."
+        - "Separate WebSocket, SSE, event stream, long polling, streaming LLM/API output, background progress, and push notification contracts where relevant."
+        - "Define failure and recovery behavior."
+      qualityChecks:
+        - "Realtime/streaming contracts include lifecycle and reconnect behavior."
+        - "Ordering, replay, and backpressure are addressed where relevant."
+        - "Streaming does not bypass auth, rate limits, error model, or observability."
+      questions:
+        - "Are realtime or streaming APIs required, deferred, unsupported, or review-needed?"
+        - "What transport is used for realtime or streaming communication?"
+        - "What message envelope and event types are used?"
+        - "How are connection lifecycle, reconnect, replay, ordering, acknowledgement, backpressure, timeout, and cancellation handled?"
+        - "How are streaming errors represented?"
+        - "What observability is required for realtime and streaming contracts?"
+    - id: "webhooks-and-async-contracts"
+      title: "Webhooks and Async Contracts"
+      intent: "Define webhook, async event, job callback, queue message, and integration event contracts, including signatures, retries, ordering, dead-letter, and idempotency."
+      required: true
+      outputGuidance:
+        - "Include this section even if webhooks/async contracts are deferred or unsupported."
+        - "Separate domain events, integration events, webhook deliveries, queue messages, callbacks, and audit/telemetry events."
+        - "Define delivery guarantees and failure handling."
+      qualityChecks:
+        - "Async contracts include security, idempotency, retries, and observability."
+        - "Webhook payloads do not expose sensitive data unnecessarily."
+        - "Delivery guarantees are explicit and realistic."
+      questions:
+        - "What webhook or async contracts exist?"
+        - "What message envelope, payload, metadata, versioning, and signature rules apply?"
+        - "How are retries, backoff, dead-lettering, ordering, idempotency, and replay handled?"
+        - "How are webhook endpoints authenticated or verified?"
+        - "What delivery guarantees are provided?"
+        - "What should Integration Architecture and Observability Plan inherit?"
+    - id: "rate-limits-and-quotas"
+      title: "Rate Limits and Quotas"
+      intent: "Define rate limits, quotas, abuse protections, retry headers, exceeded behavior, throttling, and operational monitoring."
+      required: true
+      outputGuidance:
+        - "Define limits by actor, token, IP, tenant, user, endpoint, operation class, integration, or plan where relevant."
+        - "State default and exceptional limits only when known; otherwise mark review-needed."
+        - "Include rate-limit headers and error behavior."
+      qualityChecks:
+        - "Rate limits are tied to abuse prevention, cost, fairness, reliability, or external dependency limits."
+        - "Exceeded behavior is predictable."
+        - "Limits do not silently break core journeys without fallback or communication."
+      questions:
+        - "What rate limits and quotas apply?"
+        - "What is the scope of each limit: user, account, tenant, token, IP, endpoint, integration, or operation class?"
+        - "What headers or metadata expose rate-limit state?"
+        - "What error is returned when a limit is exceeded?"
+        - "What retry-after or backoff guidance is provided?"
+        - "How are rate limits monitored and adjusted?"
     - id: "contract-testing"
       title: "Contract Testing"
-      intent: "Define how API contracts are tested between producers and consumers and what tools are used."
+      intent: "Define how API contracts are tested between producers and consumers, including schema validation, mocks, fixtures, generated clients, compatibility checks, and CI gates."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Map contract tests to contract categories and consumers."
+        - "Define producer-side, consumer-side, compatibility, negative, auth, error, and versioning tests."
+        - "State release impact for failing contract tests."
+      qualityChecks:
+        - "Contract tests prevent accidental breaking changes."
+        - "Mocks and fixtures remain synchronized with schemas."
+        - "Contract tests cover error, auth, pagination, idempotency, and versioning behavior where relevant."
       questions:
         - "How are API contracts tested between producers and consumers?"
         - "What tools are used for contract testing?"
+        - "What schema validation, generated clients, mocks, fixtures, and compatibility checks are required?"
+        - "What contract tests run in CI?"
+        - "What contract failures block merge, deployment, or release?"
+        - "How are breaking changes detected before release?"
     - id: "api-risks"
       title: "API Risks"
-      intent: "Identify risks of the API design and breaking changes that are anticipated or must be avoided."
+      intent: "Identify risks of the API design, including breaking changes, overexposure, under-specified contracts, permission gaps, performance bottlenecks, compatibility drift, and integration fragility."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe risks as concrete API failure modes."
+        - "Tie risks to endpoints, schemas, auth, versioning, idempotency, pagination, streaming, integrations, agents, adapters, tests, or downstream documents."
+        - "Include early signals, mitigation, release impact, and target document."
+      qualityChecks:
+        - "Risks are specific enough to test, review, monitor, or mitigate."
+        - "Breaking-change, security, privacy, performance, reliability, and integration risks are considered."
+        - "Mitigations are actionable or routed downstream."
       questions:
         - "What are the risks of the API design?"
         - "What breaking changes are anticipated or must be avoided?"
+        - "Where could API contracts overexpose data or domain internals?"
+        - "Where could permissions, validation, idempotency, pagination, versioning, or error behavior fail?"
+        - "Where could API performance, reliability, or compatibility become fragile?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from API Contracts and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route API contract outputs to the correct downstream documents."
+        - "Separate security, integration, frontend, infrastructure, testing, observability, deployment, release, support, and operations implications."
+        - "Preserve unresolved API questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing API rules silently."
+        - "Contract-level and implementation-level responsibilities remain distinct."
+      questions:
+        - "What should Security Architecture inherit from API Contracts?"
+        - "What should Integration Architecture inherit?"
+        - "What should Frontend Architecture inherit?"
+        - "What should Infrastructure Architecture inherit?"
+        - "What should Test Strategy and Observability Plan inherit?"
+        - "What should Deployment Plan, Release Management, Support Model, Risk Management, and Operations inherit?"
+        - "What unresolved API questions must be carried forward?"

@@ -5,109 +5,258 @@ document:
   status: "not_started"
   order: 1
   type: "strategy"
-  purpose: "Define what needs to be validated, in what order, and to what standard of evidence."
+  purpose: "Define what needs to be validated, in what order, to what evidence standard, and under which decision gates the project may advance, pivot, or stop."
   centralQuestion: "What needs to be validated, in what order, to what standard?"
   outputs:
     canonical:
       format: "markdown"
-      path: "02-validation/01-validation-strategy.md"
-      purpose: "Defines what needs to be validated, in what order, and to what standard of evidence."
-  dependsOn: []
-  feeds: []
+      path: "docs/02-validation/01-validation-strategy.md"
+      purpose: "Store the canonical validation strategy as a Markdown document."
+    artifacts:
+      - id: "validation.strategy_map"
+        format: "html"
+        path: "outcomes/html/02-validation/validation-strategy-map.html"
+        purpose: "Provide a navigable validation map showing validation objectives, scope, priorities, evidence standards, sequence, invalidating conditions, and decision gates."
+        audience: "founder"
+        includes:
+          - "validation objective"
+          - "validation scope"
+          - "validation priorities"
+          - "evidence standards"
+          - "validation sequence"
+          - "invalidating conditions"
+          - "decision gates"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.strategy_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/validation-strategy-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the validation strategy is evidence-driven, sequenced, falsifiable, and aligned with the foundation documents."
+        agentRole: "reviewer"
+        includes:
+          - "canonical validation strategy"
+          - "foundation dependencies"
+          - "validation scope"
+          - "evidence standards"
+          - "decision gates"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "01-foundation/07-glossary"
+  feeds:
+    - "02-validation/02-core-assumptions"
+    - "02-validation/03-hypotheses"
+    - "02-validation/04-research-plan"
+    - "02-validation/05-experiments"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+  inputs:
+    - id: "foundation-documents"
+      type: "context"
+      required: false
+      description: "Approved or drafted Foundation documents that define the thesis, problem, audience, principles, boundaries, success definition, and glossary."
+    - id: "known-risks"
+      type: "manual_note"
+      required: false
+      description: "Known project risks, uncertainties, assumptions, or strategic concerns that should shape validation priorities."
+    - id: "available-evidence"
+      type: "context"
+      required: false
+      description: "Existing interviews, observations, analytics, market notes, experiments, or other evidence that may inform validation strategy."
+    - id: "resource-constraints"
+      type: "manual_note"
+      required: false
+      description: "Constraints on time, budget, access to users, tooling, sample size, or execution capacity that affect validation design."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered explicitly through validation priorities, evidence standards, and decision gates."
+    - "The strategy identifies what must be validated before Product, Engineering, or Go-to-market decisions become committed."
+    - "Validation scope distinguishes what is being validated now from what is deferred."
+    - "Evidence standards distinguish weak evidence, strong evidence, qualitative evidence, quantitative evidence, and invalidating evidence."
+    - "Validation sequence identifies prerequisites, parallelizable work, and decision dependencies."
+    - "Invalidating conditions are concrete enough to trigger stop, pivot, or revision decisions."
+    - "Decision gates state required evidence, decision criteria, and decision owner or authority model."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid validating the solution before validating the problem and audience."
+    - "Avoid evidence theater: activities that look like validation but cannot change decisions."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
+    - "Do not invent validation results, sample sizes, benchmarks, or market facts."
+    - "Do not confuse validation strategy with detailed experiment design."
+    - "Do not let enthusiasm override invalidating evidence."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Tie validation priorities to foundation risks, assumptions, success criteria, and boundaries."
+    - "Separate claims, assumptions, hypotheses, evidence, and decisions."
+    - "Classify evidence standards by claim type where useful."
+    - "State what would change the project direction, not only what would support it."
+    - "Keep this document strategic; detailed interview scripts, experiment protocols, and metrics plans belong in downstream Validation documents."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation documents."
+    - "Flag validation steps that cannot produce decision-changing evidence."
+    - "Verify that the strategy tests risky assumptions before expensive commitments."
+    - "Verify that go/no-go gates include clear criteria and required evidence."
+    - "Flag content that belongs better in Core Assumptions, Hypotheses, Research Plan, Experiments, Economic Model, Business Model, or Validation Report."
+  specializedFormats:
+    validationItemFormat:
+      description: "Recommended format for validation items when listing what must be validated."
+      fields:
+        - name
+        - claimType
+        - relatedFoundationDoc
+        - riskLevel
+        - evidenceStandard
+        - validationMethod
+        - invalidatingCondition
+        - decisionGate
+        - status
+    decisionGateFormat:
+      description: "Recommended format for validation decision gates."
+      fields:
+        - gate
+        - purpose
+        - requiredEvidence
+        - decisionCriteria
+        - possibleDecisions
+        - decisionOwner
+        - downstreamEffect
+        - status
   sections:
     - id: "validation-objective"
       title: "Validation Objective"
-      intent: "Clarify what outcome this validation phase seeks to confirm or refute."
+      intent: "Clarify what outcome the Validation phase seeks to confirm, refute, or revise before deeper product, engineering, or market commitments."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "State the purpose of validation in decision terms, not activity terms."
+        - "Clarify what project confidence should increase, decrease, or change after validation."
+        - "Name which Foundation claims are being tested first."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "The objective is tied to Foundation, especially Thesis, Problem, Audience, and Success Definition."
+        - "The objective can change project decisions if evidence is negative."
+        - "The section avoids generic statements like 'validate the idea'."
       questions:
         - "What is the outcome we are trying to validate?"
         - "What does success look like for this validation phase?"
+        - "What uncertainty should this phase reduce first?"
+        - "Which Foundation claims must be tested before moving forward?"
+        - "What decisions should become possible after this validation phase?"
     - id: "validation-scope"
       title: "Validation Scope"
-      intent: "Define the boundaries of what will and will not be validated."
+      intent: "Define the boundaries of what will and will not be validated in this phase."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Separate in-scope validation from deferred validation and out-of-scope validation."
+        - "Clarify why each deferred item does not need to be tested yet."
+        - "Do not use scope to avoid testing uncomfortable assumptions."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "The scope is narrow enough to execute and broad enough to reduce the main project risks."
+        - "Deferred validation items are explicitly named."
+        - "The section does not validate downstream product details before upstream risks."
       questions:
         - "What needs to be validated?"
         - "What does not need to be validated now?"
         - "What is explicitly out of scope for this phase?"
+        - "Which validation topics are deferred and why?"
+        - "Which scope exclusions would become risky if left untested too long?"
     - id: "validation-priorities"
       title: "Validation Priorities"
-      intent: "Establish the priority order for testing assumptions and risks."
+      intent: "Establish the priority order for testing assumptions, claims, risks, and dependencies."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Prioritize validation by risk, dependency, reversibility, and cost of being wrong."
+        - "Name prerequisites before dependent validation activities."
+        - "Avoid prioritizing what is easiest if it does not reduce meaningful risk."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "The highest-risk assumptions are tested early."
+        - "Problem and audience validation are not skipped in favor of solution validation."
+        - "The priority order is justified, not merely listed."
       questions:
         - "Which risk comes first: problem, audience, solution, willingness to use, willingness to pay?"
         - "What is the priority order for testing assumptions?"
         - "Which validations are prerequisites for others?"
+        - "Which assumptions are most dangerous if wrong?"
+        - "Which validations are cheap, reversible, or expensive to delay?"
     - id: "evidence-standards"
       title: "Evidence Standards"
-      intent: "Define what constitutes sufficient evidence for different types of claims."
+      intent: "Define what constitutes sufficient evidence for different claim types and decision levels."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define evidence standards by type of claim: problem, audience, behavior, willingness to use, willingness to pay, economic viability, and business logic."
+        - "Distinguish signal strength from evidence volume."
+        - "Define invalidating evidence, not only confirming evidence."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Evidence standards are strong enough to prevent confirmation bias."
+        - "Qualitative evidence is allowed where appropriate but not overclaimed."
+        - "Quantitative evidence is not demanded where it would create false precision."
+        - "The section distinguishes evidence from opinion, preference, and speculation."
       questions:
         - "What level of evidence is sufficient for each type of claim?"
         - "What distinguishes strong evidence from weak evidence?"
         - "When is qualitative evidence enough vs. needing quantitative evidence?"
+        - "What counts as invalidating evidence?"
+        - "What evidence would be suggestive but insufficient for commitment?"
+        - "What evidence would justify moving to Product, Engineering, or Go-to-market?"
     - id: "validation-sequence"
       title: "Validation Sequence"
       intent: "Map the dependency chain and execution order of validation activities."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Map validations in the order that protects the project from premature commitment."
+        - "Show which validations can run in parallel and which must wait."
+        - "Clarify which outputs feed downstream validation documents."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "The sequence respects dependency order."
+        - "Parallel work does not depend on unavailable evidence."
+        - "The sequence is actionable enough to guide planning without becoming a detailed roadmap."
       questions:
         - "In what order will validations be executed?"
         - "What is the dependency chain between validation activities?"
         - "What can be parallelized vs. what must be sequential?"
+        - "Which validation outputs feed hypotheses, research, experiments, evidence log, and decision record?"
+        - "What should be reviewed after each validation step?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
-      intent: "Identify specific conditions that would prevent the project from advancing."
+      intent: "Identify specific evidence, results, or patterns that would prevent the project from advancing, require revision, or trigger a pivot."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define invalidation before experiments are run, where possible."
+        - "Separate stop conditions, pivot conditions, and revision conditions."
+        - "Tie invalidating conditions to Foundation claims, success criteria, and boundaries."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Invalidating conditions are concrete enough to apply during review."
+        - "The section protects against moving forward only because effort was already invested."
+        - "Invalidating conditions are not so extreme that they never trigger."
       questions:
         - "What would prevent the project from advancing?"
         - "What specific results would kill the project?"
         - "What results would trigger a significant pivot?"
+        - "What results would require revising the thesis, problem, audience, or success definition?"
+        - "What evidence would show that continuing would violate project boundaries or principles?"
     - id: "decision-gates"
       title: "Decision Gates"
-      intent: "Define the go/no-go decision points, criteria, and decision-makers."
+      intent: "Define go/no-go decision points, required evidence, decision criteria, and decision authority."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "State each gate as a decision point, not merely a milestone."
+        - "List required evidence and possible decisions for each gate."
+        - "Clarify who or what authority model decides when evidence is mixed."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Each gate can produce go, no-go, revise, pivot, or defer decisions."
+        - "Each gate states required evidence before downstream commitment."
+        - "Decision ownership is explicit enough to avoid ambiguity."
       questions:
         - "At what points are go/no-go decisions made?"
         - "Who makes each decision and with what criteria?"
         - "What evidence must be available at each gate?"
+        - "What are the possible decisions at each gate?"
+        - "What downstream work is allowed or blocked by each decision?"

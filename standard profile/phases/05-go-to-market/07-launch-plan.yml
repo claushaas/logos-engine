@@ -5,116 +5,696 @@ document:
   status: "not_started"
   order: 7
   type: "launch_plan"
-  purpose: "Define the initial controlled market entry sequence, assets, and success criteria."
-  centralQuestion: "How will the product be launched?"
+  purpose: "Define the controlled market-entry sequence, launch readiness gates, audience cohorts, assets, communications, support coverage, analytics, go/no-go criteria, contingencies, and transition from launch into ongoing operations."
+  centralQuestion: "How will the product be launched safely, credibly, measurably, and reversibly to the right first audience?"
   outputs:
     canonical:
       format: "markdown"
-      path: "05-go-to-market/07-launch-plan.md"
-      purpose: "Launch plan document with phases, checklist, assets, and success criteria."
-  dependsOn: []
-  feeds: []
+      path: "docs/05-go-to-market/07-launch-plan.md"
+      purpose: "Store the canonical launch plan as a Markdown document."
+    artifacts:
+      - id: "gtm.launch_plan_timeline"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/launch-plan-timeline.html"
+        purpose: "Provide a founder-facing launch plan covering objective, launch type, cohorts, phases, readiness gates, assets, communications, checklist, support, analytics, success criteria, contingencies, and post-launch transition."
+        audience: "founder"
+        includes:
+          - "launch objective"
+          - "launch type"
+          - "launch audience"
+          - "launch cohorts"
+          - "readiness gates"
+          - "pre-launch phase"
+          - "launch phase"
+          - "post-launch phase"
+          - "launch timeline"
+          - "launch assets"
+          - "launch communications"
+          - "launch checklist"
+          - "support readiness"
+          - "analytics readiness"
+          - "go/no-go criteria"
+          - "success criteria"
+          - "contingency plan"
+          - "pause or rollback plan"
+          - "launch risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.launch_plan_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/launch-plan-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the launch plan is focused, sequenced, readiness-gated, measurable, support-aware, risk-aware, technically honest, reversible, and operationally handoff-ready."
+        agentRole: "reviewer"
+        includes:
+          - "canonical launch plan"
+          - "GTM brief dependency"
+          - "market definition dependency"
+          - "positioning dependency"
+          - "messaging dependency"
+          - "customer segments dependency"
+          - "channel strategy dependency"
+          - "deployment readiness dependency"
+          - "technical risks dependency"
+          - "launch formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-vision"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/06-customer-discovery"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-user-personas"
+    - "03-product/03-user-journeys"
+    - "03-product/04-value-proposition"
+    - "03-product/08-product-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/02-market-definition"
+    - "05-go-to-market/03-positioning"
+    - "05-go-to-market/04-messaging"
+    - "05-go-to-market/05-customer-segments"
+    - "05-go-to-market/06-channel-strategy"
+  feeds:
+    - "05-go-to-market/08-pricing-and-packaging"
+    - "05-go-to-market/09-content-strategy"
+    - "05-go-to-market/10-sales-motion"
+    - "05-go-to-market/11-partnerships-and-distribution"
+    - "05-go-to-market/12-growth-experiments"
+    - "05-go-to-market/13-gtm-analytics"
+    - "05-go-to-market/14-gtm-risks"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "go-to-market-brief"
+      type: "context"
+      required: false
+      description: "GTM objective, market-entry thesis, beachhead segment, launch strategy, revenue motion, success criteria, constraints, and GTM risks."
+    - id: "market-definition"
+      type: "context"
+      required: false
+      description: "Market category, market boundaries, alternatives, substitute behaviors, timing rationale, constraints, evidence quality, and market risks."
+    - id: "positioning"
+      type: "context"
+      required: false
+      description: "Positioning statement, category frame, target customer context, primary pain, alternatives, differentiated value, proof hierarchy, claim boundaries, messaging pillars, and anti-positioning."
+    - id: "messaging"
+      type: "context"
+      required: false
+      description: "Core message, message house, one-liner, descriptions, audience variants, channel variants, proof points, objection responses, claim boundaries, tone, examples, and forbidden claims."
+    - id: "customer-segments"
+      type: "context"
+      required: false
+      description: "ICP, primary segment, secondary segments, early adopters, role map, qualification/disqualification signals, segment needs, segment-specific messaging, segment-specific channels, exclusions, expansion triggers, and segment risks."
+    - id: "channel-strategy"
+      type: "context"
+      required: false
+      description: "Channel objective, channel thesis, primary channel, secondary channels, segment-channel fit, message-channel fit, channel assets, channel experiments, metrics, constraints, fallback strategy, and channel risks."
+    - id: "product-readiness"
+      type: "context"
+      required: false
+      description: "Product scope, requirements, NFRs, acceptance criteria, launchable capabilities, onboarding needs, known limitations, and support implications."
+    - id: "engineering-readiness"
+      type: "context"
+      required: false
+      description: "Testing gates, observability, deployment readiness, environment status, release verification, rollback constraints, technical risks, and operational readiness concerns."
+    - id: "launch-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate launch date, launch type, launch audience size, phase ideas, checklist notes, communication ideas, asset needs, success thresholds, support constraints, and unresolved launch questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a launch plan that is sequenced, readiness-gated, measurable, support-aware, risk-aware, and reversible where possible."
+    - "Launch objective defines the single most important launch outcome and secondary outcomes, with what the launch intentionally should not optimize yet."
+    - "Launch type is selected and justified against alternatives such as waitlist, private alpha, closed beta, public beta, soft launch, limited GA, community launch, partner launch, content-led launch, open-source launch, or public launch."
+    - "Launch audience defines primary segment, cohort size, invitation criteria, qualification signals, exclusion rules, expected support load, and feedback expectations."
+    - "Launch cohorts define who enters when, cohort purpose, size, criteria, communication, onboarding, success signal, expansion trigger, and stop condition."
+    - "Readiness gates cover product, engineering, testing, deployment, observability, analytics, messaging, support, legal/compliance review where relevant, pricing/payment, onboarding, and incident response."
+    - "Pre-launch phase defines tasks, owners, dependencies, assets, instrumentation, dry runs, content prep, support prep, QA, smoke tests, communication prep, and readiness review."
+    - "Launch phase defines exact sequence of launch actions, channels, messages, audiences, timing, owners, monitoring, support coverage, feedback capture, and escalation path."
+    - "Post-launch phase defines monitoring window, feedback processing, bug triage, support review, metric review, cohort expansion decision, message/channel iteration, and transition to operations."
+    - "Launch timeline defines phases, dates or relative timing, dependencies, gates, owners, and decision points without inventing unavailable dates."
+    - "Launch assets list required, optional, blocked, missing, review-needed, and deferred assets with owner, purpose, channel, audience, status, and dependency."
+    - "Launch communications define internal and external messages, audience, channel, timing, owner, proof/claim boundaries, CTA, fallback message, and approval status."
+    - "Launch checklist defines concrete launch-critical items, owner, due date or trigger, dependency, evidence required, status, and launch impact."
+    - "Support readiness defines expected support volume, support channels, response expectations, owner, escalation path, support macros/docs, known issues, blocked claims, and incident handoff."
+    - "Analytics readiness defines events, metrics, dashboards, tracking links, attribution, cohort tags, feedback capture, qualitative notes, conversion points, success thresholds, and data quality checks."
+    - "Go/no-go criteria define pre-launch and day-of launch decisions, required evidence, blockers, approver, exception process, and rollback/pause triggers."
+    - "Launch success criteria define leading indicators, lagging indicators, qualitative evidence, thresholds, timeframe, owner, and decision implication."
+    - "Contingency plan defines what happens if product, channel, message, support, analytics, payment, deployment, observability, or reputation issues appear."
+    - "Pause or rollback plan defines when to pause invitations, stop promotion, disable a feature, revert a release, change messaging, narrow audience, or trigger incident response."
+    - "Launch risks are concrete, source-linked, impact-aware, and routed to downstream GTM or Operations documents."
+    - "Downstream handoff clarifies what Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks, Release Management, Support, Incident Response, Operating Model, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid launch theater: dates and checklists without readiness gates, owners, evidence, support coverage, analytics, contingencies, and go/no-go decisions."
+    - "Avoid public launch by default when a controlled cohort or staged launch better matches readiness and learning goals."
+    - "Avoid launching to segments Product, Engineering, Acceptance Criteria, Deployment, Technical Risks, or Support cannot serve truthfully."
+    - "Avoid launch messages that violate Messaging claim boundaries, Positioning proof limits, product truth, technical truth, legal/compliance uncertainty, or support capacity."
+    - "Avoid launch success metrics that measure attention only while ignoring qualified activation, feedback quality, conversion, support load, and learning."
+    - "Avoid adding launch tasks without owners, dependencies, evidence, status, and launch impact."
+    - "Avoid assuming analytics works without tracking plan, dashboard, QA, and data-quality checks."
+    - "Avoid assuming support can absorb launch load without coverage, escalation, known issue handling, and incident handoff."
+    - "Avoid rollback/pause plans that ignore deployment, migrations, feature flags, communication, and user trust."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent launch dates, cohort sizes, conversion rates, readiness status, support capacity, legal approval, product readiness, or technical reliability."
+    - "Launch plan must preserve Foundation boundaries, segment focus, positioning, messaging claim boundaries, channel strategy, product readiness, technical truth, support capacity, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate decision, task, owner, dependency, evidence, gate, metric, risk, contingency, and handoff."
+    - "Tie launch decisions to GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Product, Acceptance Criteria, Testing Strategy, Observability, Deployment, Technical Risks, or Decision Record where possible."
+    - "Classify launch items as required, optional, blocked, deferred, review-needed, launch-blocking, nice-to-have, pre-launch, launch-day, post-launch, or operations-handoff where useful."
+    - "State what must be true before moving from one phase or cohort to the next."
+    - "Route detailed content calendar, sales collateral, partner outreach, pricing tests, experiment execution, analytics implementation, support macros, incident runbooks, and operational procedures downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Testing Strategy, Observability, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, or Decision Record."
+    - "Flag launch plans without readiness gates, go/no-go criteria, analytics readiness, support readiness, contingency, and pause/rollback plan."
+    - "Flag launch audiences that are too broad, unqualified, unsupported, or misaligned with the primary segment."
+    - "Flag phase tasks without owner, dependency, evidence, due trigger, status, or launch impact."
+    - "Flag launch assets or communications that violate claim boundaries or lack approval/review status."
+    - "Flag success criteria that do not lead to decisions."
+    - "Flag contingencies that are vague, unactionable, or disconnected from actual launch risks."
+    - "Verify that downstream GTM and Operations documents receive concrete launch handoff inputs."
+    - "Flag content that belongs better in Pricing, Content Strategy, Sales Motion, Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Release Management, Support Model, Incident Response, or Operations."
+  specializedFormats:
+    launchPhaseFormat:
+      description: "Recommended format for launch phases."
+      fields:
+        - phase
+        - objective
+        - startTrigger
+        - endTrigger
+        - owner
+        - tasks
+        - readinessGate
+        - evidenceRequired
+        - metricsWatched
+        - risks
+        - status
+    launchCohortFormat:
+      description: "Recommended format for launch cohorts."
+      fields:
+        - cohort
+        - purpose
+        - targetSegment
+        - size
+        - invitationCriteria
+        - exclusionCriteria
+        - onboardingPath
+        - communication
+        - successSignal
+        - expansionTrigger
+        - stopCondition
+        - supportExpectation
+        - status
+    readinessGateFormat:
+      description: "Recommended format for launch readiness gates."
+      fields:
+        - gate
+        - category
+        - requirement
+        - evidenceRequired
+        - owner
+        - blockerIfFailed
+        - exceptionProcess
+        - downstreamDocument
+        - status
+    launchAssetFormat:
+      description: "Recommended format for launch assets."
+      fields:
+        - asset
+        - purpose
+        - targetAudience
+        - channel
+        - messageSupported
+        - proofIncluded
+        - owner
+        - dependency
+        - approvalRequired
+        - readinessStatus
+        - launchImpact
+    launchCommunicationFormat:
+      description: "Recommended format for launch communications."
+      fields:
+        - communication
+        - audience
+        - channel
+        - timing
+        - message
+        - CTA
+        - proofUsed
+        - claimBoundary
+        - owner
+        - approvalStatus
+        - fallbackMessage
+    launchChecklistItemFormat:
+      description: "Recommended format for launch checklist items."
+      fields:
+        - item
+        - category
+        - owner
+        - dependency
+        - dueDateOrTrigger
+        - evidenceRequired
+        - status
+        - launchImpact
+        - blockerIfIncomplete
+    launchMetricFormat:
+      description: "Recommended format for launch success metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - source
+        - baseline
+        - target
+        - timeframe
+        - threshold
+        - decisionImplication
+        - owner
+        - status
+    contingencyFormat:
+      description: "Recommended format for launch contingencies."
+      fields:
+        - scenario
+        - trigger
+        - severity
+        - immediateAction
+        - owner
+        - communication
+        - escalationPath
+        - rollbackOrPauseAction
+        - recoveryCriteria
+        - downstreamDocument
+    launchRiskFormat:
+      description: "Recommended format for launch risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - contingency
+        - downstreamDocument
+        - launchImpact
   sections:
     - id: "launch-objective"
       title: "Launch Objective"
-      intent: "Define what a successful launch achieves and the single most important outcome."
+      intent: "Define what a successful launch achieves, the single most important outcome, secondary outcomes, and what the launch should not optimize yet."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State the primary launch objective in one sentence."
+        - "Separate learning, acquisition, activation, revenue, feedback, credibility, and community objectives."
+        - "State what is intentionally out of scope for this launch."
+      qualityChecks:
+        - "Objective is specific enough to determine launch type, audience, channels, and success criteria."
+        - "Objective aligns with GTM Brief and product readiness."
+        - "The launch does not try to optimize everything at once."
       questions:
         - "What does a successful launch achieve?"
         - "What is the single most important launch outcome?"
+        - "What secondary outcomes matter?"
+        - "What should this launch intentionally not optimize yet?"
+        - "What would make this launch a failure?"
     - id: "launch-type"
       title: "Launch Type"
-      intent: "Choose the launch type and justify why over other options."
+      intent: "Choose the launch type and justify why it fits readiness, risk, segment focus, learning goals, and support capacity."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Choose one primary launch type."
+        - "Compare against relevant alternatives."
+        - "State why this type fits the current readiness and risk profile."
+      qualityChecks:
+        - "Launch type is justified by evidence and constraints."
+        - "Public launch is not assumed by default."
+        - "Rejected launch types include rationale."
       questions:
-        - "What type of launch: Waitlist, Closed Beta, Public Beta, Soft Launch, or Public Launch?"
+        - "What type of launch is planned: waitlist, private alpha, closed beta, public beta, soft launch, limited GA, community launch, partner launch, content-led launch, open-source launch, public launch, or hybrid?"
         - "Why this type over others?"
+        - "What launch types are rejected or deferred?"
+        - "What readiness, risk, and support constraints shape this choice?"
     - id: "launch-audience"
       title: "Launch Audience"
-      intent: "Identify the launch audience and target size."
+      intent: "Identify who is included in the launch, who is excluded, target size, qualification criteria, feedback expectations, and support implications."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie launch audience to Customer Segments and Channel Strategy."
+        - "State cohort size as exact number, range, or unresolved assumption."
+        - "Include exclusion rules."
+      qualityChecks:
+        - "Audience is narrow enough to manage and learn from."
+        - "Qualification and exclusion criteria are explicit."
+        - "Support load is considered."
       questions:
         - "Who is the launch audience?"
         - "How many people are targeted for the initial launch?"
+        - "What qualification criteria determine inclusion?"
+        - "Who is explicitly excluded from launch?"
+        - "What feedback is expected from this audience?"
+        - "What support load does this audience create?"
+    - id: "launch-cohorts"
+      title: "Launch Cohorts"
+      intent: "Define staged cohorts for controlled exposure, learning, support load management, and risk reduction."
+      required: true
+      outputGuidance:
+        - "Use launch cohort records for each cohort."
+        - "Define what must be true before expanding to the next cohort."
+        - "Include stop conditions."
+      qualityChecks:
+        - "Cohorts reduce risk and improve learning."
+        - "Expansion is evidence-triggered."
+        - "Stop conditions are clear."
+      questions:
+        - "What launch cohorts exist?"
+        - "What is the purpose of each cohort?"
+        - "What criteria determine who enters each cohort?"
+        - "What success signal allows expansion?"
+        - "What stop condition prevents expansion?"
+        - "What support expectation applies per cohort?"
+    - id: "readiness-gates"
+      title: "Readiness Gates"
+      intent: "Define required gates before launch and before each launch expansion."
+      required: true
+      outputGuidance:
+        - "Use readiness gate records for material gates."
+        - "Cover product, engineering, testing, deployment, observability, analytics, messaging, support, pricing/payment, onboarding, legal/compliance review where relevant, and incident response."
+        - "State blocker and exception process."
+      qualityChecks:
+        - "Readiness gates are evidence-based."
+        - "Failed gates have consequences."
+        - "No critical readiness area is assumed ready without evidence."
+      questions:
+        - "What must be ready before launch?"
+        - "What product readiness gate applies?"
+        - "What engineering/testing/deployment/observability gate applies?"
+        - "What messaging/channel/content gate applies?"
+        - "What analytics and support gates apply?"
+        - "What pricing/payment, onboarding, legal/compliance, or incident response gates apply?"
+        - "What happens if a gate fails?"
     - id: "pre-launch-phase"
       title: "Pre-launch Phase"
-      intent: "Define tasks and readiness criteria before launch day."
+      intent: "Define tasks, owners, dependencies, readiness criteria, dry runs, and preparation before launch day."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use launch phase and checklist formats where useful."
+        - "Include asset creation, QA, analytics QA, support prep, communication prep, smoke tests, dry runs, and readiness review."
+        - "State launch-blocking tasks."
+      qualityChecks:
+        - "Pre-launch tasks are concrete and owned."
+        - "Dependencies and evidence are explicit."
+        - "Pre-launch phase prepares product, GTM, support, and operations together."
       questions:
         - "What happens before the launch date?"
         - "What must be ready before launch?"
+        - "What assets, tests, smoke checks, analytics, support docs, communications, and dry runs are needed?"
+        - "Who owns each preparation area?"
+        - "What evidence proves pre-launch readiness?"
     - id: "launch-phase"
       title: "Launch Phase"
-      intent: "Define the launch sequence on and immediately after launch day."
+      intent: "Define the launch-day and immediate post-launch execution sequence, including channels, communications, monitoring, support, and escalation."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Write launch sequence as concrete steps."
+        - "Include owner, timing, audience, channel, message, CTA, monitoring, and escalation."
+        - "State what can be paused or reversed."
+      qualityChecks:
+        - "Launch sequence is executable."
+        - "Support and monitoring are active during launch."
+        - "Escalation path is explicit."
       questions:
         - "What happens on and immediately after launch day?"
         - "What is the launch sequence?"
+        - "Which channels and communications go live first?"
+        - "Who monitors product, analytics, support, and channel signals?"
+        - "What can be paused, disabled, or reversed during launch?"
+        - "Who handles escalation?"
     - id: "post-launch-phase"
       title: "Post-launch Phase"
-      intent: "Define post-launch activities and transition to ongoing operations."
+      intent: "Define post-launch monitoring, feedback processing, triage, iteration, cohort expansion, and transition to operations."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define the monitoring and learning window."
+        - "Include feedback review, bug triage, support review, metric review, messaging/channel iteration, and expansion decision."
+        - "State operational handoff."
+      qualityChecks:
+        - "Post-launch phase produces decisions, not just reporting."
+        - "Feedback and support signals are processed systematically."
+        - "Transition to operations is explicit."
       questions:
         - "What happens after the initial launch window?"
+        - "How are feedback, support issues, bugs, analytics, and channel signals reviewed?"
+        - "When is the next cohort or expansion decision made?"
+        - "What changes may be made after launch?"
         - "How does the launch transition into ongoing operations?"
+    - id: "launch-timeline"
+      title: "Launch Timeline"
+      intent: "Define launch phases, dates or relative timing, dependencies, gates, owners, and decision points."
+      required: true
+      outputGuidance:
+        - "Use relative timing if exact dates are unknown."
+        - "Include dependencies and gates rather than dates only."
+        - "Mark unresolved timing assumptions."
+      qualityChecks:
+        - "Timeline is actionable without inventing unavailable dates."
+        - "Dependencies and decision points are visible."
+        - "Timeline reflects readiness gates."
+      questions:
+        - "What is the launch timeline?"
+        - "What happens in each phase?"
+        - "What dates or relative timings apply?"
+        - "What dependencies affect timing?"
+        - "What gates or decisions control movement to the next step?"
     - id: "launch-assets"
       title: "Launch Assets"
-      intent: "List content and materials needed for launch with ownership."
+      intent: "List launch materials with purpose, audience, channel, message, proof, owner, dependency, approval, and readiness."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use launch asset records."
+        - "Classify assets as required, optional, blocked, missing, review-needed, or deferred."
+        - "Tie assets to Messaging and Channel Strategy."
+      qualityChecks:
+        - "Every critical asset has owner and readiness status."
+        - "Assets respect claim boundaries and proof limits."
+        - "Missing critical assets are launch blockers."
       questions:
         - "What content and materials are needed for launch?"
+        - "What is the purpose of each asset?"
+        - "What audience and channel does each asset serve?"
+        - "What message and proof does each asset include?"
         - "Who is responsible for each asset?"
+        - "What dependencies or approvals apply?"
+    - id: "launch-communications"
+      title: "Launch Communications"
+      intent: "Define internal and external launch communications by audience, channel, timing, message, CTA, owner, approval, and fallback."
+      required: true
+      outputGuidance:
+        - "Use launch communication records for material communications."
+        - "Separate internal comms, launch audience comms, public comms, support comms, partner comms, and incident/fallback comms where relevant."
+        - "Preserve Messaging claim boundaries."
+      qualityChecks:
+        - "Communications are coordinated and claim-safe."
+        - "CTA and audience are explicit."
+        - "Fallback communication exists for common failures."
+      questions:
+        - "What communications go out before, during, and after launch?"
+        - "Who receives each communication?"
+        - "Through which channel?"
+        - "What message and CTA are used?"
+        - "What claim boundary applies?"
+        - "Who approves and sends it?"
+        - "What fallback message is used if launch changes?"
     - id: "launch-checklist"
       title: "Launch Checklist"
-      intent: "Enumerate concrete pre-launch items and owners."
+      intent: "Enumerate concrete launch-critical items with owner, dependency, due trigger, evidence, status, and launch impact."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use launch checklist item records."
+        - "Group checklist by product, engineering, deployment, analytics, GTM, content, support, legal/compliance review, and operations where relevant."
+        - "Mark launch blockers explicitly."
+      qualityChecks:
+        - "Checklist items are executable and owned."
+        - "Each item has evidence required."
+        - "Blockers are visible."
       questions:
         - "What are the concrete items that must be completed before launch?"
         - "Who owns each checklist item?"
+        - "What dependency affects each item?"
+        - "What evidence proves completion?"
+        - "Which incomplete items block launch?"
+    - id: "support-readiness"
+      title: "Support Readiness"
+      intent: "Define support coverage, expected volume, known issues, response expectations, escalation, support assets, and incident handoff during launch."
+      required: true
+      outputGuidance:
+        - "Tie support readiness to Support Model where available."
+        - "Include known issues and blocked claims."
+        - "Define launch-period escalation."
+      qualityChecks:
+        - "Launch support burden is explicit."
+        - "Users are not launched into unsupported failure modes."
+        - "Escalation path and incident handoff are clear."
+      questions:
+        - "What support coverage is required during launch?"
+        - "What support volume is expected?"
+        - "What support channels are used?"
+        - "What response expectations apply?"
+        - "What known issues must support know?"
+        - "What support docs, macros, FAQs, or troubleshooting paths are required?"
+        - "What issues escalate to incident response?"
+    - id: "analytics-readiness"
+      title: "Analytics Readiness"
+      intent: "Define launch tracking, dashboards, metrics, attribution, cohort tags, event QA, feedback capture, and data quality checks."
+      required: true
+      outputGuidance:
+        - "Tie analytics readiness to GTM Analytics and Observability."
+        - "Include event names conceptually without over-specifying implementation if downstream analytics owns details."
+        - "State QA and failure consequences."
+      qualityChecks:
+        - "Launch can be measured before promotion starts."
+        - "Data quality is verified."
+        - "Qualitative feedback capture is included."
+      questions:
+        - "What events and metrics must be tracked during launch?"
+        - "What dashboard is required?"
+        - "How are cohorts and channels tagged?"
+        - "How is attribution handled?"
+        - "How is qualitative feedback captured?"
+        - "How is analytics QA performed?"
+        - "What happens if analytics is broken at launch?"
+    - id: "go-no-go-criteria"
+      title: "Go / No-Go Criteria"
+      intent: "Define objective criteria for proceeding, pausing, delaying, narrowing, or cancelling launch."
+      required: true
+      outputGuidance:
+        - "Separate pre-launch, launch-day, and cohort-expansion criteria."
+        - "Define approver and exception process."
+        - "State evidence required for each decision."
+      qualityChecks:
+        - "Criteria lead to real decisions."
+        - "Launch blockers are explicit."
+        - "Exceptions are not informal."
+      questions:
+        - "What criteria must be met to launch?"
+        - "What criteria delay or cancel launch?"
+        - "What criteria allow cohort expansion?"
+        - "What criteria force narrowing or pausing?"
+        - "Who makes the go/no-go decision?"
+        - "What exception process exists?"
     - id: "launch-success-criteria"
       title: "Launch Success Criteria"
-      intent: "Define metrics and go / no-go thresholds for launch success."
+      intent: "Define metrics and thresholds for launch success, learning, iteration, expansion, or stop decisions."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use launch metric records for material metrics."
+        - "Separate leading, lagging, qualitative, quantitative, channel, product, activation, support, and revenue metrics where relevant."
+        - "State decision implication."
+      qualityChecks:
+        - "Success criteria map to launch objective."
+        - "Metrics include quality and learning, not only attention."
+        - "Thresholds and timeframe are explicit or marked unresolved."
       questions:
         - "What metrics define launch success?"
-        - "What is the go / no-go threshold after launch?"
-    - id: "launch-risks"
-      title: "Launch Risks"
-      intent: "Identify launch risks and contingency plans."
+        - "What leading indicators matter?"
+        - "What lagging indicators matter?"
+        - "What qualitative evidence matters?"
+        - "What is the threshold for iterate, expand, pause, or stop?"
+        - "What timeframe applies?"
+    - id: "contingency-plan"
+      title: "Contingency Plan"
+      intent: "Define what happens if launch problems occur across product, engineering, channel, message, support, analytics, payment, deployment, observability, or reputation."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use contingency records for material scenarios."
+        - "Classify severity and immediate action."
+        - "Include communication and escalation."
+      qualityChecks:
+        - "Contingencies are scenario-specific."
+        - "Immediate owner and action are clear."
+        - "Communication and escalation are included."
       questions:
         - "What could go wrong during launch?"
-        - "What is the contingency plan for each risk?"
+        - "What is the contingency plan for each scenario?"
+        - "What trigger activates the contingency?"
+        - "Who owns the response?"
+        - "What communication is required?"
+        - "What escalation path applies?"
+    - id: "pause-or-rollback-plan"
+      title: "Pause or Rollback Plan"
+      intent: "Define when to pause promotion, stop invitations, disable a feature, revert a release, change messaging, narrow audience, or trigger incident response."
+      required: true
+      outputGuidance:
+        - "Separate GTM pause from technical rollback and incident response."
+        - "Tie technical rollback to Deployment and Release Management."
+        - "Define user communication and recovery criteria."
+      qualityChecks:
+        - "Pause and rollback are realistic."
+        - "Technical and GTM rollback paths are not confused."
+        - "User trust implications are addressed."
+      questions:
+        - "When should promotion or invitations be paused?"
+        - "When should a feature be disabled?"
+        - "When should a technical rollback or hotfix happen?"
+        - "When should messaging or audience be narrowed?"
+        - "Who has authority to pause or rollback?"
+        - "What communication is required?"
+        - "What recovery criteria allow launch to resume?"
+    - id: "launch-risks"
+      title: "Launch Risks"
+      intent: "Identify launch risks and mitigation/contingency plans."
+      required: true
+      outputGuidance:
+        - "Use launch risk records for material risks."
+        - "Include product, engineering, deployment, analytics, channel, message, support, pricing, payment, reputation, legal/compliance, and operational risks where relevant."
+        - "Route risks downstream."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Mitigation and contingency are distinct."
+        - "Launch-impacting risks have decision consequences."
+      questions:
+        - "What could go wrong during launch?"
+        - "What are the most serious launch risks?"
+        - "What early signal indicates each risk?"
+        - "What mitigation reduces likelihood or impact?"
+        - "What contingency applies if it happens?"
+        - "What downstream document must inherit the risk?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from Launch Plan and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route launch outputs to the correct downstream documents."
+        - "Separate pricing, content, sales, partnerships, experiments, analytics, GTM risk, release, support, incident response, operating model, and risk management implications."
+        - "Preserve unresolved launch questions and readiness blockers."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing launch assumptions silently."
+        - "Launch plan and downstream execution remain distinct."
+      questions:
+        - "What should Pricing and Packaging inherit?"
+        - "What should Content Strategy inherit?"
+        - "What should Sales Motion and Partnerships inherit?"
+        - "What should Growth Experiments and GTM Analytics inherit?"
+        - "What should GTM Risks inherit?"
+        - "What should Release Management inherit?"
+        - "What should Support Model and Incident Response inherit?"
+        - "What should Operating Model and Risk Management inherit?"
+        - "What unresolved launch questions must be carried forward?"

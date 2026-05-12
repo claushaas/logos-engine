@@ -5,143 +5,787 @@ document:
   status: "not_started"
   order: 12
   type: "deployment_environments"
-  purpose: "Defines how the system runs and gets published across environments."
-  centralQuestion: "How does the system run and get published?"
+  purpose: "Define how the system is built, configured, promoted, deployed, verified, rolled back, and operated across local, preview, staging, production, and recovery environments."
+  centralQuestion: "How does the system move from source code to verified production runtime across isolated, reproducible, observable, and recoverable environments?"
   outputs:
     canonical:
       format: "markdown"
-      path: "04-engineering/deployment-and-environments.md"
-      purpose: "Deployment and environments design covering environments, build process, release process, and feature flags."
-  dependsOn: []
-  feeds: []
+      path: "docs/04-engineering/12-deployment-and-environments.md"
+      purpose: "Store the canonical deployment and environments design as a Markdown document."
+    artifacts:
+      - id: "engineering.deployment_environments_map"
+        format: "html"
+        path: "outcomes/html/04-engineering/deployment-and-environments-map.html"
+        purpose: "Provide a navigable deployment and environments map covering environment strategy, local setup, previews, staging, production, configuration, secrets, builds, artifacts, CI/CD, migrations, release promotion, feature flags, smoke tests, rollback, runbooks, risks, and operations handoff."
+        audience: "founder"
+        includes:
+          - "deployment objective"
+          - "environment strategy"
+          - "environment matrix"
+          - "local development"
+          - "preview environments"
+          - "staging"
+          - "production"
+          - "recovery environments"
+          - "configuration management"
+          - "environment variables"
+          - "secrets per environment"
+          - "build process"
+          - "artifact strategy"
+          - "CI/CD pipeline"
+          - "deployment strategy"
+          - "migration process"
+          - "release promotion"
+          - "release verification"
+          - "smoke tests"
+          - "feature flags"
+          - "rollback strategy"
+          - "post-deploy monitoring"
+          - "deployment runbooks"
+          - "deployment risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.deployment_environments_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/deployment-and-environments-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether deployment and environments are reproducible, isolated, secure, observable, testable, reversible, and aligned with infrastructure, testing, observability, security, and release management."
+        agentRole: "reviewer"
+        includes:
+          - "canonical deployment and environments design"
+          - "system architecture dependency"
+          - "technical stack dependency"
+          - "security and privacy dependency"
+          - "testing strategy dependency"
+          - "observability dependency"
+          - "deployment formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+    - "04-engineering/07-integration-architecture"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/09-sync-and-state"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+  feeds:
+    - "06-operations/02-operating-model"
+    - "06-operations/05-maintenance-plan"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "Runtime units, deployment topology, system boundaries, environments, data flow, failure modes, and architecture constraints that shape deployment."
+    - id: "technical-stack"
+      type: "context"
+      required: false
+      description: "Runtime, package manager, framework, database, storage, auth, API, jobs, testing tools, deployment platform, monitoring tools, version constraints, and dependency policies."
+    - id: "data-model"
+      type: "context"
+      required: false
+      description: "Migrations, local/remote data stores, backup/restore, retention, sensitivity classes, seed data, event storage, and data recovery implications."
+    - id: "security-and-privacy"
+      type: "context"
+      required: false
+      description: "Secrets, credentials, IAM, data handling, logging restrictions, backup security, incident response, access control, and environment separation requirements."
+    - id: "testing-strategy"
+      type: "context"
+      required: false
+      description: "CI gates, test suites, release gates, smoke tests, security/privacy tests, observability tests, fixtures, mocks, and release evidence requirements."
+    - id: "observability"
+      type: "context"
+      required: false
+      description: "Logs, metrics, traces, errors, audit events, health checks, SLOs, alerts, dashboards, incident hooks, post-deploy monitoring, and privacy-safe telemetry rules."
+    - id: "deployment-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate environments, hosting constraints, CI/CD preferences, build commands, release process, feature flag needs, rollback concerns, migration concerns, and unresolved deployment questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through explicit environment design, build/release/deploy pipeline, configuration, secrets, migrations, verification, rollback, monitoring, runbooks, ownership, and risks."
+    - "Environment strategy defines each environment's purpose, isolation level, data policy, access model, deployment trigger, observability level, cost posture, and lifecycle."
+    - "Environment matrix covers local, CI, preview, staging, production, recovery, sandbox, provider test environments, and explicitly unsupported environments where relevant."
+    - "Local development defines prerequisites, bootstrap flow, local services, seed data, mocks/fakes, test data, environment variables, secrets handling, reset flow, and troubleshooting."
+    - "Preview environments define provisioning trigger, branch/PR mapping, TTL, data policy, secrets policy, external integration mode, test execution, teardown, and cost controls."
+    - "Staging defines production parity, differences from production, data seeding, anonymized data rules, integration mode, release rehearsal, smoke tests, observability, and access controls."
+    - "Production defines deployable units, runtime topology, scaling assumptions, availability expectations, data handling, secrets, access controls, observability, and release constraints."
+    - "Recovery environments define disaster recovery, restore testing, emergency environments, rollback targets, backup validation, and operator access where relevant."
+    - "Configuration management defines configuration source, validation, defaults, environment-specific overrides, runtime versus build-time config, drift detection, and documentation."
+    - "Environment variables include name, purpose, type, required status, environment scope, default, validation, sensitivity, owner, and failure behavior."
+    - "Secrets per environment define secret class, owner, storage location, injection method, rotation, revocation, audit, emergency replacement, CI/local handling, and forbidden exposure."
+    - "Build process defines commands, inputs, outputs, cache strategy, deterministic build requirements, build-time validation, generated artifacts, provenance, and failure behavior."
+    - "Artifact strategy defines artifact types, naming, versioning, metadata, storage, retention, immutability, signing/checksums where relevant, promotion, and traceability to source."
+    - "CI/CD pipeline defines stages, triggers, branch rules, required checks, parallelization, caching, environment promotion, manual approvals, evidence capture, and failure consequences."
+    - "Deployment strategy defines rollout method, deployable units, promotion path, deployment windows, concurrency, health gates, smoke tests, canaries/blue-green/rolling strategy where relevant, and operational ownership."
+    - "Migration process defines schema/data/local/remote/event migrations, ordering relative to deploy, compatibility, backfills, forward-only or rollback policy, failed migration recovery, and release blockers."
+    - "Release promotion defines how builds move from CI to preview to staging to production, what evidence is required, who approves, what can be automated, and what requires manual sign-off."
+    - "Release verification defines smoke tests, health checks, observability checks, security/privacy checks, integration checks, sync checks, manual checks, and post-deploy monitoring window."
+    - "Feature flags define flag taxonomy, ownership, lifecycle, naming, targeting, environments, defaults, kill switches, testing, cleanup, auditability, and stale flag removal."
+    - "Rollback strategy defines rollback types, triggers, authority, communication, data/migration constraints, feature flag disablement, hotfix path, restore path, retest requirements, and post-rollback monitoring."
+    - "Post-deploy monitoring defines dashboards, alerts, SLO checks, error budgets, log review, integration checks, sync checks, support signals, and release health decision points."
+    - "Deployment runbooks define deploy, rollback, hotfix, migration failure, secret rotation, provider outage, degraded mode, restore, and incident handoff procedures at the right level of detail."
+    - "Deployment risks are concrete, source-linked, impact-aware, and routed to mitigation, acceptance, or downstream Operations documents."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid deployment theater: naming environments without isolation, data policy, access rules, promotion rules, verification, rollback, or ownership."
+    - "Avoid assuming staging mirrors production unless differences are documented."
+    - "Avoid deploying migrations without compatibility, failure, backfill, and recovery strategy."
+    - "Avoid secrets in code, logs, build artifacts, screenshots, environment dumps, client bundles, or committed files."
+    - "Avoid environment drift without validation and documentation."
+    - "Avoid release promotion without evidence and clear gate consequences."
+    - "Avoid rollback strategy that ignores data migrations, irreversible side effects, caches, sync, external integrations, and feature flags."
+    - "Avoid feature flags without owner, cleanup rule, default behavior, test coverage, and auditability."
+    - "Avoid claiming production readiness without smoke tests, observability, release gates, rollback path, and support/incident handoff."
+    - "Avoid inventing platform guarantees, SLA/SLO results, deployment capabilities, recovery guarantees, or compliance readiness."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Deployment design must preserve Security and Privacy rules, Testing Strategy gates, Observability requirements, Data Model migration rules, Sync/State recovery, and Acceptance Criteria."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate environment, configuration, secret, build, artifact, pipeline, deployment, migration, verification, rollback, monitoring, and operational ownership concerns."
+    - "Tie deployment rules to System Architecture, Technical Stack, Data Model, Security and Privacy, Testing Strategy, Observability, NFRs, Acceptance Criteria, or Decision Record where possible."
+    - "Classify deployment items as required, recommended, optional, deferred, unsupported, release-blocking, manual, automated, review-needed, or accepted-risk where useful."
+    - "State what happens when a deployment, build, migration, health check, smoke test, flag, rollback, or post-deploy signal fails."
+    - "Keep detailed operational procedures in Operations documents unless needed as deployment constraints."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with System Architecture, Technical Stack, Data Model, Security and Privacy, Testing Strategy, Observability, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag environments without purpose, isolation, access rule, data policy, deployment trigger, observability level, lifecycle, or owner."
+    - "Flag configuration or environment variables without validation, default/failure behavior, sensitivity classification, or owner."
+    - "Flag secrets without storage, injection, rotation, revocation, audit, and environment separation."
+    - "Flag builds without deterministic inputs, artifact versioning, provenance, cache strategy, or failure behavior."
+    - "Flag deployment pipeline missing gates, evidence capture, health checks, smoke tests, promotion rules, or rollback constraints."
+    - "Flag migrations without compatibility, backfill, failure recovery, rollback/roll-forward policy, and retest requirements."
+    - "Verify that post-deploy monitoring and incident/support handoff are explicit."
+    - "Flag content that belongs better in Infrastructure Architecture, Security and Privacy, Testing Strategy, Observability, Release Management, Support Model, Incident Response, or Operations."
+  specializedFormats:
+    environmentFormat:
+      description: "Recommended format for environment definitions."
+      fields:
+        - environment
+        - purpose
+        - lifecycle
+        - isolationLevel
+        - dataPolicy
+        - accessPolicy
+        - deploymentTrigger
+        - promotionSource
+        - externalIntegrationMode
+        - secretsPolicy
+        - observabilityLevel
+        - costPolicy
+        - owner
+        - status
+    environmentVariableFormat:
+      description: "Recommended format for environment variables and configuration."
+      fields:
+        - name
+        - purpose
+        - type
+        - required
+        - environments
+        - default
+        - validationRule
+        - sensitivityClass
+        - buildTimeOrRuntime
+        - failureBehavior
+        - owner
+    secretFormat:
+      description: "Recommended format for deployment secrets."
+      fields:
+        - secret
+        - purpose
+        - environments
+        - owner
+        - storageLocation
+        - injectionMethod
+        - rotationRule
+        - revocationRule
+        - auditRequirement
+        - emergencyReplacement
+        - forbiddenExposure
+    artifactFormat:
+      description: "Recommended format for build and deployment artifacts."
+      fields:
+        - artifact
+        - producedBy
+        - sourceRef
+        - version
+        - metadata
+        - storageLocation
+        - immutabilityRule
+        - retentionRule
+        - promotionRule
+        - verificationRule
+        - owner
+    pipelineStageFormat:
+      description: "Recommended format for CI/CD stages."
+      fields:
+        - stage
+        - trigger
+        - inputs
+        - actions
+        - requiredChecks
+        - artifactsProduced
+        - evidenceCaptured
+        - failureConsequence
+        - approvalRequired
+        - owner
+    migrationDeploymentFormat:
+      description: "Recommended format for deployment-time migrations."
+      fields:
+        - migrationType
+        - scope
+        - timing
+        - compatibilityRequirement
+        - forwardPlan
+        - rollbackOrRollForwardPlan
+        - backfillPlan
+        - failureDetection
+        - recoveryPlan
+        - retestRequirement
+        - releaseImpact
+    rolloutFormat:
+      description: "Recommended format for rollout and release promotion."
+      fields:
+        - rollout
+        - strategy
+        - targetEnvironment
+        - promotionSource
+        - gateCriteria
+        - smokeTests
+        - healthChecks
+        - monitoringWindow
+        - rollbackTrigger
+        - approvalAuthority
+        - communicationRequirement
+    featureFlagFormat:
+      description: "Recommended format for feature flags."
+      fields:
+        - flag
+        - purpose
+        - type
+        - owner
+        - environments
+        - defaultState
+        - targetingRule
+        - killSwitch
+        - testRequirement
+        - auditRequirement
+        - cleanupTrigger
+        - expirationDateOrReviewTrigger
+    rollbackFormat:
+      description: "Recommended format for rollback paths."
+      fields:
+        - rollbackScenario
+        - trigger
+        - authority
+        - rollbackMethod
+        - dataMigrationConstraint
+        - featureFlagAction
+        - verificationSteps
+        - communicationRequirement
+        - supportImpact
+        - monitoringRequirement
+        - postmortemRequirement
+    deploymentRiskFormat:
+      description: "Recommended format for deployment risks."
+      fields:
+        - risk
+        - affectedEnvironmentOrStage
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - rollbackOrRecoveryPath
+        - targetDocument
+        - releaseImpact
   sections:
+    - id: "deployment-objective"
+      title: "Deployment Objective"
+      intent: "Define what deployment must guarantee, what production readiness means technically, and what failures must be prevented or recoverable."
+      required: true
+      outputGuidance:
+        - "Open with the deployment objective in concrete terms."
+        - "State the minimum deployability bar for MVP."
+        - "Separate deployment success, release success, and operational success."
+      qualityChecks:
+        - "Objective is tied to reproducibility, safety, observability, rollback, and release gates."
+        - "Production readiness is not reduced to code being built."
+        - "Failure and recovery expectations are explicit."
+      questions:
+        - "What must deployment guarantee?"
+        - "What does production-ready deployment mean?"
+        - "What deployment failures must be prevented?"
+        - "What deployment failures must be recoverable?"
+        - "What is the minimum deployability bar for MVP?"
+        - "What is outside the scope of this document?"
     - id: "environment-strategy"
       title: "Environment Strategy"
-      intent: "Define the environments that exist, their purpose, and isolation levels."
+      intent: "Define all environments, why they exist, how isolated they are, what data they use, how they are accessed, and how they are promoted."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe environment strategy before listing individual environments."
+        - "Explain the promotion path from source to production."
+        - "State environment isolation and data policy principles."
+      qualityChecks:
+        - "Each environment exists for a clear reason."
+        - "Isolation and data policies are explicit."
+        - "Promotion path is unambiguous."
       questions:
-        - "What environments exist? Local, preview, staging, production?"
-        - "What is the purpose and isolation level of each environment?"
+        - "What environments exist and why?"
+        - "What is the promotion path across environments?"
+        - "What isolation level is required between environments?"
+        - "What data policy applies across environments?"
+        - "Who can access each environment?"
+        - "What environments are explicitly unsupported or deferred?"
+    - id: "environment-matrix"
+      title: "Environment Matrix"
+      intent: "Maintain the complete register of environments with purpose, lifecycle, isolation, data policy, access, triggers, integrations, secrets, observability, cost, and ownership."
+      required: true
+      outputGuidance:
+        - "Use environment records for each environment."
+        - "Include local, CI, preview, staging, production, recovery, sandbox, and provider test environments where relevant."
+        - "Classify deferred or unsupported environments explicitly."
+      qualityChecks:
+        - "No environment is undefined or ownerless."
+        - "Each environment has data, secrets, access, observability, and lifecycle rules."
+        - "Provider sandboxes and external test environments are included where they affect releases."
+      questions:
+        - "What is the complete environment matrix?"
+        - "What is each environment's purpose and lifecycle?"
+        - "What data and secrets are allowed in each environment?"
+        - "How is each environment provisioned, accessed, observed, and retired?"
+        - "Which environments are MVP, post-MVP, deferred, or unsupported?"
     - id: "local-development"
       title: "Local Development"
-      intent: "Describe how developers run the full system locally and the local setup prerequisites and bootstrap steps."
+      intent: "Describe how developers run the system locally with reproducible setup, local services, seed data, mocks, environment variables, secrets handling, reset, and troubleshooting."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define local setup as an executable workflow."
+        - "Separate required tools from optional tools."
+        - "Include local reset and troubleshooting paths."
+      qualityChecks:
+        - "Local setup is reproducible enough for future contributors."
+        - "Local secrets and sensitive data are handled safely."
+        - "Local mocks/fakes do not hide critical risks without sandbox/contract tests."
       questions:
         - "How do developers run the full system locally?"
         - "What are the local setup prerequisites and bootstrap steps?"
+        - "What local services, databases, queues, storage, mocks, fakes, and provider simulators are required?"
+        - "How is seed data created and reset?"
+        - "How are local environment variables and secrets handled?"
+        - "How are local setup failures diagnosed?"
     - id: "preview-environments"
       title: "Preview Environments"
-      intent: "Specify how preview or ephemeral environments are provisioned and their lifecycle."
+      intent: "Specify how preview or ephemeral environments are provisioned, configured, secured, tested, observed, cost-controlled, and destroyed."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define trigger and lifecycle for previews."
+        - "State data and secret restrictions."
+        - "Define teardown and cost controls."
+      qualityChecks:
+        - "Preview environments cannot accidentally expose production data or secrets."
+        - "Preview lifecycle prevents orphaned cost."
+        - "Preview behavior is useful for review and testing."
       questions:
         - "How are preview or ephemeral environments provisioned?"
-        - "What is the lifecycle of a preview environment?"
+        - "What branch, PR, commit, or manual trigger creates a preview?"
+        - "What data, secrets, integrations, and observability are allowed in preview?"
+        - "What tests run against preview?"
+        - "What is the lifecycle and teardown rule of a preview environment?"
+        - "How are preview costs controlled?"
     - id: "staging"
       title: "Staging"
-      intent: "Define how closely staging mirrors production and what data is used and how it is seeded."
+      intent: "Define staging parity with production, differences, data policy, seeded/anonymized data, integrations, release rehearsal, smoke tests, observability, and access."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State where staging mirrors production and where it intentionally differs."
+        - "Define data and integration policy."
+        - "Use staging as release rehearsal environment where appropriate."
+      qualityChecks:
+        - "Staging parity claims are specific."
+        - "Production data is not used unsafely."
+        - "Staging can catch release-relevant failures."
       questions:
         - "How closely does staging mirror production?"
-        - "What data is used in staging and how is it seeded?"
+        - "What differences from production are intentional?"
+        - "What data is used in staging and how is it seeded or anonymized?"
+        - "What external integrations are live, mocked, sandboxed, or disabled in staging?"
+        - "What smoke tests and release rehearsals run in staging?"
+        - "Who can access staging?"
     - id: "production"
       title: "Production"
-      intent: "Describe the production infrastructure topology and scaling strategy."
+      intent: "Describe the production runtime, deployable units, topology, scaling assumptions, access controls, data handling, observability, and release constraints."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe production at deployment level without replacing Infrastructure Architecture."
+        - "State deployable units and runtime surfaces."
+        - "Define production access and operational constraints."
+      qualityChecks:
+        - "Production topology aligns with System Architecture and Infrastructure."
+        - "Access, data, secrets, and observability are explicit."
+        - "Scaling claims are not overstated without evidence."
       questions:
-        - "What is the production infrastructure topology?"
-        - "What is the scaling strategy for production?"
+        - "What is the production infrastructure topology at deployment level?"
+        - "What deployable units exist?"
+        - "What is the scaling strategy or scaling assumption for production?"
+        - "What production data handling and access controls apply?"
+        - "What production observability is required?"
+        - "What production release constraints exist?"
+    - id: "recovery-environments"
+      title: "Recovery Environments"
+      intent: "Define disaster recovery, restore testing, emergency environments, rollback targets, backup validation, and operator access where relevant."
+      required: true
+      outputGuidance:
+        - "Include this section even if recovery environments are deferred or not applicable."
+        - "State what recovery environment support exists now versus later."
+        - "Tie recovery environments to Backup/Restore, Incident Response, and Operations."
+      qualityChecks:
+        - "Recovery environment assumptions are explicit."
+        - "Restore testing and operator access are considered."
+        - "Deferred recovery capability is marked as risk where relevant."
+      questions:
+        - "Are recovery or disaster-recovery environments required?"
+        - "How are restore tests performed?"
+        - "What emergency environment can be used during incidents?"
+        - "What backup validation is performed and where?"
+        - "Who can access recovery environments?"
+        - "What recovery environment support is deferred?"
+    - id: "configuration-management"
+      title: "Configuration Management"
+      intent: "Define how configuration is authored, validated, documented, defaulted, overridden, versioned, drift-detected, and separated from secrets."
+      required: true
+      outputGuidance:
+        - "Separate configuration from secrets."
+        - "Distinguish build-time and runtime configuration."
+        - "Define validation and drift detection."
+      qualityChecks:
+        - "Configuration is explicit, validated, and documented."
+        - "Environment drift is detectable."
+        - "Config defaults and failure behavior are safe."
+      questions:
+        - "Where does configuration live?"
+        - "What configuration is build-time versus runtime?"
+        - "How are defaults and environment overrides defined?"
+        - "How is configuration validated?"
+        - "How is configuration documented and versioned?"
+        - "How is configuration drift detected?"
     - id: "environment-variables"
       title: "Environment Variables"
-      intent: "List environment variables per environment and how they are documented and validated."
+      intent: "List environment variables and configuration keys per environment with validation, sensitivity, defaults, runtime/build-time distinction, owner, and failure behavior."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use environment variable records for material keys."
+        - "Group keys by subsystem, environment, or deployable unit."
+        - "Mark sensitive values as secrets instead of ordinary env vars."
+      qualityChecks:
+        - "Variables have purpose, validation, and owner."
+        - "Sensitive variables are treated as secrets."
+        - "Missing or invalid variables fail safely."
       questions:
-        - "What environment variables exist per environment?"
-        - "How are environment variables documented and validated?"
+        - "What environment variables or configuration keys exist per environment?"
+        - "What is each key's purpose, type, default, and validation rule?"
+        - "Is each key required or optional?"
+        - "Is each key build-time or runtime?"
+        - "Which keys are sensitive and must be managed as secrets?"
+        - "What happens if a variable is missing or invalid?"
     - id: "secrets-per-environment"
       title: "Secrets Per Environment"
-      intent: "Define how secrets are managed per environment and injected at build time versus runtime."
+      intent: "Define how secrets are stored, injected, rotated, revoked, audited, separated by environment, handled in CI/local, and replaced during emergencies."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use secret records for material secret classes."
+        - "Separate local, CI, preview, staging, production, sandbox, and recovery secrets."
+        - "State forbidden exposure rules."
+      qualityChecks:
+        - "Secrets are never committed, bundled, logged, or exposed accidentally."
+        - "Rotation and revocation are explicit."
+        - "Environment separation prevents privilege leakage."
       questions:
         - "How are secrets managed per environment?"
+        - "Where are secrets stored?"
         - "How are secrets injected at build time versus runtime?"
+        - "How are secrets rotated, revoked, and audited?"
+        - "How are secrets handled in local development and CI?"
+        - "What is the emergency secret replacement path?"
     - id: "build-process"
       title: "Build Process"
-      intent: "Define the build process steps, outputs, cache strategy, and how build artifacts are versioned and stored."
+      intent: "Define build commands, inputs, outputs, cache strategy, deterministic builds, validation, generated files, artifact creation, and build failure handling."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe build flow from source checkout to artifact output."
+        - "Define required pre-build and build-time validation."
+        - "State cache rules and generated artifact rules."
+      qualityChecks:
+        - "Builds are reproducible enough for deployment and debugging."
+        - "Build artifacts are traceable to source."
+        - "Build cache does not hide stale or unsafe output."
       questions:
-        - "What is the build process? Steps, outputs, cache strategy?"
-        - "How are build artifacts versioned and stored?"
+        - "What is the build process?"
+        - "What inputs, commands, generated files, and outputs exist?"
+        - "What validation runs before or during build?"
+        - "What cache strategy is used?"
+        - "How are build failures handled?"
+        - "What build outputs are deployable artifacts?"
+    - id: "artifact-strategy"
+      title: "Artifact Strategy"
+      intent: "Define deployment artifacts, versioning, naming, storage, metadata, provenance, retention, immutability, verification, and promotion rules."
+      required: true
+      outputGuidance:
+        - "Use artifact records for material artifacts."
+        - "Tie artifacts to source refs and CI runs."
+        - "State immutability and promotion rules."
+      qualityChecks:
+        - "Artifacts are traceable and reproducible."
+        - "Production deploys use immutable artifacts where feasible."
+        - "Artifact retention supports rollback and audit needs."
+      questions:
+        - "What build and deployment artifacts are produced?"
+        - "How are artifacts named and versioned?"
+        - "Where are artifacts stored?"
+        - "What metadata links artifacts to source, CI, tests, and release?"
+        - "Are artifacts immutable after creation?"
+        - "How are artifacts promoted across environments?"
+    - id: "ci-cd-pipeline"
+      title: "CI/CD Pipeline"
+      intent: "Define pipeline stages, triggers, required checks, approvals, artifacts, evidence, caching, promotion, and failure consequences."
+      required: true
+      outputGuidance:
+        - "Use pipeline stage records for material stages."
+        - "Separate CI validation from CD deployment."
+        - "Define branch, tag, PR, merge, manual, scheduled, and hotfix triggers where relevant."
+      qualityChecks:
+        - "Pipeline gates match Testing Strategy and Acceptance Criteria."
+        - "Evidence is captured for release decisions."
+        - "Failures have explicit consequences."
+      questions:
+        - "What CI/CD pipeline stages exist?"
+        - "What triggers each stage?"
+        - "What required checks run at each stage?"
+        - "What artifacts and evidence are produced?"
+        - "What approvals are required?"
+        - "What happens when each stage fails?"
+    - id: "deployment-strategy"
+      title: "Deployment Strategy"
+      intent: "Define deployment method, rollout strategy, deployable units, deployment windows, health gates, smoke tests, concurrency, and operational ownership."
+      required: true
+      outputGuidance:
+        - "Describe deployment strategy by environment and deployable unit."
+        - "Classify rollout model: direct, rolling, blue-green, canary, feature-flagged, app-store, package publish, manual, or hybrid."
+        - "State health and smoke gates."
+      qualityChecks:
+        - "Deployment strategy fits architecture and risk level."
+        - "User impact and rollback are considered."
+        - "Health gates and smoke tests are not skipped for production."
+      questions:
+        - "How is each deployable unit deployed?"
+        - "What rollout strategy is used?"
+        - "What deployment windows or constraints apply?"
+        - "What health gates and smoke tests must pass?"
+        - "Who owns deployment execution?"
+        - "What deployment behavior is manual versus automated?"
     - id: "migration-process"
       title: "Migration Process"
-      intent: "Specify how database or data migrations are run during deployment and the rollback strategy for failed migrations."
+      intent: "Specify how schema, data, local, remote, event, and backfill migrations run during deployment and how failed migrations are detected and recovered."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use migration deployment records for material migration classes."
+        - "Define migration order relative to code deploy."
+        - "State compatibility, failure, rollback/roll-forward, and retest requirements."
+      qualityChecks:
+        - "Migrations do not assume rollback is always possible."
+        - "Compatibility across app/API/database versions is explicit."
+        - "Failed migrations have recovery strategy."
       questions:
-        - "How are database or data migrations run during deployment?"
-        - "What is the rollback strategy for failed migrations?"
-    - id: "release-process"
-      title: "Release Process"
-      intent: "Define the release cadence and process and how releases are versioned and changelogs generated."
+        - "How are database, data, local, remote, event, or backfill migrations run during deployment?"
+        - "Do migrations run before, during, or after code deployment?"
+        - "What compatibility requirements exist?"
+        - "What is the rollback or roll-forward strategy for failed migrations?"
+        - "How are migration failures detected?"
+        - "What retesting is required after migration?"
+    - id: "release-promotion"
+      title: "Release Promotion"
+      intent: "Define how a release candidate is promoted across environments, what evidence is required, who approves, and what blocks promotion."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define promotion path from source to production."
+        - "State evidence required at each promotion gate."
+        - "Separate automated promotion from manual approval."
+      qualityChecks:
+        - "Promotion is evidence-based, not informal."
+        - "Release candidate identity is stable across environments."
+        - "Promotion blockers are explicit."
       questions:
-        - "What is the release cadence and process?"
-        - "How are releases versioned and changelogs generated?"
-    - id: "rollback-strategy"
-      title: "Rollback Strategy"
-      intent: "Specify how a production rollback is executed and the rollback decision authority and communication plan."
+        - "How does a release candidate move from CI to preview, staging, and production?"
+        - "What evidence is required before promotion?"
+        - "Who approves promotion?"
+        - "What can be promoted automatically?"
+        - "What requires manual sign-off?"
+        - "What blocks promotion?"
+    - id: "release-verification"
+      title: "Release Verification"
+      intent: "Define checks proving a release is valid before and after deployment, including smoke tests, health checks, observability checks, security/privacy checks, integration checks, and sync checks."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie verification to Testing Strategy, Observability, and Acceptance Criteria."
+        - "Separate pre-deploy, deploy-time, post-deploy, and monitoring-window checks."
+        - "Define evidence and failure consequences."
+      qualityChecks:
+        - "Verification catches user-impacting and operational failures."
+        - "Post-deploy checks are included."
+        - "Failed verification has clear rollback or mitigation path."
       questions:
-        - "How is a production rollback executed?"
-        - "What is the rollback decision authority and communication plan?"
+        - "What checks verify a release before deployment?"
+        - "What checks run during deployment?"
+        - "What post-deploy checks run immediately?"
+        - "What monitoring window applies after release?"
+        - "What evidence is stored?"
+        - "What verification failures trigger rollback, hotfix, feature flag disablement, or incident response?"
+    - id: "smoke-tests"
+      title: "Smoke Tests"
+      intent: "Define minimal high-signal checks that prove core runtime, APIs, frontend, database, integrations, auth, sync, and observability are functioning after deployment."
+      required: true
+      outputGuidance:
+        - "List smoke tests by environment and deployable unit."
+        - "Keep smoke tests fast, reliable, and release-relevant."
+        - "Define blocking behavior."
+      qualityChecks:
+        - "Smoke tests cover critical path runtime behavior."
+        - "Smoke tests are not overloaded into full regression suites."
+        - "Failed smoke tests have immediate consequence."
+      questions:
+        - "What smoke tests run after deployment?"
+        - "What core paths must smoke tests verify?"
+        - "What environment does each smoke test run against?"
+        - "What test data or credentials are used?"
+        - "What smoke test failures block promotion or trigger rollback?"
     - id: "feature-flags"
       title: "Feature Flags"
-      intent: "Define the feature flag system used and how feature flags are managed, tested, and removed."
+      intent: "Define feature flag system, taxonomy, ownership, defaults, targeting, environment behavior, kill switches, testing, auditability, cleanup, and stale flag removal."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use feature flag records for material flags or flag categories."
+        - "Separate release flags, experiment flags, ops flags, permission flags, migration flags, and kill switches."
+        - "Define cleanup and review triggers."
+      qualityChecks:
+        - "Flags have owners and lifecycle."
+        - "Default states are safe per environment."
+        - "Stale flags do not accumulate unmanaged."
       questions:
         - "What feature flag system is used?"
-        - "How are feature flags managed, tested, and removed?"
+        - "What types of flags exist?"
+        - "How are feature flags managed, tested, audited, and removed?"
+        - "What are safe defaults per environment?"
+        - "What kill switches exist?"
+        - "How are stale flags detected and cleaned up?"
+    - id: "rollback-strategy"
+      title: "Rollback Strategy"
+      intent: "Specify rollback triggers, methods, decision authority, communication, data/migration constraints, flag disablement, hotfix path, verification, and post-rollback monitoring."
+      required: true
+      outputGuidance:
+        - "Use rollback records for material rollback scenarios."
+        - "Separate rollback, roll-forward, hotfix, feature disablement, restore, and degraded mode."
+        - "State data and migration constraints honestly."
+      qualityChecks:
+        - "Rollback strategy is realistic under data and migration constraints."
+        - "Decision authority and communication are explicit."
+        - "Post-rollback verification and monitoring are included."
+      questions:
+        - "How is a production rollback executed?"
+        - "What triggers rollback versus hotfix versus feature disablement versus roll-forward?"
+        - "What is the rollback decision authority?"
+        - "What data migration constraints affect rollback?"
+        - "What communication plan applies?"
+        - "What verification and monitoring happen after rollback?"
+    - id: "post-deploy-monitoring"
+      title: "Post-Deploy Monitoring"
+      intent: "Define the monitoring window and signals checked after deployment to decide whether the release is healthy, degraded, needs rollback, or requires incident response."
+      required: true
+      outputGuidance:
+        - "Define monitoring window by release type and risk level."
+        - "List dashboards, alerts, SLOs, logs, errors, integrations, sync signals, support signals, and product signals reviewed."
+        - "State decision points and authority."
+      qualityChecks:
+        - "Monitoring is active enough for release risk."
+        - "Signals tie to Observability and Support Model."
+        - "Decision criteria are explicit."
+      questions:
+        - "What monitoring window applies after deployment?"
+        - "What dashboards, alerts, logs, metrics, traces, errors, SLOs, integrations, sync signals, and support signals are checked?"
+        - "Who reviews post-deploy health?"
+        - "What thresholds indicate healthy, degraded, rollback, or incident state?"
+        - "What evidence is recorded?"
+    - id: "deployment-runbooks"
+      title: "Deployment Runbooks"
+      intent: "Identify runbooks needed for deploy, rollback, hotfix, migration failure, secret rotation, provider outage, degraded mode, restore, and incident handoff."
+      required: true
+      outputGuidance:
+        - "List runbooks at architecture level and route detailed steps to Operations where appropriate."
+        - "Define trigger, owner, expected inputs, expected outputs, and linked dashboards/alerts."
+        - "State which runbooks are required before production release."
+      qualityChecks:
+        - "Critical operational actions have runbook coverage."
+        - "Runbooks connect to alerts and dashboards."
+        - "Missing runbooks are explicit release risks."
+      questions:
+        - "What deployment runbooks are required?"
+        - "What rollback, hotfix, migration failure, secret rotation, provider outage, degraded mode, restore, and incident handoff runbooks are needed?"
+        - "Who owns each runbook?"
+        - "What dashboards and alerts link to each runbook?"
+        - "Which runbooks are required before production release?"
     - id: "deployment-risks"
       title: "Deployment Risks"
-      intent: "Identify top deployment risks and the blast radius of a failed deployment."
+      intent: "Identify top risks in environments, builds, artifacts, CI/CD, configuration, secrets, migrations, promotion, feature flags, rollback, monitoring, and operational handoff."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use deployment risk records for material risks."
+        - "Describe risks as concrete deployment failure modes."
+        - "Include early signal, mitigation, rollback/recovery path, target document, and release impact."
+      qualityChecks:
+        - "Risks are specific enough to mitigate, test, accept, or block release."
+        - "Blast radius is explicit."
+        - "Accepted risks require authority."
       questions:
         - "What are the top deployment risks?"
         - "What is the blast radius of a failed deployment?"
+        - "Where could environment drift, bad config, leaked secret, failed migration, broken artifact, failed CI gate, bad flag, or rollback failure occur?"
+        - "What early signals indicate deployment risk materializing?"
+        - "What mitigations and recovery paths exist?"
+        - "What risks block release or require accepted risk?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what Operations documents must inherit from Deployment and Environments and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route deployment outputs to the correct Operations documents."
+        - "Separate operating model, maintenance, release management, support, incident response, and risk management implications."
+        - "Preserve unresolved deployment questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Operations documents are not allowed to invent missing deployment rules silently."
+        - "Engineering deployment design and operational procedures remain distinct but connected."
+      questions:
+        - "What should Operating Model inherit from Deployment and Environments?"
+        - "What should Maintenance Plan inherit?"
+        - "What should Release Management inherit?"
+        - "What should Support Model inherit?"
+        - "What should Incident Response inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved deployment questions must be carried forward?"

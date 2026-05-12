@@ -1,3 +1,4 @@
+
 document:
   id: "08-security-and-privacy"
   title: "Security and Privacy"
@@ -5,152 +6,784 @@ document:
   status: "not_started"
   order: 8
   type: "security_privacy"
-  purpose: "Defines how the system protects access, data, identity, and privacy."
-  centralQuestion: "How does the system protect access, data, identity, and privacy?"
+  purpose: "Define how the system protects identity, access, data, secrets, privacy rights, integrations, logs, backups, abuse surfaces, and operational security while preserving product boundaries, user trust, and compliance review needs."
+  centralQuestion: "How does the system protect access, data, identity, privacy, secrets, operational surfaces, and user rights across the full product lifecycle?"
   outputs:
     canonical:
       format: "markdown"
-      path: "04-engineering/security-and-privacy.md"
-      purpose: "Security and privacy design covering access control, data protection, identity, and privacy."
-  dependsOn: []
-  feeds: []
+      path: "docs/04-engineering/08-security-and-privacy.md"
+      purpose: "Store the canonical security and privacy architecture as a Markdown document."
+    artifacts:
+      - id: "engineering.security_privacy_architecture"
+        format: "html"
+        path: "outcomes/html/04-engineering/security-and-privacy-architecture.html"
+        purpose: "Provide a navigable security and privacy architecture covering posture, threat model, assets, IAM, authorization, data classification, encryption, secrets, privacy rights, logging, backups, abuse prevention, testing, incidents, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "security and privacy objective"
+          - "security posture"
+          - "privacy posture"
+          - "threat model"
+          - "asset inventory"
+          - "trust boundaries"
+          - "identity and authentication"
+          - "authorization and access control"
+          - "service-to-service security"
+          - "agent security"
+          - "integration security"
+          - "data classification"
+          - "data minimization"
+          - "encryption"
+          - "key management"
+          - "secrets management"
+          - "secure logging"
+          - "telemetry privacy"
+          - "backup security"
+          - "data export"
+          - "data deletion"
+          - "consent and user rights"
+          - "abuse prevention"
+          - "security testing"
+          - "vulnerability management"
+          - "incident response"
+          - "security and privacy risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.security_privacy_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/security-and-privacy-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether security and privacy controls are threat-aware, data-aware, access-aware, testable, operationally sustainable, and aligned with architecture, data model, API contracts, integrations, and NFRs."
+        agentRole: "reviewer"
+        includes:
+          - "canonical security and privacy architecture"
+          - "system architecture dependency"
+          - "data model dependency"
+          - "API contracts dependency"
+          - "integration architecture dependency"
+          - "non-functional requirements dependency"
+          - "acceptance criteria dependency"
+          - "security and privacy formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/12-product-stack"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+    - "04-engineering/07-integration-architecture"
+  feeds:
+    - "04-engineering/09-frontend-architecture"
+    - "04-engineering/10-infrastructure-architecture"
+    - "04-engineering/11-test-strategy"
+    - "04-engineering/12-observability-plan"
+    - "04-engineering/13-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "System boundaries, layers, module boundaries, dependency rules, runtime architecture, deployment topology, data flow, trust boundaries, failure modes, security/privacy hooks, and observability hooks."
+    - id: "data-model"
+      type: "context"
+      required: false
+      description: "Data structures, fields, sensitivity classes, retention classes, data lineage, auditability, local/remote data rules, backup/restore, export, deletion, and migration requirements."
+    - id: "api-contracts"
+      type: "context"
+      required: false
+      description: "Public, internal, agent, adapter, webhook, realtime, async, auth, authorization, error, versioning, idempotency, rate-limit, and contract-testing rules."
+    - id: "integration-architecture"
+      type: "context"
+      required: false
+      description: "External services, integration boundaries, ports/adapters, credential handling, scopes, webhooks, rate limits, fallbacks, observability, privacy/compliance concerns, and integration risks."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Security, privacy, reliability, availability, compatibility, observability, compliance, operational, accessibility, and performance requirements that shape controls and verification."
+    - id: "acceptance-criteria"
+      type: "context"
+      required: false
+      description: "Security, privacy, data, permission, integration, release-blocking, readiness, sign-off, rollback, and accepted-risk criteria."
+    - id: "security-notes"
+      type: "manual_note"
+      required: false
+      description: "Known threats, data sensitivity concerns, auth decisions, secrets, compliance questions, privacy concerns, abuse vectors, test plans, incident concerns, and unresolved security questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through explicit security posture, privacy posture, threat model, assets, trust boundaries, identity, authorization, data protection, privacy rights, abuse controls, testing, incident response, and risks."
+    - "Security posture defines threat tolerance, security principles, secure defaults, trust assumptions, release-blocking categories, and accepted-risk process."
+    - "Privacy posture defines data minimization, purpose limitation, consent, user rights, transparency, retention, deletion, export, portability, telemetry boundaries, and compliance review needs."
+    - "Threat model identifies assets, threat actors, attack surfaces, trust boundaries, abuse cases, likely attacks, impact, mitigations, residual risk, and review cadence."
+    - "Asset inventory classifies protected assets including accounts, credentials, secrets, tokens, PII, sensitive data, domain records, logs, backups, exports, telemetry, admin tools, integrations, and infrastructure access."
+    - "Identity and authentication define user auth, admin auth, service auth, agent auth, integration auth, session/token handling, credential lifecycle, recovery flows, and unauthenticated surfaces."
+    - "Authorization and access control define roles/scopes/claims/permissions, object-level checks, tenant/user boundaries, privileged operations, enforcement points, deny behavior, and permission auditability."
+    - "Service-to-service, agent, and integration security define trust boundaries, credentials, signatures, mTLS/API keys/tokens where relevant, least privilege, rotation, revocation, and monitoring."
+    - "Data classification maps data categories and fields to handling rules, minimization, encryption, masking, redaction, logging restrictions, access restrictions, retention, deletion, export, and backup rules."
+    - "Encryption and key management define data-in-transit, data-at-rest, field-level encryption, backup encryption, key ownership, rotation, revocation, access control, and unresolved review items."
+    - "Secrets management defines storage, access, injection, rotation, revocation, environment separation, CI/CD handling, local development handling, auditability, and emergency response."
+    - "Secure logging and telemetry privacy define what may be logged, what must never be logged, redaction, sampling, retention, access control, correlation IDs, audit events, and privacy-safe diagnostics."
+    - "Backup security defines backup encryption, access control, retention, destruction, restore authorization, restore testing, sensitive-data handling, and auditability."
+    - "Data export and deletion define user-facing rights, internal process, completeness, format, verification, exclusions, timelines, cascading effects, backup behavior, and operational ownership."
+    - "Consent and user rights define consent capture, revocation, preference changes, data subject/user rights, transparency, audit trail, and compliance-review items."
+    - "Abuse prevention defines rate limits, quotas, bot/spam/scraping/DoS controls, fraud or misuse patterns, abuse monitoring, escalation, user impact, and false-positive handling."
+    - "Security testing defines SAST, DAST, dependency scanning, secret scanning, IaC scanning, penetration testing, authz testing, privacy tests, abuse tests, threat-model reviews, cadence, ownership, and release impact."
+    - "Vulnerability management defines intake, triage, severity, SLA, remediation, disclosure, dependency updates, emergency patching, and release blocking."
+    - "Incident response defines detection, severity, escalation, containment, eradication, recovery, communication, evidence preservation, postmortem, and operations handoff."
+    - "Security and privacy risks are concrete, source-linked, residual-risk-aware, and routed to mitigation, acceptance, or downstream documents."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid security theater: lists of controls without threat, asset, enforcement point, verification, ownership, or residual risk."
+    - "Avoid privacy theater: generic privacy language without data category, purpose, minimization, retention, deletion, export, consent, or telemetry boundaries."
+    - "Avoid claiming compliance, encryption guarantees, security review, penetration testing, legal approval, or production readiness without evidence."
+    - "Avoid hiding authorization behind authentication."
+    - "Avoid relying only on frontend checks for security-sensitive behavior."
+    - "Avoid logging sensitive data, secrets, tokens, credentials, PII, or full payloads unless explicitly justified and protected."
+    - "Avoid treating third-party providers, SDKs, integrations, agents, or admin surfaces as inherently trusted."
+    - "Avoid indefinite data retention without explicit rationale."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent legal obligations, compliance applicability, threat likelihood, provider guarantees, key management capabilities, or incident readiness."
+    - "Security and privacy architecture must preserve System Architecture boundaries, Data Model sensitivity, API authz rules, Integration boundaries, NFRs, Acceptance Criteria, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate threat, asset, control, enforcement point, verification method, owner, residual risk, and downstream handoff."
+    - "Tie controls to System Architecture, Data Model, API Contracts, Integration Architecture, Technical Stack, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries where possible."
+    - "Classify controls as required, preferred, provisional, deferred, excluded, review-needed, release-blocking, or accepted-risk where useful."
+    - "Classify data by sensitivity and purpose before defining handling rules."
+    - "Route legal/compliance uncertainty to review instead of treating it as fact."
+    - "Keep detailed infrastructure implementation, exact IAM policies, cloud configuration, and incident runbooks in downstream Operations/Infrastructure documents unless needed as architectural constraints."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with System Architecture, Data Model, API Contracts, Integration Architecture, Technical Stack, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag controls without asset, threat, enforcement point, verification method, owner, or residual-risk statement."
+    - "Flag authentication sections that omit authorization, session lifecycle, recovery, or service/agent/integration identities."
+    - "Flag authorization models without object-level checks, tenant/user boundaries, enforcement points, deny behavior, or privileged-operation handling."
+    - "Flag data classifications without handling rules, retention, logging restrictions, export/deletion implications, or backup implications."
+    - "Flag secrets or credentials without storage, access, rotation, revocation, environment separation, and emergency process."
+    - "Flag logging/telemetry that could expose sensitive data or lacks retention/access rules."
+    - "Verify that security testing, vulnerability management, incident response, and operational handoff are explicit."
+    - "Flag content that belongs better in Infrastructure Architecture, API Contracts, Integration Architecture, Data Model, Test Strategy, Observability Plan, Deployment Plan, Incident Response, Support Model, Legal, or Operations."
+  specializedFormats:
+    threatFormat:
+      description: "Recommended format for threat model entries."
+      fields:
+        - id
+        - threatActor
+        - attackSurface
+        - assetAtRisk
+        - attackVector
+        - preconditions
+        - likelihood
+        - impact
+        - existingControls
+        - proposedControls
+        - detection
+        - residualRisk
+        - ownerOrReviewTarget
+        - status
+    assetFormat:
+      description: "Recommended format for protected assets."
+      fields:
+        - asset
+        - assetType
+        - sensitivityClass
+        - owner
+        - storageLocation
+        - accessPaths
+        - threatExposure
+        - protectionRequirements
+        - retentionRequirement
+        - exportDeletionImplication
+        - auditRequirement
+    controlFormat:
+      description: "Recommended format for security and privacy controls."
+      fields:
+        - control
+        - controlType
+        - protects
+        - threatOrRequirement
+        - enforcementPoint
+        - implementationOwner
+        - verificationMethod
+        - failureBehavior
+        - residualRisk
+        - downstreamDocument
+        - status
+    dataHandlingFormat:
+      description: "Recommended format for data classification and handling rules."
+      fields:
+        - dataCategory
+        - sensitivityClass
+        - purpose
+        - collectionRule
+        - minimizationRule
+        - accessRule
+        - encryptionRule
+        - maskingOrRedactionRule
+        - loggingRule
+        - retentionRule
+        - deletionRule
+        - exportRule
+        - backupRule
+        - telemetryRule
+    accessRuleFormat:
+      description: "Recommended format for authorization rules."
+      fields:
+        - operation
+        - actorType
+        - requiredRoleOrScope
+        - objectBoundary
+        - tenantOrUserBoundary
+        - enforcementPoint
+        - denyBehavior
+        - auditEvent
+        - testImplication
+        - status
+    secretFormat:
+      description: "Recommended format for secrets and credentials."
+      fields:
+        - secretOrCredential
+        - purpose
+        - environment
+        - owner
+        - storageLocation
+        - accessPattern
+        - rotationRule
+        - revocationRule
+        - auditRequirement
+        - emergencyProcedure
+        - downstreamDocument
+    securityTestFormat:
+      description: "Recommended format for security and privacy verification."
+      fields:
+        - testOrReview
+        - category
+        - target
+        - method
+        - cadence
+        - owner
+        - evidenceRequired
+        - releaseImpact
+        - downstreamDocument
+        - status
+    securityRiskFormat:
+      description: "Recommended format for security and privacy risks."
+      fields:
+        - risk
+        - category
+        - affectedAssetOrSurface
+        - source
+        - likelihood
+        - impact
+        - existingControls
+        - mitigation
+        - residualRisk
+        - acceptedBy
+        - targetDocument
+        - releaseImpact
   sections:
-    - id: "security-objective"
-      title: "Security Objective"
-      intent: "Define the security posture, threat tolerance, and any compliance requirements that apply."
+    - id: "security-and-privacy-objective"
+      title: "Security and Privacy Objective"
+      intent: "Define the security and privacy goals, protected outcomes, threat tolerance, privacy tolerance, release implications, and scope of this architecture."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Open with the security and privacy objective in concrete terms."
+        - "State what the system must protect and why."
+        - "Distinguish security goals, privacy goals, compliance-review needs, and operational goals."
+      qualityChecks:
+        - "Objective is specific to the product and architecture."
+        - "Protected outcomes are explicit."
+        - "Compliance is not claimed without review."
       questions:
-        - "What is the security posture and threat tolerance of the system?"
-        - "What compliance requirements apply? SOC2, GDPR, HIPAA?"
+        - "What must this security and privacy architecture protect?"
+        - "What are the security goals?"
+        - "What are the privacy goals?"
+        - "What is the system's threat tolerance and privacy tolerance?"
+        - "What failures automatically block release?"
+        - "What is outside the scope of this document?"
+    - id: "security-posture"
+      title: "Security Posture"
+      intent: "Define secure defaults, security principles, trust assumptions, defense-in-depth strategy, risk acceptance model, and release-blocking security categories."
+      required: true
+      outputGuidance:
+        - "State security posture as enforceable rules, not generic slogans."
+        - "Define trust assumptions and where they must be challenged."
+        - "State how security risk is accepted, deferred, escalated, or release-blocked."
+      qualityChecks:
+        - "Security posture guides concrete decisions."
+        - "Risk acceptance is explicit and auditable."
+        - "Trust assumptions are not hidden."
+      questions:
+        - "What secure defaults should the system use?"
+        - "What are the security principles?"
+        - "What trust assumptions are made?"
+        - "Where is defense-in-depth required?"
+        - "What security risks can be accepted, and by whom?"
+        - "What security categories block release?"
+    - id: "privacy-posture"
+      title: "Privacy Posture"
+      intent: "Define data minimization, purpose limitation, consent, user rights, telemetry boundaries, retention posture, deletion posture, transparency, and compliance-review boundaries."
+      required: true
+      outputGuidance:
+        - "State privacy posture as concrete handling rules."
+        - "Define how privacy is preserved across data collection, storage, logs, telemetry, integrations, backups, exports, and deletion."
+        - "Mark legal/compliance uncertainty for review."
+      qualityChecks:
+        - "Privacy posture affects data and observability design."
+        - "Data minimization and purpose limitation are explicit."
+        - "Legal conclusions are not invented."
+      questions:
+        - "What privacy principles govern the system?"
+        - "What data should be minimized or avoided entirely?"
+        - "What purposes justify data collection and processing?"
+        - "How are consent, revocation, export, deletion, and portability handled?"
+        - "What telemetry boundaries exist?"
+        - "What privacy or legal questions require review?"
     - id: "threat-model"
       title: "Threat Model"
-      intent: "Identify primary threat actors, attack vectors, and the most valuable and exposed assets."
+      intent: "Identify threat actors, attack surfaces, attack vectors, assets at risk, likely misuse cases, controls, detection, and residual risk."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use threat records for material threats."
+        - "Cover user, admin, service, agent, integration, API, frontend, infrastructure, data, logging, and operational surfaces where relevant."
+        - "Include residual risk after controls."
+      qualityChecks:
+        - "Threats are concrete and tied to assets and surfaces."
+        - "Controls and detection are mapped to threats."
+        - "Residual risks are not hidden."
       questions:
-        - "What are the primary threat actors and attack vectors?"
-        - "What assets are most valuable and most exposed?"
-    - id: "authentication"
-      title: "Authentication"
-      intent: "Specify how users and services are authenticated and which authentication flows are supported."
+        - "Who are the likely threat actors?"
+        - "What are the main attack surfaces?"
+        - "What assets are most valuable or exposed?"
+        - "What attack vectors are plausible?"
+        - "What abuse or misuse cases matter?"
+        - "What controls reduce each threat?"
+        - "What residual risks remain?"
+    - id: "asset-inventory"
+      title: "Asset Inventory"
+      intent: "Identify protected assets and classify their sensitivity, owner, storage location, access paths, threat exposure, retention, and audit needs."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use asset records for material assets."
+        - "Include data, credentials, infrastructure, logs, telemetry, backups, exports, admin surfaces, integration credentials, and agent-accessible context."
+        - "Tie assets to Data Model sensitivity classes."
+      qualityChecks:
+        - "Assets are specific enough to protect."
+        - "Sensitivity and ownership are explicit."
+        - "Access paths and exposure are not omitted."
       questions:
-        - "How are users and services authenticated?"
-        - "What authentication flows are supported? OAuth, API keys, SSO?"
-    - id: "authorization"
-      title: "Authorization"
-      intent: "Define the authorization model, permission levels, and how they are assigned."
+        - "What assets must be protected?"
+        - "What accounts, credentials, tokens, secrets, data, logs, backups, exports, telemetry, and admin tools exist?"
+        - "Who owns each asset?"
+        - "Where is each asset stored or processed?"
+        - "How is each asset accessed?"
+        - "What audit and retention requirements apply?"
+    - id: "trust-boundaries"
+      title: "Trust Boundaries"
+      intent: "Define boundaries between users, clients, backend services, workers, agents, integrations, infrastructure, operators, admins, logs, and third-party providers."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Map trust boundaries from System Architecture and Integration Architecture."
+        - "State what data and control actions cross each boundary."
+        - "Identify required controls at each boundary."
+      qualityChecks:
+        - "Trust boundaries are explicit and enforceable."
+        - "Third-party, agent, admin, and operator boundaries are included."
+        - "Boundary controls are routed downstream where needed."
       questions:
-        - "How is authorization enforced? RBAC, ABAC, ReBAC?"
-        - "What are the permission levels and how are they assigned?"
+        - "What trust boundaries exist?"
+        - "What data crosses each trust boundary?"
+        - "What control actions cross each trust boundary?"
+        - "What authentication, authorization, validation, encryption, logging, or monitoring is required at each boundary?"
+        - "What trust assumptions are unresolved?"
+    - id: "identity-and-authentication"
+      title: "Identity and Authentication"
+      intent: "Define how users, admins, services, agents, workers, integrations, and external systems prove identity and how auth sessions or credentials are managed."
+      required: true
+      outputGuidance:
+        - "Separate user auth, admin auth, service auth, agent auth, worker auth, integration auth, and webhook auth."
+        - "Define supported flows, session/token lifecycle, recovery, revocation, MFA/SSO/API keys where relevant, and unauthenticated surfaces."
+        - "Route implementation details to API, Integration, Infrastructure, and Deployment where needed."
+      qualityChecks:
+        - "Authentication coverage includes non-user identities."
+        - "Session and credential lifecycle are explicit."
+        - "Unauthenticated surfaces are intentional."
+      questions:
+        - "How are users authenticated?"
+        - "How are admins authenticated?"
+        - "How are services, agents, workers, integrations, and webhooks authenticated?"
+        - "What authentication flows are supported?"
+        - "How are sessions, tokens, API keys, credentials, recovery, revocation, and expiration handled?"
+        - "What unauthenticated surfaces exist, if any, and why?"
+    - id: "authorization-and-access-control"
+      title: "Authorization and Access Control"
+      intent: "Define roles, scopes, claims, permissions, object-level access, tenant/user boundaries, privileged operations, enforcement points, deny behavior, and auditability."
+      required: true
+      outputGuidance:
+        - "Separate authorization from authentication."
+        - "Define access rules by actor, operation, object, boundary, and enforcement point."
+        - "Include deny behavior and audit events."
+      qualityChecks:
+        - "Authorization is object-aware where needed."
+        - "Privileged operations have stronger handling."
+        - "Frontend-only enforcement is not treated as sufficient."
+      questions:
+        - "What authorization model applies: RBAC, ABAC, ReBAC, capability-based, policy-based, or hybrid?"
+        - "What roles, scopes, claims, and permissions exist?"
+        - "How is object-level access enforced?"
+        - "How are user, tenant, workspace, account, admin, service, and agent boundaries enforced?"
+        - "What operations are privileged or sensitive?"
+        - "How are authorization failures represented and audited?"
+    - id: "service-to-service-security"
+      title: "Service-to-Service Security"
+      intent: "Define how internal services, workers, jobs, queues, adapters, and backend components authenticate, authorize, encrypt, validate, and audit communication."
+      required: true
+      outputGuidance:
+        - "Include this section even if the system starts as a monolith; classify as not-applicable, deferred, or future-facing where appropriate."
+        - "Define internal trust assumptions and controls."
+        - "Route detailed implementation to Infrastructure and Deployment."
+      qualityChecks:
+        - "Internal communication is not assumed safe without rationale."
+        - "Service identity and least privilege are considered."
+        - "Queue/job boundaries are included where relevant."
+      questions:
+        - "What internal components communicate?"
+        - "How do services, workers, jobs, queues, and adapters authenticate to each other?"
+        - "What internal authorization or least-privilege rules apply?"
+        - "What internal traffic must be encrypted?"
+        - "What internal calls require auditability or tracing?"
+    - id: "agent-security"
+      title: "Agent Security"
+      intent: "Define security and privacy boundaries for AI agents or automation agents, including context access, tool access, side effects, confirmation, audit, sandboxing, and prompt/data exposure."
+      required: true
+      outputGuidance:
+        - "Include this section even if agents are deferred or excluded."
+        - "Separate read access, suggestion, preparation, execution, and irreversible side effects."
+        - "Define confirmation and audit requirements for agent actions."
+      qualityChecks:
+        - "Agents cannot bypass user consent, authorization, or auditability."
+        - "Agent-readable context is minimized and classified."
+        - "Agent actions are bounded by explicit contracts."
+      questions:
+        - "What data or context can agents access?"
+        - "What tools or operations can agents call?"
+        - "What actions require explicit user confirmation?"
+        - "What actions are prohibited for agents?"
+        - "How are agent actions authenticated, authorized, logged, audited, rate-limited, and reviewed?"
+        - "How are prompt injection, data leakage, hallucinated tool calls, and unsafe side effects mitigated?"
+    - id: "integration-security"
+      title: "Integration Security"
+      intent: "Define security and privacy requirements for external services, provider APIs, webhooks, SDKs, adapters, scopes, credentials, and third-party data sharing."
+      required: true
+      outputGuidance:
+        - "Tie integration security to Integration Architecture."
+        - "Define provider auth, scopes, credential storage, webhook signatures, replay protection, least privilege, data minimization, and third-party policy review."
+        - "Flag unknown provider security posture or compliance assumptions."
+      qualityChecks:
+        - "External integrations are not treated as inherently trusted."
+        - "Scopes and credentials are minimized."
+        - "Webhook and provider data validation are explicit."
+      questions:
+        - "What external services receive or access system data?"
+        - "How are provider credentials and scopes managed?"
+        - "How are webhooks authenticated and protected from replay?"
+        - "What third-party data sharing risks exist?"
+        - "What provider security or privacy assumptions require review?"
     - id: "data-classification"
       title: "Data Classification"
-      intent: "Classify data into levels and define handling rules per classification level."
+      intent: "Classify data categories and define handling rules for each classification level."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use data handling records for material data categories."
+        - "Classify PII, sensitive data, secrets, credentials, domain records, financial data, behavioral data, logs, telemetry, audit data, backups, exports, and derived data where relevant."
+        - "Tie classifications to Data Model fields and storage locations."
+      qualityChecks:
+        - "Every sensitive category has handling rules."
+        - "Classification affects access, logging, retention, deletion, export, backup, and telemetry."
+        - "Unknown classification is marked review-needed."
       questions:
-        - "How is data classified? Public, internal, confidential, restricted?"
+        - "What data classifications exist?"
+        - "What data is public, internal, confidential, restricted, secret, PII, sensitive, behavioral, telemetry, audit, or derived?"
         - "What handling rules apply per classification level?"
-    - id: "encryption"
-      title: "Encryption"
-      intent: "Specify encryption standards for data at rest and in transit, and how encryption keys are managed and rotated."
+        - "What data must never be logged, exported, shared, or stored locally?"
+        - "What data requires restricted access, encryption, masking, redaction, retention, or deletion rules?"
+    - id: "data-minimization"
+      title: "Data Minimization"
+      intent: "Define what data is collected, why it is necessary, what is intentionally not collected, and how unnecessary data is prevented from entering storage, logs, telemetry, integrations, and exports."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie each material data category to purpose and necessity."
+        - "State explicit non-collection rules."
+        - "Include minimization rules for telemetry, logs, agent context, integrations, and exports."
+      qualityChecks:
+        - "Data collection has purpose."
+        - "Non-essential sensitive data is avoided or justified."
+        - "Minimization rules affect implementation and tests."
       questions:
-        - "What encryption standards apply for data at rest and in transit?"
-        - "How are encryption keys managed and rotated?"
+        - "What data is necessary to collect and why?"
+        - "What data should not be collected?"
+        - "What data should not be persisted?"
+        - "What data should not be sent to integrations, agents, telemetry, logs, or exports?"
+        - "How is minimization enforced and tested?"
+    - id: "encryption-and-key-management"
+      title: "Encryption and Key Management"
+      intent: "Define encryption for data in transit, at rest, backups, local storage, sensitive fields, secrets, and key lifecycle."
+      required: true
+      outputGuidance:
+        - "Separate encryption in transit, at rest, field-level, local storage, backups, secrets, and provider-managed encryption."
+        - "Define key ownership, access, rotation, revocation, recovery, and unresolved review needs."
+        - "Avoid exact cryptographic claims unless verified."
+      qualityChecks:
+        - "Encryption coverage maps to sensitivity classes and storage locations."
+        - "Key lifecycle is explicit."
+        - "Provider-managed encryption assumptions are marked."
+      questions:
+        - "What encryption applies in transit?"
+        - "What encryption applies at rest?"
+        - "What data requires field-level or application-level encryption?"
+        - "How is local storage encrypted, if applicable?"
+        - "How are backups encrypted?"
+        - "How are encryption keys generated, stored, accessed, rotated, revoked, and recovered?"
     - id: "secrets-management"
       title: "Secrets Management"
-      intent: "Define where secrets are stored, how they are accessed at runtime, and how they are rotated and revoked."
+      intent: "Define where secrets are stored, how they are injected into runtime, who can access them, how they are rotated, revoked, audited, and handled in local/CI/deployment environments."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use secret records for material secrets or credential classes."
+        - "Separate local, CI, preview, staging, production, sandbox, and emergency access."
+        - "State what must never appear in code, logs, screenshots, exports, or telemetry."
+      qualityChecks:
+        - "Secrets are never stored ad hoc."
+        - "Environment separation and rotation are explicit."
+        - "Emergency revocation is defined."
       questions:
-        - "Where are secrets stored and how are they accessed at runtime?"
+        - "What secrets and credentials exist?"
+        - "Where are secrets stored?"
+        - "How are secrets accessed at runtime?"
+        - "Who or what can access secrets?"
         - "How are secrets rotated and revoked?"
-    - id: "secure-logging"
-      title: "Secure Logging"
-      intent: "Specify how logs are scrubbed of sensitive data and what access controls apply to log storage."
+        - "How are secrets handled in local development, CI, deployment, and incident response?"
+    - id: "secure-logging-and-telemetry-privacy"
+      title: "Secure Logging and Telemetry Privacy"
+      intent: "Define logging, telemetry, diagnostics, audit, redaction, sampling, retention, access control, and privacy-safe observability rules."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate diagnostic logs, audit logs, security logs, telemetry, product analytics, traces, and support logs."
+        - "Define allowed, forbidden, redacted, masked, sampled, and retained fields."
+        - "Tie rules to Observability Plan."
+      qualityChecks:
+        - "Sensitive data logging is prohibited or tightly justified."
+        - "Logs are access-controlled and retained intentionally."
+        - "Telemetry remains privacy-safe and useful."
       questions:
-        - "How are logs scrubbed of sensitive data?"
-        - "What access controls apply to log storage?"
+        - "What may be logged?"
+        - "What must never be logged?"
+        - "How are logs, traces, telemetry, and analytics scrubbed of sensitive data?"
+        - "What audit events are required?"
+        - "Who can access logs and telemetry?"
+        - "How long are logs and telemetry retained?"
+        - "What should Observability Plan inherit?"
     - id: "backup-security"
       title: "Backup Security"
-      intent: "Define how backups are encrypted and access-controlled, and the backup retention and destruction policy."
+      intent: "Define how backups are encrypted, access-controlled, retained, restored, destroyed, audited, and treated during deletion/export/privacy workflows."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie backup security to Data Model backup/restore rules."
+        - "Define access, encryption, retention, destruction, restore authorization, restore testing, and audit trail."
+        - "State how user deletion applies to backups where relevant."
+      qualityChecks:
+        - "Backups are protected at least as carefully as source data."
+        - "Restore access is controlled and auditable."
+        - "Backup retention does not silently violate privacy posture."
       questions:
         - "How are backups encrypted and access-controlled?"
-        - "What is the backup retention and destruction policy?"
+        - "Who can restore backups?"
+        - "How are restores authorized, audited, and tested?"
+        - "How long are backups retained?"
+        - "How are backups destroyed?"
+        - "How do backups interact with data deletion, export, retention, and legal/compliance review needs?"
     - id: "data-export"
       title: "Data Export"
-      intent: "Specify how users can export their data and what format and completeness guarantees apply."
+      intent: "Define how users, admins, or operators export data, what data is included or excluded, format, authorization, verification, auditability, and privacy safeguards."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate user export, admin export, support export, operational export, and integration export."
+        - "Define authorization, scope, format, completeness, exclusions, delivery method, expiration, and audit trail."
+        - "State review-needed legal/privacy assumptions."
+      qualityChecks:
+        - "Exports are authorized, scoped, and auditable."
+        - "Sensitive data exposure is minimized."
+        - "Completeness guarantees are explicit or marked unresolved."
       questions:
         - "How can users export their data?"
+        - "What data is included and excluded?"
         - "What format and completeness guarantees apply?"
+        - "How are exports authorized and delivered?"
+        - "How long are export files available?"
+        - "How are exports audited and protected?"
     - id: "data-deletion"
       title: "Data Deletion"
-      intent: "Define how user data is permanently deleted upon request and the deletion timeline and verification process."
+      intent: "Define deletion, anonymization, archival, cascade behavior, backup behavior, verification, timelines, exceptions, and user-facing deletion rights."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate user-requested deletion, admin deletion, system retention expiry, soft delete, hard delete, anonymization, archival, and legal/compliance exceptions."
+        - "Tie deletion behavior to Data Model relationships and retention classes."
+        - "State verification and audit trail."
+      qualityChecks:
+        - "Deletion behavior is concrete and testable."
+        - "Cascade and backup implications are explicit."
+        - "Exceptions are documented and review-needed if legal/compliance-related."
       questions:
-        - "How is user data permanently deleted upon request?"
+        - "How is user data deleted upon request?"
+        - "What data is soft-deleted, hard-deleted, anonymized, archived, or retained?"
+        - "What cascade behavior applies to related data?"
+        - "How do backups handle deleted data?"
         - "What is the deletion timeline and verification process?"
+        - "What exceptions or legal/compliance review needs exist?"
+    - id: "consent-and-user-rights"
+      title: "Consent and User Rights"
+      intent: "Define how consent is collected, changed, revoked, audited, and connected to user privacy rights such as access, export, deletion, correction, restriction, and portability where applicable."
+      required: true
+      outputGuidance:
+        - "Do not assume legal applicability; mark jurisdiction-specific rights for review."
+        - "Define product-level consent and preference behavior."
+        - "Tie consent to data collection, integrations, telemetry, agents, and communications where relevant."
+      qualityChecks:
+        - "Consent is specific enough to implement and audit."
+        - "Revocation effects are explicit."
+        - "User rights are not claimed without review."
+      questions:
+        - "What user consent is required?"
+        - "How is consent captured, changed, revoked, and audited?"
+        - "What happens after consent is revoked?"
+        - "What user rights need to be supported or reviewed: access, correction, export, deletion, restriction, objection, portability, or consent withdrawal?"
+        - "What privacy preferences must the product expose?"
     - id: "abuse-prevention"
       title: "Abuse Prevention"
-      intent: "Describe how abuse vectors are mitigated and what rate limiting, CAPTCHA, or other controls are in place."
+      intent: "Define controls against spam, scraping, brute force, credential stuffing, DoS, rate abuse, prompt/tool abuse, fraud, enumeration, and misuse."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Identify abuse cases and controls by surface."
+        - "Include rate limits, quotas, CAPTCHA/challenges, abuse monitoring, bot detection, throttling, lockouts, circuit breakers, and escalation where relevant."
+        - "State false-positive handling and user impact."
+      qualityChecks:
+        - "Abuse controls are tied to surfaces and threats."
+        - "Controls do not create unacceptable harm to legitimate users without mitigation."
+        - "Monitoring and escalation are explicit."
       questions:
-        - "How are abuse vectors like spam, scraping, and DoS mitigated?"
-        - "What rate limiting, CAPTCHA, or other controls are in place?"
+        - "What abuse vectors exist: spam, scraping, brute force, credential stuffing, DoS, enumeration, prompt injection, tool abuse, fraud, or misuse?"
+        - "What rate limiting, quotas, CAPTCHA, lockouts, throttling, or abuse controls apply?"
+        - "How are abuse attempts detected and monitored?"
+        - "How are false positives handled?"
+        - "What abuse events trigger support, operations, or incident response?"
     - id: "security-testing"
       title: "Security Testing"
-      intent: "Define the security testing performed, cadence, and ownership."
+      intent: "Define security and privacy testing methods, cadence, ownership, evidence, release impact, and downstream Test Strategy requirements."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use security test records for material test categories."
+        - "Include SAST, DAST, dependency scanning, secret scanning, IaC scanning, authz tests, privacy tests, abuse tests, integration security tests, threat-model review, and penetration testing where relevant."
+        - "Define which tests block release."
+      qualityChecks:
+        - "Testing maps to threats and controls."
+        - "Release-blocking tests are explicit."
+        - "Security testing ownership and cadence are defined."
       questions:
-        - "What security testing is performed? SAST, DAST, penetration testing?"
+        - "What security testing is performed?"
+        - "What privacy testing is performed?"
+        - "What tests are automated versus manual or review-based?"
         - "What is the cadence and ownership of security testing?"
-    - id: "security-risks"
-      title: "Security Risks"
-      intent: "Identify top security risks, unresolved threats, and the risk acceptance process."
+        - "What evidence is required?"
+        - "What security test failures block merge, deployment, or release?"
+    - id: "vulnerability-management"
+      title: "Vulnerability Management"
+      intent: "Define vulnerability intake, triage, severity, SLA, remediation, disclosure, dependency updates, emergency patching, and release impact."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define vulnerability lifecycle from discovery to closure."
+        - "Include dependency vulnerabilities, code vulnerabilities, infrastructure vulnerabilities, secrets leaks, provider vulnerabilities, and reported issues."
+        - "State severity and remediation expectations without inventing external SLA unless committed."
+      qualityChecks:
+        - "Vulnerability handling is operationally actionable."
+        - "Severity and release impact are explicit."
+        - "Emergency patch path is defined."
       questions:
-        - "What are the top security risks and unresolved threats?"
-        - "What is the risk acceptance process?"
+        - "How are vulnerabilities discovered or reported?"
+        - "How are vulnerabilities triaged and severity-rated?"
+        - "What remediation timelines or SLAs apply?"
+        - "How are dependency vulnerabilities handled?"
+        - "How are emergency patches handled?"
+        - "What disclosure or communication process is required?"
+    - id: "incident-response"
+      title: "Incident Response"
+      intent: "Define detection, severity classification, escalation, containment, eradication, recovery, communication, evidence preservation, postmortem, and operational handoff for security/privacy incidents."
+      required: true
+      outputGuidance:
+        - "Define incident response at architecture level and route runbooks to Operations."
+        - "Separate security incident, privacy incident, abuse incident, credential leak, data exposure, integration compromise, and availability-impacting attack."
+        - "State evidence and communication requirements without inventing legal notification obligations."
+      qualityChecks:
+        - "Incident handling is not improvised."
+        - "Privacy and security incidents include containment and evidence preservation."
+        - "Legal/compliance notification uncertainty is routed to review."
+      questions:
+        - "What constitutes a security or privacy incident?"
+        - "How are incidents detected and severity-rated?"
+        - "Who is escalated and when?"
+        - "How are incidents contained, eradicated, and recovered from?"
+        - "What evidence must be preserved?"
+        - "What user, internal, legal, or operational communication may be required?"
+        - "What should Operations Incident Response inherit?"
+    - id: "security-and-privacy-risks"
+      title: "Security and Privacy Risks"
+      intent: "Identify unresolved security/privacy risks, residual risks, accepted risks, release-blocking risks, and risks requiring external review."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete failure modes."
+        - "Tie risks to assets, threats, controls, data categories, integrations, APIs, infrastructure, agents, logs, backups, or operations."
+        - "Include mitigation, residual risk, acceptance owner, release impact, and target document."
+      qualityChecks:
+        - "Risks are specific enough to mitigate, test, accept, or block release."
+        - "Residual risk is explicit after mitigation."
+        - "Accepted risk requires authority."
+      questions:
+        - "What are the top security risks?"
+        - "What are the top privacy risks?"
+        - "What unresolved threats remain?"
+        - "What residual risks remain after controls?"
+        - "What risks require legal, security, infrastructure, operations, or product review?"
+        - "What risks block release unless resolved or formally accepted?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from Security and Privacy and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route security and privacy outputs to the correct downstream documents."
+        - "Separate frontend, infrastructure, testing, observability, deployment, release, support, incident response, risk, and operations implications."
+        - "Preserve unresolved security/privacy questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing security/privacy rules silently."
+        - "Security/privacy architecture and downstream implementation responsibilities remain distinct."
+      questions:
+        - "What should Frontend Architecture inherit from Security and Privacy?"
+        - "What should Infrastructure Architecture inherit?"
+        - "What should Test Strategy inherit?"
+        - "What should Observability Plan inherit?"
+        - "What should Deployment Plan and Release Management inherit?"
+        - "What should Support Model, Incident Response, Risk Management, and Operations inherit?"
+        - "What unresolved security and privacy questions must be carried forward?"

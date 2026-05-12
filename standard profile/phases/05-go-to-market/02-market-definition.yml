@@ -5,107 +5,535 @@ document:
   status: "not_started"
   order: 2
   type: "market_definition"
-  purpose: "Define the market where the product competes and how it will be understood."
-  centralQuestion: "In what category will this product be understood?"
+  purpose: "Define the market, category, alternatives, substitute behaviors, market boundaries, maturity, timing, constraints, evidence quality, and risks that shape how the product should be positioned and brought to market."
+  centralQuestion: "In what market and category will this product be understood, compared, adopted, and bought?"
   outputs:
     canonical:
       format: "markdown"
-      path: "05-go-to-market/02-market-definition.md"
-      purpose: "Market definition document with category, sizing, alternatives, and maturity."
-  dependsOn: []
-  feeds: []
+      path: "docs/05-go-to-market/02-market-definition.md"
+      purpose: "Store the canonical market definition as a Markdown document."
+    artifacts:
+      - id: "gtm.market_definition_map"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/market-definition-map.html"
+        purpose: "Provide a founder-facing market map covering category, market boundaries, market size, alternatives, substitutes, maturity, timing, constraints, evidence quality, risks, and downstream GTM implications."
+        audience: "founder"
+        includes:
+          - "market definition summary"
+          - "category frame"
+          - "market boundaries"
+          - "primary market"
+          - "secondary markets"
+          - "market sizing"
+          - "existing alternatives"
+          - "substitute behaviors"
+          - "comparison lens"
+          - "market maturity"
+          - "timing rationale"
+          - "market constraints"
+          - "evidence quality"
+          - "market risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.market_definition_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/market-definition-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the market definition is precise, evidence-aware, category-useful, positioning-ready, channel-relevant, and not inflated by unsupported sizing or vague market claims."
+        agentRole: "reviewer"
+        includes:
+          - "canonical market definition"
+          - "GTM brief dependency"
+          - "validation dependency"
+          - "product dependency"
+          - "technical risk dependency"
+          - "market definition formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-vision"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/01-validation-brief"
+    - "02-validation/04-market-scan"
+    - "02-validation/05-competitive-analysis"
+    - "02-validation/06-customer-discovery"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-user-personas"
+    - "03-product/04-value-proposition"
+    - "03-product/08-product-scope"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+  feeds:
+    - "05-go-to-market/03-audience-and-segmentation"
+    - "05-go-to-market/04-positioning-and-messaging"
+    - "05-go-to-market/05-channel-strategy"
+    - "05-go-to-market/06-launch-plan"
+    - "05-go-to-market/07-pricing-and-packaging"
+    - "05-go-to-market/08-content-strategy"
+    - "05-go-to-market/09-sales-motion"
+    - "05-go-to-market/10-partnerships-and-distribution"
+    - "05-go-to-market/11-growth-experiments"
+    - "05-go-to-market/12-gtm-analytics"
+    - "05-go-to-market/13-gtm-risks"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "go-to-market-brief"
+      type: "context"
+      required: false
+      description: "Market-entry thesis, GTM objective, beachhead segment, primary customer, positioning thesis, channel thesis, launch strategy, revenue motion, constraints, and risks."
+    - id: "validation-context"
+      type: "context"
+      required: false
+      description: "Market scan, competitive analysis, customer discovery, validation report, decision records, customer evidence, competitor evidence, and unresolved market assumptions."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Product brief, personas, value proposition, product scope, supported use cases, product constraints, and claims that market definition must respect."
+    - id: "technical-risk-context"
+      type: "context"
+      required: false
+      description: "Technical risks and readiness constraints that affect which market claims, categories, customers, or market-entry promises are safe."
+    - id: "market-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate market categories, market sizing assumptions, competitor names, substitute behaviors, buyer language, analyst/category references, constraints, and unresolved market questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a precise market/category definition that explains how customers will understand, compare, adopt, and buy the product."
+    - "Market definition summary states the chosen market frame, category frame, primary market, beachhead relevance, comparison context, and current confidence level."
+    - "Category frame distinguishes existing category, emerging category, new category creation, wedge into an existing category, or cross-category product, with rationale and positioning implications."
+    - "Market boundaries define what is inside the market, outside the market, adjacent, overlapping, upstream, downstream, and intentionally excluded from first GTM."
+    - "Primary market is defined by customer context, problem context, alternative context, buying/adoption behavior, and relevance to the GTM Brief beachhead."
+    - "Secondary markets include adjacent segments, expansion rationale, expansion triggers, required product/operational changes, and reasons they are not first."
+    - "Market sizing separates TAM, SAM, SOM, bottom-up estimate, top-down estimate, evidence source, assumptions, confidence, and decision implication without inventing unsupported numbers."
+    - "Existing alternatives include direct competitors, indirect competitors, adjacent tools, service providers, internal processes, manual workflows, spreadsheets, consultants, agencies, communities, and do-nothing."
+    - "Substitute behaviors describe what customers currently do instead, why it works enough, where it breaks, switching friction, and what event creates openness to change."
+    - "Comparison lens defines how customers compare the product: category, job-to-be-done, budget owner, workflow, urgency, risk, price anchor, trust bar, and proof expectation."
+    - "Market maturity assesses whether the market is existing, emerging, fragmented, consolidating, saturated, category-creating, education-heavy, or trust-constrained, with evidence and GTM implications."
+    - "Timing rationale explains why now is plausible based on customer behavior, technology shift, regulation, cost, workflow change, cultural shift, platform shift, competitive gap, or founder distribution."
+    - "Market constraints identify regulatory, cultural, structural, economic, trust, technical, distribution, procurement, support, language/localization, and operational constraints."
+    - "Evidence quality distinguishes verified evidence, weak evidence, assumptions, hypotheses, unknowns, and claims requiring research before use in GTM."
+    - "Market risks identify unfavorable market dynamics, wrong category framing, weak demand, low urgency, crowded category, hard education, low willingness to pay, high switching cost, support burden, and reputational risk."
+    - "Downstream handoff clarifies what Audience/Segmentation, Positioning, Channels, Launch, Pricing, Content, Sales, Partnerships, Experiments, Analytics, Risks, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid market-definition theater: category labels without customer comparison behavior, alternatives, substitute behavior, evidence, constraints, and GTM implications."
+    - "Avoid inflated market sizing, unsourced TAM/SAM/SOM, or market-size claims that do not affect a decision."
+    - "Avoid confusing market with audience, category with positioning, and competitor list with actual customer alternatives."
+    - "Avoid defining a market so broadly that it cannot guide segmentation, messaging, channel, pricing, or launch decisions."
+    - "Avoid category creation claims unless education burden, proof burden, and adoption friction are explicitly addressed."
+    - "Avoid ignoring substitute behaviors such as manual work, spreadsheets, existing habits, consultants, internal processes, or doing nothing."
+    - "Avoid assuming market readiness without evidence of urgency, trigger, budget/adoption path, and willingness to switch."
+    - "Avoid market claims that Product, Engineering, Acceptance Criteria, or Technical Risks cannot support."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent market data, competitor facts, customer behavior, analyst categories, regulatory constraints, market size, or revenue potential."
+    - "Market definition must preserve Foundation boundaries, validation evidence, product truth, technical truth, and GTM focus."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate evidence, assumption, hypothesis, decision, market claim, category claim, sizing estimate, and risk."
+    - "Tie market definition claims to Validation, Competitive Analysis, Customer Discovery, Product, GTM Brief, Technical Risks, or Decision Record where possible."
+    - "Classify market claims as verified, likely, assumption, hypothesis, weak evidence, rejected, deferred, or review-needed where useful."
+    - "Use sizing only when it informs focus, priority, pricing, channel, funding, or launch strategy; otherwise mark sizing as low-decision-value."
+    - "Route detailed segmentation, final messaging, tactical channel plan, pricing design, sales process, partnerships, experiments, analytics, and risk planning to downstream GTM documents."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation, Validation, Product, Technical Risks, GTM Brief, or Decision Record."
+    - "Flag category claims without customer comparison logic and alternative context."
+    - "Flag market size claims without method, assumptions, evidence source, confidence, and decision implication."
+    - "Flag competitor/alternative sections that omit substitute behaviors or do-nothing behavior."
+    - "Flag market definitions that are too broad to guide GTM decisions."
+    - "Flag category creation assumptions without education burden, proof burden, and adoption friction."
+    - "Flag timing rationale without external/internal evidence or clear hypothesis."
+    - "Flag constraints that are named but not connected to GTM implications."
+    - "Verify that downstream GTM documents receive concrete handoff inputs."
+    - "Flag content that belongs better in Audience/Segmentation, Positioning, Channel Strategy, Launch Plan, Pricing, Content Strategy, Sales Motion, Partnerships, Experiments, Analytics, GTM Risks, or Operations."
+  specializedFormats:
+    marketDefinitionFormat:
+      description: "Recommended format for the overall market definition."
+      fields:
+        - marketName
+        - categoryFrame
+        - primaryCustomerContext
+        - primaryProblemContext
+        - comparisonContext
+        - existingAlternatives
+        - substituteBehaviors
+        - marketBoundary
+        - evidenceStatus
+        - confidenceLevel
+        - GTMImplication
+        - status
+    categoryFrameFormat:
+      description: "Recommended format for category framing."
+      fields:
+        - category
+        - categoryType
+        - frameOfReference
+        - customerComparisonBehavior
+        - categoryMaturity
+        - educationBurden
+        - proofBurden
+        - positioningImplication
+        - risks
+        - status
+    marketSizingFormat:
+      description: "Recommended format for market sizing estimates."
+      fields:
+        - sizingType
+        - estimate
+        - method
+        - assumptions
+        - sourceOrEvidence
+        - confidenceLevel
+        - decisionUse
+        - caveats
+        - reviewNeeded
+    alternativeFormat:
+      description: "Recommended format for existing alternatives."
+      fields:
+        - alternative
+        - alternativeType
+        - customerUsesItFor
+        - whyItWorksEnough
+        - whereItBreaks
+        - switchingFriction
+        - priceAnchor
+        - trustAdvantage
+        - differentiationImplication
+    substituteBehaviorFormat:
+      description: "Recommended format for substitute behaviors."
+      fields:
+        - behavior
+        - customerContext
+        - currentWorkflow
+        - whyItPersists
+        - insufficiency
+        - switchingTrigger
+        - switchingCost
+        - GTMImplication
+    marketConstraintFormat:
+      description: "Recommended format for market constraints."
+      fields:
+        - constraint
+        - constraintType
+        - affectedMarketOrSegment
+        - sourceOrEvidence
+        - GTMImpact
+        - mitigation
+        - downstreamDocument
+        - status
+    evidenceQualityFormat:
+      description: "Recommended format for evidence quality records."
+      fields:
+        - claim
+        - claimType
+        - evidence
+        - evidenceStrength
+        - sourceDocument
+        - confidenceLevel
+        - decisionAffected
+        - researchNeeded
+        - status
+    marketRiskFormat:
+      description: "Recommended format for market risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - downstreamDocument
+        - launchImpact
   sections:
+    - id: "market-definition-summary"
+      title: "Market Definition Summary"
+      intent: "Summarize the chosen market frame, category frame, customer comparison context, current confidence level, and implications for GTM."
+      required: true
+      outputGuidance:
+        - "Open with a concise market definition."
+        - "State whether the definition is verified, provisional, or hypothesis-led."
+        - "Identify the key GTM implication of the market definition."
+      qualityChecks:
+        - "Summary gives enough context to guide positioning and segmentation."
+        - "Confidence level is explicit."
+        - "Unsupported claims are labeled."
+      questions:
+        - "What market is this product entering?"
+        - "How will customers understand and compare it?"
+        - "What is the category frame?"
+        - "How confident are we in this definition?"
+        - "What is the most important GTM implication?"
     - id: "market-category"
       title: "Market Category"
-      intent: "Identify the category and whether it is existing or new."
+      intent: "Identify the category frame and whether the product enters, reframes, wedges into, crosses, or creates a category."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the category frame format where useful."
+        - "Separate category used by customers from category desired by the company."
+        - "State the education and proof burden of the category choice."
+      qualityChecks:
+        - "Category is tied to customer comparison behavior."
+        - "Category creation is not claimed casually."
+        - "Positioning implications are explicit."
       questions:
         - "What category does this product belong to?"
-        - "Is this an existing category or a new one?"
+        - "Is this an existing category, emerging category, new category, wedge into an existing category, or cross-category product?"
+        - "What category will customers use to compare it today?"
+        - "What category do we want to own or influence later?"
+        - "What education burden does this category choice create?"
+        - "What proof burden does this category choice create?"
+    - id: "market-boundaries"
+      title: "Market Boundaries"
+      intent: "Define what is inside, outside, adjacent to, upstream from, and downstream from the market."
+      required: true
+      outputGuidance:
+        - "Define boundaries explicitly before sizing or expansion."
+        - "Name excluded markets and why they are excluded."
+        - "Separate market boundary from product scope boundary where useful."
+      qualityChecks:
+        - "Boundaries prevent overbroad GTM strategy."
+        - "Adjacent markets are not treated as first-market focus."
+        - "Excluded markets have rationale."
+      questions:
+        - "What is inside this market?"
+        - "What is outside this market?"
+        - "What adjacent markets are close but not first?"
+        - "What upstream or downstream markets influence adoption?"
+        - "What markets are intentionally excluded from initial GTM?"
+        - "How do market boundaries differ from product scope boundaries?"
     - id: "primary-market"
       title: "Primary Market"
-      intent: "Define the primary market and estimate TAM, SAM, and SOM."
+      intent: "Define the first market context where the product should compete and be adopted."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define primary market through customer context, problem context, alternative context, buying/adoption behavior, and beachhead relevance."
+        - "Avoid broad labels unless narrowed by use case and segment."
+        - "Tie primary market to GTM Brief."
+      qualityChecks:
+        - "Primary market is narrow enough to guide decisions."
+        - "Primary market matches product readiness and beachhead segment."
+        - "Adoption path and comparison context are explicit."
       questions:
         - "What is the primary market?"
-        - "What is the estimated size (TAM, SAM, SOM)?"
+        - "What customer context defines it?"
+        - "What problem context defines it?"
+        - "What alternatives define it?"
+        - "How does this primary market connect to the beachhead segment?"
+        - "What adoption or buying behavior characterizes this market?"
+    - id: "market-sizing"
+      title: "Market Sizing"
+      intent: "Estimate market size only to the level useful for GTM decisions, separating TAM, SAM, SOM, method, assumptions, confidence, and decision implication."
+      required: true
+      outputGuidance:
+        - "Use the market sizing format."
+        - "Separate TAM, SAM, SOM, top-down, bottom-up, and directional estimates where applicable."
+        - "Mark unavailable or low-confidence sizing instead of inventing numbers."
+      qualityChecks:
+        - "Sizing method and assumptions are explicit."
+        - "Sizing informs a decision or is labeled low-decision-value."
+        - "No unsupported numeric claims are included."
+      questions:
+        - "What is the estimated TAM, SAM, and SOM, if useful and evidence exists?"
+        - "What sizing method is used?"
+        - "What assumptions drive the estimate?"
+        - "What evidence supports the estimate?"
+        - "What is the confidence level?"
+        - "What decision does this sizing influence?"
+        - "What sizing research remains needed?"
     - id: "secondary-markets"
       title: "Secondary Markets"
-      intent: "Identify secondary markets and expansion triggers."
+      intent: "Identify adjacent markets and define what must be true before expansion."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "List secondary markets as expansion hypotheses, not immediate focus unless explicitly decided."
+        - "Define expansion triggers and required product/GTM changes."
+        - "State why each is not first."
+      qualityChecks:
+        - "Secondary markets do not dilute first-market focus."
+        - "Expansion triggers are concrete."
+        - "Required changes are explicit."
       questions:
-        - "What is the secondary market?"
-        - "When would the product expand into adjacent markets?"
+        - "What secondary or adjacent markets exist?"
+        - "Why are they not the first market?"
+        - "What would trigger expansion into each adjacent market?"
+        - "What product, GTM, operational, support, localization, compliance, or channel changes would be required?"
+        - "What risks would expansion create?"
     - id: "existing-alternatives"
       title: "Existing Alternatives"
-      intent: "List the alternatives and the comparison lens customers use."
+      intent: "List the alternatives customers currently compare against, including direct competitors, indirect competitors, adjacent tools, services, manual workflows, internal processes, and doing nothing."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the alternative format for material alternatives."
+        - "Group alternatives by type."
+        - "Focus on customer comparison behavior, not only competitor taxonomy."
+      qualityChecks:
+        - "Alternatives include do-nothing and manual/internal substitutes."
+        - "Each alternative explains why it works enough today."
+        - "Differentiation implications are explicit."
       questions:
         - "What alternatives exist?"
-        - "What category would the user use to compare the product?"
+        - "What direct competitors are compared?"
+        - "What indirect competitors or adjacent tools are compared?"
+        - "What services, consultants, agencies, communities, internal processes, spreadsheets, or manual workflows are alternatives?"
+        - "Why do customers keep using each alternative?"
+        - "Where does each alternative fail?"
+        - "What price or trust anchor does each alternative create?"
     - id: "substitute-behaviors"
       title: "Substitute Behaviors"
-      intent: "Describe the current behaviour being replaced and its insufficiency."
+      intent: "Describe current behaviors being replaced or improved and why those behaviors persist despite their insufficiencies."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the substitute behavior format for material behaviors."
+        - "Focus on behavior, not just tool names."
+        - "Identify switching trigger and switching cost."
+      qualityChecks:
+        - "Current behavior is described concretely."
+        - "Insufficiency and persistence are both explained."
+        - "Switching trigger is explicit."
       questions:
-        - "What current behavior are we replacing?"
+        - "What current behavior are we replacing or improving?"
+        - "What workflow does the customer use today?"
+        - "Why does this behavior persist?"
         - "Why is the current behavior insufficient?"
+        - "What event or pain creates willingness to switch?"
+        - "What switching cost or habit must GTM overcome?"
+    - id: "comparison-lens"
+      title: "Comparison Lens"
+      intent: "Define the practical lens customers use to compare the product against alternatives."
+      required: true
+      outputGuidance:
+        - "Describe comparison criteria from the customer's perspective."
+        - "Include job-to-be-done, workflow, budget, risk, proof, trust, price, and adoption friction where relevant."
+        - "Route detailed messaging implications downstream."
+      qualityChecks:
+        - "Comparison lens explains buying/adoption judgment."
+        - "The lens is not limited to feature comparison."
+        - "Trust and proof expectations are included."
+      questions:
+        - "What lens will customers use to compare the product?"
+        - "Will they compare by category, job-to-be-done, workflow, budget, urgency, risk, trust, or price?"
+        - "What proof do they need before switching?"
+        - "What feature comparisons matter and which are distractions?"
+        - "What comparison trap should positioning avoid?"
     - id: "market-maturity"
       title: "Market Maturity"
-      intent: "Assess whether the market is existing, emerging, or needs education."
+      intent: "Assess whether the market is existing, emerging, fragmented, consolidating, saturated, category-creating, education-heavy, or trust-constrained."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State market maturity and evidence quality."
+        - "Explain how maturity affects messaging, education, channel, pricing, launch, and sales motion."
+        - "Separate customer readiness from vendor/category maturity."
+      qualityChecks:
+        - "Maturity assessment is evidence-aware."
+        - "Education burden and trust burden are explicit."
+        - "GTM implications are clear."
       questions:
-        - "Is the market existing, emerging, or needs education?"
+        - "Is the market existing, emerging, fragmented, consolidating, saturated, category-creating, education-heavy, or trust-constrained?"
         - "What evidence supports this maturity assessment?"
+        - "How educated are customers about the problem?"
+        - "How educated are customers about available solutions?"
+        - "How does maturity affect messaging, content, launch, pricing, sales, and support?"
     - id: "timing-rationale"
       title: "Timing Rationale"
-      intent: "Justify why now is the right time to enter."
+      intent: "Justify why now is a plausible time to enter the market and what timing assumptions could be wrong."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Explain timing through concrete shifts or constraints."
+        - "Separate evidence from hypothesis."
+        - "State what would indicate timing is wrong."
+      qualityChecks:
+        - "Timing rationale is not generic urgency language."
+        - "Relevant shifts are identified."
+        - "Timing risk is explicit."
       questions:
-        - "What is the timing?"
         - "Why now and not earlier or later?"
+        - "What customer behavior, technology shift, platform shift, regulation, cost change, workflow change, cultural shift, competitive gap, or founder distribution makes now plausible?"
+        - "What timing evidence exists?"
+        - "What timing assumptions remain unvalidated?"
+        - "What would signal the market is too early, too late, or not ready?"
     - id: "market-constraints"
       title: "Market Constraints"
-      intent: "Identify regulatory, cultural, or structural constraints."
+      intent: "Identify regulatory, cultural, structural, economic, trust, technical, distribution, procurement, language/localization, support, and operational constraints that shape GTM."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the market constraint format for material constraints."
+        - "Classify constraints by type."
+        - "Tie each constraint to GTM implication and downstream document."
+      qualityChecks:
+        - "Constraints have concrete GTM impact."
+        - "Legal/regulatory assumptions are marked review-needed unless verified."
+        - "Operational and support constraints are included where relevant."
       questions:
-        - "What regulatory, cultural, or structural constraints exist?"
-        - "How do constraints shape the go-to-market approach?"
+        - "What regulatory, cultural, structural, economic, trust, technical, distribution, procurement, support, language/localization, or operational constraints exist?"
+        - "How does each constraint shape GTM?"
+        - "What constraints affect claims, channels, pricing, launch, support, or sales?"
+        - "Which constraints are verified versus assumed?"
+        - "Which constraints require legal, technical, product, or operations review?"
+    - id: "evidence-quality"
+      title: "Evidence Quality"
+      intent: "Assess the strength of evidence behind market claims and identify what research is still needed."
+      required: true
+      outputGuidance:
+        - "Use evidence quality records for material claims."
+        - "Classify evidence as verified, strong, moderate, weak, anecdotal, assumption, unknown, or review-needed."
+        - "Tie evidence gaps to downstream research or experiments."
+      qualityChecks:
+        - "Market claims are not treated equally regardless of evidence."
+        - "Weak evidence and assumptions are visible."
+        - "Research needs are decision-linked."
+      questions:
+        - "Which market claims are supported by evidence?"
+        - "Which claims are assumptions or hypotheses?"
+        - "How strong is the evidence behind category, market size, alternatives, substitutes, maturity, timing, and constraints?"
+        - "What research is still needed?"
+        - "What decisions depend on weak evidence?"
     - id: "market-risks"
       title: "Market Risks"
-      intent: "Surface factors that could make the market unfavourable."
+      intent: "Surface market factors that could make the market unfavorable or make the chosen market definition wrong."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the market risk format for material risks."
+        - "Include category, demand, urgency, timing, competition, education, trust, willingness-to-pay, switching, support, and reputational risks."
+        - "State early signals and mitigation."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Wrong-market and wrong-category risks are included."
+        - "Risks are routed to downstream GTM or Operations documents."
       questions:
-        - "What could make the market unfavourable?"
+        - "What could make this market unfavorable?"
+        - "What could make the category frame wrong?"
         - "What would signal the market is not ready?"
+        - "What would signal demand is weaker than expected?"
+        - "What would signal switching cost or education burden is too high?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from Market Definition and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route market definition outputs to the correct downstream documents."
+        - "Separate segmentation, positioning, channels, launch, pricing, content, sales, partnerships, experiments, analytics, GTM risks, support, and operations implications."
+        - "Preserve unresolved market questions and weak evidence flags."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing market assumptions silently."
+        - "Market definition and downstream tactical execution remain distinct."
+      questions:
+        - "What should Audience and Segmentation inherit?"
+        - "What should Positioning and Messaging inherit?"
+        - "What should Channel Strategy inherit?"
+        - "What should Launch Plan inherit?"
+        - "What should Pricing and Packaging inherit?"
+        - "What should Content Strategy, Sales Motion, Partnerships, Growth Experiments, and GTM Analytics inherit?"
+        - "What should GTM Risks, Support Model, and Risk Management inherit?"
+        - "What unresolved market questions must be carried forward?"

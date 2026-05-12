@@ -5,132 +5,289 @@ document:
   status: "not_started"
   order: 3
   type: "hypotheses"
-  purpose: "Register testable propositions with required evidence and refutation signals."
+  purpose: "Translate core assumptions into testable, falsifiable hypotheses with required evidence, validation method, refutation signals, priority, and decision implications."
   centralQuestion: "What specific hypotheses will be tested?"
   outputs:
     canonical:
       format: "markdown"
-      path: "02-validation/03-hypotheses.md"
-      purpose: "Registers testable propositions with required evidence and refutation signals."
-  dependsOn: []
-  feeds: []
+      path: "docs/02-validation/03-hypotheses.md"
+      purpose: "Store the canonical hypothesis register as a Markdown document."
+    artifacts:
+      - id: "validation.hypothesis_matrix"
+        format: "html"
+        path: "outcomes/html/02-validation/hypothesis-matrix.html"
+        purpose: "Provide a navigable matrix of hypotheses by type, assumption source, evidence required, validation method, refutation signal, priority, status, and decision implication."
+        audience: "founder"
+        includes:
+          - "hypothesis register"
+          - "problem hypotheses"
+          - "audience hypotheses"
+          - "behavior hypotheses"
+          - "solution hypotheses"
+          - "willingness-to-pay hypotheses"
+          - "adoption hypotheses"
+          - "retention hypotheses"
+          - "decision implications"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.hypotheses_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/hypotheses-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether hypotheses are testable, falsifiable, derived from assumptions, and ready to feed research or experiments."
+        agentRole: "reviewer"
+        includes:
+          - "canonical hypothesis register"
+          - "validation strategy dependency"
+          - "core assumptions dependency"
+          - "hypothesis format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/06-success-definition"
+    - "02-validation/01-validation-strategy"
+    - "02-validation/02-core-assumptions"
+  feeds:
+    - "02-validation/04-research-plan"
+    - "02-validation/05-experiments"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+  inputs:
+    - id: "core-assumptions"
+      type: "context"
+      required: false
+      description: "Core assumptions that should be translated into testable hypotheses."
+    - id: "validation-strategy"
+      type: "context"
+      required: false
+      description: "Validation priorities, evidence standards, invalidating conditions, and decision gates that should shape hypothesis priority and evidence requirements."
+    - id: "available-evidence"
+      type: "context"
+      required: false
+      description: "Existing evidence that may inform hypothesis status, priority, or required next validation step."
+    - id: "research-constraints"
+      type: "manual_note"
+      required: false
+      description: "Constraints on user access, sample size, time, budget, instrumentation, or experiment feasibility."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered by a concrete register of testable hypotheses."
+    - "Each hypothesis is traceable to at least one core assumption or foundation claim."
+    - "Each hypothesis is stated in a form that can be supported, refuted, or marked inconclusive."
+    - "Each hypothesis includes evidence required, validation method, refutation signal, priority, status, and decision implication."
+    - "Critical hypotheses are clearly distinguished from exploratory or secondary hypotheses."
+    - "Hypotheses are grouped by validation type without skipping upstream problem and audience validation."
+    - "No hypothesis relies on invented evidence, fabricated metrics, or unstated assumptions."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid untestable hypotheses."
+    - "Avoid solution-first hypotheses before problem and audience hypotheses are defined."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
+    - "Each hypothesis must be falsifiable."
+    - "Each refutation signal must be specific enough to apply during review."
+    - "Do not confuse hypothesis statements with experiment designs."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Write each hypothesis as a proposition that can be tested."
+    - "Trace each hypothesis to one or more assumptions or foundation claims."
+    - "Separate hypothesis, evidence required, method, refutation signal, and decision implication."
+    - "Label unsupported hypotheses as untested rather than implying confidence."
+    - "Do not invent sample sizes, target metrics, conversion rates, pricing, churn, or adoption rates."
+    - "Use provisional thresholds only when clearly marked as assumptions."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation documents, Validation Strategy, or Core Assumptions."
+    - "Flag hypotheses that are too vague to test."
+    - "Flag hypotheses that cannot be refuted."
+    - "Verify that each critical assumption has at least one corresponding hypothesis or a documented reason for deferral."
+    - "Verify that each hypothesis can feed Research Plan, Experiments, Evidence Log, or Decision Record."
+    - "Flag content that belongs better in Research Plan, Experiments, Economic Model, Business Model, or Validation Report."
   specializedFormats:
     hypothesisFormat:
-      description: "Reusable format for each hypothesis entry."
+      description: "Required format for each hypothesis entry."
       fields:
-        - "Type"
-        - "Statement (We believe that...)"
-        - "Evidence Required"
-        - "Refutation Signal"
-        - "Priority (Critical/High/Medium/Low)"
-        - "Status (Untested/Testing/Supported/Refuted/Inconclusive)"
+        - id
+        - type
+        - statement
+        - sourceAssumptions
+        - relatedFoundationDocs
+        - evidenceRequired
+        - validationMethod
+        - refutationSignal
+        - priority
+        - confidence
+        - status
+        - decisionImplication
+        - nextStep
+        - owner
+        - notes
+    hypothesisGroupFormat:
+      description: "Recommended format for each hypothesis group."
+      fields:
+        - group
+        - purpose
+        - assumptionsCovered
+        - hypotheses
+        - missingHypotheses
+        - downstreamValidationDocs
   sections:
     - id: "hypothesis-register"
       title: "Hypothesis Register"
-      intent: "Maintain the master list of all testable hypotheses with status and outcomes."
+      intent: "Maintain the master list of all testable hypotheses with source assumptions, evidence requirements, refutation signals, status, and decision implications."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "List hypotheses as testable propositions, not broad research themes."
+        - "Trace each hypothesis to its source assumptions."
+        - "Include status and decision implication for each hypothesis."
+        - "Keep experiment details minimal; detailed protocols belong in Experiments."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Each hypothesis is testable and falsifiable."
+        - "Each hypothesis has a clear refutation signal."
+        - "The register distinguishes untested, testing, supported, refuted, and inconclusive status."
+        - "The register is complete enough to guide Research Plan and Experiments."
       questions:
         - "What is the complete list of testable hypotheses?"
+        - "Which assumptions does each hypothesis test?"
+        - "What evidence is required for each hypothesis?"
+        - "What refutation signal applies to each hypothesis?"
         - "Which hypotheses have been tested and what was the outcome?"
         - "Which hypotheses remain untested?"
+        - "What decision would each hypothesis affect?"
     - id: "problem-hypotheses"
       title: "Problem Hypotheses"
-      intent: "Clarify whether the problem exists, is severe, and is urgent."
+      intent: "Test whether the problem exists, is severe, frequent, urgent, and meaningfully painful for the target audience."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Start with the problem existing independently of the proposed solution."
+        - "State hypotheses about observable pain, frequency, severity, urgency, and current coping behavior."
+        - "Avoid phrasing the problem as lack of the proposed product."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Problem hypotheses can be tested before solution exposure."
+        - "The hypotheses distinguish pain intensity from expressed interest."
+        - "The section does not assume the problem is validated because the thesis is compelling."
       questions:
         - "Do people experience this problem?"
+        - "Is the problem frequent enough to matter?"
         - "Is the problem severe enough to motivate action?"
+        - "Is the problem urgent or merely interesting?"
         - "How do people currently cope with the problem?"
+        - "What evidence would refute the existence, severity, or urgency of the problem?"
     - id: "audience-hypotheses"
       title: "Audience Hypotheses"
-      intent: "Identify who has the problem and whether they can be reached."
+      intent: "Test who has the problem, whether they match the audience definition, and whether they can be reached or observed."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define audience hypotheses behaviorally and situationally, not only demographically."
+        - "Avoid unsupported addressable-market claims."
+        - "Separate who experiences the problem from who can be reached, influenced, or converted."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Audience hypotheses are specific enough to reject wrong audiences."
+        - "Reachability is not confused with need."
+        - "Scale claims are marked as assumptions unless evidenced."
       questions:
         - "Who specifically has this problem?"
-        - "How large is the addressable audience?"
+        - "Which situations or behaviors identify this audience?"
+        - "How large might the addressable audience be, and what evidence supports that estimate?"
         - "Can the audience be reached effectively?"
+        - "Which plausible audiences should be excluded or deprioritized?"
+        - "What evidence would refute the current audience definition?"
     - id: "behavior-hypotheses"
       title: "Behavior Hypotheses"
-      intent: "Map current audience behavior and alternatives in use."
+      intent: "Test current behavior, triggers, alternatives, switching constraints, and evidence that the problem is already costly enough to produce action."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Focus on what people currently do, not what they claim they might do."
+        - "Include hypotheses about triggers, workarounds, alternatives, switching costs, and repeated behavior."
+        - "Distinguish behavior evidence from preference evidence."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Behavior hypotheses are observable."
+        - "Alternatives are described fairly."
+        - "The section avoids treating stated intent as actual behavior."
       questions:
         - "What do people currently do to address the problem?"
         - "What triggers the problem-solving behavior?"
         - "What alternatives are currently in use?"
+        - "What switching costs or habits keep current behavior in place?"
+        - "What behavior would indicate the problem is already important?"
+        - "What evidence would refute the assumed behavior pattern?"
     - id: "solution-hypotheses"
       title: "Solution Hypotheses"
-      intent: "Determine whether the proposed solution works and produces meaningful improvement."
+      intent: "Test whether the proposed solution meaningfully improves the user's ability to address the validated problem without violating principles or boundaries."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Only define solution hypotheses after problem, audience, and behavior hypotheses are explicit."
+        - "State what improvement the solution is expected to produce."
+        - "Include usability, trust, cognitive load, and boundary-alignment hypotheses where relevant."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Solution hypotheses are tied to validated or explicitly assumed problems."
+        - "The section does not treat preference for a demo as proof of solution value."
+        - "Hypotheses include meaningful improvement, not just feature comprehension."
       questions:
         - "Does the solution actually solve the problem?"
         - "Is the solution usable by the target audience?"
         - "Does the solution produce a meaningful improvement?"
+        - "Does the solution reduce friction without creating unacceptable new risk?"
+        - "Does the solution respect the project principles and boundaries?"
+        - "What evidence would refute the solution thesis?"
     - id: "willingness-to-pay-hypotheses"
       title: "Willingness-to-Pay Hypotheses"
-      intent: "Assess whether and how much people will pay for the solution."
+      intent: "Test whether the audience or buyer is willing to exchange money, time, attention, trust, or organizational effort for the solution."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Distinguish willingness to pay from willingness to try."
+        - "Separate user, buyer, payer, and beneficiary where relevant."
+        - "Avoid inventing price points unless marked as provisional assumptions."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Payment hypotheses identify who pays, why they pay, and under what model."
+        - "The section does not confuse compliments, signups, or survey answers with payment evidence."
+        - "Price sensitivity claims are marked as assumptions unless evidenced."
       questions:
         - "Will people pay for this solution?"
-        - "How much are people willing to pay?"
+        - "Who pays: user, buyer, organization, sponsor, or another party?"
+        - "How much might people be willing to pay, and what evidence would support that?"
         - "What payment model is most acceptable?"
+        - "What non-monetary cost must users be willing to pay?"
+        - "What evidence would refute willingness to pay?"
     - id: "adoption-hypotheses"
       title: "Adoption Hypotheses"
-      intent: "Evaluate how people will discover, adopt, and overcome barriers to using the solution."
+      intent: "Test how people will discover, understand, trust, try, and initially adopt the solution despite adoption barriers."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Separate discovery, comprehension, trust, first action, and initial adoption."
+        - "Avoid unsupported expected adoption-rate claims."
+        - "Include adoption barriers and reasons people may not start even if the problem is real."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Adoption hypotheses are grounded in plausible channels and user context."
+        - "The section distinguishes initial curiosity from activated use."
+        - "Barriers are concrete enough to inform Research Plan or Experiments."
       questions:
         - "How will people learn about the solution?"
-        - "What is the expected adoption rate?"
+        - "What must people understand before trying it?"
+        - "What must people trust before trying it?"
+        - "What is the expected adoption pattern, and what evidence supports it?"
         - "What barriers exist to initial adoption?"
+        - "What evidence would refute the adoption path?"
     - id: "retention-hypotheses"
       title: "Retention Hypotheses"
-      intent: "Determine whether people will continue using the solution over time."
+      intent: "Test whether users will continue using the solution because it repeatedly produces value, not because of novelty or sunk cost."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define retention around repeated value, recurring trigger, habit formation, or ongoing necessity."
+        - "Separate retention from one-time usefulness."
+        - "Avoid inventing churn rates unless marked as provisional assumptions."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Retention hypotheses identify a recurring reason to return."
+        - "The section distinguishes engagement from dependency or lock-in."
+        - "Churn assumptions are clearly marked unless supported by evidence."
       questions:
         - "Will people continue using the solution over time?"
-        - "What drives ongoing engagement?"
-        - "What is the expected churn rate?"
+        - "What recurring trigger brings users back?"
+        - "What drives ongoing engagement or repeated value?"
+        - "What would cause users to stop using it?"
+        - "What is the expected churn pattern, and what evidence supports it?"
+        - "What evidence would refute retention potential?"

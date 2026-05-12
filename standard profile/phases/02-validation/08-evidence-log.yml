@@ -5,111 +5,348 @@ document:
   status: "not_started"
   order: 8
   type: "evidence_log"
-  purpose: "Centralized registry of all evidence collected, its sources, strength, and interpretation."
-  centralQuestion: "What evidence was collected and from where?"
+  purpose: "Maintain an auditable registry of all evidence collected, including source, raw content, interpretation, strength, bias risk, linked hypotheses, contradictions, and downstream decisions."
+  centralQuestion: "What evidence was collected, from where, how strong is it, and what does it imply?"
   outputs:
     canonical:
       format: "markdown"
-      path: "02-validation/08-evidence-log.md"
-      purpose: "Centralized registry of all evidence collected, its sources, strength, and interpretation."
-  dependsOn: []
-  feeds: []
+      path: "docs/02-validation/08-evidence-log.md"
+      purpose: "Store the canonical evidence log as a Markdown document."
+    artifacts:
+      - id: "validation.evidence_index"
+        format: "html"
+        path: "outcomes/html/02-validation/evidence-index.html"
+        purpose: "Provide a navigable evidence index grouped by hypothesis, source type, strength, contradiction status, evidence gap, and decision implication."
+        audience: "founder"
+        includes:
+          - "evidence register"
+          - "interview evidence"
+          - "behavioral evidence"
+          - "quantitative evidence"
+          - "market evidence"
+          - "contradictory evidence"
+          - "evidence gaps"
+          - "evidence quality notes"
+          - "decision implications"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.evidence_log_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/evidence-log-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether evidence is traceable, correctly interpreted, bias-aware, and sufficient for validation decisions."
+        agentRole: "reviewer"
+        includes:
+          - "canonical evidence log"
+          - "validation strategy dependency"
+          - "hypotheses dependency"
+          - "research plan dependency"
+          - "experiments dependency"
+          - "evidence entry format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/01-validation-strategy"
+    - "02-validation/02-core-assumptions"
+    - "02-validation/03-hypotheses"
+    - "02-validation/04-research-plan"
+    - "02-validation/05-experiments"
+    - "02-validation/06-economic-model"
+    - "02-validation/07-business-model"
+  feeds:
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "06-operations/02-operating-model"
+  inputs:
+    - id: "research-findings"
+      type: "context"
+      required: false
+      description: "Interview notes, observations, transcripts, synthesis notes, quotes, participant metadata, and qualitative research findings."
+    - id: "experiment-results"
+      type: "context"
+      required: false
+      description: "Experiment outputs, metrics, raw results, interpretation, limitations, and decision implications."
+    - id: "market-research"
+      type: "context"
+      required: false
+      description: "Market notes, competitor evidence, substitute analysis, pricing references, benchmark data, or external research."
+    - id: "analytics-or-metrics"
+      type: "context"
+      required: false
+      description: "Quantitative measurements, product analytics, funnel data, survey data, financial metrics, or operational metrics."
+    - id: "contradictory-notes"
+      type: "manual_note"
+      required: false
+      description: "Evidence, observations, objections, or patterns that conflict with existing assumptions, hypotheses, or preferred conclusions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered by a complete evidence register."
+    - "Every evidence entry includes source, source type, raw evidence or summary, interpretation, evidence strength, confidence, bias risk, and linked hypotheses or assumptions."
+    - "Raw evidence is distinguished from interpretation and conclusion."
+    - "Evidence entries are traceable to Research Plan, Experiments, Hypotheses, Core Assumptions, Economic Model, or Business Model where relevant."
+    - "Contradictory evidence is logged explicitly and not suppressed."
+    - "Evidence gaps are named and routed to further research, experiments, or decision deferral."
+    - "Evidence quality notes explain reliability, limitations, bias, and appropriate use of each major evidence source."
+    - "Decision implications are explicit enough to feed Decision Record and Validation Report."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid treating interpretation as raw evidence."
+    - "Avoid treating weak evidence as strong evidence."
+    - "Avoid cherry-picking only supportive evidence."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Evidence entries must be traceable to specific hypotheses or experiments."
+    - "Do not invent evidence, quotes, metrics, sources, sample sizes, statistical significance, or market data."
+    - "Do not overclaim from small samples, biased samples, anecdotal evidence, or inconclusive results."
+    - "Protect privacy, consent, and sensitive participant information."
+    - "Evidence entries must be traceable to specific hypotheses, assumptions, experiments, research questions, or decisions where possible."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate raw evidence, interpretation, confidence, and decision implication."
+    - "Classify evidence by source type: interview, observation, behavioral, quantitative, market, economic, operational, expert, desk research, or experiment."
+    - "Classify evidence strength as weak, suggestive, moderate, strong, contradictory, or inconclusive where useful."
+    - "Preserve contradictory and negative evidence with the same rigor as supportive evidence."
+    - "Use anonymized participant identifiers when needed."
+    - "Label statistical significance as unknown unless actually calculated and supported by appropriate data."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation documents, Validation Strategy, Hypotheses, Research Plan, Experiments, Economic Model, or Business Model."
+    - "Flag evidence entries without source, linked hypothesis, interpretation, or strength."
+    - "Flag unsupported interpretations that exceed the underlying evidence."
+    - "Flag missing contradictory evidence when conclusions appear one-sided."
+    - "Verify that privacy and consent concerns are handled where participant data is included."
+    - "Verify that evidence quality is sufficient before feeding decisions."
+    - "Flag content that belongs better in Research Plan, Experiments, Decision Record, or Validation Report."
+  specializedFormats:
+    evidenceEntryFormat:
+      description: "Required format for each evidence entry."
+      fields:
+        - id
+        - title
+        - sourceType
+        - sourceReference
+        - collectionDate
+        - collectedBy
+        - linkedHypotheses
+        - linkedAssumptions
+        - linkedExperiments
+        - rawEvidence
+        - interpretation
+        - evidenceStrength
+        - confidence
+        - biasRisks
+        - limitations
+        - contradictionStatus
+        - decisionImplication
+        - privacyNotes
+        - status
+    evidenceQualityFormat:
+      description: "Recommended format for assessing source and evidence quality."
+      fields:
+        - evidenceId
+        - sourceReliability
+        - relevance
+        - specificity
+        - sampleLimitations
+        - biasRisks
+        - confidence
+        - appropriateUse
+        - inappropriateUse
+    contradictionFormat:
+      description: "Recommended format for contradictory evidence and reconciliation."
+      fields:
+        - id
+        - evidenceIds
+        - contradicts
+        - description
+        - possibleExplanations
+        - severity
+        - decisionImpact
+        - reconciliationPlan
+        - status
+    evidenceGapFormat:
+      description: "Recommended format for evidence gaps."
+      fields:
+        - gap
+        - affectedHypotheses
+        - affectedDecisions
+        - riskIfUnresolved
+        - proposedResearchOrExperiment
+        - priority
+        - status
   sections:
     - id: "evidence-register"
       title: "Evidence Register"
-      intent: "Maintain the master log of all evidence entries with source, interpretation, and strength."
+      intent: "Maintain the master log of all evidence entries with source, raw evidence, interpretation, strength, links, limitations, and decision implications."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "List evidence entries as traceable records, not narrative summary alone."
+        - "Separate raw evidence from interpretation."
+        - "Link each entry to hypotheses, assumptions, experiments, research questions, or decisions where possible."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Each evidence entry is traceable to a source."
+        - "Each entry distinguishes evidence strength from confidence."
+        - "The register includes supportive, contradictory, inconclusive, and weak evidence."
       questions:
         - "What is the complete inventory of evidence collected?"
-        - "Which evidence entries are strongest and weakest?"
+        - "What is the source, source type, and collection context for each evidence entry?"
+        - "Which hypotheses, assumptions, or experiments does each evidence entry relate to?"
+        - "What is raw evidence versus interpretation?"
+        - "Which evidence entries are strongest, weakest, contradictory, or inconclusive?"
+        - "What decisions could each evidence entry inform?"
     - id: "interview-evidence"
       title: "Interview Evidence"
-      intent: "Catalog evidence from interviews, including key quotes and patterns across participants."
+      intent: "Catalog evidence from interviews, including quotes, patterns, contradictions, participant context, and interpretation limits."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Use anonymized participant identifiers where relevant."
+        - "Preserve key quotes without overstating what one participant proves."
+        - "Separate repeated patterns from isolated anecdotes."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Quotes are attributed to an anonymized source or session reference."
+        - "Interview patterns distinguish frequency, intensity, and confidence."
+        - "The section does not treat interview claims as observed behavior unless behavior was actually observed."
       questions:
         - "What evidence was collected from interviews?"
-        - "Which participant quotes are most revealing?"
+        - "Which participant quotes are most revealing and why?"
         - "What patterns emerged across interviews?"
+        - "What contradictions emerged across interviews?"
+        - "Which hypotheses were supported, weakened, refuted, or left inconclusive by interview evidence?"
+        - "What limitations or biases affect interview evidence?"
     - id: "behavioral-evidence"
       title: "Behavioral Evidence"
-      intent: "Document observed behavior, comparing actual actions to stated intentions."
+      intent: "Document observed behavior, workarounds, actual actions, drop-offs, switching behavior, and gaps between stated intent and observed action."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Prioritize observed behavior over stated intent."
+        - "Describe what people did, avoided, repeated, abandoned, or struggled to complete."
+        - "Note the context in which behavior occurred."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Behavioral evidence is based on observed action or reliable behavioral records."
+        - "Stated intent is clearly separated from actual behavior."
+        - "Unexpected behavior is preserved even if it complicates the preferred conclusion."
       questions:
         - "What evidence was collected from observed behavior?"
-        - "What did people actually do vs. what they said they would do?"
+        - "What did people actually do versus what they said they would do?"
+        - "What workarounds, habits, or alternatives were observed?"
         - "What behavioral patterns were unexpected?"
+        - "What behaviors supported or contradicted current hypotheses?"
+        - "What behavior evidence is still missing?"
     - id: "quantitative-evidence"
       title: "Quantitative Evidence"
-      intent: "Document numerical evidence, key metrics, and statistical significance."
+      intent: "Document numerical evidence, metric definitions, sample size, collection method, uncertainty, statistical relevance, and interpretation limits."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define each metric before reporting values."
+        - "Include sample size, time window, source, and collection method where relevant."
+        - "Mark statistical significance as unknown unless properly calculated."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Metrics are tied to hypotheses, experiments, or decisions."
+        - "Quantitative evidence does not imply false precision."
+        - "The section distinguishes descriptive metrics from statistically meaningful findings."
       questions:
         - "What numerical evidence was collected?"
-        - "What are the key metrics and their values?"
-        - "What is the statistical significance of the quantitative findings?"
+        - "What are the metric definitions, values, sample sizes, and time windows?"
+        - "What collection method produced the data?"
+        - "What is the statistical significance of the quantitative findings, if actually calculated?"
+        - "What uncertainty, bias, or data quality issues affect the numbers?"
+        - "What decisions can and cannot be supported by this quantitative evidence?"
     - id: "market-evidence"
       title: "Market Evidence"
-      intent: "Document evidence about the market, competitors, substitutes, and adjacent markets."
+      intent: "Document evidence about market category, competitors, substitutes, buyer behavior, pricing references, adoption patterns, and adjacent markets."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Separate primary market evidence from secondary desk research."
+        - "Distinguish competitors from substitutes and adjacent alternatives."
+        - "Avoid using market evidence to imply demand without behavioral or willingness-to-pay evidence."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Market claims cite a source or are marked as assumptions."
+        - "Competitor and substitute evidence is represented fairly."
+        - "The section does not overclaim market size or demand."
       questions:
         - "What evidence about the market was collected?"
         - "What do competitors, substitutes, and adjacent markets indicate?"
+        - "What pricing or packaging evidence exists in the market?"
         - "What market data supports or refutes the opportunity?"
+        - "What market evidence is weak, outdated, indirect, or not yet validated?"
+        - "What market evidence should feed GTM or Business Model decisions?"
+    - id: "economic-and-business-evidence"
+      title: "Economic and Business Evidence"
+      intent: "Track evidence related to pricing, willingness to pay, costs, margins, channels, customer segments, revenue streams, and business model viability."
+      required: true
+      outputGuidance:
+        - "Separate economic evidence from economic assumptions."
+        - "Link evidence to Economic Model or Business Model components."
+        - "Identify what remains an estimate rather than validated evidence."
+      qualityChecks:
+        - "Willingness-to-pay evidence is not confused with interest or compliments."
+        - "Cost evidence is sourced or marked estimated."
+        - "Business evidence is linked to model components and decisions."
+      questions:
+        - "What evidence supports or weakens pricing assumptions?"
+        - "What evidence supports or weakens willingness to pay?"
+        - "What evidence supports or weakens cost assumptions?"
+        - "What evidence supports or weakens channel, sales, or adoption assumptions?"
+        - "What evidence supports or weakens the business model mechanism?"
+        - "What evidence should feed Economic Model, Business Model, GTM, or Operations?"
     - id: "contradictory-evidence"
       title: "Contradictory Evidence"
-      intent: "Surface evidence that contradicts assumptions and track reconciliation."
+      intent: "Surface evidence that contradicts assumptions, hypotheses, preferred conclusions, economic claims, or business model claims, and track reconciliation."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Log uncomfortable evidence explicitly."
+        - "State what the evidence contradicts and how severe the contradiction is."
+        - "Define whether the contradiction requires more research, hypothesis revision, model revision, pivot, or no action."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Contradictory evidence is not softened to preserve the preferred direction."
+        - "Each contradiction identifies affected assumptions, hypotheses, or decisions."
+        - "Reconciliation plans do not explain away strong negative evidence without basis."
       questions:
         - "What evidence contradicts the project's assumptions?"
         - "What evidence was collected that we did not want to find?"
+        - "Which hypotheses, assumptions, economic claims, or business model claims are contradicted?"
+        - "How severe is each contradiction?"
         - "How are contradictions being reconciled?"
+        - "Which contradictions require decision review?"
+    - id: "evidence-gaps"
+      title: "Evidence Gaps"
+      intent: "Identify missing, weak, inconclusive, or insufficient evidence that blocks or weakens validation decisions."
+      required: true
+      outputGuidance:
+        - "List gaps by affected hypothesis, assumption, or decision."
+        - "Prioritize gaps by decision risk."
+        - "Propose whether each gap needs research, experiment, external data, or decision deferral."
+      qualityChecks:
+        - "Evidence gaps are not hidden by confident interpretation."
+        - "Each high-risk gap has a proposed resolution path."
+        - "Low-priority gaps are distinguished from blocking gaps."
+      questions:
+        - "Where are the evidence gaps?"
+        - "Which hypotheses or decisions lack sufficient evidence?"
+        - "Which evidence gaps block validation decisions?"
+        - "Which evidence gaps can be carried forward temporarily?"
+        - "What research or experiment should address each major gap?"
     - id: "evidence-quality-notes"
       title: "Evidence Quality Notes"
-      intent: "Assess overall evidence quality, source reliability, gaps, and potential biases."
+      intent: "Assess overall evidence quality, source reliability, relevance, specificity, sample limitations, bias, confidence, and appropriate use."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Assess evidence quality by source, relevance, specificity, sample, bias, and decision fit."
+        - "Explain what each evidence type can and cannot support."
+        - "Preserve limitations even for evidence that supports the project."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Evidence quality is not inflated because evidence is favorable."
+        - "Weak evidence is not used to justify strong commitments."
+        - "Bias and limitations are explicit."
       questions:
         - "What is the overall quality of the evidence collected?"
         - "Which evidence sources are most reliable?"
-        - "Where are the evidence gaps?"
+        - "Which evidence sources are weakest or most biased?"
         - "What biases may have affected evidence collection?"
+        - "What can this evidence appropriately support?"
+        - "What should this evidence not be used to justify?"

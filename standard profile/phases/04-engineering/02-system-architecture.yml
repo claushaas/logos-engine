@@ -5,127 +5,532 @@ document:
   status: "not_started"
   order: 2
   type: "system_architecture"
-  purpose: "Macro architecture defining the main technical blocks and their relationships."
-  centralQuestion: "What are the main technical blocks and how do they relate?"
+  purpose: "Define the macro technical architecture of the system, including architectural style, system boundaries, components, layers, module boundaries, runtime model, data flow, dependency rules, resilience, risks, and downstream technical implications."
+  centralQuestion: "What is the system's technical shape, how do its parts relate, and what rules keep it coherent, resilient, and evolvable?"
   outputs:
     canonical:
       format: "markdown"
-      path: "04-engineering/system-architecture.md"
-      purpose: "Macro architecture document defining main technical blocks and their relationships."
-  dependsOn: []
-  feeds: []
+      path: "docs/04-engineering/02-system-architecture.md"
+      purpose: "Store the canonical system architecture document as a Markdown document."
+    artifacts:
+      - id: "engineering.system_architecture_map"
+        format: "html"
+        path: "outcomes/html/04-engineering/system-architecture-map.html"
+        purpose: "Provide a navigable system architecture map covering context, architecture style, components, layers, module boundaries, dependency rules, runtime, deployment, data flow, failure modes, decisions, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "architecture overview"
+          - "architectural drivers"
+          - "architectural style"
+          - "system context"
+          - "system boundary"
+          - "application layers"
+          - "module boundaries"
+          - "dependency rules"
+          - "runtime architecture"
+          - "deployment topology"
+          - "data flow"
+          - "security and privacy hooks"
+          - "observability hooks"
+          - "failure modes"
+          - "architecture decisions"
+          - "architecture risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.system_architecture_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/system-architecture-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the system architecture is coherent, bounded, dependency-safe, resilient, secure, observable, product-aligned, and ready to feed downstream engineering documents."
+        agentRole: "reviewer"
+        includes:
+          - "canonical system architecture"
+          - "engineering brief dependency"
+          - "product stack dependency"
+          - "functional requirements dependency"
+          - "non-functional requirements dependency"
+          - "acceptance criteria dependency"
+          - "architecture formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/12-product-stack"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+  feeds:
+    - "04-engineering/03-data-model"
+    - "04-engineering/04-security-architecture"
+    - "04-engineering/05-api-contracts"
+    - "04-engineering/06-integration-architecture"
+    - "04-engineering/07-frontend-architecture"
+    - "04-engineering/08-infrastructure-architecture"
+    - "04-engineering/09-test-strategy"
+    - "04-engineering/10-design-system"
+    - "04-engineering/11-observability-plan"
+    - "04-engineering/12-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "engineering-brief"
+      type: "context"
+      required: false
+      description: "Engineering objective, product inputs, technical scope, architecture direction, engineering constraints, capabilities, risks, deferred decisions, and success criteria."
+    - id: "product-stack"
+      type: "context"
+      required: false
+      description: "Product-level technology choices, platform strategy, client choices, UX-relevant constraints, integration surface, deferred engineering decisions, and stack risks."
+    - id: "product-architecture"
+      type: "context"
+      required: false
+      description: "Product modules, capabilities, module boundaries, dependencies, ownership, and product architecture risks that system architecture must implement or preserve."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "Functional requirements, data requirements, integration requirements, business rules, and traceability that architecture must support."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, compliance, and operational constraints."
+    - id: "acceptance-criteria"
+      type: "context"
+      required: false
+      description: "Acceptance gates, release blockers, readiness criteria, rollback expectations, and verification requirements that architecture must enable."
+    - id: "architecture-notes"
+      type: "manual_note"
+      required: false
+      description: "Architecture preferences, candidate diagrams, technology constraints, runtime concerns, module ideas, resilience concerns, and unresolved architecture questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through explicit system shape, boundaries, relationships, dependency rules, runtime model, data flow, failure handling, decisions, and risks."
+    - "Architecture overview identifies major components, system boundary, external actors, deployment surfaces, core flows, and primary architectural drivers."
+    - "Architectural style is selected or narrowed with rationale, alternatives considered, trade-offs, constraints, and implications for product requirements and NFRs."
+    - "System context distinguishes internal system responsibilities from external systems, users, admins, integrations, platforms, infrastructure, and operational actors."
+    - "Application layers define responsibilities, allowed dependencies, forbidden dependencies, cross-cutting concerns, and ownership of domain rules, application orchestration, adapters, infrastructure, and presentation."
+    - "Module boundaries define module responsibilities, owned data or concepts, public interfaces, allowed dependencies, forbidden dependencies, lifecycle ownership, and boundary enforcement."
+    - "Dependency rules prevent circular dependencies, direct infrastructure leakage, domain leakage, cross-layer shortcuts, and UI-to-infrastructure coupling where relevant."
+    - "Runtime architecture defines processes, workers, queues, scheduling, concurrency model, background jobs, sync behavior, long-running operations, and runtime failure implications where relevant."
+    - "Deployment topology identifies environments, deployable units, hosting boundaries, environment boundaries, configuration boundaries, and what Infrastructure Architecture must expand."
+    - "Data flow explains how data enters, moves, validates, transforms, persists, synchronizes, exits, and fails across the architecture."
+    - "Security, privacy, and observability hooks identify where downstream documents must define controls, auditability, telemetry, logging, metrics, tracing, and privacy-safe diagnostics."
+    - "Failure modes include internal failure, external dependency failure, data failure, permission failure, network failure, concurrency failure, partial failure, degraded mode, and recovery strategy."
+    - "Architecture decisions are captured as ADR candidates with rationale, alternatives, consequences, reversibility, and downstream impact."
+    - "Architecture risks are specific, source-linked, impact-aware, and routed to downstream documents or mitigation plans."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid architecture theater: diagrams or labels that do not define responsibilities, dependencies, boundaries, runtime behavior, or failure handling."
+    - "Avoid selecting architectural style by fashion rather than product/NFR fit."
+    - "Avoid leaking infrastructure concerns into domain or UI boundaries without explicit rationale."
+    - "Avoid hiding security, privacy, observability, resilience, deployment, or operational implications."
+    - "Avoid pretending provisional architecture choices are final ADRs."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent technology guarantees, runtime benchmarks, compliance status, cloud capabilities, team capacity, or production topology."
+    - "System architecture must preserve product boundaries, engineering constraints, acceptance gates, NFRs, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate architectural drivers, style, context, components, layers, module boundaries, dependency rules, runtime, deployment, data flow, failure modes, decisions, and risks."
+    - "Tie architecture decisions to Engineering Brief, Product Stack, Functional Requirements, NFRs, Acceptance Criteria, Product Architecture, Validation Report, or Decision Record where possible."
+    - "Classify architecture choices as committed, provisional, deferred, rejected, MVP, post-MVP, or review-needed where useful."
+    - "State where each detailed technical area should be expanded downstream."
+    - "Use diagrams conceptually where useful, but require text to define responsibilities and rules."
+    - "Keep this document as macro architecture; detailed schemas, API payloads, security controls, infrastructure topology, frontend component architecture, and test plans belong downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Engineering Brief, Product Stack, Product Architecture, Functional Requirements, Non-Functional Requirements, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag architecture components without responsibility, owner, boundary, interface, dependency rule, or failure behavior."
+    - "Flag architectural style choices without rationale, alternatives, trade-offs, or NFR implications."
+    - "Flag module boundaries that allow circular dependencies, infrastructure leakage, domain leakage, or ambiguous ownership."
+    - "Flag data flows that omit validation, persistence, sync, error, privacy, or audit implications."
+    - "Verify that security, privacy, observability, reliability, deployment, and operations implications are routed downstream."
+    - "Flag content that belongs better in Data Model, Security Architecture, API Contracts, Integration Architecture, Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or Operations."
+  specializedFormats:
+    componentFormat:
+      description: "Recommended format for system components."
+      fields:
+        - id
+        - name
+        - type
+        - responsibility
+        - ownedConcepts
+        - publicInterfaces
+        - dependencies
+        - forbiddenDependencies
+        - runtimeBehavior
+        - failureBehavior
+        - securityPrivacyImplications
+        - observabilityImplications
+        - downstreamDocuments
+        - status
+    layerFormat:
+      description: "Recommended format for application layers."
+      fields:
+        - layer
+        - responsibility
+        - mayDependOn
+        - mustNotDependOn
+        - owns
+        - doesNotOwn
+        - publicSurface
+        - enforcementRule
+        - violationExamples
+        - downstreamImplications
+    moduleBoundaryFormat:
+      description: "Recommended format for module boundaries."
+      fields:
+        - module
+        - responsibility
+        - owns
+        - doesNotOwn
+        - publicInterface
+        - allowedDependencies
+        - forbiddenDependencies
+        - dataOwnership
+        - lifecycleOwnership
+        - boundaryEnforcement
+        - ambiguityResolution
+    dataFlowFormat:
+      description: "Recommended format for architecture-level data flows."
+      fields:
+        - flow
+        - source
+        - destination
+        - trigger
+        - dataObjects
+        - validationPoint
+        - transformationPoint
+        - persistencePoint
+        - permissionCheck
+        - failureBehavior
+        - auditOrTelemetry
+        - downstreamDocument
+    architectureDecisionFormat:
+      description: "Recommended format for architecture decision records."
+      fields:
+        - id
+        - decision
+        - status
+        - context
+        - optionsConsidered
+        - rationale
+        - tradeoffs
+        - consequences
+        - reversibility
+        - linkedRequirements
+        - downstreamImpact
+        - revisitTrigger
+    architectureRiskFormat:
+      description: "Recommended format for architecture risks."
+      fields:
+        - risk
+        - category
+        - affectedComponents
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - targetDocument
+        - releaseImpact
   sections:
     - id: "architecture-overview"
       title: "Architecture Overview"
-      intent: "Provide a high-level architecture diagram and identify the primary architectural drivers."
+      intent: "Provide the high-level architecture shape, major components, system boundary, core flows, and primary architectural drivers."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Start with a concise architecture summary in prose."
+        - "Describe the major components and their responsibilities before any diagram."
+        - "Identify primary drivers such as product scope, NFRs, security, privacy, integrations, offline needs, scalability, cost, and operational constraints."
+        - "Include a diagram or diagram-ready structure when useful, but do not rely on diagram labels alone."
+      qualityChecks:
+        - "The overview makes the system shape understandable without detailed downstream docs."
+        - "Each major component has a clear role."
+        - "Architectural drivers are traceable to upstream inputs."
       questions:
-        - "What is the high-level architecture diagram showing major components?"
+        - "What is the high-level architecture of the system?"
+        - "What are the major components and what is each responsible for?"
+        - "What is inside versus outside the system boundary?"
         - "What are the primary architectural drivers?"
+        - "What core flows must the architecture support?"
+        - "What constraints most strongly shape the architecture?"
     - id: "architectural-style"
       title: "Architectural Style"
-      intent: "Determine the architectural style that best serves the product goals — monolith, modular monolith, services, serverless, local-first, or offline-first."
+      intent: "Select or narrow the architectural style and explain why it fits the product, engineering constraints, NFRs, and release strategy."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Compare relevant styles such as monolith, modular monolith, services, serverless, event-driven, local-first, offline-first, server-first, or hybrid where applicable."
+        - "State selected style, rejected alternatives, trade-offs, and reversibility."
+        - "Explain how the style affects complexity, deployment, testing, scalability, observability, cost, and team workflow."
+      qualityChecks:
+        - "Style selection is driven by requirements and constraints."
+        - "Rejected styles include rationale."
+        - "The chosen style does not overfit future scale while ignoring current delivery needs."
       questions:
-        - "Monolith, modular monolith, services, serverless, local-first, offline-first?"
         - "What architectural style best serves the product goals?"
+        - "Is the system a monolith, modular monolith, service architecture, serverless system, event-driven system, local-first system, offline-first system, server-first system, or hybrid?"
+        - "What alternatives were considered and rejected?"
+        - "What trade-offs are accepted by this style?"
+        - "How reversible is this architectural style decision?"
+        - "What downstream documents must expand this style into implementation detail?"
     - id: "system-context"
       title: "System Context"
-      intent: "Define the external systems and actors that interact with the system and clarify the system boundary."
+      intent: "Define external actors, external systems, platform services, operational actors, integration points, trust boundaries, and the system boundary."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe the system from the outside in."
+        - "Separate users, admins, internal operators, external services, platform capabilities, infrastructure services, and third-party integrations."
+        - "Mark trust boundaries and data/control boundaries where relevant."
+      qualityChecks:
+        - "System boundary is explicit."
+        - "External dependencies and actors are not hidden."
+        - "Trust boundaries are identified for Security Architecture and Privacy review."
       questions:
         - "What external systems and actors interact with the system?"
         - "What is the system boundary?"
+        - "What external systems are trusted, semi-trusted, or untrusted?"
+        - "What data crosses the system boundary?"
+        - "What control actions cross the system boundary?"
+        - "What context should Integration Architecture and Security Architecture inherit?"
     - id: "application-layers"
       title: "Application Layers"
-      intent: "Describe the application layers and how concerns are separated across them."
+      intent: "Define application layers, responsibilities, allowed dependencies, forbidden dependencies, ownership of rules, and enforcement expectations."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define each layer by responsibility and ownership."
+        - "Specify where domain rules, application orchestration, infrastructure adapters, UI/presentation, persistence, integration, and cross-cutting concerns belong."
+        - "State what each layer must not know about."
+      qualityChecks:
+        - "Layers separate concerns without becoming ceremonial."
+        - "Dependency direction is explicit."
+        - "Domain, application, infrastructure, and presentation responsibilities are not mixed without rationale."
       questions:
         - "What layers exist?"
-        - "How are concerns separated across layers?"
+        - "What is the responsibility of each layer?"
+        - "Where do domain rules live?"
+        - "Where does application orchestration live?"
+        - "Where do adapters, persistence, integrations, and infrastructure concerns live?"
+        - "Where does UI or presentation logic live?"
+        - "How are concerns separated and enforced across layers?"
     - id: "module-boundaries"
       title: "Module Boundaries"
-      intent: "Identify rigid boundaries and define which modules are allowed to depend on which other modules."
+      intent: "Define technical module boundaries, responsibilities, public interfaces, ownership, data boundaries, lifecycle boundaries, and dependency permissions."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Translate Product Architecture modules into technical module boundaries where appropriate."
+        - "Define owned concepts, public interfaces, forbidden dependencies, and ambiguity rules."
+        - "State boundary enforcement mechanisms at a conceptual level."
+      qualityChecks:
+        - "Each module has clear responsibility and public surface."
+        - "Modules do not share ownership of the same concept without a rule."
+        - "Boundaries prevent circular dependencies and unclear ownership."
       questions:
-        - "Which boundaries are rigid?"
+        - "What technical modules exist?"
+        - "What does each module own and not own?"
+        - "What public interfaces does each module expose?"
+        - "Which boundaries are rigid and which are flexible?"
         - "Which modules are allowed to depend on which other modules?"
+        - "Which dependencies are forbidden?"
+        - "How are module boundary violations detected or prevented?"
     - id: "dependency-rules"
       title: "Dependency Rules"
-      intent: "Establish rules governing imports and dependencies between modules and how circular dependencies are prevented."
+      intent: "Establish rules governing imports, dependencies, cross-layer access, adapter usage, dependency injection, circular dependency prevention, and boundary enforcement."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State dependency direction rules explicitly."
+        - "Define how modules call each other, how adapters are injected, and what direct imports are forbidden."
+        - "Include examples of allowed and forbidden dependency paths."
+      qualityChecks:
+        - "Rules are concrete enough to guide code review and tooling later."
+        - "Circular dependency prevention is explicit."
+        - "Infrastructure and UI do not bypass intended boundaries."
       questions:
         - "What are the rules governing imports and dependencies between modules?"
+        - "What dependency direction is allowed across layers?"
+        - "How are adapters injected or accessed?"
+        - "What direct imports are forbidden?"
         - "How are circular dependencies prevented?"
+        - "What dependency rules should be enforced by linting, package boundaries, tests, or review?"
     - id: "runtime-architecture"
       title: "Runtime Architecture"
-      intent: "Explain how the system runs at runtime — processes, threads, workers — and the concurrency model."
+      intent: "Explain how the system runs at runtime, including processes, clients, servers, workers, jobs, queues, concurrency, scheduling, long-running tasks, and resource boundaries."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe runtime units and their responsibilities."
+        - "Define concurrency, background work, retry, idempotency, job execution, and long-running operation expectations at architecture level."
+        - "State what remains unresolved for Infrastructure and Deployment Plan."
+      qualityChecks:
+        - "Runtime model supports Functional Requirements and NFRs."
+        - "Background work and long-running operations include failure and observability implications."
+        - "Concurrency and resource assumptions are explicit or marked for review."
       questions:
-        - "How does the system run at runtime? Processes, threads, workers?"
+        - "How does the system run at runtime?"
+        - "What runtime units exist: clients, servers, workers, jobs, queues, schedulers, edge functions, background tasks, or local processes?"
         - "What is the concurrency model?"
+        - "How are long-running operations handled?"
+        - "How are retries, idempotency, and duplicate work handled at architecture level?"
+        - "What runtime assumptions require Infrastructure or Deployment review?"
+    - id: "deployment-topology"
+      title: "Deployment Topology"
+      intent: "Define deployable units, environment boundaries, hosting assumptions, configuration boundaries, release surfaces, and downstream infrastructure implications."
+      required: true
+      outputGuidance:
+        - "Describe deployment topology at macro level without replacing Infrastructure Architecture."
+        - "Separate environments, deployable units, runtime surfaces, configuration ownership, secrets boundaries, and release units."
+        - "Mark provisional hosting or deployment assumptions for downstream review."
+      qualityChecks:
+        - "Deployable units align with architectural style and runtime model."
+        - "Environment and configuration boundaries are explicit."
+        - "Deployment details are not over-specified beyond this document's scope."
+      questions:
+        - "What are the deployable units of the system?"
+        - "What environments exist or are expected: local, preview, staging, production, sandbox, or others?"
+        - "What hosting or runtime surfaces are assumed?"
+        - "What configuration and secrets boundaries exist?"
+        - "What release units exist?"
+        - "What should Infrastructure Architecture and Deployment Plan expand?"
     - id: "data-flow"
       title: "Data Flow"
-      intent: "Describe how data moves through the system, how client talks to backend, where domain rules live, and where adapters live."
+      intent: "Describe how data enters, moves, validates, transforms, persists, synchronizes, exits, and fails across the system."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe major data flows, not full schema details."
+        - "Identify validation points, transformation points, persistence points, permission checks, audit points, sync points, and failure behavior."
+        - "State where domain rules and adapter responsibilities apply."
+      qualityChecks:
+        - "Data flow supports IA objects, Functional Requirements, NFRs, and Product Stack constraints."
+        - "Data flow includes error, privacy, permission, and audit implications."
+        - "Schema and API details are deferred to Data Model and API Contracts."
       questions:
         - "How does data move through the system?"
-        - "How does client talk to backend?"
-        - "Where do domain rules live?"
+        - "How does the client communicate with backend or local services?"
+        - "Where is data validated?"
+        - "Where is data transformed?"
+        - "Where is data persisted or synchronized?"
+        - "Where do domain rules apply?"
         - "Where do adapters live?"
+        - "What happens when data flow fails or becomes partial?"
+    - id: "security-and-privacy-hooks"
+      title: "Security and Privacy Hooks"
+      intent: "Identify architecture-level security and privacy control points that downstream Security Architecture and Data Model must expand."
+      required: true
+      outputGuidance:
+        - "Identify control points, not final implementation controls."
+        - "Include authentication, authorization, permission checks, encryption boundaries, audit logging, secrets, sensitive data, data retention, deletion, export, and telemetry minimization where relevant."
+        - "Route unresolved questions to Security Architecture and Data Model."
+      qualityChecks:
+        - "Security and privacy are present in architecture, not bolted on later."
+        - "Sensitive flows and trust boundaries are identified."
+        - "Claims are not overstated as final controls."
+      questions:
+        - "Where are the architecture-level security control points?"
+        - "Where are authentication and authorization enforced?"
+        - "Where are permission checks required?"
+        - "Where are sensitive data boundaries?"
+        - "Where are audit logging and privacy-safe telemetry required?"
+        - "What must Security Architecture and Data Model expand?"
+    - id: "observability-hooks"
+      title: "Observability Hooks"
+      intent: "Identify architecture-level logging, metrics, tracing, audit, health, alerting, debugging, and privacy-safe telemetry points."
+      required: true
+      outputGuidance:
+        - "Identify what must be observable at architecture level."
+        - "Separate product analytics, operational metrics, diagnostic logs, security events, audit events, and traces."
+        - "Route detailed instrumentation to Observability Plan and Test Strategy."
+      qualityChecks:
+        - "Critical flows, failures, integrations, and release gates have observability hooks."
+        - "Telemetry does not imply unnecessary sensitive data collection."
+        - "Observability supports debugging, support, incident response, and acceptance verification."
+      questions:
+        - "What must be observable in the system?"
+        - "What logs, metrics, traces, audit events, and health checks are needed at architecture level?"
+        - "What failure modes require alerts or operational visibility?"
+        - "What telemetry must remain privacy-safe?"
+        - "What should Observability Plan expand?"
     - id: "failure-modes"
       title: "Failure Modes"
-      intent: "Identify primary failure scenarios, how they are handled, and the resilience strategy."
+      intent: "Identify primary system failure scenarios, user impact, detection, containment, recovery, degradation, and resilience strategy."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe failures by component, flow, dependency, runtime unit, or data operation."
+        - "Include partial failure, external dependency failure, network failure, data corruption, concurrency failure, permission failure, timeout, retry exhaustion, degraded mode, and rollback implications where relevant."
+        - "Tie failure modes to observability, tests, release blockers, and operations."
+      qualityChecks:
+        - "Failure modes are concrete and connected to recovery or mitigation."
+        - "User-visible impact is explicit."
+        - "Resilience strategy does not rely on optimism or manual improvisation alone."
       questions:
-        - "What are the primary failure scenarios and how are they handled?"
-        - "What is the resilience strategy?"
+        - "What are the primary failure scenarios?"
+        - "How is each failure detected?"
+        - "What is the user impact of each failure?"
+        - "How is each failure contained or isolated?"
+        - "How does the system recover or degrade gracefully?"
+        - "What failures block release or require rollback?"
+        - "What should Test Strategy, Observability Plan, Release Management, and Operations inherit?"
     - id: "architecture-decisions"
       title: "Architecture Decisions"
-      intent: "Document key ADRs already made or expected and the trade-offs that have been accepted."
+      intent: "Document key architecture decisions and ADR candidates with context, alternatives, rationale, trade-offs, consequences, reversibility, and revisit triggers."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Record committed decisions separately from ADR candidates and provisional assumptions."
+        - "Include alternatives considered and consequences."
+        - "State reversibility and revisit triggers."
+      qualityChecks:
+        - "Decisions are traceable and not presented as arbitrary preference."
+        - "Trade-offs are explicit."
+        - "Provisional decisions are not treated as final ADRs."
       questions:
-        - "What are the key ADRs already made or expected?"
+        - "What key architecture decisions have already been made?"
+        - "What ADRs are expected or needed?"
+        - "What alternatives were considered?"
         - "What trade-offs have been accepted?"
+        - "What are the consequences of each decision?"
+        - "Which decisions are reversible, partially reversible, or hard to reverse?"
+        - "What would trigger revisiting each decision?"
     - id: "architecture-risks"
       title: "Architecture Risks"
-      intent: "Identify the biggest risks in the chosen architecture and assumptions that could prove wrong."
+      intent: "Identify risks in the chosen architecture, including assumptions that could prove wrong, weak boundaries, coupling, scale limits, resilience gaps, and downstream unknowns."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe risks as concrete architecture failure modes."
+        - "Tie risks to components, flows, NFRs, decisions, dependencies, runtime, deployment, security, privacy, observability, or operations."
+        - "Include early signal, mitigation, release impact, and target document."
+      qualityChecks:
+        - "Risks are specific enough to monitor, test, mitigate, or route downstream."
+        - "Coupling, scalability, resilience, security, privacy, observability, integration, deployment, and operational risks are considered."
+        - "Architecture assumptions that could prove wrong are explicit."
       questions:
         - "What are the biggest risks in the chosen architecture?"
         - "What assumptions could prove wrong?"
+        - "Where are boundaries weakest or most likely to erode?"
+        - "Where could coupling or circular dependency emerge?"
+        - "Where could scale, resilience, security, privacy, observability, deployment, or operational risks appear?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from System Architecture and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route architecture outputs to the correct downstream documents."
+        - "Separate data, security, API, integration, frontend, infrastructure, testing, observability, deployment, release, support, and operations implications."
+        - "Preserve unresolved architecture questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing architecture rules silently."
+        - "Macro architecture and detailed implementation responsibilities remain distinct."
+      questions:
+        - "What should Data Model inherit from System Architecture?"
+        - "What should Security Architecture inherit?"
+        - "What should API Contracts and Integration Architecture inherit?"
+        - "What should Frontend Architecture and Infrastructure Architecture inherit?"
+        - "What should Test Strategy, Observability Plan, and Deployment Plan inherit?"
+        - "What should Release Management, Support Model, Risk Management, and Operations inherit?"
+        - "What unresolved system architecture questions must be carried forward?"

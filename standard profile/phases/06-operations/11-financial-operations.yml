@@ -5,134 +5,854 @@ document:
   status: "not_started"
   order: 11
   type: "financial_operations"
-  purpose: "Define how money is operated day to day, including billing, payments, and cost control."
-  centralQuestion: "How is money operated day to day?"
-  dependsOn: []
-  feeds: []
+  purpose: "Define how money is operated day to day, including pricing enforcement, billing, payments, subscriptions, refunds, chargebacks, invoices/receipts, revenue data, cost monitoring, vendor spend, margin monitoring, tax/accounting interface, financial controls, reporting, evidence, exceptions, risks, and downstream handoff."
+  centralQuestion: "How are revenue, billing, payments, refunds, costs, margins, vendors, financial records, and financial risks operated accurately, transparently, sustainably, and safely day to day?"
   outputs:
     canonical:
       format: "markdown"
-      path: "06-operations/11-financial-operations.md"
-      purpose: "Complete financial operations definition covering objectives, billing, subscription management, payment failures, refunds, revenue recognition, cost and margin monitoring, vendor costs, tax/accounting interface, financial reporting, and risks."
+      path: "docs/06-operations/11-financial-operations.md"
+      purpose: "Store the canonical financial operations model as a Markdown document."
+    artifacts:
+      - id: "operations.financial_operations_playbook"
+        format: "html"
+        path: "outcomes/html/06-operations/financial-operations-playbook.html"
+        purpose: "Provide a founder-facing financial operations playbook covering billing, payments, subscriptions, refunds, chargebacks, invoices, revenue data, costs, margins, vendors, tax/accounting interface, financial controls, reporting, exceptions, metrics, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "financial operations objective"
+          - "financial principles"
+          - "financial operations scope"
+          - "pricing and package enforcement"
+          - "billing operations"
+          - "payment operations"
+          - "subscription management"
+          - "plan changes and proration"
+          - "payment failures and dunning"
+          - "refund operations"
+          - "chargebacks and disputes"
+          - "invoice and receipt operations"
+          - "revenue data and recognition interface"
+          - "cost monitoring"
+          - "margin monitoring"
+          - "vendor cost management"
+          - "tax and accounting interface"
+          - "financial controls"
+          - "financial exceptions"
+          - "financial reporting"
+          - "financial metrics"
+          - "financial evidence and audit trail"
+          - "financial operations risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.financial_operations_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/financial-operations-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether financial operations are accurate, owner-assigned, policy-aligned, processor-aware, evidence-backed, exception-aware, metric-driven, risk-aware, and not overclaiming accounting, tax, or legal conclusions."
+        agentRole: "reviewer"
+        includes:
+          - "canonical financial operations model"
+          - "pricing dependency"
+          - "operations brief dependency"
+          - "operating model dependency"
+          - "team responsibilities dependency"
+          - "business processes dependency"
+          - "operational metrics dependency"
+          - "reporting cadence dependency"
+          - "incident management dependency"
+          - "risk and compliance dependency"
+          - "financial operations formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "03-product/08-product-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/05-data-model"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/12-growth-metrics"
+    - "05-go-to-market/13-go-to-market-risks"
+    - "06-operations/01-operations-brief"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-team-and-responsibilities"
+    - "06-operations/04-customer-support"
+    - "06-operations/06-business-processes"
+    - "06-operations/07-operational-metrics"
+    - "06-operations/08-reporting-and-cadence"
+    - "06-operations/09-incident-management"
+    - "06-operations/10-risk-and-compliance"
+  feeds:
+    - "06-operations/12-risk-management"
+  inputs:
+    - id: "pricing-and-packaging"
+      type: "context"
+      required: false
+      description: "Pricing thesis, plans/packages, value metric, billing terms, payment flow, free/trial strategy, subscription terms, discounts, refunds, cancellation, plan changes, pricing metrics, pricing risks, and customer-facing financial promises."
+    - id: "operations-context"
+      type: "context"
+      required: false
+      description: "Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, and Risk/Compliance outputs that affect financial operations."
+    - id: "product-engineering-context"
+      type: "context"
+      required: false
+      description: "Product scope, entitlements, data model, security/privacy constraints, observability, deployment environments, technical risks, entitlement logic, payment integration assumptions, and financial event tracking."
+    - id: "processor-vendor-context"
+      type: "context"
+      required: false
+      description: "Known payment processors, billing platforms, app store payment systems, invoicing tools, accounting tools, tax tools, vendors, fee structures, account owners, access owners, and processor behavior assumptions."
+    - id: "tax-accounting-context"
+      type: "context"
+      required: false
+      description: "Known accounting method, tax/accounting review needs, invoice/receipt requirements, revenue recognition assumptions, reconciliation needs, financial reporting expectations, and professional-review constraints."
+    - id: "financial-operations-notes"
+      type: "manual_note"
+      required: false
+      description: "Known billing rules, payment failure ideas, refund policies, chargeback concerns, cost concerns, margin targets, vendor costs, reporting needs, financial owner assumptions, and unresolved financial operations questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a complete financial operations model covering billing, payments, subscriptions, refunds, chargebacks, invoices, revenue data, costs, margins, vendors, controls, reporting, evidence, exceptions, risks, and handoff."
+    - "Financial operations objective defines what financial operations protects: pricing truth, billing correctness, payment reliability, customer trust, revenue data quality, cost discipline, margin visibility, accounting/tax interface, auditability, and sustainability."
+    - "Financial principles define how financial operations handles accuracy, transparency, reversibility, customer communication, exception control, professional review, evidence, and financial privacy/security."
+    - "Financial operations scope defines what is in scope, what belongs to Pricing, Product/Engineering, Customer Support, Risk/Compliance, Tax/Accounting, and Risk Management, and what is explicitly out of scope."
+    - "Pricing and package enforcement defines how plans, entitlements, trials, discounts, plan limits, feature gates, billing terms, and cancellation/refund promises are operationalized and verified."
+    - "Billing operations define how charges are calculated, generated, scheduled, invoiced/receipted, collected, recorded, reconciled, communicated, failed, retried, adjusted, and corrected."
+    - "Payment operations define supported payment methods, payment processor assumptions, authorization/capture behavior, settlement, processor fees, failed payments, retries, fraud/risk signals, and processor incident handling."
+    - "Subscription management defines subscription creation, renewal, cancellation, pause/suspension, reactivation, upgrade, downgrade, entitlement changes, access timing, and customer communication."
+    - "Plan changes and proration define how upgrades, downgrades, billing-cycle changes, credits, proration, grandfathering, manual exceptions, and entitlement timing are handled."
+    - "Payment failures and dunning define detection, retry logic, grace period, customer communication, support handoff, access rule, suspension/cancellation trigger, reactivation, and financial reporting."
+    - "Refund operations define refund eligibility, intake, approval, exception authority, processor action, customer communication, recordkeeping, abuse/fraud signals, and reporting."
+    - "Chargebacks and disputes define detection, evidence, owner, processor workflow, customer communication, financial impact, recurrence prevention, and escalation."
+    - "Invoice and receipt operations define when invoices/receipts are generated, required fields, delivery, correction, duplicate requests, accounting handoff, customer support handoff, and review-needed tax/accounting assumptions."
+    - "Revenue data and recognition interface defines revenue event sources, revenue reporting fields, accounting export, reconciliation, recognized/deferred revenue assumptions, professional-review needs, and caveats."
+    - "Cost monitoring defines infrastructure costs, vendor costs, support costs, payment processor fees, observability costs, AI/model costs, storage/bandwidth costs, manual work costs, and anomaly thresholds."
+    - "Margin monitoring defines gross margin, contribution margin, net margin, cost allocation assumptions, per-customer/per-plan economics, threshold triggers, caveats, and review cadence."
+    - "Vendor cost management defines vendor inventory, billing owner, account owner, cost center/category, renewal cadence, usage/cost driver, alert threshold, cancellation/offboarding rule, and replacement consideration."
+    - "Tax and accounting interface defines what data is shared, owner, cadence, format, accounting/tax review needs, unknown obligations, professional-review boundaries, and downstream evidence."
+    - "Financial controls define approvals, access controls, refund controls, discount controls, invoice correction controls, reconciliation checks, processor access review, vendor spend review, audit trail, and exception review."
+    - "Financial exceptions define how pricing, discounts, refunds, credits, billing corrections, invoice changes, manual entitlements, payment issues, and customer-specific financial exceptions are requested, approved, time-boxed, documented, reviewed, and closed."
+    - "Financial reporting defines reports, cadence, audience, owner, metrics, source, artifact, caveats, escalation triggers, and decision use."
+    - "Financial metrics define MRR/ARR/revenue where applicable, payments collected, failed payment rate, payment recovery, refund rate, chargeback rate, billing error rate, invoice issue rate, discount exception rate, subscription state errors, vendor cost, margin, and finance support burden."
+    - "Financial evidence and audit trail define what financial actions, exceptions, refunds, chargebacks, invoices, billing corrections, processor events, reports, reconciliations, and approvals are stored, protected, reviewed, and retained."
+    - "Financial operations risks identify billing errors, incorrect entitlements, failed payment handling gaps, refund abuse, chargebacks, processor failure, tax/accounting unknowns, cost spikes, margin erosion, vendor surprises, weak controls, evidence gaps, and owner gaps."
+    - "Downstream handoff clarifies what Risk Management must inherit from Financial Operations."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid financial-operations theater: billing, payment, refund, cost, or reporting claims without owner, source, process, control, evidence, metric, exception path, and risk handling."
+    - "Avoid asserting tax, accounting, revenue recognition, invoice, legal, chargeback, or regulatory conclusions as final unless professionally reviewed."
+    - "Avoid confusing Pricing strategy with Financial Operations execution; pricing defines terms, financial operations enforces and records them."
+    - "Avoid confusing Customer Support handling with Financial Operations authority; support may intake questions, but financial approval and evidence must be defined."
+    - "Avoid refund, discount, credit, billing correction, or manual entitlement exceptions without approval authority, audit trail, expiration/review trigger, and abuse/fraud consideration."
+    - "Avoid payment failure handling without customer communication, retry/grace/access rules, support handoff, and financial reporting."
+    - "Avoid revenue metrics without source, formula, caveats, owner, and accounting/tax review boundary."
+    - "Avoid margin metrics that ignore processor fees, vendor costs, infrastructure, support burden, observability, AI/model costs, storage/bandwidth, refunds, chargebacks, and manual work."
+    - "Avoid vendor cost tracking without owner, renewal cadence, cost driver, alert threshold, and cancellation/offboarding path."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent payment processor behavior, tax obligations, accounting method, revenue recognition treatment, invoice requirements, chargeback timelines, refund authority, cost numbers, margin targets, or financial tooling readiness."
+    - "Financial Operations must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate billing rule, payment rule, subscription rule, refund rule, chargeback rule, cost item, vendor cost, margin metric, financial control, exception, report, evidence, risk, and handoff."
+    - "Tie financial operations claims to Pricing and Packaging, Business Processes, Customer Support, Product Scope, Data Model, Security/Privacy, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance, or Decision Record where possible."
+    - "Classify financial items as current, required, deferred, blocked, review-needed, professional-review-needed, customer-facing, internal-only, financial-sensitive, privacy-sensitive, processor-owned, manually-operated, automated, launch-critical, post-launch, or downstream-owned where useful."
+    - "State whether each financial process is self-serve, processor-automated, system-automated, support-assisted, finance-assisted, manually reviewed, or professional-review-needed."
+    - "Route enterprise risk governance downstream to Risk Management."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Pricing and Packaging, Product Scope, Acceptance Criteria, Data Model, Security/Privacy, Observability, Technical Risks, GTM Risks, Operations Brief, Operating Model, Team Responsibilities, Customer Support, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance, or Decision Record."
+    - "Flag financial processes without owner, backup owner, trigger, input, output, control, exception path, evidence, metric, and risk."
+    - "Flag tax/accounting/revenue-recognition statements that sound final but are not marked reviewed or review-needed."
+    - "Flag refund, discount, credit, billing correction, and manual entitlement exceptions without approval authority, evidence, expiration/review trigger, and abuse/fraud consideration."
+    - "Flag payment failure logic without retry/grace/access/customer communication/support handoff."
+    - "Flag subscription management without entitlement timing, cancellation access timing, plan-change handling, and customer communication."
+    - "Flag chargeback/dispute handling without evidence, owner, processor workflow, financial impact, and escalation."
+    - "Flag cost/margin metrics without formula, source, owner, cadence, threshold, caveat, and decision implication."
+    - "Flag financial evidence/audit trail without storage, access control, retention, redaction, review, and evidence owner."
+    - "Verify that Risk Management receives concrete financial risk handoff inputs."
+  specializedFormats:
+    billingRuleFormat:
+      description: "Recommended format for billing operation rules."
+      fields:
+        - rule
+        - billingScenario
+        - pricingSource
+        - trigger
+        - calculationMethod
+        - processorOrSystem
+        - customerCommunication
+        - owner
+        - control
+        - evidenceRequired
+        - exceptionPath
+        - status
+    paymentRuleFormat:
+      description: "Recommended format for payment operation rules."
+      fields:
+        - rule
+        - paymentScenario
+        - supportedMethod
+        - processor
+        - authorizationOrCaptureBehavior
+        - settlementAssumption
+        - feeAssumption
+        - failureMode
+        - owner
+        - evidenceRequired
+        - status
+    subscriptionRuleFormat:
+      description: "Recommended format for subscription management rules."
+      fields:
+        - rule
+        - subscriptionScenario
+        - trigger
+        - customerAction
+        - systemAction
+        - entitlementEffect
+        - accessTiming
+        - billingEffect
+        - customerCommunication
+        - owner
+        - exceptionPath
+        - status
+    planChangeFormat:
+      description: "Recommended format for upgrades, downgrades, credits, and proration."
+      fields:
+        - changeType
+        - trigger
+        - prorationRule
+        - creditRule
+        - entitlementTiming
+        - billingTiming
+        - customerCommunication
+        - approvalRequired
+        - exceptionPath
+        - evidenceRequired
+        - status
+    refundRuleFormat:
+      description: "Recommended format for refund rules."
+      fields:
+        - refundScenario
+        - eligibilityRule
+        - intakeSource
+        - requiredInformation
+        - approvalRequired
+        - approver
+        - processorAction
+        - customerCommunication
+        - abuseOrFraudSignal
+        - evidenceRequired
+        - reportingImpact
+        - status
+    chargebackDisputeFormat:
+      description: "Recommended format for chargebacks and disputes."
+      fields:
+        - scenario
+        - detectionSource
+        - owner
+        - processorWorkflow
+        - evidenceRequired
+        - customerCommunication
+        - financialImpact
+        - escalationPath
+        - recurrencePrevention
+        - status
+    invoiceReceiptFormat:
+      description: "Recommended format for invoice and receipt operations."
+      fields:
+        - documentType
+        - trigger
+        - requiredFields
+        - generationSource
+        - deliveryMethod
+        - correctionRule
+        - duplicateRequestHandling
+        - accountingHandoff
+        - customerSupportHandoff
+        - reviewNeeded
+        - status
+    revenueDataFormat:
+      description: "Recommended format for revenue data and accounting interface records."
+      fields:
+        - revenueEvent
+        - sourceSystem
+        - fieldsCaptured
+        - reportingUse
+        - accountingExport
+        - recognitionAssumption
+        - reconciliationRule
+        - owner
+        - professionalReviewNeeded
+        - caveat
+        - status
+    costItemFormat:
+      description: "Recommended format for operational cost items."
+      fields:
+        - costItem
+        - costCategory
+        - source
+        - owner
+        - costDriver
+        - reviewCadence
+        - alertThreshold
+        - allocationRule
+        - optimizationAction
+        - caveat
+        - status
+    marginMetricFormat:
+      description: "Recommended format for margin metrics."
+      fields:
+        - metric
+        - marginType
+        - formula
+        - includedCosts
+        - excludedCosts
+        - dataSource
+        - threshold
+        - cadence
+        - owner
+        - decisionImplication
+        - caveat
+        - status
+    vendorCostFormat:
+      description: "Recommended format for vendor cost management records."
+      fields:
+        - vendor
+        - operationalPurpose
+        - billingOwner
+        - accountOwner
+        - costCategory
+        - costDriver
+        - renewalCadence
+        - reviewCadence
+        - alertThreshold
+        - cancellationOrOffboardingRule
+        - replacementConsideration
+        - status
+    financialControlFormat:
+      description: "Recommended format for financial controls."
+      fields:
+        - control
+        - financialArea
+        - riskPrevented
+        - owner
+        - approver
+        - evidenceRequired
+        - reviewCadence
+        - failureSignal
+        - escalationPath
+        - status
+    financialExceptionFormat:
+      description: "Recommended format for financial exceptions."
+      fields:
+        - exceptionType
+        - scenario
+        - requester
+        - approver
+        - rationale
+        - financialImpact
+        - customerImpact
+        - expirationOrReviewTrigger
+        - evidenceRequired
+        - abuseOrFraudConsideration
+        - status
+    financialReportFormat:
+      description: "Recommended format for financial reports."
+      fields:
+        - report
+        - purpose
+        - audience
+        - cadence
+        - owner
+        - dataSources
+        - metricsIncluded
+        - artifactProduced
+        - caveats
+        - escalationTrigger
+        - decisionUse
+        - status
+    financialMetricFormat:
+      description: "Recommended format for financial metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - formulaOrMeasurement
+        - source
+        - threshold
+        - cadence
+        - owner
+        - decisionImplication
+        - caveat
+        - status
+    financialEvidenceFormat:
+      description: "Recommended format for financial evidence and audit trail."
+      fields:
+        - evidence
+        - proves
+        - sourceSystem
+        - owner
+        - storageLocation
+        - accessRule
+        - retentionRule
+        - redactionRule
+        - reviewCadence
+        - downstreamUse
+        - status
+    financialRiskFormat:
+      description: "Recommended format for financial operations risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - affectedArea
+        - likelihood
+        - impact
+        - confidence
+        - earlySignal
+        - mitigation
+        - contingency
+        - owner
+        - downstreamDocument
+        - status
+    financialHandoffFormat:
+      description: "Recommended format for downstream financial handoffs."
+      fields:
+        - handoffTarget
+        - financialContext
+        - recordsToPreserve
+        - risksToPreserve
+        - evidenceToPreserve
+        - ownerToPreserve
+        - requiredAction
+        - timing
+        - unresolvedQuestion
+        - status
   sections:
     - id: "financial-operations-objective"
       title: "Financial Operations Objective"
-      intent: "Define the goal of financial operations and its connection to the economic model and pricing."
+      intent: "Define the goal of financial operations and its connection to pricing, customer trust, cost discipline, reporting, and sustainability."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Open with the purpose of financial operations in one concise paragraph."
+        - "State what financial operations protects: pricing truth, billing correctness, payment reliability, revenue data quality, customer trust, cost discipline, margin visibility, auditability, and sustainability."
+        - "Clarify that tax/accounting/legal conclusions require professional review where uncertain."
+      qualityChecks:
+        - "Objective is operational, not purely accounting-oriented."
+        - "Connection to Pricing and Packaging is explicit."
+        - "Professional-review boundary is explicit."
       questions:
         - "What is the goal of financial operations?"
         - "How does financial operations connect to the economic model and pricing?"
+        - "What must financial operations protect?"
+        - "What requires professional tax/accounting/legal review?"
+    - id: "financial-principles"
+      title: "Financial Principles"
+      intent: "Define how financial operations behaves when handling money, exceptions, customer communication, and uncertainty."
+      required: true
+      outputGuidance:
+        - "Define principles for accuracy, transparency, reversibility, evidence, customer communication, exception discipline, fraud/abuse awareness, and privacy/security."
+        - "State what financial operations must not do."
+        - "Tie principles to Foundation boundaries and customer trust."
+      qualityChecks:
+        - "Principles are actionable."
+        - "Exception and evidence discipline are explicit."
+        - "Customer communication and financial privacy are included."
+      questions:
+        - "What principles guide financial operations?"
+        - "How should money-related errors, exceptions, and uncertainty be handled?"
+        - "How should financial operations communicate with customers?"
+        - "What behaviors are prohibited?"
+    - id: "financial-operations-scope"
+      title: "Financial Operations Scope"
+      intent: "Define what is inside financial operations and what belongs to Pricing, Support, Product/Engineering, Risk/Compliance, Tax/Accounting, or Risk Management."
+      required: true
+      outputGuidance:
+        - "Separate in-scope, out-of-scope, shared, downstream-owned, and professional-review-needed areas."
+        - "Clarify relationship with Pricing, Customer Support, Business Processes, Risk and Compliance, and Risk Management."
+        - "Preserve unresolved scope questions."
+      qualityChecks:
+        - "Scope prevents responsibility drift."
+        - "Financial authority and support intake are distinguished."
+        - "Professional-review-needed areas are visible."
+      questions:
+        - "What falls inside financial operations?"
+        - "What belongs to Pricing and Packaging instead?"
+        - "What belongs to Customer Support, Product/Engineering, Risk/Compliance, Tax/Accounting, or Risk Management?"
+        - "What is explicitly out of scope?"
+    - id: "pricing-and-package-enforcement"
+      title: "Pricing and Package Enforcement"
+      intent: "Define how pricing, plans, limits, trials, discounts, entitlements, billing terms, and cancellation/refund promises are enforced operationally."
+      required: true
+      outputGuidance:
+        - "Tie directly to Pricing and Packaging."
+        - "Use billing, subscription, plan change, and financial control records where useful."
+        - "State how pricing truth is verified against product entitlements and customer communication."
+      qualityChecks:
+        - "Pricing terms are operationalized rather than repeated."
+        - "Entitlement and billing effects are consistent."
+        - "Manual exceptions are controlled."
+      questions:
+        - "How are plans, packages, limits, trials, discounts, and entitlements enforced?"
+        - "How are billing terms reflected in systems and customer communication?"
+        - "How are cancellation and refund promises enforced?"
+        - "What controls prevent mismatch between price, entitlement, and billing?"
     - id: "billing-operations"
       title: "Billing Operations"
-      intent: "Define how charges are calculated, invoiced, collected, and what billing cycles and payment methods are supported."
+      intent: "Define how charges are calculated, generated, collected, recorded, reconciled, communicated, failed, retried, adjusted, and corrected."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use billing rule records."
+        - "State source of pricing, processor/system behavior, customer communication, owner, control, evidence, and exception path."
+        - "Mark processor assumptions as assumptions unless verified."
+      qualityChecks:
+        - "Billing rules are auditable."
+        - "Calculation, collection, reconciliation, and correction are covered."
+        - "Customer communication and evidence are explicit."
       questions:
-        - "How are charges calculated, invoiced, and collected?"
+        - "How are charges calculated, invoiced/receipted, collected, and recorded?"
         - "What billing cycles and payment methods are supported?"
+        - "How are billing adjustments and corrections handled?"
+        - "How is billing reconciled?"
+        - "What evidence proves billing accuracy?"
+    - id: "payment-operations"
+      title: "Payment Operations"
+      intent: "Define supported payment methods, payment processor behavior, settlement, fees, failure modes, fraud/risk signals, and processor incidents."
+      required: true
+      outputGuidance:
+        - "Use payment rule records."
+        - "Do not invent processor behavior."
+        - "Include payment method support, fees, settlement assumptions, failure modes, and processor incident handling."
+      qualityChecks:
+        - "Processor assumptions are explicit."
+        - "Payment method support is accurate."
+        - "Fees and settlement are included where known."
+      questions:
+        - "What payment methods are supported?"
+        - "What processor or platform handles payments?"
+        - "How do authorization, capture, settlement, and fees work?"
+        - "What payment failure modes exist?"
+        - "How are fraud/risk signals or processor incidents handled?"
     - id: "subscription-management"
       title: "Subscription Management"
-      intent: "Define how subscriptions are created, modified, cancelled, and how plan changes and proration are handled."
+      intent: "Define how subscriptions are created, renewed, cancelled, paused/suspended, reactivated, upgraded, downgraded, and connected to entitlement timing."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use subscription rule records."
+        - "Include customer action, system action, entitlement effect, access timing, billing effect, customer communication, and exception path."
+        - "Tie to cancellation and plan-change rules."
+      qualityChecks:
+        - "Subscription state changes are clear."
+        - "Access timing and entitlement effects are explicit."
+        - "Customer communication is included."
       questions:
-        - "How are subscriptions created, modified, and cancelled?"
-        - "How are plan changes and proration handled?"
-    - id: "payment-failures"
-      title: "Payment Failures"
-      intent: "Define what happens when payments fail, including retry logic and dunning process."
+        - "How are subscriptions created, renewed, modified, cancelled, paused, suspended, and reactivated?"
+        - "What happens to access and entitlements at each state change?"
+        - "How are customers informed?"
+        - "What exceptions can occur?"
+    - id: "plan-changes-and-proration"
+      title: "Plan Changes and Proration"
+      intent: "Define how upgrades, downgrades, billing-cycle changes, credits, proration, grandfathering, and entitlement timing are handled."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use plan change records."
+        - "Mark proration and tax/accounting implications as review-needed unless verified."
+        - "Include customer communication and approval for exceptions."
+      qualityChecks:
+        - "Plan changes do not create entitlement/billing mismatch."
+        - "Proration assumptions are explicit."
+        - "Exceptions are controlled."
+      questions:
+        - "How are upgrades and downgrades handled?"
+        - "How are plan changes, credits, proration, and grandfathering handled?"
+        - "When do entitlement changes take effect?"
+        - "What customer communication is required?"
+    - id: "payment-failures-and-dunning"
+      title: "Payment Failures and Dunning"
+      intent: "Define what happens when payments fail, including retry logic, grace periods, customer communication, support handoff, access rules, and cancellation/suspension conditions."
+      required: true
+      outputGuidance:
+        - "Use billing/payment/subscription records where useful."
+        - "Separate processor retry behavior from internal customer communication."
+        - "Include support handoff and financial reporting."
+      qualityChecks:
+        - "Failure handling is customer-safe and financially clear."
+        - "Access/grace/suspension rules are explicit or marked unresolved."
+        - "Dunning does not become hostile or misleading."
       questions:
         - "What happens when a payment fails?"
         - "What retry logic and dunning process is in place?"
-    - id: "refund-process"
-      title: "Refund Process"
-      intent: "Define how refunds are evaluated, approved, processed, and what policies apply."
+        - "What grace period and access rules apply?"
+        - "How are customers informed?"
+        - "When does support or finance intervene?"
+    - id: "refund-operations"
+      title: "Refund Operations"
+      intent: "Define how refunds are evaluated, approved, processed, communicated, recorded, monitored, and controlled."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use refund rule records."
+        - "Tie to Pricing refund policy and Customer Support billing intake."
+        - "Include approval authority, exception path, abuse/fraud signals, evidence, and reporting impact."
+      qualityChecks:
+        - "Refund rules follow policy and authority."
+        - "Exceptions and evidence are explicit."
+        - "Customer communication is clear."
       questions:
         - "How are refunds evaluated, approved, and processed?"
         - "What refund policies apply and who can override them?"
-    - id: "revenue-recognition-notes"
-      title: "Revenue Recognition Notes"
-      intent: "Define how revenue is recognized for reporting and what accounting interface exists for revenue data."
+        - "What information is required?"
+        - "How are refunds communicated and recorded?"
+        - "What abuse or fraud signals are monitored?"
+    - id: "chargebacks-and-disputes"
+      title: "Chargebacks and Disputes"
+      intent: "Define how chargebacks, payment disputes, processor disputes, and related customer communication are handled."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use chargeback/dispute records."
+        - "Mark processor timelines and requirements as assumptions unless verified."
+        - "Include recurrence prevention and risk escalation."
+      qualityChecks:
+        - "Dispute handling has owner and evidence."
+        - "Customer communication and financial impact are explicit."
+        - "Chargebacks feed risk review when recurring."
       questions:
-        - "How is revenue recognized for reporting purposes?"
+        - "How are chargebacks and disputes detected?"
+        - "Who owns the dispute workflow?"
+        - "What evidence is required?"
+        - "How are customers communicated with?"
+        - "How are recurring disputes prevented?"
+    - id: "invoice-and-receipt-operations"
+      title: "Invoice and Receipt Operations"
+      intent: "Define how invoices and receipts are generated, delivered, corrected, duplicated, handed to accounting, and handled by support."
+      required: true
+      outputGuidance:
+        - "Use invoice/receipt records."
+        - "Mark tax/accounting requirements as review-needed unless verified."
+        - "Include correction and duplicate request handling."
+      qualityChecks:
+        - "Invoice/receipt process is customer-safe and auditable."
+        - "Accounting handoff is explicit."
+        - "Tax/accounting uncertainty is visible."
+      questions:
+        - "When are invoices or receipts generated?"
+        - "What required fields apply?"
+        - "How are invoices or receipts delivered?"
+        - "How are corrections and duplicate requests handled?"
+        - "What accounting handoff is required?"
+    - id: "revenue-data-and-recognition-interface"
+      title: "Revenue Data and Recognition Interface"
+      intent: "Define revenue event sources, reporting fields, accounting export, reconciliation, recognition assumptions, professional-review needs, and caveats."
+      required: true
+      outputGuidance:
+        - "Use revenue data records."
+        - "Do not state revenue recognition conclusions as final unless professionally reviewed."
+        - "Focus on data interface and assumptions."
+      qualityChecks:
+        - "Revenue data source and caveats are explicit."
+        - "Accounting interface is defined."
+        - "Recognition assumptions are review-labeled."
+      questions:
+        - "How is revenue recognized for reporting purposes, if known?"
         - "What accounting interface exists for revenue data?"
+        - "What revenue events and fields are captured?"
+        - "How is revenue data reconciled?"
+        - "What requires accounting review?"
     - id: "cost-monitoring"
       title: "Cost Monitoring"
-      intent: "Define how operational costs are tracked, monitored, and what cost anomalies trigger alerts."
+      intent: "Define how operational costs are tracked, monitored, reviewed, allocated, optimized, and escalated."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use cost item records."
+        - "Include infrastructure, vendors, support, payment processor fees, observability, AI/model costs, storage/bandwidth, and manual work where relevant."
+        - "Define anomaly thresholds and owner."
+      qualityChecks:
+        - "Cost categories are complete enough for decision-making."
+        - "Manual work and processor fees are not ignored."
+        - "Anomaly thresholds and review cadence are included."
       questions:
         - "How are operational costs tracked and monitored?"
+        - "What cost categories matter?"
         - "What cost anomalies trigger alerts?"
+        - "Who owns cost review?"
+        - "What optimization actions are available?"
     - id: "margin-monitoring"
       title: "Margin Monitoring"
-      intent: "Define how gross and net margin are calculated, monitored, and what thresholds trigger action."
+      intent: "Define how gross margin, contribution margin, net margin, and per-customer/per-plan economics are calculated, reviewed, and acted on."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use margin metric records."
+        - "State included/excluded costs and caveats."
+        - "Tie margin thresholds to Pricing and Cost Monitoring."
+      qualityChecks:
+        - "Margin formula is explicit."
+        - "Cost allocation assumptions are visible."
+        - "Thresholds trigger decisions."
       questions:
         - "How is gross and net margin calculated and monitored?"
+        - "What costs are included or excluded?"
+        - "How are per-customer or per-plan economics reviewed?"
         - "What margin thresholds trigger action?"
-    - id: "vendor-costs"
-      title: "Vendor Costs"
-      intent: "Define how third-party vendor costs are tracked and the review cadence."
+    - id: "vendor-cost-management"
+      title: "Vendor Cost Management"
+      intent: "Define how third-party vendor costs are tracked, reviewed, optimized, renewed, cancelled, or replaced."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use vendor cost records."
+        - "Tie to Vendor Compliance and Operating Model dependencies."
+        - "Include renewal cadence, alert threshold, and offboarding/cancellation rule."
+      qualityChecks:
+        - "Vendor spend has owner and review cadence."
+        - "Cost driver and alert threshold are explicit."
+        - "Cancellation/replacement path is considered."
       questions:
         - "How are third-party vendor costs tracked?"
+        - "Who owns vendor billing and account access?"
         - "What vendor cost review cadence exists?"
+        - "What thresholds trigger vendor review, cancellation, downgrade, or replacement?"
     - id: "tax-accounting-interface"
       title: "Tax/Accounting Interface"
-      intent: "Define how financial operations interfaces with tax and accounting functions and what data is shared."
+      intent: "Define how financial operations interfaces with tax and accounting functions and what data, evidence, and review needs are handed off."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Focus on interface, data, cadence, owner, and professional-review need."
+        - "Do not invent tax/accounting requirements."
+        - "Tie to Risk and Compliance."
+      qualityChecks:
+        - "Tax/accounting interface is concrete."
+        - "Professional-review needs are visible."
+        - "Data handoff is defined."
       questions:
         - "How does financial operations interface with tax and accounting functions?"
-        - "What data is shared with accounting systems?"
+        - "What data is shared with accounting systems or professionals?"
+        - "What cadence and format apply?"
+        - "What tax/accounting assumptions require review?"
+    - id: "financial-controls"
+      title: "Financial Controls"
+      intent: "Define controls that prevent billing, refund, discount, invoice, vendor, processor, access, reconciliation, and reporting failures."
+      required: true
+      outputGuidance:
+        - "Use financial control records."
+        - "Include approvals, access controls, reconciliation checks, processor access review, vendor spend review, audit trail, and exception review."
+        - "Tie controls to financial risks."
+      qualityChecks:
+        - "Controls prevent specific risks."
+        - "Evidence and review cadence are explicit."
+        - "Controls are not arbitrary bureaucracy."
+      questions:
+        - "What controls prevent financial errors or abuse?"
+        - "What approvals are required?"
+        - "What reconciliation checks exist?"
+        - "How are processor/vendor access and spend reviewed?"
+        - "What evidence proves controls ran?"
+    - id: "financial-exceptions"
+      title: "Financial Exceptions"
+      intent: "Define how pricing, discount, refund, credit, billing correction, invoice correction, manual entitlement, payment, and customer-specific financial exceptions are handled."
+      required: true
+      outputGuidance:
+        - "Use financial exception records."
+        - "Separate exception from policy change and accepted risk."
+        - "Include approval, expiration/review trigger, evidence, financial impact, customer impact, and abuse/fraud consideration."
+      qualityChecks:
+        - "Exceptions are auditable and time-bounded where appropriate."
+        - "Approval authority is explicit."
+        - "Exceptions do not silently become policy."
+      questions:
+        - "What financial exceptions can occur?"
+        - "Who may approve exceptions?"
+        - "What evidence and rationale are required?"
+        - "When must exceptions be reviewed or closed?"
+        - "How are abuse, fraud, and precedent risks handled?"
     - id: "financial-reporting"
       title: "Financial Reporting"
-      intent: "Define what financial reports are produced, at what cadence, and who consumes them."
+      intent: "Define what financial reports are produced, at what cadence, who consumes them, what data they use, and what decisions they support."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use financial report records."
+        - "Tie to Reporting and Cadence and Operational Metrics."
+        - "Include caveats, artifacts, and escalation triggers."
+      qualityChecks:
+        - "Reports are decision-useful."
+        - "Reports have source, owner, cadence, and caveats."
+        - "Financial reporting does not overstate accounting certainty."
       questions:
         - "What financial reports are produced and at what cadence?"
         - "Who consumes financial operations reports?"
+        - "What metrics and data sources are included?"
+        - "What decisions do reports support?"
+        - "What caveats apply?"
+    - id: "financial-metrics"
+      title: "Financial Metrics"
+      intent: "Define financial metrics used to monitor payment, billing, refund, chargeback, revenue, cost, margin, and financial support health."
+      required: true
+      outputGuidance:
+        - "Use financial metric records."
+        - "Include revenue/MRR/ARR where applicable, payments collected, failed payment rate, payment recovery, refund rate, chargeback rate, billing error rate, invoice issue rate, discount exception rate, subscription state errors, vendor cost, margin, and finance support burden."
+        - "State formula, source, owner, cadence, threshold, caveat, and decision implication."
+      qualityChecks:
+        - "Metrics are formula-defined."
+        - "Metrics have decision consequences."
+        - "Review-needed metrics are labeled."
+      questions:
+        - "What financial metrics matter?"
+        - "How are revenue, payment failures, recovery, refunds, chargebacks, billing errors, invoice issues, discounts, subscription errors, vendor costs, margins, and finance support burden measured?"
+        - "What thresholds trigger action?"
+    - id: "financial-evidence-and-audit-trail"
+      title: "Financial Evidence and Audit Trail"
+      intent: "Define what financial evidence is stored, who owns it, who may access it, how long it is retained, and how it supports audit/review."
+      required: true
+      outputGuidance:
+        - "Use financial evidence records."
+        - "Include billing events, payments, refunds, chargebacks, invoices/receipts, billing corrections, processor events, reports, reconciliations, approvals, exceptions, and vendor costs."
+        - "Define access, retention, redaction, and review cadence."
+      qualityChecks:
+        - "Evidence is retrievable and protected."
+        - "Sensitive financial data has access rules."
+        - "Evidence links to controls and reports."
+      questions:
+        - "What financial evidence must be stored?"
+        - "Where is financial evidence stored?"
+        - "Who can access it?"
+        - "How long is it retained?"
+        - "How is evidence redacted, reviewed, and used?"
     - id: "financial-operations-risks"
       title: "Financial Operations Risks"
-      intent: "Identify failure modes of financial operations and how financial risks are detected and mitigated."
+      intent: "Identify failure modes of financial operations and how financial risks are detected, mitigated, escalated, or handed off."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use financial risk records."
+        - "Include billing errors, incorrect entitlements, failed payment gaps, refund abuse, chargebacks, processor failure, tax/accounting unknowns, cost spikes, margin erosion, vendor surprises, weak controls, evidence gaps, and owner gaps."
+        - "Route risks to Risk Management where needed."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Mitigation and contingency are distinct."
+        - "High-impact risks have owner and downstream handoff."
       questions:
         - "What could cause financial operations to fail?"
         - "How are financial risks detected and mitigated?"
+        - "What billing, payment, refund, chargeback, cost, margin, tax/accounting, vendor, control, or evidence risks exist?"
+        - "What should Risk Management inherit?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Operations documents must inherit from Financial Operations and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use financial handoff records."
+        - "Route context to Risk Management."
+        - "Preserve financial rules, records, controls, exceptions, professional-review needs, metrics, risks, unresolved questions, and evidence requirements."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing financial assumptions silently."
+        - "Financial Operations remains money-operations architecture; enterprise risk governance remains downstream."
+      questions:
+        - "What should Risk Management inherit?"
+        - "What financial rules, controls, exceptions, metrics, risks, and evidence requirements must be preserved?"
+        - "What unresolved financial operations questions must be carried forward?"

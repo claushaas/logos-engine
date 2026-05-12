@@ -4,137 +4,902 @@ document:
   phase: "06-operations"
   status: "not_started"
   order: 14
-  type: "risk_register"
-  purpose: "Maintain the operational risk register identifying what can break the operation."
-  centralQuestion: "What can break the operation?"
-  dependsOn: []
-  feeds: []
+  type: "operational_risk_register"
+  purpose: "Maintain the final operational risk register by consolidating risks from operations, support, customer success, business processes, metrics, reporting, incidents, compliance, financial operations, knowledge management, and continuous improvement into an owner-assigned, reviewable, evidence-backed, mitigation-driven risk system."
+  centralQuestion: "What can break the operation, how would we detect it early, who owns the response, what mitigation or contingency exists, what residual risk remains, and when must the risk be escalated, accepted, retired, or converted into action?"
   outputs:
     canonical:
       format: "markdown"
-      path: "06-operations/14-operational-risks.md"
-      purpose: "Complete operational risk register covering risk inventory by domain (support, reliability, financial, compliance, vendor, team, process, customer success, knowledge) and an overall mitigation plan."
+      path: "docs/06-operations/14-operational-risks.md"
+      purpose: "Store the canonical operational risk register as a Markdown document."
+    artifacts:
+      - id: "operations.operational_risk_register"
+        format: "html"
+        path: "outcomes/html/06-operations/operational-risk-register.html"
+        purpose: "Provide a founder-facing operational risk register covering risk taxonomy, consolidated risk inventory, scoring, ownership, early signals, mitigations, contingencies, accepted risks, escalation, review cadence, metrics, evidence, and action tracking."
+        audience: "founder"
+        includes:
+          - "risk objective"
+          - "risk principles"
+          - "risk scope"
+          - "risk taxonomy"
+          - "risk scoring model"
+          - "risk register"
+          - "inherited risks"
+          - "support risks"
+          - "customer success risks"
+          - "reliability risks"
+          - "incident risks"
+          - "release risks"
+          - "financial risks"
+          - "compliance risks"
+          - "data and privacy risks"
+          - "vendor risks"
+          - "team and capacity risks"
+          - "process risks"
+          - "metrics and reporting risks"
+          - "knowledge risks"
+          - "continuous improvement risks"
+          - "risk ownership"
+          - "early warning signals"
+          - "mitigation plan"
+          - "contingency plan"
+          - "accepted risks"
+          - "risk escalation"
+          - "risk review cadence"
+          - "risk metrics"
+          - "risk evidence"
+          - "risk action tracking"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.operational_risks_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/operational-risks-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether operational risks are consolidated, categorized, scored, owner-assigned, signal-aware, mitigation-ready, contingency-aware, evidence-backed, escalation-ready, and connected to continuous improvement."
+        agentRole: "reviewer"
+        includes:
+          - "canonical operational risk register"
+          - "all operations dependencies"
+          - "risk formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "03-product/08-product-scope"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/12-growth-metrics"
+    - "05-go-to-market/13-go-to-market-risks"
+    - "06-operations/01-operations-brief"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-team-and-responsibilities"
+    - "06-operations/04-customer-support"
+    - "06-operations/05-customer-success"
+    - "06-operations/06-business-processes"
+    - "06-operations/07-operational-metrics"
+    - "06-operations/08-reporting-and-cadence"
+    - "06-operations/09-incident-management"
+    - "06-operations/10-risk-and-compliance"
+    - "06-operations/11-financial-operations"
+    - "06-operations/12-knowledge-management"
+    - "06-operations/13-continuous-improvement"
+  feeds: []
+  inputs:
+    - id: "operations-brief"
+      type: "context"
+      required: false
+      description: "Operational success criteria, critical functions, service expectations, support expectations, incident expectations, cost/capacity constraints, and operational risks."
+    - id: "operating-model"
+      type: "context"
+      required: false
+      description: "Operating functions, workflows, manual operations, automations, dependencies, decision rights, escalation paths, constraints, metrics, and operating model risks."
+    - id: "team-and-responsibilities"
+      type: "context"
+      required: false
+      description: "Responsibility gaps, owner gaps, backup gaps, role overload, decision authority gaps, escalation gaps, capacity constraints, future hiring needs, and responsibility risks."
+    - id: "customer-support"
+      type: "context"
+      required: false
+      description: "Support overload risks, triage risks, escalation risks, bug flow risks, billing/refund support risks, privacy request risks, stale macro risks, and support trust risks."
+    - id: "customer-success"
+      type: "context"
+      required: false
+      description: "Activation risks, health signal risks, churn risks, retention risks, expansion risks, feedback loop risks, satisfaction measurement risks, and customer success ownership risks."
+    - id: "business-processes"
+      type: "context"
+      required: false
+      description: "Process gaps, manual overload, missed handoffs, unclear ownership, financial-sensitive process risks, privacy-sensitive process risks, automation failure, vendor failure, and process control risks."
+    - id: "operational-metrics"
+      type: "context"
+      required: false
+      description: "Metric risks, bad data, missing instrumentation, misleading thresholds, alert fatigue, metric gaming, cost/capacity risk signals, guardrail metrics, and data quality caveats."
+    - id: "reporting-and-cadence"
+      type: "context"
+      required: false
+      description: "Cadence risks, stale dashboards, ignored reports, no action follow-through, decision latency, meeting bloat, alert fatigue, escalation triggers, and reporting caveats."
+    - id: "incident-management"
+      type: "context"
+      required: false
+      description: "Incident risks, delayed detection, unclear severity, owner gaps, weak escalation, poor communication, privacy/billing incident risks, failed rollback, repeated incidents, and action decay."
+    - id: "risk-and-compliance"
+      type: "context"
+      required: false
+      description: "Compliance risks, obligation gaps, unsupported assumptions, stale policies, vendor noncompliance, weak audit trail, unresolved contracts, governance drift, accepted risks, and compliance evidence gaps."
+    - id: "financial-operations"
+      type: "context"
+      required: false
+      description: "Billing errors, entitlement errors, payment failure gaps, refund abuse, chargebacks, processor failure, tax/accounting unknowns, cost spikes, margin erosion, weak financial controls, and evidence gaps."
+    - id: "knowledge-management"
+      type: "context"
+      required: false
+      description: "Knowledge loss, stale docs, duplicate truth, poor search, ownerless docs, missing runbooks, stale support/customer docs, sensitive knowledge exposure, and documentation rot."
+    - id: "continuous-improvement"
+      type: "context"
+      required: false
+      description: "Improvement risks, chaotic change, over-automation, local optimization, weak validation, no adoption, hidden risk, process churn, documentation drift, backlog rot, and improvement guardrails."
+    - id: "operational-risk-notes"
+      type: "manual_note"
+      required: false
+      description: "Known operational risks, risk appetite notes, mitigation ideas, accepted risk candidates, contingency ideas, escalation concerns, owner assumptions, risk scoring preferences, and unresolved risk questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a complete operational risk register with taxonomy, scoring, inventory, inherited risks, owners, early signals, mitigation, contingency, accepted risks, escalation, review cadence, metrics, evidence, and action tracking."
+    - "Risk objective defines what operational risk management protects: continuity, customer trust, reliability, supportability, privacy/security, financial correctness, compliance awareness, knowledge continuity, cost discipline, and operational sustainability."
+    - "Risk principles define how risks are surfaced early, kept explicit, assigned to owners, reviewed regularly, mitigated proportionally, accepted deliberately, escalated when thresholds are crossed, and converted into action."
+    - "Risk scope defines what this final Operations risk register consolidates, what belongs to Product/Engineering/GTM risk registers, what is inherited from upstream docs, and what is explicitly out of scope."
+    - "Risk taxonomy defines categories, status, likelihood, impact, confidence, severity, detectability, risk appetite, residual risk, accepted-risk state, escalation state, mitigation state, and evidence state."
+    - "Risk scoring model defines how likelihood, impact, confidence, detectability, customer trust impact, financial impact, privacy/security impact, operational continuity impact, and residual risk are scored or qualitatively assessed."
+    - "Risk register lists each material operational risk with category, source document, description, affected area, likelihood, impact, confidence, early signal, detection method, owner, backup owner, mitigation, contingency, residual risk, escalation trigger, accepted-risk state, evidence, review cadence, and status."
+    - "Inherited risks section consolidates risks from Operations Brief, Operating Model, Team/Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting/Cadence, Incident Management, Risk/Compliance, Financial Operations, Knowledge Management, and Continuous Improvement."
+    - "Support risks identify support overload, triage failure, slow response, wrong priority, weak escalation, stale macros, unresolved bugs, billing/refund mishandling, privacy request mishandling, and trust risks."
+    - "Customer success risks identify failed activation, weak health signals, ignored churn signals, poor retention action, unethical expansion, low satisfaction visibility, insufficient data, privacy-invasive outreach, and owner gaps."
+    - "Reliability risks identify availability, latency, error-rate, performance, failed jobs, dependency failure, data integrity, queue/backlog, deployment, backup/restore, and observability gaps."
+    - "Incident risks identify delayed detection, unclear declaration, weak severity model, missing responder ownership, poor communication, failed mitigation, failed rollback, repeated incidents, postmortem theater, and corrective-action decay."
+    - "Release risks identify unsafe releases, incomplete readiness, failed smoke checks, poor support handoff, rollback gaps, hotfix pressure, post-release incidents, release communication gaps, and deployment environment mismatch."
+    - "Financial risks identify billing errors, incorrect entitlements, payment failure gaps, refund abuse, chargebacks, processor failure, tax/accounting unknowns, cost spikes, margin erosion, vendor surprises, weak financial controls, and evidence gaps."
+    - "Compliance risks identify missing obligations, unsupported legal/regulatory assumptions, stale policies, vendor noncompliance, unresolved contracts, privacy mishandling, weak audit trail, governance drift, and professional-review gaps."
+    - "Data and privacy risks identify overcollection, weak access control, missing retention/deletion process, export/deletion errors, telemetry/logging exposure, sensitive data leak, privacy request mishandling, and privacy incident escalation gaps."
+    - "Vendor risks identify critical dependency failure, vendor lock-in, pricing/cost changes, account access loss, billing surprise, data exposure, compliance gap, weak fallback, and offboarding failure."
+    - "Team and capacity risks identify founder bottleneck, owner gaps, backup gaps, unclear decision authority, role overload, missing skills, unavailable expertise, poor handoff, and future hiring trigger risk."
+    - "Process risks identify missing process, unclear trigger, ownerless process, manual overload, missed handoff, control failure, exception sprawl, automation failure, stale process docs, and process review failure."
+    - "Metrics and reporting risks identify missing instrumentation, bad data, stale dashboards, misleading thresholds, alert fatigue, ignored reports, no action follow-through, metric gaming, and unsafe decisions from low-quality metrics."
+    - "Knowledge risks identify tribal knowledge, duplicate truth, stale docs, ownerless docs, missing runbooks, stale customer-facing docs, stale support macros, bad search, missing incident learning, and sensitive knowledge exposure."
+    - "Continuous improvement risks identify chaotic change, over-automation, local optimization, novelty bias, weak validation, no adoption, hidden risk, process churn, documentation drift, and improvement backlog rot."
+    - "Risk ownership defines accountable owner, backup owner, mitigation owner, contingency owner, escalation owner, reviewer, decision authority, and unresolved ownership gaps for each critical risk."
+    - "Early warning signals define observable leading indicators, detection source, review cadence, threshold, alert/escalation condition, owner, and caveat for each material risk."
+    - "Mitigation plan defines preventive or reducing actions, owner, priority, due trigger/date, evidence required, metric affected, dependency, and verification method."
+    - "Contingency plan defines what happens if risk materializes, including fallback, rollback, manual workaround, customer communication, vendor escalation, incident trigger, financial correction, or privacy/security escalation."
+    - "Accepted risks define deliberately accepted residual risks with rationale, approver, residual impact, mitigation still required, expiration/review trigger, communication requirement, evidence, and status."
+    - "Risk escalation defines escalation triggers, severity, route, owner, backup, response expectation, decision required, customer communication trigger, incident trigger, and downstream action."
+    - "Risk review cadence defines daily/weekly/monthly/quarterly/event-triggered risk reviews, inputs, outputs, participants, owner, artifact, escalation condition, and action tracking."
+    - "Risk metrics define open risk count, high-severity risk count, overdue mitigation count, accepted risk count, stale risk count, risk recurrence, incident-linked risks, ownerless risks, and mitigation effectiveness."
+    - "Risk evidence defines what proves a risk was reviewed, mitigated, accepted, escalated, retired, or converted into improvement work, including storage, access, retention, and owner."
+    - "Risk action tracking defines how mitigations, contingencies, corrective actions, accepted-risk reviews, and continuous-improvement actions are assigned, tracked, escalated, verified, and closed."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid risk-register theater: risk names without source, owner, likelihood, impact, confidence, early signal, mitigation, contingency, residual risk, escalation trigger, evidence, review cadence, and status."
+    - "Avoid treating risks as mitigated when only documented."
+    - "Avoid accepting risks implicitly; accepted risks require explicit approver, rationale, residual risk, mitigation still required, review trigger, and evidence."
+    - "Avoid risk scoring that pretends precision where only qualitative judgment exists; use confidence and caveats."
+    - "Avoid risk categories that duplicate upstream documents without consolidating ownership, signals, mitigation, contingency, and review cadence."
+    - "Avoid ownerless high-impact risks, backup-less critical risks, and risks without escalation path."
+    - "Avoid mitigations without verification evidence and action tracking."
+    - "Avoid contingency plans that depend on unavailable people, tools, vendors, data, or procedures."
+    - "Avoid hiding professional-review-needed compliance, financial, tax, legal, privacy, or security assumptions."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent risk probabilities, legal/accounting conclusions, compliance status, staffing coverage, vendor guarantees, mitigation completion, data source readiness, or incident response capacity."
+    - "Operational Risks must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate risk, source, category, score, owner, signal, mitigation, contingency, accepted-risk state, escalation, metric, evidence, action, and status."
+    - "Tie every risk to upstream source documents where possible."
+    - "Classify risks as current, emerging, latent, accepted, mitigated, partially-mitigated, unmitigated, transferred, avoided, retired, blocked, review-needed, professional-review-needed, ownerless, backup-missing, launch-critical, post-launch, customer-facing, privacy-sensitive, financial-sensitive, compliance-sensitive, security-sensitive, vendor-owned, or incident-triggering where useful."
+    - "State whether each risk is detected manually, automatically, through support, through metrics, through incident review, through financial review, through privacy review, through vendor monitoring, or currently undetected."
+    - "Convert actionable high-priority mitigations into continuous-improvement or corrective-action handoff items where appropriate."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with any upstream Operations document, Foundation, Product, Engineering, GTM, Technical Risks, GTM Risks, Pricing, Security/Privacy, Observability, Deployment, or Decision Record."
+    - "Flag risks without source document, category, likelihood, impact, confidence, early signal, detection method, owner, backup owner, mitigation, contingency, residual risk, escalation trigger, evidence, review cadence, and status."
+    - "Flag high-impact risks without explicit owner, backup, escalation, contingency, and review cadence."
+    - "Flag accepted risks without approver, rationale, residual impact, mitigation still required, expiration/review trigger, and evidence."
+    - "Flag mitigations without verification method, due trigger/date, owner, and closure evidence."
+    - "Flag contingency plans that depend on undefined tools, roles, vendors, procedures, or data."
+    - "Flag risk metrics without formula/source, owner, cadence, threshold, and decision implication."
+    - "Flag stale, duplicated, ownerless, unreviewed, or low-confidence risks."
+    - "Verify that high-priority risks are converted into mitigation actions, corrective actions, or continuous-improvement work where appropriate."
   specializedFormats:
     riskFormat:
-      - id
-      - category
-      - description
-      - likelihood
-      - impact
-      - detectionSignal
-      - mitigation
-      - owner
-      - status
+      description: "Recommended format for operational risk records."
+      fields:
+        - id
+        - risk
+        - category
+        - sourceDocument
+        - description
+        - affectedArea
+        - likelihood
+        - impact
+        - confidence
+        - detectability
+        - earlySignal
+        - detectionMethod
+        - owner
+        - backupOwner
+        - mitigation
+        - contingency
+        - residualRisk
+        - escalationTrigger
+        - acceptedRiskState
+        - evidenceRequired
+        - reviewCadence
+        - status
+    riskScoringFormat:
+      description: "Recommended format for risk scoring rules."
+      fields:
+        - scoreDimension
+        - scale
+        - definition
+        - lowDefinition
+        - mediumDefinition
+        - highDefinition
+        - criticalDefinition
+        - confidenceRule
+        - caveat
+        - status
+    riskOwnershipFormat:
+      description: "Recommended format for operational risk ownership."
+      fields:
+        - riskOrCategory
+        - accountableOwner
+        - backupOwner
+        - mitigationOwner
+        - contingencyOwner
+        - escalationOwner
+        - reviewer
+        - decisionAuthority
+        - ownershipGap
+        - status
+    earlyWarningSignalFormat:
+      description: "Recommended format for risk early warning signals."
+      fields:
+        - risk
+        - signal
+        - signalType
+        - source
+        - threshold
+        - cadence
+        - owner
+        - caveat
+        - actionTriggered
+        - status
+    mitigationActionFormat:
+      description: "Recommended format for mitigation actions."
+      fields:
+        - action
+        - risk
+        - actionType
+        - owner
+        - priority
+        - dueDateOrTrigger
+        - dependency
+        - verificationMethod
+        - evidenceRequired
+        - metricAffected
+        - escalationIfBlocked
+        - status
+    contingencyPlanFormat:
+      description: "Recommended format for contingency plans."
+      fields:
+        - risk
+        - materializationTrigger
+        - contingency
+        - owner
+        - backupOwner
+        - requiredTools
+        - requiredData
+        - customerCommunication
+        - incidentTrigger
+        - fallbackOrRollback
+        - validationMethod
+        - status
+    acceptedRiskFormat:
+      description: "Recommended format for accepted operational risks."
+      fields:
+        - risk
+        - rationale
+        - approver
+        - residualImpact
+        - mitigationStillRequired
+        - expirationOrReviewTrigger
+        - communicationRequirement
+        - evidenceRequired
+        - escalationIfChanged
+        - status
+    riskEscalationFormat:
+      description: "Recommended format for risk escalation rules."
+      fields:
+        - riskOrCategory
+        - trigger
+        - severity
+        - escalationOwner
+        - backupOwner
+        - notificationTarget
+        - responseExpectation
+        - decisionRequired
+        - customerCommunicationTrigger
+        - incidentTrigger
+        - downstreamAction
+        - status
+    riskReviewCadenceFormat:
+      description: "Recommended format for risk review cadences."
+      fields:
+        - review
+        - cadence
+        - purpose
+        - participants
+        - inputs
+        - outputs
+        - owner
+        - artifactProduced
+        - escalationCondition
+        - actionTrackingMethod
+        - status
+    riskMetricFormat:
+      description: "Recommended format for operational risk metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - formulaOrMeasurement
+        - source
+        - threshold
+        - cadence
+        - owner
+        - decisionImplication
+        - caveat
+        - status
+    riskEvidenceFormat:
+      description: "Recommended format for risk evidence."
+      fields:
+        - evidence
+        - risk
+        - proves
+        - source
+        - owner
+        - storageLocation
+        - accessRule
+        - retentionRule
+        - reviewCadence
+        - status
+    riskActionTrackingFormat:
+      description: "Recommended format for risk action tracking."
+      fields:
+        - action
+        - sourceRisk
+        - actionType
+        - owner
+        - dueDateOrTrigger
+        - status
+        - closureEvidence
+        - escalationIfBlocked
+        - linkedImprovementOrIncident
+        - statusReviewCadence
   sections:
+    - id: "risk-objective"
+      title: "Risk Objective"
+      intent: "Define why operational risk management exists and what operational outcomes it protects."
+      required: true
+      outputGuidance:
+        - "Open with the purpose of the operational risk register in one concise paragraph."
+        - "State what risk management protects: continuity, trust, reliability, supportability, privacy/security, financial correctness, compliance awareness, knowledge continuity, cost discipline, and sustainability."
+        - "Clarify that risks must lead to decisions, mitigation, acceptance, escalation, or retirement."
+      qualityChecks:
+        - "Objective is operationally actionable."
+        - "Risk management is not treated as documentation-only."
+        - "The relationship to Continuous Improvement is explicit."
+      questions:
+        - "Why does the operational risk register exist?"
+        - "What operational outcomes does it protect?"
+        - "What should happen after a risk is identified?"
+    - id: "risk-principles"
+      title: "Risk Principles"
+      intent: "Define how operational risks are surfaced, assessed, owned, mitigated, accepted, escalated, reviewed, and retired."
+      required: true
+      outputGuidance:
+        - "Define principles for explicit ownership, early signals, proportional mitigation, deliberate acceptance, evidence, review cadence, and escalation."
+        - "State that undocumented risk acceptance is not valid."
+        - "Tie principles to Foundation boundaries and operational sustainability."
+      qualityChecks:
+        - "Principles are actionable."
+        - "Risk acceptance and escalation discipline are explicit."
+        - "Evidence and review are included."
+      questions:
+        - "What principles guide risk management?"
+        - "How are risks surfaced early?"
+        - "How are risks accepted, escalated, mitigated, or retired?"
+        - "What risk behavior is prohibited?"
+    - id: "risk-scope"
+      title: "Risk Scope"
+      intent: "Define what this final operational risk register consolidates and what remains owned elsewhere."
+      required: true
+      outputGuidance:
+        - "Separate in-scope, out-of-scope, inherited, upstream-owned, and review-needed risks."
+        - "Clarify relationship with Technical Risks, GTM Risks, Risk/Compliance, Financial Operations, Incident Management, and Continuous Improvement."
+        - "Preserve unresolved scope questions."
+      qualityChecks:
+        - "Scope prevents duplicate risk ownership."
+        - "Inherited risks are explicitly linked."
+        - "Upstream-owned risks are not silently absorbed."
+      questions:
+        - "What risks belong in the operational risk register?"
+        - "What risks remain owned by Product, Engineering, GTM, Finance, Compliance, or another document?"
+        - "What inherited risks must be preserved here?"
+    - id: "risk-taxonomy"
+      title: "Risk Taxonomy"
+      intent: "Define categories, statuses, sensitivities, ownership states, mitigation states, acceptance states, escalation states, and evidence states."
+      required: true
+      outputGuidance:
+        - "Define operational risk categories and statuses."
+        - "Include current, emerging, latent, accepted, mitigated, partially-mitigated, unmitigated, transferred, avoided, retired, blocked, review-needed, ownerless, backup-missing, and incident-triggering states."
+        - "Define privacy-sensitive, financial-sensitive, compliance-sensitive, security-sensitive, customer-facing, and vendor-owned labels."
+      qualityChecks:
+        - "Taxonomy supports prioritization and review."
+        - "Accepted, mitigated, and retired states are distinct."
+        - "Sensitive risk labels are operationally meaningful."
+      questions:
+        - "How are operational risks categorized?"
+        - "What statuses can a risk have?"
+        - "What sensitivity and ownership labels are used?"
+    - id: "risk-scoring-model"
+      title: "Risk Scoring Model"
+      intent: "Define how likelihood, impact, confidence, detectability, severity, residual risk, and risk appetite are assessed."
+      required: true
+      outputGuidance:
+        - "Use risk scoring records."
+        - "Allow qualitative scoring where quantitative data is unavailable."
+        - "Include confidence and caveat fields to prevent false precision."
+      qualityChecks:
+        - "Scoring is clear and useful."
+        - "Low-confidence risks are visible."
+        - "Residual risk is distinct from initial risk."
+      questions:
+        - "How are likelihood, impact, confidence, detectability, and severity assessed?"
+        - "How is residual risk assessed after mitigation?"
+        - "How is risk appetite represented?"
+        - "How is false precision avoided?"
     - id: "risk-register"
       title: "Risk Register"
-      intent: "Provide the complete inventory of operational risks and define how risks are identified, assessed, and updated."
+      intent: "Provide the complete consolidated operational risk inventory."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use risk records for every material operational risk."
+        - "Group risks by domain where useful."
+        - "Every risk should include source document, owner, early signal, mitigation, contingency, residual risk, escalation trigger, evidence, review cadence, and status."
+      qualityChecks:
+        - "Risk register is complete enough to operate from."
+        - "Risks are not names only."
+        - "High-impact risks have owner, backup, contingency, and escalation."
       questions:
         - "What is the complete inventory of operational risks?"
-        - "How are risks identified, assessed, and updated?"
+        - "What source document produced each risk?"
+        - "Who owns each risk?"
+        - "How is each risk detected, mitigated, escalated, reviewed, and closed?"
+    - id: "inherited-risks"
+      title: "Inherited Risks"
+      intent: "Consolidate risk handoffs from every prior Operations document and preserve their source context."
+      required: true
+      outputGuidance:
+        - "List inherited risks by source document."
+        - "Identify duplicated risks and merge them into canonical risk records."
+        - "Preserve source context and unresolved questions."
+      qualityChecks:
+        - "Upstream risk handoffs are not lost."
+        - "Duplicate risks are consolidated, not repeated."
+        - "Source context remains traceable."
+      questions:
+        - "What risks were handed off from each previous Operations document?"
+        - "Which risks are duplicates across documents?"
+        - "Which inherited risks need canonical consolidation?"
     - id: "support-risks"
       title: "Support Risks"
-      intent: "Identify risks that could degrade or break the support function and the mitigations in place."
+      intent: "Identify risks that could degrade customer support, customer trust, issue resolution, or support sustainability."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use risk records."
+        - "Include support overload, triage failure, slow response, wrong priority, weak escalation, stale macros, unresolved bugs, billing/refund mishandling, privacy request mishandling, and customer trust risks."
+        - "Tie to Customer Support."
+      qualityChecks:
+        - "Support risks include capacity, quality, escalation, billing, privacy, and trust."
+        - "Support risks have early signals and mitigations."
+        - "Support overload is treated as operational risk, not inconvenience."
       questions:
-        - "What risks could degrade or break the support function?"
-        - "What mitigations are in place for support risks?"
-    - id: "reliability-risks"
-      title: "Reliability Risks"
-      intent: "Identify risks that threaten product reliability and availability and the mitigations in place."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What risks threaten product reliability and availability?"
-        - "What mitigations are in place for reliability risks?"
-    - id: "financial-risks"
-      title: "Financial Risks"
-      intent: "Identify risks that threaten financial operations and the mitigations in place."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What risks threaten financial operations (billing errors, payment failures)?"
-        - "What mitigations are in place for financial risks?"
-    - id: "compliance-risks"
-      title: "Compliance Risks"
-      intent: "Identify risks that threaten regulatory or contractual compliance and the mitigations in place."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What risks threaten regulatory or contractual compliance?"
-        - "What mitigations are in place for compliance risks?"
-    - id: "vendor-risks"
-      title: "Vendor Risks"
-      intent: "Identify risks arising from third-party vendor dependencies and the mitigations in place."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What risks arise from third-party vendor dependencies?"
-        - "What mitigations are in place for vendor risks?"
-    - id: "team-risks"
-      title: "Team Risks"
-      intent: "Identify risks arising from team composition, capacity, or knowledge gaps and the mitigations in place."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What risks arise from team composition, capacity, or knowledge gaps?"
-        - "What mitigations are in place for team risks?"
-    - id: "process-risks"
-      title: "Process Risks"
-      intent: "Identify risks arising from process failures or gaps and the mitigations in place."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What risks arise from process failures or gaps?"
-        - "What mitigations are in place for process risks?"
+        - "What risks could degrade or break support?"
+        - "What early signals reveal support risk?"
+        - "What mitigations and contingencies exist?"
     - id: "customer-success-risks"
       title: "Customer Success Risks"
-      intent: "Identify risks that threaten the customer success function and the mitigations in place."
+      intent: "Identify risks that could prevent customers from reaching value, retaining, expanding ethically, or giving reliable feedback."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use risk records."
+        - "Include failed activation, weak health signals, ignored churn signals, poor retention action, unethical expansion, low satisfaction visibility, insufficient data, privacy-invasive outreach, and owner gaps."
+        - "Tie to Customer Success."
+      qualityChecks:
+        - "Customer success risks are value-based, not vanity-metric based."
+        - "Churn and activation risks have signals."
+        - "Expansion and privacy risks are included."
       questions:
-        - "What risks threaten the customer success function?"
-        - "What mitigations are in place for customer success risks?"
+        - "What risks threaten customer success?"
+        - "What risks prevent customers from reaching value?"
+        - "How are churn, activation, retention, expansion, and feedback risks detected and mitigated?"
+    - id: "reliability-risks"
+      title: "Reliability Risks"
+      intent: "Identify risks to product availability, performance, correctness, data integrity, dependencies, environments, observability, and backup/restore readiness."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include availability, latency, error-rate, performance, failed jobs, dependency failure, data integrity, queue/backlog, deployment, backup/restore, and observability gaps."
+        - "Tie to Engineering Observability, NFRs, and Technical Risks."
+      qualityChecks:
+        - "Reliability risks are observable or marked currently undetected."
+        - "Dependency and backup/restore risks are included."
+        - "Incident triggers are defined where relevant."
+      questions:
+        - "What risks threaten product reliability and availability?"
+        - "What technical or operational signals reveal reliability risk?"
+        - "What mitigation and contingency exists for reliability risks?"
+    - id: "incident-risks"
+      title: "Incident Risks"
+      intent: "Identify risks that incident management fails before, during, or after incidents."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include delayed detection, unclear declaration, weak severity model, missing responder ownership, poor communication, failed mitigation, failed rollback, repeated incidents, postmortem theater, and corrective-action decay."
+        - "Tie to Incident Management."
+      qualityChecks:
+        - "Incident risks cover response and learning."
+        - "Communication and corrective-action risks are included."
+        - "Detection gaps are visible."
+      questions:
+        - "What could cause incident response to fail?"
+        - "What risks exist before, during, and after incidents?"
+        - "How are incident risks detected and mitigated?"
+    - id: "release-risks"
+      title: "Release Risks"
+      intent: "Identify risks related to deployment, release readiness, rollback, release communication, hotfixes, and post-release health."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include unsafe releases, incomplete readiness, failed smoke checks, poor support handoff, rollback gaps, hotfix pressure, post-release incidents, release communication gaps, and deployment environment mismatch."
+        - "Tie to Deployment, Reporting/Cadence, Incident Management, and future Release Management if present."
+      qualityChecks:
+        - "Release risks include readiness, rollback, support, and communication."
+        - "Release risk thresholds are explicit."
+        - "Post-release monitoring is included."
+      questions:
+        - "What risks can break release quality or deployment safety?"
+        - "What early signals reveal release risk?"
+        - "What mitigation or rollback contingency exists?"
+    - id: "financial-risks"
+      title: "Financial Risks"
+      intent: "Identify risks to billing correctness, payments, refunds, chargebacks, subscriptions, costs, margins, vendors, tax/accounting assumptions, and evidence."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include billing errors, incorrect entitlements, payment failure gaps, refund abuse, chargebacks, processor failure, tax/accounting unknowns, cost spikes, margin erosion, vendor surprises, weak financial controls, and evidence gaps."
+        - "Tie to Financial Operations and Pricing."
+      qualityChecks:
+        - "Financial risks include correctness, cost, margin, processor, and evidence risks."
+        - "Professional-review-needed assumptions are visible."
+        - "Financial customer trust risks are included."
+      questions:
+        - "What risks threaten financial operations?"
+        - "How are billing, payment, refund, chargeback, cost, margin, vendor, tax/accounting, and evidence risks detected?"
+        - "What mitigation and contingency exists?"
+    - id: "compliance-risks"
+      title: "Compliance Risks"
+      intent: "Identify risks related to obligations, policies, vendors, contracts, audit trails, governance, professional review, and unsupported assumptions."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include missing obligations, unsupported legal/regulatory assumptions, stale policies, vendor noncompliance, unresolved contracts, privacy mishandling, weak audit trail, governance drift, and professional-review gaps."
+        - "Tie to Risk and Compliance."
+      qualityChecks:
+        - "Compliance risks do not overclaim legal certainty."
+        - "Obligation and evidence gaps are explicit."
+        - "Professional-review-needed items are preserved."
+      questions:
+        - "What risks threaten regulatory, contractual, policy, or governance compliance?"
+        - "What assumptions require professional review?"
+        - "What mitigation and contingency exists?"
+    - id: "data-and-privacy-risks"
+      title: "Data and Privacy Risks"
+      intent: "Identify risks related to data access, retention, deletion, export, telemetry, logs, sensitive data, and privacy request handling."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include overcollection, weak access control, missing retention/deletion process, export/deletion errors, telemetry/logging exposure, sensitive data leak, privacy request mishandling, and privacy incident escalation gaps."
+        - "Tie to Security/Privacy, Risk/Compliance, Incident Management, and future Data/Privacy Operations if present."
+      qualityChecks:
+        - "Privacy risks include operational execution, not only policy."
+        - "Sensitive data and logging risks are visible."
+        - "Escalation and evidence are included."
+      questions:
+        - "What data and privacy risks can break operations or customer trust?"
+        - "How are access, retention, deletion, export, logs, telemetry, and privacy request risks detected?"
+        - "What mitigation and contingency exists?"
+    - id: "vendor-risks"
+      title: "Vendor Risks"
+      intent: "Identify risks arising from third-party vendor dependencies, cost, access, compliance, data exposure, fallback, and offboarding."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include critical dependency failure, vendor lock-in, pricing/cost changes, account access loss, billing surprise, data exposure, compliance gap, weak fallback, and offboarding failure."
+        - "Tie to Operating Model, Business Processes, Risk/Compliance, and Financial Operations."
+      qualityChecks:
+        - "Vendor risks include failure, cost, access, data, compliance, and offboarding."
+        - "Critical vendors have contingency."
+        - "Vendor assumptions are not treated as guarantees."
+      questions:
+        - "What risks arise from third-party vendor dependencies?"
+        - "What happens if critical vendors fail, become expensive, lose access, or create compliance/data risk?"
+        - "What fallback or offboarding contingency exists?"
+    - id: "team-and-capacity-risks"
+      title: "Team and Capacity Risks"
+      intent: "Identify risks arising from team size, owner gaps, backup gaps, role overload, skills, decision authority, handoffs, and hiring triggers."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include founder bottleneck, owner gaps, backup gaps, unclear decision authority, role overload, missing skills, unavailable expertise, poor handoff, and future hiring trigger risk."
+        - "Tie to Team and Responsibilities."
+      qualityChecks:
+        - "Capacity risk is treated as real operational risk."
+        - "Owner and backup gaps are explicit."
+        - "Hiring/transfer triggers are included where useful."
+      questions:
+        - "What risks arise from team composition, capacity, or knowledge gaps?"
+        - "Where are single points of failure?"
+        - "What mitigation or hiring/transfer trigger exists?"
+    - id: "process-risks"
+      title: "Process Risks"
+      intent: "Identify risks arising from missing, unclear, manual-heavy, ownerless, poorly controlled, or stale business processes."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include missing process, unclear trigger, ownerless process, manual overload, missed handoff, control failure, exception sprawl, automation failure, stale process docs, and process review failure."
+        - "Tie to Business Processes."
+      qualityChecks:
+        - "Process risks include manual burden and control failure."
+        - "Trigger/ownership gaps are explicit."
+        - "Automation failure is considered."
+      questions:
+        - "What risks arise from process failures or gaps?"
+        - "Which processes are manual-heavy, ownerless, unclear, poorly controlled, or stale?"
+        - "What mitigation and contingency exists?"
+    - id: "metrics-and-reporting-risks"
+      title: "Metrics and Reporting Risks"
+      intent: "Identify risks arising from bad data, missing metrics, stale dashboards, misleading thresholds, alert fatigue, ignored reports, and poor action follow-through."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include missing instrumentation, bad data, stale dashboards, misleading thresholds, alert fatigue, ignored reports, no action follow-through, metric gaming, and unsafe decisions from low-quality metrics."
+        - "Tie to Operational Metrics and Reporting/Cadence."
+      qualityChecks:
+        - "Measurement risks include decision-safety."
+        - "Data quality and alert fatigue are included."
+        - "Reporting risks include action follow-through."
+      questions:
+        - "What risks arise from metrics and reporting failures?"
+        - "Where could bad data or misleading dashboards cause wrong decisions?"
+        - "What mitigation and contingency exists?"
     - id: "knowledge-risks"
       title: "Knowledge Risks"
-      intent: "Identify risks arising from knowledge loss or documentation gaps and the mitigations in place."
+      intent: "Identify risks arising from knowledge loss, stale documentation, duplicate truth, ownerless docs, bad search, missing runbooks, and sensitive knowledge exposure."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use risk records."
+        - "Include tribal knowledge, duplicate truth, stale docs, ownerless docs, missing runbooks, stale customer-facing docs, stale support macros, bad search, missing incident learning, and sensitive knowledge exposure."
+        - "Tie to Knowledge Management."
+      qualityChecks:
+        - "Knowledge risks include currentness, ownership, discovery, and sensitivity."
+        - "Customer-facing stale knowledge is treated as trust risk."
+        - "Missing runbooks are treated as operational risk."
       questions:
         - "What risks arise from knowledge loss or documentation gaps?"
-        - "What mitigations are in place for knowledge risks?"
+        - "Where could stale, duplicate, hidden, or inaccessible knowledge break operations?"
+        - "What mitigation and contingency exists?"
+    - id: "continuous-improvement-risks"
+      title: "Continuous Improvement Risks"
+      intent: "Identify risks caused by the improvement system itself becoming chaotic, over-automated, locally optimized, weakly validated, or unadopted."
+      required: true
+      outputGuidance:
+        - "Use risk records."
+        - "Include chaotic change, over-automation, local optimization, novelty bias, weak validation, no adoption, hidden risk, process churn, documentation drift, and improvement backlog rot."
+        - "Tie to Continuous Improvement."
+      qualityChecks:
+        - "Improvement risks include stability and adoption."
+        - "Guardrails and rollback are considered."
+        - "Backlog rot is included."
+      questions:
+        - "What risks can continuous improvement create?"
+        - "Where could improvement become instability, noise, over-automation, or hidden risk?"
+        - "What guardrails and mitigation exist?"
+    - id: "risk-ownership"
+      title: "Risk Ownership"
+      intent: "Define accountability for each risk, mitigation, contingency, escalation, review, and decision authority."
+      required: true
+      outputGuidance:
+        - "Use risk ownership records."
+        - "Separate accountable owner, mitigation owner, contingency owner, escalation owner, reviewer, and decision authority."
+        - "Flag owner gaps and backup gaps."
+      qualityChecks:
+        - "Critical risks are not ownerless."
+        - "Mitigation and contingency ownership are distinct where needed."
+        - "Backup ownership is included."
+      questions:
+        - "Who owns each operational risk?"
+        - "Who owns mitigation, contingency, escalation, and review?"
+        - "What ownership or backup gaps remain?"
+    - id: "early-warning-signals"
+      title: "Early Warning Signals"
+      intent: "Define leading indicators that reveal risk before full failure."
+      required: true
+      outputGuidance:
+        - "Use early warning signal records."
+        - "Tie signals to metrics, reports, support patterns, incident signals, vendor signals, cost signals, privacy/compliance reviews, and knowledge freshness."
+        - "State caveats and action triggered."
+      qualityChecks:
+        - "Signals are observable."
+        - "Signals trigger action."
+        - "Low-confidence signals are caveated."
+      questions:
+        - "What early warning signals reveal operational risk before it materializes?"
+        - "Where does each signal come from?"
+        - "What threshold triggers action?"
     - id: "mitigation-plan"
       title: "Mitigation Plan"
-      intent: "Define the overall plan for mitigating operational risks and how mitigation actions are tracked and verified."
+      intent: "Define preventive or reducing actions for material operational risks and how mitigation is verified."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use mitigation action records."
+        - "Include owner, priority, due trigger/date, dependency, verification method, evidence, metric affected, and escalation if blocked."
+        - "Tie high-priority mitigations to Continuous Improvement or corrective actions where appropriate."
+      qualityChecks:
+        - "Mitigations are actionable and verifiable."
+        - "Mitigation is not confused with documentation."
+        - "Blocked mitigation escalates."
       questions:
-        - "What is the overall plan for mitigating operational risks?"
-        - "How are mitigation actions tracked and verified?"
+        - "What is the plan for mitigating operational risks?"
+        - "Who owns each mitigation?"
+        - "How is mitigation verified?"
+        - "What happens if mitigation is blocked?"
+    - id: "contingency-plan"
+      title: "Contingency Plan"
+      intent: "Define fallback actions if material risks occur despite mitigation."
+      required: true
+      outputGuidance:
+        - "Use contingency plan records."
+        - "Include materialization trigger, owner, tools/data required, customer communication, incident trigger, fallback/rollback, and validation."
+        - "Flag contingencies that depend on missing capabilities."
+      qualityChecks:
+        - "Contingencies are executable."
+        - "Required tools/data/people are identified."
+        - "Customer communication and incident trigger are considered."
+      questions:
+        - "What happens if each material risk occurs?"
+        - "What fallback, rollback, workaround, vendor escalation, or incident procedure applies?"
+        - "What tools, data, or people are required?"
+    - id: "accepted-risks"
+      title: "Accepted Risks"
+      intent: "Document deliberately accepted residual risks and prevent implicit risk acceptance."
+      required: true
+      outputGuidance:
+        - "Use accepted risk records."
+        - "Include rationale, approver, residual impact, mitigation still required, expiration/review trigger, communication requirement, and evidence."
+        - "State that accepted risk is not resolved risk."
+      qualityChecks:
+        - "Accepted risks are explicit and auditable."
+        - "Residual risk remains visible."
+        - "Review trigger and evidence are required."
+      questions:
+        - "What risks are deliberately accepted?"
+        - "Who approved acceptance?"
+        - "What residual risk remains?"
+        - "When must accepted risks be reviewed?"
+    - id: "risk-escalation"
+      title: "Risk Escalation"
+      intent: "Define when risks escalate, who is notified, what decision is required, and when risk becomes incident or customer communication."
+      required: true
+      outputGuidance:
+        - "Use risk escalation records."
+        - "Include severity, owner, backup, notification target, response expectation, decision required, customer communication trigger, incident trigger, and downstream action."
+        - "Tie to Incident Management and Reporting/Cadence."
+      qualityChecks:
+        - "Escalation triggers are concrete."
+        - "High-severity risks have response expectation."
+        - "Incident and customer communication triggers are included."
+      questions:
+        - "When should a risk be escalated?"
+        - "Who is notified?"
+        - "What decision is required?"
+        - "When does a risk become an incident?"
+        - "When is customer communication required?"
+    - id: "risk-review-cadence"
+      title: "Risk Review Cadence"
+      intent: "Define how risks are reviewed, updated, escalated, accepted, retired, and converted into action."
+      required: true
+      outputGuidance:
+        - "Use risk review cadence records."
+        - "Include daily/weekly/monthly/quarterly/event-triggered reviews where relevant."
+        - "Tie to Reporting/Cadence and Continuous Improvement."
+      qualityChecks:
+        - "Risk review produces decisions and actions."
+        - "Event-triggered review is included."
+        - "Review artifact and action tracking are explicit."
+      questions:
+        - "How often are operational risks reviewed?"
+        - "Who participates?"
+        - "What inputs and outputs exist?"
+        - "What triggers out-of-cycle review?"
+        - "How are risk actions tracked?"
+    - id: "risk-metrics"
+      title: "Risk Metrics"
+      intent: "Define metrics that show whether operational risk is increasing, decreasing, stale, ownerless, accepted, or poorly mitigated."
+      required: true
+      outputGuidance:
+        - "Use risk metric records."
+        - "Include open risk count, high-severity risk count, overdue mitigation count, accepted risk count, stale risk count, risk recurrence, incident-linked risks, ownerless risks, and mitigation effectiveness."
+        - "Tie to Operational Metrics."
+      qualityChecks:
+        - "Risk metrics are decision-useful."
+        - "Metrics have source, owner, cadence, threshold, and caveat."
+        - "Metrics do not incentivize hiding risk."
+      questions:
+        - "What metrics show operational risk health?"
+        - "How are open risks, high-severity risks, overdue mitigations, accepted risks, stale risks, incident-linked risks, ownerless risks, and mitigation effectiveness measured?"
+        - "What thresholds trigger action?"
+    - id: "risk-evidence"
+      title: "Risk Evidence"
+      intent: "Define what evidence proves risks were reviewed, mitigated, accepted, escalated, retired, or converted into action."
+      required: true
+      outputGuidance:
+        - "Use risk evidence records."
+        - "Include storage, owner, access, retention, and review cadence."
+        - "Tie evidence to mitigations, reviews, accepted risks, incidents, and improvement actions."
+      qualityChecks:
+        - "Risk evidence is retrievable and useful."
+        - "Sensitive evidence is protected."
+        - "Evidence links to risk status changes."
+      questions:
+        - "What evidence proves risk management actions occurred?"
+        - "Where is evidence stored?"
+        - "Who owns evidence?"
+        - "How are sensitive risk records protected?"
+    - id: "risk-action-tracking"
+      title: "Risk Action Tracking"
+      intent: "Define how mitigation actions, contingencies, corrective actions, accepted-risk reviews, and improvement actions are tracked to closure."
+      required: true
+      outputGuidance:
+        - "Use risk action tracking records."
+        - "Include source risk, action type, owner, due trigger/date, status, closure evidence, escalation if blocked, linked improvement/incident, and status review cadence."
+        - "Tie to Continuous Improvement."
+      qualityChecks:
+        - "Risk actions do not disappear after review."
+        - "Closure requires evidence."
+        - "Blocked actions escalate."
+      questions:
+        - "How are mitigation and corrective actions tracked?"
+        - "Who owns each action?"
+        - "What evidence closes an action?"
+        - "What happens when risk actions are blocked or overdue?"

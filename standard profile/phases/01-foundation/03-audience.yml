@@ -5,42 +5,102 @@ document:
   status: "not_started"
   order: 3
   type: "audience"
-  purpose: "Define who should recognize this project as useful, necessary, or inevitable."
+  purpose: "Define who should recognize this project as useful, necessary, or inevitable based on the founding thesis and problem definition."
   centralQuestion: "Who should recognize this project as useful, necessary, or inevitable?"
   outputs:
     canonical:
       format: "markdown"
-      path: "01-foundation/03-audience.md"
-      purpose: "Rendered audience definition document"
+      path: "docs/01-foundation/03-audience.md"
+      purpose: "Store the canonical audience definition as a Markdown document."
+    artifacts:
+      - id: "foundation.audience_map"
+        format: "html"
+        path: "outcomes/html/01-foundation/audience-map.html"
+        purpose: "Provide a navigable representation of the primary audience, context of use, capabilities, constraints, motivations, risks, and excluded audiences."
+        audience: "founder"
+        includes:
+          - "primary audience"
+          - "context of use"
+          - "user capabilities"
+          - "user constraints"
+          - "user motivations"
+          - "user risks"
+          - "excluded audiences"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "foundation.audience_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/01-foundation/audience-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the audience definition is specific, behaviorally grounded, and aligned with the thesis and problem."
+        agentRole: "reviewer"
+        includes:
+          - "canonical audience definition"
+          - "founding thesis dependency"
+          - "problem definition dependency"
+          - "central question"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
   dependsOn:
-    - "01-thesis"
-    - "02-problem"
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
   feeds:
-    - "04-principles"
-    - "05-boundaries"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+  inputs:
+    - id: "user-observations"
+      type: "manual_note"
+      required: false
+      description: "Observed behaviors, complaints, contexts, constraints, or workarounds from potential users."
+    - id: "research-notes"
+      type: "context"
+      required: false
+      description: "Interviews, transcripts, survey notes, analytics, support logs, or other evidence that can clarify who the project serves."
+    - id: "excluded-user-notes"
+      type: "manual_note"
+      required: false
+      description: "Notes about plausible but intentionally excluded audiences, contexts, or use cases."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
-    - "The primary user persona is described with sufficient specificity to guide design decisions."
+    - "The central question is answered explicitly in the Primary Audience section."
+    - "The primary audience is described through situation, behavior, constraints, capabilities, and values rather than shallow demographics."
+    - "The audience definition is specific enough to exclude plausible but wrong audiences."
+    - "User capabilities and constraints are explicit enough to guide Product and UX decisions."
+    - "Excluded audiences and out-of-scope use cases are justified by the thesis and problem definition."
+    - "Unvalidated audience assumptions are surfaced rather than presented as facts."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid demographic stereotypes."
+    - "Avoid idealized or overly convenient users."
+    - "Prefer behavioral and situational descriptions over persona fiction."
     - "Prefer decision-useful statements."
-    - "Audience description must be specific enough to exclude plausible but wrong audiences."
+    - "Audience description must be specific enough to reject incompatible product directions."
+    - "Do not invent user evidence, quotes, or prevalence claims."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
     - "Prefer behavioral descriptions over demographic stereotypes."
+    - "Separate facts, assumptions, hypotheses, and unknowns."
+    - "Do not define the audience only as people who want the proposed solution."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with the Founding Thesis or Problem Definition."
     - "Confirm excluded audiences are justified by the thesis and problem."
+    - "Flag content that belongs better in Product, Go-to-market, Validation, or Operations."
+    - "Verify that the audience is narrow enough to guide design without being artificially overfit."
   sections:
     - id: "primary-audience"
       title: "Primary Audience"
-      intent: "Describe the primary user in terms of situation, capabilities, and values."
+      intent: "Describe the primary user in terms of situation, behavior, capabilities, constraints, and values."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define the audience by lived situation and recurring behavior before demographics."
+        - "Name what makes this audience especially affected by the problem."
+        - "Clarify why this audience should be served first."
+      qualityChecks:
+        - "The audience is not defined merely as people interested in the solution."
+        - "The description is specific enough to exclude adjacent audiences."
+        - "The section distinguishes observed facts from assumptions."
       questions:
         - "Who is the primary user?"
         - "What situation are they in?"
@@ -48,58 +108,103 @@ document:
         - "What capabilities do they have?"
         - "What limitations do they have?"
         - "What do they value?"
+        - "Why should this audience be served first?"
         - "What should the project not presume about them?"
+        - "Which claims about this audience are observed, assumed, or still unknown?"
     - id: "context-of-use"
       title: "Context of Use"
-      intent: "Describe the environment and constraints in which the project will be used."
+      intent: "Describe the environment, timing, constraints, and operating conditions in which the project will be used."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe when, where, why, and under what pressure the audience encounters the problem."
+        - "Include environmental, cognitive, social, technical, and temporal constraints where relevant."
+      qualityChecks:
+        - "The context explains product constraints without becoming a product specification."
+        - "The section makes clear which contexts are primary versus secondary."
       questions:
         - "In what environment or situation will the project be used?"
+        - "When does the need usually arise?"
         - "What constraints does the context impose?"
+        - "What distractions, pressures, or competing priorities exist in this context?"
+        - "Which contexts are secondary or intentionally deprioritized?"
     - id: "user-capabilities"
       title: "User Capabilities"
-      intent: "Specify the skills, knowledge, and infrastructure users are assumed to have."
+      intent: "Specify the skills, knowledge, habits, tools, and infrastructure users are assumed to have."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate required capabilities from helpful but optional capabilities."
+        - "Clarify which capabilities the product may rely on and which it must not assume."
+      qualityChecks:
+        - "Assumed capabilities are plausible for the primary audience."
+        - "The section does not silently assume expert behavior unless the audience definition supports it."
       questions:
         - "What skills or knowledge are assumed?"
+        - "What habits or workflows do users already have?"
         - "What tools or infrastructure do users already have?"
+        - "Which capabilities are required for the initial product to work?"
+        - "Which capabilities would be helpful but should not be assumed?"
     - id: "user-constraints"
       title: "User Constraints"
-      intent: "Identify limitations and scarce resources users operate under."
+      intent: "Identify limitations, scarce resources, and conditions that shape how users can engage with the project."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Name practical constraints before emotional or aspirational descriptions."
+        - "Include constraints related to time, attention, money, energy, knowledge, trust, access, and environment where relevant."
+      qualityChecks:
+        - "Constraints are specific enough to inform UX and product boundaries."
+        - "The section does not blame users for constraints created by context or systems."
       questions:
         - "What limitations do users operate under?"
         - "What resources are scarce for the user?"
+        - "What constraints make existing alternatives insufficient?"
+        - "What constraints could prevent adoption?"
+        - "Which constraints must the project respect rather than try to eliminate?"
     - id: "user-motivations"
       title: "User Motivations"
       intent: "Clarify what drives users to seek a solution and what outcomes they value."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe motivations in terms of desired progress, avoided pain, and valued outcomes."
+        - "Distinguish urgent motivations from aspirational motivations."
+      qualityChecks:
+        - "Motivations are connected to the problem definition."
+        - "The section avoids generic motivations that could apply to any product."
       questions:
         - "What drives the user to seek a solution?"
         - "What outcomes does the user value?"
+        - "What pain are they trying to reduce or avoid?"
+        - "What progress are they trying to make?"
+        - "Which motivations are urgent, recurring, or aspirational?"
     - id: "user-risks"
       title: "User Risks"
-      intent: "Assess what happens to users if the solution fails and their tolerance for friction."
+      intent: "Assess what happens to users if the solution fails, misleads them, adds friction, or creates misplaced trust."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe user-level downside clearly."
+        - "Include risks created by bad advice, false confidence, cognitive overload, privacy exposure, or workflow disruption where relevant."
+      qualityChecks:
+        - "Risks are specific to the audience and context of use."
+        - "The section identifies trust and failure risks without turning into Engineering or Security documentation."
       questions:
         - "What happens to the user if the solution fails?"
         - "What is the user's tolerance for friction or complexity?"
+        - "What would make the user lose trust?"
+        - "What user harm could occur if the system overreaches?"
+        - "What must the project avoid doing to this audience?"
     - id: "excluded-audiences"
       title: "Excluded Audiences"
-      intent: "Identify who is explicitly not the target and which use cases are out of scope."
+      intent: "Identify who is explicitly not the target and which use cases are out of scope for the initial audience definition."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Name plausible but excluded audiences explicitly."
+        - "Explain whether each exclusion is permanent, initial, or pending validation."
+        - "Connect exclusions to the thesis, problem, constraints, or current project scope."
+      qualityChecks:
+        - "Excluded audiences are not dismissed as invalid; they are excluded for strategic reasons."
+        - "The exclusions protect focus without blocking future validated expansion."
       questions:
         - "Who is explicitly not the target audience?"
         - "What use cases are out of scope for the initial audience?"
+        - "Which adjacent audiences may become relevant later?"
+        - "Why are these audiences excluded now?"
+        - "Which exclusions should be expanded later in the Boundaries document?"

@@ -5,121 +5,344 @@ document:
   status: "not_started"
   order: 9
   type: "decision_record"
-  purpose: "Record all decisions made from evidence, including reasoning, alternatives, and remaining risk."
-  centralQuestion: "What was decided based on what evidence?"
+  purpose: "Record validation-driven decisions with evidence, criteria, alternatives, rationale, reversibility, consequences, remaining risk, and downstream implications."
+  centralQuestion: "What was decided, based on what evidence, under what criteria, and with what remaining risk?"
   outputs:
     canonical:
       format: "markdown"
-      path: "02-validation/09-decision-record.md"
-      purpose: "Records all decisions made from evidence, including reasoning, alternatives, and remaining risk."
-  dependsOn: []
-  feeds: []
+      path: "docs/02-validation/09-decision-record.md"
+      purpose: "Store the canonical validation decision record as a Markdown document."
+    artifacts:
+      - id: "validation.decision_record_index"
+        format: "html"
+        path: "outcomes/html/02-validation/decision-record-index.html"
+        purpose: "Provide a navigable index of validation decisions by status, evidence basis, decision type, affected hypotheses, reversibility, risks, and downstream implications."
+        audience: "founder"
+        includes:
+          - "decision register"
+          - "accepted hypotheses"
+          - "refuted hypotheses"
+          - "pivot decisions"
+          - "proceed decisions"
+          - "stop decisions"
+          - "deferred decisions"
+          - "reopened decisions"
+          - "open risks"
+          - "downstream implications"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.decision_record_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/decision-record-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether validation decisions are evidence-based, traceable, reversible where appropriate, and aligned with the validation record."
+        agentRole: "reviewer"
+        includes:
+          - "canonical decision record"
+          - "validation strategy dependency"
+          - "hypotheses dependency"
+          - "experiments dependency"
+          - "evidence log dependency"
+          - "decision record format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/01-validation-strategy"
+    - "02-validation/02-core-assumptions"
+    - "02-validation/03-hypotheses"
+    - "02-validation/05-experiments"
+    - "02-validation/08-evidence-log"
+  feeds:
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-product-scope"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "06-operations/02-operating-model"
+  inputs:
+    - id: "evidence-log"
+      type: "context"
+      required: false
+      description: "Evidence entries, evidence strength, contradictions, gaps, and decision implications that support validation decisions."
+    - id: "hypotheses"
+      type: "context"
+      required: false
+      description: "Hypotheses with status, evidence requirements, refutation signals, and decision implications."
+    - id: "experiment-results"
+      type: "context"
+      required: false
+      description: "Completed experiment results, interpretation, confidence, limitations, and decisions proposed by experiments."
+    - id: "decision-gates"
+      type: "context"
+      required: false
+      description: "Decision gates, required evidence, criteria, possible decisions, and downstream effects defined in the Validation Strategy."
+    - id: "open-risks"
+      type: "manual_note"
+      required: false
+      description: "Known unresolved risks, objections, uncertainty, or conditions that should remain attached to decisions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a complete decision register."
+    - "Each decision includes evidence basis, decision criteria, alternatives considered, rationale, confidence, reversibility, consequences, and remaining risk."
+    - "Each accepted or refuted hypothesis links to evidence entries and states confidence level."
+    - "Proceed, pivot, stop, defer, and reopen decisions are distinguished by type and downstream implication."
+    - "Decisions identify what changed in Foundation, Validation, Product, Engineering, Go-to-market, or Operations."
+    - "Open risks are preserved and assigned monitoring, resolution path, or acceptance rationale."
+    - "No decision is recorded as evidence-based unless the evidence can be traced to the Evidence Log, Experiments, Research Plan, or Validation Strategy."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid decision theater: decisions that sound final but lack evidence, criteria, or ownership."
+    - "Avoid treating weak evidence as sufficient for irreversible decisions."
+    - "Avoid hiding trade-offs, uncertainty, or remaining risk."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
+    - "Do not invent decisions, evidence, dates, owners, or consensus."
+    - "Do not record a hypothesis as accepted or refuted without evidence strength and confidence."
+    - "Do not treat deferred decisions as resolved decisions."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate evidence, interpretation, decision, rationale, consequences, and remaining risk."
+    - "Classify decisions by type: proceed, pivot, stop, defer, reopen, revise, accept hypothesis, refute hypothesis, or monitor risk."
+    - "State whether each decision is reversible, partially reversible, or irreversible."
+    - "Link every decision to evidence entries, hypotheses, assumptions, experiments, or decision gates where possible."
+    - "Record uncertainty and dissent where relevant."
+    - "Keep this document as a decision ledger; synthesis belongs in Validation Report."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation documents, Validation Strategy, Hypotheses, Experiments, or Evidence Log."
+    - "Flag decisions without linked evidence or explicit rationale."
+    - "Flag decisions whose confidence exceeds evidence strength."
+    - "Verify that alternatives and trade-offs were considered for consequential decisions."
+    - "Verify that remaining risks are attached to proceed or pivot decisions."
+    - "Verify that deferred and reopened decisions are not treated as final."
+    - "Flag content that belongs better in Evidence Log, Experiments, Validation Report, Product, Engineering, Go-to-market, or Operations."
   specializedFormats:
     decisionRecordFormat:
-      description: "Standardized format for each decision entry."
+      description: "Required format for each decision entry."
       fields:
         - id
+        - title
+        - decisionType
         - decision
-        - context
-        - optionsConsidered
-        - rationale
-        - consequences
         - status
         - date
+        - decisionOwner
+        - context
+        - linkedHypotheses
+        - linkedAssumptions
+        - linkedEvidence
+        - linkedExperiments
+        - decisionGate
+        - criteriaApplied
+        - optionsConsidered
+        - rationale
+        - confidence
+        - reversibility
+        - consequences
+        - downstreamImplications
+        - remainingRisks
+        - monitoringPlan
+        - revisitTrigger
+        - supersedes
+        - supersededBy
+        - notes
+    hypothesisDecisionFormat:
+      description: "Recommended format for accepted or refuted hypothesis decisions."
+      fields:
+        - hypothesis
+        - decision
+        - evidenceBasis
+        - evidenceStrength
+        - confidence
+        - limitations
+        - impact
+        - followUpNeeded
+        - status
+    riskDecisionFormat:
+      description: "Recommended format for open risk decisions."
+      fields:
+        - risk
+        - status
+        - evidenceBasis
+        - acceptedRiskLevel
+        - owner
+        - monitoringSignal
+        - mitigation
+        - revisitTrigger
+        - downstreamImpact
   sections:
     - id: "decision-register"
       title: "Decision Register"
-      intent: "Maintain the master log of all validation-driven decisions and complete decision history."
+      intent: "Maintain the master log of all validation-driven decisions with evidence, rationale, alternatives, reversibility, consequences, and remaining risk."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "List decisions as structured records, not narrative summary alone."
+        - "Separate evidence basis, rationale, decision, and consequence."
+        - "Include decision status and links to Evidence Log or experiments where possible."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Each decision is traceable to evidence or explicitly marked as judgment under uncertainty."
+        - "The register distinguishes final, provisional, deferred, superseded, and reopened decisions."
+        - "Decision confidence does not exceed evidence strength."
       questions:
         - "What decisions have been made based on evidence?"
         - "What is the complete decision history?"
+        - "What evidence, criteria, and alternatives informed each decision?"
+        - "What is the status of each decision: proposed, accepted, deferred, superseded, reopened, or rejected?"
+        - "Which decisions are reversible, partially reversible, or irreversible?"
+        - "What downstream documents or phases are affected by each decision?"
     - id: "accepted-hypotheses"
       title: "Accepted Hypotheses"
-      intent: "List hypotheses accepted as supported, with evidence and confidence levels."
+      intent: "Record hypotheses accepted as supported, with evidence basis, confidence, limitations, and downstream effects."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Use 'accepted as supported' rather than 'proven' unless proof is actually possible."
+        - "State evidence strength and confidence separately."
+        - "Include limitations and what remains unvalidated."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Accepted hypotheses are supported by traceable evidence."
+        - "Confidence is proportional to evidence strength."
+        - "Acceptance does not imply broader validation than the evidence supports."
       questions:
         - "Which hypotheses have been accepted as supported?"
         - "What evidence supports each accepted hypothesis?"
-        - "What is the confidence level in each accepted hypothesis?"
+        - "What is the evidence strength and confidence level in each accepted hypothesis?"
+        - "What limitations remain attached to each accepted hypothesis?"
+        - "What downstream decisions become possible because of each accepted hypothesis?"
     - id: "refuted-hypotheses"
       title: "Refuted Hypotheses"
-      intent: "List refuted hypotheses, the evidence that refuted them, and their impact on the project."
+      intent: "Record refuted hypotheses, refuting evidence, confidence, implications, and required revisions."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "State what exactly was refuted and what was not."
+        - "Distinguish refuted from inconclusive or insufficiently tested."
+        - "Connect refutation to revision, pivot, stop, or further validation."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Refuted hypotheses have explicit refuting evidence."
+        - "The section does not overgeneralize from narrow refutation."
+        - "Impacts are concrete enough to guide next steps."
       questions:
         - "Which hypotheses have been refuted?"
         - "What evidence refuted each hypothesis?"
+        - "What was the confidence level in each refutation?"
         - "What was the impact of each refutation on the project?"
+        - "What needs to change because of each refutation?"
     - id: "pivot-decisions"
       title: "Pivot Decisions"
-      intent: "Document pivot decisions, triggers, and resulting changes."
+      intent: "Document decisions that change thesis, audience, problem framing, solution direction, business model, or validation strategy."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define what changed and what stayed stable."
+        - "Tie each pivot to triggering evidence and rejected alternatives."
+        - "State downstream documents requiring revision."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Pivot decisions are evidence-driven, not preference-driven."
+        - "The pivot scope is explicit."
+        - "Remaining risks and validation needs after the pivot are stated."
       questions:
         - "What pivot decisions have been made?"
         - "What triggered each pivot?"
+        - "What evidence justified the pivot?"
         - "What changed as a result of each pivot?"
+        - "What stayed unchanged?"
+        - "Which documents must be revised because of the pivot?"
+        - "What risks remain after the pivot?"
     - id: "proceed-decisions"
       title: "Proceed Decisions"
-      intent: "Document go-forward decisions, justifying evidence, and attached conditions."
+      intent: "Document go-forward decisions, justifying evidence, attached conditions, assumptions carried forward, and monitoring requirements."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "State what work is now allowed to proceed and what remains blocked."
+        - "Include conditions attached to proceeding."
+        - "List assumptions or risks carried forward."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Proceed decisions are not treated as total validation."
+        - "Conditions and monitoring requirements are explicit."
+        - "Proceeding does not violate invalidating conditions or project boundaries."
       questions:
         - "What proceed/go-forward decisions have been made?"
         - "What evidence justified proceeding?"
         - "What conditions were attached to proceeding?"
+        - "What assumptions are being carried forward?"
+        - "What risks must be monitored while proceeding?"
+        - "What downstream work is now allowed, and what remains blocked?"
     - id: "stop-decisions"
       title: "Stop Decisions"
-      intent: "Document stop/kill decisions, triggering evidence, and lessons learned."
+      intent: "Document stop, kill, or pause decisions, triggering evidence, consequences, lessons, and preservation of reusable learning."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Specify whether the decision stops the project, a direction, an experiment, a segment, a feature path, or a business model path."
+        - "State the triggering evidence and decision criteria."
+        - "Extract reusable learning without softening the stop decision."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Stop decisions are not reframed as vague postponement."
+        - "Triggering evidence is traceable."
+        - "Lessons learned are specific enough to inform future work."
       questions:
-        - "What stop/kill decisions have been made?"
+        - "What stop/kill/pause decisions have been made?"
         - "What evidence triggered the decision to stop?"
+        - "What exactly was stopped?"
+        - "What consequences follow from stopping?"
         - "What can be learned from the stopped initiative?"
+        - "What evidence or condition would justify reopening it later, if any?"
+    - id: "deferred-decisions"
+      title: "Deferred Decisions"
+      intent: "Track decisions intentionally postponed because evidence, timing, ownership, or scope is not yet sufficient."
+      required: true
+      outputGuidance:
+        - "State why each decision is deferred."
+        - "Identify what evidence or condition is needed to make the decision later."
+        - "Clarify whether deferral blocks downstream work."
+      qualityChecks:
+        - "Deferred decisions are not disguised as resolved decisions."
+        - "Each deferral has a revisit trigger or required evidence."
+        - "Blocking impact is explicit."
+      questions:
+        - "What decisions have been deferred?"
+        - "Why was each decision deferred?"
+        - "What evidence is needed to make the decision later?"
+        - "What is blocked or allowed while the decision remains deferred?"
+        - "When or under what condition should the decision be revisited?"
+    - id: "reopened-decisions"
+      title: "Reopened Decisions"
+      intent: "Track decisions that were previously accepted but reopened due to new evidence, contradiction, changed assumptions, or downstream consequences."
+      required: true
+      outputGuidance:
+        - "State the original decision and why it was reopened."
+        - "Identify the new evidence or contradiction."
+        - "Record whether the decision was reaffirmed, revised, reversed, or deferred again."
+      qualityChecks:
+        - "Reopened decisions are traceable to a prior decision entry."
+        - "The reopening reason is evidence-based or explicitly justified."
+        - "Supersession relationships are clear."
+      questions:
+        - "Which decisions have been reopened?"
+        - "What new evidence or contradiction caused reopening?"
+        - "Was the original decision reaffirmed, revised, reversed, or deferred?"
+        - "Which decision records supersede or are superseded by this one?"
+        - "What downstream documents need correction because of reopening?"
     - id: "open-risks"
       title: "Open Risks"
-      intent: "Identify remaining open risks, those under monitoring, and those needing more evidence."
+      intent: "Identify remaining open risks, accepted risks, monitored risks, and risks requiring more evidence before a decision can be finalized."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Separate accepted risks from unresolved risks and monitored risks."
+        - "Tie risks to decisions, hypotheses, evidence gaps, or downstream phases."
+        - "Assign monitoring signal, owner, or revisit trigger where useful."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Risks are not hidden inside proceed decisions."
+        - "Each major open risk has an owner, monitoring plan, mitigation, or explicit acceptance rationale."
+        - "Risk status is clear enough to guide Validation Report and downstream phases."
       questions:
         - "What risks remain open and unaddressed?"
         - "Which risks are being actively monitored?"
+        - "Which risks were accepted, and why?"
         - "Which risks require further evidence before a decision can be made?"
+        - "What evidence gaps or signals determine each risk's status?"
+        - "What downstream work is affected by each open risk?"

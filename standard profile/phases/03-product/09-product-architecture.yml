@@ -5,114 +5,465 @@ document:
   status: "not_started"
   order: 9
   type: "product_architecture"
-  purpose: "Define the modular structure of the product and its capabilities."
-  centralQuestion: "What modules, areas, and capabilities compose the product?"
-  dependsOn: []
-  feeds: []
+  purpose: "Define the conceptual modular structure of the product: product areas, capabilities, boundaries, relationships, dependencies, sequencing, risks, and downstream implications before engineering architecture is specified."
+  centralQuestion: "What product modules, areas, capabilities, boundaries, and relationships compose the product, and how should they evolve?"
   outputs:
     canonical:
       format: "markdown"
-      path: "03-product/09-product-architecture.md"
-      purpose: "Modular architecture of product areas and capabilities"
+      path: "docs/03-product/09-product-architecture.md"
+      purpose: "Store the canonical product architecture as a Markdown document."
+    artifacts:
+      - id: "product.product_architecture_map"
+        format: "html"
+        path: "outcomes/html/03-product/product-architecture-map.html"
+        purpose: "Provide a navigable product architecture map covering modules, capabilities, boundaries, relationships, dependencies, sequencing, ownership, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "product architecture thesis"
+          - "product modules"
+          - "module boundaries"
+          - "core capabilities"
+          - "supporting capabilities"
+          - "cross-cutting capabilities"
+          - "capability map"
+          - "module relationships"
+          - "product dependencies"
+          - "capability sequencing"
+          - "ownership model"
+          - "architecture risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.product_architecture_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/product-architecture-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the product architecture is coherent, scoped, modular, dependency-aware, and ready to feed feature specification and engineering architecture."
+        agentRole: "reviewer"
+        includes:
+          - "canonical product architecture"
+          - "product brief dependency"
+          - "product scope dependency"
+          - "information architecture dependency"
+          - "interaction model dependency"
+          - "UI specification dependency"
+          - "design system dependency"
+          - "product architecture formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/03-user-journeys"
+    - "03-product/04-ux-model"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/07-ui-specification"
+    - "03-product/08-design-system"
+  feeds:
+    - "03-product/11-feature-specification"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-data-model"
+    - "04-engineering/05-api-contracts"
+    - "04-engineering/07-frontend-architecture"
+    - "06-operations/02-operating-model"
+  inputs:
+    - id: "product-brief"
+      type: "context"
+      required: false
+      description: "Product definition, target user, core promise, primary use case, differentiation, constraints, and success criteria."
+    - id: "product-scope"
+      type: "context"
+      required: false
+      description: "In-scope, out-of-scope, MVP, post-MVP, non-goals, boundaries, deferred decisions, and scope governance."
+    - id: "information-architecture"
+      type: "context"
+      required: false
+      description: "Core objects, object relationships, navigation, content hierarchy, naming, lifecycle, visibility, and retrieval model."
+    - id: "interaction-model"
+      type: "context"
+      required: false
+      description: "Commands, actions, confirmations, undo, ambiguity handling, suggestions, corrections, state transitions, and interaction risks."
+    - id: "ui-specification"
+      type: "context"
+      required: false
+      description: "Screens, components, UI states, responsive behavior, accessibility UI rules, and UI risks."
+    - id: "design-system"
+      type: "context"
+      required: false
+      description: "Reusable tokens, components, component states, accessibility rules, theming, and design system governance."
+    - id: "architecture-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate modules, product areas, capabilities, integration points, dependencies, ownership concerns, and product architecture risks."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through explicit modules, capabilities, boundaries, relationships, dependencies, sequencing, ownership, risks, and downstream handoff."
+    - "Each product module includes user-facing purpose, responsibility, scope classification, included capabilities, excluded responsibilities, owned objects, screens or journeys affected, and downstream implications."
+    - "Module boundaries distinguish product responsibility, adjacent module responsibility, external system responsibility, user responsibility, and support or operations responsibility."
+    - "Core capabilities are directly tied to the product promise, primary use case, MVP scope, and product success criteria."
+    - "Supporting and cross-cutting capabilities are classified by necessity, scope status, dependency level, and deferral risk."
+    - "Capability map includes priority, MVP/post-MVP/deferred/excluded classification, dependencies, evidence basis, and delivery sequencing."
+    - "Module relationships define conceptual integration points, shared objects, data or state flows, coupling constraints, and failure/degradation behavior without becoming engineering architecture."
+    - "Product dependencies distinguish external systems, third-party services, platform capabilities, manual processes, operational dependencies, licensing concerns, fallback behavior, and criticality."
+    - "Architecture risks identify coupling, scope creep, missing modules, unclear ownership, invalid sequencing, external dependency, scale, and operational handoff risks."
+    - "Downstream handoff clarifies what Feature Specification, Acceptance Criteria, Engineering Architecture, Data Model, API Contracts, Frontend Architecture, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid product-architecture theater: module diagrams that do not clarify responsibility, boundaries, capability ownership, or sequencing."
+    - "Avoid turning product architecture into technical system architecture, database schema, API design, or implementation layering."
+    - "Avoid defining modules around internal team structure unless that structure is product-relevant."
+    - "Avoid including capabilities outside Product Scope unless explicitly marked post-MVP, deferred, validation-required, or excluded."
+    - "Avoid hidden cross-cutting concerns that later create inconsistent UX, permissions, state, content, or support behavior."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent validated evidence, implementation constraints, external services, ownership, licensing terms, or platform capabilities."
+    - "Product architecture must preserve product boundaries, user responsibility boundaries, validation caveats, and downstream traceability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate product modules, capabilities, boundaries, relationships, dependencies, sequencing, risks, and engineering implications."
+    - "Tie architecture decisions to Product Brief, Product Scope, User Journeys, Information Architecture, Interaction Model, UI Specification, Design System, Validation Report, or Decision Record where possible."
+    - "Classify modules and capabilities as MVP, post-MVP, deferred, excluded, experimental, cross-cutting, external, or operational where useful."
+    - "Describe conceptual flows and product responsibilities without specifying implementation technologies."
+    - "Keep this document at product architecture level; technical architecture belongs in Engineering System Architecture, Data Model, API Contracts, and Frontend Architecture."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Identify content that should move to another document."
+    - "Flag contradictions with Product Brief, Product Scope, User Journeys, Information Architecture, Interaction Model, UI Specification, Design System, Validation Report, Decision Record, or Foundation Boundaries."
+    - "Flag modules without clear responsibility, boundary, capability ownership, or user-facing purpose."
+    - "Flag capabilities not supported by product promise, scope, journey need, evidence, or explicit assumption."
+    - "Flag cross-cutting capabilities that lack ownership or consistency rules."
+    - "Flag module relationships that create unclear responsibility, circular dependency, hidden coupling, or ambiguous fallback behavior."
+    - "Verify that MVP capability sequencing preserves the core product promise without overbuilding."
+    - "Verify that downstream engineering implications are explicit but not over-specified."
+    - "Flag content that belongs better in Feature Specification, Acceptance Criteria, Engineering System Architecture, Data Model, API Contracts, Frontend Architecture, or Operations."
+  specializedFormats:
+    moduleFormat:
+      description: "Recommended format for product modules."
+      fields:
+        - id
+        - name
+        - userFacingName
+        - purpose
+        - responsibility
+        - classification
+        - includedCapabilities
+        - excludedResponsibilities
+        - ownedObjects
+        - affectedJourneys
+        - affectedScreens
+        - dependencies
+        - boundaryRules
+        - ownerOrReviewTarget
+        - downstreamImplications
+        - openQuestions
+    capabilityFormat:
+      description: "Recommended format for product capabilities."
+      fields:
+        - id
+        - name
+        - capabilityType
+        - description
+        - productPromiseRelevance
+        - scopeClassification
+        - priority
+        - module
+        - dependencies
+        - evidenceBasis
+        - MVPBehavior
+        - postMVPExpansion
+        - failureOrDegradationBehavior
+        - downstreamImplications
+        - status
+    moduleRelationshipFormat:
+      description: "Recommended format for module relationships."
+      fields:
+        - sourceModule
+        - targetModule
+        - relationshipType
+        - sharedObjects
+        - sharedCapabilities
+        - conceptualFlow
+        - couplingLevel
+        - fallbackBehavior
+        - risk
+        - downstreamEngineeringImplication
+    dependencyFormat:
+      description: "Recommended format for product dependencies."
+      fields:
+        - dependency
+        - dependencyType
+        - usedBy
+        - purpose
+        - criticality
+        - fallbackOrDegradation
+        - ownership
+        - licensingOrPolicyConcern
+        - risk
+        - validationOrEngineeringReviewNeeded
+    architectureRiskFormat:
+      description: "Recommended format for product architecture risks."
+      fields:
+        - risk
+        - affectedModuleOrCapability
+        - riskType
+        - userImpact
+        - productImpact
+        - earlySignal
+        - mitigation
+        - targetDocument
   sections:
+    - id: "product-architecture-thesis"
+      title: "Product Architecture Thesis"
+      intent: "State the organizing logic of the product architecture and how modular structure protects the product promise, scope, and evolution."
+      required: true
+      outputGuidance:
+        - "Open with the product architecture's organizing principle."
+        - "Explain how modular structure supports the primary use case, product promise, and future evolution."
+        - "State what the architecture must avoid becoming."
+      qualityChecks:
+        - "The thesis is product-specific and guides modular decisions."
+        - "The thesis does not duplicate engineering architecture."
+        - "The thesis can reject at least one plausible module or capability split."
+      questions:
+        - "What is the organizing logic of the product architecture?"
+        - "How does the modular structure protect the product promise and primary journey?"
+        - "What should remain stable as the product evolves?"
+        - "What should be easy to add, remove, defer, or isolate?"
+        - "What should the product architecture avoid becoming?"
     - id: "product-modules"
       title: "Product Modules"
-      intent: "Identify top-level product modules with responsibilities and user-facing names"
+      intent: "Identify top-level product modules or areas with user-facing purpose, responsibilities, scope classification, and ownership of capabilities or objects."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define modules as product responsibility areas, not engineering packages."
+        - "Give each module a user-facing purpose and internal responsibility."
+        - "Identify included and excluded responsibilities."
+      qualityChecks:
+        - "Each module has clear responsibility and boundary."
+        - "Modules are justified by user journey, IA, scope, or product promise."
+        - "Modules do not merely mirror implementation folders or team preferences."
       questions:
         - "What are the top-level product modules or areas?"
         - "What is the responsibility of each module?"
         - "What is the user-facing name and purpose of each module?"
+        - "Which product objects, journeys, screens, or capabilities does each module own?"
+        - "What is explicitly not the responsibility of each module?"
         - "How are modules organized and related?"
+        - "Which modules are MVP, post-MVP, deferred, or excluded?"
+    - id: "module-boundaries"
+      title: "Module Boundaries"
+      intent: "Define where each module starts and ends, including responsibility splits, gray areas, escalation paths, and boundary rules."
+      required: true
+      outputGuidance:
+        - "Describe boundaries in product responsibility terms before technical terms."
+        - "Identify gray areas and define decision rules."
+        - "Separate module responsibility from user, external system, support, and operations responsibility."
+      qualityChecks:
+        - "Boundary rules prevent duplication and ambiguous ownership."
+        - "Gray areas include review or escalation logic."
+        - "Boundaries preserve Product Scope and Foundation Boundaries."
+      questions:
+        - "Where does each module's responsibility begin and end?"
+        - "What responsibilities are shared across modules?"
+        - "What responsibilities belong outside the product?"
+        - "What gray areas exist between modules?"
+        - "What decision rule resolves boundary ambiguity?"
+        - "What boundary issues should Engineering or Operations inherit?"
     - id: "core-capabilities"
       title: "Core Capabilities"
-      intent: "Define capabilities essential to delivering the core product promise"
+      intent: "Define capabilities essential to delivering the core product promise and primary use case."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Only classify a capability as core if the product promise fails without it."
+        - "Tie each core capability to Product Brief, Product Scope, User Journeys, and Product Success Criteria."
+        - "Define MVP behavior and failure/degradation behavior for each core capability."
+      qualityChecks:
+        - "Every core capability directly protects the product promise or primary journey."
+        - "Core capabilities are not inflated with convenience features."
+        - "Dependencies and delivery sequence are explicit."
       questions:
         - "What capabilities are essential to the product?"
         - "Which capabilities directly deliver the core product promise?"
         - "What is the dependency order among core capabilities?"
-        - "What is the MVP scope of each core capability?"
+        - "What is the MVP behavior of each core capability?"
+        - "What happens if a core capability is unavailable, delayed, or degraded?"
+        - "What evidence or decision supports each core capability?"
     - id: "supporting-capabilities"
       title: "Supporting Capabilities"
-      intent: "Define capabilities that support the core experience"
+      intent: "Define capabilities that support the core experience but do not independently define the product promise."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate required supporting capabilities from convenience or post-MVP support."
+        - "Explain how each supporting capability improves reliability, usability, trust, accessibility, or operations."
+        - "State deferral risk when supporting capabilities are not MVP."
+      qualityChecks:
+        - "Supporting capabilities are not mislabeled core capabilities."
+        - "Deferred supporting capabilities include risk and revisit trigger."
+        - "Supporting capabilities are connected to journeys, UI, interaction, state, permissions, or operations."
       questions:
         - "What capabilities support the core experience?"
         - "Which supporting capabilities are required at MVP?"
         - "Which supporting capabilities can be deferred?"
         - "How do supporting capabilities enhance the core promise?"
+        - "What risk is created if a supporting capability is deferred?"
+        - "What downstream documents must expand each supporting capability?"
     - id: "cross-cutting-capabilities"
       title: "Cross-Cutting Capabilities"
-      intent: "Define capabilities spanning multiple modules and shared services"
+      intent: "Define capabilities and concerns that span multiple modules, including state, permissions, search, notifications, content, analytics, accessibility, AI assistance, auditability, and support."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Identify concerns that affect multiple modules and require consistent rules."
+        - "Assign ownership or review target for each cross-cutting capability."
+        - "State how consistency is maintained across modules."
+      qualityChecks:
+        - "Cross-cutting capabilities have explicit governance or ownership."
+        - "The section does not hide important product behavior inside unrelated modules."
+        - "Cross-cutting capabilities feed the correct downstream documents."
       questions:
         - "What capabilities span multiple modules?"
         - "How are cross-cutting concerns managed?"
-        - "What are the shared services or utilities?"
+        - "What shared services, concepts, or utilities exist at product level?"
         - "How is consistency maintained across cross-cutting capabilities?"
-    - id: "module-relationships"
-      title: "Module Relationships"
-      intent: "Define dependencies, integration points, and data flows between modules"
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "How do modules depend on each other?"
-        - "What are the integration points between modules?"
-        - "What data flows between modules?"
-        - "What are the coupling constraints between modules?"
+        - "Who owns or reviews cross-cutting product behavior?"
+        - "What downstream documents should define each cross-cutting concern in detail?"
     - id: "capability-map"
       title: "Capability Map"
-      intent: "Provide the complete inventory of capabilities mapped to modules and prioritized"
+      intent: "Provide the complete inventory of product capabilities mapped to modules, priority, scope classification, dependencies, evidence, and delivery sequence."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Map capabilities consistently using the capability format."
+        - "Classify capability type and scope status."
+        - "Separate conceptual capability from feature implementation detail."
+      qualityChecks:
+        - "Capabilities map cleanly to modules or cross-cutting ownership."
+        - "Priority is justified by product promise, MVP, dependency, evidence, or risk."
+        - "Delivery sequence avoids blocked or circular dependencies."
       questions:
         - "What is the complete inventory of product capabilities?"
         - "How are capabilities mapped to modules?"
         - "How are capabilities prioritized?"
+        - "Which capabilities are MVP, post-MVP, deferred, validation-required, or excluded?"
         - "What is the capability delivery sequence?"
+        - "What evidence or decision supports each material capability?"
+        - "What capabilities should become Feature Specifications?"
+    - id: "module-relationships"
+      title: "Module Relationships"
+      intent: "Define conceptual dependencies, integration points, object sharing, user-facing transitions, state flows, and coupling constraints between modules."
+      required: true
+      outputGuidance:
+        - "Describe relationships at product behavior level, not API or code level."
+        - "Identify shared objects, shared actions, shared states, and cross-module user transitions."
+        - "State acceptable and unacceptable coupling."
+      qualityChecks:
+        - "Relationships clarify how the product behaves across module boundaries."
+        - "Shared responsibility does not create ambiguous ownership."
+        - "Coupling constraints are explicit enough to guide Engineering later."
+      questions:
+        - "How do modules depend on each other?"
+        - "What are the conceptual integration points between modules?"
+        - "What objects, states, actions, or user journeys cross module boundaries?"
+        - "What data or state conceptually flows between modules?"
+        - "What are the coupling constraints between modules?"
+        - "What fallback or degradation behavior applies when a related module is unavailable?"
     - id: "product-dependencies"
       title: "Product Dependencies"
-      intent: "Enumerate external systems, services, and third-party dependencies"
+      intent: "Enumerate external systems, services, third-party tools, platform capabilities, manual processes, operational dependencies, and licensing or policy concerns."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Classify dependencies by type and criticality."
+        - "State fallback, degradation, or no-fallback behavior."
+        - "Mark dependencies that require engineering, legal, policy, security, or operations review."
+      qualityChecks:
+        - "Dependencies are not assumed to be available without review."
+        - "Critical dependencies include fallback or explicit no-fallback rationale."
+        - "Licensing, policy, privacy, or operational concerns are surfaced without inventing conclusions."
       questions:
-        - "What external systems or services does the product depend on?"
-        - "What are the critical vs non-critical dependencies?"
+        - "What external systems, services, third-party tools, platform capabilities, or manual processes does the product depend on?"
+        - "What are the critical versus non-critical dependencies?"
         - "What is the fallback or degradation behavior for each dependency?"
-        - "What licensing or third-party dependencies exist?"
+        - "What licensing, policy, privacy, security, or third-party concerns exist?"
+        - "Which dependencies require Engineering, Legal, Security, or Operations review?"
+        - "What assumptions about dependencies remain unresolved?"
+    - id: "capability-sequencing"
+      title: "Capability Sequencing"
+      intent: "Define the order in which capabilities should be specified, built, validated, or deferred based on dependency, promise preservation, risk, and MVP scope."
+      required: true
+      outputGuidance:
+        - "Sequence capabilities by dependency and product promise, not convenience alone."
+        - "Separate specification order from build order where useful."
+        - "Identify capabilities that can be parallelized or must wait."
+      qualityChecks:
+        - "Sequencing preserves the primary use case and avoids premature complexity."
+        - "Blocked capabilities and prerequisites are explicit."
+        - "Deferred capabilities include revisit triggers or evidence requirements."
+      questions:
+        - "In what order should capabilities be specified or built?"
+        - "Which capabilities are prerequisites for others?"
+        - "Which capabilities can be specified or built in parallel?"
+        - "Which capabilities must wait for validation, architecture, dependency, or operational readiness?"
+        - "What is the minimum capability sequence required for MVP?"
+        - "What sequencing decisions should Engineering inherit?"
+    - id: "ownership-model"
+      title: "Ownership Model"
+      intent: "Define product-level ownership of modules, capabilities, cross-cutting concerns, decisions, and unresolved questions."
+      required: true
+      outputGuidance:
+        - "Assign ownership as document target, role, decision owner, or review authority where useful."
+        - "Separate product ownership from engineering implementation ownership."
+        - "Identify unresolved ownership gaps."
+      qualityChecks:
+        - "Ownership prevents ambiguous module or capability responsibility."
+        - "Cross-cutting concerns have review targets."
+        - "Unowned critical capabilities are flagged as risks."
+      questions:
+        - "Who or what document owns each product module?"
+        - "Who or what document owns each cross-cutting capability?"
+        - "What decisions require product review versus engineering review?"
+        - "What ownership gaps remain unresolved?"
+        - "What ownership assumptions should Operations inherit?"
     - id: "product-architecture-risks"
       title: "Product Architecture Risks"
-      intent: "Identify highest-risk architectural decisions and untested assumptions"
+      intent: "Identify risks created by module structure, capability split, sequencing, coupling, dependencies, cross-cutting concerns, scale, or operational handoff."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe risks as concrete product architecture failure modes."
+        - "Tie risks to affected modules, capabilities, dependencies, journeys, or downstream documents."
+        - "Include early signals, mitigation, and target document for resolution."
+      qualityChecks:
+        - "Risks are specific enough to become review checks or acceptance criteria."
+        - "Coupling, unclear ownership, sequencing, dependency, scale, and scope risks are considered."
+        - "Mitigations are actionable or routed downstream."
       questions:
         - "What architectural decisions carry the most risk?"
-        - "Where might the architecture fail under scale or complexity?"
-        - "What architectural assumptions need validation?"
+        - "Where might the architecture fail under scale, complexity, or evolving scope?"
+        - "What module boundaries or relationships are most fragile?"
+        - "What architectural assumptions need validation or engineering review?"
+        - "What dependency, ownership, or sequencing risks exist?"
         - "How will architectural risks be monitored and addressed?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Product, Engineering, and Operations documents must inherit from product architecture and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route product architecture outputs to the correct downstream documents."
+        - "Separate feature, acceptance, engineering architecture, data model, API, frontend, and operations implications."
+        - "Preserve unresolved architecture questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing module, capability, boundary, dependency, or sequencing rules silently."
+        - "Product-level and engineering-level responsibilities are not conflated."
+      questions:
+        - "What should Feature Specification inherit from product architecture?"
+        - "What should Acceptance Criteria inherit?"
+        - "What should Engineering Brief and System Architecture inherit?"
+        - "What should Data Model inherit?"
+        - "What should API Contracts and Frontend Architecture inherit?"
+        - "What should Operations inherit?"
+        - "What unresolved product architecture questions must be carried forward?"

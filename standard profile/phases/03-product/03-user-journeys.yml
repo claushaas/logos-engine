@@ -5,127 +5,371 @@ document:
   status: "not_started"
   order: 3
   type: "user_journeys"
-  purpose: "Map how users move through the product to achieve their goals."
-  centralQuestion: "How does the user move through the product?"
-  dependsOn: []
-  feeds: []
+  purpose: "Map how users move through the product from trigger to value, completion, repetition, failure, recovery, and re-entry, grounded in validated scope and product promise."
+  centralQuestion: "How does the user move through the product to reach value, recover from failure, and return over time?"
   outputs:
     canonical:
       format: "markdown"
-      path: "03-product/03-user-journeys.md"
-      purpose: "Map of user journeys through the product"
+      path: "docs/03-product/03-user-journeys.md"
+      purpose: "Store the canonical user journey map as a Markdown document."
+    artifacts:
+      - id: "product.user_journey_map"
+        format: "html"
+        path: "outcomes/html/03-product/user-journey-map.html"
+        purpose: "Provide a navigable map of primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, completion, and re-entry journeys."
+        audience: "founder"
+        includes:
+          - "journey overview"
+          - "primary journey"
+          - "secondary journeys"
+          - "onboarding journey"
+          - "first value journey"
+          - "repeat use journey"
+          - "failure and recovery journeys"
+          - "exit and completion journeys"
+          - "journey risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.user_journeys_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/user-journeys-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether user journeys are coherent, scoped, testable, recoverable, and aligned with the product brief and scope."
+        agentRole: "reviewer"
+        includes:
+          - "canonical user journeys"
+          - "product brief dependency"
+          - "product scope dependency"
+          - "journey format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/08-evidence-log"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+  feeds:
+    - "03-product/04-user-stories"
+    - "03-product/05-information-architecture"
+    - "03-product/06-ux-principles"
+    - "03-product/07-ui-principles"
+    - "03-product/08-interaction-model"
+    - "03-product/09-feature-specification"
+    - "03-product/10-content-model"
+    - "03-product/11-state-model"
+    - "03-product/12-permission-model"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+  inputs:
+    - id: "product-brief"
+      type: "context"
+      required: false
+      description: "Product definition, target user, core promise, product thesis, primary use case, product constraints, and product success criteria."
+    - id: "product-scope"
+      type: "context"
+      required: false
+      description: "In-scope, out-of-scope, MVP, post-MVP, non-goals, scope boundaries, deferred decisions, and scope governance."
+    - id: "audience-definition"
+      type: "context"
+      required: false
+      description: "Primary audience, context of use, user capabilities, user constraints, motivations, risks, and excluded audiences."
+    - id: "validation-evidence"
+      type: "context"
+      required: false
+      description: "Evidence about user behavior, triggers, alternatives, failure points, adoption barriers, and repeat-use patterns."
+    - id: "journey-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate journey steps, edge cases, abandoned flows, recovery needs, and user workflow observations."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, completion, and re-entry journeys."
+    - "Each major journey includes trigger, user goal, entry state, steps, system responses, user decisions, success state, failure modes, recovery paths, and exit or re-entry behavior."
+    - "The primary journey is aligned with the Product Brief primary use case and MVP scope."
+    - "Journey steps distinguish user action, system action, visible feedback, hidden state change, and decision point where relevant."
+    - "Failure and recovery journeys protect user trust, data integrity, state continuity, and product boundaries."
+    - "Onboarding and first-value journeys define what must happen before the user can receive value."
+    - "Repeat-use journeys define what persists, what resumes, what changes over time, and what brings the user back."
+    - "Journey risks identify confusion, drop-off, dependency, permission, state, trust, and recovery risks with mitigation signals."
+    - "Downstream handoff clarifies what User Stories, IA, UX, UI, Interaction Model, State Model, Permissions, Feature Spec, and Acceptance Criteria must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid journey theater: polished flows that do not reflect real user triggers, constraints, or failure conditions."
+    - "Avoid assuming an ideal user who always understands, completes, remembers, or trusts the product."
+    - "Avoid hiding failure, abandonment, re-entry, or recovery paths."
+    - "Avoid adding journeys that are outside MVP scope unless clearly marked as post-MVP or deferred."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent user behavior, validated evidence, platform capabilities, permissions, or system state."
+    - "Do not move detailed UI layout, feature implementation, or engineering architecture into this document."
+    - "Journeys must preserve product boundaries and user responsibility boundaries."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate user action, system response, state change, feedback, decision point, failure mode, and recovery path where useful."
+    - "Tie journeys to Product Brief, Product Scope, Audience Definition, Validation evidence, and Foundation Boundaries where possible."
+    - "Classify journeys as MVP, post-MVP, deferred, optional, or excluded where useful."
+    - "Include abandonment and re-entry behavior for every high-value journey."
+    - "Keep this document at journey level; detailed requirements belong in User Stories, Feature Specification, Interaction Model, State Model, and Acceptance Criteria."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Identify content that should move to another document."
+    - "Flag contradictions with Audience Definition, Product Brief, Product Scope, Validation Report, or Foundation Boundaries."
+    - "Flag journeys that depend on out-of-scope capabilities or unvalidated assumptions without labeling them."
+    - "Flag missing failure, abandonment, recovery, or re-entry paths."
+    - "Verify that first value and repeat use connect to product success criteria."
+    - "Verify that journey steps are clear enough to feed User Stories, IA, UX, Interaction Model, State Model, Permissions, Feature Spec, and Acceptance Criteria."
+    - "Flag content that belongs better in UI Principles, Interaction Model, Feature Specification, Engineering, Go-to-market, or Operations."
+  specializedFormats:
+    journeyFormat:
+      description: "Recommended format for each major journey."
+      fields:
+        - id
+        - title
+        - classification
+        - user
+        - trigger
+        - entryState
+        - userGoal
+        - preconditions
+        - steps
+        - successState
+        - failureModes
+        - recoveryPaths
+        - abandonmentPath
+        - reEntryPath
+        - persistedState
+        - permissionsOrDependencies
+        - evidenceBasis
+        - downstreamImplications
+        - openQuestions
+    journeyStepFormat:
+      description: "Recommended format for journey steps."
+      fields:
+        - step
+        - userAction
+        - systemResponse
+        - visibleFeedback
+        - stateChange
+        - decisionPoint
+        - risk
+        - recoveryOption
+        - downstreamRequirement
+    journeyRiskFormat:
+      description: "Recommended format for journey risks."
+      fields:
+        - risk
+        - affectedJourney
+        - affectedStep
+        - riskType
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - ownerOrTargetDocument
   sections:
     - id: "journey-overview"
       title: "Journey Overview"
-      intent: "Provide a high-level map of all key journeys"
+      intent: "Provide a high-level map of key journeys, their classification, relationships, user goals, entry points, and downstream relevance."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "List journeys as a connected system rather than isolated flows."
+        - "Classify each journey as MVP, post-MVP, deferred, optional, or excluded where useful."
+        - "Explain how users discover or enter each journey."
+      qualityChecks:
+        - "The overview matches Product Scope and Product Brief."
+        - "The primary journey is clearly distinguished from supporting journeys."
+        - "No journey is included without a user goal or product reason."
       questions:
         - "What are the key journeys through the product?"
+        - "Which journeys are MVP, post-MVP, deferred, optional, or excluded?"
         - "How do journeys relate to each other?"
         - "What is the primary goal of each journey?"
-        - "How are journeys discovered by the user?"
+        - "How are journeys discovered or entered by the user?"
+        - "Which journeys are required for the core product promise to hold?"
     - id: "primary-journey"
       title: "Primary Journey"
-      intent: "Detail the single most important journey end to end"
+      intent: "Detail the single most important journey from trigger to value, completion, failure, recovery, abandonment, and re-entry."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Start with the trigger and user context, not the screen sequence."
+        - "Map steps from user intent to successful completion."
+        - "Include failure, abandonment, recovery, and re-entry paths."
+      qualityChecks:
+        - "The primary journey matches the primary use case from Product Brief."
+        - "The journey is specific enough to generate User Stories and Acceptance Criteria."
+        - "Failure points and recovery paths are explicit."
       questions:
         - "What is the single most important journey?"
-        - "What triggers the primary journey?"
+        - "What user situation or trigger starts the primary journey?"
+        - "What is the user's desired outcome?"
         - "What are the steps from trigger to completion?"
-        - "What does success feel like at each step?"
+        - "What does the system do at each step?"
+        - "What visible feedback does the user receive at each step?"
+        - "What state changes during the journey?"
+        - "What does success look or feel like at each step?"
         - "Where can the primary journey break down?"
+        - "How does the user recover, abandon, or re-enter the journey?"
     - id: "secondary-journeys"
       title: "Secondary Journeys"
-      intent: "Describe supporting journeys and their relationship to the primary journey"
+      intent: "Describe supporting journeys, their relationship to the primary journey, their scope classification, and their success or deferral logic."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe only supporting journeys that are necessary, validated, or intentionally deferred."
+        - "Explain how each secondary journey supports, precedes, follows, or interrupts the primary journey."
+        - "Classify each journey by scope status."
+      qualityChecks:
+        - "Secondary journeys do not dilute MVP scope."
+        - "Each secondary journey has a clear relationship to the primary journey."
+        - "Deferred journeys are not written as committed requirements."
       questions:
         - "What are the supporting journeys?"
         - "How does each secondary journey relate to the primary journey?"
         - "What triggers each secondary journey?"
+        - "Which secondary journeys are required for MVP?"
+        - "Which secondary journeys are post-MVP, optional, deferred, or excluded?"
         - "What are the success criteria for each secondary journey?"
+        - "What would make a secondary journey unnecessary or unsafe to include?"
     - id: "onboarding-journey"
       title: "Onboarding Journey"
-      intent: "Define how a new user enters and achieves first value"
+      intent: "Define how a new user enters, understands the product promise, grants necessary permissions, completes setup, and reaches readiness for first value."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate account/setup work from learning and trust-building work."
+        - "Minimize required upfront configuration unless necessary for first value."
+        - "Include abandonment and return after onboarding failure."
+      qualityChecks:
+        - "Onboarding does not demand more effort than the product promise justifies."
+        - "Required setup, permissions, and learning are explicit."
+        - "The journey avoids assuming the user already understands the product."
       questions:
         - "How does a new user enter the product?"
-        - "What is the time-to-first-value target?"
-        - "What setup, configuration, or learning is required up front?"
+        - "What must the user understand before first use?"
+        - "What setup, configuration, permissions, or learning is required up front?"
+        - "What can be deferred until later without blocking first value?"
+        - "What is the time-to-first-value target or assumption?"
         - "What happens if the user abandons onboarding?"
         - "How does the product handle returning after abandonment?"
     - id: "first-value-journey"
       title: "First Value Journey"
-      intent: "Define the moment the user first derives value"
+      intent: "Define the first moment the user receives meaningful value and the minimum journey required to produce that value."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define first value as a user outcome, not as product activation alone."
+        - "State the minimum conditions required for first value."
+        - "Identify product feedback that confirms value without overclaiming."
+      qualityChecks:
+        - "First value connects to the product promise and success criteria."
+        - "The first-value moment is observable."
+        - "The path to first value is not inflated with nonessential steps."
       questions:
-        - "What is the first moment the user derives value?"
+        - "What is the first moment the user derives meaningful value?"
         - "How quickly can the user reach first value?"
         - "What must be true for first value to occur?"
+        - "What user action produces first value?"
+        - "What system response creates or reveals the value?"
         - "What signals does the product provide that value has been delivered?"
+        - "What could create a false sense of value?"
     - id: "repeat-use-journey"
       title: "Repeat Use Journey"
-      intent: "Describe how users return and continue work across sessions"
+      intent: "Describe how users return, resume context, continue work, deepen value, and avoid losing state across sessions."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe what brings the user back and what state must be preserved."
+        - "Separate repeated value from engagement theater."
+        - "Map how experience changes with repeated use."
+      qualityChecks:
+        - "Repeat use is tied to real recurring user need."
+        - "Persisted state and resumed context are explicit."
+        - "The journey does not rely on manipulative retention patterns."
       questions:
         - "How does the user return to the product?"
+        - "What recurring trigger brings the user back?"
         - "What state is preserved between sessions?"
         - "How does the product surface unfinished or ongoing work?"
+        - "How does the user resume without losing context?"
         - "How does the experience change with repeated use?"
+        - "What would make repeat use unnecessary, annoying, or harmful?"
     - id: "failure-recovery-journeys"
       title: "Failure and Recovery Journeys"
-      intent: "Map what can go wrong and how users recover"
+      intent: "Map what can go wrong, how failures are detected or surfaced, what state is at risk, and how users recover safely."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Treat failure paths as first-class journeys, not edge-case footnotes."
+        - "Map user error, system error, permission failure, data/state failure, dependency failure, trust failure, and misunderstanding where relevant."
+        - "Define recovery paths that preserve user agency and data integrity."
+      qualityChecks:
+        - "Failure modes are concrete and recoverable where possible."
+        - "The product does not hide uncertainty, loss, or failure from the user."
+        - "State, data, and trust risks are explicit."
       questions:
         - "What can go wrong at each journey step?"
+        - "What user errors are likely?"
+        - "What system, permission, data, dependency, or state failures are possible?"
         - "How does the product detect and surface failures?"
         - "How does the user recover from each failure mode?"
         - "What data or state is at risk during failures?"
+        - "What failures require escalation, support, or manual intervention?"
     - id: "exit-completion-journeys"
       title: "Exit and Completion Journeys"
-      intent: "Define how users exit journeys gracefully"
+      intent: "Define how users complete, pause, abandon, exit, resume, or re-enter journeys with clear state and confidence."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define completion as a user-understandable state."
+        - "Describe graceful abandonment and re-entry without punishing the user."
+        - "Include what is saved, lost, closed, archived, or reopened."
+      qualityChecks:
+        - "Completion signals are clear and not misleading."
+        - "Exit and abandonment preserve user trust and state where appropriate."
+        - "Re-entry experience is explicit."
       questions:
         - "How does the user know a journey is complete?"
         - "What signals confirm completion?"
+        - "What state is saved, closed, archived, or left open after completion?"
         - "How does the product gracefully handle exit or abandonment?"
         - "What is the re-entry experience after completion?"
+        - "What is the re-entry experience after abandonment?"
+        - "What should the product avoid doing at completion or exit?"
     - id: "journey-risks"
       title: "Journey Risks"
-      intent: "Identify high-risk steps and mitigation strategies"
+      intent: "Identify high-risk journey steps, confusion points, drop-off points, dependencies, trust risks, state risks, and mitigation strategies."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe risks by journey and step."
+        - "Separate confusion, drop-off, dependency, trust, permission, data, and state risks."
+        - "Tie risks to mitigation, monitoring, or downstream requirements."
+      qualityChecks:
+        - "Risks are specific enough to inform UX, Interaction Model, Feature Spec, State Model, Permissions, and Acceptance Criteria."
+        - "High-risk steps are not hidden because they complicate the ideal flow."
+        - "Mitigations are actionable or routed to downstream documents."
       questions:
         - "What are the highest-risk steps in each journey?"
         - "Where is user confusion or drop-off most likely?"
         - "What external dependencies do journeys rely on?"
+        - "What permissions, data, or state risks exist?"
+        - "What trust risks exist during each journey?"
         - "How are journey risks monitored and mitigated?"
+        - "Which risks should become acceptance criteria?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Product documents must inherit from journey mapping and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route journey outputs to the correct downstream documents."
+        - "Separate narrative flow from requirements, IA, UX, interaction, state, permission, and acceptance implications."
+        - "Preserve unresolved questions and risky journey assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing journey behavior silently."
+        - "Failure and recovery implications are included in handoff."
+      questions:
+        - "What should User Stories inherit from these journeys?"
+        - "What should Information Architecture inherit?"
+        - "What should UX Principles and UI Principles inherit?"
+        - "What should Interaction Model inherit?"
+        - "What should State Model and Permission Model inherit?"
+        - "What should Feature Specification and Acceptance Criteria inherit?"
+        - "What unresolved journey questions must be carried forward?"

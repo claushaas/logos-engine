@@ -5,125 +5,697 @@ document:
   status: "not_started"
   order: 5
   type: "customer_segments"
-  purpose: "Refine the audience for acquisition, distinguishing users, payers, buyers, decision makers, influencers, and blockers."
-  centralQuestion: "Who uses, who pays, who decides, who influences, who blocks?"
+  purpose: "Define, prioritize, qualify, and operationalize customer segments for acquisition, activation, monetization, support, and expansion, distinguishing users, buyers, payers, decision makers, influencers, champions, blockers, early adopters, and excluded segments."
+  centralQuestion: "Who should we target first, who should we avoid, who uses, who pays, who decides, who influences, who blocks, and what observable signals prove segment fit?"
   outputs:
     canonical:
       format: "markdown"
-      path: "05-go-to-market/05-customer-segments.md"
-      purpose: "Customer segments document with roles, prioritisation, and exclusions."
-  dependsOn: []
-  feeds: []
+      path: "docs/05-go-to-market/05-customer-segments.md"
+      purpose: "Store the canonical customer segments document as a Markdown document."
+    artifacts:
+      - id: "gtm.customer_segments_map"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/customer-segments-map.html"
+        purpose: "Provide a founder-facing customer segmentation map covering ICP, segment taxonomy, primary segment, secondary segments, early adopters, buyer/user roles, decision dynamics, qualification, exclusions, prioritization, messages, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "segmentation objective"
+          - "segment taxonomy"
+          - "ICP"
+          - "primary segment"
+          - "secondary segments"
+          - "early adopters"
+          - "users"
+          - "buyers"
+          - "payers"
+          - "decision makers"
+          - "champions"
+          - "influencers"
+          - "blockers"
+          - "qualification signals"
+          - "disqualification signals"
+          - "segment prioritization"
+          - "segment-specific messaging"
+          - "segment-specific channels"
+          - "excluded segments"
+          - "expansion triggers"
+          - "segment risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.customer_segments_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/customer-segments-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether segmentation is specific, observable, prioritized, GTM-actionable, message-ready, channel-relevant, support-aware, and aligned with market definition, positioning, messaging, product readiness, and technical constraints."
+        agentRole: "reviewer"
+        includes:
+          - "canonical customer segments"
+          - "GTM brief dependency"
+          - "market definition dependency"
+          - "positioning dependency"
+          - "messaging dependency"
+          - "product dependency"
+          - "technical risk dependency"
+          - "customer segment formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-vision"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/04-market-scan"
+    - "02-validation/05-competitive-analysis"
+    - "02-validation/06-customer-discovery"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-user-personas"
+    - "03-product/03-user-journeys"
+    - "03-product/04-value-proposition"
+    - "03-product/08-product-scope"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/02-market-definition"
+    - "05-go-to-market/03-positioning"
+    - "05-go-to-market/04-messaging"
+  feeds:
+    - "05-go-to-market/06-channel-strategy"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/08-pricing-and-packaging"
+    - "05-go-to-market/09-content-strategy"
+    - "05-go-to-market/10-sales-motion"
+    - "05-go-to-market/11-partnerships-and-distribution"
+    - "05-go-to-market/12-growth-experiments"
+    - "05-go-to-market/13-gtm-analytics"
+    - "05-go-to-market/14-gtm-risks"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "go-to-market-brief"
+      type: "context"
+      required: false
+      description: "GTM objective, market-entry thesis, beachhead segment, primary customer, primary use case, launch strategy, revenue motion, constraints, and GTM risks."
+    - id: "market-definition"
+      type: "context"
+      required: false
+      description: "Market category, market boundaries, primary market, secondary markets, alternatives, substitute behaviors, comparison lens, maturity, timing, constraints, evidence quality, and market risks."
+    - id: "positioning"
+      type: "context"
+      required: false
+      description: "Positioning statement, target customer context, primary pain, alternatives, differentiated value, proof hierarchy, claim boundaries, messaging pillars, anti-positioning, and positioning risks."
+    - id: "messaging"
+      type: "context"
+      required: false
+      description: "Core message, audience variants, channel variants, pain messages, outcome messages, objections, proof points, claim boundaries, tone, and forbidden claims."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Product brief, personas, journeys, product scope, acceptance criteria, supported use cases, onboarding needs, feature readiness, and support constraints."
+    - id: "technical-risk-context"
+      type: "context"
+      required: false
+      description: "Deployment readiness, technical limitations, unsupported capabilities, support load, operational risks, and claims or segments that may be unsafe to target."
+    - id: "segmentation-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate segments, role distinctions, observable customer traits, buyer/user notes, early adopter assumptions, exclusion ideas, priority rationale, and unresolved segmentation questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through actionable segmentation that identifies who to target first, who to avoid, who uses, who pays, who decides, who influences, who blocks, and how fit is observed."
+    - "Segmentation objective defines what decisions segmentation must support: acquisition, messaging, channel choice, launch sequence, pricing, sales motion, support planning, analytics, and expansion."
+    - "Segment taxonomy defines segment types, roles, lifecycle states, fit levels, qualification status, priority status, expansion status, and exclusion status."
+    - "ICP defines the ideal first customer with context, pain, trigger, use case, current alternative, urgency, willingness signal, qualification signals, disqualification signals, objections, support needs, and proof required."
+    - "Primary segment matches GTM Brief beachhead, Market Definition, Positioning, product readiness, channel access, and support capacity."
+    - "Secondary segments are treated as expansion hypotheses with trigger, rationale, dependency, required product/GTM changes, and risk."
+    - "Early adopters are defined by behavior and observable signals, not only demographics or enthusiasm."
+    - "Users, buyers, payers, decision makers, champions, influencers, and blockers are distinguished when roles differ."
+    - "Decision dynamics define who initiates, evaluates, approves, pays, implements, uses, supports, blocks, and renews/continues adoption."
+    - "Qualification signals and disqualification signals are observable enough to drive targeting, campaigns, sales, onboarding, and analytics."
+    - "Segment needs define jobs-to-be-done, desired outcomes, pains, objections, proof needs, onboarding needs, support needs, and success criteria by segment."
+    - "Segment-specific messaging maps each major segment to message emphasis, proof, objections, claims to avoid, and allowed channel contexts."
+    - "Segment-specific channels define where each segment can be reached, why the channel fits, what assets are needed, and what signal validates reach."
+    - "Segment prioritization ranks segments using explicit criteria such as pain intensity, urgency, reachability, willingness to pay/adopt, product fit, proof availability, channel access, support burden, technical risk, and strategic value."
+    - "Excluded segments identify who should not be targeted now, why, what risk they create, and what would need to change before reconsidering."
+    - "Expansion triggers define when to move beyond the primary segment and what evidence, readiness, support, product, channel, or pricing changes are required."
+    - "Segment risks identify wrong-segment, low-urgency, hard-to-reach, low willingness-to-pay, high-support, high-churn, mispositioned, technically unsafe, and reputational risks."
+    - "Downstream handoff clarifies what Channel Strategy, Launch, Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks, Support, Release, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid segmentation theater: audience labels without observable traits, pains, triggers, alternatives, role dynamics, qualification signals, channel implications, and prioritization rationale."
+    - "Avoid demographic-only segmentation unless demographics directly affect pain, access, buying, compliance, support, or pricing."
+    - "Avoid broad segments that cannot guide messaging, targeting, channel choice, sales motion, onboarding, support, or analytics."
+    - "Avoid treating users, buyers, payers, decision makers, champions, influencers, and blockers as the same person unless evidence supports it."
+    - "Avoid prioritizing segments only by market size while ignoring urgency, reachability, product fit, proof, support burden, technical risk, and willingness to adopt or pay."
+    - "Avoid targeting segments Product, Engineering, Acceptance Criteria, Deployment, Technical Risks, or Support cannot serve truthfully."
+    - "Avoid using unsupported personas, invented buyer behavior, fake willingness-to-pay, or assumed procurement complexity as fact."
+    - "Avoid ignoring excluded segments; who not to target is part of segmentation."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent customer evidence, segment size, purchasing power, procurement process, buyer roles, willingness-to-pay, channel access, support burden, or adoption urgency."
+    - "Customer segmentation must preserve Foundation boundaries, validation evidence, market definition, positioning claim boundaries, messaging safety, product truth, technical truth, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate evidence, assumption, hypothesis, segment definition, role, qualification signal, priority decision, exclusion, and risk."
+    - "Tie segmentation claims to GTM Brief, Market Definition, Customer Discovery, Personas, Journeys, Positioning, Messaging, Product, Acceptance Criteria, Technical Risks, or Decision Record where possible."
+    - "Classify segments as primary, secondary, early-adopter, expansion, experimental, deferred, excluded, rejected, review-needed, or unsupported where useful."
+    - "State how each segment affects messaging, channel strategy, launch, pricing, sales, content, support, analytics, and risk."
+    - "Route detailed campaign targeting, launch cohorts, pricing table, sales process, content calendar, partnership targets, experiment design, analytics implementation, and support workflows downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, or Decision Record."
+    - "Flag segments without observable qualification and disqualification signals."
+    - "Flag primary segment choices that do not align with beachhead, channel access, product readiness, support capacity, or positioning."
+    - "Flag segment role assumptions where buyer, payer, user, decision maker, influencer, champion, and blocker may differ."
+    - "Flag prioritization without explicit criteria and trade-offs."
+    - "Flag excluded segments that are missing despite obvious mismatch, risk, or unsupported needs."
+    - "Flag segment-specific messages or channels that exceed claim boundaries or product/technical truth."
+    - "Verify that downstream GTM and Operations documents receive concrete segmentation handoff inputs."
+    - "Flag content that belongs better in Market Definition, Positioning, Messaging, Channel Strategy, Launch Plan, Pricing, Content Strategy, Sales Motion, Partnerships, Experiments, Analytics, GTM Risks, Support Model, or Operations."
+  specializedFormats:
+    segmentFormat:
+      description: "Recommended format for customer segments."
+      fields:
+        - segment
+        - segmentType
+        - description
+        - customerContext
+        - primaryPain
+        - trigger
+        - currentAlternative
+        - urgencySignal
+        - willingnessSignal
+        - qualificationSignals
+        - disqualificationSignals
+        - objections
+        - supportNeeds
+        - productFit
+        - channelFit
+        - priority
+        - status
+    roleMapFormat:
+      description: "Recommended format for buying/adoption role mapping."
+      fields:
+        - segment
+        - user
+        - buyer
+        - payer
+        - decisionMaker
+        - champion
+        - influencer
+        - blocker
+        - implementer
+        - supportContact
+        - roleOverlap
+        - evidenceStatus
+    prioritizationFormat:
+      description: "Recommended format for segment prioritization."
+      fields:
+        - segment
+        - painIntensity
+        - urgency
+        - reachability
+        - willingnessToPayOrAdopt
+        - productFit
+        - proofAvailability
+        - channelAccess
+        - supportBurden
+        - technicalRisk
+        - strategicValue
+        - priorityDecision
+        - rationale
+    qualificationFormat:
+      description: "Recommended format for qualification and disqualification."
+      fields:
+        - signal
+        - signalType
+        - segment
+        - observableBehavior
+        - source
+        - confidenceLevel
+        - GTMUse
+        - analyticsImplication
+        - status
+    segmentMessageFormat:
+      description: "Recommended format for segment-specific messaging."
+      fields:
+        - segment
+        - messageEmphasis
+        - painMessage
+        - outcomeMessage
+        - proofNeeded
+        - likelyObjection
+        - objectionResponse
+        - claimsToAvoid
+        - allowedChannels
+        - status
+    segmentChannelFormat:
+      description: "Recommended format for segment-specific channel implications."
+      fields:
+        - segment
+        - channel
+        - channelRole
+        - whyReachableHere
+        - requiredAssets
+        - validationSignal
+        - costOrCapacityConcern
+        - risk
+        - downstreamDocument
+    excludedSegmentFormat:
+      description: "Recommended format for excluded segments."
+      fields:
+        - segment
+        - exclusionReason
+        - riskCreated
+        - unsupportedNeed
+        - reconsiderationTrigger
+        - downstreamImplication
+        - status
+    expansionTriggerFormat:
+      description: "Recommended format for expansion triggers."
+      fields:
+        - segment
+        - trigger
+        - evidenceRequired
+        - productReadinessRequired
+        - channelReadinessRequired
+        - supportReadinessRequired
+        - pricingOrPackagingImplication
+        - risk
+        - status
+    segmentRiskFormat:
+      description: "Recommended format for segment risks."
+      fields:
+        - risk
+        - segment
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - downstreamDocument
+        - launchImpact
   sections:
+    - id: "segmentation-objective"
+      title: "Segmentation Objective"
+      intent: "Define what segmentation must help decide and how it supports GTM execution."
+      required: true
+      outputGuidance:
+        - "Open with the practical purpose of segmentation."
+        - "Name the GTM decisions segmentation must influence."
+        - "State what segmentation should intentionally not optimize yet."
+      qualityChecks:
+        - "Objective is tied to acquisition, launch, messaging, pricing, sales, support, analytics, or expansion decisions."
+        - "Objective does not make segmentation broader than useful."
+        - "First-market focus remains clear."
+      questions:
+        - "What decisions must customer segmentation support?"
+        - "How does segmentation affect acquisition, messaging, channel choice, launch, pricing, sales, onboarding, support, analytics, and expansion?"
+        - "What should segmentation intentionally not optimize yet?"
+        - "What would make segmentation too broad or unusable?"
+    - id: "segment-taxonomy"
+      title: "Segment Taxonomy"
+      intent: "Define the segment labels, role labels, lifecycle states, fit levels, priority states, and exclusion states used in the document."
+      required: true
+      outputGuidance:
+        - "Define taxonomy before listing segments."
+        - "Distinguish segment, persona, role, use case, channel audience, and account/customer type."
+        - "State what each status label means."
+      qualityChecks:
+        - "Taxonomy prevents confusion between segment and persona."
+        - "Role labels are precise."
+        - "Priority and exclusion states are clear."
+      questions:
+        - "What segment types are used?"
+        - "How are segments different from personas, roles, use cases, and channel audiences?"
+        - "What role labels are used: user, buyer, payer, decision maker, champion, influencer, blocker, implementer, support contact?"
+        - "What priority and lifecycle labels exist?"
+        - "What does excluded, deferred, experimental, primary, secondary, and expansion mean?"
     - id: "segment-overview"
       title: "Segment Overview"
-      intent: "Map the total addressable audience structure and segment relationships."
+      intent: "Map the total addressable audience structure and segment relationships without losing focus on the first GTM segment."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe the audience structure at a useful level."
+        - "Map how primary, secondary, adjacent, expansion, and excluded segments relate."
+        - "Avoid treating the total addressable audience as the launch target."
+      qualityChecks:
+        - "Overview clarifies relationships between segments."
+        - "First-market focus remains visible."
+        - "Audience map supports downstream GTM decisions."
       questions:
         - "What is the total addressable audience structure?"
         - "How do segments relate to each other?"
+        - "Which segment is first?"
+        - "Which segments are adjacent?"
+        - "Which segments are expansion candidates?"
+        - "Which segments are excluded?"
+    - id: "ideal-customer-profile"
+      title: "Ideal Customer Profile"
+      intent: "Define the ideal first customer with observable fit signals, pain, trigger, alternative, willingness, objections, proof need, and support implications."
+      required: true
+      outputGuidance:
+        - "Use the segment format for the ICP."
+        - "Keep the ICP narrow enough for targeting and messaging."
+        - "Distinguish evidence from assumptions."
+      qualityChecks:
+        - "ICP is behavioral and observable, not generic."
+        - "ICP aligns with GTM Brief and Positioning."
+        - "ICP does not require unsupported product or support capabilities."
+      questions:
+        - "Who is the ideal first customer?"
+        - "What customer context defines them?"
+        - "What pain and trigger make them likely to act now?"
+        - "What current alternative do they use?"
+        - "What willingness-to-pay or willingness-to-adopt signal exists?"
+        - "What qualifies or disqualifies them?"
+        - "What proof and support do they need?"
     - id: "primary-segment"
       title: "Primary Segment"
-      intent: "Identify the highest-priority beachhead segment and its rationale."
+      intent: "Identify the highest-priority beachhead segment and explain why it should be targeted first."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the segment format for the primary segment."
+        - "Tie priority to GTM Brief, Market Definition, Positioning, Messaging, Product readiness, channel access, and support capacity."
+        - "State major trade-offs of choosing this segment first."
+      qualityChecks:
+        - "Primary segment is not just the broadest audience."
+        - "Rationale is explicit and evidence-aware."
+        - "Segment can be reached and served truthfully."
       questions:
         - "Who is the primary segment?"
         - "What makes them the highest-priority beachhead?"
+        - "What evidence supports choosing them first?"
+        - "What assumptions remain?"
+        - "What trade-offs does this choice create?"
+        - "What would indicate this segment is wrong?"
     - id: "secondary-segments"
       title: "Secondary Segments"
-      intent: "List segments targeted after the primary and expansion triggers."
+      intent: "List secondary segments as expansion hypotheses and define what must be true before targeting them."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use segment records for secondary segments."
+        - "Do not mix secondary segments into first launch unless explicitly required."
+        - "Define expansion trigger and required readiness for each."
+      qualityChecks:
+        - "Secondary segments preserve focus rather than dilute it."
+        - "Expansion triggers are concrete."
+        - "Required product, GTM, support, and technical changes are explicit."
       questions:
         - "What segments will be targeted after the primary?"
+        - "Why are they secondary rather than primary?"
         - "What triggers expansion into each?"
+        - "What product, channel, pricing, support, or technical readiness is required?"
+        - "What risks does each secondary segment create?"
     - id: "early-adopters"
       title: "Early Adopters"
-      intent: "Profile likely early adopters and observable identification traits."
+      intent: "Profile likely early adopters and define observable identification traits, motivations, tolerance, and feedback value."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define early adopters behaviorally."
+        - "Include tolerance for rough edges, motivation to try, feedback quality, and public/private advocacy potential where relevant."
+        - "Avoid assuming early adopters are just the most excited people."
+      qualityChecks:
+        - "Early adopter traits are observable."
+        - "Motivation and feedback value are explicit."
+        - "Support burden and expectation risk are considered."
       questions:
         - "Who are the likely early adopters?"
-        - "What observable trait or behaviour identifies them?"
-    - id: "buyers"
-      title: "Buyers"
-      intent: "Identify who pays and their procurement process."
+        - "What observable trait or behavior identifies them?"
+        - "What makes them likely to try early?"
+        - "What rough edges can they tolerate?"
+        - "What feedback can they provide?"
+        - "What support or expectation risk do they create?"
+    - id: "role-map"
+      title: "Role Map"
+      intent: "Map users, buyers, payers, decision makers, champions, influencers, blockers, implementers, and support contacts by segment."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the role map format for material segments."
+        - "State when roles are the same person and when they differ."
+        - "Include evidence status for role assumptions."
+      qualityChecks:
+        - "Role dynamics are explicit."
+        - "Buying/adoption assumptions are not hidden."
+        - "Role differences feed Sales Motion, Pricing, Support, and Analytics."
       questions:
-        - "Who pays for the product?"
-        - "What is their procurement process?"
+        - "Who uses the product?"
+        - "Who buys it?"
+        - "Who pays for it?"
+        - "Who decides whether to adopt?"
+        - "Who champions it?"
+        - "Who influences adoption without authority?"
+        - "Who blocks adoption?"
+        - "Who implements or supports it internally?"
+        - "Where do roles overlap or differ?"
     - id: "users"
       title: "Users"
-      intent: "Identify day-to-day users and their primary job to be done."
+      intent: "Identify day-to-day users, their jobs-to-be-done, workflows, success criteria, onboarding needs, and support needs."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe users by workflow and use case."
+        - "Tie users to Product Personas and User Journeys."
+        - "State how user needs affect activation and retention."
+      qualityChecks:
+        - "Users are described through behavior and jobs, not just labels."
+        - "Onboarding and support needs are explicit."
+        - "User needs do not exceed product readiness."
       questions:
         - "Who uses the product day to day?"
         - "What is their primary job to be done?"
+        - "What workflow does the product enter?"
+        - "What does success look like for them?"
+        - "What onboarding do they need?"
+        - "What support do they need?"
+    - id: "buyers-and-payers"
+      title: "Buyers and Payers"
+      intent: "Identify who pays, who authorizes payment, what budget or procurement process exists, and what proof or packaging they need."
+      required: true
+      outputGuidance:
+        - "Separate buyer and payer when they differ."
+        - "State procurement assumptions as assumptions unless validated."
+        - "Tie implications to Pricing and Sales Motion."
+      qualityChecks:
+        - "Payment and procurement assumptions are explicit."
+        - "Buyer proof needs are identified."
+        - "Pricing implications are routed downstream."
+      questions:
+        - "Who pays for the product?"
+        - "Who authorizes payment?"
+        - "What budget, procurement, approval, or purchase process exists?"
+        - "What proof does the buyer or payer need?"
+        - "What pricing or packaging implication follows?"
+        - "What payment assumptions remain unvalidated?"
     - id: "decision-makers"
       title: "Decision Makers"
-      intent: "Identify who decides on adoption and their criteria."
+      intent: "Identify who decides on adoption, what criteria they use, what risks they perceive, and what proof they require."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate decision maker from user and payer where useful."
+        - "List decision criteria, perceived risks, and proof needs."
+        - "Route sales/process implications downstream."
+      qualityChecks:
+        - "Decision criteria are specific."
+        - "Perceived risks and objections are included."
+        - "Proof needs match Messaging and Sales Motion."
       questions:
         - "Who decides whether to adopt the product?"
         - "What criteria do they use?"
-    - id: "influencers"
-      title: "Influencers"
-      intent: "Identify who influences the adoption decision and how to reach them."
+        - "What risks do they perceive?"
+        - "What proof do they require?"
+        - "What would block their decision?"
+        - "What sales or onboarding support do they need?"
+    - id: "champions-influencers-and-blockers"
+      title: "Champions, Influencers, and Blockers"
+      intent: "Identify who can accelerate, influence, slow, block, or undermine adoption and how GTM should handle them."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe champions, influencers, and blockers by motivation and influence path."
+        - "Tie each to channel, content, sales, and support implications."
+        - "State what evidence is known versus assumed."
+      qualityChecks:
+        - "Influence dynamics are practical, not abstract."
+        - "Blockers are taken seriously."
+        - "Champion activation does not overpromise advocacy."
       questions:
-        - "Who influences the adoption decision without authority?"
-        - "What channels reach them?"
+        - "Who can champion adoption?"
+        - "Who influences adoption without authority?"
+        - "Who can slow or block adoption?"
+        - "What motivates each role?"
+        - "How can GTM reach or support each role?"
+        - "What objections or risks do blockers create?"
+    - id: "qualification-and-disqualification"
+      title: "Qualification and Disqualification"
+      intent: "Define observable signals that indicate a prospect or account is a good fit, bad fit, too early, too costly, or unsafe to target."
+      required: true
+      outputGuidance:
+        - "Use qualification records for material signals."
+        - "Separate fit, urgency, willingness, readiness, risk, support burden, and exclusion signals."
+        - "Tie signals to campaigns, sales, onboarding, support, and analytics."
+      qualityChecks:
+        - "Signals are observable and usable."
+        - "Disqualification is treated as strategically important."
+        - "Signals are not just internal guesses unless marked as assumptions."
+      questions:
+        - "What observable signals qualify a customer or segment?"
+        - "What observable signals disqualify them?"
+        - "What signals indicate urgency?"
+        - "What signals indicate willingness to pay or adopt?"
+        - "What signals indicate high support burden or technical risk?"
+        - "How should these signals be used in targeting, sales, onboarding, support, and analytics?"
+    - id: "segment-needs"
+      title: "Segment Needs"
+      intent: "Map each material segment to jobs, pains, desired outcomes, proof needs, objections, onboarding needs, support needs, and success criteria."
+      required: true
+      outputGuidance:
+        - "Summarize needs by segment without duplicating full personas."
+        - "Tie needs to messaging, launch, pricing, content, sales, support, and product readiness."
+        - "Mark unsupported needs clearly."
+      qualityChecks:
+        - "Segment needs are specific enough to drive GTM decisions."
+        - "Unsupported needs are not hidden."
+        - "Needs connect to downstream docs."
+      questions:
+        - "What does each segment need?"
+        - "What job-to-be-done matters most?"
+        - "What pain and desired outcome matter most?"
+        - "What proof, onboarding, and support does each segment need?"
+        - "What needs are unsupported or deferred?"
+    - id: "segment-specific-messaging"
+      title: "Segment-Specific Messaging"
+      intent: "Map segments to message emphasis, pain message, outcome message, proof, objections, claims to avoid, and allowed channels."
+      required: true
+      outputGuidance:
+        - "Use segment message records for material segments."
+        - "Derive messages from Messaging and Positioning."
+        - "Do not create new claims that bypass claim boundaries."
+      qualityChecks:
+        - "Segment messages are consistent with canonical messaging."
+        - "Proof and objections are included."
+        - "Claims to avoid are explicit."
+      questions:
+        - "What message emphasis applies to each segment?"
+        - "What pain message should each segment hear?"
+        - "What outcome message should each segment hear?"
+        - "What proof does each segment need?"
+        - "What objections are likely by segment?"
+        - "What claims should be avoided by segment?"
+    - id: "segment-specific-channels"
+      title: "Segment-Specific Channels"
+      intent: "Map segments to likely channels, reachability logic, required assets, validation signals, and risks."
+      required: true
+      outputGuidance:
+        - "Use segment channel records for material segment/channel pairs."
+        - "Define channel role rather than producing a full channel strategy."
+        - "Route tactical channel planning downstream."
+      qualityChecks:
+        - "Channels are tied to segment reachability."
+        - "Required assets and validation signals are explicit."
+        - "Channel assumptions are not treated as facts without evidence."
+      questions:
+        - "Where can each segment be reached?"
+        - "Why is each channel plausible for that segment?"
+        - "What assets are required to reach the segment?"
+        - "What signal validates segment/channel fit?"
+        - "What cost, capacity, or risk does each segment/channel pair create?"
     - id: "segment-prioritization"
       title: "Segment Prioritization"
-      intent: "Rank segments by priority with rationale."
+      intent: "Rank segments by priority using explicit criteria and trade-offs."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use prioritization records for material segments."
+        - "Score or classify segments across decision-useful criteria."
+        - "State final priority decision and rationale."
+      qualityChecks:
+        - "Prioritization is explicit and not arbitrary."
+        - "Trade-offs are visible."
+        - "Highest priority segment aligns with GTM focus and readiness."
       questions:
         - "What is the ranked order of segment priority?"
+        - "What criteria determine priority?"
+        - "How do pain intensity, urgency, reachability, willingness to pay/adopt, product fit, proof availability, channel access, support burden, technical risk, and strategic value compare by segment?"
         - "What is the rationale for the ordering?"
+        - "What trade-offs are accepted?"
     - id: "excluded-segments"
       title: "Excluded Segments"
-      intent: "List segments explicitly out of scope and why."
+      intent: "List segments explicitly out of scope, why they are excluded, what risk they create, and what would need to change before reconsidering."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use excluded segment records for material exclusions."
+        - "Include exclusion rationale tied to product, GTM, support, technical, ethical, or strategic constraints."
+        - "State reconsideration triggers."
+      qualityChecks:
+        - "Exclusions are concrete and useful."
+        - "Unsupported or risky segments are not quietly targeted."
+        - "Reconsideration triggers prevent permanent accidental exclusion."
       questions:
         - "Which segments are explicitly out of scope?"
         - "Why exclude them at this stage?"
+        - "What risk would targeting them create?"
+        - "What need do they have that is unsupported?"
+        - "What would need to change before reconsidering them?"
+    - id: "expansion-triggers"
+      title: "Expansion Triggers"
+      intent: "Define what evidence or readiness must exist before moving beyond the primary segment."
+      required: true
+      outputGuidance:
+        - "Use expansion trigger records for material expansion segments."
+        - "Tie triggers to evidence, product readiness, channel readiness, support readiness, pricing/packaging, and risk."
+        - "Do not define expansion as automatic."
+      qualityChecks:
+        - "Expansion is evidence-triggered."
+        - "Readiness requirements are explicit."
+        - "Premature expansion risks are visible."
+      questions:
+        - "What must be true before targeting secondary segments?"
+        - "What evidence is required?"
+        - "What product readiness is required?"
+        - "What channel readiness is required?"
+        - "What support readiness is required?"
+        - "What pricing or packaging changes may be required?"
     - id: "segment-risks"
       title: "Segment Risks"
-      intent: "Surface what could make the chosen segment unattractive."
+      intent: "Surface what could make selected segments unattractive, unreachable, unsupported, unprofitable, high-churn, technically risky, or reputationally risky."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use segment risk records for material risks."
+        - "Include early signal, mitigation, launch impact, and downstream document."
+        - "Treat wrong-segment risk as release/launch risk when it affects GTM focus."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Wrong-segment and unsupported-segment risks are explicit."
+        - "Mitigations are actionable or routed downstream."
       questions:
         - "What could make the chosen segment unattractive?"
         - "What would signal the segment is wrong?"
+        - "What could make a segment too hard to reach?"
+        - "What could make a segment too expensive or support-heavy?"
+        - "What could make a segment technically unsafe or reputationally risky?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from Customer Segments and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route segmentation outputs to the correct downstream documents."
+        - "Separate channel, launch, pricing, content, sales, partnerships, experiments, analytics, GTM risk, release, support, and operations implications."
+        - "Preserve unresolved segmentation questions and exclusion rules."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing segment assumptions silently."
+        - "Segmentation strategy and downstream execution remain distinct."
+      questions:
+        - "What should Channel Strategy inherit?"
+        - "What should Launch Plan inherit?"
+        - "What should Pricing and Packaging inherit?"
+        - "What should Content Strategy inherit?"
+        - "What should Sales Motion and Partnerships inherit?"
+        - "What should Growth Experiments and GTM Analytics inherit?"
+        - "What should GTM Risks, Release Management, Support Model, Operating Model, and Risk Management inherit?"
+        - "What unresolved segmentation questions must be carried forward?"

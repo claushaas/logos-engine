@@ -5,127 +5,338 @@ document:
   status: "not_started"
   order: 4
   type: "research_plan"
-  purpose: "Plan qualitative and contextual evidence gathering through listening and observation."
-  centralQuestion: "How will we listen and observe?"
+  purpose: "Plan qualitative and contextual evidence gathering through listening, observation, and structured synthesis so research can inform validation decisions."
+  centralQuestion: "How will we listen and observe in a way that produces decision-useful evidence?"
   outputs:
     canonical:
       format: "markdown"
-      path: "02-validation/04-research-plan.md"
-      purpose: "Plans qualitative and contextual evidence gathering through listening and observation."
-  dependsOn: []
-  feeds: []
+      path: "docs/02-validation/04-research-plan.md"
+      purpose: "Store the canonical research plan as a Markdown document."
+    artifacts:
+      - id: "validation.research_plan_map"
+        format: "html"
+        path: "outcomes/html/02-validation/research-plan-map.html"
+        purpose: "Provide a navigable research plan covering goals, participants, recruitment, interview guide, observation criteria, bias risks, data capture, synthesis, and evidence handoff."
+        audience: "founder"
+        includes:
+          - "research goals"
+          - "participant profile"
+          - "recruitment criteria"
+          - "interview guide"
+          - "observation criteria"
+          - "bias risks"
+          - "data capture format"
+          - "synthesis method"
+          - "evidence handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.research_plan_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/research-plan-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the research plan is unbiased, ethical, evidence-oriented, and aligned with hypotheses and validation strategy."
+        agentRole: "reviewer"
+        includes:
+          - "canonical research plan"
+          - "validation strategy dependency"
+          - "core assumptions dependency"
+          - "hypotheses dependency"
+          - "research protocol format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/01-validation-strategy"
+    - "02-validation/02-core-assumptions"
+    - "02-validation/03-hypotheses"
+  feeds:
+    - "02-validation/05-experiments"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+  inputs:
+    - id: "hypotheses"
+      type: "context"
+      required: false
+      description: "Hypotheses that the research plan should support, refine, or challenge."
+    - id: "core-assumptions"
+      type: "context"
+      required: false
+      description: "Core assumptions that should shape research goals, participant criteria, and observation focus."
+    - id: "audience-definition"
+      type: "context"
+      required: false
+      description: "Audience definition used to determine participant profile, inclusion criteria, and exclusion criteria."
+    - id: "research-constraints"
+      type: "manual_note"
+      required: false
+      description: "Constraints on participant access, time, budget, tooling, privacy, consent, recordings, or analysis capacity."
+    - id: "available-evidence"
+      type: "context"
+      required: false
+      description: "Existing interviews, notes, transcripts, observations, analytics, support logs, or other evidence to avoid duplicate research and calibrate the plan."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered by a concrete research plan tied to validation decisions."
+    - "Research goals are connected to hypotheses, assumptions, or decision gates."
+    - "Participant profile includes inclusion criteria, exclusion criteria, target sample logic, and rationale."
+    - "Recruitment and screening reduce selection bias instead of merely finding convenient participants."
+    - "Interview and observation guidance avoid leading questions and solution-first framing."
+    - "Bias risks include mitigation techniques for confirmation bias, selection bias, interviewer bias, recall bias, and social desirability bias."
+    - "Data capture format specifies how raw evidence, quotes, observations, consent, and metadata will be recorded."
+    - "Synthesis method explains how findings, contradictions, patterns, and evidence strength will feed Evidence Log and Decision Record."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid leading questions."
+    - "Avoid solution-first framing before problem, audience, and behavior evidence are gathered."
+    - "Avoid treating participant opinions as validated behavior."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
+    - "Do not invent participants, quotes, sample sizes, research results, or evidence."
+    - "Do not overclaim qualitative findings beyond the evidence collected."
+    - "Respect privacy, consent, and boundaries around recordings and sensitive data."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Tie every research activity to a hypothesis, assumption, or validation decision where possible."
+    - "Separate what will be asked, what will be observed, what will be captured, and how it will be interpreted."
+    - "Prefer questions about past behavior and concrete examples over speculative future intent."
+    - "Label provisional sample size targets as assumptions when not evidence-based."
+    - "Plan for contradictory evidence rather than only confirmatory evidence."
+    - "Keep this document as research design; experiment protocols and quantitative tests belong in Experiments."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation documents, Validation Strategy, Core Assumptions, or Hypotheses."
+    - "Flag leading, loaded, vague, or solution-pitch questions."
+    - "Verify that research goals can influence decisions."
+    - "Verify that recruitment criteria match the audience definition and validation needs."
+    - "Verify that data capture preserves enough raw evidence for synthesis and audit."
+    - "Flag content that belongs better in Experiments, Evidence Log, Decision Record, or Validation Report."
+  specializedFormats:
+    researchQuestionFormat:
+      description: "Recommended format for research questions."
+      fields:
+        - id
+        - question
+        - linkedHypotheses
+        - linkedAssumptions
+        - decisionInformed
+        - evidenceNeeded
+        - method
+        - priority
+        - notes
+    participantCriteriaFormat:
+      description: "Recommended format for participant profile and screening criteria."
+      fields:
+        - criterion
+        - type
+        - rationale
+        - inclusionRule
+        - exclusionRule
+        - screeningQuestion
+        - biasRisk
+    interviewQuestionFormat:
+      description: "Recommended format for interview guide questions."
+      fields:
+        - id
+        - question
+        - purpose
+        - linkedHypotheses
+        - expectedEvidence
+        - followUps
+        - biasRisk
+        - avoidIf
+    evidenceCaptureFormat:
+      description: "Recommended format for captured research evidence."
+      fields:
+        - participantId
+        - sessionDate
+        - method
+        - consentStatus
+        - rawObservation
+        - quote
+        - interpretation
+        - linkedHypotheses
+        - evidenceStrength
+        - contradictionFlag
+        - privacyNotes
   sections:
     - id: "research-goals"
       title: "Research Goals"
-      intent: "Define the specific questions and decisions the research will inform."
+      intent: "Define the specific questions, hypotheses, assumptions, and decisions the research will inform."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "State research goals in terms of decisions they will inform."
+        - "Connect each goal to hypotheses, assumptions, or validation gates."
+        - "Separate learning goals from decision gates."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Every research goal can affect a future decision."
+        - "Goals are not generic curiosity items."
+        - "Goals do not presume the solution is correct."
       questions:
         - "What specific questions is this research trying to answer?"
+        - "Which hypotheses or assumptions does each question connect to?"
         - "What decisions will this research inform?"
         - "How will research findings be used?"
+        - "What would make this research worth doing?"
+        - "What would make this research insufficient for decision-making?"
     - id: "participant-profile"
       title: "Participant Profile"
-      intent: "Define who will be interviewed or observed and why."
+      intent: "Define who will be interviewed or observed, why they are relevant, and which participants should be excluded."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define participants by situation, behavior, and relevance to the problem."
+        - "Separate primary participants from secondary or exploratory participants."
+        - "Explain target sample logic without inventing false statistical precision."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Participant criteria match the Audience Definition."
+        - "Participant selection can test or challenge hypotheses."
+        - "The profile does not only include convenient or overly friendly participants."
       questions:
         - "Who will be interviewed or observed?"
-        - "What are the inclusion and exclusion criteria for participants?"
+        - "What are the inclusion criteria for participants?"
+        - "What are the exclusion criteria for participants?"
+        - "Which participant groups are primary, secondary, or exploratory?"
         - "How many participants are needed and why?"
+        - "What sample size assumptions are provisional?"
+        - "Which participants could challenge the current thesis or audience definition?"
     - id: "recruitment-criteria"
       title: "Recruitment Criteria"
-      intent: "Describe how participants will be recruited and screened."
+      intent: "Describe how participants will be recruited, screened, selected, and balanced to reduce bias."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define recruitment sources and screening rules explicitly."
+        - "Explain how recruitment avoids only finding people who already agree with the project."
+        - "Identify recruitment constraints and trade-offs."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Recruitment criteria align with participant profile and research goals."
+        - "The screening process can reject poor-fit participants."
+        - "Diversity of perspective is defined in relation to the research question, not as a vague aspiration."
       questions:
         - "How will participants be recruited?"
         - "What screening process will be used?"
+        - "What recruitment sources are acceptable?"
+        - "What recruitment sources may introduce bias?"
         - "How will diversity of perspective be ensured?"
+        - "How will poor-fit or overly leading participants be screened out?"
+        - "What incentives, if any, will be offered and what bias might they introduce?"
     - id: "interview-guide"
       title: "Interview Guide"
-      intent: "Provide the interview structure, questions, and follow-up handling."
+      intent: "Provide the interview structure, question categories, follow-up handling, and anti-bias rules."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Structure interviews from context and past behavior before solution reaction."
+        - "Prefer open-ended questions about concrete situations and recent behavior."
+        - "Mark questions that should not be asked because they lead the participant."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Questions avoid pitching the solution before the problem is understood."
+        - "Questions distinguish past behavior from future speculation."
+        - "Follow-ups are designed to clarify evidence, not push agreement."
       questions:
         - "What questions will be asked?"
         - "What is the interview structure and flow?"
+        - "Which questions map to which hypotheses?"
         - "How will follow-up questions be handled?"
         - "What topics must be covered in every interview?"
+        - "Which questions should be avoided because they are leading, vague, or solution-first?"
+        - "How will interviewers handle contradictions, uncertainty, or unexpected answers?"
     - id: "observation-criteria"
       title: "Observation Criteria"
-      intent: "Define what behaviors, signals, and contextual factors to observe."
+      intent: "Define what behaviors, signals, workarounds, artifacts, and contextual factors will be observed."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "List observable behaviors before inferred interpretations."
+        - "Include what people do, avoid, repeat, struggle with, workaround, or abandon."
+        - "Capture context, environment, artifacts, timing, and constraints where relevant."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Observation criteria are observable, not speculative."
+        - "Success and failure signals are tied to hypotheses."
+        - "Contextual factors are specific enough to influence interpretation."
       questions:
         - "What behaviors will be observed?"
+        - "What workarounds, artifacts, tools, or routines should be noted?"
         - "What signals indicate success or failure?"
         - "What contextual factors should be noted?"
+        - "What should be captured without interpretation?"
+        - "What observations would contradict current hypotheses?"
     - id: "bias-risks"
       title: "Bias Risks"
-      intent: "Identify and mitigate biases in research design and execution."
+      intent: "Identify and mitigate biases in research design, recruitment, interviewing, observation, synthesis, and interpretation."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Name specific bias risks and mitigation methods."
+        - "Include confirmation bias, selection bias, interviewer bias, leading questions, recall bias, survivorship bias, and social desirability bias where relevant."
+        - "Define how contradictions and negative evidence will be protected during synthesis."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Bias mitigation is specific enough to change research behavior."
+        - "The plan prevents the research from only confirming what the project already wants to believe."
+        - "Negative and contradictory evidence has a clear capture path."
       questions:
         - "What biases need to be avoided?"
-        - "How to avoid only confirming what we already want to believe?"
+        - "How will we avoid only confirming what we already want to believe?"
         - "What techniques will be used to mitigate interviewer bias?"
         - "How will leading questions be identified and removed?"
         - "How will selection bias be addressed?"
+        - "How will recall bias and social desirability bias be reduced?"
+        - "How will contradictory evidence be preserved and reviewed?"
     - id: "data-capture-format"
       title: "Data Capture Format"
-      intent: "Define how data will be recorded, formatted, and stored."
+      intent: "Define how research evidence will be recorded, formatted, stored, protected, and linked to hypotheses."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Separate raw evidence from interpretation."
+        - "Define metadata needed for auditability and synthesis."
+        - "Clarify consent and privacy handling for notes, audio, video, screen recordings, and sensitive information."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Captured data can be traced back to hypotheses and participants without exposing unnecessary personal data."
+        - "Raw observations and quotes are distinguishable from researcher interpretation."
+        - "Privacy and consent requirements are explicit."
       questions:
         - "How will data be recorded?"
         - "What format will interview notes use?"
         - "What tools will be used for data capture?"
         - "How will audio, video, or screen recordings be handled?"
+        - "How will consent be captured?"
+        - "How will raw evidence be separated from interpretation?"
+        - "How will evidence be linked to hypotheses and assumptions?"
+        - "How will sensitive or identifying information be protected?"
     - id: "synthesis-method"
       title: "Synthesis Method"
-      intent: "Define how raw data will be synthesized into structured findings."
+      intent: "Define how raw data will be converted into findings, evidence strength, patterns, contradictions, and validation decisions."
       required: true
-      outputGuidance: []
+      outputGuidance:
+        - "Define how raw evidence becomes a finding."
+        - "Describe how patterns, outliers, contradictions, and negative evidence will be handled."
+        - "Clarify how synthesis feeds Evidence Log, Decision Record, and Validation Report."
       qualityChecks:
-        - "Answers each listed question substantively."
-        - "Avoids unsupported assertions."
+        - "Synthesis does not overclaim beyond the evidence."
+        - "Contradictory evidence is not discarded without justification."
+        - "Findings are linked to hypotheses and decision implications."
       questions:
         - "How will data be synthesized into findings?"
         - "What signals should be captured during synthesis?"
         - "How will patterns be identified across participants?"
         - "How will contradictory evidence be handled?"
+        - "How will evidence strength be assessed?"
+        - "How will findings be linked to hypotheses, assumptions, and decision gates?"
+        - "What gets sent to Evidence Log, Decision Record, and Validation Report?"
+    - id: "evidence-handoff"
+      title: "Evidence Handoff"
+      intent: "Define how research outputs move into evidence tracking, decisions, and subsequent validation work."
+      required: true
+      outputGuidance:
+        - "Specify which outputs are produced after each research activity."
+        - "Define what belongs in Evidence Log versus Decision Record versus Validation Report."
+        - "Clarify what unresolved questions feed into Experiments or additional research."
+      qualityChecks:
+        - "Research findings have a clear destination."
+        - "Evidence handoff preserves uncertainty and contradictions."
+        - "Downstream documents receive enough context to avoid reinterpreting evidence incorrectly."
+      questions:
+        - "What research outputs will be created after each session or batch?"
+        - "What evidence is logged and where?"
+        - "What decisions are recorded and where?"
+        - "What findings should trigger new experiments or follow-up research?"
+        - "How will unresolved or contradictory findings be tracked?"

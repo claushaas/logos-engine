@@ -4,144 +4,719 @@ document:
   phase: "04-engineering"
   status: "not_started"
   order: 13
-  type: "standards"
-  purpose: "Defines code and collaboration standards to maintain technical consistency as the system grows."
-  centralQuestion: "How to maintain technical consistency as the system grows?"
+  type: "engineering_standards"
+  purpose: "Define the engineering norms, code conventions, collaboration rules, repository structure, quality gates, documentation expectations, automation requirements, and governance mechanisms that keep the system consistent, maintainable, secure, reviewable, and scalable as it evolves."
+  centralQuestion: "What standards must Engineering follow so the system remains coherent, maintainable, safe, reviewable, and evolvable as it grows?"
   outputs:
     canonical:
       format: "markdown"
-      path: "04-engineering/engineering-standards.md"
-      purpose: "Engineering standards covering repository structure, code organisation, naming conventions, and collaboration rules."
-  dependsOn: []
-  feeds: []
+      path: "docs/04-engineering/13-engineering-standards.md"
+      purpose: "Store the canonical engineering standards as a Markdown document."
+    artifacts:
+      - id: "engineering.engineering_standards_reference"
+        format: "html"
+        path: "outcomes/html/04-engineering/engineering-standards-reference.html"
+        purpose: "Provide a navigable engineering standards reference covering repository structure, code organization, naming, type safety, error handling, logging, dependencies, migrations, git workflow, PR rules, documentation, review checklist, automation, enforcement, exceptions, ownership, and risks."
+        audience: "founder"
+        includes:
+          - "standards objective"
+          - "standards taxonomy"
+          - "repository structure"
+          - "code organization"
+          - "module boundaries"
+          - "naming conventions"
+          - "formatting and linting"
+          - "type safety"
+          - "validation standards"
+          - "error handling"
+          - "logging conventions"
+          - "security coding standards"
+          - "privacy coding standards"
+          - "dependency management"
+          - "migration rules"
+          - "testing standards"
+          - "documentation rules"
+          - "git workflow"
+          - "pull request rules"
+          - "review checklist"
+          - "automation and enforcement"
+          - "exception process"
+          - "ownership and maintenance"
+          - "standards risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.engineering_standards_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/engineering-standards-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether engineering standards are enforceable, coherent, aligned with architecture, secure, privacy-aware, testable, automation-friendly, and maintainable."
+        agentRole: "reviewer"
+        includes:
+          - "canonical engineering standards"
+          - "system architecture dependency"
+          - "technical stack dependency"
+          - "security and privacy dependency"
+          - "testing strategy dependency"
+          - "observability dependency"
+          - "deployment dependency"
+          - "standards formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+    - "04-engineering/07-integration-architecture"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/09-sync-and-state"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+  feeds:
+    - "06-operations/02-operating-model"
+    - "06-operations/05-maintenance-plan"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "Application layers, module boundaries, dependency rules, runtime architecture, data flow, failure modes, and architecture decisions that standards must enforce."
+    - id: "technical-stack"
+      type: "context"
+      required: false
+      description: "Runtime, languages, frameworks, package management, dependency policy, version constraints, testing tools, deployment platform, and local development tools."
+    - id: "domain-model"
+      type: "context"
+      required: false
+      description: "Domain language, entities, aggregates, commands, events, invariants, state machines, and bounded contexts that naming, module, and type standards should preserve."
+    - id: "security-and-privacy"
+      type: "context"
+      required: false
+      description: "Security/privacy controls, data handling rules, logging restrictions, secrets handling, authorization rules, vulnerability management, and incident concerns that coding standards must enforce."
+    - id: "testing-strategy"
+      type: "context"
+      required: false
+      description: "Test taxonomy, coverage matrix, CI gates, fixtures, mocks, release gates, flaky test policy, and test ownership rules."
+    - id: "observability"
+      type: "context"
+      required: false
+      description: "Logging, metrics, traces, audit events, correlation fields, telemetry privacy, alerts, dashboards, and observability testing requirements."
+    - id: "deployment-and-environments"
+      type: "context"
+      required: false
+      description: "Local setup, environment variables, secrets, build process, artifacts, CI/CD, migrations, release verification, feature flags, rollback, and deployment runbooks."
+    - id: "standards-notes"
+      type: "manual_note"
+      required: false
+      description: "Existing conventions, repo constraints, style preferences, automation tools, review rules, coding norms, contribution expectations, and unresolved standards questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through explicit, enforceable, reviewable standards for code, repository structure, collaboration, documentation, automation, exceptions, and maintenance."
+    - "Standards distinguish mandatory rules, recommended conventions, optional practices, deprecated patterns, prohibited patterns, and exception paths."
+    - "Repository structure defines monorepo/polyrepo posture, top-level directories, package/app boundaries, shared code rules, generated code locations, scripts, docs, tests, tooling, and ownership."
+    - "Code organization defines modules, features, layers, file placement, imports, exports, public/private surfaces, dependency direction, barrel usage, and anti-patterns."
+    - "Module boundary standards enforce System Architecture dependency rules, domain/infrastructure separation, adapter boundaries, frontend/backend boundaries, and forbidden imports."
+    - "Naming conventions define files, folders, packages, modules, variables, functions, classes, types, interfaces, schemas, tests, mocks, feature flags, environment variables, events, commands, errors, metrics, logs, and migrations."
+    - "Formatting and linting define formatter, linter, strictness, import ordering, unused code policy, generated code exceptions, CI enforcement, and local tooling expectations."
+    - "Type safety defines strictness, runtime validation, schema sharing, generated types, unsafe escape hatches, nullability, unknown/any usage, public API types, domain types, and data/API schema alignment."
+    - "Validation standards define where validation belongs, how schemas are authored, how input/output validation works, how domain validation differs from API validation, and how validation errors are represented."
+    - "Error handling defines error taxonomy, Result/exception policy, error boundaries, propagation, wrapping, user-safe messages, developer diagnostics, logging, retryability, and observability linkage."
+    - "Logging conventions define structured logs, levels, required context, forbidden data, redaction, correlation IDs, audit events, sampling, and alignment with Observability/Security."
+    - "Security and privacy coding standards define secrets handling, auth/authz checks, sensitive data handling, dependency hygiene, injection prevention, safe defaults, and prohibited patterns."
+    - "Dependency management defines add/update/remove workflow, approval rules, license/security checks, package health checks, transitive dependency policy, lockfile policy, upgrade cadence, and abandonment handling."
+    - "Migration rules define naming, authoring, review, testing, compatibility, backfill, rollback/roll-forward, local/remote migration handling, release gates, and failed migration response."
+    - "Testing standards define required tests by change type, fixture/mocking rules, test naming, determinism, fake clocks, CI expectations, snapshot policy, flaky test handling, and regression test requirements."
+    - "Documentation rules define required docs per change type, ADR triggers, README expectations, code comments, API docs, migration docs, runbook updates, and docs freshness rules."
+    - "Git workflow defines branch strategy, commit conventions, changeset/release-note expectations, protected branches, merge strategy, history policy, and hotfix workflow."
+    - "Pull request rules define PR size, description, linked issues, test evidence, screenshots, migration notes, security/privacy notes, observability notes, reviewer requirements, approvals, and merge criteria."
+    - "Review checklist covers correctness, architecture, domain, data, API, security/privacy, testing, observability, performance, accessibility, migration, deployment, docs, and operations impact."
+    - "Automation and enforcement define which standards are enforced by formatter, linter, typechecker, tests, CI gates, dependency scanners, secret scanners, policy checks, codeowners, templates, or review."
+    - "Exception process defines how standards can be waived, who approves, how risk is recorded, how temporary exceptions expire, and how cleanup is tracked."
+    - "Ownership and maintenance define who owns standards, how they evolve, review cadence, deprecation process, onboarding expectations, and standards drift monitoring."
+    - "Standards risks identify likely inconsistency, over-strictness, under-enforcement, tool drift, review bottlenecks, exception abuse, and operational burden."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid standards theater: rules that are not enforceable, reviewable, automatable, or tied to system quality."
+    - "Avoid excessive bureaucracy that blocks delivery without reducing meaningful risk."
+    - "Avoid standards that contradict System Architecture dependency rules, Technical Stack choices, Security/Privacy controls, Testing Strategy gates, Observability requirements, or Deployment constraints."
+    - "Avoid hidden exceptions and undocumented tribal knowledge."
+    - "Avoid relying on human review for rules that should be automated."
+    - "Avoid automating rules that require architectural judgment without human review."
+    - "Avoid naming/formatting standards that obscure domain language or API/data semantics."
+    - "Avoid treating generated code, vendor code, migrations, docs, tests, and production code as if they always need identical rules."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent existing tooling, CI behavior, team capacity, review SLA, compliance status, or enforcement already in place unless provided."
+    - "Engineering standards must preserve architecture coherence, domain clarity, type safety, data integrity, security/privacy, observability, testability, deployment safety, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate rule, rationale, scope, enforcement method, exception path, and owner."
+    - "Tie standards to System Architecture, Technical Stack, Domain Model, Data Model, API Contracts, Security and Privacy, Testing Strategy, Observability, Deployment and Environments, NFRs, Acceptance Criteria, or Decision Record where possible."
+    - "Classify standards as mandatory, recommended, optional, deprecated, prohibited, review-needed, CI-enforced, review-enforced, or documentation-only where useful."
+    - "State whether each standard is enforced by tooling, CI, review, templates, codeowners, scripts, documentation, or manual discipline."
+    - "Keep standards practical: each rule should either reduce defects, reduce ambiguity, preserve architecture, improve review, improve security/privacy, improve observability, or reduce maintenance burden."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with System Architecture, Technical Stack, Domain Model, Data Model, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, Observability, Deployment and Environments, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag standards without rationale, scope, enforcement method, exception path, or owner."
+    - "Flag standards that should be automated but are left to memory or ad hoc review."
+    - "Flag standards that are too broad, too vague, too costly, or likely to cause inconsistent application."
+    - "Flag missing standards for architecture boundaries, type safety, validation, error handling, logging, secrets, dependencies, migrations, testing, docs, PRs, and reviews."
+    - "Verify that generated code, vendor code, migrations, tests, docs, scripts, and production code have appropriate rule differences."
+    - "Verify that enforcement feeds CI/CD, review, release management, maintenance, and operations where relevant."
+    - "Flag content that belongs better in System Architecture, Technical Stack, Security and Privacy, Testing Strategy, Observability, Deployment and Environments, Release Management, Maintenance Plan, or Operations."
+  specializedFormats:
+    standardRuleFormat:
+      description: "Recommended format for individual engineering standards."
+      fields:
+        - id
+        - rule
+        - category
+        - scope
+        - rationale
+        - requiredLevel
+        - enforcementMethod
+        - exceptionPath
+        - owner
+        - downstreamImplications
+        - status
+    namingRuleFormat:
+      description: "Recommended format for naming conventions."
+      fields:
+        - target
+        - convention
+        - examples
+        - forbiddenExamples
+        - rationale
+        - enforcementMethod
+        - exceptionPath
+        - status
+    reviewChecklistFormat:
+      description: "Recommended format for review checklist items."
+      fields:
+        - item
+        - appliesTo
+        - reviewerRole
+        - check
+        - evidenceRequired
+        - blockingLevel
+        - automationSupport
+        - notes
+    automationRuleFormat:
+      description: "Recommended format for automation/enforcement rules."
+      fields:
+        - rule
+        - toolOrMechanism
+        - trigger
+        - scope
+        - failureConsequence
+        - exceptionProcess
+        - owner
+        - status
+    exceptionFormat:
+      description: "Recommended format for standards exceptions."
+      fields:
+        - exception
+        - standardAffected
+        - reason
+        - risk
+        - approver
+        - expirationOrReviewTrigger
+        - mitigation
+        - cleanupPlan
+        - status
+    standardsRiskFormat:
+      description: "Recommended format for standards risks."
+      fields:
+        - risk
+        - affectedStandard
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - owner
+        - downstreamImpact
   sections:
+    - id: "standards-objective"
+      title: "Standards Objective"
+      intent: "Define why engineering standards exist, what quality outcomes they protect, how strict they should be, and how they balance consistency with delivery speed."
+      required: true
+      outputGuidance:
+        - "Open with the core reason standards exist for this project."
+        - "State which outcomes standards protect: architecture, maintainability, safety, speed, reviewability, onboarding, reliability, security, privacy, observability, and operations."
+        - "State the intended strictness level and acceptable flexibility."
+      qualityChecks:
+        - "The objective can reject both under-specified and over-bureaucratic standards."
+        - "The objective is tied to project constraints and architecture."
+        - "Trade-offs are explicit."
+      questions:
+        - "What are engineering standards meant to protect?"
+        - "What quality outcomes matter most?"
+        - "How strict should the standards be?"
+        - "Where is flexibility acceptable?"
+        - "What standards failures would materially harm the project?"
+    - id: "standards-taxonomy"
+      title: "Standards Taxonomy"
+      intent: "Define standard classes, required levels, enforcement types, exception types, and review semantics used throughout the document."
+      required: true
+      outputGuidance:
+        - "Define standard status labels before listing individual standards."
+        - "Distinguish mandatory, recommended, optional, deprecated, prohibited, review-needed, CI-enforced, review-enforced, and documentation-only rules."
+        - "Define what happens when each class is violated."
+      qualityChecks:
+        - "Taxonomy prevents ambiguity in how rules are applied."
+        - "Violation consequences are explicit."
+        - "Exception process is referenced early."
+      questions:
+        - "What classes of standards exist?"
+        - "What does mandatory versus recommended mean?"
+        - "What rules are CI-enforced versus review-enforced?"
+        - "What rules are prohibited or deprecated?"
+        - "How are violations handled?"
+        - "How are exceptions classified?"
     - id: "repository-structure"
       title: "Repository Structure"
-      intent: "Define the top-level directory layout and how packages, apps, and shared code are organised."
+      intent: "Define top-level directory layout, monorepo/polyrepo posture, apps/packages/shared code organization, generated code, scripts, docs, tests, tooling, ownership, and boundaries."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State monorepo or polyrepo posture and rationale."
+        - "Define top-level directories and what belongs in each."
+        - "Define how apps, packages, shared code, generated code, tests, scripts, docs, and tools are organized."
+      qualityChecks:
+        - "Structure supports System Architecture boundaries."
+        - "Shared code placement does not create dependency leakage."
+        - "Generated code and tooling have explicit locations."
       questions:
-        - "What is the top-level directory layout? Monorepo or polyrepo?"
-        - "How are packages, apps, and shared code organised?"
+        - "What is the top-level directory layout?"
+        - "Is the project monorepo, polyrepo, multi-package repo, or single-app repo?"
+        - "How are apps, packages, shared code, docs, scripts, tests, generated code, and tooling organized?"
+        - "What belongs in each top-level directory?"
+        - "What should never be placed in shared code?"
+        - "How is ownership represented in repository structure?"
     - id: "code-organization"
       title: "Code Organization"
-      intent: "Specify module and file organisation conventions and how imports are grouped and ordered."
+      intent: "Specify module, feature, layer, file, import, export, public/private surface, and dependency organization conventions."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define how code is grouped: by feature, layer, domain, package, capability, or hybrid."
+        - "State public and private module surfaces."
+        - "Define import/export patterns and anti-patterns."
+      qualityChecks:
+        - "Code organization preserves architecture and reduces ambiguity."
+        - "Public/private surfaces are explicit."
+        - "Import order and dependency direction are enforceable."
       questions:
-        - "What are the module and file organisation conventions?"
+        - "How are modules and files organized?"
+        - "Is code organized by feature, layer, domain, package, capability, or hybrid?"
         - "How are imports grouped and ordered?"
+        - "When are barrel exports allowed or prohibited?"
+        - "How are public and private module surfaces defined?"
+        - "What organization anti-patterns are prohibited?"
+    - id: "module-boundaries"
+      title: "Module Boundaries"
+      intent: "Define standards that enforce architectural boundaries, allowed dependencies, forbidden dependencies, adapter usage, and dependency injection."
+      required: true
+      outputGuidance:
+        - "Tie module boundary standards to System Architecture dependency rules."
+        - "Define allowed and forbidden imports."
+        - "State how boundary rules are enforced by linting, package boundaries, tests, or review."
+      qualityChecks:
+        - "Boundary rules prevent architecture erosion."
+        - "Domain, application, infrastructure, adapter, UI, and integration responsibilities do not collapse."
+        - "Violation examples are included where useful."
+      questions:
+        - "What module boundaries must be preserved?"
+        - "What dependencies are allowed?"
+        - "What dependencies are forbidden?"
+        - "How are adapter and infrastructure dependencies accessed?"
+        - "How is dependency injection handled?"
+        - "How are boundary violations detected?"
     - id: "naming-conventions"
       title: "Naming Conventions"
-      intent: "Define naming conventions for files, folders, variables, functions, and types, including casing conventions."
+      intent: "Define naming conventions for files, folders, packages, modules, variables, functions, types, schemas, tests, migrations, events, commands, errors, metrics, logs, and feature flags."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use naming rule records for material naming categories."
+        - "Include casing conventions and examples."
+        - "Tie domain names to Domain Model and avoid accidental terminology drift."
+      qualityChecks:
+        - "Names preserve domain meaning and reduce ambiguity."
+        - "Casing and suffix/prefix rules are explicit."
+        - "Forbidden names or ambiguous terms are documented."
       questions:
-        - "What naming conventions apply to files, folders, variables, functions, and types?"
-        - "What casing conventions are used? camelCase, PascalCase, kebab-case, snake_case?"
+        - "What naming conventions apply to files, folders, packages, modules, variables, functions, classes, types, interfaces, and schemas?"
+        - "What casing conventions are used?"
+        - "How are tests, mocks, fixtures, migrations, commands, events, errors, metrics, logs, and feature flags named?"
+        - "What domain terms must be used consistently?"
+        - "What names, suffixes, prefixes, or abbreviations are prohibited?"
+    - id: "formatting-and-linting"
+      title: "Formatting and Linting"
+      intent: "Define formatter, linter, import sorting, unused code policy, generated code exceptions, CI enforcement, local tooling, and rule ownership."
+      required: true
+      outputGuidance:
+        - "State formatting and linting tools only if known; otherwise define policy and mark tool unresolved."
+        - "Separate style rules from correctness/security rules."
+        - "Define generated/vendor code exceptions."
+      qualityChecks:
+        - "Formatting is automated."
+        - "Lint rules support correctness and architecture, not just style."
+        - "Exceptions are explicit and justified."
+      questions:
+        - "What formatter is used?"
+        - "What linter is used?"
+        - "How are imports sorted?"
+        - "What unused code, dead code, commented code, and TODO policies apply?"
+        - "What lint rules are warnings versus errors?"
+        - "How are generated code and vendor code treated differently?"
+        - "How are formatting and linting enforced locally and in CI?"
     - id: "type-safety"
       title: "Type Safety"
-      intent: "Specify the type system used and how types are shared between modules."
+      intent: "Specify type system strictness, runtime validation, schema sharing, generated types, unsafe escape hatches, nullability, public types, and domain/API/data alignment."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie type safety standards to Technical Stack and API/Data/Domain documents."
+        - "Define usage of strict mode, runtime schemas, generated types, type exports, and validation boundaries."
+        - "Define when unsafe casts, any/unknown, non-null assertions, and suppression comments are allowed."
+      qualityChecks:
+        - "Type standards reduce runtime ambiguity."
+        - "Runtime validation boundaries are explicit."
+        - "Unsafe escape hatches are limited and reviewable."
       questions:
-        - "What type system is used? TypeScript strict mode, Zod schemas?"
-        - "How are types shared between modules? Generated, manual, imported?"
+        - "What type system and strictness level are used?"
+        - "How are types shared between modules?"
+        - "Which types are generated versus manually maintained?"
+        - "How are API, data, and domain types aligned without leaking persistence details?"
+        - "Where is runtime validation required?"
+        - "When are any, unknown, casts, non-null assertions, and type suppressions allowed?"
+    - id: "validation-standards"
+      title: "Validation Standards"
+      intent: "Define where validation belongs, how schemas are authored, how input/output validation works, and how validation errors are represented."
+      required: true
+      outputGuidance:
+        - "Separate domain validation, API validation, form validation, data validation, integration validation, and configuration validation."
+        - "Define schema ownership and reuse rules."
+        - "Tie validation errors to API Contracts and Error Handling."
+      qualityChecks:
+        - "Validation is performed at trust boundaries."
+        - "Domain invariants are not reduced to frontend validation."
+        - "Validation errors are consistent and user-safe."
+      questions:
+        - "Where is validation required?"
+        - "How are validation schemas authored and shared?"
+        - "How does domain validation differ from API, form, data, integration, and configuration validation?"
+        - "How are invalid inputs handled?"
+        - "How are validation errors represented to users, APIs, logs, and tests?"
     - id: "error-handling"
       title: "Error Handling"
-      intent: "Define the error handling pattern and how errors are propagated, logged, and surfaced to users."
+      intent: "Define error taxonomy, Result/exception policy, propagation, wrapping, retryability, user-safe messages, developer diagnostics, logging, observability, and failure boundaries."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie error handling to API Contracts, Observability, Security and Privacy, and Sync/State."
+        - "Separate expected domain errors, validation errors, infrastructure errors, integration errors, programmer errors, security errors, and unknown errors."
+        - "Define user-safe and developer-facing error information."
+      qualityChecks:
+        - "Errors are actionable and classified."
+        - "Sensitive data is not exposed in error messages."
+        - "Retryability and observability are explicit."
       questions:
-        - "What is the error handling pattern? Result types, exceptions, error codes?"
-        - "How are errors propagated, logged, and surfaced to users?"
+        - "What error taxonomy is used?"
+        - "When are Result types, exceptions, error codes, or typed failures used?"
+        - "How are errors propagated and wrapped?"
+        - "How are retryable and non-retryable errors identified?"
+        - "How are errors logged, traced, reported, and surfaced to users?"
+        - "What error handling patterns are prohibited?"
     - id: "logging-conventions"
       title: "Logging Conventions"
-      intent: "Specify logging conventions in application code and what should and should not be logged."
+      intent: "Specify structured logging conventions, log levels, required context, forbidden data, redaction, correlation, audit event boundaries, sampling, and alignment with observability."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie logging rules to Observability and Security/Privacy."
+        - "Define required context fields and forbidden payloads."
+        - "Separate diagnostic logs from audit events and telemetry."
+      qualityChecks:
+        - "Logs are useful, structured, and privacy-safe."
+        - "Correlation fields support debugging."
+        - "Audit events are not replaced by casual logs."
       questions:
         - "What logging conventions apply in application code?"
+        - "What log levels exist and when are they used?"
+        - "What context fields are required?"
         - "What should and should not be logged?"
+        - "How are secrets, tokens, PII, sensitive data, and payloads redacted or avoided?"
+        - "How are logs correlated with traces, metrics, errors, and audits?"
+    - id: "security-coding-standards"
+      title: "Security Coding Standards"
+      intent: "Define secure coding rules for auth/authz, secrets, injection prevention, unsafe APIs, input handling, dependency hygiene, privileged operations, and secure defaults."
+      required: true
+      outputGuidance:
+        - "Tie standards to Security and Privacy threat model and controls."
+        - "Define prohibited insecure patterns."
+        - "Route security-sensitive changes to review."
+      qualityChecks:
+        - "Security standards are specific and enforceable where possible."
+        - "Authorization checks are not left implicit."
+        - "Secrets and credentials are never handled casually."
+      questions:
+        - "What secure coding rules apply?"
+        - "How must authentication and authorization checks be implemented and reviewed?"
+        - "How are secrets, credentials, tokens, and API keys handled in code?"
+        - "What injection, deserialization, file, command execution, SSRF, XSS, CSRF, path traversal, and unsafe eval risks must be avoided?"
+        - "What security-sensitive changes require extra review?"
+    - id: "privacy-coding-standards"
+      title: "Privacy Coding Standards"
+      intent: "Define privacy-preserving coding rules for data minimization, sensitive data handling, telemetry, logs, exports, deletion, consent, agent context, and third-party sharing."
+      required: true
+      outputGuidance:
+        - "Tie standards to Security and Privacy data handling rules."
+        - "Define what code paths require privacy review."
+        - "Include agent, telemetry, export, deletion, and integration boundaries where relevant."
+      qualityChecks:
+        - "Privacy standards prevent accidental collection or leakage."
+        - "Telemetry and logs are privacy-safe by default."
+        - "Export/deletion behavior is not broken by new code."
+      questions:
+        - "What privacy coding rules apply?"
+        - "How is data minimization enforced in code?"
+        - "How are sensitive data, telemetry, logs, exports, deletion, consent, and third-party sharing handled?"
+        - "What code changes require privacy review?"
+        - "How is agent-readable or integration-shared data minimized?"
     - id: "dependency-management"
       title: "Dependency Management"
-      intent: "Define how dependencies are added, updated, and removed, and the policy on transitive dependency pinning and auditing."
+      intent: "Define how dependencies are added, reviewed, updated, audited, deprecated, removed, replaced, pinned, and governed."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie dependency rules to Technical Stack dependency policy."
+        - "Define checks before adding new dependencies."
+        - "State update cadence and abandonment handling."
+      qualityChecks:
+        - "Dependencies are intentional and reviewed."
+        - "License/security/maintenance risks are considered before adoption."
+        - "Transitive dependency and lockfile rules are explicit."
       questions:
         - "How are dependencies added, updated, and removed?"
-        - "What is the policy on transitive dependency pinning and auditing?"
+        - "What checks are required before adding a dependency?"
+        - "What license, security, package health, maintenance, bundle size, performance, and transitive dependency review applies?"
+        - "What is the policy on lockfiles, version ranges, pinning, and transitive dependency overrides?"
+        - "How are abandoned, deprecated, vulnerable, or risky dependencies handled?"
     - id: "migration-rules"
       title: "Migration Rules"
-      intent: "Specify how data migration scripts are authored and reviewed and what backward-compatibility guarantees are required."
+      intent: "Specify standards for authoring, naming, reviewing, testing, ordering, deploying, rolling forward/back, and recovering from migrations."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie migration standards to Data Model and Deployment."
+        - "Separate schema migrations, data migrations, local migrations, remote migrations, event migrations, and backfills."
+        - "Define compatibility and release gates."
+      qualityChecks:
+        - "Migration standards prevent unsafe deploys."
+        - "Rollback/roll-forward reality is explicit."
+        - "Failed migration behavior is defined."
       questions:
-        - "How are data migration scripts authored and reviewed?"
-        - "What backward-compatibility guarantees are required?"
-    - id: "git-workflow"
-      title: "Git Workflow"
-      intent: "Define the branching strategy and commit message conventions."
+        - "How are migration scripts authored, named, reviewed, and tested?"
+        - "What backward/forward compatibility guarantees are required?"
+        - "How are backfills and long-running migrations handled?"
+        - "What migration patterns are prohibited?"
+        - "What release gates apply to migrations?"
+        - "How are failed migrations recovered?"
+    - id: "testing-standards"
+      title: "Testing Standards"
+      intent: "Define required tests by change type, test naming, fixture rules, mocking rules, determinism, snapshot policy, flaky test handling, and regression expectations."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Tie testing standards to Testing Strategy."
+        - "Define what tests are required for each change category."
+        - "State deterministic testing and flaky test rules."
+      qualityChecks:
+        - "Testing standards are actionable during PR review."
+        - "Mocks and fixtures follow project policy."
+        - "Regression tests are required for meaningful defects."
       questions:
-        - "What branching strategy is used? Trunk-based, GitFlow, feature branches?"
-        - "What are the commit message conventions?"
-    - id: "pull-request-rules"
-      title: "Pull Request Rules"
-      intent: "Specify PR requirements including approvals, CI checks, linked issues, PR size guidelines, and review SLA."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What are the PR requirements? Approvals, CI checks, linked issues?"
-        - "What is the PR size guideline and review SLA?"
+        - "What tests are required for feature, bugfix, refactor, migration, API, security, privacy, frontend, integration, and documentation changes?"
+        - "How are tests named and organized?"
+        - "What fixture and mock standards apply?"
+        - "How are fake clocks, randomness, network calls, and time zones handled?"
+        - "What snapshot testing policy applies?"
+        - "How are flaky tests handled?"
+        - "When are regression tests mandatory?"
     - id: "documentation-rules"
       title: "Documentation Rules"
-      intent: "Define documentation required alongside code and where it lives and how it is kept current."
+      intent: "Define required documentation alongside code, ADR triggers, README expectations, comments, API docs, migration docs, runbook updates, and documentation freshness rules."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define docs required by change type."
+        - "State where documentation lives and how it is kept current."
+        - "Distinguish useful comments from redundant comments."
+      qualityChecks:
+        - "Docs are updated when behavior, contracts, architecture, operations, or standards change."
+        - "ADR triggers are explicit."
+        - "Documentation burden is useful rather than ceremonial."
       questions:
-        - "What documentation is required alongside code? README, ADRs, API docs?"
-        - "Where does documentation live and how is it kept current?"
+        - "What documentation is required alongside code changes?"
+        - "When is an ADR required?"
+        - "What README, API docs, migration docs, runbooks, examples, comments, and changelog updates are required?"
+        - "Where does documentation live?"
+        - "How is documentation kept current?"
+        - "What documentation anti-patterns are prohibited?"
+    - id: "git-workflow"
+      title: "Git Workflow"
+      intent: "Define branch strategy, commit conventions, merge strategy, protected branches, release tags, hotfix workflow, and history policy."
+      required: true
+      outputGuidance:
+        - "State branch model and rationale."
+        - "Define commit message conventions and merge policy."
+        - "Include hotfix and release-tag expectations where relevant."
+      qualityChecks:
+        - "Git workflow supports CI/CD and release management."
+        - "History policy is explicit."
+        - "Hotfix workflow is not improvised."
+      questions:
+        - "What branching strategy is used?"
+        - "What commit message convention applies?"
+        - "What merge strategy is used: squash, merge commit, rebase, fast-forward?"
+        - "What branches are protected?"
+        - "How are releases tagged?"
+        - "How are hotfixes handled?"
+        - "What history rewriting policy applies?"
+    - id: "pull-request-rules"
+      title: "Pull Request Rules"
+      intent: "Specify PR requirements, size guidelines, description template, linked work, CI evidence, screenshots, migration/security/privacy/docs notes, review requirements, approvals, and merge criteria."
+      required: true
+      outputGuidance:
+        - "Define required PR metadata and evidence."
+        - "State PR size and review expectations without inventing team SLA unless known."
+        - "Classify high-risk PRs requiring additional review."
+      qualityChecks:
+        - "PR rules make review efficient and risk-aware."
+        - "High-risk changes include extra evidence."
+        - "Merge criteria align with CI and Acceptance Criteria."
+      questions:
+        - "What are the PR requirements?"
+        - "What must PR descriptions include?"
+        - "What tests, screenshots, logs, migration notes, security/privacy notes, observability notes, and docs updates are required?"
+        - "What PR size guideline applies?"
+        - "What review requirements apply by change type?"
+        - "What approvals and CI checks are required before merge?"
     - id: "review-checklist"
       title: "Review Checklist"
-      intent: "Specify what reviewers check for and the review checklist for different change types."
+      intent: "Define what reviewers check by change type, including correctness, architecture, domain, data, API, security/privacy, testing, observability, performance, accessibility, migration, deployment, docs, and operations impact."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use review checklist records for material checklist items."
+        - "Separate general checklist from specialized checklists by change type."
+        - "Define blocking and non-blocking review findings."
+      qualityChecks:
+        - "Checklist reflects project-specific risks."
+        - "Reviewers are not expected to rely on memory."
+        - "Automation-supported checks are not duplicated manually unless judgment is needed."
       questions:
-        - "What do reviewers check for? Correctness, style, security, performance?"
-        - "What is the review checklist for different change types?"
+        - "What should every code review check?"
+        - "What additional checks apply to architecture, domain, data, API, security, privacy, frontend, integration, sync, migration, deployment, and operations changes?"
+        - "What evidence should reviewers require?"
+        - "What findings are blocking versus advisory?"
+        - "What should be automated rather than reviewed manually?"
+    - id: "automation-and-enforcement"
+      title: "Automation and Enforcement"
+      intent: "Define which standards are enforced by tooling, CI, templates, codeowners, policy checks, scanners, scripts, docs, or manual review."
+      required: true
+      outputGuidance:
+        - "Use automation rule records for enforceable standards."
+        - "Prioritize automation for repetitive objective checks."
+        - "State failure consequences and exception process."
+      qualityChecks:
+        - "Objective standards are automated where practical."
+        - "Subjective standards are supported by templates/checklists."
+        - "CI enforcement aligns with Deployment and Testing Strategy."
+      questions:
+        - "Which standards are enforced automatically?"
+        - "What tools enforce formatting, linting, types, tests, dependency checks, secret scans, security scans, architecture boundaries, docs checks, and CI gates?"
+        - "What standards remain manual review responsibilities?"
+        - "What happens when automation fails?"
+        - "How are enforcement exceptions handled?"
+    - id: "exception-process"
+      title: "Exception Process"
+      intent: "Define how standards can be waived, who approves exceptions, how risk is recorded, when exceptions expire, and how cleanup is tracked."
+      required: true
+      outputGuidance:
+        - "Use exception records for material exceptions."
+        - "Distinguish temporary exceptions from permanent policy changes."
+        - "Require risk, mitigation, expiry/review trigger, and cleanup plan."
+      qualityChecks:
+        - "Exceptions are explicit and auditable."
+        - "Temporary exceptions cannot become permanent silently."
+        - "High-risk exceptions require proper authority."
+      questions:
+        - "When can a standard be waived?"
+        - "Who can approve exceptions?"
+        - "How is exception risk recorded?"
+        - "How are exceptions tracked, reviewed, and expired?"
+        - "What mitigation or cleanup plan is required?"
+        - "What standards cannot be waived without release-risk acceptance?"
+    - id: "ownership-and-maintenance"
+      title: "Ownership and Maintenance"
+      intent: "Define who owns standards, how they evolve, review cadence, deprecation process, onboarding expectations, and standards drift monitoring."
+      required: true
+      outputGuidance:
+        - "Assign ownership for standards categories."
+        - "Define how standards change over time."
+        - "State onboarding and drift-control expectations."
+      qualityChecks:
+        - "Standards have maintainers."
+        - "Standards evolution is intentional, not accidental."
+        - "Deprecated standards and stale rules are cleaned up."
+      questions:
+        - "Who owns engineering standards?"
+        - "How are standards proposed, changed, deprecated, and removed?"
+        - "What review cadence applies?"
+        - "How are new contributors onboarded into standards?"
+        - "How is standards drift detected?"
+        - "How are outdated standards cleaned up?"
     - id: "standards-risks"
       title: "Standards Risks"
-      intent: "Identify risks of the chosen standards and which standards are most likely to be inconsistently applied."
+      intent: "Identify risks of the chosen standards, including inconsistency, over-strictness, under-enforcement, tool drift, review bottlenecks, exception abuse, and operational burden."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use standards risk records for material risks."
+        - "Describe risks as concrete standards failure modes."
+        - "Include early signal, mitigation, owner, and downstream impact."
+      qualityChecks:
+        - "Risks are specific enough to mitigate or accept."
+        - "Both too much and too little process are considered."
+        - "Standards most likely to drift are identified."
       questions:
         - "What are the risks of the chosen standards?"
         - "Which standards are most likely to be inconsistently applied?"
+        - "Where could standards be too strict and slow delivery?"
+        - "Where could standards be too weak and allow quality erosion?"
+        - "Where could tooling drift from documented rules?"
+        - "What mitigations are needed?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what Operations documents must inherit from Engineering Standards and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route standards outputs to the correct Operations documents."
+        - "Separate operating model, maintenance, release management, support, and risk implications."
+        - "Preserve unresolved standards questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Operations documents are not allowed to invent missing engineering governance silently."
+        - "Engineering standards and operational procedures remain distinct but connected."
+      questions:
+        - "What should Operating Model inherit from Engineering Standards?"
+        - "What should Maintenance Plan inherit?"
+        - "What should Release Management inherit?"
+        - "What should Support Model inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved standards questions must be carried forward?"

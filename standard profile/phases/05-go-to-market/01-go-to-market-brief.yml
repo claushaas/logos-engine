@@ -4,108 +4,544 @@ document:
   phase: "05-go-to-market"
   status: "not_started"
   order: 1
-  type: "go_to_market"
-  purpose: "Commercial axis synthesis defining the market entry thesis."
-  centralQuestion: "What is the market entry thesis?"
+  type: "go_to_market_brief"
+  purpose: "Define the initial market-entry thesis, including commercial objective, target market, beachhead segment, ICP, positioning, channel strategy, launch motion, revenue motion, success criteria, constraints, risks, and downstream GTM handoff."
+  centralQuestion: "What is the most credible, focused, and testable way to bring this product into the market?"
   outputs:
     canonical:
       format: "markdown"
-      path: "05-go-to-market/01-go-to-market-brief.md"
-      purpose: "Synthesised go-to-market brief answering the market entry thesis."
-  dependsOn: []
-  feeds: []
+      path: "docs/05-go-to-market/01-go-to-market-brief.md"
+      purpose: "Store the canonical go-to-market brief as a Markdown document."
+    artifacts:
+      - id: "gtm.go_to_market_brief_summary"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/go-to-market-brief-summary.html"
+        purpose: "Provide a concise founder-facing GTM brief covering objective, market thesis, ICP, positioning, channels, launch motion, revenue motion, success criteria, risks, and next documents."
+        audience: "founder"
+        includes:
+          - "GTM objective"
+          - "product and readiness context"
+          - "market-entry thesis"
+          - "target market"
+          - "beachhead segment"
+          - "primary customer"
+          - "primary use case"
+          - "positioning thesis"
+          - "category strategy"
+          - "channel thesis"
+          - "launch strategy"
+          - "revenue motion"
+          - "success criteria"
+          - "go/no-go criteria"
+          - "GTM constraints"
+          - "GTM risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.go_to_market_brief_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/go-to-market-brief-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the GTM thesis is focused, realistic, testable, product-aligned, technically honest, and ready to feed positioning, channels, launch, pricing, content, sales, partnerships, and analytics docs."
+        agentRole: "reviewer"
+        includes:
+          - "canonical GTM brief"
+          - "foundation dependency"
+          - "validation dependency"
+          - "product dependency"
+          - "engineering readiness dependency"
+          - "GTM formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-vision"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/01-validation-brief"
+    - "02-validation/04-market-scan"
+    - "02-validation/05-competitive-analysis"
+    - "02-validation/06-customer-discovery"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-user-personas"
+    - "03-product/03-user-journeys"
+    - "03-product/04-value-proposition"
+    - "03-product/08-product-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+  feeds:
+    - "05-go-to-market/02-positioning-and-messaging"
+    - "05-go-to-market/03-audience-and-segmentation"
+    - "05-go-to-market/04-channel-strategy"
+    - "05-go-to-market/05-launch-plan"
+    - "05-go-to-market/06-pricing-and-packaging"
+    - "05-go-to-market/07-content-strategy"
+    - "05-go-to-market/08-sales-motion"
+    - "05-go-to-market/09-partnerships-and-distribution"
+    - "05-go-to-market/10-growth-experiments"
+    - "05-go-to-market/11-gtm-analytics"
+    - "05-go-to-market/12-gtm-risks"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "foundation-context"
+      type: "context"
+      required: false
+      description: "Vision, problem definition, audience, principles, boundaries, success definition, and foundational constraints that GTM must preserve."
+    - id: "validation-context"
+      type: "context"
+      required: false
+      description: "Market scan, competitive analysis, customer discovery, validation findings, decision records, validation report, and unresolved validation assumptions."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Product brief, value proposition, personas, journeys, scope, functional requirements, NFRs, acceptance criteria, and readiness constraints."
+    - id: "engineering-context"
+      type: "context"
+      required: false
+      description: "Engineering readiness, deployment constraints, known technical risks, release constraints, operational implications, and claims that GTM must not overpromise."
+    - id: "gtm-notes"
+      type: "manual_note"
+      required: false
+      description: "Founder assumptions, target segment ideas, launch preferences, pricing ideas, channel hypotheses, community/context assets, sales constraints, and unresolved GTM questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through a focused, testable market-entry thesis."
+    - "GTM objective identifies the commercial or validation outcome, priority, time horizon, and what is intentionally not optimized in the first market entry."
+    - "Product and readiness context states what can be truthfully launched, what is still unavailable, what claims are currently unsupported, and what readiness constraints shape GTM."
+    - "Market-entry thesis defines why this product, why this market, why now, why this segment first, why this channel, and why this offer."
+    - "Target market and beachhead segment are narrowed enough to guide messaging, channels, pricing, launch sequence, and success metrics."
+    - "Primary customer profile includes pains, triggers, current alternatives, willingness-to-pay or willingness-to-adopt signals, objections, buying/user role, urgency, and observable qualification signals."
+    - "Primary use case connects customer pain to product value, activation moment, success moment, retention reason, and proof needed."
+    - "Positioning thesis defines category, frame of reference, alternatives, differentiated value, proof points, anti-positioning, and claims to avoid."
+    - "Channel thesis identifies primary and secondary acquisition channels, rationale, repeatability assumptions, owned/earned/paid/community distribution, and why other channels are deferred."
+    - "Launch strategy defines launch type, sequencing, audience, offer, timing, readiness gates, feedback loops, and operational constraints."
+    - "Revenue motion defines monetization model, packaging hypothesis, pricing hypothesis, conversion path, sales motion, trial/freemium/demo/payment assumptions, and validation needed."
+    - "Success criteria define leading indicators, lagging indicators, qualitative evidence, quantitative thresholds, go/no-go criteria, and timeframe."
+    - "GTM constraints include product constraints, engineering constraints, budget constraints, team capacity constraints, brand/ethics constraints, support constraints, and legal/compliance review needs where relevant."
+    - "GTM risks are concrete, source-linked, impact-aware, and routed to downstream GTM or Operations documents."
+    - "Downstream handoff clarifies what positioning, audience, channels, launch, pricing, content, sales, partnerships, experiments, analytics, risks, support, and release management must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid GTM theater: broad market language without beachhead, channel logic, offer, proof, timing, constraints, and measurable success criteria."
+    - "Avoid pretending a product is ready for promises that Product, Engineering, Acceptance Criteria, Deployment, or Technical Risks do not support."
+    - "Avoid choosing a broad audience before identifying a narrow first segment."
+    - "Avoid channel wishlists; every channel must include why it can work now and what must be true for it to repeat."
+    - "Avoid positioning by feature list rather than customer context, alternatives, category, pain, differentiated outcome, and proof."
+    - "Avoid pricing assumptions without willingness-to-pay, willingness-to-adopt, value metric, or validation plan."
+    - "Avoid success metrics that are vanity-only or disconnected from the launch objective."
+    - "Avoid hiding operational burden, support burden, onboarding friction, technical limitations, or reputational risk."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent market evidence, customer proof, revenue numbers, competitor facts, legal claims, compliance status, or launch readiness."
+    - "GTM must preserve Foundation principles, validated evidence, product scope, acceptance criteria, technical truth, support capacity, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate evidence, assumption, hypothesis, decision, constraint, and risk."
+    - "Tie GTM claims to Foundation, Validation, Product, Engineering, Acceptance Criteria, Deployment, Technical Risks, or Decision Record where possible."
+    - "Classify GTM choices as committed, provisional, hypothesis, deferred, rejected, review-needed, MVP-launch, post-launch, or blocked where useful."
+    - "State what must be proven during launch versus what can be assumed temporarily."
+    - "Route detailed messaging, segmentation, channel plans, launch tasks, pricing tables, sales scripts, partnerships, experiments, analytics, and GTM risks to downstream GTM documents."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Foundation, Validation, Product, Engineering, Acceptance Criteria, Deployment, Technical Risks, or Decision Record."
+    - "Flag any claim that overstates product readiness, technical capability, customer evidence, market proof, compliance, revenue expectation, or channel repeatability."
+    - "Flag audiences that are too broad to guide launch decisions."
+    - "Flag channels without rationale, repeatability assumption, cost/capacity implication, or validation metric."
+    - "Flag positioning that lacks frame of reference, alternative, differentiation, proof, or anti-positioning."
+    - "Flag launch strategy without readiness gate, feedback loop, timeline, operational support, or go/no-go criteria."
+    - "Flag revenue motion without conversion path, pricing/packaging hypothesis, value metric, or validation plan."
+    - "Verify that downstream GTM documents receive concrete handoff inputs."
+    - "Flag content that belongs better in Positioning, Audience Segmentation, Channel Strategy, Launch Plan, Pricing, Content Strategy, Sales Motion, Partnerships, Experiments, Analytics, Risk Management, or Operations."
+  specializedFormats:
+    gtmThesisFormat:
+      description: "Recommended format for the market-entry thesis."
+      fields:
+        - thesis
+        - targetMarket
+        - beachheadSegment
+        - primaryCustomer
+        - primaryPain
+        - productPromise
+        - primaryChannel
+        - launchMotion
+        - revenueMotion
+        - proofNeeded
+        - biggestAssumption
+        - status
+    customerProfileFormat:
+      description: "Recommended format for first-customer profile."
+      fields:
+        - segment
+        - customerType
+        - pain
+        - trigger
+        - currentAlternative
+        - urgencySignal
+        - willingnessSignal
+        - objection
+        - qualificationSignal
+        - disqualificationSignal
+        - evidenceStatus
+    channelHypothesisFormat:
+      description: "Recommended format for channel hypotheses."
+      fields:
+        - channel
+        - role
+        - rationale
+        - audienceFit
+        - repeatabilityAssumption
+        - costOrCapacityConstraint
+        - requiredAssets
+        - validationMetric
+        - failureSignal
+        - status
+    launchMotionFormat:
+      description: "Recommended format for launch motion decisions."
+      fields:
+        - launchType
+        - targetAudience
+        - offer
+        - sequence
+        - readinessGate
+        - feedbackLoop
+        - supportImplication
+        - timeline
+        - goNoGoCriteria
+        - status
+    revenueMotionFormat:
+      description: "Recommended format for revenue motion hypothesis."
+      fields:
+        - model
+        - packagingHypothesis
+        - pricingHypothesis
+        - valueMetric
+        - conversionPath
+        - paymentMoment
+        - trialOrDemoPolicy
+        - salesTouch
+        - validationNeeded
+        - risk
+    gtmSuccessMetricFormat:
+      description: "Recommended format for GTM success metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - baseline
+        - target
+        - timeframe
+        - measurementMethod
+        - decisionImplication
+        - owner
+        - status
+    gtmRiskFormat:
+      description: "Recommended format for GTM brief risks."
+      fields:
+        - risk
+        - category
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - downstreamDocument
+        - releaseOrLaunchImpact
   sections:
     - id: "gtm-objective"
       title: "GTM Objective"
-      intent: "Clarify the commercial outcome this launch must achieve."
+      intent: "Clarify the primary outcome this market entry must achieve and what it should not try to optimize yet."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State the primary launch objective in one clear sentence."
+        - "Classify the objective as validation, acquisition, revenue, awareness, community-building, waitlist generation, retention learning, or another explicit outcome."
+        - "Define the time horizon and what is intentionally out of scope for the first GTM motion."
+      qualityChecks:
+        - "The objective is specific enough to choose metrics and channels."
+        - "The objective does not try to optimize everything at once."
+        - "The objective is aligned with product readiness and technical truth."
       questions:
-        - "What commercial outcome must this launch achieve?"
-        - "Is the priority acquisition, revenue, awareness, or validation?"
-    - id: "product-context"
-      title: "Product Context"
-      intent: "Establish what the product is and its development stage."
+        - "What outcome must this market entry achieve first?"
+        - "Is the priority validation, acquisition, revenue, awareness, community-building, waitlist generation, retention learning, or something else?"
+        - "What is the time horizon for judging the first GTM motion?"
+        - "What should this launch intentionally not optimize yet?"
+        - "What would make this first GTM motion a failure?"
+    - id: "product-and-readiness-context"
+      title: "Product and Readiness Context"
+      intent: "Establish what can be truthfully offered to the market now, what is not ready, and what constraints GTM must respect."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe the product and current readiness stage."
+        - "State what is ready, what is partial, what is manual, what is deferred, and what must not be promised."
+        - "Tie launch claims to Acceptance Criteria, Deployment, and Technical Risks where possible."
+      qualityChecks:
+        - "No launch claim exceeds product or engineering readiness."
+        - "Manual or concierge work is labeled if part of launch."
+        - "Unsupported claims are explicitly avoided."
       questions:
         - "What is the product and what does it do?"
-        - "What stage is the product at (pre-alpha, alpha, beta, GA)?"
+        - "What stage is the product in: concept, prototype, alpha, beta, limited launch, GA, or another stage?"
+        - "What is actually ready to be shown, used, sold, or tested?"
+        - "What remains manual, mocked, limited, unstable, or unavailable?"
+        - "What claims must GTM avoid because the product or engineering work does not yet support them?"
+    - id: "market-entry-thesis"
+      title: "Market Entry Thesis"
+      intent: "State the focused hypothesis explaining why this product can enter this market through this segment, channel, offer, and timing."
+      required: true
+      outputGuidance:
+        - "Use the GTM thesis format where useful."
+        - "Include why this product, why this audience, why this segment first, why this channel, why this offer, and why now."
+        - "Separate evidence from assumptions."
+      qualityChecks:
+        - "The thesis is testable."
+        - "The thesis is narrow enough to guide downstream GTM decisions."
+        - "The biggest assumption is explicit."
+      questions:
+        - "What is the market-entry thesis?"
+        - "Why this product?"
+        - "Why this market?"
+        - "Why this segment first?"
+        - "Why this channel?"
+        - "Why this offer?"
+        - "Why now?"
+        - "What is the biggest assumption behind the thesis?"
     - id: "target-market"
       title: "Target Market"
-      intent: "Identify the initial beachhead segment and the rationale."
+      intent: "Define the broader market context while keeping the first GTM move focused."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe the market category or context without over-sizing or inventing market data."
+        - "State market boundaries and excluded markets."
+        - "Identify why the market matters for this product."
+      qualityChecks:
+        - "Target market is bounded."
+        - "Claims are evidence-based or marked as assumptions."
+        - "The market description does not replace beachhead segmentation."
+      questions:
+        - "What broader market or market context is this product entering?"
+        - "What is inside and outside the target market?"
+        - "What market pain, shift, behavior, or constraint makes this product relevant?"
+        - "What market evidence supports this choice?"
+        - "What market assumptions remain unvalidated?"
+    - id: "beachhead-segment"
+      title: "Beachhead Segment"
+      intent: "Identify the narrow first segment where the product has the strongest initial chance of adoption, learning, or revenue."
+      required: true
+      outputGuidance:
+        - "Define the beachhead as narrowly as useful."
+        - "Explain why this segment comes before adjacent segments."
+        - "Identify inclusion and exclusion criteria."
+      qualityChecks:
+        - "Beachhead is specific enough to guide copy, channel, offer, and outreach."
+        - "Rationale includes urgency, access, pain, willingness, or evidence."
+        - "Deferred adjacent segments are named where useful."
       questions:
         - "Who is the initial beachhead segment?"
         - "Why start here instead of elsewhere?"
+        - "What makes this segment more urgent, reachable, painful, valuable, or validated than alternatives?"
+        - "Who is explicitly not in the first segment?"
+        - "What adjacent segments are deferred?"
     - id: "primary-customer"
       title: "Primary Customer"
-      intent: "Profile the ideal first customer and observable fit signals."
+      intent: "Profile the ideal first customer and the observable signals that qualify or disqualify them."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the customer profile format where useful."
+        - "Distinguish buyer, user, evaluator, influencer, and champion when relevant."
+        - "Include observable fit and disqualification signals."
+      qualityChecks:
+        - "The customer profile is behavioral, not only demographic."
+        - "Fit signals are observable."
+        - "Objections and alternatives are included."
       questions:
         - "Who is the ideal first customer?"
-        - "What observable signal makes them a good fit?"
+        - "What pain or desire makes them a strong fit?"
+        - "What trigger makes them likely to act now?"
+        - "What are they using or doing today instead?"
+        - "What observable signal qualifies them?"
+        - "What observable signal disqualifies them?"
+        - "What objections are likely?"
+    - id: "primary-use-case"
+      title: "Primary Use Case"
+      intent: "Define the first use case that should drive messaging, onboarding, activation, and value proof."
+      required: true
+      outputGuidance:
+        - "Describe the use case from the customer's context, not from the product feature list."
+        - "Connect pain, moment of need, product action, value moment, and proof."
+        - "State what use cases are deferred."
+      qualityChecks:
+        - "Use case is concrete enough to shape onboarding and launch copy."
+        - "Activation and success moments are explicit."
+        - "Deferred use cases are not mixed into the first launch."
+      questions:
+        - "What first use case should GTM lead with?"
+        - "What customer situation triggers this use case?"
+        - "What does the customer need to accomplish?"
+        - "What product action creates the value moment?"
+        - "What proves that the use case worked?"
+        - "What use cases are intentionally deferred?"
     - id: "core-positioning"
       title: "Core Positioning"
-      intent: "Define how the product will be perceived and categorised."
+      intent: "Define how the product should be understood relative to category, alternatives, pain, outcome, and proof."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State the positioning thesis without writing final marketing copy."
+        - "Include frame of reference, alternatives, differentiated value, proof points, and claims to avoid."
+        - "Route final messaging to Positioning and Messaging."
+      qualityChecks:
+        - "Positioning is not just a tagline."
+        - "The product is positioned against real alternatives."
+        - "Unsupported or inflated claims are excluded."
       questions:
-        - "How will the product be perceived relative to alternatives?"
-        - "What category does it claim?"
-    - id: "primary-channel"
-      title: "Primary Channel"
-      intent: "Identify how first customers will arrive and why it is defensible."
+        - "How should the product be perceived relative to alternatives?"
+        - "What category or frame of reference does it claim?"
+        - "What current alternatives does it replace, complement, or challenge?"
+        - "What differentiated outcome should the customer believe?"
+        - "What proof supports that belief?"
+        - "What claims should be avoided?"
+    - id: "channel-thesis"
+      title: "Channel Thesis"
+      intent: "Define how the first qualified customers will arrive and why the selected channel can work now."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the channel hypothesis format where useful."
+        - "Identify primary, secondary, deferred, and rejected channels."
+        - "State channel repeatability assumptions and validation metrics."
+      qualityChecks:
+        - "Primary channel is justified by audience access and founder/project constraints."
+        - "Channel strategy is not a wishlist."
+        - "Deferred or rejected channels include rationale."
       questions:
-        - "Through which channel will the first customers arrive?"
-        - "Why is this channel defensible or repeatable?"
+        - "Through which primary channel will first customers arrive?"
+        - "Why is this channel plausible now?"
+        - "What secondary channels support it?"
+        - "What channels are deferred or rejected for now?"
+        - "What must be true for the channel to become repeatable?"
+        - "What metric validates or invalidates the channel?"
     - id: "launch-strategy"
       title: "Launch Strategy"
-      intent: "Outline the launch type, sequence, and timeline."
+      intent: "Outline the launch type, sequence, readiness gates, feedback loops, timeline, support implications, and go/no-go criteria."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the launch motion format where useful."
+        - "Define launch type: private alpha, waitlist, beta, concierge, community launch, content-led launch, Product Hunt-style launch, partner launch, public GA, or hybrid."
+        - "Keep tactical launch tasks for the Launch Plan."
+      qualityChecks:
+        - "Launch strategy fits readiness and support capacity."
+        - "Readiness gates and feedback loops are explicit."
+        - "Timeline is concrete or marked unresolved."
       questions:
         - "What type of launch is planned?"
-        - "What is the launch sequence and timeline?"
+        - "What is the launch sequence?"
+        - "What readiness gates must be met before launch?"
+        - "What feedback loops are required during launch?"
+        - "What support or operational burden does launch create?"
+        - "What is the launch timeline?"
+        - "What are the go/no-go criteria?"
     - id: "revenue-motion"
       title: "Revenue Motion"
-      intent: "Describe how the product generates revenue and the motion type."
+      intent: "Describe how revenue is expected to happen, what pricing/packaging assumptions exist, and what must be validated."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the revenue motion format where useful."
+        - "Identify monetization model, pricing hypothesis, packaging hypothesis, value metric, conversion path, and validation needed."
+        - "Route detailed price table and packaging to Pricing and Packaging."
+      qualityChecks:
+        - "Revenue motion matches customer behavior and product readiness."
+        - "Pricing is treated as hypothesis unless validated."
+        - "Conversion path is explicit."
       questions:
         - "How will the product generate revenue?"
-        - "Is the motion self-serve, sales-led, or hybrid?"
+        - "Is the motion self-serve, sales-led, founder-led, product-led, community-led, partner-led, or hybrid?"
+        - "What is the initial pricing and packaging hypothesis?"
+        - "What is the value metric?"
+        - "What is the conversion path from first touch to payment?"
+        - "What must be validated before treating the revenue motion as real?"
     - id: "gtm-success-criteria"
       title: "GTM Success Criteria"
-      intent: "Define the metrics and thresholds for a successful market entry."
+      intent: "Define measurable and qualitative success criteria for judging the first GTM motion."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use the GTM success metric format where useful."
+        - "Separate leading indicators, lagging indicators, qualitative signals, quantitative thresholds, and go/no-go criteria."
+        - "Tie metrics to the GTM objective."
+      qualityChecks:
+        - "Metrics are not vanity-only."
+        - "Thresholds and timeframe are explicit or marked unresolved."
+        - "Success criteria lead to decisions."
       questions:
-        - "What metrics define a successful market entry?"
-        - "What is the threshold for go / no-go after the initial push?"
+        - "What metrics define successful market entry?"
+        - "What leading indicators should be watched early?"
+        - "What lagging indicators prove meaningful traction?"
+        - "What qualitative evidence matters?"
+        - "What thresholds define go, iterate, pause, or stop?"
+        - "What is the timeframe for judging success?"
+    - id: "gtm-constraints"
+      title: "GTM Constraints"
+      intent: "Identify constraints that shape or limit GTM claims, timing, channels, launch type, pricing, support, and growth motion."
+      required: true
+      outputGuidance:
+        - "Classify constraints by product, engineering, budget, team/capacity, support, brand, ethics, legal/compliance, market, and operational categories."
+        - "State how each constraint affects GTM decisions."
+        - "Do not treat constraints as blockers unless they actually block launch."
+      qualityChecks:
+        - "Constraints are connected to concrete GTM implications."
+        - "Technical and operational constraints are not hidden."
+        - "Claims and channels respect constraints."
+      questions:
+        - "What product constraints shape GTM?"
+        - "What engineering or deployment constraints shape GTM?"
+        - "What budget, team, support, operational, brand, ethics, legal, or compliance constraints exist?"
+        - "What claims or channels are constrained?"
+        - "What constraints are launch-blocking versus manageable?"
+    - id: "gtm-risks"
+      title: "GTM Risks"
+      intent: "Identify risks in the market-entry thesis and route them to downstream GTM or Operations documents."
+      required: true
+      outputGuidance:
+        - "Use the GTM risk format for material risks."
+        - "Include customer, positioning, channel, launch, pricing, conversion, support, product-readiness, technical-truth, and reputational risks."
+        - "State early signal and mitigation."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Risks are routed to downstream documents."
+        - "Known technical/product limitations are represented honestly."
+      questions:
+        - "What are the biggest risks in the GTM thesis?"
+        - "Where could customer targeting be wrong?"
+        - "Where could positioning fail?"
+        - "Where could channel assumptions fail?"
+        - "Where could launch create support, trust, technical, or reputational risk?"
+        - "What early signals indicate the GTM motion is not working?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from the GTM Brief and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route GTM brief outputs to the correct downstream documents."
+        - "Separate positioning, audience, channels, launch, pricing, content, sales, partnerships, experiments, analytics, risk, release, support, and operations implications."
+        - "Preserve unresolved GTM questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing GTM assumptions silently."
+        - "Strategic GTM thesis and downstream tactical execution remain distinct."
+      questions:
+        - "What should Positioning and Messaging inherit?"
+        - "What should Audience and Segmentation inherit?"
+        - "What should Channel Strategy inherit?"
+        - "What should Launch Plan inherit?"
+        - "What should Pricing and Packaging inherit?"
+        - "What should Content Strategy, Sales Motion, Partnerships, Growth Experiments, and GTM Analytics inherit?"
+        - "What should GTM Risks, Release Management, Support Model, and Operations inherit?"
+        - "What unresolved GTM questions must be carried forward?"

@@ -5,116 +5,737 @@ document:
   status: "not_started"
   order: 7
   type: "operational_metrics"
-  purpose: "Define how to measure operational health with quantitative metrics."
-  centralQuestion: "How to measure operational health?"
-  dependsOn: []
-  feeds: []
+  purpose: "Define the operational measurement system used to monitor reliability, support, customer success, release quality, maintenance, business processes, financial operations, data/privacy operations, cost, capacity, SLA/SLO performance, risks, and continuous improvement."
+  centralQuestion: "Which operational metrics show whether the system is healthy, overloaded, unsafe, unreliable, costly, stale, risky, or improving, and what actions should follow when thresholds are crossed?"
   outputs:
     canonical:
       format: "markdown"
-      path: "06-operations/07-operational-metrics.md"
-      purpose: "Complete operational metrics definition covering support, reliability, quality, financial, customer success, process, cost, SLA/SLO metrics, and review rules."
+      path: "docs/06-operations/07-operational-metrics.md"
+      purpose: "Store the canonical operational metrics specification as a Markdown document."
+    artifacts:
+      - id: "operations.operational_metrics_dashboard_spec"
+        format: "html"
+        path: "outcomes/html/06-operations/operational-metrics-dashboard-spec.html"
+        purpose: "Provide a founder-facing operational metrics dashboard specification covering metric taxonomy, definitions, formulas, data sources, owners, thresholds, review cadence, alerts, SLO/SLA reporting, data quality, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "operational health objective"
+          - "metric taxonomy"
+          - "metric inventory"
+          - "health scorecard"
+          - "support metrics"
+          - "customer success metrics"
+          - "reliability metrics"
+          - "incident metrics"
+          - "release metrics"
+          - "maintenance metrics"
+          - "business process metrics"
+          - "financial operations metrics"
+          - "data and privacy metrics"
+          - "cost and capacity metrics"
+          - "SLA and SLO metrics"
+          - "guardrail metrics"
+          - "metric thresholds"
+          - "metric ownership"
+          - "reporting cadence"
+          - "alerting and escalation"
+          - "data quality checks"
+          - "metric risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.operational_metrics_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/operational-metrics-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether operational metrics are complete, formula-defined, source-backed, owner-assigned, thresholded, cadence-aware, escalation-ready, data-quality-aware, and properly handed off downstream."
+        agentRole: "reviewer"
+        includes:
+          - "canonical operational metrics"
+          - "operations brief dependency"
+          - "operating model dependency"
+          - "team responsibilities dependency"
+          - "customer support dependency"
+          - "customer success dependency"
+          - "business processes dependency"
+          - "engineering observability dependency"
+          - "operational metric formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/06-success-definition"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/12-growth-metrics"
+    - "05-go-to-market/13-go-to-market-risks"
+    - "06-operations/01-operations-brief"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-team-and-responsibilities"
+    - "06-operations/04-customer-support"
+    - "06-operations/05-customer-success"
+    - "06-operations/06-business-processes"
+  feeds:
+    - "06-operations/08-maintenance-plan"
+    - "06-operations/09-release-management"
+    - "06-operations/10-incident-response"
+    - "06-operations/11-data-and-privacy-operations"
+    - "06-operations/12-financial-operations"
+    - "06-operations/13-risk-management"
+  inputs:
+    - id: "operations-brief"
+      type: "context"
+      required: false
+      description: "Operations objective, critical operational functions, service expectations, support expectations, incident expectations, maintenance expectations, release expectations, data/privacy operations, cost/capacity constraints, operational success criteria, and operational risks."
+    - id: "operating-model"
+      type: "context"
+      required: false
+      description: "Operating scope, roles, cadences, workflows, manual operations, automated operations, dependencies, decision rights, escalation paths, operational metrics, constraints, and operating model risks."
+    - id: "team-and-responsibilities"
+      type: "context"
+      required: false
+      description: "Metric owners, backup owners, decision authority, escalation owners, reporting responsibility, owner gaps, and responsibility risks."
+    - id: "customer-support"
+      type: "context"
+      required: false
+      description: "Support channels, ticket categories, priorities, response targets, escalation rules, bug flow, known issues, support feedback loop, support metrics, and support risks."
+    - id: "customer-success"
+      type: "context"
+      required: false
+      description: "Lifecycle, onboarding, activation milestones, health signals, retention actions, expansion opportunities, satisfaction measurement, churn analysis, customer success metrics, and customer success risks."
+    - id: "business-processes"
+      type: "context"
+      required: false
+      description: "Process inventory, process ownership, triggers, process controls, process metrics, review cadence, and process risks."
+    - id: "engineering-observability-context"
+      type: "context"
+      required: false
+      description: "Observability strategy, telemetry sources, logs, traces, metrics, alerts, dashboards, deployment environments, NFRs, SLO candidates, technical risks, and data quality constraints."
+    - id: "pricing-finance-context"
+      type: "context"
+      required: false
+      description: "Pricing model, payment flow, subscription terms, failed payment handling, refunds, discounts, billing process assumptions, revenue metrics, and financial operations risks."
+    - id: "operational-metric-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate metrics, dashboard ideas, thresholds, reporting cadence, alerting rules, operational concerns, data source notes, owners, and unresolved measurement questions."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered through an operational metrics system with metric taxonomy, inventory, formulas, sources, thresholds, owners, cadence, escalation, data quality, risks, and downstream handoff."
+    - "Operational health objective defines what metrics must protect: reliability, supportability, customer trust, release safety, maintenance freshness, process repeatability, financial correctness, data/privacy safety, cost control, capacity, and continuous improvement."
+    - "Metric taxonomy classifies metrics by domain, metric type, operational criticality, customer-facing status, SLA/SLO relevance, privacy sensitivity, financial sensitivity, alertability, and dashboard readiness."
+    - "Metric inventory lists every material metric with purpose, formula/measurement, source, owner, backup owner, cadence, threshold, segmentation, decision implication, caveat, and downstream document."
+    - "Health scorecard defines a compact set of top-level operational indicators, including green/yellow/red interpretation, review owner, review cadence, and action triggered."
+    - "Support metrics define ticket volume, first response, update cadence, resolution time, backlog, reopen rate, escalation rate, bug rate, known issue volume, billing/refund volume, support burden, and quality/satisfaction signals."
+    - "Customer success metrics define onboarding completion, activation, time-to-value, health signals, at-risk customers, retention, churn, expansion, satisfaction, intervention success, and feedback loop metrics."
+    - "Reliability metrics define availability, uptime, error rate, latency, performance, failed jobs, dependency health, data integrity, queue/backlog health, and user-impacting degradation signals."
+    - "Incident metrics define incident count, severity distribution, detection time, acknowledgement time, mitigation time, resolution time, recurrence, post-incident action completion, customer communication timeliness, and incident trend."
+    - "Release metrics define release frequency, deployment success rate, rollback rate, hotfix rate, failed release checks, post-release incidents, release lead time, release quality, and release communication readiness."
+    - "Maintenance metrics define dependency freshness, documentation freshness, backup/restore check status, security/privacy review freshness, observability review freshness, automation review freshness, and stale operational asset indicators."
+    - "Business process metrics define process completion time, backlog, failure rate, exception rate, manual intervention rate, rework, customer impact, automation reliability, control failure, and process review completion."
+    - "Financial operations metrics define failed payment rate, payment recovery, refund rate, chargeback rate, billing error rate, invoice/receipt issue rate, discount exception rate, subscription state errors, and finance support burden."
+    - "Data and privacy metrics define data request volume, export/deletion completion time, verification failures, access review completion, privacy incident count, sensitive-data exposure events, telemetry/log review, and retention/deletion control health."
+    - "Cost and capacity metrics define infrastructure cost, vendor/tooling cost, support cost, manual work burden, cost per active user/customer, observability cost, billing/payment cost, capacity utilization, and overload signals."
+    - "SLA and SLO metrics define service objectives, service level indicators, targets, measurement windows, error budgets where useful, reporting rules, breach conditions, and customer-facing versus internal target distinction."
+    - "Guardrail metrics define limits that prevent harmful optimization, including support overload, poor quality, release instability, privacy risk, financial error, incident recurrence, excessive manual work, cost spikes, and customer trust degradation."
+    - "Metric thresholds define target, warning, critical, breach, go/no-go, review, escalation, pause/rollback, and risk-review thresholds where useful."
+    - "Metric ownership defines definition owner, implementation owner, dashboard owner, QA owner, review owner, action owner, escalation owner, and backup owner for critical metrics."
+    - "Reporting cadence defines launch-window, daily, weekly, monthly, release-cycle, incident-triggered, support-review, process-review, financial-review, privacy-review, and risk-review reporting where relevant."
+    - "Alerting and escalation define which metrics alert, alert channel, severity, owner, backup, acknowledgement target, escalation rule, customer communication trigger, and downstream procedure."
+    - "Data quality checks define how metrics are validated, what missing/stale/inconsistent data means, who owns QA, what caveats apply, and when metrics are not decision-safe."
+    - "Metric risks identify vanity metrics, misleading thresholds, bad data, missing instrumentation, owner gaps, alert fatigue, metric gaming, privacy-invasive measurement, financial mismeasurement, and over-optimization risks."
+    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid metric theater: metric names without formula, source, owner, cadence, threshold, action, caveat, and downstream document."
+    - "Avoid targets or SLAs/SLOs that are invented, unsupported, unaffordable, unobservable, or not backed by team capacity and tooling."
+    - "Avoid confusing internal targets with customer-facing promises."
+    - "Avoid measuring only speed while ignoring quality, correctness, trust, privacy, support burden, and cost."
+    - "Avoid metrics that incentivize support deflection, rushed releases, hidden incidents, denied refunds, hostile cancellation, privacy-invasive tracking, or low-quality growth."
+    - "Avoid operational dashboards without data quality checks and owner accountability."
+    - "Avoid alerting rules without severity, owner, backup, acknowledgement expectation, and escalation path."
+    - "Avoid cost metrics that ignore manual work, vendor costs, observability costs, billing/payment costs, and support burden."
+    - "Avoid privacy/data metrics that expose sensitive data or require unnecessary personal data collection."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent baselines, targets, thresholds, SLAs, SLOs, error budgets, cost numbers, staffing coverage, dashboard readiness, data source availability, or alert reliability."
+    - "Operational metrics must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate metric, formula, source, owner, cadence, threshold, segmentation, action, alert, caveat, risk, and handoff."
+    - "Tie metrics to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Observability, Deployment, NFRs, Technical Risks, Pricing, Growth Metrics, GTM Risks, or Decision Record where possible."
+    - "Classify metrics as current, required, deferred, blocked, dashboard-ready, alert-ready, internal-target, customer-facing, SLI, SLO, SLA, guardrail, privacy-sensitive, financial-sensitive, review-needed, or downstream-owned where useful."
+    - "State whether each metric is measured automatically, manually, estimated, unavailable, or requires instrumentation."
+    - "Route detailed dashboard implementation, alert implementation, financial reporting, data/privacy reporting, incident reporting, release reporting, and risk governance downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with upstream documents."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Product NFRs, Acceptance Criteria, Security/Privacy, Observability, Deployment, Technical Risks, Pricing, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag metrics without purpose, formula/measurement, source, owner, backup owner, cadence, threshold, caveat, decision implication, and downstream document."
+    - "Flag customer-facing SLA/SLO claims that exceed available instrumentation, support coverage, architecture, release process, or budget."
+    - "Flag alerting rules without severity, owner, backup, acknowledgement expectation, escalation, and customer communication rule."
+    - "Flag metric thresholds without action or review consequence."
+    - "Flag data quality gaps that make metrics unsafe for decisions."
+    - "Flag cost/capacity metrics that omit manual effort, vendor/tooling costs, support load, or observability cost."
+    - "Flag financial/privacy-sensitive metrics without appropriate owner, review, and downstream handoff."
+    - "Verify that downstream Operations documents receive concrete metric handoff inputs."
+    - "Flag content that belongs better in Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+  specializedFormats:
+    metricFormat:
+      description: "Recommended format for operational metric definitions."
+      fields:
+        - metric
+        - domain
+        - metricType
+        - purpose
+        - formulaOrMeasurement
+        - dataSource
+        - measurementMethod
+        - baseline
+        - target
+        - warningThreshold
+        - criticalThreshold
+        - reviewCadence
+        - owner
+        - backupOwner
+        - decisionImplication
+        - caveats
+        - downstreamDocument
+        - status
+    healthScorecardMetricFormat:
+      description: "Recommended format for top-level operational health indicators."
+      fields:
+        - indicator
+        - domain
+        - greenDefinition
+        - yellowDefinition
+        - redDefinition
+        - source
+        - reviewCadence
+        - owner
+        - actionIfYellow
+        - actionIfRed
+        - status
+    sloMetricFormat:
+      description: "Recommended format for SLI/SLO/SLA metrics."
+      fields:
+        - service
+        - sli
+        - sloTarget
+        - slaCommitment
+        - measurementWindow
+        - dataSource
+        - errorBudget
+        - breachCondition
+        - reportingRule
+        - customerFacing
+        - owner
+        - caveat
+        - status
+    thresholdFormat:
+      description: "Recommended format for metric thresholds."
+      fields:
+        - metric
+        - target
+        - warningThreshold
+        - criticalThreshold
+        - breachThreshold
+        - escalationThreshold
+        - pauseOrRollbackThreshold
+        - reviewAction
+        - escalationAction
+        - owner
+        - status
+    metricOwnershipFormat:
+      description: "Recommended format for metric ownership."
+      fields:
+        - metricOrDomain
+        - definitionOwner
+        - implementationOwner
+        - dashboardOwner
+        - QAOwner
+        - reviewOwner
+        - actionOwner
+        - escalationOwner
+        - backupOwner
+        - downstreamDocument
+        - status
+    reportingCadenceFormat:
+      description: "Recommended format for operational metric reporting cadence."
+      fields:
+        - report
+        - cadence
+        - audience
+        - owner
+        - metricsIncluded
+        - inputs
+        - outputs
+        - decisionsSupported
+        - escalationCondition
+        - downstreamDocument
+        - status
+    alertRuleFormat:
+      description: "Recommended format for alerting and escalation rules."
+      fields:
+        - alert
+        - metric
+        - triggerCondition
+        - severity
+        - channel
+        - owner
+        - backupOwner
+        - acknowledgementTarget
+        - escalationRule
+        - customerCommunicationTrigger
+        - downstreamProcedure
+        - status
+    dataQualityCheckFormat:
+      description: "Recommended format for metric data quality checks."
+      fields:
+        - check
+        - metricOrSource
+        - dataQualityRisk
+        - validationMethod
+        - owner
+        - cadence
+        - failureSignal
+        - decisionImpact
+        - remediation
+        - status
+    guardrailMetricFormat:
+      description: "Recommended format for operational guardrail metrics."
+      fields:
+        - guardrail
+        - protectsAgainst
+        - metric
+        - formulaOrMeasurement
+        - source
+        - threshold
+        - escalationRule
+        - owner
+        - downstreamAction
+        - status
+    metricRiskFormat:
+      description: "Recommended format for operational metric risks."
+      fields:
+        - risk
+        - affectedMetric
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - contingency
+        - owner
+        - downstreamDocument
+        - status
+    metricHandoffFormat:
+      description: "Recommended format for downstream metric handoffs."
+      fields:
+        - handoffTarget
+        - metricsToPreserve
+        - thresholdContext
+        - ownerToPreserve
+        - requiredAction
+        - timing
+        - unresolvedQuestion
+        - riskOrConstraint
+        - status
   sections:
     - id: "operational-health-objective"
       title: "Operational Health Objective"
-      intent: "Define what a healthy operation looks like in quantitative terms and how metrics drive decisions."
+      intent: "Define what operational health means numerically and how metrics drive operational decisions."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Open with what operational health means for this project."
+        - "State how metrics protect reliability, supportability, customer trust, release safety, process repeatability, financial correctness, privacy, cost, and capacity."
+        - "State what metrics should not optimize at the expense of customer value or safety."
+      qualityChecks:
+        - "Objective is decision-oriented."
+        - "Objective includes technical, customer, financial, privacy, and capacity dimensions."
+        - "Metric misuse is explicitly constrained."
       questions:
-        - "What does a healthy operation look like in numbers?"
-        - "How are metrics used to drive operational decisions?"
+        - "What does healthy operation look like in measurable terms?"
+        - "What operational decisions should metrics drive?"
+        - "What must metrics protect beyond speed and volume?"
+        - "What metric misuse should be avoided?"
+    - id: "metric-taxonomy"
+      title: "Metric Taxonomy"
+      intent: "Define the categories, types, statuses, sensitivities, and readiness labels used for operational metrics."
+      required: true
+      outputGuidance:
+        - "Define domain categories and metric types."
+        - "Define labels such as internal target, customer-facing, SLI, SLO, SLA, guardrail, privacy-sensitive, financial-sensitive, dashboard-ready, alert-ready, blocked, and review-needed."
+        - "Clarify difference between metric, KPI, SLI, SLO, SLA, target, threshold, alert, and guardrail."
+      qualityChecks:
+        - "Taxonomy prevents confusing internal metrics with external promises."
+        - "Sensitivity and readiness labels are operationally useful."
+        - "SLO/SLA vocabulary is not used loosely."
+      questions:
+        - "How are operational metrics categorized?"
+        - "What metric types exist?"
+        - "What labels indicate SLI, SLO, SLA, guardrail, privacy-sensitive, financial-sensitive, dashboard-ready, or alert-ready metrics?"
+        - "How are metric, KPI, SLI, SLO, SLA, target, threshold, alert, and guardrail different?"
+    - id: "metric-inventory"
+      title: "Metric Inventory"
+      intent: "List every material operational metric with definition, formula, source, owner, cadence, threshold, caveat, and downstream use."
+      required: true
+      outputGuidance:
+        - "Use metric records for every material metric."
+        - "Group metrics by domain."
+        - "Mark metrics as current, required, deferred, blocked, dashboard-ready, alert-ready, or review-needed."
+      qualityChecks:
+        - "Every metric has purpose, formula/source, owner, threshold, cadence, and decision use."
+        - "Unknown baselines and targets are explicit."
+        - "Metrics are not names only."
+      questions:
+        - "What operational metrics must be tracked?"
+        - "What is the formula or measurement method for each metric?"
+        - "What source provides each metric?"
+        - "Who owns each metric?"
+        - "What threshold and action applies?"
+        - "What caveats or unresolved measurement gaps remain?"
+    - id: "health-scorecard"
+      title: "Health Scorecard"
+      intent: "Define the compact top-level operational scorecard used for quick review and escalation."
+      required: true
+      outputGuidance:
+        - "Use health scorecard metric records."
+        - "Keep scorecard small and decision-useful."
+        - "Define green/yellow/red states and actions."
+      qualityChecks:
+        - "Scorecard summarizes health without hiding detail."
+        - "Each indicator has action if yellow/red."
+        - "Scorecard includes customer, technical, support, financial, privacy, and capacity dimensions where relevant."
+      questions:
+        - "What small set of metrics summarizes operational health?"
+        - "What makes each indicator green, yellow, or red?"
+        - "Who reviews the scorecard?"
+        - "What action follows yellow or red status?"
     - id: "support-metrics"
       title: "Support Metrics"
-      intent: "Define ticket volume, first response time, resolution time, and customer satisfaction targets for support."
+      intent: "Define metrics that measure reactive customer support volume, speed, quality, escalation, backlog, and burden."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use metric records."
+        - "Include ticket volume, first response, update cadence, resolution time, backlog, reopen rate, escalation rate, bug rate, known issue volume, billing/refund volume, support burden, and satisfaction/quality."
+        - "Tie to Customer Support."
+      qualityChecks:
+        - "Support metrics include quality and burden, not only speed."
+        - "Response targets are realistic and labeled internal/customer-facing."
+        - "Escalation and backlog health are measured."
       questions:
-        - "What ticket volume, first response time, and resolution time targets exist?"
-        - "How is customer satisfaction with support measured?"
-    - id: "reliability-metrics"
-      title: "Reliability Metrics"
-      intent: "Define uptime, error rate, and incident count targets and how reliability is trended and reviewed."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What uptime, error rate, and incident count targets exist?"
-        - "How is reliability trended and reviewed?"
-    - id: "quality-metrics"
-      title: "Quality Metrics"
-      intent: "Define bug reopen rate, defect density, regression rate targets and quality trending."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What bug reopen rate, defect density, and regression rate targets exist?"
-        - "How is quality trended over time?"
-    - id: "financial-operations-metrics"
-      title: "Financial Operations Metrics"
-      intent: "Define failed payment, refund, and chargeback rate targets for financial operational health."
-      required: true
-      outputGuidance: []
-      qualityChecks: []
-      questions:
-        - "What failed payment rate, refund rate, and chargeback rate targets exist?"
-        - "How is financial operational health measured?"
+        - "What support volume, first response, update cadence, resolution, backlog, reopen, escalation, bug, known issue, billing/refund, and support burden metrics matter?"
+        - "How is support quality or satisfaction measured?"
+        - "What thresholds indicate support overload or trust risk?"
     - id: "customer-success-metrics"
       title: "Customer Success Metrics"
-      intent: "Define churn rate, retention rate, expansion rate targets and account health scoring and trending."
+      intent: "Define metrics that measure proactive value realization, activation, retention, expansion, satisfaction, and churn prevention."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use metric records."
+        - "Include onboarding completion, activation, time-to-value, health, at-risk customers, retention, churn, expansion, satisfaction, intervention success, and feedback loops."
+        - "Tie to Customer Success and Growth Metrics."
+      qualityChecks:
+        - "Customer success metrics reflect value, not shallow activity."
+        - "Health score caveats are explicit."
+        - "Churn and retention signals are actionable."
       questions:
-        - "What churn rate, retention rate, and expansion rate targets exist?"
-        - "How is account health scored and trended?"
-    - id: "process-metrics"
-      title: "Process Metrics"
-      intent: "Define manual intervention rate and process cycle time targets and process efficiency measurement."
+        - "What onboarding, activation, time-to-value, health, at-risk, retention, churn, expansion, satisfaction, intervention, and feedback metrics matter?"
+        - "What thresholds indicate customer success risk?"
+        - "How are metrics segmented by cohort, plan, segment, or lifecycle stage?"
+    - id: "reliability-metrics"
+      title: "Reliability Metrics"
+      intent: "Define metrics that measure system reliability, performance, correctness, degradation, and dependency health."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use metric records."
+        - "Include availability, uptime, error rate, latency, performance, failed jobs, dependency health, data integrity, queue/backlog health, and user-impacting degradation."
+        - "Tie to Engineering Observability and NFRs."
+      qualityChecks:
+        - "Reliability metrics are measurable from real telemetry or marked blocked."
+        - "User-impacting signals are distinguished from internal-only signals."
+        - "Dependency health is included."
       questions:
-        - "What manual intervention rate and process cycle time targets exist?"
-        - "How is process efficiency measured?"
-    - id: "cost-metrics"
-      title: "Cost Metrics"
-      intent: "Define support cost per customer, infrastructure cost per active user targets, and budget tracking."
+        - "What metrics measure availability, uptime, error rate, latency, performance, failed jobs, dependency health, data integrity, and degraded service?"
+        - "What reliability metrics are customer-facing versus internal?"
+        - "What thresholds trigger incident review or escalation?"
+    - id: "incident-metrics"
+      title: "Incident Metrics"
+      intent: "Define metrics that measure incident detection, response, mitigation, resolution, recurrence, communication, and learning."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use metric records."
+        - "Include incident count, severity distribution, time to detect, time to acknowledge, time to mitigate, time to resolve, recurrence, customer communication timing, and post-incident action completion."
+        - "Tie to Incident Response."
+      qualityChecks:
+        - "Incident metrics improve response and learning."
+        - "Severity and recurrence are tracked."
+        - "Customer communication and post-incident actions are included."
       questions:
-        - "What support cost per customer and infrastructure cost per active user targets exist?"
-        - "How are operational costs tracked against budget?"
+        - "What incident metrics matter?"
+        - "How are detection, acknowledgement, mitigation, resolution, recurrence, communication, and post-incident action measured?"
+        - "What thresholds indicate incident process risk?"
+    - id: "release-metrics"
+      title: "Release Metrics"
+      intent: "Define metrics that measure release quality, deployment safety, rollback, hotfix, communication, and post-release health."
+      required: true
+      outputGuidance:
+        - "Use metric records."
+        - "Include release frequency, deployment success rate, rollback rate, hotfix rate, failed checks, post-release incidents, lead time, release quality, and communication readiness."
+        - "Tie to Release Management."
+      qualityChecks:
+        - "Release metrics protect quality, not only speed."
+        - "Rollback and post-release incident metrics are included."
+        - "Release communication readiness is measured when relevant."
+      questions:
+        - "What release metrics matter?"
+        - "How are release frequency, deployment success, rollback, hotfix, failed checks, post-release incidents, lead time, and release quality measured?"
+        - "What threshold triggers release process review?"
+    - id: "maintenance-metrics"
+      title: "Maintenance Metrics"
+      intent: "Define metrics that measure maintenance freshness, operational drift, dependency health, backup/restore readiness, and documentation currency."
+      required: true
+      outputGuidance:
+        - "Use metric records."
+        - "Include dependency freshness, documentation freshness, backup/restore check status, security/privacy review freshness, observability review freshness, automation review freshness, and stale operational asset indicators."
+        - "Tie to Maintenance Plan."
+      qualityChecks:
+        - "Maintenance metrics detect drift before failure."
+        - "Backup/restore and documentation are included."
+        - "Review freshness has owner and cadence."
+      questions:
+        - "What metrics indicate maintenance freshness or drift?"
+        - "How are dependency, documentation, backup/restore, security/privacy, observability, automation, and operational asset freshness measured?"
+        - "What threshold triggers maintenance work?"
+    - id: "business-process-metrics"
+      title: "Business Process Metrics"
+      intent: "Define metrics that measure repeatability, efficiency, control, exceptions, failures, and manual burden of recurring business processes."
+      required: true
+      outputGuidance:
+        - "Use metric records."
+        - "Include process completion time, backlog, failure rate, exception rate, manual intervention rate, rework, customer impact, automation reliability, control failure, and review completion."
+        - "Tie to Business Processes."
+      qualityChecks:
+        - "Process metrics reveal bottlenecks and control failures."
+        - "Manual effort is measured."
+        - "Metrics lead to process improvement decisions."
+      questions:
+        - "What metrics measure business process health?"
+        - "How are process completion time, backlog, failure, exception, manual intervention, rework, customer impact, automation reliability, and control failures measured?"
+        - "What threshold triggers process review or improvement?"
+    - id: "financial-operations-metrics"
+      title: "Financial Operations Metrics"
+      intent: "Define metrics that measure billing, payment, refund, discount, chargeback, subscription, invoice, and finance-support health."
+      required: true
+      outputGuidance:
+        - "Use metric records."
+        - "Include failed payment rate, payment recovery, refund rate, chargeback rate, billing error rate, invoice/receipt issue rate, discount exception rate, subscription state errors, and finance support burden."
+        - "Tie to Pricing and Financial Operations."
+      qualityChecks:
+        - "Financial metrics protect correctness and trust."
+        - "Refunds, failed payments, chargebacks, and billing errors are included where relevant."
+        - "Accounting/legal review assumptions are not invented."
+      questions:
+        - "What financial operations metrics matter?"
+        - "How are failed payment, recovery, refund, chargeback, billing error, invoice issue, discount exception, subscription state error, and finance support burden measured?"
+        - "What threshold triggers financial review or escalation?"
+    - id: "data-and-privacy-metrics"
+      title: "Data and Privacy Metrics"
+      intent: "Define metrics that measure privacy request handling, access reviews, data retention/deletion controls, telemetry/log review, and privacy incidents."
+      required: true
+      outputGuidance:
+        - "Use metric records."
+        - "Include request volume, export/deletion completion time, verification failures, access review completion, privacy incident count, sensitive-data exposure events, telemetry/log review, and retention/deletion control health."
+        - "Tie to Data and Privacy Operations."
+      qualityChecks:
+        - "Privacy metrics do not require unnecessary data collection."
+        - "Access review and deletion/export controls are included."
+        - "Privacy incident signals are escalatable."
+      questions:
+        - "What data and privacy metrics matter?"
+        - "How are data request volume, export/deletion time, verification failures, access review completion, privacy incidents, sensitive-data exposure, telemetry/log review, and retention/deletion health measured?"
+        - "What threshold triggers privacy review or escalation?"
+    - id: "cost-and-capacity-metrics"
+      title: "Cost and Capacity Metrics"
+      intent: "Define metrics that measure operating cost, manual effort, support burden, vendor/tooling costs, observability cost, and capacity utilization."
+      required: true
+      outputGuidance:
+        - "Use metric records."
+        - "Include infrastructure cost, vendor/tooling cost, support cost, manual work burden, cost per active user/customer, observability cost, billing/payment cost, capacity utilization, and overload signals."
+        - "Tie to Operating Model and Financial Operations."
+      qualityChecks:
+        - "Costs include time, tools, vendors, observability, support, and manual work."
+        - "Capacity overload signals are explicit."
+        - "Cost targets are not invented without evidence."
+      questions:
+        - "What cost and capacity metrics matter?"
+        - "How are infrastructure, vendor/tooling, support, manual work, cost per active user/customer, observability, billing/payment, and capacity utilization measured?"
+        - "What signals indicate overload or unsustainable cost?"
     - id: "sla-slo-metrics"
       title: "SLA/SLO Metrics"
-      intent: "Define service level objectives and agreements and how compliance is measured and reported."
+      intent: "Define SLI/SLO/SLA metrics, measurement windows, breach conditions, reporting rules, and customer-facing versus internal target boundaries."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use SLO metric records."
+        - "Separate SLI, SLO, SLA, internal target, and customer-facing promise."
+        - "Do not invent external commitments unless already supported."
+      qualityChecks:
+        - "SLO/SLA terminology is precise."
+        - "Measurement windows and breach conditions are explicit."
+        - "Customer-facing commitments match capacity and tooling."
       questions:
-        - "What service level objectives and agreements are in place?"
-        - "How is SLA/SLO compliance measured and reported?"
-    - id: "metric-review-rules"
-      title: "Metric Review Rules"
-      intent: "Define metric review cadence, ownership, and thresholds that trigger action or escalation."
+        - "What service level indicators are measured?"
+        - "What internal SLOs exist or should exist?"
+        - "What customer-facing SLAs exist, if any?"
+        - "What measurement windows and breach conditions apply?"
+        - "How is compliance reported?"
+    - id: "guardrail-metrics"
+      title: "Guardrail Metrics"
+      intent: "Define metrics that prevent operational optimization from harming customers, trust, privacy, quality, support, cost, or reliability."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Use guardrail metric records."
+        - "Include support overload, poor quality, release instability, privacy risk, financial error, incident recurrence, excessive manual work, cost spikes, and customer trust degradation."
+        - "Define escalation and downstream action."
+      qualityChecks:
+        - "Guardrails prevent harmful optimization."
+        - "Guardrails have thresholds and owners."
+        - "Guardrails trigger action."
       questions:
-        - "How often are metrics reviewed and by whom?"
-        - "What thresholds trigger action or escalation?"
+        - "What operational guardrails are needed?"
+        - "What metrics prevent speed, cost-cutting, automation, release cadence, support deflection, or growth from damaging quality, trust, privacy, or sustainability?"
+        - "What threshold triggers escalation or pause?"
+    - id: "metric-thresholds"
+      title: "Metric Thresholds"
+      intent: "Define target, warning, critical, breach, escalation, review, pause, and rollback thresholds for material metrics."
+      required: true
+      outputGuidance:
+        - "Use threshold records."
+        - "Tie thresholds to actions."
+        - "Label unknown thresholds and assumption-based thresholds clearly."
+      qualityChecks:
+        - "Thresholds are not decorative."
+        - "Every threshold has action consequence."
+        - "Unvalidated thresholds are labeled."
+      questions:
+        - "What target, warning, critical, breach, escalation, review, pause, or rollback thresholds apply?"
+        - "What action follows each threshold?"
+        - "Which thresholds are known, unknown, assumed, or review-needed?"
+    - id: "metric-ownership"
+      title: "Metric Ownership"
+      intent: "Define who owns metric definition, implementation, dashboarding, QA, review, action, escalation, and backup coverage."
+      required: true
+      outputGuidance:
+        - "Use metric ownership records."
+        - "Separate definition ownership from action ownership."
+        - "Flag owner gaps and backup gaps."
+      qualityChecks:
+        - "Critical metrics are not ownerless."
+        - "Action and escalation ownership are explicit."
+        - "Backup coverage is included."
+      questions:
+        - "Who defines each metric?"
+        - "Who implements collection?"
+        - "Who owns dashboarding?"
+        - "Who performs metric QA?"
+        - "Who reviews and acts on each metric?"
+        - "Who owns escalation and backup coverage?"
+    - id: "reporting-cadence"
+      title: "Reporting Cadence"
+      intent: "Define how operational metrics are reported, reviewed, escalated, and converted into decisions."
+      required: true
+      outputGuidance:
+        - "Use reporting cadence records."
+        - "Include launch-window, daily, weekly, monthly, release-cycle, incident-triggered, support-review, process-review, financial-review, privacy-review, and risk-review reports where relevant."
+        - "State audience, owner, inputs, outputs, and decisions supported."
+      qualityChecks:
+        - "Reports produce decisions or actions."
+        - "Cadence matches metric volatility and risk."
+        - "Escalation condition is explicit."
+      questions:
+        - "How often are operational metrics reviewed?"
+        - "Who receives each report?"
+        - "What metrics are included?"
+        - "What decisions does each report support?"
+        - "What triggers escalation outside regular reporting?"
+    - id: "alerting-and-escalation"
+      title: "Alerting and Escalation"
+      intent: "Define which metrics alert, when alerts fire, who receives them, what acknowledgement is expected, and how escalation proceeds."
+      required: true
+      outputGuidance:
+        - "Use alert rule records."
+        - "Separate alerting from reporting."
+        - "Define severity, channel, owner, backup, acknowledgement target, escalation, and customer communication trigger."
+      qualityChecks:
+        - "Alerts are actionable."
+        - "Alert fatigue is considered."
+        - "Customer communication trigger is explicit where relevant."
+      questions:
+        - "Which metrics should create alerts?"
+        - "What trigger condition and severity apply?"
+        - "Who receives and acknowledges alerts?"
+        - "What escalation path follows?"
+        - "When does an alert require customer communication or incident handoff?"
+    - id: "data-quality-checks"
+      title: "Data Quality Checks"
+      intent: "Define how metric data quality is validated and what happens when metric data is missing, stale, inconsistent, incomplete, or unsafe for decisions."
+      required: true
+      outputGuidance:
+        - "Use data quality check records."
+        - "Include validation method, owner, cadence, failure signal, decision impact, and remediation."
+        - "Mark metrics not safe for decisions when data quality fails."
+      qualityChecks:
+        - "Data quality is treated as part of measurement."
+        - "Unsafe metrics are explicitly flagged."
+        - "Remediation owner is identified."
+      questions:
+        - "How is metric data quality validated?"
+        - "What signals missing, stale, inconsistent, incomplete, or unsafe data?"
+        - "Who owns metric QA?"
+        - "What decisions must pause when data quality fails?"
+        - "How are data quality issues remediated?"
+    - id: "metric-risks"
+      title: "Metric Risks"
+      intent: "Identify risks that operational metrics become misleading, harmful, unavailable, noisy, privacy-invasive, ownerless, or ignored."
+      required: true
+      outputGuidance:
+        - "Use metric risk records."
+        - "Include vanity metrics, misleading thresholds, bad data, missing instrumentation, owner gaps, alert fatigue, metric gaming, privacy-invasive measurement, financial mismeasurement, and over-optimization."
+        - "Route risks to Risk Management where needed."
+      qualityChecks:
+        - "Metric risks are concrete and monitorable."
+        - "Mitigation and contingency are distinct."
+        - "High-impact risks have owner and downstream handoff."
+      questions:
+        - "What could make operational metrics misleading or harmful?"
+        - "Where could thresholds be wrong?"
+        - "Where could data be missing or low quality?"
+        - "Where could alerts create fatigue?"
+        - "Where could metrics incentivize harmful behavior?"
+        - "What should Risk Management inherit?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Operations documents must inherit from Operational Metrics and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use metric handoff records."
+        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
+        - "Preserve metric definitions, thresholds, owners, alert rules, data quality caveats, unresolved questions, and metric risks."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing metric assumptions silently."
+        - "Operational Metrics remains measurement architecture; dashboard/alert/runbook implementation remains downstream."
+      questions:
+        - "What should Maintenance Plan inherit?"
+        - "What should Release Management inherit?"
+        - "What should Incident Response inherit?"
+        - "What should Data and Privacy Operations inherit?"
+        - "What should Financial Operations inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved operational metric questions must be carried forward?"

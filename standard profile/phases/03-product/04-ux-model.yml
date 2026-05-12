@@ -5,145 +5,397 @@ document:
   status: "not_started"
   order: 4
   type: "ux_model"
-  purpose: "Define the conceptual experience model and how the product should be felt, understood, and used."
-  centralQuestion: "How should this product be felt, understood, and used?"
-  dependsOn: []
-  feeds: []
+  purpose: "Define the conceptual experience model: how the product should be felt, understood, guided, trusted, recovered from, and used across core journeys."
+  centralQuestion: "How should this product be felt, understood, guided, trusted, and used?"
   outputs:
     canonical:
       format: "markdown"
-      path: "03-product/04-ux-model.md"
-      purpose: "Conceptual experience model for the product"
+      path: "docs/03-product/04-ux-model.md"
+      purpose: "Store the canonical UX model as a Markdown document."
+    artifacts:
+      - id: "product.ux_model_map"
+        format: "html"
+        path: "outcomes/html/03-product/ux-model-map.html"
+        purpose: "Provide a navigable UX model covering experience thesis, principles, paradigm, mental model, cognitive load, guidance, feedback, error recovery, proactivity, trust, anti-patterns, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "UX thesis"
+          - "experience principles"
+          - "primary UX paradigm"
+          - "user mental model"
+          - "cognitive load rules"
+          - "guidance model"
+          - "feedback model"
+          - "error and recovery model"
+          - "proactivity model"
+          - "trust model"
+          - "UX anti-patterns"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.ux_model_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/ux-model-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the UX model is coherent, actionable, scoped, user-respecting, and aligned with product scope and journeys."
+        agentRole: "reviewer"
+        includes:
+          - "canonical UX model"
+          - "product brief dependency"
+          - "product scope dependency"
+          - "user journeys dependency"
+          - "UX principle format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/08-evidence-log"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/03-user-journeys"
+  feeds:
+    - "03-product/05-information-architecture"
+    - "03-product/06-ui-model"
+    - "03-product/07-interaction-model"
+    - "03-product/08-content-model"
+    - "03-product/09-state-model"
+    - "03-product/10-permission-model"
+    - "03-product/11-feature-specification"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+  inputs:
+    - id: "product-brief"
+      type: "context"
+      required: false
+      description: "Product definition, target user, core promise, product thesis, primary use case, constraints, and success criteria."
+    - id: "product-scope"
+      type: "context"
+      required: false
+      description: "In-scope, out-of-scope, MVP, post-MVP, non-goals, scope boundaries, deferred decisions, and scope governance."
+    - id: "user-journeys"
+      type: "context"
+      required: false
+      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys."
+    - id: "audience-definition"
+      type: "context"
+      required: false
+      description: "Audience constraints, capabilities, motivations, risks, context of use, and excluded audiences."
+    - id: "validation-evidence"
+      type: "context"
+      required: false
+      description: "Evidence about user behavior, mental models, confusion, trust, adoption barriers, drop-off points, and recovery needs."
+    - id: "ux-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate UX principles, paradigms, metaphors, tone notes, anti-patterns, interaction ideas, and known UX concerns."
   completionCriteria:
-    - "The central question is directly answered."
-    - "All required sections contain substantive content."
+    - "The central question is answered explicitly through the UX Thesis and supporting models."
+    - "The UX model is grounded in target user constraints, product promise, scope, journeys, and validation evidence."
+    - "Experience principles are actionable enough to resolve UX trade-offs."
+    - "The primary UX paradigm explains how users navigate, input, receive output, recover, and return."
+    - "The user mental model defines the product's core abstraction and avoids misleading metaphors."
+    - "Cognitive load rules define default visibility, progressive disclosure, decision density, and prioritization."
+    - "Guidance, feedback, error recovery, proactivity, and trust models specify expected UX behavior without becoming detailed UI or engineering specs."
+    - "UX anti-patterns include dark patterns, manipulative retention, over-automation, false confidence, and boundary violations where relevant."
+    - "Downstream handoff states what IA, UI Model, Interaction Model, Content Model, State Model, Permission Model, Feature Spec, and Acceptance Criteria must inherit."
   qualityChecks:
     - "Avoid vague claims."
+    - "Avoid UX theater: attractive experience language that does not change product decisions."
+    - "Avoid generic UX principles that could apply to any product."
+    - "Avoid assuming ideal user attention, understanding, patience, memory, or trust."
+    - "Avoid moving detailed UI layout, visual design, component decisions, feature behavior, or engineering architecture into this document."
     - "Prefer decision-useful statements."
-    - "Remove content that belongs to another phase."
+    - "Make assumptions explicit."
+    - "Do not invent user evidence, validated behaviors, platform capabilities, accessibility facts, or usability results."
+    - "UX must respect product boundaries, user responsibility boundaries, consent, uncertainty, and recovery paths."
+    - "The UX model must preserve user agency instead of optimizing only for completion or engagement."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
+    - "Separate UX thesis, UX principles, conceptual models, behavioral rules, anti-patterns, and downstream requirements."
+    - "Tie UX decisions to Audience Definition, Product Brief, Product Scope, User Journeys, Validation evidence, or Foundation Principles where possible."
+    - "State trade-offs when a UX rule improves one quality while worsening another."
+    - "Label aspirational UX claims as assumptions if not validated."
+    - "Keep this document conceptual and behavioral; detailed UI components belong in UI Model and detailed interaction mechanics belong in Interaction Model."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Identify content that should move to another document."
+    - "Flag contradictions with Audience Definition, Product Brief, Product Scope, User Journeys, Foundation Principles, or Foundation Boundaries."
+    - "Flag UX claims that are unsupported by evidence or not marked as assumptions."
+    - "Flag principles that do not change decisions or cannot identify violations."
+    - "Flag proactivity or guidance patterns that undermine user control, consent, trust, or boundaries."
+    - "Verify that error, recovery, uncertainty, and low-confidence states are treated as first-class UX concerns."
+    - "Verify that downstream handoff is clear enough for IA, UI, Interaction, Content, State, Permissions, Feature Spec, and Acceptance Criteria."
+    - "Flag content that belongs better in UI Model, Interaction Model, Feature Specification, Engineering, Go-to-market, or Operations."
+  specializedFormats:
+    uxPrincipleFormat:
+      description: "Recommended format for each UX principle."
+      fields:
+        - name
+        - meaning
+        - decisionRule
+        - userBenefit
+        - tradeoffs
+        - violations
+        - affectedJourneys
+        - downstreamImplications
+        - status
+    uxRuleFormat:
+      description: "Recommended format for UX behavioral rules."
+      fields:
+        - rule
+        - appliesTo
+        - rationale
+        - evidenceBasis
+        - tradeoff
+        - violationExample
+        - downstreamRequirement
+    uxRiskFormat:
+      description: "Recommended format for UX risks."
+      fields:
+        - risk
+        - affectedJourney
+        - riskType
+        - userImpact
+        - earlySignal
+        - mitigation
+        - targetDocument
   sections:
     - id: "ux-thesis"
       title: "UX Thesis"
-      intent: "State the core experience philosophy of the product"
+      intent: "State the core experience philosophy of the product and the product-level UX bet it represents."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Open with a direct statement of the intended experience."
+        - "Connect the UX thesis to the product promise, target user, primary journey, and product constraints."
+        - "State what the experience should not become."
+      qualityChecks:
+        - "The thesis is specific to this product and user."
+        - "The thesis guides actual UX decisions."
+        - "The thesis does not become brand copy or UI mood language only."
       questions:
         - "What is the core experience philosophy of the product?"
-        - "How does the experience differentiate from alternatives?"
-        - "What emotion should the user feel most often while using the product?"
+        - "What should the product feel like during normal use?"
+        - "How should the experience differentiate from alternatives?"
+        - "What emotion should the user feel most often while using the product, and why?"
+        - "What should the user not feel while using the product?"
+        - "What product promise or journey does this UX thesis protect?"
     - id: "experience-principles"
       title: "Experience Principles"
-      intent: "Define immutable principles that guide all experience decisions"
+      intent: "Define actionable principles that guide UX decisions and resolve trade-offs."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "State principles as decision rules, not slogans."
+        - "Classify principles as mandatory, preferred, or aspirational."
+        - "Include violations and trade-offs for each principle."
+      qualityChecks:
+        - "Each principle can reject at least one plausible UX direction."
+        - "Conflicts between principles include precedence or resolution logic."
+        - "Principles align with Foundation Principles and Product Scope."
       questions:
-        - "What are the 3-5 immutable experience principles?"
+        - "What are the 3-5 core experience principles?"
+        - "Which principles are mandatory, preferred, or aspirational?"
+        - "What decision rule does each principle create?"
         - "How are trade-offs between principles resolved when they conflict?"
-        - "What principles are aspirational vs mandatory?"
+        - "What would violate each principle?"
+        - "What journeys, screens, or product behaviors does each principle affect?"
     - id: "primary-ux-paradigm"
       title: "Primary UX Paradigm"
-      intent: "Choose the dominant interaction and navigation paradigm"
+      intent: "Choose the dominant interaction, navigation, input, output, and orientation paradigm."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define the primary paradigm before naming UI patterns."
+        - "Explain what users navigate by: tasks, objects, conversations, documents, timelines, projects, states, or another abstraction."
+        - "Clarify dominant input and output modes without locking detailed UI implementation prematurely."
+      qualityChecks:
+        - "The paradigm fits the primary use case and user mental model."
+        - "The paradigm does not conflict with scope or journeys."
+        - "Secondary paradigms are clearly subordinate to the primary paradigm."
       questions:
-        - "Is the product chat-first, dashboard-first, canvas-first, or something else?"
-        - "Does the user navigate by tasks, objects, conversations, documents, or projects?"
+        - "Is the product chat-first, dashboard-first, canvas-first, document-first, workflow-first, object-first, or something else?"
+        - "Does the user navigate by tasks, objects, conversations, documents, projects, timelines, states, or another abstraction?"
         - "What is the dominant input mode?"
         - "What is the dominant output mode?"
+        - "What secondary paradigms exist, if any?"
+        - "What paradigm would be misleading or harmful?"
     - id: "user-mental-model"
       title: "User Mental Model"
-      intent: "Define how users should conceptualize the product's core abstraction"
+      intent: "Define how users should conceptualize the product's core abstraction, state, value, and limits."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe the mental model users likely bring and the model the product should teach."
+        - "Name the core abstraction users should understand."
+        - "Identify metaphors that clarify and metaphors that mislead."
+      qualityChecks:
+        - "The mental model supports the primary journey and first-value journey."
+        - "The model avoids implying capabilities the product does not have."
+        - "Metaphors do not conflict with Foundation Boundaries or Product Scope."
       questions:
         - "What existing mental model will users bring to this product?"
         - "How should users conceptualize the product's core abstraction?"
+        - "What should users believe the product is responsible for?"
+        - "What should users understand remains their responsibility?"
         - "What metaphors or analogies are appropriate?"
         - "What metaphors or analogies should be avoided?"
+        - "What misunderstanding would create the most UX risk?"
     - id: "cognitive-load-rules"
       title: "Cognitive Load Rules"
-      intent: "Define how complexity is managed and progressively disclosed"
+      intent: "Define how complexity, attention, choice, information density, and progressive disclosure are managed."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define concrete rules for choice count, default visibility, disclosure, hierarchy, and interruption."
+        - "Explain how the product helps users decide what matters now."
+        - "State what should remain hidden until relevant."
+      qualityChecks:
+        - "Rules are specific enough to influence IA, UI, and Interaction Model."
+        - "The model respects user attention and context constraints."
+        - "Progressive disclosure does not hide critical risk, uncertainty, or consequence."
       questions:
         - "How many choices should the user face at any moment?"
         - "How is complexity progressively disclosed?"
         - "What information is hidden by default and revealed on demand?"
-        - "How is information prioritized on each screen?"
+        - "What information must never be hidden?"
+        - "How is information prioritized on each screen or state?"
+        - "How does the product avoid overwhelming users during failure, uncertainty, or first use?"
     - id: "guidance-model"
       title: "Guidance Model"
-      intent: "Define how the product guides both new and experienced users"
+      intent: "Define how the product guides new and experienced users without taking inappropriate control."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate onboarding guidance, contextual guidance, ambient guidance, explicit guidance, and advanced guidance."
+        - "Clarify when the product should suggest, explain, warn, ask, or stay silent."
+        - "Define how guidance evolves with user experience."
+      qualityChecks:
+        - "Guidance supports agency rather than replacing judgment."
+        - "Guidance is tied to journey moments and user need."
+        - "Advanced guidance does not create hidden complexity for new users."
       questions:
         - "How does the product guide first-time users?"
         - "How does the product guide experienced users toward advanced features?"
-        - "What guidance is ambient vs explicit?"
-        - "Is the product proactive or reactive in its guidance?"
+        - "What guidance is ambient versus explicit?"
+        - "When should the product suggest, explain, warn, ask, or stay silent?"
+        - "Is guidance proactive or reactive in each major context?"
         - "Does the product require configuration or learn through use?"
+        - "What guidance would become annoying, manipulative, or unsafe?"
     - id: "feedback-model"
       title: "Feedback Model"
-      intent: "Define how the product communicates the result of user actions"
+      intent: "Define how the product communicates action results, system status, progress, uncertainty, partial completion, and success."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Define feedback by action type, latency, importance, reversibility, and risk."
+        - "Include feedback for success, pending, partial, failed, low-confidence, and reversible states."
+        - "Clarify when feedback should be immediate, persistent, ambient, or interruptive."
+      qualityChecks:
+        - "Feedback prevents ambiguity about whether an action occurred."
+        - "Feedback does not overstate certainty or completion."
+        - "Latency expectations are explicit for important action classes."
       questions:
         - "How does the product provide feedback on user actions?"
         - "What is the latency tolerance for different types of feedback?"
         - "How are successes confirmed?"
-        - "How are partial or in-progress states communicated?"
+        - "How are partial, pending, or in-progress states communicated?"
+        - "How are low-confidence or uncertain outputs communicated?"
+        - "What feedback must persist versus disappear?"
+        - "What feedback should never be interruptive?"
     - id: "error-and-recovery-model"
       title: "Error and Recovery Model"
-      intent: "Define error prevention, surfacing, and recovery strategies"
+      intent: "Define error prevention, surfacing, explanation, recovery, reversibility, escalation, and trust preservation."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Treat errors as expected UX states, not exceptional copy concerns."
+        - "Classify error types: user error, system error, validation error, permission error, network/dependency error, data/state error, AI/confidence error, and boundary error where relevant."
+        - "Define recovery paths and what state must be preserved."
+      qualityChecks:
+        - "Recovery paths are concrete enough to feed Interaction Model and Acceptance Criteria."
+        - "Errors are surfaced without blame or concealment."
+        - "The model protects data integrity, user agency, and trust."
       questions:
         - "How does the product prevent errors?"
         - "How does the product surface errors when they occur?"
+        - "What error classes exist?"
         - "What recovery paths are available for each error class?"
+        - "What actions should be undoable or reversible?"
+        - "What errors require escalation, support, confirmation, or manual intervention?"
         - "How does the product maintain user trust during errors?"
     - id: "proactivity-model"
       title: "Proactivity Model"
-      intent: "Define when the product acts without user initiation"
+      intent: "Define when the product suggests, alerts, prepares, or acts without direct initiation, and how user control is preserved."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Separate suggestions, alerts, preparation, automation, and execution."
+        - "Define which proactive behaviors are allowed, blocked, consent-gated, or deferred."
+        - "Clarify how proactive behavior is explained, dismissed, reversed, or configured."
+      qualityChecks:
+        - "Proactivity does not silently transfer agency from user to system."
+        - "Proactive actions respect consent, boundaries, and uncertainty."
+        - "The model distinguishes helpful initiative from interruption or manipulation."
       questions:
-        - "Is the product primarily proactive or reactive?"
-        - "What actions does the product take without user initiation?"
+        - "Is the product primarily proactive, reactive, or mixed by context?"
+        - "What suggestions may the product make without user initiation?"
+        - "What preparation may the product do without user initiation?"
+        - "What actions, if any, may the product execute without explicit confirmation?"
+        - "What proactive behaviors are prohibited?"
         - "How are proactive actions communicated to the user?"
         - "How is proactivity balanced against user control?"
     - id: "trust-model"
       title: "Trust Model"
-      intent: "Define how the product earns and maintains user trust"
+      intent: "Define how the product earns and maintains trust through consent, transparency, uncertainty handling, reversibility, privacy, boundaries, and reliability."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "Describe trust as behavior, not brand tone."
+        - "Define how uncertainty, confidence, data use, permissions, and irreversible consequences are communicated."
+        - "State trust-breaking behaviors explicitly."
+      qualityChecks:
+        - "Trust mechanisms are concrete enough to influence UI, Interaction, Permissions, and Acceptance Criteria."
+        - "The model avoids overpromising, false certainty, and hidden automation."
+        - "Consent and sensitive actions are explicit."
       questions:
         - "How does the product earn and maintain user trust?"
         - "What data or actions require explicit user consent?"
         - "How is uncertainty or low-confidence output communicated?"
         - "How does the product avoid overpromising?"
+        - "What should be transparent to the user by default?"
+        - "What must be reversible, explainable, or auditable?"
+        - "What behaviors would break trust immediately?"
     - id: "ux-anti-patterns"
       title: "UX Anti-Patterns"
-      intent: "Enumerate UX patterns explicitly avoided"
+      intent: "Enumerate UX patterns explicitly avoided because they violate user agency, trust, clarity, safety, boundaries, or product coherence."
       required: true
-      outputGuidance: []
-      qualityChecks: []
+      outputGuidance:
+        - "List anti-patterns as recognizable UX behaviors, not vague dislikes."
+        - "Tie each anti-pattern to the principle, boundary, user risk, or journey failure it violates."
+        - "Include dark patterns, false confidence, manipulative retention, hidden automation, and excessive cognitive load where relevant."
+      qualityChecks:
+        - "Anti-patterns are specific enough to identify during review."
+        - "The section does not reject patterns only because they are common or stylistically disliked."
+        - "Each anti-pattern includes why it is harmful in this product context."
       questions:
         - "What UX patterns are explicitly avoided?"
         - "What dark patterns or manipulative patterns are prohibited?"
         - "What UX patterns common in competitor products are rejected?"
+        - "What patterns create false confidence, hidden dependency, or excessive user burden?"
+        - "What patterns would violate product boundaries or user responsibility boundaries?"
+        - "What early signals show that an anti-pattern is entering the product?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Product documents must inherit from the UX model and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route UX rules and models to the correct downstream documents."
+        - "Separate IA implications, UI implications, interaction implications, content implications, state implications, permission implications, and acceptance implications."
+        - "Preserve unresolved UX questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing UX behavior silently."
+        - "Trust, recovery, proactivity, and uncertainty implications are included."
+      questions:
+        - "What should Information Architecture inherit from this UX model?"
+        - "What should UI Model inherit?"
+        - "What should Interaction Model inherit?"
+        - "What should Content Model inherit?"
+        - "What should State Model and Permission Model inherit?"
+        - "What should Feature Specification and Acceptance Criteria inherit?"
+        - "What unresolved UX questions must be carried forward?"
