@@ -7,6 +7,7 @@ It defines the standard profile for transforming an unclear project idea into ca
 ## Structure
 
 - **`docs.yml`** — Root documentation registry defining axes, phase registry, output model, global rules, quality model, dependency policy, agent policy, and roadmap integration.
+- **`document.schema.yml`** — Profile-wide document contract defining the canonical structure, required fields, validation rules, output policies, and supported specialized formats for document definitions.
 - **`phases/`** — Phase-level YAML definitions containing document specifications, sections, dependencies, guiding questions, and generated outputs.
 
 ## Axes
@@ -94,10 +95,11 @@ Agents using this profile must:
 ## How to Read
 
 1. Start with `docs.yml` to understand the global registry.
-2. Read `phaseRegistry` to see which phase files are active.
-3. Read each `phases/*.yml` file for document definitions, sections, dependencies, guiding questions, and expected outputs.
-4. Generate or review Markdown documents as the canonical project documentation.
-5. Generate HTML artifacts and agent packs only as derived outputs.
+2. Read `document.schema.yml` to understand the shared contract used by document definitions.
+3. Read `phaseRegistry` to see which phase files are active.
+4. Read each `phases/*.yml` file for document definitions, sections, dependencies, guiding questions, and expected outputs.
+5. Generate or review Markdown documents as the canonical project documentation.
+6. Generate HTML artifacts and agent packs only as derived outputs.
 
 ## How to Use
 
