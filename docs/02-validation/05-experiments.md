@@ -445,16 +445,18 @@ Interim signals must not be interpreted as validation results unless explicitly 
 **Protocol:**
 
 1. Show or guide the participant through a local workspace shape.
-2. Show canonical Markdown, structured state, and derived artifact concepts.
-3. Explain provider disclosure and local-only versus remote-provider behavior.
-4. Ask which parts increase trust, which create friction, and which are unnecessary.
-5. Observe whether the participant values inspectability, diffs, editability, and ownership.
-6. Ask what setup step would cause abandonment before value.
+2. Show the default LOGOS documentation root as `logos/`, explain that it avoids collisions with existing project `docs/` folders, and show that the root can be configured.
+3. Show canonical Markdown, structured state, and derived artifact concepts.
+4. Explain provider disclosure and local-only versus remote-provider behavior.
+5. Ask which parts increase trust, which create friction, and which are unnecessary.
+6. Observe whether the participant values inspectability, diffs, editability, folder configurability, and ownership.
+7. Ask what setup step would cause abandonment before value.
 
 **Success criteria:**
 
 - Participant values local ownership, inspectability, Markdown, diffs, or Git-friendly output.
 - Participant understands the difference between local state, generated documents, and remote AI operations.
+- Participant understands why generated LOGOS documentation defaults to `logos/` and can identify when they would configure another folder.
 - Setup friction is acceptable if clarity value is visible.
 - Provider disclosure increases trust more than it creates confusion.
 
@@ -462,6 +464,7 @@ Interim signals must not be interpreted as validation results unless explicitly 
 
 - Participant strongly prefers hosted state as canonical.
 - Local files and Git-friendly output are irrelevant to the strongest-pain audience.
+- The default `logos/` root or path configuration is confusing enough to block trust or setup.
 - Setup or provider configuration prevents participants from reaching value.
 - Trust requires boundary violations such as hidden remote processing or automatic decisions.
 
@@ -469,7 +472,7 @@ Interim signals must not be interpreted as validation results unless explicitly 
 
 - Stop when the project can decide whether local-first remains a product strength for the early audience.
 
-**Data collected:** setup friction notes, trust reactions, privacy concerns, local-first preference evidence, abandonment thresholds, boundary concerns.
+**Data collected:** setup friction notes, trust reactions, privacy concerns, local-first preference evidence, documentation-root reactions, path-configuration expectations, abandonment thresholds, boundary concerns.
 
 **Instrumentation:** walkthrough checklist; optional setup observation notes.
 
@@ -589,7 +592,7 @@ Interim signals must not be interpreted as validation results unless explicitly 
 
 1. Follow up after a defined delay.
 2. Ask what changed in the project since the session.
-3. Ask whether they used, edited, shared, committed, or revisited the generated documentation.
+3. Ask whether they used, edited, shared, committed, or revisited the generated documentation, and whether the chosen LOGOS documentation root helped or got in the way.
 4. Ask what would trigger them to return.
 5. If possible, observe whether they revise decisions or regenerate documents.
 

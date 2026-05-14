@@ -172,7 +172,7 @@ The Evidence Log currently contains internal documentary evidence only. Therefor
 
 **Context:** Foundation boundaries define what demand should not count as valid demand for this thesis: hidden remote-first state, autonomous decisions, generic chatbot behavior, no-code execution, project management sprawl, and polished output over structure.
 
-**Linked hypotheses:** H-SO-02, H-SO-05, H-SO-06, H-WP-01.
+**Linked hypotheses:** H-SO-02, H-SO-05, H-SO-06, H-SO-07, H-WP-01.
 
 **Linked assumptions:** A-TR-01, A-TR-02, A-TR-03, A-TE-02, A-MK-02.
 
@@ -290,7 +290,7 @@ Potential future stop decisions include:
 | Validate AI-led intake. | No prototype or concierge intake evidence exists. | EXP-04. | Blocks AI workflow commitments. | Users safely review proposed decisions from real sessions. | deferred |
 | Validate structured documents over generic prose. | No artifact comparison evidence exists. | EXP-03. | Blocks core documentation-mechanism confidence. | Participants prefer decision-derived docs for clarity, not polish. | deferred |
 | Decide whether diagnostics are core. | No diagnostic actionability evidence exists. | EXP-05. | Blocks diagnostic roadmap priority. | Users can explain diagnostics and choose next actions. | deferred |
-| Decide whether local-first is a market advantage. | Trust evidence is internal only. | EXP-06. | Blocks architecture and positioning confidence. | Users value local files, inspectability, and provider disclosure. | deferred |
+| Decide whether local-first and the default `logos/` documentation root are market advantages. | Trust and setup evidence are internal only. | EXP-06. | Blocks architecture, documentation-root, and positioning confidence. | Users value local files, inspectability, provider disclosure, and configurable LOGOS output paths. | deferred |
 | Decide pricing and packaging. | No value or willingness-to-pay evidence exists. | EXP-09 after EXP-03/04/06/08. | Blocks pricing and financial operations. | Users connect value to money, time, trust, or workflow change. | deferred |
 | Decide business-model path. | Business model is coherent but unproven. | EXP-07, EXP-08, EXP-09 plus cost/support evidence. | Blocks GTM and operations commitments. | Evidence identifies buyer, revenue stream, channel, and support model. | deferred |
 | Decide hosted collaboration or enterprise path. | Deferred by boundaries and no demand evidence. | Future research after local value is proven. | Blocks hosted/team/enterprise scope. | Strong boundary-safe demand appears. | deferred |
@@ -311,6 +311,7 @@ Likely future reopening triggers:
 - user evidence contradicts the broad audience framing;
 - diagnostics are found to be noisy or unactionable;
 - local-first setup blocks adoption;
+- the default `logos/` documentation root or path configuration blocks adoption;
 - AI-led intake creates false confidence;
 - willingness-to-pay evidence points to a different buyer or segment;
 - economic sustainability requires a boundary violation.
@@ -336,7 +337,7 @@ Product work may use the Foundation and Validation documents as constraints, but
 
 ### Engineering
 
-Engineering may prepare for local-first, structured state, Markdown rendering, AI proposal review, diagnostics, and safe defaults as product constraints. However, large architecture commitments around hosted collaboration, marketplace, broad profile expansion, or enterprise features remain blocked.
+Engineering may prepare for local-first, structured state, configurable LOGOS documentation root behavior, Markdown rendering, AI proposal review, diagnostics, and safe defaults as product constraints. However, large architecture commitments around hosted collaboration, marketplace, broad profile expansion, or enterprise features remain blocked.
 
 ### Go-to-market
 

@@ -44,6 +44,7 @@ This phase validates the conditions required before committing to product, engin
 - **Behavioral value:** whether structured questioning and decision capture change what users understand, decide, or document.
 - **Workflow acceptability:** whether users tolerate AI-led intake, review of proposed decisions, marked uncertainty, and local file-based outputs.
 - **Trust model:** whether users value inspectability, local-first storage, explicit provider configuration, and reviewable AI output.
+- **Documentation-root fit:** whether defaulting generated LOGOS documentation to `logos/`, with a configurable alternative, avoids collisions with existing project docs without adding confusing setup friction.
 - **Generality boundary:** whether the broader "structured documentation before execution" framing holds beyond the app-based business origin case.
 - **Minimum validation threshold:** whether at least one real user can complete an end-to-end local documentation flow and produce a foundation package judged clearer and more useful than the starting state.
 
@@ -127,6 +128,7 @@ Key claims:
 
 - AI-led intake feels better than a deterministic questionnaire while still producing structured state.
 - Local-first, Git-friendly outputs are valued by the intended audience.
+- A dedicated configurable LOGOS documentation root is acceptable, and `logos/` is a sensible default when projects may already have `docs/`.
 - Users tolerate visible uncertainty and confirmation steps because they produce trust.
 - Users understand and value the difference between canonical documents, structured state, derived artifacts, and AI output.
 

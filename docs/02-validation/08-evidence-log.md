@@ -361,7 +361,7 @@ Contradictory evidence should be updated with real negative evidence as soon as 
 | No artifact clarity evidence | H-BE-03, H-SO-03 | Whether structured docs beat generic prose or notes. | The core mechanism may fail. | EXP-03. | critical | open |
 | No AI-led intake evidence | H-SO-01, H-SO-02 | Whether AI can produce safe reviewable structured state. | The workflow may create false confidence. | EXP-04. | critical | open |
 | No diagnostic actionability evidence | H-SO-04 | Whether diagnostics are core or secondary. | Diagnostics may be noise. | EXP-05. | high | open |
-| No local-first trust evidence | H-SO-05, H-SO-06, H-AD-03 | Architecture, onboarding, trust, and positioning. | Local-first may be a project preference rather than user value. | EXP-06. | high | open |
+| No local-first trust evidence | H-SO-05, H-SO-06, H-SO-07, H-AD-03 | Architecture, onboarding, documentation-root configuration, trust, and positioning. | Local-first and the default `logos/` documentation root may be project preferences rather than user value. | EXP-06. | high | open |
 | No adoption/message evidence | H-AD-01, H-AD-02 | Positioning and profile strategy. | Messaging may attract curiosity but not qualified users. | EXP-07 after upstream evidence. | medium | open |
 | No retention evidence | H-RE-01, H-RE-02 | Subscription, living-state, and roadmap assumptions. | Product may be one-time-use only. | EXP-08 after workflow sessions. | medium | open |
 | No willingness-to-pay evidence | H-WP-01, H-WP-02 | Pricing, revenue, economic model, business model. | Economic model may be impossible. | EXP-09 after value validation. | medium now, high later | deferred |
@@ -436,6 +436,7 @@ Current evidence does not support:
 - claiming the initial audience is correct;
 - claiming users will pay;
 - claiming local-first is a market advantage;
+- claiming the default `logos/` documentation root is preferred or frictionless;
 - claiming diagnostics are actionable;
 - claiming decision-derived documents beat generic AI prose;
 - claiming the business model is viable;

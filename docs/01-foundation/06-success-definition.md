@@ -10,12 +10,15 @@ The smallest meaningful condition that validates the thesis is this:
 
 > A user with an ambiguous project idea can use LOGOS Engine to produce a coherent, local, reviewable documentation foundation that exposes decisions, assumptions, gaps, risks, and next steps before serious execution begins.
 
+By default, this documentation foundation should be generated under a dedicated `logos/` root inside the user's repository, not under `docs/`. The documentation root must be configurable so users can avoid conflicts with existing project documentation.
+
 For the thesis to appear valid, all of the following must become true:
 
 - The user begins with incomplete intent and ends with clearer project structure.
 - The system identifies missing decisions the user had not already made explicit.
 - The system separates facts, assumptions, hypotheses, risks, and open questions.
 - Canonical documents reflect structured decisions rather than loose AI prose.
+- Canonical documents are written to the configured LOGOS documentation root, defaulting to `logos/`.
 - The user can inspect, revise, and version the resulting documents and decision state.
 - The user can understand what remains unresolved instead of receiving false certainty.
 - The user remains responsible for confirming decisions.
@@ -55,6 +58,7 @@ The user succeeds when they can:
 - Identify assumptions before they become hidden commitments.
 - Understand trade-offs before committing to product, content, business, technical, operational, or launch decisions.
 - Generate or refresh canonical documentation from structured state.
+- Configure where LOGOS documentation is generated when the default `logos/` root is not appropriate.
 - Run diagnostics and understand gaps, risks, contradictions, or incomplete areas.
 - Continue a project documentation session without losing the reasoning context.
 - Commit project documentation and decision history to Git or another local file-based workflow.
@@ -101,6 +105,7 @@ System-level success means the product can reliably produce the conditions that 
 The system works structurally when:
 
 - Canonical Markdown and profile YAML remain the primary reviewable sources.
+- Canonical Markdown is generated under the configured LOGOS documentation root, defaulting to `logos/`.
 - Generated artifacts can be traced back to canonical documents or structured state.
 - Decisions, assumptions, open questions, and risks are represented explicitly.
 - Derived outputs such as HTML artifacts or agent packs can be regenerated from canonical sources.

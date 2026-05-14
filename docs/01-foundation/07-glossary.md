@@ -72,7 +72,7 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 
 **Status:** canonical.
 
-**Definition:** A human-readable Markdown document that carries approved or reviewable project content for a defined document purpose. It is source material for derived outputs, but it should still reflect structured decisions rather than replace them.
+**Definition:** A human-readable Markdown document that carries approved or reviewable project content for a defined document purpose. It is generated under the configured LOGOS documentation root, which defaults to `logos/`. It is source material for derived outputs, but it should still reflect structured decisions rather than replace them.
 
 **Used in:** Thesis, Principles, Boundaries, Success Definition, documentation registry.
 
@@ -83,6 +83,22 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 **Not to be confused with:** derived artifact, document contract, decision registry.
 
 **Decision relevance:** Canonical documents are the primary review surface for humans and the basis for generated views and agent packs.
+
+### LOGOS Documentation Root
+
+**Status:** canonical.
+
+**Definition:** The repository folder where LOGOS Engine writes generated canonical Markdown documents and derived outcomes. The default root is `logos/` so LOGOS does not collide with an existing project `docs/` folder. The user may configure a different root when needed.
+
+**Used in:** Principles, Boundaries, Success Definition, Product Brief, Product Scope, Engineering documents.
+
+**Aliases:** documentation root, LOGOS output root, generated documentation root.
+
+**Discouraged terms:** docs folder, hard-coded docs path.
+
+**Not to be confused with:** project `docs/` folder, `.logos` internal state, derived artifact.
+
+**Decision relevance:** Product and Engineering must resolve canonical paths relative to the configured LOGOS documentation root instead of assuming `docs/` is available.
 
 ### Canonical Source
 

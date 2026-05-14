@@ -10,6 +10,8 @@ Local First means the user's project knowledge should belong to the user's works
 
 The principle is about local agency, not only local execution. The user should be able to understand what exists, where it is stored, what generated it, and what can be committed, reviewed, changed, or removed.
 
+LOGOS Engine must not assume the repository's existing `docs/` folder is available for generated project documentation. Many projects already use `docs/` for their own documentation. The default LOGOS documentation root should therefore be `logos/`, and the user should be able to configure a different folder when the project needs another location.
+
 ### Decision Rule
 
 When local control conflicts with hosted convenience, favor local control unless the user has explicitly chosen the hosted behavior and can inspect what will leave the workspace.
@@ -20,6 +22,7 @@ When local control conflicts with hosted convenience, favor local control unless
 - Accept text-based files over richer hosted interfaces when the richer interface would make state opaque.
 - Accept explicit provider configuration before AI features that send project context outside the machine.
 - Accept slower onboarding if the alternative hides where project knowledge lives.
+- Accept a dedicated configurable LOGOS documentation root instead of writing into an existing `docs/` folder by default.
 
 ### Violations
 
@@ -28,10 +31,11 @@ When local control conflicts with hosted convenience, favor local control unless
 - Sending project answers, assumptions, source context, or file paths to a provider without explicit configuration and disclosure.
 - Making generated documentation available only through a hosted interface.
 - Hiding workspace state in a format the user cannot reasonably inspect, diff, or remove.
+- Writing generated LOGOS documentation into an existing project documentation folder without explicit configuration and confirmation.
 
 ### Downstream Implications
 
-- Product should prioritize local project initialization, local state, local documents, and explicit provider configuration.
+- Product should prioritize local project initialization, local state, local documents under a configurable LOGOS documentation root, and explicit provider configuration.
 - Engineering should favor plain files, predictable directories, and opt-in remote calls.
 - Operations should avoid telemetry, phone-home behavior, and default cloud dependency unless the user explicitly enables them.
 - Documentation should explain local ownership and remote-provider boundaries clearly.
@@ -72,7 +76,7 @@ When durable structure conflicts with visual polish or artifact convenience, fav
 ### Downstream Implications
 
 - YAML should define structure, metadata, dependencies, sections, quality gates, and agent instructions.
-- Markdown should carry canonical human-readable project content.
+- Markdown should carry canonical human-readable project content under the configured LOGOS documentation root.
 - HTML artifacts should remain derived views for review and navigation.
 - Agent packs should be generated from canonical documents and document contracts, not from ad hoc presentation state.
 
@@ -155,6 +159,7 @@ When Git-friendly formats conflict with rich presentation or convenience, favor 
 ### Downstream Implications
 
 - File names, folders, and document ids should be stable.
+- The default LOGOS documentation root should be `logos/`, with user configuration available for projects that need a different path.
 - Generated changes should be reviewable in ordinary diffs.
 - Manual content should not be overwritten without warning.
 - Sensitive local configuration should be excluded from tracked files by default.

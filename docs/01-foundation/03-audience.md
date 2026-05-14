@@ -38,6 +38,7 @@ The environment is practical and work-oriented:
 - The user is comfortable with text files and version control.
 - The user may be using an IDE, terminal, Markdown notes, issue tracker, AI chat, or existing project folder.
 - The user wants the output to become part of the project, not a detached planning artifact.
+- The project may already contain its own `docs/` folder, so the user needs LOGOS output to live in a dedicated configurable documentation root, defaulting to `logos/`.
 
 The cognitive context matters. The user may have enthusiasm and momentum, but also uncertainty, incomplete information, and competing pressure to start building. The experience should therefore create useful friction without becoming bureaucratic. It should ask enough to expose missing decisions, but allow "I do not know yet" as a legitimate answer.
 
@@ -66,6 +67,7 @@ Required capabilities for the initial product:
 
 - The user can work with a local project folder.
 - The user can read and edit Markdown or other text-based project artifacts.
+- The user can understand that LOGOS-generated documentation has its own root folder, defaulting to `logos/`, which can be configured if the project requires another location.
 - The user can answer structured questions about their project, including by saying when they do not know.
 - The user can review proposed decisions instead of treating AI output as automatically correct.
 - The user can run or tolerate a CLI/TUI workflow.
@@ -118,6 +120,7 @@ Existing alternatives are insufficient for this audience because they either lea
 Constraints the project must respect:
 
 - Keep outputs text-based, diff-friendly, and inspectable.
+- Do not write generated LOGOS documentation into an existing project `docs/` folder by default; use `logos/` unless the user configures another root.
 - Keep AI behavior transparent enough for review.
 - Allow incomplete areas to remain marked rather than hidden.
 - Preserve user control over decisions.

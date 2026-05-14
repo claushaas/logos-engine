@@ -43,7 +43,7 @@ The idea is not invalidated. It is also not validated. It has enough internal st
 - Engineering architecture commitments beyond validation-safe constraints.
 - Go-to-market execution beyond message hypotheses.
 - Pricing and packaging decisions.
-- Claims of local-first market advantage.
+- Claims of local-first market advantage or preference for the default `logos/` documentation root.
 - Claims that diagnostics, AI-led intake, or structured documents are user-validated.
 - Hosted collaboration, marketplace, enterprise, or broad profile expansion.
 
@@ -59,7 +59,7 @@ The idea is not invalidated. It is also not validated. It has enough internal st
 | Structured decision value | not started | 0% externally validated | H-BE-03, H-SO-03 | Blocks core mechanism validation. |
 | AI-led intake and review | not started | 0% externally validated | H-SO-01, H-SO-02 | Blocks AI workflow confidence. |
 | Diagnostics | not started | 0% externally validated | H-SO-04 | Blocks diagnostic roadmap priority. |
-| Trust and local-first fit | not started | 0% externally validated | H-SO-05, H-SO-06 | Blocks architecture and positioning confidence. |
+| Trust and local-first fit | not started | 0% externally validated | H-SO-05, H-SO-06, H-SO-07 | Blocks architecture, documentation-root, and positioning confidence. |
 | Economic validation | deferred | 0% externally validated | Economic Model, DR-005 | Blocks pricing, revenue, and financial planning. |
 | Business model validation | deferred | 0% externally validated | Business Model, DR-005 | Blocks business-model execution. |
 | Decision governance | complete enough for validation | internally complete | Evidence Log, Decision Record | Enables traceable future decisions. |
@@ -94,7 +94,7 @@ Potential future refutations are already defined:
 - Decision-derived documents are not clearer than generic AI prose or notes.
 - AI-led intake creates false authority or untraceable output.
 - Diagnostics are too noisy or unactionable.
-- Local-first setup blocks adoption.
+- Local-first setup or the default `logos/` documentation root blocks adoption.
 - Willingness to pay does not appear after value is demonstrated.
 
 These are not current findings. They are future decision conditions.
@@ -112,7 +112,7 @@ Most substantive claims remain inconclusive because no external evidence exists.
 | Users can distinguish more clarity from more text. | inconclusive | EV-002, EV-009 | weak | low | No artifact comparison. | EXP-03. | Blocks structured-docs mechanism. |
 | AI-led intake can produce safe structured state. | inconclusive | Foundation and old AI/system docs indirectly | weak | low | No intake session evidence. | EXP-04. | Blocks AI workflow confidence. |
 | Diagnostics are actionable. | inconclusive | EV-005 | weak | low | Diagnostics are specified, not user-tested. | EXP-05. | Blocks diagnostic priority. |
-| Local-first, Git-friendly output increases trust. | inconclusive | EV-006 | suggestive | low | Trust posture is internal and unobserved. | EXP-06. | Blocks positioning and architecture confidence. |
+| Local-first, Git-friendly output and a dedicated `logos/` documentation root increase trust. | inconclusive | EV-006 | suggestive | low | Trust posture, path expectations, and setup behavior are internal and unobserved. | EXP-06. | Blocks positioning, documentation-root, and architecture confidence. |
 | The project can sustain itself economically. | inconclusive | EV-013 | weak | low | No cost, pricing, retention, or WTP evidence. | EXP-08, EXP-09 later. | Blocks economic decisions. |
 | The business model is viable. | inconclusive | EV-014 | weak | low | Coherence is not validation. | EXP-07, EXP-08, EXP-09 later. | Blocks GTM/business execution. |
 
@@ -125,7 +125,7 @@ The following important claims remain untested.
 | H-PR-01 through H-PR-03: problem hypotheses. | blocking | Interviews and artifact reviews have not begun. | Recent concrete user examples and consequences. | Run EXP-01. |
 | H-AU-01 through H-AU-03: audience and generality hypotheses. | blocking | Participant research has not begun. | Repeated pain and workflow fit across relevant segments. | Run EXP-01 and EXP-02. |
 | H-BE-01 through H-BE-03: behavior hypotheses. | blocking | No workflow, artifact, or behavior observation exists. | Current workarounds, artifact comparison, behavior change. | Run EXP-01, EXP-03, EXP-04. |
-| H-SO-01 through H-SO-06: solution hypotheses. | blocking | Prototype/concierge sessions have not run. | Intake, decision-review, diagnostics, trust, and setup evidence. | Run EXP-03 through EXP-06 after upstream evidence. |
+| H-SO-01 through H-SO-07: solution hypotheses. | blocking | Prototype/concierge sessions have not run. | Intake, decision-review, diagnostics, trust, documentation-root, and setup evidence. | Run EXP-03 through EXP-06 after upstream evidence. |
 | H-WP-01 and H-WP-02: willingness-to-pay hypotheses. | deferred | Value is not demonstrated yet. | Buyer/user value and payment logic after workflow value. | Run EXP-09 later. |
 | H-AD-01 through H-AD-03: adoption hypotheses. | deferred | Messaging and setup tests depend on audience/problem evidence. | Positioning comprehension and setup-friction evidence. | Run EXP-06 and EXP-07. |
 | H-RE-01 and H-RE-02: retention hypotheses. | deferred | Requires follow-up after workflow use. | Return triggers and repeated use evidence. | Run EXP-08 later. |
@@ -191,7 +191,7 @@ The project does not yet have:
 - artifact comparison evidence;
 - prototype or concierge workflow evidence;
 - diagnostic actionability evidence;
-- local-first trust evidence;
+- local-first trust and documentation-root evidence;
 - market evidence;
 - willingness-to-pay evidence;
 - completed experiment results.
@@ -227,7 +227,7 @@ Before Product development begins as a product-definition phase, these changes o
 | Evidence Log | Add external problem and audience evidence. | EXP-01, EXP-02 | required | Run interviews and artifact review. | Product may target an unvalidated problem. |
 | Decision Record | Decide whether problem and audience hypotheses are supported, refuted, or inconclusive. | Evidence Log updates | required | Record evidence-based decisions. | Downstream teams may rely on assumptions. |
 | Product Brief | Define product scope only from supported claims or explicit assumptions. | DR updates | required later | Wait for EXP-01 through EXP-06 or label assumptions. | Product spec may overclaim validation. |
-| Product Scope | Preserve boundaries around local-first, user-owned decisions, explicit AI, and no false authority. | DR-006 | required | Carry constraints forward. | Scope may drift into generic AI/productivity. |
+| Product Scope | Preserve boundaries around local-first, configurable LOGOS documentation root, user-owned decisions, explicit AI, and no false authority. | DR-006 | required | Carry constraints forward. | Scope may drift into generic AI/productivity or collide with existing project docs. |
 | Engineering Brief | Treat structured state, Markdown rendering, decision review, diagnostics, and safe defaults as constraints, not as validated UX. | DR-006, DR-007 | required later | Separate architecture constraints from user-validated behavior. | Engineering may overbuild unvalidated flows. |
 | GTM Brief | Keep positioning as hypothesis until EXP-07 and market evidence exist. | Evidence Gaps, H-AD claims | required | Avoid demand/channel claims. | Messaging may attract attention without qualified adoption. |
 | Pricing and Packaging | Do not set prices yet. | DR-005, EV-013 | required | Wait for value and willingness-to-pay evidence. | Pricing may distort product direction. |
@@ -245,7 +245,7 @@ Product may assume:
 
 - the project intends to solve pre-execution ambiguity through structured decisions and documentation;
 - app-business is an origin/proving ground, not the full boundary;
-- local-first, explicit decisions, reviewable AI, and safe defaults are current constraints.
+- local-first, configurable LOGOS documentation root, explicit decisions, reviewable AI, and safe defaults are current constraints.
 
 Product must not assume:
 
@@ -254,7 +254,7 @@ Product must not assume:
 - the workflow is acceptable;
 - diagnostics are actionable;
 - users prefer structured docs to generic AI prose;
-- local-first is a market advantage.
+- local-first or the default `logos/` documentation root is a market advantage.
 
 ### Engineering
 
@@ -277,7 +277,7 @@ Engineering must not assume:
 GTM may assume:
 
 - "clarity before execution" is the current message hypothesis;
-- local-first, Git-friendly, structured documentation is the current positioning hypothesis;
+- local-first, Git-friendly, configurable-root structured documentation is the current positioning hypothesis;
 - open-source/community channels are plausible channels to test.
 
 GTM must not assume:

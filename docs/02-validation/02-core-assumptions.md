@@ -112,6 +112,7 @@ Evidence that would strengthen it:
 Evidence that would weaken it:
 
 - Users prefer one-shot generated documents and ignore decision state.
+- Users dislike a dedicated `logos/` documentation root and expect generated documentation to appear in `docs/`.
 
 ### A-AU-02: The Primary Audience Will Adopt a New Workflow
 
@@ -135,6 +136,7 @@ Evidence that would strengthen it:
 
 - Users prefer local files over hosted-only project state.
 - Users inspect, edit, diff, or commit generated documents.
+- Users understand and accept a dedicated configurable LOGOS documentation root, defaulting to `logos/`, especially when their repository already has a `docs/` folder.
 
 Evidence that would weaken it:
 
@@ -161,6 +163,7 @@ These assumptions should be tracked in the Evidence Log when evidence appears, b
 - Whether generated documents are judged more useful when tied to structured decisions.
 - Whether the workflow creates clarity faster than it creates process burden.
 - Whether local-first storage is valued or merely tolerated.
+- Whether the default `logos/` documentation root is clear and useful, or whether path configuration creates setup friction.
 - Whether the broader project-type ambition holds outside the founder's app-based business origin case.
 
 Resolution path:

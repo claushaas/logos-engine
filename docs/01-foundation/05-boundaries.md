@@ -27,6 +27,7 @@ LOGOS Engine is not limited to the founder's original app-based business use cas
 In scope for the initial product:
 
 - Initializing a local project workspace.
+- Creating and using a configurable LOGOS documentation root, defaulting to `logos/`, for generated project documentation.
 - Running a structured AI-led intake conversation.
 - Capturing answers, assumptions, open questions, and proposed decisions.
 - Storing decisions and project state locally.
@@ -232,7 +233,7 @@ Violation example: hard-coding all documentation, language, and validation assum
 
 **Classification:** prohibited to violate.
 
-Canonical truth should live in structured local state and Markdown/YAML documents. HTML views, dashboards, presentations, and agent packs may exist, but they must remain derived outputs.
+Canonical truth should live in structured local state and Markdown/YAML documents inside the configured LOGOS documentation root. The default root is `logos/`, not the repository's existing `docs/` folder, because user projects may already have their own documentation there. HTML views, dashboards, presentations, and agent packs may exist, but they must remain derived outputs.
 
 Protected principles: Local First, Structure Over Presentation, Git Friendly.
 
