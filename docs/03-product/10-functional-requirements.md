@@ -126,6 +126,8 @@ The register below lists all functional requirements identified from Product Sco
 | FR-057 | The product must not provide live task ownership, bidirectional sync, assignment, comment, notification, or calendar workflows as part of the Executive Axis MVP. | System | Business Rule | excluded | won't-have | Foundation Boundaries, OOS-010 | review |
 | FR-058 | When intake is advanced and the next question directly depends on earlier project state, the product may show contextual suggestions alongside the question. | System | User | supporting / MVP / validation-required | should-have | UX Model Rule 1A, Interaction Pattern 1A, CAP-023 | observable test |
 | FR-059 | Contextual suggestions must remain optional, source-labeled, caveated when needed, and non-canonical until the user accepts or revises them through the normal answer/proposal flow. | User | Business Rule | core / MVP | must-have | Foundation Glossary, Interaction Pattern 1A, ACT-019 through ACT-021 | observable test |
+| FR-060 | After workspace initialization, every `logos` TUI startup must present an AI Startup Briefing that summarizes current status and recommends the next step from local structured state. | System | User | supporting / MVP / validation-required | should-have | UX Model Rule 2A, Interaction Pattern 2A, CAP-012A | observable test |
+| FR-061 | The AI Startup Briefing must be read-only, grounded in bounded workspace status, and backed by a deterministic status fallback when AI is unavailable or remote-provider disclosure is not satisfied. | System | Business Rule | core / MVP | must-have | AI as a Layer, Permission Model, API Contracts | observable test |
 
 ---
 
@@ -319,6 +321,21 @@ Core requirements are the must-have behaviors essential to the product promise a
 - **Verification:** observable test.
 - **Failure Behavior:** Stale or missing state triggers recovery with preserved safe state.
 - **Recovery Behavior:** Reinitialize or repair with user confirmation.
+
+#### CR-010A: AI Startup Briefing
+
+- **ID:** FR-060, FR-061.
+- **Statement:** After initialization, every TUI startup presents a welcome briefing that uses AI when provider rules allow it to summarize current local status and recommend the next step.
+- **Actor:** System.
+- **Classification:** supporting / MVP / validation-required.
+- **Priority:** should-have for AI generation; must-have for read-only safety and fallback behavior.
+- **Source:** UX Model Rule 2A, Interaction Model Pattern 2A, Product Architecture CAP-012A.
+- **Related Journey:** J-002 Continue an Existing Session.
+- **Related Module:** TUI Experience, Workspace Status, AI Assistance.
+- **Related Capability:** CAP-012A.
+- **Verification:** observable test.
+- **Failure Behavior:** If AI is unavailable, blocked by disclosure rules, times out, or returns invalid output, the product shows deterministic startup status with the same essential continuation details.
+- **Recovery Behavior:** User can run `/continue`, `/status`, `/diagnose`, `/validate`, `/generate`, or `/config ai` from the briefing.
 
 ---
 

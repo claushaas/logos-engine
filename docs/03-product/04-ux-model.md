@@ -164,6 +164,8 @@ Users navigate by:
 - Decisions, assumptions, open questions, risks, and validation gaps.
 - The next useful action, such as continue, configure, generate, diagnose, validate, or revise.
 
+After initialization, every TUI startup should begin with an AI Startup Briefing. The briefing welcomes the user back, summarizes the current status from local structured state, names the most relevant blockers or unresolved items, and recommends the next step with enough detail for the user to continue without first running `/status` or rereading prior documents.
+
 The dominant input mode is natural language conversation supported by slash commands for explicit system operations. Slash commands should remain clear operational anchors, including `/init`, `/continue`, `/generate`, `/diagnose`, `/validate`, `/status`, and `/config ai`.
 
 The dominant output mode is local, inspectable project knowledge:
@@ -287,6 +289,20 @@ The highest-risk misunderstanding is that generated documents prove the project 
 **Violation example:** Ending a diagnostic report with a long list of findings but no recommended next question or action.
 
 **Downstream requirement:** UI Model and Content Model must include concise next-action language for major states.
+
+### Rule 2A: Welcome Back With Status and Continuation Detail
+
+**Applies to:** TUI startup after initialization, session re-entry, recovery after reopening.
+
+**Rationale:** A returning user should not need to remember where they stopped. The agent should orient them immediately using the current local state and the profile contract.
+
+**Evidence basis:** Founder-origin workflow hypothesis; not externally validated.
+
+**Trade-off:** AI-generated summaries can introduce latency or overconfidence if not grounded in deterministic status data.
+
+**Violation example:** Opening an initialized workspace into a blank shell or generic greeting that does not name current phase, unresolved decisions, pending proposals, stale outputs, or the safest next action.
+
+**Downstream requirement:** Interaction Model, UI Specification, API Contracts, and Test Strategy must define a startup briefing that is AI-generated when provider rules allow it, source-grounded, non-mutating, and backed by a deterministic fallback when AI is unavailable.
 
 ### Rule 3: Never Hide Critical Consequence Information
 

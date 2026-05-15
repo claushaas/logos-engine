@@ -162,6 +162,24 @@ When principles conflict:
 
 **Status:** MVP.
 
+### Pattern 2A: AI Startup Briefing
+
+**Classification:** MVP / validation-required.
+
+**Purpose:** Welcome the user back after initialization and provide enough current status and next-step detail to continue work immediately.
+
+**Input modality:** System-initiated on TUI startup after workspace load.
+
+**Trigger:** The user runs `logos` in a repository with an initialized, readable LOGOS workspace.
+
+**System response:** LOGOS loads deterministic workspace status, profile progress, pending proposals, open questions, diagnostics, stale outputs, generation status, provider status, and the recommended next action. When AI provider rules allow it, LOGOS generates a concise briefing from that bounded status context and displays it as the first agent message.
+
+**State effect:** The briefing is read-only and must not mutate decisions, assumptions, questions, diagnostics, generation status, provider configuration, or files.
+
+**Failure handling:** If AI is unavailable, unconfigured, times out, or cannot be used because remote disclosure has not been accepted, LOGOS shows a deterministic startup status fallback with the same essential continuation details and a provider/configuration recovery path.
+
+**Status:** MVP / validation-required.
+
 ### Pattern 3: Decision Review
 
 **Classification:** MVP.
@@ -275,7 +293,7 @@ Commands should be discoverable through `/help`, status prompts, contextual sugg
 
 | Command | Purpose | Target Object | Preconditions | Confirmation Rule | Output | Error Handling | Permission Requirements |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `logos` | Open the TUI in the current repository directory. | Repository Workspace | User is in intended repository directory. | Ask before writing if uninitialized or ambiguous. | Loaded or uninitialized workspace state. | Show active path and recovery. | Read local context; write only after init confirmation. |
+| `logos` | Open the TUI in the current repository directory and, after initialization, show an AI Startup Briefing with current status and next step. | Repository Workspace | User is in intended repository directory. | Ask before writing if uninitialized or ambiguous. | Loaded or uninitialized workspace state; initialized workspaces show startup briefing or deterministic fallback. | Show active path, status, next action, and recovery. | Read local context; AI call only after provider rules allow it; write only after init confirmation. |
 | `/init` | Initialize LOGOS workspace and setup defaults. | Workspace State, Documentation Root, Profile | Repository context available. | Required before creating state or generated root. | Initialized workspace, active profile, active root defaulting to `logos/` unless configured. | Preserve existing state; report conflicts. | Local write consent. |
 | `/continue` | Resume AI-led clarification. | Intake Conversation, Workspace State | Workspace exists or can explain missing state. | Not required for read/resume; required for state-changing proposals only. | Current progress, next question cluster, unresolved items. | If no AI provider, route to `/config ai`; preserve state. | Remote AI disclosure if provider call needed. |
 | `/status` | Show current repository, root, profile, progress, and next actions. | Workspace State | None beyond readable context. | Not required. | Status summary and next action. | If state missing, show initialization path. | Read local state. |
@@ -319,6 +337,7 @@ The system may initiate these actions without treating them as user consent:
 - Detect repository context.
 - Detect initialized or uninitialized workspace state.
 - Summarize current state.
+- Generate a read-only startup briefing from bounded status context when provider rules allow it.
 - Suggest next questions or commands.
 - Suggest optional contextual answers when directly supported by prior reviewable state.
 - Mark AI interpretation as proposed or low confidence.
@@ -361,6 +380,7 @@ Confirmation is not required for:
 - Dismissing suggestions.
 - Running read-only deterministic diagnostics.
 - Running read-only validation checks.
+- Showing a startup briefing or deterministic startup status fallback.
 - Capturing ordinary conversation input before it becomes canonical state.
 - Showing proposed decisions.
 - Showing contextual suggestions.

@@ -37,6 +37,7 @@ The MVP UI is one TUI shell with multiple views, panels, overlays, and reports. 
 | ID | Screen or View | Classification | Purpose | User Goal | Entry Points | Exit Points | Primary Objects | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | UI-001 | TUI Shell | global / MVP | Provide stable frame, command input, conversation area, status, and feedback. | Stay oriented and act safely. | `logos` | `/exit`, command navigation | Repository Workspace, Workspace State | MVP |
+| UI-001A | AI Startup Briefing | startup / MVP / validation-required | Welcome initialized users with current status and next step. | Resume work immediately. | `logos` in initialized workspace | Continue, status, review, generate, diagnose, configure | Workspace State, Diagnostic Finding, Generation Report | MVP |
 | UI-002 | First-Run / Initialization View | contextual / MVP | Start LOGOS in an uninitialized repository. | Initialize safely with profile and root awareness. | `logos`, `/init` | Intake, status, exit | Repository Workspace, Documentation Root, Profile | MVP |
 | UI-003 | Workspace Status View | global / MVP | Summarize repository, root, profile, progress, decisions, diagnostics, and next action. | Understand current state without changing it. | `/status`, startup, recovery | Continue, generate, diagnose, configure | Workspace State, Phase, Document, Decision | MVP |
 | UI-004 | Conversational Intake View | primary / MVP | Capture natural language project context and show AI-led question clusters. | Clarify ambiguous intent without form burden. | non-slash input, `/continue` | Review proposals, status, generate, exit | Intake Conversation, Open Question, Assumption | MVP |
@@ -179,6 +180,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 | Orientation Header | Show active repository, root, profile, provider status, and state category. | All major views | normal, warning, compact | Never omit on write/config screens. | Text labels, not color-only status. |
 | Command Input | Accept slash commands and conversational text. | TUI Shell | idle, focused, pending, error | Do not use for irreversible action confirmation alone. | Keyboard-first, clear focus. |
 | Conversation Turn | Display user and AI-led intake messages. | Intake | user, system, AI, low-confidence | Do not treat AI turn as confirmed state. | Speaker/status text labels. |
+| Startup Briefing | Display AI-generated welcome status and next step after initialized startup. | TUI Shell, Workspace Status | normal, fallback, provider-unavailable, recovery-needed | Do not use when workspace is uninitialized; do not let it replace deterministic status data. | Status labels, source/caveat text, and next action in text. |
 | Question Cluster | Present small set of questions. | Intake, diagnostics follow-up | normal, blocking, optional | Do not show long questionnaire pages by default. | Clear order and keyboard navigation. |
 | Contextual Suggestion | Show a suggested answer, option, or framing grounded in earlier state. | Intake, diagnostics follow-up, proposal review | normal, low-confidence, conflicted, source-limited | Do not show when source basis is weak or unrelated; do not make it look confirmed. | Source/caveat text and accept/edit/reject/ignore actions. |
 | Proposal Card | Show proposed decision, assumption, or follow-up. | Proposal Review | proposed, low-confidence, conflicted | Do not use for confirmed content without relabeling. | Status in text; actions reachable. |
@@ -260,6 +262,62 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 
 **Open questions:** Exact terminal framework constraints require engineering review.
 
+### UI-001A: AI Startup Briefing
+
+**Classification:** startup / MVP / validation-required.
+
+**Purpose:** Welcome the user after initialization and summarize the current project state with enough detail to continue work.
+
+**User goal:** Understand current status and the next step immediately after opening the TUI.
+
+**Primary journey:** Continue, repeat use, recovery.
+
+**Entry points:** `logos` in an initialized workspace.
+
+**Exit points:** continue intake, review proposals, run diagnostics, generate, configure AI, status, exit.
+
+**Primary content:**
+
+- Greeting scoped to the active repository.
+- Active LOGOS documentation root.
+- Active profile and current phase or document focus.
+- Current progress summary.
+- Pending proposed decisions, assumptions, open questions, risks, diagnostics, or validation gaps that affect continuation.
+- Last generation status and stale or missing outputs when relevant.
+- Recommended next step with command or natural-language action.
+
+**Secondary content:**
+
+- Provider status and whether the briefing was AI-generated or deterministic fallback.
+- Source/caveat note that the briefing is derived from local structured state.
+- Optional contextual suggestion when the recommended next step is a directly related question.
+
+**Available actions:** accept recommended next step, type naturally, `/continue`, `/status`, `/diagnose`, `/validate`, `/generate`, `/config ai`, `/help`, `/exit`.
+
+**Component composition:** Orientation Header, Startup Briefing, Status Summary, Next Action Block, Command Input.
+
+**States:** generated, deterministic fallback, provider unavailable, recovery-needed, stale outputs, pending proposals, no prior content.
+
+**Empty state:** For initialized workspace with no captured content, welcome the user and recommend describing the project or running `/continue`.
+
+**Loading state:** Show workspace status loading first; if AI briefing generation takes longer, show deterministic status and pending AI summary only if useful.
+
+**Error state:** If briefing generation fails, keep deterministic status visible and route provider failures to recovery or `/config ai`.
+
+**Success state:** AI-generated briefing appears as the first agent message with current status and next step.
+
+**Permission state:** No confirmation required because the briefing is read-only; remote provider disclosure is required before sending context to a remote provider.
+
+**Responsive rules:** On compact terminals, show repository, root, current status, and next action before detailed diagnostics.
+
+**Accessibility notes:** The next step and status must be text, not color or layout alone.
+
+**Data dependencies:** Workspace State, Profile, Documentation Root, Provider Status, Diagnostics, Validation, Generation Report, Output Status.
+
+**Downstream implications:** API Contracts must provide a startup briefing result or fallback status result. Test Strategy must verify startup briefing does not mutate state.
+
+**Open questions:** Exact timeout for AI briefing generation belongs to Frontend and Integration Architecture.
+
 ### UI-002: First-Run / Initialization View
 
 **Classification:** contextual / MVP.
@@ -325,7 +383,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 
 **Primary journey:** Continue, repeat use, recovery, diagnostics.
 
-**Entry points:** `/status`, startup with existing workspace, after errors, after generation.
+**Entry points:** `/status`, startup with existing workspace, AI Startup Briefing fallback, after errors, after generation.
 
 **Exit points:** continue, review proposals, generate, diagnose, validate, configure.
 

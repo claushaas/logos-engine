@@ -21,6 +21,7 @@ Engineering success means:
 - file writes, provider transmission, root changes, and overwrites require clear user intent;
 - the default LOGOS documentation root is `logos/`, and it is configurable;
 - contextual suggestions can help later-phase intake only when grounded in direct prior state and kept non-canonical until user review;
+- initialized TUI startup produces an AI-generated briefing from bounded local status when provider rules allow it, with deterministic fallback otherwise;
 - release gates can be verified without live AI provider calls, network access, or raw tokens in fixtures.
 
 Engineering failure means:
@@ -47,6 +48,7 @@ Engineering failure means:
 | Product Scope SC-006 | Structured project state carries answers, summaries, decisions, assumptions, risks, and document status. | State schemas, migrations, safe writes, corruption handling, and traceability must be treated as core architecture. | committed |
 | Product Scope SC-007 | AI-derived decisions remain proposed until user review. | State transitions must prevent proposed material from becoming confirmed without explicit user action. | committed |
 | Product UX / FR-058 | Later-phase intake may include contextual suggestions when questions depend on earlier project state. | Intake must derive suggestions from bounded prior state, label source/caveats, and route accept/edit through normal proposal and confirmation flows. | committed / validation-required |
+| Product UX / FR-060 | Opening an initialized TUI shows an AI Startup Briefing with status and next step. | Startup must compose deterministic status first, then ask AI to summarize only bounded status context; fallback must remain useful without AI. | committed / validation-required |
 | Product Scope SC-008 | Markdown is generated under the configured root from state and profile contracts. | Rendering must be deterministic, traceable, safe to regenerate, and clear about stale or incomplete outputs. | committed |
 | Product Scope SC-009 | HTML artifacts are generated as derived outputs. | Artifact generation must be downstream of canonical Markdown and profile contracts, with stale/failed status. | committed / supporting |
 | Product Scope SC-010 | Agent packs are generated as derived downstream context. | Agent pack generation must preserve caveats, dependencies, and source traceability without becoming canonical. | committed / supporting / validation-required |
@@ -84,6 +86,7 @@ Product inputs requiring engineering clarification:
 | AI provider layer | Support provider configuration, redacted status, local/remote mode, disclosure, timeout, failure, and structured response validation. | SC-005, FR-017, NFR-PERF-002 | API Contracts, Integration Architecture, Security Architecture |
 | Conversational intake | Support AI-led question clusters, unknown answers, assume-for-now answers, low-confidence labels, and proposal creation. | SC-004, FR-006, FR-024, FR-025 | System Architecture, API Contracts |
 | Contextual suggestions | Generate optional source-labeled suggestions for directly related questions when prior state supports them, without confirming state automatically. | FR-058, FR-059 | System Architecture, API Contracts, Test Strategy |
+| Startup briefing | Generate an AI-authored welcome/status message after initialized startup, with deterministic status fallback and no state mutation. | FR-060, FR-061 | System Architecture, API Contracts, Test Strategy |
 | Decision review | Enforce proposed, confirmed, rejected, deferred, revised, and superseded decision states. | SC-007, FR-008, FR-021 | Data Model, API Contracts |
 | Validation and diagnostics | Run deterministic checks without live AI, report severity, affected documents, unsupported claims, and next actions. | SC-011, FR-012, FR-013 | Test Strategy, System Architecture |
 | Markdown generation | Render canonical Markdown from profile contracts and structured state under configured root. | SC-008, FR-009 | System Architecture, Data Model |
@@ -192,6 +195,7 @@ Known resource constraints are not yet documented beyond founder-led execution. 
 | ENG-CAP-004 | Profile contract loading | profile / schema | MVP | FR-005 | Load, validate, and expose Standard profile contracts and output definitions. | AC-FN-025 | System Architecture, Data Model | committed |
 | ENG-CAP-005 | Structured state persistence | data | MVP | FR-007, FR-020 | Store decisions, assumptions, questions, risks, diagnostics, validation gaps, and output status. | AC-FN-007 | Data Model | committed |
 | ENG-CAP-006 | AI provider abstraction | integration / security | MVP | FR-017, FR-018 | Configure providers, enforce token rules, disclose remote transmission, handle timeout/failure. | AC-FN-015, AC-FN-016, AC-NF-PRIV-002 | Integration Architecture, Security Architecture | committed |
+| ENG-CAP-006A | AI startup briefing | AI / UX / status | MVP / validation-required | FR-060, FR-061 | Build deterministic startup status, generate bounded AI briefing when allowed, and show fallback when AI is unavailable. | AC-UX-017, AC-FN-041 | System Architecture, API Contracts, Test Strategy | committed |
 | ENG-CAP-007 | Conversational intake pipeline | AI / interaction | MVP / validation-required | FR-006, FR-046 | Build prompt/context flow, question clusters, response interpretation, and fallback behavior. | AC-FN-006, AC-UX-002 | System Architecture, API Contracts | committed |
 | ENG-CAP-008 | Proposal and decision state machine | data / safety | MVP | FR-008, FR-021, FR-043 | Enforce proposed, confirmed, revised, rejected, deferred, and superseded transitions. | AC-FN-008, AC-FN-018, AC-FN-029, AC-FN-030 | Data Model, API Contracts | committed |
 | ENG-CAP-009 | Deterministic validation engine | validation | MVP | FR-013, NFR-REL-006 | Run profile/state checks without AI and report validation gaps. | AC-FN-012 | System Architecture, Test Strategy | committed |

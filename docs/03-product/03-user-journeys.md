@@ -114,15 +114,16 @@ Journeys required for the core product promise to hold are onboarding, primary c
 
 1. User opens `logos` from the target repository.
 2. System detects existing workspace state, configured documentation root, profile, document status, and unresolved items.
-3. User runs `/continue` or types naturally into the conversation.
-4. System summarizes current progress, unresolved decisions, and next useful questions, optionally including source-labeled contextual suggestions when a question directly depends on prior state.
-5. User continues intake, reviews proposed decisions, regenerates outputs, or runs diagnostics.
+3. System shows an AI Startup Briefing with current status, relevant unresolved decisions, pending proposals, diagnostics, generation status, and the recommended next step.
+4. User runs `/continue`, accepts the recommended next action, or types naturally into the conversation.
+5. System summarizes current progress, unresolved decisions, and next useful questions, optionally including source-labeled contextual suggestions when a question directly depends on prior state.
+6. User continues intake, reviews proposed decisions, regenerates outputs, or runs diagnostics.
 
-**Success state:** The user can continue from the latest meaningful state without rereading every document.
+**Success state:** The user can continue from the latest meaningful state without rereading every document or manually running `/status` first.
 
 **Failure modes:** stale context, missing files, changed documentation root, uncommitted manual edits, or confusing progress status.
 
-**Recovery paths:** show changed paths, report missing outputs, avoid overwriting manual content without warning, and identify the next smallest continuation step.
+**Recovery paths:** deterministic status fallback, show changed paths, report missing outputs, avoid overwriting manual content without warning, and identify the next smallest continuation step.
 
 **Re-entry:** This is itself the re-entry journey for interrupted work.
 

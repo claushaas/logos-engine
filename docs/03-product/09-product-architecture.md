@@ -625,6 +625,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 | CAP-010 | Decision proposal extraction | core | AI / State / Review | MVP | must-have | CAP-008, CAP-009 | 5 | defined |
 | CAP-011 | Decision confirmation flow | core | Review | MVP | must-have | CAP-010 | 5 | defined |
 | CAP-012 | Status view | support | TUI / Workspace | MVP | should-have | CAP-003, CAP-009 | 5 | defined |
+| CAP-012A | AI startup briefing | support | TUI / Workspace / AI | MVP / validation-required | should-have | CAP-003, CAP-007, CAP-009, CAP-012 | 5 | defined |
 | CAP-013 | Canonical Markdown generation | core | Generation | MVP | must-have | CAP-004, CAP-005, CAP-009, CAP-011 | 6 | defined |
 | CAP-014 | HTML artifact generation | support | Generation | MVP support | should-have | CAP-013 | 6 | defined |
 | CAP-015 | Agent pack generation | support | Generation | MVP support / validation-required | should-have | CAP-013 | 6 | defined |

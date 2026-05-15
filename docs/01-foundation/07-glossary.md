@@ -36,6 +36,22 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 
 **Decision relevance:** AI output must be reviewed, grounded, and never silently converted into confirmed project truth.
 
+### AI Startup Briefing
+
+**Status:** canonical.
+
+**Definition:** The AI-generated welcome message shown after an initialized workspace is opened in the TUI. It summarizes current local project status and the next best step from structured state, profile contracts, diagnostics, and generation status.
+
+**Used in:** UX Model, Interaction Model, UI Specification, Functional Requirements, API Contracts.
+
+**Aliases:** startup briefing, welcome briefing, continuation briefing.
+
+**Discouraged terms:** chat memory greeting, autonomous plan, hidden status.
+
+**Not to be confused with:** `/status`, diagnostic finding, contextual suggestion, decision proposal.
+
+**Decision relevance:** The briefing helps the user resume work, but it is derived from canonical local state and must not create or confirm decisions by itself.
+
 ### Ambiguous Intent
 
 **Status:** canonical.

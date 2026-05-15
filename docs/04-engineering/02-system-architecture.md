@@ -28,6 +28,7 @@ TUI Shell
   |       |
   |       +--> Workspace Service
   |       +--> Profile Service
+  |       +--> Startup Briefing Service
   |       +--> Intake Orchestrator
   |       +--> Contextual Suggestion Service
   |       +--> Decision Service
@@ -64,6 +65,7 @@ The major system components are:
 | Workspace Service | Resolve repository context, initialize/resume workspace, expose active profile and documentation root. | Does not own generated content semantics. |
 | Configuration Service | Manage documentation root and AI provider configuration status. | Does not store raw provider tokens in project files. |
 | Profile Service | Load and validate profile YAML contracts, phases, documents, outputs, and quality rules. | Does not decide project content. |
+| Startup Briefing Service | Compose deterministic startup status and optionally generate an AI-authored welcome briefing from bounded status context. | Cannot mutate project state or send remote context before disclosure rules allow it. |
 | Intake Orchestrator | Coordinate AI-led question clusters, answer capture, interpretation, and proposal creation. | Cannot confirm decisions. |
 | Contextual Suggestion Service | Build optional suggested answers or option framings for directly related questions from bounded prior state. | Cannot create confirmed decisions or treat stale/weak sources as authoritative. |
 | Decision Service | Own decision, assumption, open-question, risk, revision, and state transition rules. | Does not depend on UI or provider implementation details. |
@@ -206,6 +208,7 @@ Layer violations to reject in review:
 | Workspace Module | Resolve repository, initialize/resume workspace, expose active root/profile/status. | Workspace metadata, root config reference. | Profile content semantics, generated documents. | `initWorkspace`, `loadWorkspace`, `getWorkspaceStatus`. | File System Port, Profile Module, State Module. | TUI internals, provider SDKs. | Idempotency and path safety tests. |
 | Profile Module | Load and validate profile YAML contracts. | Profile metadata, phases, document contracts, output definitions, quality rules. | User decisions or generated content. | `loadProfile`, `validateProfile`, `getDocumentContract`. | File System Port, YAML adapter, schemas. | Decision mutation, renderer writes. | Schema validation fixtures. |
 | State Module | Persist and retrieve structured project state. | Decisions, assumptions, questions, risks, diagnostics, validation gaps, output status, generation reports. | UI rendering, provider execution. | State repository port and state transition service. | File System Port, Domain Layer. | TUI components, provider SDKs. | Versioned schemas and safe write policy. |
+| Startup Briefing Module | Build startup status and AI-generated continuation briefing after initialized workspace load. | Briefing composition, bounded status context, fallback result, next-step recommendation. | Canonical state mutation, file writes, broad repository ingestion. | `getStartupBriefing`, `buildStartupStatusContext`. | Workspace Module, Profile Module, State Module, Validation Module, Diagnostics Module, Generation Module, AI Provider Port. | Direct confirmed-state writes, raw chat transcript as source truth. | Read-only startup and fallback tests. |
 | Intake Module | Coordinate user answers, prompt context, provider calls, and interpretation. | Conversation turns as input records, proposed interpreted outputs. | Confirmed decisions. | `continueIntake`, `interpretAnswer`, `createProposals`. | AI Provider Port, Profile Module, State Module, Decision Module. | Direct confirmed-state writes. | AI output schema validation and proposal-only tests. |
 | Contextual Suggestion Module | Derive optional suggested answers for current questions from direct prior state and document dependencies. | Suggestion eligibility, source refs, caveats, confidence labels, suppression after rejection. | Confirmed state, broad retrieval, hidden defaults. | `buildContextualSuggestions`, `reviewSuggestionAction`. | Profile Module, State Module, Intake Module, Decision Module. | Direct confirmed-state writes, arbitrary repository scraping. | Source-basis and no-confirmation tests. |
 | Decision Module | Enforce decision lifecycle and user confirmation. | Decision state machine, revisions, supersession, affected outputs. | Provider prompts, UI layout. | `proposeDecision`, `confirmDecision`, `reviseDecision`, `deferDecision`. | State Module, Domain types. | AI Provider Adapter, Renderer Adapter. | State transition tests. |
@@ -382,6 +385,21 @@ Infrastructure Architecture and Deployment Plan must expand package publishing, 
 | Permission Check | Confirmation before destructive reinitialization or root change. |
 | Failure Behavior | Preserve existing state; report missing permissions, invalid paths, or profile failure. |
 | Audit or Report | Workspace status and initialization result. |
+
+### Flow 1A: Initialized TUI Startup Briefing
+
+| Field | Description |
+| --- | --- |
+| Source | `logos` startup in an initialized workspace. |
+| Destination | Startup Briefing Service, AI Provider Port when allowed, TUI Shell. |
+| Trigger | Workspace, profile, state, root, provider, diagnostics, validation, and generation status load successfully enough to summarize. |
+| Data Objects | Workspace status, active root, profile, phase/document progress, pending proposals, open questions, diagnostics, validation gaps, output freshness, provider status, next action. |
+| Validation Point | State/profile/root readability; remote-provider disclosure before any remote AI summarization; bounded context check. |
+| Transformation Point | Deterministic status context becomes an AI-authored welcome briefing or deterministic fallback. |
+| Persistence Point | No required persistence; optional local audit may record that startup status was viewed without storing full prompt/response. |
+| Permission Check | No write confirmation because briefing is read-only; remote provider context requires prior disclosure/consent. |
+| Failure Behavior | Show deterministic status fallback and provider/configuration recovery path; startup must not fail solely because AI briefing failed. |
+| Audit or Report | Startup briefing result category: generated, fallback, provider-unavailable, recovery-needed. |
 
 ### Flow 2: Conversational Intake to Proposed State
 

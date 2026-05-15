@@ -163,6 +163,7 @@ Every accepted feature must be traceable to:
 | AC-UX-007 | Generation reports summarize created, updated, skipped, incomplete, blocked, and failed outputs before listing file details. | FR-019, UX Model Principle 1 | observable test | degrade gracefully | draft |
 | AC-UX-008 | The product does not pressure the user to complete for engagement; dismissed suggestions do not reappear without changed context. | Interaction Model Suggestion Rules | observable test | degrade gracefully | draft |
 | AC-UX-016 | Contextual suggestions appear only beside directly related questions, include source/caveat text, and provide accept, edit, reject, or ignore actions without implying the suggestion is expected. | FR-058, FR-059, UX Model Rule 1A | observable test | degrade gracefully | draft |
+| AC-UX-017 | After initialization, opening `logos` shows an AI Startup Briefing or deterministic fallback with current status, unresolved items, generation state, provider/root/profile context, and the recommended next step. | FR-060, FR-061, UX Model Rule 2A | observable test | release-blocking for re-entry | draft |
 
 ### Trust and Recovery Acceptance
 
@@ -275,6 +276,7 @@ Every accepted feature must be traceable to:
 | AC-FN-038 | Assumption → confirmed fact is blocked; assumptions remain visibly caveated. | Interaction Model Blocked Transitions | automated test | release-blocking | draft |
 | AC-FN-039 | Executive JSON and exports become stale when normative documents, profile contracts, acceptance criteria, or source decisions change. | FR-051, FR-052, FR-054 | automated test | feature-blocking for Executive Axis | draft |
 | AC-FN-040 | Contextual suggestion → confirmed decision is blocked; accepting or editing a suggestion must route through ordinary answer/proposal capture and explicit review rules. | FR-058, FR-059, ACT-019, ACT-020 | automated test | release-blocking | draft |
+| AC-FN-041 | Startup briefing generation is read-only: it cannot confirm decisions, mutate assumptions/questions, write files, or send remote context before disclosure requirements are satisfied. | FR-060, FR-061, Interaction Pattern 2A | automated test | release-blocking | draft |
 
 ---
 
