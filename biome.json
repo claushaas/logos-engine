@@ -31,7 +31,8 @@
 			"!**/*.d.ts",
 			"!**/*.spec.ts",
 			"!**/.github",
-			"!**/.rnstorybook"
+			"!**/.rnstorybook",
+			"!**/executive-overview.html"
 		]
 	},
 	"formatter": {
