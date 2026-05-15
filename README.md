@@ -4,7 +4,7 @@ LOGOS Engine is a local-first, open-source TUI system for structured externaliza
 
 Its purpose is to help people transform a diffuse idea into a complete, coherent, auditable documentation package before committing heavily to execution.
 
-The first supported profile is **App Business**, focused on people who want to design, validate, document, and build an app-based venture. The system is intentionally designed to support other outcomes later, such as websites, SaaS products, courses, books, agencies, research projects, communities, and other structured initiatives.
+The first supported profile is **Standard**, focused on people who want to design, validate, document, and build an app-based venture. The system is intentionally designed to support other outcomes later, such as websites, SaaS products, courses, books, agencies, research projects, communities, and other structured initiatives.
 
 LOGOS Engine is not a document generator.
 
@@ -24,27 +24,26 @@ It helps users:
 ## Repository Structure
 
 ```text
-src/
+src/                  # TypeScript source (scaffolded in Step 0.2)
   application/
   ai/
   domain/
   foundation/
   storage/
   tui/
-tests/
+tests/                # Test suite (added in Step 0.3)
   fixtures/
+scripts/
+  smoke-cli.js        # CLI smoke test (added in Step 0.3)
+profiles/
+  standard/           # Initial bundled documentation profile
 docs/
-  00-foundation/
-  01-product/
-  02-open-source/
-  03-system-architecture/
-  04-tui-experience/
-  05-profiles/
-  06-documentation-system/
-  07-ai-and-agent-behavior/
-  08-growth-and-community/
-  09-implementation-roadmap/
-  10-operational-playbooks/
+  01-foundation/
+  02-validation/
+  03-product/
+  04-engineering/
+  05-go-to-market/
+  06-operations/
 ```
 
 ## Local Development
@@ -62,32 +61,33 @@ Install dependencies:
 pnpm install
 ```
 
-Run the Phase 0 validation commands:
+Run the available quality commands:
 
 ```bash
-pnpm test
-pnpm build
-pnpm smoke:cli
-pnpm lint:md
-pnpm lint:biome
+pnpm lint:biome    # Code/style lint — passes cleanly
+pnpm lint:md       # Markdown lint — currently has pre-existing failures in docs/ and profile templates
+pnpm format        # Format with Biome — mutating, fixes auto-fixable issues
 ```
 
-Additional useful commands:
+Commands that require later implementation steps:
 
 ```bash
-pnpm typecheck
-pnpm test:coverage
-pnpm format
+pnpm typecheck     # Requires src/ tree (Step 0.2)
+pnpm build         # Requires src/ tree (Step 0.2)
+pnpm test          # Requires tests/ (Step 0.3)
+pnpm smoke:cli     # Requires scripts/smoke-cli.js (Step 0.3)
 ```
 
-The `smoke:cli` script is a Phase 0 preflight. The executable `logos` command and Ink TUI are Phase 1 scope.
+The `smoke:cli` script is a Phase 0 preflight. The executable `logos` command and Ink TUI are Phase 2 scope.
+
+> **Step 0.1 status:** `pnpm lint:biome` passes. `pnpm lint:md` reports pre-existing formatting issues in existing documentation and profile templates that are outside the Step 0.1 scope. `pnpm check` runs both lint commands; it will show markdown failures until those files are cleaned up in a later documentation-hardening pass.
 
 ## First Outcome Profile
 
 The first canonical profile is:
 
 ```text
-app-business
+standard
 ```
 
 This profile guides you through the complete documentation needed to design and execute an app-based business. Start a conversation with AI in the TUI — describe your idea, answer follow-up questions naturally, and LOGOS builds a structured workspace of decisions, assumptions, and generated documentation.
@@ -96,7 +96,7 @@ This profile guides you through the complete documentation needed to design and 
 
 ```bash
 logos           # Open the TUI
-/init           # Create a workspace (select app-business profile)
+/init           # Create a workspace (select standard profile)
 /continue       # Resume or start the AI-led conversation
 # Type freely: "I'm building a fitness app for personal trainers..."
 /generate       # Render the canonical document tree

@@ -22,7 +22,7 @@ LOGOS Engine accepts contributions in several layers:
 
 ### Profiles
 
-Creating or improving outcome profiles (e.g. `app-business`, SaaS, course, ecommerce, agency, research).
+Creating or improving outcome profiles (e.g. `standard`, SaaS, course, ecommerce, agency, research).
 
 ### Document Templates
 
@@ -53,8 +53,6 @@ Anonymized sample workspaces demonstrating real use are especially valuable.
 
 ```bash
 pnpm install
-pnpm build
-pnpm test
 ```
 
 ## Quality Gate
@@ -62,10 +60,16 @@ pnpm test
 Run these before opening a PR:
 
 ```bash
-pnpm lint:biome
-pnpm lint:md
-pnpm typecheck
-pnpm test
+pnpm lint:biome    # passes cleanly
+pnpm lint:md       # currently has pre-existing failures in docs/ and profile templates
+```
+
+The following commands will be added to the quality gate after the source and test trees are scaffolded (Steps 0.2–0.4):
+
+```bash
+pnpm typecheck   # requires src/ (Step 0.2)
+pnpm test        # requires tests/ (Step 0.3)
+pnpm build       # requires src/ (Step 0.2)
 ```
 
 ## Contribution Requirements
@@ -110,7 +114,7 @@ For large features, an RFC-style issue is preferred.
 
 ## How to Propose a New Profile
 
-See [docs/05-profiles/01_PROFILE_CONTRIBUTION_GUIDE.md](./docs/05-profiles/01_PROFILE_CONTRIBUTION_GUIDE.md).
+See [profiles/standard/README.md](./profiles/standard/README.md).
 
 ## Governance
 
