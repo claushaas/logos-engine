@@ -1,0 +1,18 @@
+document:
+  id: "test-doc"
+  title: "Test Document"
+  phase: "01-foundation"
+  type: "thesis"
+  status: "not_started"
+  purpose: "Test purpose."
+  centralQuestion: "Test question?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/test.md"
+  completionCriteria: "not an array"
+  sections:
+    - id: "sec-1"
+      title: "Section 1"
+      questions:
+        - "Question 1?"

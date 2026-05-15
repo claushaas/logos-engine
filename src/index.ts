@@ -21,6 +21,31 @@ export function getPackageMetadata(): LogosPackageMetadata {
 }
 
 export type {
+	DocumentDescriptor,
+	DocumentDescriptorDependency,
+	DocumentDescriptorId,
+	DocumentDescriptorOutput,
+	DocumentDescriptorOutputAgentPack,
+	DocumentDescriptorOutputArtifact,
+	DocumentDescriptorOutputCanonical,
+	DocumentDescriptorOutputData,
+	DocumentDescriptorSection,
+	DocumentDescriptorStatus,
+	DocumentDescriptorValidationError,
+	DocumentDescriptorValidationOptions,
+	DocumentDescriptorValidationResult,
+	DocumentSchema,
+	LoadAndValidateDocumentDescriptorOptions,
+	SchemaFieldDef,
+} from './profiles/document-descriptor.js';
+export {
+	DocumentDescriptorValidationErrorClass,
+	loadAndValidateDocumentDescriptor,
+	loadDocumentSchema,
+	setDocumentSchemaForValidation,
+	validateDocumentDescriptor,
+} from './profiles/document-descriptor.js';
+export type {
 	LoadProfileRegistryOptions,
 	ProfileAgentPolicy,
 	ProfileAxis,
