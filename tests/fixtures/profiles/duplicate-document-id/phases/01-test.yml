@@ -1,0 +1,15 @@
+phase:
+  id: 01-test
+  title: Test Phase
+  order: 1
+  axis: normative
+  status: not_started
+  documents:
+    - id: 01-doc
+      title: First Document
+      file: phases/01-test/01-doc.yml
+      required: true
+    - id: 02-doc
+      title: Second Document
+      file: phases/01-test/02-doc.yml
+      required: true

@@ -46,6 +46,25 @@ export {
 	validateDocumentDescriptor,
 } from './profiles/document-descriptor.js';
 export type {
+	CanonicalDocumentId,
+	DocumentationContract,
+	DocumentationContractDiagnostic,
+	DocumentationContractIndexEntry,
+	DocumentationContractPaths,
+	DocumentDescriptorPath,
+	LoadDocumentationContractOptions,
+	LoadedDocumentDescriptor,
+	LoadedPhaseDescriptor,
+	PhaseDocumentRef,
+	PhaseId,
+} from './profiles/documentation-contract.js';
+export {
+	DocumentationContractError,
+	listDocumentationContractIndex,
+	loadDocumentationContract,
+	relativizeIndexPaths,
+} from './profiles/documentation-contract.js';
+export type {
 	LoadProfileRegistryOptions,
 	ProfileAgentPolicy,
 	ProfileAxis,
