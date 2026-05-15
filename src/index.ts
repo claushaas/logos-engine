@@ -19,3 +19,27 @@ export function getPackageMetadata(): LogosPackageMetadata {
 		version: PACKAGE_VERSION,
 	};
 }
+
+export type {
+	LoadProfileRegistryOptions,
+	ProfileAgentPolicy,
+	ProfileAxis,
+	ProfileDependencyPolicy,
+	ProfileGlobalRules,
+	ProfileId,
+	ProfileOutputModel,
+	ProfileOutputModelEntry,
+	ProfilePhaseRegistry,
+	ProfilePhaseRegistryEntry,
+	ProfileQualityModel,
+	ProfileRegistry,
+	ProfileRegistryDiagnostic,
+	ProfileRegistryPaths,
+	ProfileRoadmapIntegration,
+	ProfileStatusWorkflow,
+} from './profiles/profile-registry.js';
+export {
+	loadProfileRegistry,
+	ProfileRegistryError,
+	validateProfileRegistry,
+} from './profiles/profile-registry.js';
