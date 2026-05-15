@@ -58,7 +58,7 @@ Journeys required for the core product promise to hold are onboarding, primary c
 | 3 | Selects or confirms the Standard profile. | Loads document contracts, phases, completion criteria, and output definitions. | Shows profile and phase coverage. | Profile context becomes active. | Confirm profile fit or defer. | Profile feels too broad. | Mark profile fit as assumption and continue with caveat. |
 | 4 | Configures AI or confirms existing provider setup. | Checks provider configuration shape and disclosure. | Shows local or remote provider mode and redacted token source. | AI capability becomes enabled or blocked. | Use configured provider, configure later, or stop intake. | Remote transmission confusion. | Explain what may be sent and allow local/provider alternatives. |
 | 5 | Describes the project in natural language. | AI asks a small set of context-aware questions. | Shows why questions matter and accepts unknowns. | Raw answer, summary, assumptions, and open questions are stored. | Answer, skip, or mark assumption. | Too many questions or unclear purpose. | Ask fewer questions and show next useful reason. |
-| 6 | Answers, says "I do not know", or asks the system to assume. | Interprets answers into proposed decisions, assumptions, risks, and gaps. | Shows captured content and proposed updates. | Proposed decision state changes. | Confirm, revise, reject, or defer proposals. | AI sounds authoritative. | Keep proposals visibly unconfirmed. |
+| 6 | Answers, says "I do not know", accepts/edits a contextual suggestion, or asks the system to assume. | Interprets answers into proposed decisions, assumptions, risks, and gaps. | Shows captured content, proposed updates, and source/caveat labels for suggestions. | Proposed decision state changes; contextual suggestions remain non-canonical until accepted into the normal flow. | Confirm, revise, reject, ignore, or defer proposals and suggestions. | AI sounds authoritative. | Keep proposals and suggestions visibly unconfirmed. |
 | 7 | Reviews proposed decisions. | Records confirmed, revised, rejected, or deferred decisions. | Shows decision status and affected documents. | Decision registry becomes more explicit. | Continue intake or generate documents. | User accepts without review. | Require clear decision-state language. |
 | 8 | Requests generation or accepts a generation prompt. | Renders canonical Markdown under the configured LOGOS root and derived HTML/agent outputs. | Shows created, updated, skipped, incomplete, and blocked outputs. | Canonical and derived outputs are refreshed. | Review outputs or run diagnostics. | Generated text hides uncertainty. | Preserve assumptions, gaps, and caveats in outputs. |
 | 9 | Runs `/diagnose`, `/validate`, or checks status. | Evaluates gaps, contradictions, incomplete areas, and affected documents. | Shows findings by severity and next suggested action. | Diagnostic state is recorded or displayed. | Continue, revise decisions, stop, or defer. | Diagnostics feel noisy. | Route findings to specific next questions. |
@@ -89,7 +89,7 @@ Journeys required for the core product promise to hold are onboarding, primary c
 
 **Re-entry path:** The user reopens `logos` from the same repository, sees workspace status, resumes the current phase, reviews unresolved questions, and continues from preserved state.
 
-**Persisted state:** Workspace metadata, configured LOGOS documentation root, profile, answers, assumptions, proposed decisions, confirmed decisions, open questions, risks, diagnostics, canonical documents, HTML artifacts, and agent packs.
+**Persisted state:** Workspace metadata, configured LOGOS documentation root, profile, answers, assumptions, proposed decisions, confirmed decisions, open questions, risks, diagnostics, contextual suggestion status where useful, canonical documents, HTML artifacts, and agent packs.
 
 **Evidence basis:** Product Brief, Product Scope, Audience Definition, Foundation Boundaries, old TUI and AI docs. No external behavior evidence yet.
 
@@ -115,7 +115,7 @@ Journeys required for the core product promise to hold are onboarding, primary c
 1. User opens `logos` from the target repository.
 2. System detects existing workspace state, configured documentation root, profile, document status, and unresolved items.
 3. User runs `/continue` or types naturally into the conversation.
-4. System summarizes current progress, unresolved decisions, and next useful questions.
+4. System summarizes current progress, unresolved decisions, and next useful questions, optionally including source-labeled contextual suggestions when a question directly depends on prior state.
 5. User continues intake, reviews proposed decisions, regenerates outputs, or runs diagnostics.
 
 **Success state:** The user can continue from the latest meaningful state without rereading every document.

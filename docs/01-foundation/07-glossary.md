@@ -132,6 +132,22 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 
 **Decision relevance:** Confirmed decisions are the strongest inputs for canonical documents and downstream generation.
 
+### Contextual Suggestion
+
+**Status:** canonical.
+
+**Definition:** An advisory proposed answer, option, framing, or draft response shown alongside a current question because prior confirmed decisions, active assumptions, open questions, completed documents, or validation gaps make the suggestion plausible.
+
+**Used in:** Principles, Boundaries, UX Model, Interaction Model, Functional Requirements, API Contracts.
+
+**Aliases:** suggested answer, grounded suggestion, context-aware suggestion.
+
+**Discouraged terms:** auto-answer, inferred decision, default decision.
+
+**Not to be confused with:** confirmed decision, assumption, diagnostic finding, generic hint.
+
+**Decision relevance:** A contextual suggestion can reduce repeated work in later phases, but it is not canonical state until the user accepts or revises it through an explicit review path.
+
 ### Decision
 
 **Status:** canonical.

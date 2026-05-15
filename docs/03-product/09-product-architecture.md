@@ -133,6 +133,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 - Conversation-first input.
 - `/continue` resume behavior.
 - Question cluster guidance.
+- Contextual suggestions for directly related later-phase questions.
 - Unknown answer handling.
 - Assume-for-now handling.
 - Low-confidence interpretation surfacing.
@@ -145,7 +146,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 - External research automation.
 - Broad source-code context capture.
 
-**Owned objects:** Intake Conversation, Conversation Turn, interpreted answer summaries, Open Question candidates.
+**Owned objects:** Intake Conversation, Conversation Turn, interpreted answer summaries, Contextual Suggestion candidates, Open Question candidates.
 
 **Affected journeys:** primary clarification, first value, continuation, recovery.
 
@@ -634,9 +635,10 @@ This architecture is based on founder-origin experience, existing Foundation and
 | CAP-020 | Output browser | support | Generation / TUI | preferred MVP | medium | CAP-016 | later MVP | provisional |
 | CAP-021 | Executive JSON generation | support | Executive Compiler | post-baseline / validation-required | medium | CAP-013, CAP-017 | after normative baseline | defined |
 | CAP-022 | Executive export adapters | support | Executive Compiler / Generation | post-baseline | medium | CAP-021 | after executive JSON | defined/planned by adapter |
-| CAP-023 | Search/retrieval | support | TUI / State | deferred | low | CAP-009 scale | post-MVP | deferred |
-| CAP-024 | Hosted collaboration | external | deferred module | deferred | none for MVP | cloud/account model | post-validation | deferred |
-| CAP-025 | Profile marketplace | external | deferred module | deferred | none for MVP | profile governance | post-validation | deferred |
+| CAP-023 | Contextual suggestions during intake | support | Conversational Intake / AI / State | MVP / validation-required | should-have | CAP-008, CAP-009, CAP-010 | later MVP | defined |
+| CAP-024 | Search/retrieval | support | TUI / State | deferred | low | CAP-009 scale | post-MVP | deferred |
+| CAP-025 | Hosted collaboration | external | deferred module | deferred | none for MVP | cloud/account model | post-validation | deferred |
+| CAP-026 | Profile marketplace | external | deferred module | deferred | none for MVP | profile governance | post-validation | deferred |
 
 ## Module Relationships
 

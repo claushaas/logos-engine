@@ -13,6 +13,7 @@ The MVP quality bar is evidence-based:
 - AI provider behavior is tested through deterministic fakes/fixtures by default.
 - No default test requires live AI, network access, or raw provider tokens.
 - AI proposals cannot become confirmed decisions without explicit user action.
+- Contextual suggestions are shown only when grounded in direct prior state and cannot become confirmed decisions without normal review.
 - Deterministic validation remains separate from AI judgment.
 - Canonical Markdown, derived HTML artifacts, and agent packs are generated under the configured root, defaulting to `logos/`.
 - Executive JSON and executive export artifacts are generated from normative documents, validate against the executive schema, and remain derived from the Normative Axis.
@@ -46,6 +47,7 @@ Tests are not substitutes for product sign-off. Automated tests prove behavior; 
 | Acceptance Criteria | Gate 3 / NFR-PRIV-001 | No telemetry or hidden network calls by default. | Privacy, static review, optional network inspection. | Code review plus no-live-provider tests. | Release-blocking. | Engineering/product. | MVP/review-needed. | Automated network egress guard not yet specified. |
 | Functional Requirements | FR-003, FR-007, FR-014 | Workspace state persists and resumes across sessions. | Integration, workflow, state tests. | Temp workspace fixtures and continuation tests. | Release-blocking. | Engineering. | MVP. | Migration coverage must grow with schema changes. |
 | Functional Requirements | FR-008, FR-043 | AI-derived decisions remain proposed until user review. | Domain, contract, workflow, security. | Decision transition tests and provider fixture tests. | Release-blocking. | Engineering. | MVP. | None known. |
+| Functional Requirements | FR-058, FR-059 | Contextual suggestions appear only for directly related questions and remain optional/non-canonical. | Domain, contract, workflow, frontend. | Suggestion eligibility fixtures, source-basis assertions, accept/edit/reject/ignore tests. | Release-blocking if suggestions can confirm state. | Engineering. | MVP / validation-required. | Exact suggestion quality thresholds need prototype evidence. |
 | Functional Requirements | FR-009, FR-010, FR-011, FR-027 | Markdown, HTML artifacts, and agent packs are generated and classified correctly. | Renderer, golden, integration. | Generated output fixtures/snapshots. | Release-blocking for canonical Markdown; degrade gracefully for early derived renderers if accepted. | Engineering. | MVP/review-needed. | Exact HTML renderer coverage depends on renderer implementation. |
 | Functional Requirements | FR-051 through FR-057 | Executive JSON and exports compile from the normative baseline without becoming live task state. | Schema, adapter, golden, integration. | Executive plan schema fixtures, export snapshots, unsupported-target tests. | Feature-blocking for Executive Axis. | Engineering/product. | post-baseline. | Command trigger and export readiness policy still review-needed. |
 | Functional Requirements | FR-018, FR-035 | Remote provider transmission requires explicit disclosure. | Provider config, command, workflow. | Fake remote-provider tests. | Release-blocking. | Engineering. | MVP. | Context preview UX needs frontend test once finalized. |
@@ -151,6 +153,7 @@ Domain tests must directly verify product invariants:
 - assumptions remain caveated;
 - unknown answers create valid open-question/incomplete state;
 - rejected/deferred proposals do not silently reappear without changed context;
+- contextual suggestions require direct source refs, remain optional, and route accepted/edited content through normal answer/proposal capture;
 - decision revisions preserve history rather than overwriting truth;
 - state-changing commands return structured results with recovery guidance;
 - generated outputs become stale when source state changes;
@@ -168,6 +171,7 @@ Data model tests must protect the filesystem-backed state model.
 | Profile lock | active profile id/version/source, invalid profile, profile compatibility. | Release-blocking. |
 | Decisions and revisions | schema validity, status enums, revision history, source refs. | Release-blocking. |
 | Sessions and turns | persistence, source traceability, provider failure preservation, retention/pruning behavior when defined. | Release-blocking for persistence; pruning review-needed. |
+| Contextual suggestions | source basis, stale detection, accept/edit/reject/ignore statuses, suppression after rejection where persisted. | Release-blocking for no-confirmation behavior; validation-required for usefulness. |
 | Validation/generation reports | run status, partial failure, stale/missing outputs, affected object refs. | Release-blocking. |
 | Output records | path containment, kind classification, source refs/checksum/mtime behavior. | Release-blocking. |
 | Executive plan records | schema version, readiness, source normative documents, confidence, stale status, and generated path. | Feature-blocking for Executive Axis. |
@@ -189,6 +193,7 @@ Required MVP sync/state tests:
 - output stale/missing/manual-edit states are detected where metadata exists;
 - generation retry preserves successful outputs and reports failed outputs;
 - provider retry/failure does not replay duplicate confirmed decisions;
+- stale contextual suggestions are refreshed, suppressed, or labeled before capture;
 - schema/checkpoint/source refs prefer conservative stale/unknown over false freshness;
 - root changes mark prior output status uncertain/stale;
 - no remote sync, background sync, queue, worker, webhook, or telemetry path is introduced accidentally.
@@ -238,6 +243,7 @@ Security tests map directly to the Security and Privacy threat model.
 | Remote provider consent | Fake remote provider cannot receive context before disclosure/acceptance. | Release-blocking. |
 | Path containment | Traversal, absolute path, root escape, collision tests. | Release-blocking. |
 | AI cannot confirm decisions | Provider output cannot create confirmed decision directly. | Release-blocking. |
+| Contextual suggestions cannot confirm decisions | Accepting or editing a suggestion creates answer/proposal input only, with source/caveat labels preserved. | Release-blocking. |
 | Invalid provider output rejected | Malformed/hostile provider fixtures. | Release-blocking. |
 | No telemetry by default | Static review and optional network guard. | Release-blocking. |
 | Generated HTML safety | Escaping/no external scripts/no telemetry. | Release-blocking for HTML artifact renderer. |

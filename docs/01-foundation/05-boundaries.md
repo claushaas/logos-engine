@@ -29,6 +29,7 @@ In scope for the initial product:
 - Initializing a local project workspace.
 - Creating and using a configurable LOGOS documentation root, defaulting to `logos/`, for generated project documentation.
 - Running a structured AI-led intake conversation.
+- Offering contextual suggestions alongside directly related questions when earlier confirmed or reviewable project state supports them.
 - Capturing answers, assumptions, open questions, and proposed decisions.
 - Storing decisions and project state locally.
 - Rendering canonical Markdown documentation from structured state.
@@ -61,6 +62,7 @@ These are not part of the project identity:
 - **Silent decision-making on behalf of the user**: prohibited. It violates user agency and AI as a Layer.
 - **Hidden remote-first state**: prohibited. It violates Local First, Git Friendly, and Structure Over Presentation.
 - **Unreviewed conversion of assumptions into facts**: prohibited. It violates Explicit Over Assumed and Safe by Default.
+- **Contextual suggestions presented as expected answers**: prohibited. Suggestions may reduce repeated work, but they must remain optional, source-labeled, and reviewable.
 - **Telemetry or surprise data collection**: prohibited unless a future explicit governance decision changes the privacy model with user consent.
 
 ### Pending Validation
@@ -120,6 +122,8 @@ This anti-pattern appears when the system acts as if AI can make project decisio
 It violates User Responsibility Boundaries, AI as a Layer, and Safe by Default.
 
 Example violation: marking a major product, market, architecture, or operational decision as confirmed because the AI inferred it from vague answers.
+
+Related violation: pre-filling the next phase with suggested answers derived from earlier documents and treating them as accepted because they are coherent with the existing project state.
 
 Review signal: user-owned choices become canonical without a clear confirmation path.
 

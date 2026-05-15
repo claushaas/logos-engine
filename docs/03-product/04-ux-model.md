@@ -173,6 +173,8 @@ The dominant output mode is local, inspectable project knowledge:
 - Derived agent packs regenerated from canonical content and profile contracts.
 - Visible status, diagnostics, decision proposals, gap reports, and generation reports inside the TUI.
 
+When the user has already completed several related phases, the intake experience may also show contextual suggestions beside the next questions. A contextual suggestion should feel like "LOGOS noticed this question relates to what you already decided; here is a proposed answer you may accept, edit, reject, or ignore." It must not feel like a required answer, a hidden default, or a decision the system already made.
+
 Secondary paradigms exist but remain subordinate:
 
 - **Command surface:** for explicit operations and recovery.
@@ -257,6 +259,20 @@ The highest-risk misunderstanding is that generated documents prove the project 
 **Violation example:** Asking the user to complete every product, market, validation, scope, and UX question before showing any state or value.
 
 **Downstream requirement:** Interaction Model must define intake turns that focus on the next few useful decisions rather than full phase completion at once.
+
+### Rule 1A: Suggest Only From Direct Prior Context
+
+**Applies to:** later-phase intake, continuation, diagnostics follow-up, document-specific questions.
+
+**Rationale:** Once the project has several completed documents, some later questions are direct continuations of earlier decisions. Re-asking them from zero creates friction, but auto-answering them creates false authority.
+
+**Evidence basis:** Product hypothesis grounded in founder-origin use and the project's source-of-truth principles; not externally validated.
+
+**Trade-off:** Suggestions add cognitive load if shown too often or without a clear source basis.
+
+**Violation example:** Asking an engineering architecture question and pre-filling an answer from an unvalidated market assumption without labeling the assumption or asking the user to review it.
+
+**Downstream requirement:** Interaction Model and API Contracts must define contextual suggestions as proposed, source-labeled, and optional; State Model must prevent suggestions from becoming confirmed decisions without user action.
 
 ### Rule 2: Show the Next Useful Action by Default
 

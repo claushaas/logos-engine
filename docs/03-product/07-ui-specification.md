@@ -13,6 +13,7 @@ The UI must make these things visually obvious:
 - Active profile and phase or document context.
 - AI provider status when AI interaction is relevant.
 - Whether content is conversational, proposed, confirmed, assumed, unknown, incomplete, blocked, canonical, derived, stale, partial, or failed.
+- Whether an answer is only a contextual suggestion derived from earlier project state.
 - Whether an action will write files, overwrite files, send context remotely, change configuration, or update canonical state.
 - The next useful action without hiding alternative safe actions.
 
@@ -145,6 +146,7 @@ State labels must be visible in text. Color or icon treatment may reinforce mean
 | Canonical | Marked as primary human-readable generated output. |
 | Derived | Marked as regenerated from canonical source; not source of truth. |
 | Low confidence | Requires review; never visually merged with confirmed content. |
+| Contextual suggestion | Optional and source-labeled; never styled as already accepted or expected. |
 | Partial | Summary must show what succeeded and what did not. |
 | Failed | Clear error state with preserved state and next safe action. |
 
@@ -178,6 +180,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 | Command Input | Accept slash commands and conversational text. | TUI Shell | idle, focused, pending, error | Do not use for irreversible action confirmation alone. | Keyboard-first, clear focus. |
 | Conversation Turn | Display user and AI-led intake messages. | Intake | user, system, AI, low-confidence | Do not treat AI turn as confirmed state. | Speaker/status text labels. |
 | Question Cluster | Present small set of questions. | Intake, diagnostics follow-up | normal, blocking, optional | Do not show long questionnaire pages by default. | Clear order and keyboard navigation. |
+| Contextual Suggestion | Show a suggested answer, option, or framing grounded in earlier state. | Intake, diagnostics follow-up, proposal review | normal, low-confidence, conflicted, source-limited | Do not show when source basis is weak or unrelated; do not make it look confirmed. | Source/caveat text and accept/edit/reject/ignore actions. |
 | Proposal Card | Show proposed decision, assumption, or follow-up. | Proposal Review | proposed, low-confidence, conflicted | Do not use for confirmed content without relabeling. | Status in text; actions reachable. |
 | Decision Status Badge | Mark proposed, confirmed, rejected, deferred, deprecated. | Review, status, documents | all decision states | Do not rely on color alone. | Text label required. |
 | Assumption Badge | Mark accepted-for-now or unvalidated assumption. | Review, diagnostics, generated reports | proposed, accepted, needs validation | Do not replace validation gaps. | Text label required. |
@@ -385,6 +388,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 **Primary content:**
 
 - Current question cluster.
+- Optional contextual suggestions with source basis, confidence or caveat, and accept/edit/reject/ignore actions.
 - User messages.
 - AI/system responses.
 - Why the question matters when helpful.
@@ -399,7 +403,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 
 **Available actions:** answer naturally, say unknown, ask to assume, correct prior answer, review proposals, run commands.
 
-**Component composition:** Conversation Turn, Question Cluster, Inline Alert, Proposal Preview, Command Input.
+**Component composition:** Conversation Turn, Question Cluster, Contextual Suggestion, Inline Alert, Proposal Preview, Command Input.
 
 **States:** active, waiting for AI, no provider, low confidence, proposal available, unknown answer captured, assumption captured, provider error.
 
@@ -417,7 +421,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 
 **Accessibility notes:** Conversation turns need speaker/status labels.
 
-**Data dependencies:** Intake Conversation, AI Provider Configuration, Open Questions, Assumptions, Decision Proposals.
+**Data dependencies:** Intake Conversation, AI Provider Configuration, Open Questions, Assumptions, Decision Proposals, Contextual Suggestions.
 
 **Downstream implications:** Feature Specification must ensure non-slash input routes to conversation and does not require question IDs.
 

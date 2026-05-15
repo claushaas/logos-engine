@@ -124,6 +124,8 @@ The register below lists all functional requirements identified from Product Sco
 | FR-055 | The product must support supported file exports for executive Markdown snapshots, GitHub Issue-compatible Markdown, HTML executive overview, and agent task packs. | System | Integration | supporting / post-baseline | should-have | Executive mappings | inspection |
 | FR-056 | The product must treat Linear and Notion executive mappings as planned adapter contracts unless implemented and validated; they must not imply live sync in MVP. | System | Business Rule | deferred/planned | won't-have for live sync | Executive mappings, OOS-010 | review |
 | FR-057 | The product must not provide live task ownership, bidirectional sync, assignment, comment, notification, or calendar workflows as part of the Executive Axis MVP. | System | Business Rule | excluded | won't-have | Foundation Boundaries, OOS-010 | review |
+| FR-058 | When intake is advanced and the next question directly depends on earlier project state, the product may show contextual suggestions alongside the question. | System | User | supporting / MVP / validation-required | should-have | UX Model Rule 1A, Interaction Pattern 1A, CAP-023 | observable test |
+| FR-059 | Contextual suggestions must remain optional, source-labeled, caveated when needed, and non-canonical until the user accepts or revises them through the normal answer/proposal flow. | User | Business Rule | core / MVP | must-have | Foundation Glossary, Interaction Pattern 1A, ACT-019 through ACT-021 | observable test |
 
 ---
 
@@ -227,6 +229,21 @@ Core requirements are the must-have behaviors essential to the product promise a
 - **Verification:** prototype evidence.
 - **Failure Behavior:** If AI provider is unavailable, route to no-provider recovery or `/config ai`.
 - **Recovery Behavior:** Preserve user input and allow continuation after provider setup.
+
+#### CR-005A: Contextual Suggestions During Intake
+
+- **ID:** FR-058, FR-059.
+- **Statement:** When the user is answering a later-phase or directly dependent question, the product may show contextual suggestions derived from prior confirmed decisions, active assumptions, open questions, completed documents, or validation gaps.
+- **Actor:** System and user.
+- **Classification:** supporting / MVP / validation-required.
+- **Priority:** should-have, with safety rules must-have when implemented.
+- **Source:** UX Model Rule 1A, Interaction Model Pattern 1A, Product Architecture CAP-023.
+- **Related Journey:** J-001 Primary Clarification, J-002 Continue an Existing Session, J-006 Diagnose Gaps and Validate Readiness.
+- **Related Module:** Conversational Intake, AI Assistance, Structured State and Decision.
+- **Related Capability:** CAP-023.
+- **Verification:** observable test.
+- **Failure Behavior:** If source context is weak, stale, contradictory, or unavailable, the product asks the question without a suggestion or marks the suggestion low confidence.
+- **Recovery Behavior:** User may accept, edit, reject, ignore, say unknown, or answer manually; no confirmed state changes until the underlying review rule allows it.
 
 #### CR-006: Structured Project State Capture
 

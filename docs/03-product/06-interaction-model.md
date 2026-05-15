@@ -126,6 +126,24 @@ When principles conflict:
 
 **Status:** MVP.
 
+### Pattern 1A: Question With Contextual Suggestions
+
+**Classification:** MVP / validation-required.
+
+**Purpose:** Reduce repeated work in later phases by showing proposed answers or option framings when the current question directly depends on earlier confirmed decisions, active assumptions, open questions, or completed documents.
+
+**Input modality:** Text input, keyboard-selectable suggestion actions, or explicit textual acceptance/revision.
+
+**Trigger:** The user is continuing intake after meaningful prior progress, and the next question has a direct dependency on earlier project state or profile-defined document dependencies.
+
+**System response:** LOGOS asks the relevant question and may attach one or more contextual suggestions. Each suggestion must show its status, source basis, confidence or caveat, and available actions: accept, edit, reject, ignore, or ask for a different suggestion.
+
+**State effect:** Contextual suggestions are advisory. Accepting a suggestion routes through the same proposal, assumption, or answer-capture path as a user answer. Editing creates user-authored input. Ignoring or rejecting a suggestion must not change confirmed state.
+
+**Failure handling:** If the source basis is weak, contradictory, stale, or privacy-sensitive beyond the current operation, LOGOS asks the question without a suggestion or labels the suggestion as low confidence. If suggestion generation fails, ordinary question flow continues.
+
+**Status:** MVP / validation-required.
+
 ### Pattern 2: Slash Command Operation
 
 **Classification:** MVP.
@@ -290,6 +308,9 @@ Commands should be discoverable through `/help`, status prompts, contextual sugg
 | ACT-016 | Correct AI interpretation | User | Decision, Assumption, Open Question | update | User says interpretation is wrong | Identify target and preview correction | Proposal or state updated | Required if canonical state changes | Yes | Ambiguous target | Ask clarification; keep old state | MVP |
 | ACT-017 | Retry failed operation | User | Failed Operation | recover | User selects retry | Re-run with same or adjusted context | Success, partial, or failed state | Based on operation | Based on operation | Repeated failure | Offer config/root/status path | MVP |
 | ACT-018 | Cancel pending operation | User | Pending Operation | recover | User cancels | Stop where safe and report preserved state | Pending to canceled/partial | No unless cancellation loses work | Partially | Operation already wrote files | Report completed writes | MVP |
+| ACT-019 | Accept contextual suggestion | User | Contextual Suggestion | create/update | User accepts a suggested answer or option | Route accepted suggestion through answer/proposal capture with source basis | May create proposed decision, active assumption, answer, or open question according to review rules | Based on underlying state effect | Based on underlying action | Suggestion source stale or contradicted | Revalidate source and keep unconfirmed if ambiguous | MVP / validation-required |
+| ACT-020 | Edit contextual suggestion | User | Contextual Suggestion | create/update | User modifies suggestion before submitting | Treat edited content as user-authored input while retaining suggestion source refs where useful | May create proposed state through normal intake | Based on resulting state effect | Based on underlying action | Edited answer changes meaning or dependency | Ask clarification or route to proposal review | MVP / validation-required |
+| ACT-021 | Reject contextual suggestion | User | Contextual Suggestion | dismiss/update | User rejects suggestion | Mark suggestion rejected or lower priority for current context | No confirmed-state change | No | Usually | Rejected suggestion reappears without changed context | Suppress until source context changes | MVP / validation-required |
 
 ### System-Initiated Actions
 
@@ -299,6 +320,7 @@ The system may initiate these actions without treating them as user consent:
 - Detect initialized or uninitialized workspace state.
 - Summarize current state.
 - Suggest next questions or commands.
+- Suggest optional contextual answers when directly supported by prior reviewable state.
 - Mark AI interpretation as proposed or low confidence.
 - Report diagnostics and generation status.
 - Warn about provider, root, overwrite, or validation risk.
@@ -341,6 +363,8 @@ Confirmation is not required for:
 - Running read-only validation checks.
 - Capturing ordinary conversation input before it becomes canonical state.
 - Showing proposed decisions.
+- Showing contextual suggestions.
+- Dismissing, ignoring, or rejecting contextual suggestions.
 - Showing generation previews.
 
 ### Undo May Substitute for Confirmation Only When Safe

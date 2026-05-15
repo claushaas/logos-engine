@@ -90,6 +90,7 @@ This IA is a product hypothesis based on founder-origin experience, existing Fou
 - Active profile.
 - Configured LOGOS documentation root.
 - Conversation summaries.
+- Contextual suggestion status where useful.
 - Decisions.
 - Assumptions.
 - Open questions.
@@ -120,7 +121,7 @@ This IA is a product hypothesis based on founder-origin experience, existing Fou
 
 **Archived or deleted by:** User manually or future workspace management; not a primary MVP flow.
 
-**Related objects:** Repository Workspace, Decision Registry, Assumption, Open Question, Diagnostic Finding, Generation Report.
+**Related objects:** Repository Workspace, Decision Registry, Assumption, Open Question, Contextual Suggestion, Diagnostic Finding, Generation Report.
 
 **Evidence basis:** Product Scope, UX Model, old system architecture.
 
@@ -562,6 +563,54 @@ This IA is a product hypothesis based on founder-origin experience, existing Fou
 **Downstream implications:** Interaction Model must route open questions into small clusters. UI Model must show unresolved questions without overwhelming the user.
 
 **Open questions:** What priority model best separates blocking from useful-later questions?
+
+### OBJ-011A: Contextual Suggestion
+
+**User-facing definition:** An optional suggested answer, option, or framing shown beside a current question because earlier project state makes it plausible.
+
+**Purpose:** Help users avoid repeating work across later phases while preserving review, uncertainty, and user-owned decisions.
+
+**Classification:** MVP / user-facing / advisory state / validation-required.
+
+**Key properties:**
+
+- Suggestion id.
+- Current question or open question reference.
+- Suggested answer or option set.
+- Source basis.
+- Confidence or caveat.
+- Related phase or document.
+- Status.
+- Resulting answer, proposal, assumption, or ignored/rejected marker.
+
+**Lifecycle states:**
+
+- Proposed.
+- Accepted for capture.
+- Edited for capture.
+- Rejected.
+- Ignored.
+- Stale.
+
+**Ownership:** LOGOS proposes; the user decides whether to use, edit, reject, or ignore the suggestion.
+
+**Visibility:** High only in the current intake context; lower after rejection, ignore, or source staleness.
+
+**Permissions relevance:** Medium. Showing or dismissing a suggestion is low risk; accepting or editing it can create answer/proposal state, but cannot confirm decisions directly.
+
+**Created by:** Intake when current questions directly depend on prior decisions, assumptions, open questions, completed documents, or validation gaps.
+
+**Modified by:** User accept/edit/reject/ignore action or source-state changes.
+
+**Archived or deleted by:** Suppression, pruning, or recomputation policy; exact retention is implementation-level.
+
+**Related objects:** Intake Conversation, Open Question, Decision, Assumption, Diagnostic Finding, Canonical Document.
+
+**Evidence basis:** UX Model Rule 1A, Interaction Model Pattern 1A, Functional Requirements FR-058 and FR-059.
+
+**Downstream implications:** UI Model must show suggestion status and source/caveat text. State Model must prevent suggestions from becoming confirmed state without review.
+
+**Open questions:** What confidence threshold is useful enough to show suggestions without adding noise?
 
 ### OBJ-012: Risk
 
@@ -1092,6 +1141,7 @@ This IA is a product hypothesis based on founder-origin experience, existing Fou
 | REL-010 | Intake Conversation | Decision | proposes | many-to-many | yes | AI or user input may create proposed decisions. | User confirmation required before canonical decision status. | AI cannot confirm. |
 | REL-011 | Intake Conversation | Assumption | identifies | many-to-many | yes | Unknown or provisional answers may become assumptions. | Accepting an assumption can affect generation. | Assumptions must stay visible. |
 | REL-012 | Intake Conversation | Open Question | creates | many-to-many | yes | Unknowns and follow-ups become open questions. | Low direct permission impact. | Questions should be clustered by next usefulness. |
+| REL-012A | Intake Conversation | Contextual Suggestion | offers | many-to-many | yes | Later-phase questions may include source-labeled suggested answers. | Accept/edit may create answer or proposal state; reject/ignore does not mutate confirmed state. | Suggestions need direct source basis and visible caveats. |
 | REL-013 | Decision | Canonical Document | affects | many-to-many | yes | Document status may become stale when decisions change. | Regeneration may write files. | Affected documents should be visible on change. |
 | REL-014 | Assumption | Canonical Document | qualifies | many-to-many | yes | Documents must preserve assumption labels until resolved. | Low direct permission impact. | Avoid treating assumptions as facts. |
 | REL-015 | Open Question | Canonical Document | blocks or informs | many-to-many | yes | Open questions can make documents incomplete or caveated. | Low direct permission impact. | Blocking status must be visible. |

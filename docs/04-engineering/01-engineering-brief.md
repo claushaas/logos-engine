@@ -20,6 +20,7 @@ Engineering success means:
 - deterministic validation remains usable without live AI;
 - file writes, provider transmission, root changes, and overwrites require clear user intent;
 - the default LOGOS documentation root is `logos/`, and it is configurable;
+- contextual suggestions can help later-phase intake only when grounded in direct prior state and kept non-canonical until user review;
 - release gates can be verified without live AI provider calls, network access, or raw tokens in fixtures.
 
 Engineering failure means:
@@ -45,6 +46,7 @@ Engineering failure means:
 | Product Scope SC-005 | AI provider configuration is explicit and supports local and remote modes where available. | Provider abstraction, redacted status, transmission disclosure, token-source rules, and no-provider recovery are required. | committed |
 | Product Scope SC-006 | Structured project state carries answers, summaries, decisions, assumptions, risks, and document status. | State schemas, migrations, safe writes, corruption handling, and traceability must be treated as core architecture. | committed |
 | Product Scope SC-007 | AI-derived decisions remain proposed until user review. | State transitions must prevent proposed material from becoming confirmed without explicit user action. | committed |
+| Product UX / FR-058 | Later-phase intake may include contextual suggestions when questions depend on earlier project state. | Intake must derive suggestions from bounded prior state, label source/caveats, and route accept/edit through normal proposal and confirmation flows. | committed / validation-required |
 | Product Scope SC-008 | Markdown is generated under the configured root from state and profile contracts. | Rendering must be deterministic, traceable, safe to regenerate, and clear about stale or incomplete outputs. | committed |
 | Product Scope SC-009 | HTML artifacts are generated as derived outputs. | Artifact generation must be downstream of canonical Markdown and profile contracts, with stale/failed status. | committed / supporting |
 | Product Scope SC-010 | Agent packs are generated as derived downstream context. | Agent pack generation must preserve caveats, dependencies, and source traceability without becoming canonical. | committed / supporting / validation-required |
@@ -81,6 +83,7 @@ Product inputs requiring engineering clarification:
 | Structured state | Persist decisions, assumptions, open questions, risks, diagnostics, validation gaps, output status, and generation reports. | SC-006, FR-007 | Data Model |
 | AI provider layer | Support provider configuration, redacted status, local/remote mode, disclosure, timeout, failure, and structured response validation. | SC-005, FR-017, NFR-PERF-002 | API Contracts, Integration Architecture, Security Architecture |
 | Conversational intake | Support AI-led question clusters, unknown answers, assume-for-now answers, low-confidence labels, and proposal creation. | SC-004, FR-006, FR-024, FR-025 | System Architecture, API Contracts |
+| Contextual suggestions | Generate optional source-labeled suggestions for directly related questions when prior state supports them, without confirming state automatically. | FR-058, FR-059 | System Architecture, API Contracts, Test Strategy |
 | Decision review | Enforce proposed, confirmed, rejected, deferred, revised, and superseded decision states. | SC-007, FR-008, FR-021 | Data Model, API Contracts |
 | Validation and diagnostics | Run deterministic checks without live AI, report severity, affected documents, unsupported claims, and next actions. | SC-011, FR-012, FR-013 | Test Strategy, System Architecture |
 | Markdown generation | Render canonical Markdown from profile contracts and structured state under configured root. | SC-008, FR-009 | System Architecture, Data Model |
@@ -124,6 +127,7 @@ This direction is intentionally high-level. Detailed system design belongs in Sy
 | TUI vs domain actions | The TUI routes user input and renders state; domain services own state transitions, validation, generation, and permissions. | Prevents UI shortcuts from bypassing confirmation and safety rules. |
 | Conversation vs structured state | Conversation is input; structured state is durable truth. | Prevents chat transcript dependency and enables regeneration. |
 | AI provider vs AI interpretation | Provider calls return candidate output; interpretation must be schema-validated and reviewed before state mutation. | Protects against malformed provider output and false authority. |
+| Contextual suggestions vs confirmed state | Suggestions are transient or proposed assistance derived from prior state; user action decides whether they become an answer, proposal, assumption, or ignored suggestion. | Prevents coherent AI suggestions from bypassing decision review. |
 | Profile contract vs project content | Profile YAML defines document shape; project state defines project truth. | Prevents profiles from becoming strategy generators. |
 | Deterministic validation vs AI diagnostics | Deterministic validators produce rule-based findings; AI may explain or advise separately. | Keeps validation reliable without live AI. |
 | Canonical Markdown vs derived outputs | Markdown is the canonical human-readable projection; HTML artifacts and agent packs are derived. | Prevents stale artifacts from becoming source truth. |

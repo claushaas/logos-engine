@@ -97,6 +97,7 @@ Internal APIs are command/action, query, port, and adapter contracts inside the 
 | `routeInput` | TUI | Command Router | stable MVP | Returns command action or conversational input action; does not execute business logic. | MVP |
 | Workspace Commands | Command Router | Workspace Service | stable MVP | Initialize/resume/status/root config through application service only. | MVP |
 | Intake Commands | Command Router/TUI | Intake Orchestrator | stable MVP | Non-slash input becomes intake; provider output remains proposal/advisory. | MVP |
+| Contextual Suggestion Commands | Intake/TUI | Contextual Suggestion Service | stable MVP / validation-required | Suggestions are optional, source-labeled, and route accept/edit through answer/proposal capture; they cannot confirm decisions. | MVP / validation-required |
 | Decision Commands | Review UI/Application | Decision Service | stable MVP | Confirm/revise/reject/defer require valid transitions and explicit user action. | MVP |
 | Validation Queries/Commands | TUI/Application | Validation Service | stable MVP | No live AI/network dependency. | MVP |
 | Diagnostics Queries/Commands | TUI/Application | Diagnostics Service | stable MVP | Advisory findings only; no confirmed state mutation. | MVP |
@@ -157,7 +158,7 @@ The register uses operation names rather than HTTP methods/paths because MVP has
 | API-004 | ChangeDocumentationRoot | internal command | N/A | N/A | Configure generated output root. | TUI/Command Router | Configuration Service | ChangeDocumentationRoot | FR-004, FR-023 | no | explicit confirmation | `ChangeDocumentationRootRequest` | `ConfigCommandResult` | `unsafe_path`, `path_conflict`, `confirmation_required` | yes | none | none | none | config schema version | DocumentationRootChanged | Must not assume `docs/`. | MVP |
 | API-005 | ConfigureProvider | internal command | N/A | N/A | Set AI provider mode and redacted token source metadata. | TUI/Command Router | Configuration Service | ConfigureProvider | FR-017, FR-036 | provider credential resolved externally | token safety and disclosure | `ConfigureProviderRequest` | `ProviderConfigResult` | `unsafe_token_storage`, `provider_invalid`, `credential_missing` | yes | none | none | provider external limits | provider config schema version | ProviderConfigurationChanged | Raw tokens forbidden. | MVP |
 | API-006 | TestProvider | adapter operation | N/A | N/A | Verify provider connectivity/configuration. | Configuration Service | AI Provider Adapter | provider status query | FR-042 | provider credential if needed | remote disclosure if context sent; test should send no project context | `TestProviderRequest` | `ProviderStatusResult` | `provider_timeout`, `provider_auth_failed`, `provider_unavailable` | no | none | none | provider external limits | provider contract version | ProviderTestCompleted | No live test in default suite. | MVP |
-| API-007 | ContinueIntake | internal command | N/A | N/A | Process non-slash user input or resume conversation. | TUI/Command Router | Intake Orchestrator | RecordIntakeTurn / proposal interpretation | FR-006, FR-007, FR-014 | no account auth | remote disclosure before provider call | `ContinueIntakeRequest` | `IntakeResult` | `provider_unconfigured`, `provider_timeout`, `invalid_ai_output` | yes for saved turns | none | none | provider external limits | intake schema version | IntakeTurnRecorded | Must preserve input on provider failure. | MVP |
+| API-007 | ContinueIntake | internal command | N/A | N/A | Process non-slash user input or resume conversation. | TUI/Command Router | Intake Orchestrator | RecordIntakeTurn / proposal interpretation / contextual suggestion creation | FR-006, FR-007, FR-014, FR-058 | no account auth | remote disclosure before provider call | `ContinueIntakeRequest` | `IntakeResult` | `provider_unconfigured`, `provider_timeout`, `invalid_ai_output` | yes for saved turns | none | none | provider external limits | intake schema version | IntakeTurnRecorded, ContextualSuggestionCreated | Must preserve input on provider failure; suggestions are optional and non-canonical. | MVP |
 | API-008 | ReviewProposal | internal command | N/A | N/A | Confirm, revise, reject, or defer proposed decision/assumption. | TUI | Decision Service | ConfirmDecision / ReviseDecision / RejectDecision / DeferDecision | FR-008, FR-021, FR-043 | no | explicit user action | `ReviewProposalRequest` | `DecisionCommandResult` | `invalid_transition`, `proposal_not_found`, `confirmation_required` | yes | none | none | none | decision schema version | DecisionConfirmed/DecisionRevised | Confirmation semantics cannot loosen. | MVP |
 | API-009 | RunValidation | internal command/query | N/A | N/A | Run deterministic validation against state/profile. | TUI/Generation | Validation Service | RunValidation | FR-013 | no | read local state | `RunValidationRequest` | `ValidationResult` | `state_invalid`, `profile_invalid`, `rule_failed` | no | finding list bounded | phase/document filters | none | validation rule/schema version | ValidationRunCompleted | No AI dependency. | MVP |
 | API-010 | DiagnoseWorkspace | internal query/command | N/A | N/A | Explain gaps, contradictions, risks, and next actions. | TUI | Diagnostics Service | DiagnoseWorkspace | FR-012, FR-026 | no | read/advisory only | `DiagnoseWorkspaceRequest` | `DiagnosticResult` | `state_invalid`, `diagnostic_failed` | no | finding list bounded | severity/document filters | none | diagnostic schema version | DiagnosticFindingRaised | Advisory; no confirmed mutation. | MVP |
@@ -232,7 +233,7 @@ type OperationResult<T> =
 | --- | --- | --- | --- |
 | `WorkspaceStatusResult` | status/startup | repository path, root, profile, provider status, state health, next action | Must show `logos/` or custom root clearly. |
 | `ConfigCommandResult` | root/provider config | prior value, new value, confirmation status, warnings | Must redact token metadata. |
-| `IntakeResult` | conversation | saved turn status, provider status, proposals, assumptions, open questions, next prompt | Low confidence and provider failure represented explicitly. |
+| `IntakeResult` | conversation | saved turn status, provider status, proposals, assumptions, open questions, contextual suggestions, next prompt | Low confidence, source basis, suggestion caveats, and provider failure represented explicitly. |
 | `DecisionCommandResult` | proposal review | decision id, old status, new status, affected docs, stale outputs | No silent confirmation. |
 | `ValidationResult` | validation | run id, summary counts, findings, blocking status | Deterministic and provider-independent. |
 | `DiagnosticResult` | diagnostics | run id, severity groups, affected objects, next actions | Advisory; must not claim confirmed changes. |
@@ -247,6 +248,7 @@ Response evolution rules:
 - adding optional fields is allowed if consumers tolerate unknown fields;
 - changing enum values, required fields, or status semantics is breaking;
 - low-confidence, warning, partial, blocked, stale, and recovery states must be explicit, not hidden in prose;
+- contextual suggestions must expose status, source basis, confidence or caveat, and available actions instead of appearing as accepted answers;
 - sensitive data is excluded by default and included only through explicit future export contracts.
 
 ## Error Model
@@ -285,6 +287,7 @@ type ApiError = {
 | `migration_failed` | state | N/A | no until repaired | State migration failed and needs review. | Migration threw or produced invalid state. | migration id, versions | error | none | Restore/repair state. |
 | `profile_invalid` | profile | N/A | no | The active profile is invalid. | Profile schema/contract validation failed. | profile path, errors | error | none | Fix/select profile. |
 | `invalid_transition` | domain | N/A | no | This state change is not allowed. | Domain state machine rejected transition. | entity id/status | warn | none | Choose valid action. |
+| `stale_suggestion` | domain/conflict | N/A | yes after refresh | This suggestion is based on stale or changed context. | Contextual suggestion source refs changed. | suggestion id, source refs | info | none | Refresh suggestion or answer manually. |
 | `provider_unconfigured` | provider | N/A | yes after config | AI provider is not configured. | Provider config missing. | provider mode | info | none | Run `/config ai`. |
 | `provider_timeout` | timeout/provider | N/A | yes | The AI provider timed out. | Provider call exceeded timeout. | timeoutMs, operation | warn | none | Retry/reconfigure/save. |
 | `provider_auth_failed` | provider | N/A | no until fixed | Provider credentials failed. | External provider auth rejected. | provider id, redacted source | warn | none | Fix token source. |
@@ -323,6 +326,7 @@ MVP authorization means local operation permission and explicit user consent, no
 | Write/overwrite generated outputs | explicit generation intent and overwrite confirmation when needed | `confirmation_required`, `path_conflict`, `write_denied` | Paths must resolve under configured root. |
 | Remote provider transmission | provider configured plus disclosure/preview acceptance | `confirmation_required`, `provider_unconfigured` | Sensitive project context may leave machine. |
 | Confirm/revise/reject/defer decisions | explicit user action required | `invalid_transition`, `confirmation_required` | AI cannot authorize this. |
+| Accept/edit/reject contextual suggestion | allowed as an intake action; confirmation depends on resulting state transition | `stale_suggestion`, `invalid_transition` | Accepting/editing captures input or proposals; it does not confirm decisions directly. |
 | Store provider token | prohibited in project files | `unsafe_token_storage` | Only token source refs persist. |
 | Diagnostics/validation | allowed; no confirmed state mutation | `state_invalid`, `profile_invalid` | Deterministic validation remains local. |
 

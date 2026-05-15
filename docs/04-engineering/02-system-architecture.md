@@ -29,6 +29,7 @@ TUI Shell
   |       +--> Workspace Service
   |       +--> Profile Service
   |       +--> Intake Orchestrator
+  |       +--> Contextual Suggestion Service
   |       +--> Decision Service
   |       +--> Validation Service
   |       +--> Diagnostics Service
@@ -64,6 +65,7 @@ The major system components are:
 | Configuration Service | Manage documentation root and AI provider configuration status. | Does not store raw provider tokens in project files. |
 | Profile Service | Load and validate profile YAML contracts, phases, documents, outputs, and quality rules. | Does not decide project content. |
 | Intake Orchestrator | Coordinate AI-led question clusters, answer capture, interpretation, and proposal creation. | Cannot confirm decisions. |
+| Contextual Suggestion Service | Build optional suggested answers or option framings for directly related questions from bounded prior state. | Cannot create confirmed decisions or treat stale/weak sources as authoritative. |
 | Decision Service | Own decision, assumption, open-question, risk, revision, and state transition rules. | Does not depend on UI or provider implementation details. |
 | Validation Service | Run deterministic validation checks against state and profile contracts. | Does not require live AI. |
 | Diagnostics Service | Produce severity-grouped gaps, contradictions, risks, affected documents, and next actions. | AI advice, if used later, remains advisory. |
@@ -205,6 +207,7 @@ Layer violations to reject in review:
 | Profile Module | Load and validate profile YAML contracts. | Profile metadata, phases, document contracts, output definitions, quality rules. | User decisions or generated content. | `loadProfile`, `validateProfile`, `getDocumentContract`. | File System Port, YAML adapter, schemas. | Decision mutation, renderer writes. | Schema validation fixtures. |
 | State Module | Persist and retrieve structured project state. | Decisions, assumptions, questions, risks, diagnostics, validation gaps, output status, generation reports. | UI rendering, provider execution. | State repository port and state transition service. | File System Port, Domain Layer. | TUI components, provider SDKs. | Versioned schemas and safe write policy. |
 | Intake Module | Coordinate user answers, prompt context, provider calls, and interpretation. | Conversation turns as input records, proposed interpreted outputs. | Confirmed decisions. | `continueIntake`, `interpretAnswer`, `createProposals`. | AI Provider Port, Profile Module, State Module, Decision Module. | Direct confirmed-state writes. | AI output schema validation and proposal-only tests. |
+| Contextual Suggestion Module | Derive optional suggested answers for current questions from direct prior state and document dependencies. | Suggestion eligibility, source refs, caveats, confidence labels, suppression after rejection. | Confirmed state, broad retrieval, hidden defaults. | `buildContextualSuggestions`, `reviewSuggestionAction`. | Profile Module, State Module, Intake Module, Decision Module. | Direct confirmed-state writes, arbitrary repository scraping. | Source-basis and no-confirmation tests. |
 | Decision Module | Enforce decision lifecycle and user confirmation. | Decision state machine, revisions, supersession, affected outputs. | Provider prompts, UI layout. | `proposeDecision`, `confirmDecision`, `reviseDecision`, `deferDecision`. | State Module, Domain types. | AI Provider Adapter, Renderer Adapter. | State transition tests. |
 | Validation Module | Run deterministic checks. | Validation findings, severity rules, readiness checks. | AI advisory text. | `validateWorkspace`, `validateDocument`, `validateProfileCoverage`. | Profile Module, State Module, Domain rules. | AI Provider Adapter. | No-provider tests. |
 | Diagnostics Module | Summarize gaps, contradictions, risks, and next actions. | Diagnostic findings and grouping logic. | Canonical state mutation. | `diagnoseWorkspace`, `diagnoseDocument`. | Validation Module, State Module, Profile Module. | Direct remote provider calls for deterministic findings. | Snapshot and fixture tests. |
@@ -394,6 +397,21 @@ Infrastructure Architecture and Deployment Plan must expand package publishing, 
 | Permission Check | Remote provider disclosure before sending context; user review before confirmation. |
 | Failure Behavior | Preserve user input, reject malformed AI output, offer retry/reconfigure/no-provider path. |
 | Audit or Report | Decision proposal status and provider failure record if applicable. |
+
+### Flow 2A: Contextual Suggestion for Dependent Questions
+
+| Field | Description |
+| --- | --- |
+| Source | Current intake question, profile dependencies, and bounded prior project state. |
+| Destination | TUI Intake View and optional answer/proposal capture flow. |
+| Trigger | Intake is advanced and the next question directly depends on earlier decisions, assumptions, open questions, completed documents, or validation gaps. |
+| Data Objects | Question id or prompt, source refs, suggestion text/options, confidence label, caveats, accepted/rejected/ignored status. |
+| Validation Point | Source references must exist, be relevant, and not conflict with confirmed decisions; stale or weak sources reduce confidence or suppress suggestion. |
+| Transformation Point | Prior reviewable state becomes an optional suggested answer, not a decision. |
+| Persistence Point | Suggestion review status may be persisted; accepted/edited content enters normal answer or proposal state. |
+| Permission Check | Remote provider disclosure if AI is used; explicit review before any canonical decision transition. |
+| Failure Behavior | Ask the question without a suggestion or show low-confidence caveat; never block ordinary intake because suggestion generation failed. |
+| Audit or Report | Suggestion source basis and user action where persisted. |
 
 ### Flow 3: Decision Review
 

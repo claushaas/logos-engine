@@ -162,6 +162,7 @@ Every accepted feature must be traceable to:
 | AC-UX-006 | Diagnostics group findings by severity and affected object, and recommend a next useful action rather than dumping a flat list. | FR-012, FR-026, UX Model Principle 3 | observable test | degrade gracefully | draft |
 | AC-UX-007 | Generation reports summarize created, updated, skipped, incomplete, blocked, and failed outputs before listing file details. | FR-019, UX Model Principle 1 | observable test | degrade gracefully | draft |
 | AC-UX-008 | The product does not pressure the user to complete for engagement; dismissed suggestions do not reappear without changed context. | Interaction Model Suggestion Rules | observable test | degrade gracefully | draft |
+| AC-UX-016 | Contextual suggestions appear only beside directly related questions, include source/caveat text, and provide accept, edit, reject, or ignore actions without implying the suggestion is expected. | FR-058, FR-059, UX Model Rule 1A | observable test | degrade gracefully | draft |
 
 ### Trust and Recovery Acceptance
 
@@ -273,6 +274,7 @@ Every accepted feature must be traceable to:
 | AC-FN-037 | Generated output becomes stale when source state changes; stale indicator is visible. | Interaction Model Automatic Transitions | automated test | degrade gracefully | draft |
 | AC-FN-038 | Assumption → confirmed fact is blocked; assumptions remain visibly caveated. | Interaction Model Blocked Transitions | automated test | release-blocking | draft |
 | AC-FN-039 | Executive JSON and exports become stale when normative documents, profile contracts, acceptance criteria, or source decisions change. | FR-051, FR-052, FR-054 | automated test | feature-blocking for Executive Axis | draft |
+| AC-FN-040 | Contextual suggestion → confirmed decision is blocked; accepting or editing a suggestion must route through ordinary answer/proposal capture and explicit review rules. | FR-058, FR-059, ACT-019, ACT-020 | automated test | release-blocking | draft |
 
 ---
 

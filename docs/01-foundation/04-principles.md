@@ -179,6 +179,8 @@ AI as a Layer means AI participates in questioning, interpretation, drafting, di
 
 AI should help the user think, not silently replace the user's judgment. It may suggest, challenge, summarize, and draft, but it must remain bounded by structure, provenance, and review.
 
+When the project is already advanced through several phases, AI may use confirmed decisions, active assumptions, open questions, and completed documents to offer contextual suggestions alongside the next relevant questions. These suggestions are allowed only when the next question has a direct dependency on earlier work, and they must remain visibly proposed until the user accepts, revises, rejects, or ignores them.
+
 ### Decision Rule
 
 When AI convenience conflicts with auditability, user control, or canonical structure, favor auditability, user control, and canonical structure.
@@ -189,6 +191,7 @@ When AI convenience conflicts with auditability, user control, or canonical stru
 - Accept slower generation when structured output validation prevents unreliable documents.
 - Accept visible AI limitations instead of pretending the system knows more than it does.
 - Accept deterministic or incomplete behavior when no AI provider is configured, rather than hiding remote dependencies.
+- Accept source-labeled contextual suggestions when they reduce repeated work without turning prior assumptions into new facts.
 
 ### Violations
 
@@ -198,11 +201,13 @@ When AI convenience conflicts with auditability, user control, or canonical stru
 - Hiding AI assumptions inside generated documents.
 - Making normal project progress depend on uninspectable prompts or provider behavior.
 - Letting AI make autonomous project decisions on behalf of the user.
+- Presenting a contextual suggestion as the expected answer instead of an optional proposed answer.
 
 ### Downstream Implications
 
 - Prompts should be grounded in profile definitions, confirmed decisions, assumptions, open questions, and document contracts.
 - AI outputs should be parsed, validated, and reviewable before becoming canonical.
+- Contextual suggestions should cite or identify the prior decisions, assumptions, documents, or gaps that make the suggestion plausible.
 - Agent packs should derive from canonical documents, not from private conversational memory.
 - UX should make clear when content is proposed, confirmed, incomplete, or uncertain.
 - Provider configuration and transmission disclosure should be explicit.
