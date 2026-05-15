@@ -1094,7 +1094,6 @@ Create a schema that supports canonical outputs, derived artifacts, exports, and
   "initiativeId": "init-001"
 }
 ```
-```
 
 ---
 
