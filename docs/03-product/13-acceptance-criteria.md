@@ -73,7 +73,7 @@ Every material acceptance criterion in this document includes:
 LOGOS Engine MVP is accepted when a user can complete the following end-to-end workflow without hitting unrecoverable errors, silent data loss, or trust-breaking behavior:
 
 1. Install the package and run `logos` from a target repository directory.
-2. Initialize or resume a LOGOS workspace with the Standard profile.
+2. Initialize or resume a LOGOS workspace with the initial Standard profile.
 3. Configure an AI provider (local or remote) with explicit disclosure and no raw token storage in project files.
 4. Conduct AI-led conversational intake that asks context-aware question clusters.
 5. Review AI-derived proposed decisions and explicitly confirm, revise, reject, or defer them.
@@ -227,7 +227,8 @@ Every accepted feature must be traceable to:
 | ID | Statement | Source | Verification | Release Impact | Status |
 |----|-----------|--------|------------|----------------|--------|
 | AC-FN-001 | Running `logos` from the target repository opens the TUI with workspace detection. | FR-001, FR-002 | observable test | release-blocking | draft |
-| AC-FN-002 | `/init` creates workspace metadata, profile reference, and state; repeated init is idempotent and preserves existing state. | FR-003, NFR-REL-003 | observable test | release-blocking | draft |
+| AC-FN-002 | `/init` creates workspace metadata, selected profile reference, and state; repeated init is idempotent and preserves existing state. | FR-003, NFR-REL-003 | observable test | release-blocking | draft |
+| AC-FN-002A | `/init` allows the user to select or confirm the active profile, with Standard offered as the initial default profile. | FR-005, CR-004 | observable test | release-blocking | draft |
 | AC-FN-003 | The default documentation root is `logos/`; the user can configure another root before generation. | FR-004 | inspection | release-blocking | draft |
 | AC-FN-004 | Non-slash text routes to conversational intake; slash-prefixed text routes to command handling. | FR-045, Interaction Model Command Router | observable test | release-blocking | draft |
 | AC-FN-005 | All material slash commands (`/init`, `/continue`, `/generate`, `/diagnose`, `/validate`, `/status`, `/config ai`, `/help`, `/exit`) are recognized and handled. | FR-016, Interaction Model Commands | observable test | release-blocking | draft |

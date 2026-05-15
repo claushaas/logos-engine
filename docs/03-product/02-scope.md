@@ -56,11 +56,11 @@ The following items are in scope for the current product definition. They are in
 
 **Reconsider trigger:** evidence that users need a different project attachment model.
 
-### SC-003: Standard Profile Selection
+### SC-003: Initial Standard Profile Selection
 
 **Classification:** core / MVP.
 
-**Description:** The product supports selecting and using the initial Standard profile as the document contract for the local project.
+**Description:** The product supports selecting the active profile during `/init` and using the initial Standard profile as the default document contract for the local project. The profile model should remain capable of loading future profiles, but the MVP only commits to the bundled Standard profile.
 
 **Rationale:** The profile defines phases, documents, canonical Markdown paths, HTML artifacts, agent packs, completion criteria, quality checks, and review rules.
 
@@ -68,9 +68,9 @@ The following items are in scope for the current product definition. They are in
 
 **Priority:** must-have.
 
-**Dependencies:** profile definitions, document schema, phase registry.
+**Dependencies:** profile definitions, document schema, phase registry, initialization flow.
 
-**Downstream implications:** Product Architecture and Functional Requirements should model profiles as product capabilities; Engineering should preserve profile YAML as contract input.
+**Downstream implications:** Product Architecture and Functional Requirements should model profiles as product capabilities; Engineering should preserve profile YAML as contract input and avoid hard-coding Standard-specific assumptions outside the active profile contract.
 
 **Reconsider trigger:** validation evidence showing the initial profile is too broad, too narrow, or not aligned with the founder-origin app-business proving ground.
 

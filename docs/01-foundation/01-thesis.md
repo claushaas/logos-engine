@@ -23,6 +23,7 @@ Facts derived from the existing material:
 - Markdown, YAML, JSON, and Git are treated as sufficient foundations to make the system useful.
 - Canonical documentation must remain inspectable and regenerable.
 - The system must distinguish facts, assumptions, hypotheses, risks, and open questions.
+- The current documentation set under development is the Standard profile, and it should be treated as the first bundled profile rather than the only profile the engine can ever support.
 
 Hypotheses not yet proven:
 
@@ -58,7 +59,7 @@ Assumptions not yet validated:
 - The quality of decisions extracted through conversation will be high enough to support canonical documentation.
 - Users will trust a local-first system that records state, decisions, and documents inside the repository.
 - Traceability between answers, decisions, and documents will perceptibly reduce rework.
-- Different profiles will be able to share the same engine without diluting the usefulness of the first use case.
+- Different profiles will be able to share the same engine without diluting the usefulness of the initial Standard profile.
 
 Conditions that would weaken or falsify the thesis:
 
@@ -96,4 +97,4 @@ These exclusions protect the thesis. The project does not try to prove that AI s
 - Which decisions should be mandatory before generating foundation documents?
 - How should the system measure whether the user actually reduced ambiguity, rather than merely produced more text?
 - At what point should a hypothesis block progress, generate a warning, or simply remain recorded?
-- Which parts of the model should be generic across all profiles, and which should belong to the first use case, App Business?
+- Which parts of the model should be generic across all profiles, and which should belong specifically to the initial Standard profile and its app-business proving ground?

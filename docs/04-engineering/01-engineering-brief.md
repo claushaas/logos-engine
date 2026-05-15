@@ -42,7 +42,7 @@ Engineering failure means:
 | Foundation Boundaries | LOGOS is local-first, user-owned, and not a hosted SaaS by default. | Build filesystem-first storage and avoid cloud accounts, sync, telemetry, hosted identity, and server-side authorization in MVP. | committed |
 | Product Scope SC-001 | LOGOS runs from the target repository directory. | The runtime must resolve the active repository, show it to the user, and scope workspace state and generated output to that directory. | committed |
 | Product Scope SC-002 | The default LOGOS documentation root is `logos/`, configurable per workspace. | Path handling, generation, reports, root configuration, and overwrite protection must resolve against a configurable root. | committed |
-| Product Scope SC-003 | The Standard profile is the initial document contract. | Engineering must load profile YAML, validate it, and use it to drive intake coverage, document contracts, outputs, quality checks, and validation. | committed |
+| Product Scope SC-003 | Profile selection happens during `/init`, with Standard as the initial bundled document contract. | Engineering must list or resolve available profiles, load the selected profile YAML, validate it, represent active profile id/version/source explicitly, and use it to drive intake coverage, document contracts, outputs, quality checks, and validation. | committed |
 | Product Scope SC-004 | Normal clarification is AI-led conversation. | The TUI must route non-slash text to conversational intake and support provider-backed interpretation without deterministic question-id UX. | committed / validation-required |
 | Product Scope SC-005 | AI provider configuration is explicit and supports local and remote modes where available. | Provider abstraction, redacted status, transmission disclosure, token-source rules, and no-provider recovery are required. | committed |
 | Product Scope SC-006 | Structured project state carries answers, summaries, decisions, assumptions, risks, and document status. | State schemas, migrations, safe writes, corruption handling, and traceability must be treated as core architecture. | committed |
@@ -81,7 +81,7 @@ Product inputs requiring engineering clarification:
 | TUI runtime | Open `logos` in the current repository, render the shell, route input, show status, and support all MVP slash commands. | Product Stack, FR-001, FR-016 | Frontend Architecture, API Contracts |
 | Workspace lifecycle | Initialize, detect, resume, validate, and recover local LOGOS workspace state. | SC-002, FR-002, FR-003 | System Architecture, Data Model |
 | Documentation root handling | Default to `logos/`, allow configuration, validate paths, and prevent unsafe writes. | SC-001, SC-002, FR-004 | System Architecture, Security Architecture |
-| Profile loading | Load and validate Standard profile YAML contracts, document schemas, phase definitions, outputs, and quality rules. | SC-003, FR-005 | System Architecture, Data Model |
+| Profile loading | Select during `/init`, then load and validate the chosen profile YAML contracts, document schemas, phase definitions, outputs, and quality rules while preserving a generic active-profile contract shape. | SC-003, FR-005, FR-062 | System Architecture, Data Model |
 | Structured state | Persist decisions, assumptions, open questions, risks, diagnostics, validation gaps, output status, and generation reports. | SC-006, FR-007 | Data Model |
 | AI provider layer | Support provider configuration, redacted status, local/remote mode, disclosure, timeout, failure, and structured response validation. | SC-005, FR-017, NFR-PERF-002 | API Contracts, Integration Architecture, Security Architecture |
 | Conversational intake | Support AI-led question clusters, unknown answers, assume-for-now answers, low-confidence labels, and proposal creation. | SC-004, FR-006, FR-024, FR-025 | System Architecture, API Contracts |
@@ -101,7 +101,7 @@ Product inputs requiring engineering clarification:
 | --- | --- | --- |
 | Hosted web dashboard | deferred / excluded from MVP | Requires hosted infrastructure and may weaken local-first source-of-truth model. |
 | Multi-user collaboration | excluded from MVP | No accounts, comments, roles, shared workspaces, or cloud sync are in current scope. |
-| Profile marketplace or broad profile authoring UI | deferred | The Standard profile must prove value before profile ecosystem work. |
+| Profile marketplace or broad profile authoring UI | deferred | The Standard profile must prove value before profile ecosystem work, but core profile references should remain future-compatible. |
 | Programmatic API or batch mode | deferred | Risks bypassing conversation, review, and consent gates. |
 | Native Windows terminal support outside WSL | excluded for MVP | Product Stack commits to macOS, Linux, and Windows via WSL first. |
 | External research automation | excluded | LOGOS must not claim market, legal, or competitive research automation. |
@@ -192,7 +192,7 @@ Known resource constraints are not yet documented beyond founder-led execution. 
 | ENG-CAP-001 | TUI shell and command router | frontend / interaction | MVP | FR-001, FR-016 | Render shell, route slash commands, route non-slash input to intake. | AC-FN-001, AC-FN-004, AC-FN-005 | Frontend Architecture, API Contracts | committed |
 | ENG-CAP-002 | Workspace initialization and resume | state / filesystem | MVP | FR-002, FR-003, FR-014 | Detect, initialize, resume, and recover local workspace state idempotently. | AC-FN-002, AC-FN-013 | System Architecture, Data Model | committed |
 | ENG-CAP-003 | Documentation root resolution | filesystem / permissions | MVP | FR-004, FR-023 | Default to `logos/`, allow configuration, validate safety, report active root. | AC-FN-003, AC-FN-020 | System Architecture, Security Architecture | committed |
-| ENG-CAP-004 | Profile contract loading | profile / schema | MVP | FR-005 | Load, validate, and expose Standard profile contracts and output definitions. | AC-FN-025 | System Architecture, Data Model | committed |
+| ENG-CAP-004 | Profile selection and contract loading | profile / schema | MVP | FR-005, FR-062 | Let `/init` select or confirm the active profile, then load, validate, and expose its contracts and output definitions with explicit profile id/version/source metadata. | AC-FN-025, AC-FN-002A | System Architecture, Data Model | committed |
 | ENG-CAP-005 | Structured state persistence | data | MVP | FR-007, FR-020 | Store decisions, assumptions, questions, risks, diagnostics, validation gaps, and output status. | AC-FN-007 | Data Model | committed |
 | ENG-CAP-006 | AI provider abstraction | integration / security | MVP | FR-017, FR-018 | Configure providers, enforce token rules, disclose remote transmission, handle timeout/failure. | AC-FN-015, AC-FN-016, AC-NF-PRIV-002 | Integration Architecture, Security Architecture | committed |
 | ENG-CAP-006A | AI startup briefing | AI / UX / status | MVP / validation-required | FR-060, FR-061 | Build deterministic startup status, generate bounded AI briefing when allowed, and show fallback when AI is unavailable. | AC-UX-017, AC-FN-041 | System Architecture, API Contracts, Test Strategy | committed |
@@ -235,7 +235,7 @@ The first engineering iteration should reduce the largest trust and feasibility 
 | --- | --- | --- | --- | --- |
 | 1 | Entrypoint, TUI shell, command router, `/help`, `/status` skeleton | Node, Ink, Commander | TUI opens from repo; slash vs non-slash routing works. | Establishes the user surface and command model. |
 | 2 | Workspace initialization, repository detection, configured root defaulting to `logos/` | Slice 1 | `/init` is idempotent; active repo/root/profile visible. | Locks path safety and local-first behavior early. |
-| 3 | Profile loading and schema validation | Slice 2 | Standard profile loads; invalid profile blocks clearly. | Everything downstream depends on profile contracts. |
+| 3 | Profile loading and schema validation | Slice 2 | Standard profile loads as the first bundled profile; invalid active profile blocks clearly. | Everything downstream depends on profile contracts. |
 | 4 | Structured state model and decision state machine | Slice 2, Slice 3 | Proposed decisions cannot become confirmed without explicit action. | Protects source-of-truth and AI boundary. |
 | 5 | Deterministic validation and diagnostics baseline | Slice 3, Slice 4 | Validation runs without AI and reports severity/affected object. | Creates a useful no-provider core. |
 | 6 | Mock/fixture AI provider and conversational intake pipeline | Slice 3, Slice 4 | Fixture conversation produces proposed state only. | Tests AI workflow safely before live providers. |

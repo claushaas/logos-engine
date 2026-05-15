@@ -28,6 +28,7 @@ In scope for the initial product:
 
 - Initializing a local project workspace.
 - Creating and using a configurable LOGOS documentation root, defaulting to `logos/`, for generated project documentation.
+- Supporting the Standard profile as the first bundled documentation profile while preserving a profile model that can later support additional profile directories.
 - Running a structured AI-led intake conversation.
 - Offering contextual suggestions alongside directly related questions when earlier confirmed or reviewable project state supports them.
 - Capturing answers, assumptions, open questions, and proposed decisions.

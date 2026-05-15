@@ -2,7 +2,7 @@
 
 ## Architecture Overview
 
-LOGOS Engine is a local-first, repository-scoped, modular TypeScript TUI application. It runs as a single local process started by the `logos` command from the target repository directory. The system manages local structured project state, loads profile YAML contracts, coordinates AI-led intake through provider adapters, enforces user-reviewed decision state, runs deterministic validation and diagnostics, renders canonical Markdown plus derived HTML artifacts and agent packs under the configured LOGOS documentation root, and can compile a portable Executive JSON model from the normative documentation baseline.
+LOGOS Engine is a local-first, repository-scoped, modular TypeScript TUI application. It runs as a single local process started by the `logos` command from the target repository directory. The system manages local structured project state, loads profile YAML contracts, coordinates AI-led intake through provider adapters, enforces user-reviewed decision state, runs deterministic validation and diagnostics, renders canonical Markdown plus derived HTML artifacts and agent packs under the configured LOGOS documentation root, and can compile a portable Executive JSON model from the normative documentation baseline. The Standard profile is the first bundled profile, but the system boundary treats profiles as id/version/source-addressed contract sets so future profiles can be added without rewriting core workflow rules.
 
 The architecture is shaped by five primary drivers:
 
@@ -345,7 +345,7 @@ Architecture rules:
 | Unit | Status | Description |
 | --- | --- | --- |
 | LOGOS npm package / executable | committed | Local package exposing the `logos` command. |
-| Standard profile files | committed | Bundled or installed profile YAML contracts used by the product. |
+| Standard profile files | committed | First bundled profile YAML contracts used by the product. |
 | Generated workspace state | runtime local artifact | Local structured state created inside the active repository workspace. |
 | Generated documentation root | runtime local artifact | Defaults to `logos/`, configurable by the user. |
 | HTML artifacts and agent packs | runtime local artifacts | Derived outputs under the configured LOGOS documentation root. |

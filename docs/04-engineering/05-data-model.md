@@ -8,7 +8,7 @@ The model separates five data categories:
 
 | Category | Source of Truth | Storage Role | Notes |
 | --- | --- | --- | --- |
-| Profile contracts | Profile YAML files | Contract source | Defines phases, document contracts, outputs, completion criteria, and review rules. |
+| Profile contracts | Profile YAML files | Contract source | Defines phases, document contracts, outputs, completion criteria, and review rules. The Standard profile is the initial bundled contract; future profiles should use the same profile reference model. |
 | Project clarity state | Local structured JSON state | Durable product truth | Stores decisions, assumptions, open questions, risks, validation findings, diagnostics, generation status, and configuration metadata. |
 | Canonical documents | Markdown under the configured LOGOS documentation root | Human-readable projection | Rendered from structured state and profile contracts. Canonical for review, but not the only state authority. |
 | Executive exchange model | JSON under the configured LOGOS documentation root | Portable derived execution model | Generated from the Normative Axis to represent execution graph, readiness, confidence, source refs, and export metadata. |
@@ -150,7 +150,7 @@ Fields are grouped by logical record. Exact TypeScript/Zod syntax belongs in imp
 | WorkspaceRecord | workspaceId | string | no | generated | no | stable id | yes | low | none | yes | status | immutable after init | Opaque id preferred. |
 | WorkspaceRecord | repositoryPath | string | no | current cwd | no | normalized absolute path | no | local path metadata | redact in support exports if needed | yes | status | path format cross-platform | `logos` runs from target repo directory. |
 | WorkspaceRecord | documentationRoot | string/ref | no | `logos/` | no | safe relative or approved path | no | local path metadata | none | yes | status/generation | migrated from old `docs/` assumptions | Must not hard-code `docs/`. |
-| WorkspaceRecord | activeProfile | object/ref | no | Standard profile | no | valid profile id/version | no | low | none | yes | status | profile compatibility sensitive | Links to lock. |
+| WorkspaceRecord | activeProfile | object/ref | no | `standard` profile reference | no | valid profile id/version/source | no | low | none | yes | status | profile compatibility sensitive | Links to lock; Standard is the MVP default, not a hard-coded permanent limit. |
 | DocumentationRootConfig | rootPath | string | no | `logos/` | no | normalized, safe, configurable | no | local path metadata | none | yes | status/generation | root changes affect outputs | User-facing path. |
 | DocumentationRootConfig | isDefault | boolean | no | true | yes | derived from rootPath | no | low | none | no | status | none | Helps UI explain default/custom root. |
 | DocumentationRootConfig | lastConfirmedAt | ISO datetime | yes | null | no | set on confirmed change | no | low | none | no | internal | add when introducing confirmation history | Supports permission audit. |
@@ -220,7 +220,7 @@ There are no database indexes in MVP. Runtime indexes are in-memory lookup maps 
 | Output by path/kind/status | OutputRecord | in-memory lookup | outputPath, outputKind, status | output browsing, stale reports | path unique per root/kind | status grouping | dozens to hundreds of outputs | rebuild on read | low | MVP |
 | Findings by severity/affected object | ValidationFindingRecord, DiagnosticFindingRecord | in-memory grouping | severity, affectedObjectRef | `/status`, `/diagnose`, `/validate` | no | severity then document | findings remain small | rebuild on read | low | MVP |
 | Session by updatedAt/status | IntakeSessionRecord | in-memory sort/group | status, updatedAt | `/continue`, recovery | id unique | newest first | few active sessions | rebuild on read | low | MVP |
-| Profile document by id | DocumentContractReference | in-memory lookup | documentId | generation and validation | unique within profile version | N/A | Standard profile document count is small | rebuild on profile load | low | MVP |
+| Profile document by id | DocumentContractReference | in-memory lookup | documentId | generation and validation | unique within profile version | N/A | Standard profile document count is small for MVP; future profiles may differ | rebuild on profile load | low | MVP |
 
 If runtime state grows enough that rebuilding these maps causes perceptible delay, the first escalation should be state partitioning and lazy reads, not immediate database adoption.
 

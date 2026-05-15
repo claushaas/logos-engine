@@ -456,7 +456,7 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 
 **Status:** canonical.
 
-**Definition:** A domain or outcome configuration that defines phases, canonical documents, document contracts, questions, validation rules, decision schema, dependency rules, and terminology.
+**Definition:** A domain or outcome configuration that defines phases, canonical documents, document contracts, questions, validation rules, decision schema, dependency rules, outputs, and terminology. The Standard profile is the first bundled profile currently under development; future profiles may live beside it and define different document systems.
 
 **Used in:** old profile docs, documentation registry, AI prompts, generation flows.
 
@@ -467,6 +467,22 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 **Not to be confused with:** persona, user profile, document template.
 
 **Decision relevance:** Profiles let the engine adapt to project types without hard-coding one domain.
+
+### Standard Profile
+
+**Status:** canonical.
+
+**Definition:** The initial bundled LOGOS documentation profile in `profiles/standard/`. It defines the current Foundation, Validation, Product, Engineering, Go-to-Market, Operations, and Executive Axis contracts used by the MVP.
+
+**Used in:** Product Scope, Product Architecture, Functional Requirements, Engineering documents, Operations documents.
+
+**Aliases:** default profile, initial profile, bundled standard profile.
+
+**Discouraged terms:** only profile, permanent profile, hard-coded documentation set.
+
+**Not to be confused with:** generic profile model, profile marketplace, custom profile authoring UI.
+
+**Decision relevance:** The Standard profile is the first concrete profile to validate the engine. Product and Engineering may optimize for it in the MVP, but should not encode assumptions that prevent future profiles from being added.
 
 ### Proposed Decision
 

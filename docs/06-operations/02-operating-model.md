@@ -106,7 +106,7 @@ See Operations Brief for detailed ownership records. At the operating model leve
 | TypeScript build | Ensure compilation correctness | tsc | PR, merge, or manual | On commit / manual | Founder | Clean build | Build errors | Fix and re-run | Source files | No secrets in source | Per release | Current |
 | CLI smoke test | Verify executable starts and basic commands work | `pnpm smoke:cli` | PR affecting CLI, or release prep | Manual | Founder | Smoke passes | Smoke failure | Debug locally | Temp repo, synthetic state | No real provider tokens | Per release | Current |
 | Secret scan (if configured) | Detect accidental token commits | git-secrets, GitHub secret scanning, or equivalent | Commit or PR | On commit (if enabled) | Founder | No alerts | Alert fired | Investigate, rotate, remove | Commit diff | Alert may expose secret in notification | Per release | Review-needed |
-| Profile contract validation | Ensure Standard profile YAML is valid | Profile loader + Zod schema | PR affecting profiles, or release prep | On commit / manual | Founder | Profile loads cleanly | Validation error | Fix profile or schema | Profile YAML | No sensitive data in profiles | Per release | Current |
+| Profile contract validation | Ensure the initial Standard profile YAML is valid; extend to future profiles when added | Profile loader + Zod schema | PR affecting profiles, or release prep | On commit / manual | Founder | Profile loads cleanly | Validation error | Fix profile or schema | Profile YAML | No sensitive data in profiles | Per release | Current |
 
 ## Third-Party Dependencies
 

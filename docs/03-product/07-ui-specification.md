@@ -371,7 +371,7 @@ Uncertainty should not be styled as failure. It should be styled as project stat
 
 **Downstream implications:** Acceptance Criteria must verify no hidden default output path.
 
-**Open questions:** Whether profile selection is explicit in first MVP or defaults to Standard requires final scope confirmation.
+**Profile behavior:** The initialization view must allow the user to select or confirm the active profile. The Standard profile is the initial default option while future profiles may appear when available.
 
 ### UI-003: Workspace Status View
 

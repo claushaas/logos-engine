@@ -101,7 +101,7 @@ The register below lists all non-functional requirements. Items marked N/A are e
 | NFR-AVA-003 | No external uptime SLA is offered; availability is a function of the user's local machine and chosen provider. | Availability | excluded | won't-have | Product Scope | review |
 | NFR-AVA-004 | Planned maintenance: N/A — no hosted service. | Availability | excluded | won't-have | Product Scope | review |
 | NFR-SCAL-001 | MVP supports single-user local operation; multi-user concurrency is excluded. | Scalability | excluded | won't-have | Product Scope, Boundaries | review |
-| NFR-SCAL-002 | The Standard profile document tree (~28 documents) must generate without perceptible degradation on typical developer hardware. | Scalability | provisional | must-have | Product Architecture | prototype evidence |
+| NFR-SCAL-002 | The initial Standard profile document tree (~28 documents) must generate without perceptible degradation on typical developer hardware. | Scalability | provisional | must-have | Product Architecture | prototype evidence |
 | NFR-SCAL-003 | Structured state must support at least hundreds of decisions, assumptions, and open questions without perceptible TUI slowdown. | Scalability | provisional | should-have | Information Architecture | prototype evidence |
 | NFR-SCAL-004 | Request throughput and user concurrency: N/A — local single-user product. | Scalability | excluded | won't-have | Product Scope | review |
 | NFR-COMP-001 | The TUI must run on macOS, Linux, and Windows (WSL). | Compatibility | required | must-have | Product Scope, old TUI docs | observable test |
@@ -719,10 +719,10 @@ Scalability requirements focus on local data volume and project complexity rathe
 - **Source:** Product Scope, Boundaries.
 - **Notes:** Multi-user collaboration is deferred until validated.
 
-### NFR-SCAL-002: Standard Profile Document Tree
+### NFR-SCAL-002: Initial Standard Profile Document Tree
 
 - **Category:** Scalability.
-- **Statement:** The Standard profile document tree (~28 documents) must generate without perceptible degradation on typical developer hardware.
+- **Statement:** The initial Standard profile document tree (~28 documents) must generate without perceptible degradation on typical developer hardware. Future profiles should receive separate performance baselines when introduced.
 - **Target:** Full tree generation completes within a provisional 30-second threshold.
 - **Minimum Threshold:** Generation does not hang or exhaust memory on typical machines.
 - **Classification:** provisional.
@@ -730,7 +730,7 @@ Scalability requirements focus on local data volume and project complexity rathe
 - **Source:** Product Architecture.
 - **Verification:** prototype evidence.
 - **Release Impact:** degrade gracefully.
-- **Risk if Unmet:** Standard profile feels too heavy to use.
+- **Risk if Unmet:** The first bundled profile feels too heavy to use.
 - **Affected Features:** `/generate`.
 - **Affected Modules:** Generation and Outputs.
 - **Owner or Review Target:** Engineering Brief, Test Strategy.
@@ -1122,7 +1122,7 @@ Each NFR traces backward to a source document or risk and forward to downstream 
 | NFR-AVA-003 | Product Scope | No hosted SLA |
 | NFR-AVA-004 | Product Scope | No hosted service |
 | NFR-SCAL-001 | Product Scope | Single-user |
-| NFR-SCAL-002 | Product Architecture | Standard profile |
+| NFR-SCAL-002 | Product Architecture | Initial Standard profile |
 | NFR-SCAL-003 | Information Architecture | Object volume |
 | NFR-SCAL-004 | Product Scope | No concurrency |
 | NFR-COMP-001 | Product Scope | OS support |
@@ -1181,6 +1181,7 @@ Non-functional requirements change through the same lightweight governance as fu
 ### Proposal Rules
 
 A new NFR may be proposed when:
+
 - It protects a Foundation Principle or product boundary.
 - It addresses a product risk identified in Product Architecture, Validation Report, or old risk registers.
 - It is required by a downstream engineering or operations constraint.
@@ -1189,6 +1190,7 @@ A new NFR may be proposed when:
 ### Proposal Content
 
 Each NFR proposal must include:
+
 - Category, statement, target, threshold, classification, priority.
 - Source document or risk.
 - Verification method and release impact.
@@ -1206,6 +1208,7 @@ Each NFR proposal must include:
 ### Downstream Update Obligations
 
 After an NFR change, the following must be reviewed:
+
 - Engineering Brief and System Architecture (if performance, reliability, or scalability targets change).
 - Security Architecture (if security or privacy requirements change).
 - Test Strategy (if verification methods or acceptance criteria change).
@@ -1235,6 +1238,7 @@ After an NFR change, the following must be reviewed:
 ### Engineering Brief and System Architecture
 
 Engineering must inherit:
+
 - Local-first, no-telemetry, no-phone-home constraints.
 - Token safety and redaction requirements.
 - Provider timeout and failure handling behavior.
@@ -1248,6 +1252,7 @@ Engineering must inherit:
 ### Security Architecture
 
 Security must review:
+
 - Token handling and storage boundaries.
 - Provider transmission disclosure and consent requirements.
 - Bounded context ingestion rules.
@@ -1257,6 +1262,7 @@ Security must review:
 ### Data Model
 
 Data Model must preserve:
+
 - Decision audit trails and status transitions.
 - No raw token storage in project state.
 - UTF-8 support for all text fields.
@@ -1266,6 +1272,7 @@ Data Model must preserve:
 ### Test Strategy
 
 Test Strategy must verify:
+
 - AI failure does not corrupt state.
 - Overwrite requires confirmation.
 - Provider timeout is respected.
@@ -1277,6 +1284,7 @@ Test Strategy must verify:
 ### Observability Plan
 
 Observability Plan must define:
+
 - Local debug logging approach (opt-in, secret-free).
 - Decision change audit structure.
 - Generation report persistence rules.
@@ -1285,6 +1293,7 @@ Observability Plan must define:
 ### Operations
 
 Operations must prepare:
+
 - Release checklist and quality gates.
 - Semantic versioning discipline.
 - Breaking change migration notes.
@@ -1294,6 +1303,7 @@ Operations must prepare:
 ### Acceptance Criteria
 
 Acceptance Criteria must verify observable NFRs:
+
 - TUI startup completes without excessive delay.
 - Provider timeout is configurable and respected.
 - No network calls occur in default offline configuration.

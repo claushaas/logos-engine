@@ -10,7 +10,7 @@ The architecture must keep these separations stable:
 
 - Conversation is an input surface, not the source of truth.
 - AI is an assistance layer, not a decision owner.
-- Profile YAML defines document contracts and output expectations.
+- Profile YAML defines document contracts and output expectations; the Standard profile is the first bundled profile, while the architecture should keep profile identity, version, and contracts explicit for future profiles.
 - Structured project state carries decisions, assumptions, open questions, risks, diagnostics, and output status.
 - Canonical Markdown is generated under the configured LOGOS documentation root, defaulting to `logos/`.
 - HTML artifacts and agent packs are derived outputs, not canonical sources.
@@ -88,7 +88,8 @@ This architecture is based on founder-origin experience, existing Foundation and
 
 **Included capabilities:**
 
-- Standard profile selection.
+- Initial Standard profile selection.
+- Profile identity and version awareness.
 - Phase and document contract awareness.
 - Canonical output definitions.
 - HTML artifact and agent pack definitions.
@@ -114,7 +115,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 
 **Owner or review target:** Product Architecture, Feature Specification, Engineering System Architecture.
 
-**Downstream implications:** Engineering must preserve profile YAML as contract input.
+**Downstream implications:** Engineering must preserve profile YAML as contract input, load the Standard profile as the first supported bundled profile, and avoid code paths that assume every future profile has the same document tree.
 
 **Open questions:** How much profile contract detail should be user-facing in MVP?
 
@@ -560,7 +561,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 | Agent packs used by other agents | Keep derived and caveat-preserving; do not treat downstream agent output as LOGOS truth. |
 | HTML artifacts as review surfaces | Allow navigation/review; do not allow them to become canonical editing surfaces in MVP. |
 | Executive Markdown or GitHub issue exports | Treat as import/review snapshots generated from Executive JSON; do not let them become the source of project decisions. |
-| Profile expansion | Defer broad authoring/marketplace until first profile proves value. |
+| Profile expansion | Defer broad authoring/marketplace until the Standard profile proves value, while keeping the internal model profile-aware. |
 
 ## Core Capabilities
 
@@ -569,7 +570,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 | C-001 | Repository-directory TUI startup | Repository Workspace / TUI | Anchors local-first workflow. | `logos` opens TUI in current repository. | Show path and avoid writes if uncertain. | Product Scope, old TUI docs. |
 | C-002 | Workspace initialization | Repository Workspace | Creates local project context. | `/init` creates/loads workspace and root/profile setup. | Preserve existing state; report conflicts. | Product Scope. |
 | C-003 | Configurable documentation root | Repository Workspace / Permission | Prevents collisions and hidden writes. | Default `logos/`, configurable before generation. | Block or warn on invalid/colliding root. | Foundation Glossary, Scope. |
-| C-004 | Standard profile contract use | Profile Module | Defines generated documentation system. | Use Standard profile YAML as contract. | Invalid profile fails clearly. | Profile YAML, Scope. |
+| C-004 | Initial Standard profile contract use | Profile Module | Defines the first generated documentation system. | Use Standard profile YAML as the initial active contract. | Invalid active profile fails clearly. | Profile YAML, Scope. |
 | C-005 | AI-led conversational intake | Intake / AI | Core clarification mechanism. | Non-slash input advances conversation. | No-provider state guides configuration. | Product Brief, Interaction Model. |
 | C-006 | Structured project state | State Module | Turns conversation into durable clarity. | Store answers, decisions, assumptions, questions, risks, output status. | Malformed AI output cannot corrupt state. | IA, old architecture. |
 | C-007 | Decision proposal review | Review Module | Preserves user agency. | AI-derived decisions stay proposed until confirmed. | Keep unconfirmed when ambiguous. | Foundation Boundaries. |
@@ -617,7 +618,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 | CAP-002 | Repository context detection | core | Repository Workspace | MVP | must-have | local filesystem | 1 | defined |
 | CAP-003 | Workspace initialization | core | Repository Workspace | MVP | must-have | CAP-001, CAP-002 | 2 | defined |
 | CAP-004 | Documentation-root setup | core | Repository Workspace / Permission | MVP | must-have | CAP-003 | 2 | defined |
-| CAP-005 | Standard profile loading | core | Profile Module | MVP | must-have | profile YAML | 2 | defined |
+| CAP-005 | Initial profile loading | core | Profile Module | MVP | must-have | Standard profile YAML, profile id/version | 2 | defined |
 | CAP-006 | Slash command surface | core | TUI Experience | MVP | must-have | CAP-001 | 2 | defined |
 | CAP-007 | AI provider configuration | support | AI Assistance | MVP | must-have for AI intake | Permission rules | 3 | defined |
 | CAP-008 | Conversation-first intake | core | Conversational Intake | MVP / validation-required | must-have | CAP-007 or no-provider recovery | 4 | defined |
@@ -700,7 +701,7 @@ Dependencies requiring downstream review:
 1. Repository-directory TUI startup.
 2. Workspace initialization and safe existing-state loading.
 3. Configurable LOGOS documentation root with default `logos/`.
-4. Standard profile loading and contract validation.
+4. Standard profile loading and contract validation as the first bundled profile.
 5. Slash command surface and status view.
 6. AI provider configuration and no-provider recovery state.
 7. Conversation-first intake.

@@ -41,7 +41,7 @@ Possible future models:
 Initial packaging should be simple:
 
 - Core engine.
-- Standard profile.
+- Initial Standard profile.
 - Local TUI workflow.
 - Markdown generation.
 - Derived HTML artifacts.
@@ -68,7 +68,7 @@ This structure requires validation before implementation.
 Initial feature mapping:
 
 - Core local TUI: free/open-source.
-- Standard profile: free/open-source.
+- Initial Standard profile: free/open-source.
 - Generated Markdown: free/open-source.
 - HTML artifacts and agent packs: free/open-source.
 - Custom profiles, hosted collaboration, support, or commercial terms: future hypotheses.

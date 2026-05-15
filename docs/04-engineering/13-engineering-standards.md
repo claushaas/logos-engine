@@ -240,7 +240,7 @@ LOGOS has no database migrations in MVP, but local state, profile contracts, pro
 | Migration Type | Standard | Release Impact |
 | --- | --- | --- |
 | Workspace state schema | Version every schema change; include old-state fixtures; preserve prior state where feasible. | Release-blocking. |
-| Profile contract/schema | Validate bundled profiles; document compatibility and stale/orphan behavior. | Release-blocking for Standard profile. |
+| Profile contract/schema | Validate bundled profiles; document compatibility and stale/orphan behavior. | Release-blocking for the initial Standard profile and any future bundled profile. |
 | Provider config shape | Never introduce raw token persistence; route failures to `/config ai`. | Release-blocking if token safety affected. |
 | Generated output format | Treat outputs as regenerable; warn/confirm before overwriting manual edits. | Release-blocking for canonical Markdown safety. |
 | Root behavior | Preserve default `logos/`; root changes mark prior outputs stale/unknown. | Release-blocking for root regression. |

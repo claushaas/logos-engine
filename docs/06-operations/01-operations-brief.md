@@ -23,7 +23,7 @@ LOGOS Engine is a local-first TUI that runs inside a user's target repository. I
 | Component | Type | Operational Attention | Status |
 |---|---|---|---|
 | npm package artifact | User-facing / distribution | Build, test, publish, verify install | Current |
-| Standard profile YAML | User-facing / contract | Validate, version, document changes | Current |
+| Standard profile YAML | User-facing / first bundled contract | Validate, version, document changes | Current |
 | TUI runtime (Ink/Node.js) | User-facing / execution | Cross-platform compatibility, keyboard accessibility, error handling | Current |
 | AI provider abstraction | User-facing / integration | Adapter behavior, timeout, disclosure, token safety | Current |
 | Workspace state (`.logos/`) | Internal / user-owned | Schema migration guidance, corruption recovery | Current |
@@ -180,7 +180,7 @@ Escalation rules:
 | Dependency updates | Review and apply security patches and compatible updates | Monthly review; immediate for CVEs | Founder | Current |
 | Documentation updates | Refresh README, examples, and known limitations per release | Per release + as needed | Founder | Current |
 | Security/privacy upkeep | Verify no-telemetry behavior, secret scanning, redaction checks | Per release + immediate on report | Founder | Current |
-| Profile/schema maintenance | Update Standard profile if product boundaries change | Per release or per scope change | Founder | Current |
+| Profile/schema maintenance | Update the initial Standard profile if product boundaries change; apply the same governance to future profiles when introduced | Per release or per scope change | Founder | Current |
 | Backup/restore checks | User state is local; no central backup responsibility | N/A (user-managed via Git) | User | N/A |
 | Observability review | Review generation reports, issue trends, and support load | Monthly | Founder | Current |
 

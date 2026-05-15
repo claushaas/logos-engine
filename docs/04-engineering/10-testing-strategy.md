@@ -14,6 +14,7 @@ The MVP quality bar is evidence-based:
 - No default test requires live AI, network access, or raw provider tokens.
 - AI proposals cannot become confirmed decisions without explicit user action.
 - Contextual suggestions are shown only when grounded in direct prior state and cannot become confirmed decisions without normal review.
+- AI startup briefings are generated only from bounded status context, fall back deterministically, and never mutate state.
 - Deterministic validation remains separate from AI judgment.
 - Canonical Markdown, derived HTML artifacts, and agent packs are generated under the configured root, defaulting to `logos/`.
 - Executive JSON and executive export artifacts are generated from normative documents, validate against the executive schema, and remain derived from the Normative Axis.
@@ -46,8 +47,10 @@ Tests are not substitutes for product sign-off. Automated tests prove behavior; 
 | Acceptance Criteria | Gate 2 / NFR-SEC-001 | No raw token storage in `.logos/`, `logos/`, fixtures, logs, or generated outputs. | Security/privacy, fixtures, snapshots. | Redaction/secret tests and inspection. | Release-blocking. | Engineering. | MVP. | Dedicated repo-wide secret scan command review-needed. |
 | Acceptance Criteria | Gate 3 / NFR-PRIV-001 | No telemetry or hidden network calls by default. | Privacy, static review, optional network inspection. | Code review plus no-live-provider tests. | Release-blocking. | Engineering/product. | MVP/review-needed. | Automated network egress guard not yet specified. |
 | Functional Requirements | FR-003, FR-007, FR-014 | Workspace state persists and resumes across sessions. | Integration, workflow, state tests. | Temp workspace fixtures and continuation tests. | Release-blocking. | Engineering. | MVP. | Migration coverage must grow with schema changes. |
+| Functional Requirements | FR-005, FR-062 | `/init` selects or confirms the active profile and persists profile id/version/source. | Contract, integration, workflow. | Standard default fixture, invalid profile fixture, profile lock assertions. | Release-blocking for initialization. | Engineering. | MVP. | Additional profile fixtures become required when future profiles are added. |
 | Functional Requirements | FR-008, FR-043 | AI-derived decisions remain proposed until user review. | Domain, contract, workflow, security. | Decision transition tests and provider fixture tests. | Release-blocking. | Engineering. | MVP. | None known. |
 | Functional Requirements | FR-058, FR-059 | Contextual suggestions appear only for directly related questions and remain optional/non-canonical. | Domain, contract, workflow, frontend. | Suggestion eligibility fixtures, source-basis assertions, accept/edit/reject/ignore tests. | Release-blocking if suggestions can confirm state. | Engineering. | MVP / validation-required. | Exact suggestion quality thresholds need prototype evidence. |
+| Functional Requirements | FR-060, FR-061 | Initialized startup shows an AI Startup Briefing or deterministic fallback without mutating state. | Contract, workflow, frontend, security/privacy. | Startup fixtures, state before/after assertions, provider disclosure/failure cases. | Release-blocking if startup mutates state or sends remote context without disclosure. | Engineering. | MVP / validation-required. | Exact timeout and copy quality thresholds need prototype evidence. |
 | Functional Requirements | FR-009, FR-010, FR-011, FR-027 | Markdown, HTML artifacts, and agent packs are generated and classified correctly. | Renderer, golden, integration. | Generated output fixtures/snapshots. | Release-blocking for canonical Markdown; degrade gracefully for early derived renderers if accepted. | Engineering. | MVP/review-needed. | Exact HTML renderer coverage depends on renderer implementation. |
 | Functional Requirements | FR-051 through FR-057 | Executive JSON and exports compile from the normative baseline without becoming live task state. | Schema, adapter, golden, integration. | Executive plan schema fixtures, export snapshots, unsupported-target tests. | Feature-blocking for Executive Axis. | Engineering/product. | post-baseline. | Command trigger and export readiness policy still review-needed. |
 | Functional Requirements | FR-018, FR-035 | Remote provider transmission requires explicit disclosure. | Provider config, command, workflow. | Fake remote-provider tests. | Release-blocking. | Engineering. | MVP. | Context preview UX needs frontend test once finalized. |
@@ -274,7 +277,7 @@ Initial performance smoke coverage should focus on:
 - TUI startup and `/status` responsiveness;
 - profile load and state hydration with hundreds of decisions/assumptions/questions;
 - deterministic `/validate`;
-- full Standard profile generation;
+- full Standard profile generation as the MVP baseline, with future profiles measured separately when introduced;
 - provider timeout handling with the documented 60s default and configurable upper bound;
 - generated HTML/agent pack rendering once implemented.
 
@@ -345,6 +348,7 @@ Regression workflow:
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Minimal workspace | Init/status tests. | Synthetic state. | Test factory. | Low. | Generated temp dir. | Delete after test. | Update with state schema. | Engineering. | Infrastructure. |
 | Complete Standard profile workspace | Generation/validation workflow. | Synthetic project clarity data. | Hand-authored fixture. | Low/synthetic. | Versioned JSON/YAML/Markdown. | Immutable per test. | Update with profile schema. | Engineering/product. | Release. |
+| Initialized startup workspace | Startup briefing and status fallback workflow. | Synthetic local state plus provider fake. | Hand-authored fixture. | Low/synthetic. | Versioned JSON/YAML/Markdown. | Immutable per test. | Update with state/profile schemas. | Engineering/product. | Release. |
 | Incomplete/ambiguous workspace | Diagnostics/open question behavior. | Synthetic project context. | Hand-authored fixture. | Low/synthetic. | Versioned fixture. | Immutable. | Update with validation rules. | Engineering. | Support. |
 | Corrupt/old state fixtures | Recovery/migration tests. | Synthetic broken state. | Hand-authored fixtures. | Low. | Versioned files. | Immutable. | One fixture per schema issue. | Engineering. | Release. |
 | Provider success/failure responses | AI contract and workflow tests. | Synthetic provider output. | Fake provider fixtures. | Low; no real prompts/tokens. | Hand-authored JSON/objects. | Immutable. | Version with provider contract. | Engineering. | Integration. |

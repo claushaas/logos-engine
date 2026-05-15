@@ -69,9 +69,9 @@ The register below lists all functional requirements identified from Product Sco
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | FR-001 | The product must open as a TUI when the user runs `logos` from the target repository directory. | User | System | core / MVP | must-have | SC-001, CAP-001, J-001 | observable test |
 | FR-002 | The product must detect whether the current repository has an initialized LOGOS workspace. | System | System | core / MVP | must-have | SC-002, CAP-002, J-001 | observable test |
-| FR-003 | The product must initialize a workspace with metadata, profile reference, and state when the user confirms `/init`. | User | System | core / MVP | must-have | SC-002, CAP-003, J-009 | observable test |
+| FR-003 | The product must initialize a workspace with metadata, selected profile reference, and state when the user confirms `/init`. | User | System | core / MVP | must-have | SC-002, CAP-003, J-009 | observable test |
 | FR-004 | The product must use `logos/` as the default LOGOS documentation root and allow the user to configure another root. | User | Admin | core / MVP | must-have | SC-002, CAP-004, J-003 | inspection |
-| FR-005 | The product must load and apply the Standard profile as the active document contract. | System | System | core / MVP | must-have | SC-003, CAP-005 | inspection |
+| FR-005 | The product must let the user select a profile during `/init`, with the Standard profile available as the initial default active document contract. | User | System | core / MVP | must-have | SC-003, CAP-005 | inspection |
 | FR-006 | The product must conduct AI-led conversational intake without requiring deterministic question IDs during normal flow. | User | User | core / MVP | must-have | SC-004, CAP-008, J-001 | observable test |
 | FR-007 | The product must capture answers, assumptions, open questions, proposed decisions, risks, and dependencies in local structured state. | System | Data | core / MVP | must-have | SC-006, CAP-009 | inspection |
 | FR-008 | The product must present AI-derived decisions as proposed until the user explicitly confirms, revises, rejects, or defers them. | User | User | core / MVP | must-have | SC-007, CAP-011, J-007 | observable test |
@@ -128,6 +128,7 @@ The register below lists all functional requirements identified from Product Sco
 | FR-059 | Contextual suggestions must remain optional, source-labeled, caveated when needed, and non-canonical until the user accepts or revises them through the normal answer/proposal flow. | User | Business Rule | core / MVP | must-have | Foundation Glossary, Interaction Pattern 1A, ACT-019 through ACT-021 | observable test |
 | FR-060 | After workspace initialization, every `logos` TUI startup must present an AI Startup Briefing that summarizes current status and recommends the next step from local structured state. | System | User | supporting / MVP / validation-required | should-have | UX Model Rule 2A, Interaction Pattern 2A, CAP-012A | observable test |
 | FR-061 | The AI Startup Briefing must be read-only, grounded in bounded workspace status, and backed by a deterministic status fallback when AI is unavailable or remote-provider disclosure is not satisfied. | System | Business Rule | core / MVP | must-have | AI as a Layer, Permission Model, API Contracts | observable test |
+| FR-062 | The product must represent the active profile by id, version, source, and contract status so the Standard profile can be the MVP default without preventing future profiles. | System | Data | supporting / MVP | should-have | SC-003, Profile Glossary, Data Model | inspection |
 
 ---
 
@@ -175,7 +176,7 @@ Core requirements are the must-have behaviors essential to the product promise a
 #### CR-002: Workspace Initialization
 
 - **ID:** FR-003.
-- **Statement:** The product initializes a workspace with metadata, profile reference, and state when the user confirms `/init`.
+- **Statement:** The product initializes a workspace with metadata, selected profile reference, and state when the user confirms `/init`.
 - **Actor:** User.
 - **Classification:** core / MVP.
 - **Priority:** must-have.
@@ -202,11 +203,11 @@ Core requirements are the must-have behaviors essential to the product promise a
 - **Failure Behavior:** Invalid or inaccessible paths block generation and report the issue.
 - **Recovery Behavior:** The user may reconfigure the root or resolve the filesystem issue.
 
-#### CR-004: Standard Profile Loading
+#### CR-004: Profile Selection During Initialization
 
 - **ID:** FR-005.
-- **Statement:** The product loads and applies the Standard profile as the active document contract, defining phases, documents, completion criteria, and output definitions.
-- **Actor:** System.
+- **Statement:** The product lets the user select a profile during `/init`, with the Standard profile available as the initial default active document contract. The selected profile defines phases, documents, completion criteria, and output definitions while preserving active profile id/version metadata.
+- **Actor:** User.
 - **Classification:** core / MVP.
 - **Priority:** must-have.
 - **Source:** Product Scope SC-003, Product Architecture CAP-005.
@@ -612,7 +613,7 @@ Admin requirements cover local self-administration: the user configures their ow
 ### AR-004: Profile Selection
 
 - **ID:** FR-005.
-- **Statement:** The user must be able to select and use the Standard profile as the active document contract.
+- **Statement:** The user must be able to select the active profile during `/init` and use the Standard profile as the initial default document contract.
 - **Actor:** End user (self-admin).
 - **Classification:** core / MVP.
 - **Priority:** must-have.
@@ -1056,6 +1057,7 @@ Non-Functional Requirements must inherit local-first defaults, Git-friendly text
 Engineering must inherit:
 
 - Local-first, repository-directory, text-based, profile-driven direction.
+- Standard profile as the first bundled profile, with active profile id/version/source represented explicitly for future compatibility.
 - Explicit AI boundaries.
 - Configurable LOGOS documentation root defaulting to `logos/`.
 - Canonical Markdown outputs and derived HTML artifacts and agent packs.

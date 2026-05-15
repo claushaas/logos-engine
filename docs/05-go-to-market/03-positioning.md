@@ -52,7 +52,7 @@ Key differentiators are:
 
 ## Reasons to Believe
 
-Current reasons to believe are product design reasons, not market proof. They include the repository-native workflow, local-first constraints, structured decision model, Standard profile coverage, and the founder's direct experience with unclear pre-build project intent.
+Current reasons to believe are product design reasons, not market proof. They include the repository-native workflow, local-first constraints, structured decision model, initial Standard profile coverage, and the founder's direct experience with unclear pre-build project intent.
 
 External proof remains missing and must be created through validation.
 
