@@ -39,7 +39,9 @@ function assertOutput(result, argv, expectedSubstrings) {
 
 function main() {
 	if (!existsSync(DIST_CLI)) {
-		console.error(`Smoke failed: ${DIST_CLI} does not exist. Run "pnpm build" first.`);
+		console.error(
+			`Smoke failed: ${DIST_CLI} does not exist. Run "pnpm build" first.`,
+		);
 		process.exit(1);
 	}
 

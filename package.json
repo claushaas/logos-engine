@@ -47,9 +47,10 @@
 	"packageManager": "pnpm@10.33.2",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"check": "pnpm lint:biome && pnpm lint:md",
+		"check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm smoke:cli",
 		"format": "pnpm format:biome",
 		"format:biome": "biome check --write --unsafe .",
+		"lint": "pnpm lint:biome && pnpm lint:md",
 		"lint:biome": "biome check .",
 		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
 		"smoke:cli": "node scripts/smoke-cli.js",

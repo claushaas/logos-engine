@@ -64,23 +64,22 @@ pnpm install
 Run the available quality commands:
 
 ```bash
-pnpm lint:biome    # Code/style lint — passes cleanly
-pnpm lint:md       # Markdown lint — currently has pre-existing failures in docs/ and profile templates
-pnpm format        # Format with Biome — mutating, fixes auto-fixable issues
+pnpm lint          # Non-mutating lint (Biome + markdownlint)
+pnpm lint:biome    # Code/style lint — non-mutating
+pnpm lint:md       # Markdown lint — non-mutating
+pnpm typecheck     # Type-check src/ tree without emit
+pnpm test          # Run Vitest baseline
+pnpm build         # Build src/ to dist/
+pnpm smoke:cli     # Verify built CLI starts
+pnpm check         # Full non-mutating quality gate (lint + typecheck + test + build + smoke)
+pnpm format        # Mutating format with Biome — fixes auto-fixable issues
 ```
 
-Available quality commands:
-
-```bash
-pnpm typecheck     # Type-check src/ tree (Step 0.2)
-pnpm build         # Build src/ to dist/ (Step 0.2)
-pnpm test          # Run Vitest baseline (Step 0.3)
-pnpm smoke:cli     # Verify built CLI starts (Step 0.3)
-```
+`pnpm check` is the strict CI/release gate and must not mutate files. `pnpm format` is the local write command.
 
 The `smoke:cli` script is a Phase 0 preflight. The executable `logos` command and Ink TUI are Phase 2 scope.
 
-> **Step 0.1 status:** `pnpm lint:biome` passes. `pnpm lint:md` reports pre-existing formatting issues in existing documentation and profile templates that are outside the Step 0.1 scope. `pnpm check` runs both lint commands; it will show markdown failures until those files are cleaned up in a later documentation-hardening pass.
+> **Step 0.4 status:** `pnpm check` passes cleanly. Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and select profile templates are excluded from markdownlint via `.markdownlintignore` until a documentation-hardening pass cleans them up.
 
 ## First Outcome Profile
 

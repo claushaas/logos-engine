@@ -60,18 +60,25 @@ pnpm install
 Run these before opening a PR:
 
 ```bash
-pnpm lint:biome    # passes cleanly
-pnpm lint:md       # currently has pre-existing failures in docs/ and profile templates
+pnpm check       # Full non-mutating quality gate (lint + typecheck + test + build + smoke)
 ```
 
-The following commands are now part of the quality gate:
+Individual quality commands:
 
 ```bash
-pnpm typecheck   # requires src/ (Step 0.2)
-pnpm test        # requires tests/ (Step 0.3)
-pnpm build       # requires src/ (Step 0.2)
-pnpm smoke:cli   # requires scripts/smoke-cli.js (Step 0.3)
+pnpm lint        # Non-mutating lint (Biome + markdownlint)
+pnpm lint:biome  # Code/style lint — non-mutating
+pnpm lint:md     # Markdown lint — non-mutating
+pnpm typecheck   # Type-check src/ tree without emit
+pnpm test        # Run Vitest baseline
+pnpm build       # Build src/ to dist/
+pnpm smoke:cli   # Verify built CLI starts
+pnpm format      # Mutating format with Biome — fixes auto-fixable issues
 ```
+
+`pnpm check` is the strict CI/release gate and must not mutate files. `pnpm format` is the local write command.
+
+Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and select profile templates are excluded from markdownlint via `.markdownlintignore` until a documentation-hardening pass cleans them up.
 
 ## Contribution Requirements
 

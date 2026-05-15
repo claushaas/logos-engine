@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+	getPackageMetadata,
 	LOGOS_BINARY_NAME,
 	PACKAGE_NAME,
 	PACKAGE_VERSION,
-	getPackageMetadata,
 } from '../src/index.js';
 
 describe('package metadata', () => {
