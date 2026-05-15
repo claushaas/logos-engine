@@ -69,13 +69,13 @@ pnpm lint:md       # Markdown lint — currently has pre-existing failures in do
 pnpm format        # Format with Biome — mutating, fixes auto-fixable issues
 ```
 
-Commands that require later implementation steps:
+Available quality commands:
 
 ```bash
-pnpm typecheck     # Requires src/ tree (Step 0.2)
-pnpm build         # Requires src/ tree (Step 0.2)
-pnpm test          # Requires tests/ (Step 0.3)
-pnpm smoke:cli     # Requires scripts/smoke-cli.js (Step 0.3)
+pnpm typecheck     # Type-check src/ tree (Step 0.2)
+pnpm build         # Build src/ to dist/ (Step 0.2)
+pnpm test          # Run Vitest baseline (Step 0.3)
+pnpm smoke:cli     # Verify built CLI starts (Step 0.3)
 ```
 
 The `smoke:cli` script is a Phase 0 preflight. The executable `logos` command and Ink TUI are Phase 2 scope.

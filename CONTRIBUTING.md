@@ -64,12 +64,13 @@ pnpm lint:biome    # passes cleanly
 pnpm lint:md       # currently has pre-existing failures in docs/ and profile templates
 ```
 
-The following commands will be added to the quality gate after the source and test trees are scaffolded (Steps 0.2–0.4):
+The following commands are now part of the quality gate:
 
 ```bash
 pnpm typecheck   # requires src/ (Step 0.2)
 pnpm test        # requires tests/ (Step 0.3)
 pnpm build       # requires src/ (Step 0.2)
+pnpm smoke:cli   # requires scripts/smoke-cli.js (Step 0.3)
 ```
 
 ## Contribution Requirements
