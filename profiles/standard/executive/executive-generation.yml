@@ -1,0 +1,242 @@
+id: executive-generation
+version: 1.0.0
+title: Executive Axis Generation Profile
+status: draft
+
+purpose: >
+  Define how LOGOS compiles a portable executive model from the current
+  normative documentation baseline.
+
+principles:
+  - id: normative_first
+    statement: The Executive Axis must be generated from the Normative Axis, not authored independently.
+  - id: portable_model
+    statement: The Executive Axis must be represented as a portable JSON execution model.
+  - id: no_task_manager
+    statement: LOGOS must not become a proprietary task management application.
+  - id: generated_not_live
+    statement: Generated execution artifacts are exports or snapshots, not live operational state.
+  - id: traceability_required
+    statement: Executive items should preserve traceability to their source normative documents.
+
+source:
+  normativeAxis:
+    required: true
+    inputs:
+      - docs.yml
+      - phases/01-foundation.yml
+      - phases/02-validation.yml
+      - phases/03-product.yml
+      - phases/04-engineering.yml
+      - phases/05-go-to-market.yml
+      - phases/06-operations.yml
+      - docs/**/*.md
+
+readinessGate:
+  enabled: true
+  requiredStatus: baseline_ready
+  allowDraftGeneration: true
+  allowExportWhenDraft: false
+  statuses:
+    draft:
+      meaning: Normative baseline is incomplete.
+      canGenerateExecutiveModel: true
+      canExportToExecutionTools: false
+    baseline_ready:
+      meaning: Normative baseline is sufficient for executive compilation.
+      canGenerateExecutiveModel: true
+      canExportToExecutionTools: true
+    execution_ready:
+      meaning: Normative baseline includes enough detail for actionable execution.
+      canGenerateExecutiveModel: true
+      canExportToExecutionTools: true
+  minimumCoverage:
+    foundation:
+      required: true
+      requiredDocuments:
+        - thesis
+        - problem
+        - audience
+        - principles
+        - boundaries
+    validation:
+      required: true
+      requiredDocuments:
+        - validation-strategy
+        - core-assumptions
+        - hypotheses
+    product:
+      required: true
+      requiredDocuments:
+        - product-brief
+        - scope
+        - functional-requirements
+        - acceptance-criteria
+    engineering:
+      required: true
+      requiredDocuments:
+        - engineering-brief
+        - system-architecture
+        - technical-stack
+        - technical-risks
+    goToMarket:
+      required: false
+      requiredDocuments:
+        - go-to-market-brief
+        - positioning
+        - channel-strategy
+    operations:
+      required: false
+      requiredDocuments:
+        - operations-brief
+        - operating-model
+        - operational-risks
+
+generation:
+  output:
+    format: json
+    path: outcomes/executive/executive-plan.json
+    schema: executive/executive-plan.schema.json
+  model:
+    type: execution_graph
+    include:
+      - roadmaps
+      - milestones
+      - workstreams
+      - initiatives
+      - items
+      - decisions
+      - risks
+      - artifacts
+  itemTypes:
+    - task
+    - decision
+    - question
+    - blocker
+    - risk
+    - experiment
+    - review
+    - agent_prompt
+    - doc_update
+    - spike
+    - artifact
+    - bug
+    - follow_up
+  traceability:
+    requireSourceNormativeDocuments: true
+    allowInferredItems: true
+    inferredItemsRequireReview: true
+    preserveSourceSectionsWhenAvailable: true
+  confidence:
+    includeOverallConfidence: true
+    includeConfidenceByArea: true
+    allowedLevels:
+      - low
+      - medium
+      - high
+  granularity:
+    defaultLevel: initiative_and_task
+    avoidOverFragmentation: true
+    maxItemsPerInitiative: 12
+    preferActionableItems: true
+    splitItemsOnlyWhenAcceptanceCriteriaDiverge: true
+  prioritization:
+    defaultPriority: medium
+    allowedPriorities:
+      - low
+      - medium
+      - high
+      - critical
+    deriveFrom:
+      - normativeCriticality
+      - dependencyOrder
+      - riskReduction
+      - implementationSequence
+      - userValue
+      - validationNeed
+  dependencies:
+    inferDependencies: true
+    requireResolvableReferences: true
+    allowSoftDependencies: true
+  acceptanceCriteria:
+    requiredFor:
+      - task
+      - review
+      - spike
+      - experiment
+      - agent_prompt
+    deriveFrom:
+      - product.acceptanceCriteria
+      - engineering.testingStrategy
+      - engineering.standards
+      - document.generatedOutputs
+      - document.requiredSections
+
+derivationRules:
+  - id: derive_milestone_from_normative_phase
+    from: normative.phase
+    to: executive.milestone
+    when:
+      phaseHasDocuments: true
+  - id: derive_initiative_from_document_group
+    from: normative.documentGroup
+    to: executive.initiative
+    when:
+      groupHasImplementationImpact: true
+  - id: derive_task_from_required_output
+    from: normative.document.outputs
+    to: executive.item.task
+    when:
+      outputRequiresCreation: true
+  - id: derive_review_from_acceptance_criteria
+    from: normative.document.acceptanceCriteria
+    to: executive.item.review
+    when:
+      acceptanceCriteriaExist: true
+  - id: derive_risk_from_risk_sections
+    from: normative.document.sections
+    to: executive.risk
+    when:
+      sectionIdContains: risk
+
+exports:
+  enabled:
+    - githubIssues
+    - markdown
+    - html
+    - agentPack
+  targets:
+    githubIssues:
+      mapping: executive/mappings/github-issues.mapping.yml
+      outputPath: outcomes/executive/exports/github/issues/
+    linear:
+      mapping: executive/mappings/linear.mapping.yml
+      outputPath: outcomes/executive/exports/linear/
+    notion:
+      mapping: executive/mappings/notion.mapping.yml
+      outputPath: outcomes/executive/exports/notion/
+    markdown:
+      mapping: executive/mappings/markdown.mapping.yml
+      outputPath: outcomes/executive/exports/markdown/
+    html:
+      mapping: executive/mappings/html.mapping.yml
+      outputPath: outcomes/executive/exports/html/
+    agentPack:
+      mapping: executive/mappings/agent-pack.mapping.yml
+      outputPath: outcomes/executive/exports/agent-packs/
+
+validation:
+  rules:
+    - unique_entity_ids
+    - valid_cross_references
+    - source_documents_declared
+    - dependencies_resolve
+    - required_acceptance_criteria_present
+    - export_targets_supported
+    - unsupported_fields_preserved_as_metadata
+
+nonGoals:
+  - manual_task_management
+  - proprietary_execution_ui
+  - bidirectional_sync_in_mvp
+  - live_status_tracking_inside_logos

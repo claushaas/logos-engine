@@ -1,0 +1,46 @@
+id: markdown
+version: 1.0.0
+adapter: markdown
+status: supported
+exportType: file_export
+outputFormat: markdown
+
+purpose: >
+  Generate human-readable execution snapshots, implementation plans,
+  decision summaries, risk lists, and review documents.
+
+outputs:
+  implementationPlan:
+    path: outcomes/executive/exports/markdown/implementation-plan.md
+    template: executive/templates/implementation-plan.md
+    includes:
+      - project_summary
+      - readiness_status
+      - roadmap
+      - milestones
+      - initiatives
+      - execution_items
+      - dependencies
+      - acceptance_criteria
+      - risks
+      - decisions
+  decisionSummary:
+    path: outcomes/executive/exports/markdown/decisions.md
+    includes:
+      - decisions
+      - affected_normative_documents
+      - consequences
+  riskSummary:
+    path: outcomes/executive/exports/markdown/risks.md
+    includes:
+      - risks
+      - likelihood
+      - impact
+      - mitigation
+
+rules:
+  markdownIsDerivedArtifact: true
+  doNotTreatAsLiveExecutionState: true
+  includeGeneratedAt: true
+  includeSourceExecutivePlanPath: true
+  includeSourceNormativeDocuments: true

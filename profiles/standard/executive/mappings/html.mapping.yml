@@ -1,0 +1,44 @@
+id: html
+version: 1.0.0
+adapter: html
+status: supported
+exportType: file_export
+outputFormat: html
+template: executive/templates/executive-overview.html
+
+purpose: >
+  Generate navigable HTML review artifacts from the Executive JSON.
+  HTML is a derived artifact, not source of truth.
+
+outputs:
+  executiveOverview:
+    path: outcomes/executive/exports/html/executive-overview.html
+    includes:
+      - project_summary
+      - readiness_status
+      - confidence
+      - roadmap
+      - milestones
+      - initiatives
+      - workstreams
+      - execution_items
+      - risks
+      - decisions
+      - export_targets
+
+rules:
+  htmlIsDerivedArtifact: true
+  doNotEditManually: true
+  includeGeneratedAt: true
+  includeSourceExecutivePlanPath: true
+  includeSourceNormativeDocuments: true
+  preserveTraceabilityLinks: true
+
+visualSections:
+  - current_summary
+  - roadmap_map
+  - milestone_board
+  - workstream_index
+  - risk_panel
+  - decision_panel
+  - export_summary

@@ -1,0 +1,75 @@
+id: notion
+version: 1.0.0
+adapter: notion
+status: planned
+exportType: csv_or_api_export
+outputFormat: json
+template: null
+
+purpose: >
+  Export LOGOS execution entities into Notion databases or importable
+  structured payloads.
+
+mode: database
+
+recommendedDatabases:
+  - Execution Items
+  - Initiatives
+  - Milestones
+  - Decisions
+  - Risks
+  - Artifacts
+
+minimalDatabase:
+  name: Execution Items
+  useWhen: User wants a single lightweight Notion database.
+
+maps:
+  roadmap: page
+  milestone: database_row
+  initiative: database_row
+  workstream: select_or_relation
+  item.task: database_row
+  item.bug: database_row
+  item.risk: database_row
+  item.review: database_row
+  item.decision: database_row
+  item.question: database_row
+  item.blocker: database_row
+  item.spike: database_row
+  item.doc_update: database_row
+  item.agent_prompt: page
+  artifact: page_or_file_link
+
+fields:
+  title: Name
+  type: Type
+  status: Status
+  priority: Priority
+  workstreamId: Workstream
+  initiativeId: Initiative
+  milestoneId: Milestone
+  acceptanceCriteria: Acceptance Criteria
+  sourceNormativeDocuments: Source Docs
+  dependsOn: Dependencies
+  requiresReview: Requires Review
+  origin: Origin
+
+statusMap:
+  draft: Draft
+  planned: Planned
+  ready: Ready
+  in_progress: In Progress
+  blocked: Blocked
+  reviewing: Reviewing
+  done: Done
+  cancelled: Cancelled
+  superseded: Superseded
+
+metadata:
+  includeLogosIdProperty: true
+  includeSourceDocumentsProperty: true
+  preserveUnsupportedFieldsInPageBody: true
+
+unsupported:
+  strategy: preserve_in_page_body

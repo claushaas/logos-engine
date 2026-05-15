@@ -1,0 +1,71 @@
+id: linear
+version: 1.0.0
+adapter: linear
+status: planned
+exportType: json_export
+outputFormat: json
+template: null
+
+purpose: >
+  Map LOGOS execution entities into Linear-compatible projects, issues,
+  labels, priorities, and milestones where available.
+
+maps:
+  roadmap: project_group
+  milestone: milestone
+  initiative: project
+  workstream: label
+  item.task: issue
+  item.bug: issue
+  item.risk: issue
+  item.review: issue
+  item.decision: issue
+  item.question: issue
+  item.blocker: issue
+  item.spike: issue
+  item.doc_update: issue
+  item.follow_up: issue
+  artifact: attachment_or_link
+
+fields:
+  title: title
+  description: description
+  priority: priority
+  status: state
+  acceptanceCriteria: description
+  sourceNormativeDocuments: description
+  dependsOn: relations
+  workstreamId: labels
+  initiativeId: project
+
+priorityMap:
+  low: 1
+  medium: 2
+  high: 3
+  critical: 4
+
+statusMap:
+  draft: backlog
+  planned: backlog
+  ready: todo
+  in_progress: in_progress
+  blocked: blocked
+  reviewing: in_review
+  done: done
+  cancelled: canceled
+  superseded: canceled
+
+labels:
+  preserveItemTypeAsLabel: true
+  preserveWorkstreamAsLabel: true
+  prefix:
+    type: type/
+    workstream: ws/
+    source: source/
+
+metadata:
+  includeLogosMetadataFooter: true
+  preserveUnsupportedFieldsInDescription: true
+
+unsupported:
+  strategy: preserve_in_description_metadata
