@@ -2,7 +2,7 @@
 
 ## Engineering Objective
 
-Engineering must deliver a local-first, repository-oriented TUI product that turns AI-led clarification into structured project state, user-reviewed decisions, deterministic validation, canonical Markdown documentation, and derived HTML artifacts and agent packs.
+Engineering must deliver a local-first, repository-oriented TUI product that turns AI-led clarification into structured project state, user-reviewed decisions, deterministic validation, canonical Markdown documentation, portable Executive JSON, and derived HTML artifacts, executive exports, and agent packs.
 
 The engineering objective is to make the LOGOS Engine MVP technically trustworthy enough that a user can run `logos` from a target repository, initialize or resume a workspace, configure AI explicitly, conduct bounded intake, review proposed decisions, generate outputs under the configured LOGOS documentation root, diagnose gaps, and continue later without silent data loss, hidden remote transmission, or false authority.
 
@@ -14,7 +14,8 @@ Engineering success means:
 - profile YAML contracts drive phases, document contracts, validations, Markdown outputs, HTML artifacts, and agent packs;
 - structured local state is the durable source of project truth;
 - generated Markdown is the canonical human-readable projection;
-- derived HTML artifacts and agent packs remain regenerable, labeled, and non-canonical;
+- Executive JSON is the portable execution exchange model derived from the Normative Axis;
+- derived HTML artifacts, executive exports, and agent packs remain regenerable, labeled, and non-canonical;
 - AI assistance is provider-agnostic, explicit, bounded, and reviewable;
 - deterministic validation remains usable without live AI;
 - file writes, provider transmission, root changes, and overwrites require clear user intent;
@@ -47,6 +48,7 @@ Engineering failure means:
 | Product Scope SC-008 | Markdown is generated under the configured root from state and profile contracts. | Rendering must be deterministic, traceable, safe to regenerate, and clear about stale or incomplete outputs. | committed |
 | Product Scope SC-009 | HTML artifacts are generated as derived outputs. | Artifact generation must be downstream of canonical Markdown and profile contracts, with stale/failed status. | committed / supporting |
 | Product Scope SC-010 | Agent packs are generated as derived downstream context. | Agent pack generation must preserve caveats, dependencies, and source traceability without becoming canonical. | committed / supporting / validation-required |
+| Product Scope SC-014 | The Executive Axis compiles portable Executive JSON and derived exports from the normative baseline. | Engineering must add schema validation, readiness gates, source traceability, adapter outputs, and no-live-sync boundaries. | supporting / post-baseline |
 | Functional Requirements | Slash commands include `/init`, `/continue`, `/generate`, `/diagnose`, `/validate`, `/status`, `/config ai`, `/help`, and `/exit`. | Command routing, help, error handling, and observable command outcomes are MVP surface requirements. | committed |
 | Non-Functional Requirements | TUI startup, status, generation feedback, keyboard operation, privacy, token safety, and reliability have release impact. | Engineering must define measurable quality gates and failure-path tests, not only happy-path implementation. | committed / some thresholds provisional |
 | Product Stack | Node.js >=22, TypeScript, Ink, React, Commander entrypoint, filesystem storage, Zod, YAML, Markdown, and provider abstraction are product-level commitments. | Detailed architecture can choose structure, but it must stay within these committed stack constraints unless explicitly changed. | committed |
@@ -83,6 +85,7 @@ Product inputs requiring engineering clarification:
 | Validation and diagnostics | Run deterministic checks without live AI, report severity, affected documents, unsupported claims, and next actions. | SC-011, FR-012, FR-013 | Test Strategy, System Architecture |
 | Markdown generation | Render canonical Markdown from profile contracts and structured state under configured root. | SC-008, FR-009 | System Architecture, Data Model |
 | Derived outputs | Generate HTML artifacts and agent packs from canonical content and mark them as derived. | SC-009, SC-010, FR-010, FR-011 | System Architecture, Integration Architecture |
+| Executive compiler | Generate Executive JSON and supported export artifacts from normative documents. | SC-014, FR-051 through FR-057 | System Architecture, Data Model, API Contracts, Integration Architecture |
 | Permission and recovery | Confirm writes, overwrites, root changes, and remote transmission; preserve state on interruption. | FR-018, FR-020, FR-022, FR-023 | Security Architecture, API Contracts |
 | Quality gates | Provide automated and observable verification for release-blocking acceptance criteria. | Acceptance Criteria | Test Strategy, Release Management |
 
@@ -110,7 +113,7 @@ Product inputs requiring engineering clarification:
 
 ## Architecture Direction
 
-The preliminary architecture direction is a local, modular TypeScript application with a TUI shell, command router, profile loader, structured state layer, AI provider abstraction, validation engine, diagnostics engine, document renderer, derived-output renderer, and filesystem adapter.
+The preliminary architecture direction is a local, modular TypeScript application with a TUI shell, command router, profile loader, structured state layer, AI provider abstraction, validation engine, diagnostics engine, document renderer, Executive Compiler, derived-output renderer, export adapters, and filesystem adapter.
 
 This direction is intentionally high-level. Detailed system design belongs in System Architecture, Data Model, API Contracts, Security Architecture, Frontend Architecture, Infrastructure Architecture, Integration Architecture, and Test Strategy.
 
@@ -193,6 +196,7 @@ Known resource constraints are not yet documented beyond founder-led execution. 
 | ENG-CAP-012 | Derived artifact generation | generation | MVP support | FR-010, FR-027 | Generate HTML artifacts from canonical content and mark derived status. | AC-FN-010, AC-UI-012 | System Architecture, Frontend Architecture | committed / implementation review-needed |
 | ENG-CAP-013 | Agent pack generation | generation / agent context | MVP support / validation-required | FR-011, FR-027 | Generate compact downstream agent packs with caveats and source traceability. | AC-FN-010 | Integration Architecture | committed / format review-needed |
 | ENG-CAP-014 | Generation report and stale tracking | generation / observability | MVP | FR-019, FR-027 | Report created, updated, skipped, incomplete, blocked, failed, stale, canonical, and derived outputs. | AC-FN-017, AC-FN-031 | Data Model, API Contracts | committed |
+| ENG-CAP-015 | Executive compiler and exports | generation / execution exchange | post-baseline support | FR-051 through FR-057 | Generate schema-valid Executive JSON and supported export artifacts with source traceability and no-live-sync labels. | AC-FN-024 through AC-FN-028 | Data Model, API Contracts, Integration Architecture | planned |
 | ENG-CAP-015 | Permissioned writes and overwrite protection | security / reliability | MVP | FR-022, FR-031, NFR-SEC-004 | Require confirmations and detect or warn about unsafe writes and manual edits. | AC-FN-019, AC-FN-022, AC-UX-010 | Security Architecture | committed |
 | ENG-CAP-016 | No-provider and failure recovery | reliability | MVP | FR-030, FR-042 | Preserve state and offer retry, reconfigure, or continue without AI. | AC-FN-021, AC-UX-011 | System Architecture, API Contracts | committed |
 | ENG-CAP-017 | Release-quality test harness | testing | MVP | Acceptance Criteria | Run deterministic tests, mocked providers, lint, typecheck, build, smoke checks. | Gate 1 | Test Strategy, Release Management | committed |
@@ -230,6 +234,7 @@ The first engineering iteration should reduce the largest trust and feasibility 
 | 7 | Provider configuration and remote/local provider adapters | Slice 6 | Timeout, disclosure, no-token-storage, and failure recovery verified. | Adds real AI after safety boundaries exist. |
 | 8 | Canonical Markdown renderer and generation report | Slice 3, Slice 4, Slice 5 | Markdown writes under configured root with confirmation and report. | Delivers core output value. |
 | 9 | Derived HTML artifact and agent pack generation | Slice 8 | Derived outputs are generated, labeled, and traceable. | Completes profile-defined output model. |
+| 10 | Executive Axis compiler and exports | Slice 8, Slice 9 | Executive JSON and export snapshots are generated from normative docs. | Enables execution handoff without task-manager scope creep. |
 | 10 | Recovery, stale output tracking, manual edit protection | Slice 4, Slice 8, Slice 9 | Revised state marks affected outputs stale; overwrite warnings work. | Hardens repeat use and trust. |
 | 11 | Cross-platform, accessibility, and release gates | all prior slices | `pnpm check`, smoke tests, keyboard checks, no network/default telemetry checks. | Converts prototype into release candidate. |
 
@@ -283,6 +288,7 @@ The first engineering iteration should reduce the largest trust and feasibility 
 | Manual edit conflict strategy | Product requires safety but not exact mechanism. | Renderer metadata approach, checksum feasibility, UX prompts. | Markdown renderer design. | Regeneration may be unsafe or overly blocked. | Final overwrite policy. | Conservative confirmation and generation reports. | System Architecture, API Contracts | review-needed |
 | HTML artifact renderer | Product commits to derived HTML but not library or template engine. | Accessibility needs, style constraints, Markdown conversion needs. | Artifact generation slice. | Derived artifacts may lag or be inconsistent. | Final artifact pipeline. | Define artifact contract and stale status. | Frontend Architecture, System Architecture | deferred |
 | Agent pack format | Product commits to agent packs but usefulness is validation-required. | Downstream agent needs and review prompt structure. | First agent-pack review loop. | Packs may be too broad or misleading. | Stable agent pack schema. | Generate minimal caveat-preserving Markdown packs. | Integration Architecture | deferred |
+| Executive generation trigger | Product commits to Executive Axis generation but not the exact command surface. | Interaction design, readiness policy, and generation report behavior. | First executive generation implementation. | Users may miss the feature or confuse it with normal docs generation. | `/generate` integration versus dedicated command. | Treat as generation subflow with explicit report until command is decided. | Interaction Model, API Contracts | review-needed |
 | OS credential store support | Preferred but cross-platform implementation risk exists. | Library evaluation, UX flow, WSL behavior. | Provider configuration architecture. | Env-var-only UX may be less friendly; credential store may be brittle. | Persistent secure token storage. | Env var token source and redacted status. | Security Architecture | review-needed |
 | Local debug logging | Helpful for support but privacy-sensitive. | Support needs, log redaction design, user opt-in model. | Support Model drafting or first difficult support issue. | Harder debugging without logs; unsafe logs if rushed. | Default debug logs. | Local generation reports and diagnostics. | Observability Plan | deferred |
 | CI/platform matrix | Product targets macOS, Linux, WSL but capacity may be limited. | Build infrastructure and release capacity. | Release candidate planning. | Platform regressions may be missed. | Full release confidence. | Local smoke scripts and documented manual checks. | Test Strategy, Deployment Plan | review-needed |

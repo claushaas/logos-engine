@@ -12,6 +12,7 @@ The selected strategy is:
 - **Public network API:** excluded for MVP.
 - **External provider API:** hidden behind provider-agnostic adapter contracts.
 - **Agent contract:** derived Markdown agent packs plus review prompts; no agent-callable mutation API in MVP.
+- **Executive contract:** portable Executive JSON plus export adapter results; no live task-management or sync API in MVP.
 - **Documentation:** this Markdown document is the canonical API contract reference; generated HTML and agent review packs are derived.
 - **Compatibility:** persisted state schemas, profile schemas, command result shapes, and adapter interfaces require compatibility tests before release.
 
@@ -24,6 +25,7 @@ API design constraints:
 - Remote provider calls require explicit disclosure and safe context preview.
 - Raw provider tokens must never appear in project files, logs, command responses, fixtures, or generated outputs.
 - Generated output paths must resolve under the configured LOGOS documentation root, defaulting to `logos/`.
+- Executive exports must resolve under the configured LOGOS documentation root and must not imply live external-tool sync.
 
 Open API questions:
 
@@ -31,6 +33,7 @@ Open API questions:
 - whether internal schemas are published as package exports is deferred;
 - whether support tooling needs a formal local export contract is review-needed;
 - whether HTML artifact generation needs a formal browser-consumable JSON manifest is deferred.
+- whether executive generation is triggered through `/generate` or a dedicated command remains product/interaction review-needed.
 
 ## Contract Taxonomy
 
@@ -46,6 +49,8 @@ Open API questions:
 | AI Provider Contract | intake/drafting to provider adapters | external adapter boundary | stable MVP | provider operation schema version | Integration | MVP |
 | Credential/Environment Contract | config service to env/credential source | adapter boundary | stable | redacted metadata version | Security/Config | MVP |
 | Agent Pack Contract | LOGOS to downstream agents | derived artifact boundary | stable enough for review | artifact version metadata recommended | Integration | MVP |
+| Executive Plan Contract | LOGOS to export adapters | derived exchange-model boundary | stable enough for schema validation | executive schema version required | Executive Compiler/API | post-baseline |
+| Executive Export Contract | LOGOS to external-tool import files | derived export boundary | adapter-specific | adapter version metadata recommended | Integration/API | post-baseline |
 | Public HTTP API | external product clients | network boundary | N/A | N/A | N/A | excluded |
 | Webhook/Async Contract | external systems | network/event boundary | N/A | N/A | N/A | excluded/deferred |
 | Worker/Job Contract | background workers | process boundary | N/A | N/A | N/A | excluded |
@@ -65,6 +70,7 @@ Implementation-only interfaces can change without deprecation only when they do 
 | Intake Orchestrator | AI Provider Port | provider operation contract | local app to provider | provider credential if remote | remote disclosure | project context/prompt | Integration/Security | Provider fakes and redaction tests. |
 | Configuration Service | Credential Source Port | token resolution contract | local app to OS/env | external credential source | no raw persistence | token metadata | Security | Token redaction tests. |
 | Generation Service | Renderer Ports | render contract | application to renderer | no | write confirmation via generation service | state snapshot/content | Generation | Golden output tests. |
+| Executive Compiler Service | Executive Export Adapters | executive plan/export contract | application to adapter | no | write/export confirmation via generation service | normative docs, execution graph, source refs | Executive Compiler/Integration | Schema, adapter, and golden export tests. |
 | Generation Service | File System Port | file write contract | app to repository filesystem | OS filesystem permission | path safety/overwrite consent | generated content | Infrastructure/Security | Safe-write tests. |
 | Downstream Agent | Agent Pack File | derived context artifact | generated file to external agent | none enforced by LOGOS | user decides use | project context | Integration | Strong derived/caveat labels. |
 
@@ -98,6 +104,8 @@ Internal APIs are command/action, query, port, and adapter contracts inside the 
 | Configuration Commands | TUI/Application | Configuration Service | stable MVP | Provider metadata redacted; raw token values excluded. | MVP |
 | State Repository Port | Services | File System Adapter | stable MVP | Versioned schemas and safe writes. | MVP |
 | Renderer Ports | Generation Service | Markdown/HTML/Agent Pack Renderers | stable MVP | Render from snapshots and contracts, not raw chat truth. | MVP |
+| Executive Compiler Commands | Command Router/TUI | Executive Compiler Service | post-baseline | Compile from normative baseline and export through mappings; no live sync. | post-baseline |
+| Executive Export Adapter Ports | Executive Compiler Service | Markdown/HTML/GitHub/Linear/Notion/Agent Pack adapters | post-baseline | Transform Executive JSON into derived artifacts, preserving metadata. | supported/planned by adapter |
 | AI Provider Port | Intake/AI Services | Provider Adapters | stable MVP | Provider-agnostic request/response with schema validation. | MVP |
 
 Internal APIs must not expose persistence files as direct caller responsibilities. Consumers request domain/application operations and receive typed results, not file paths to mutate.
@@ -132,6 +140,8 @@ Agent context rules:
 | Markdown Renderer Port | Markdown Renderer | render canonical document | state snapshot, profile contract, output path metadata | text content plus render metadata | missing input, unsupported contract | no automatic retry | none | golden fixture renderer |
 | HTML Renderer Port | HTML Renderer | render artifact | canonical/source snapshot, contract | HTML content plus metadata | render failure, unsupported artifact | no automatic retry | none | fixture renderer |
 | Agent Pack Renderer Port | Agent Pack Renderer | render pack | canonical context, caveats, contract | Markdown pack plus metadata | missing source, unsafe context | no automatic retry | none | golden fixture renderer |
+| Executive Compiler Port | Executive Compiler | compile execution graph | normative document snapshot, profile contracts, readiness policy | Executive JSON plus metadata | readiness failed, schema invalid, missing source docs | no automatic retry | none | executive schema fixtures |
+| Executive Export Adapter Port | Export Adapters | export plan | Executive JSON, target mapping, output path metadata | derived export content plus metadata | unsupported target, mapping invalid, render failed | no automatic retry | none | golden export fixtures |
 
 Vendor-specific provider payloads must be mapped to stable internal errors and normalized response shapes before entering application or domain state.
 
@@ -155,6 +165,8 @@ The register uses operation names rather than HTTP methods/paths because MVP has
 | API-012 | BrowseOutputs | internal query | N/A | N/A | List canonical and derived outputs under active root. | TUI | Generation/Status Service | output query | FR-029 | no | read local root | `BrowseOutputsRequest` | `BrowseOutputsResult` | `root_missing`, `state_invalid` | no | optional cursor if grows | kind/status filters | none | output schema version | OutputsViewed optional local event | Could remain preferred/could-have. | preferred MVP |
 | API-013 | LoadProfile | internal query | N/A | N/A | Load and validate profile contracts. | Workspace/Profile Service | Profile Loader | ProfileLoaded | FR-005 | no | profile path safety | `LoadProfileRequest` | `ProfileLoadResult` | `profile_missing`, `invalid_yaml`, `invalid_contract` | no | none | none | none | profile schema version | ProfileLoaded/ProfileValidationFailed | Additive profile fields allowed. | MVP |
 | API-014 | ResolveTokenSource | adapter operation | N/A | N/A | Resolve provider token into memory for call. | Configuration/Provider Adapter | Credential Source Adapter | credential lookup | FR-036 | credential source | raw token never returned to TUI/logs/state | `ResolveTokenSourceRequest` | `ResolvedCredentialResult` | `credential_missing`, `credential_inaccessible`, `unsafe_token_storage` | no | none | none | none | credential contract version | CredentialResolved redacted | Internal only; secret handling critical. | MVP |
+| API-015 | GenerateExecutivePlan | internal command | N/A | N/A | Compile Executive JSON from the normative baseline. | TUI/Generation | Executive Compiler Service | CompileExecutivePlan | FR-051, FR-052, FR-053 | no | read normative docs; write confirmation for plan file | `GenerateExecutivePlanRequest` | `ExecutivePlanResult` | `baseline_not_ready`, `source_missing`, `schema_invalid`, `write_denied` | yes | output list bounded | phase/area filters deferred | none | executive schema version | ExecutivePlanGenerated/Blocked | Draft generation allowed; external export may be blocked. | post-baseline |
+| API-016 | ExportExecutivePlan | internal command | N/A | N/A | Export Executive JSON through selected adapter mappings. | TUI/Generation | Executive Compiler / Export Adapters | ExportExecutivePlan | FR-054, FR-055, FR-056, FR-057 | no | plan schema-valid; target supported; write confirmation | `ExportExecutivePlanRequest` | `ExecutiveExportResult` | `unsupported_export_target`, `mapping_invalid`, `baseline_not_exportable`, `write_denied`, `render_failed` | yes | output list bounded | target/status filters | none | adapter schema version | ExecutivePlanExported/ExportBlocked | No bidirectional sync or live task mutation. | post-baseline |
 
 ## Request Schemas
 
@@ -176,7 +188,9 @@ All request contracts are local TypeScript/Zod structures. Unknown fields should
 | `reviewAction` | enum | request | proposal review | no | none | valid transition | confirm/revise/reject/defer | no | no | User-selected proposal action. | `confirm` |
 | `targetPhaseId` | string | request | optional | yes | null | must exist in profile if provided | profile phase id | no | no | Optional phase filter. | `04-engineering` |
 | `targetDocumentId` | string | request | optional | yes | null | must exist in profile if provided | profile document id | no | no | Optional document filter. | `06-api-contracts` |
-| `outputKinds` | string[] | request | optional | no | all eligible | valid output kind list | canonicalMarkdown/derivedHtml/derivedAgentPack | no | no | Limits generation/browsing to output kinds. | `["canonicalMarkdown"]` |
+| `outputKinds` | string[] | request | optional | no | all eligible | valid output kind list | canonicalMarkdown/executiveJson/executiveExport/derivedHtml/derivedAgentPack | no | no | Limits generation/browsing to output kinds. | `["canonicalMarkdown"]` |
+| `executiveExportTargets` | string[] | request | optional | no | supported file exports | valid executive export target list | markdown/html/githubIssues/agentPack/linear/notion | no | no | Limits executive export generation to selected adapter targets. | `["markdown", "githubIssues"]` |
+| `executiveReadinessMode` | enum | request | optional | no | baseline_ready | draft/baseline_ready/execution_ready | fixed enum | no | no | Controls whether draft executive generation is allowed and whether external exports can run. | `baseline_ready` |
 | `overwritePolicy` | enum | request | generation | no | safe | must align with confirmation | safe/confirm/force-after-confirmation | no | no | File collision policy. | `safe` |
 | `providerContextPreviewAccepted` | boolean | request | conditional | no | false | true only after disclosure | true/false | no | no | Confirms user saw remote context implications before a remote provider call. | `true` |
 
@@ -223,6 +237,8 @@ type OperationResult<T> =
 | `ValidationResult` | validation | run id, summary counts, findings, blocking status | Deterministic and provider-independent. |
 | `DiagnosticResult` | diagnostics | run id, severity groups, affected objects, next actions | Advisory; must not claim confirmed changes. |
 | `GenerationResult` | generation | run id, root, created/updated/skipped/blocked/failed/stale outputs | Partial success is first-class. |
+| `ExecutivePlanResult` | executive generation | run id, root, plan path, readiness, confidence, source normative documents, schema status, warnings, blocked exports | Executive JSON is portable exchange output, not live task state. |
+| `ExecutiveExportResult` | executive exports | run id, source executive plan path, selected targets, generated/skipped/unsupported/blocked/failed files, adapter metadata | Exports are derived snapshots and must preserve source metadata. |
 | `ProviderStatusResult` | provider config/test | mode, endpoint/model if safe, redacted token source, availability | No raw token. |
 | `BrowseOutputsResult` | output browsing | root, output groups by kind/status, stale/missing markers | Derived outputs labeled. |
 

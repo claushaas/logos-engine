@@ -168,7 +168,7 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 
 **Status:** canonical.
 
-**Definition:** An output generated from canonical source for navigation, review, presentation, or execution support. Examples include HTML views and agent packs.
+**Definition:** An output generated from canonical source for navigation, review, presentation, import, or execution support. Examples include HTML views, Markdown execution snapshots, GitHub Issue-compatible files, and agent packs.
 
 **Used in:** Principles, Boundaries, Success Definition, documentation registry.
 
@@ -179,6 +179,86 @@ This glossary controls the meaning of recurring terms across the Foundation docu
 **Not to be confused with:** canonical document, canonical source.
 
 **Decision relevance:** Derived artifacts can improve usability but must not become authoritative.
+
+### Executive Axis
+
+**Status:** canonical.
+
+**Definition:** The volatile execution-planning axis that defines what should happen next. It is generated from the Normative Axis as a portable JSON execution model, then exported to review artifacts, import files, or agent packs.
+
+**Used in:** Boundaries, Product Scope, Product Architecture, Engineering documents, Operations.
+
+**Aliases:** execution axis, portable execution model.
+
+**Discouraged terms:** task manager, live project board, operational workspace.
+
+**Not to be confused with:** Normative Axis, project management suite, derived artifact.
+
+**Decision relevance:** The Executive Axis helps turn approved project clarity into actionable execution structure without making LOGOS own day-to-day task management.
+
+### Executive Compiler
+
+**Status:** canonical.
+
+**Definition:** The LOGOS capability that reads the current normative documentation baseline, applies readiness and derivation rules, and produces the Executive JSON model plus optional export artifacts.
+
+**Used in:** Product Architecture, Functional Requirements, System Architecture, API Contracts.
+
+**Aliases:** execution compiler, executive generation.
+
+**Discouraged terms:** task creator, task manager.
+
+**Not to be confused with:** Generation Service for canonical Markdown, external execution tools.
+
+**Decision relevance:** The compiler must preserve traceability to source normative documents and must not infer live operational truth from stale or incomplete docs.
+
+### Executive JSON
+
+**Status:** canonical.
+
+**Definition:** The portable JSON execution model generated from the Normative Axis. It represents roadmaps, milestones, workstreams, initiatives, execution items, decisions, risks, artifacts, dependencies, acceptance criteria, confidence, and export metadata.
+
+**Used in:** Product Scope, Data Model, API Contracts, Integration Architecture.
+
+**Aliases:** executive plan, executive exchange model, portable execution model.
+
+**Discouraged terms:** task database, live status store.
+
+**Not to be confused with:** Markdown implementation plan, HTML overview, GitHub issue export, agent pack.
+
+**Decision relevance:** Executive JSON is the canonical exchange model for execution exports, but it is still derived from the Normative Axis and must be regenerated when normative inputs change.
+
+### Export Adapter
+
+**Status:** canonical.
+
+**Definition:** A mapping layer that transforms Executive JSON into a target-specific file, payload, or review artifact such as Markdown, HTML, GitHub Issue-compatible Markdown, Linear JSON, Notion JSON/CSV, or agent packs.
+
+**Used in:** Engineering and Integration documents.
+
+**Aliases:** adapter mapping, export mapping.
+
+**Discouraged terms:** sync engine, live integration.
+
+**Not to be confused with:** provider adapter, renderer, public API.
+
+**Decision relevance:** Export adapters support transfer to external tools while preserving source metadata and avoiding bidirectional task ownership in MVP.
+
+### Execution Graph
+
+**Status:** canonical.
+
+**Definition:** The structured graph inside Executive JSON that connects roadmaps, milestones, workstreams, initiatives, execution items, acceptance criteria, dependencies, risks, decisions, artifacts, and export targets.
+
+**Used in:** Executive Axis, Product Architecture, Data Model, Testing Strategy.
+
+**Aliases:** executive graph, execution model.
+
+**Discouraged terms:** flat task list.
+
+**Not to be confused with:** dependency visualization, project board.
+
+**Decision relevance:** LOGOS must preserve why work exists and where it came from, not merely flatten every item into a task.
 
 ### Diagnostics
 

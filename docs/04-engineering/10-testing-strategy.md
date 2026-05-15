@@ -15,6 +15,7 @@ The MVP quality bar is evidence-based:
 - AI proposals cannot become confirmed decisions without explicit user action.
 - Deterministic validation remains separate from AI judgment.
 - Canonical Markdown, derived HTML artifacts, and agent packs are generated under the configured root, defaulting to `logos/`.
+- Executive JSON and executive export artifacts are generated from normative documents, validate against the executive schema, and remain derived from the Normative Axis.
 - Write, overwrite, root-change, remote-provider, and destructive actions are confirmation-gated.
 - Failures preserve state and produce an actionable recovery path.
 
@@ -46,6 +47,7 @@ Tests are not substitutes for product sign-off. Automated tests prove behavior; 
 | Functional Requirements | FR-003, FR-007, FR-014 | Workspace state persists and resumes across sessions. | Integration, workflow, state tests. | Temp workspace fixtures and continuation tests. | Release-blocking. | Engineering. | MVP. | Migration coverage must grow with schema changes. |
 | Functional Requirements | FR-008, FR-043 | AI-derived decisions remain proposed until user review. | Domain, contract, workflow, security. | Decision transition tests and provider fixture tests. | Release-blocking. | Engineering. | MVP. | None known. |
 | Functional Requirements | FR-009, FR-010, FR-011, FR-027 | Markdown, HTML artifacts, and agent packs are generated and classified correctly. | Renderer, golden, integration. | Generated output fixtures/snapshots. | Release-blocking for canonical Markdown; degrade gracefully for early derived renderers if accepted. | Engineering. | MVP/review-needed. | Exact HTML renderer coverage depends on renderer implementation. |
+| Functional Requirements | FR-051 through FR-057 | Executive JSON and exports compile from the normative baseline without becoming live task state. | Schema, adapter, golden, integration. | Executive plan schema fixtures, export snapshots, unsupported-target tests. | Feature-blocking for Executive Axis. | Engineering/product. | post-baseline. | Command trigger and export readiness policy still review-needed. |
 | Functional Requirements | FR-018, FR-035 | Remote provider transmission requires explicit disclosure. | Provider config, command, workflow. | Fake remote-provider tests. | Release-blocking. | Engineering. | MVP. | Context preview UX needs frontend test once finalized. |
 | Functional Requirements | FR-022, FR-023, FR-031 | Writes, overwrites, root changes, and manual edits require safe handling. | Filesystem integration, workflow, security. | Collision/path/manual-edit fixtures. | Release-blocking. | Engineering. | MVP/review-needed. | Manual Markdown merge policy unresolved. |
 | NFRs | NFR-REL-001 through NFR-REL-006 | Provider failure, decision immutability, idempotent init, safe writes, partial failure, no-AI validation. | Reliability, domain, integration. | Failure fixtures and hardening suite. | Release-blocking. | Engineering. | MVP. | Add more interrupted-write and migration fixtures as implementation grows. |
@@ -114,6 +116,7 @@ The E2E/workflow suite should stay small and high-signal.
 | Conversation-first intake | `/continue`, provider fake, answer persistence, proposed decisions. | Fixture provider and workspace. | Workflow test. | Release-blocking for AI-led MVP. |
 | Proposal review | confirm/revise/reject/defer without silent AI confirmation. | Decision fixtures. | Workflow/domain pass. | Release-blocking. |
 | Generate outputs | Generate canonical Markdown and derived outputs under `logos/` or custom root. | Complete fixture state/profile. | Output report and golden files. | Release-blocking for canonical docs. |
+| Generate executive plan | Generate Executive JSON and supported exports from a normative baseline. | Complete normative docs/profile plus executive mappings. | Executive schema pass, golden export files, and unsupported-target report. | Feature-blocking for Executive Axis. |
 | Validate/diagnose recovery | Run validation and diagnostics with no provider or failing provider. | Invalid/incomplete state fixtures. | Findings and recovery output. | Release-blocking for core recovery. |
 | Provider failure path | Timeout/auth/malformed output preserves input/state. | Fake provider failures. | Hardening test. | Release-blocking. |
 
@@ -132,9 +135,10 @@ Required contract coverage:
 - provider request/response normalization;
 - decision/proposal statuses;
 - validation findings and generation reports;
-- output kinds: canonical Markdown, derived HTML artifact, derived agent pack;
+- output kinds: canonical Markdown, executive JSON, executive export, derived HTML artifact, derived agent pack;
 - root path behavior defaulting to `logos/`;
 - redacted provider config and token source references.
+- executive plan schema, readiness statuses, source normative document references, supported export target metadata, and unsupported target handling.
 
 Mocks and fakes must be validated against the same contract surface they replace. If a provider fake can return a shape that no real adapter would produce, the fake is a liability and must be corrected or explicitly scoped.
 
@@ -166,6 +170,8 @@ Data model tests must protect the filesystem-backed state model.
 | Sessions and turns | persistence, source traceability, provider failure preservation, retention/pruning behavior when defined. | Release-blocking for persistence; pruning review-needed. |
 | Validation/generation reports | run status, partial failure, stale/missing outputs, affected object refs. | Release-blocking. |
 | Output records | path containment, kind classification, source refs/checksum/mtime behavior. | Release-blocking. |
+| Executive plan records | schema version, readiness, source normative documents, confidence, stale status, and generated path. | Feature-blocking for Executive Axis. |
+| Executive export records | adapter id/version, supported/planned target status, derived classification, source plan ref, and output path under root. | Feature-blocking for Executive Axis. |
 | Provider config | redacted metadata only; unsafe raw token storage rejected. | Release-blocking. |
 | Migrations | old schema fixtures, failed migration, migration record evidence. | Release-blocking once migrations exist. |
 

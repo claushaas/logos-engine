@@ -166,7 +166,7 @@ When principles conflict:
 
 **Classification:** MVP.
 
-**Purpose:** Let the user understand what canonical Markdown, HTML artifacts, and agent packs were created, updated, skipped, incomplete, or blocked.
+**Purpose:** Let the user understand what canonical Markdown, Executive JSON, executive exports, HTML artifacts, and agent packs were created, updated, skipped, incomplete, unsupported, or blocked.
 
 **Input modality:** Slash command plus report review.
 
@@ -174,7 +174,7 @@ When principles conflict:
 
 **System response:** LOGOS resolves the configured LOGOS documentation root, checks write implications, generates outputs where allowed, and reports results.
 
-**State effect:** Canonical documents and derived outputs may be created, updated, marked stale, incomplete, blocked, or failed.
+**State effect:** Canonical documents, Executive JSON, and derived outputs may be created, updated, marked stale, incomplete, unsupported, blocked, or failed.
 
 **Failure handling:** Partial generation must preserve completed outputs and report blocked outputs with recovery paths.
 
@@ -261,7 +261,7 @@ Commands should be discoverable through `/help`, status prompts, contextual sugg
 | `/init` | Initialize LOGOS workspace and setup defaults. | Workspace State, Documentation Root, Profile | Repository context available. | Required before creating state or generated root. | Initialized workspace, active profile, active root defaulting to `logos/` unless configured. | Preserve existing state; report conflicts. | Local write consent. |
 | `/continue` | Resume AI-led clarification. | Intake Conversation, Workspace State | Workspace exists or can explain missing state. | Not required for read/resume; required for state-changing proposals only. | Current progress, next question cluster, unresolved items. | If no AI provider, route to `/config ai`; preserve state. | Remote AI disclosure if provider call needed. |
 | `/status` | Show current repository, root, profile, progress, and next actions. | Workspace State | None beyond readable context. | Not required. | Status summary and next action. | If state missing, show initialization path. | Read local state. |
-| `/generate` | Render canonical Markdown and derived outputs. | Canonical Documents, HTML Artifacts, Agent Packs | Workspace, profile, root, and sufficient state or accepted caveats. | Required before first write, overwrite, force render, or risky partial generation. | Generation Report. | Report created, updated, skipped, incomplete, blocked, failed. | Local write consent; overwrite safeguards. |
+| `/generate` | Render canonical Markdown and derived outputs, including Executive JSON and supported executive exports when eligible. | Canonical Documents, Executive Plan, Executive Exports, HTML Artifacts, Agent Packs | Workspace, profile, root, sufficient state or accepted caveats, and executive readiness when exporting execution artifacts. | Required before first write, overwrite, force render, or risky partial generation. | Generation Report. | Report created, updated, skipped, unsupported, incomplete, blocked, failed. | Local write consent; overwrite safeguards; no live task sync. |
 | `/diagnose` | Find gaps, contradictions, risks, and next actions. | Diagnostic Findings | Workspace readable. | Not required unless it triggers AI provider use not already consented to. | Diagnostic report grouped by severity and object. | Explain deterministic, AI, provider, or state failure. | Read state; remote AI disclosure if used. |
 | `/validate` | Check readiness and validation gaps. | Validation Gaps, Diagnostic Findings | Workspace and profile contracts readable. | Not required for read-only checks; required if accepting assumptions or changing state. | Validation result with severity and affected documents. | Preserve distinction between missing evidence and system error. | Read state; optional remote AI disclosure. |
 | `/config ai` | Configure or inspect AI provider. | AI Provider Configuration | User chooses provider mode or asks to inspect status. | Required before storing non-secret config or testing remote provider. | Redacted provider status and next action. | Invalid config preserves prior valid config. | No raw tokens in project files; disclose remote behavior. |

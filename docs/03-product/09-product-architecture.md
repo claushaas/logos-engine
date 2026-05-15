@@ -14,6 +14,7 @@ The architecture must keep these separations stable:
 - Structured project state carries decisions, assumptions, open questions, risks, diagnostics, and output status.
 - Canonical Markdown is generated under the configured LOGOS documentation root, defaulting to `logos/`.
 - HTML artifacts and agent packs are derived outputs, not canonical sources.
+- Executive Axis generation compiles the Normative Axis into portable Executive JSON, then exports derived execution artifacts without becoming a live task manager.
 - Deterministic validation remains separate from AI-assisted diagnostics and interpretation.
 - Internal workspace state and generated documentation root are distinct product concepts.
 
@@ -21,6 +22,7 @@ The product architecture must avoid becoming:
 
 - a generic AI chat product;
 - a project management suite;
+- a live task board or bidirectional execution-sync product;
 - a no-code or autonomous execution platform;
 - a hosted SaaS architecture by default;
 - a profile marketplace before the first profile proves value;
@@ -336,6 +338,53 @@ This architecture is based on founder-origin experience, existing Foundation and
 
 **Open questions:** How much manual edit preservation is MVP versus later?
 
+### PA-007A: Executive Axis Compiler Module
+
+**User-facing name:** Executive Plan.
+
+**Purpose:** Convert the current normative documentation baseline into portable, traceable execution structure.
+
+**Responsibility:** Generate Executive JSON from normative documents and profile contracts, enforce readiness gates, preserve source normative document references, classify inferred items as review-needed, and export derived execution artifacts through supported adapters.
+
+**Classification:** supporting / post-documentation-baseline / validation-required.
+
+**Included capabilities:**
+
+- Executive readiness evaluation.
+- Executive JSON generation.
+- Execution graph construction for roadmaps, milestones, workstreams, initiatives, items, decisions, risks, artifacts, and dependencies.
+- Source normative document traceability.
+- Confidence and review-needed labeling.
+- Markdown implementation-plan export.
+- GitHub Issue-compatible Markdown export.
+- HTML executive overview export.
+- Agent task pack export.
+- Planned Linear and Notion mapping support.
+
+**Excluded responsibilities:**
+
+- Live task management.
+- Bidirectional sync with Linear, Notion, GitHub, or other execution tools in MVP.
+- Assignment, comment, notification, calendar, or status workflow ownership.
+- Treating exported Markdown, HTML, issue files, or agent packs as canonical project truth.
+- Generating execution from private chat history instead of the normative baseline.
+
+**Owned objects:** Executive JSON, Executive Readiness Status, Execution Graph, Executive Export Record, Export Adapter Mapping.
+
+**Affected journeys:** generation and review, implementation handoff, agent handoff, external tool import, operational planning.
+
+**Affected screens:** Generation Confirmation, Generation Report, Output Browser, Status, future Executive Plan Review.
+
+**Dependencies:** Repository Workspace, Documentation Root, Profile Contracts, Structured State, Canonical Documents, Validation, Generation, Permission/Trust.
+
+**Boundary rules:** The Executive Compiler owns portable execution derivation and export reports. External execution tools own daily operational state. Exported artifacts are snapshots and must preserve source links, caveats, and review-needed labels.
+
+**Owner or review target:** Product Architecture, Engineering System Architecture, Integration Architecture, Testing Strategy, Operations.
+
+**Downstream implications:** Engineering must add schema validation for Executive JSON, adapter contracts for supported exports, stale detection when normative inputs change, and tests proving exports remain derived.
+
+**Open questions:** Which command triggers executive generation, whether it is part of `/generate` or a dedicated operation, and whether draft executive plans should be blocked from external-tool export until baseline readiness is reached.
+
 ### PA-008: Diagnostics and Validation Module
 
 **User-facing name:** Diagnostics and Validation.
@@ -477,7 +526,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 | Hosted Collaboration | deferred | Requires accounts, cloud state, permissions, and validated team demand. |
 | Profile Marketplace | deferred | Profile quality and first-profile value must be proven first. |
 | External Research Automation | deferred | Provenance, privacy, source currency, and false-authority risks unresolved. |
-| Roadmap-to-Task Export | post-MVP candidate | Useful only after canonical docs and decision state are reliable. |
+| Live Roadmap-to-Task Management | excluded/deferred | Portable execution exports are allowed, but LOGOS must not host live task state. |
 | Project Management Suite | excluded | Pulls product away from structured clarification before execution. |
 | Autonomous Execution Agent | excluded as identity direction | Violates user-owned decision boundary. |
 
@@ -492,6 +541,8 @@ This architecture is based on founder-origin experience, existing Foundation and
 | Profile vs Generation | Profile defines contracts; Generation renders outputs from state and contracts. |
 | Generation vs Source of Truth | Generation creates canonical Markdown and derived outputs; structured state and confirmed decisions remain source inputs. |
 | Canonical vs Derived | Canonical Markdown is the human-readable rendered output; HTML artifacts and agent packs are derived and regenerable. |
+| Normative vs Executive | Normative documents define what must be true; Executive JSON defines what should happen next and is regenerated from the normative baseline. |
+| Executive vs External Tools | LOGOS exports execution structure; external tools own live status, comments, assignments, and collaboration. |
 | Diagnostics vs Validation | Deterministic validation checks structure/readiness; diagnostics may include advisory AI interpretation and next actions. |
 | TUI vs Product Actions | TUI routes and displays; product actions enforce permissions and state changes. |
 | Documentation Root vs Internal State | `logos/` default root is for generated documentation; internal workspace state is a separate concept. |
@@ -507,6 +558,7 @@ This architecture is based on founder-origin experience, existing Foundation and
 | AI-assisted diagnostics | Mark advisory/proposed where AI contributes; deterministic checks remain separate. |
 | Agent packs used by other agents | Keep derived and caveat-preserving; do not treat downstream agent output as LOGOS truth. |
 | HTML artifacts as review surfaces | Allow navigation/review; do not allow them to become canonical editing surfaces in MVP. |
+| Executive Markdown or GitHub issue exports | Treat as import/review snapshots generated from Executive JSON; do not let them become the source of project decisions. |
 | Profile expansion | Defer broad authoring/marketplace until first profile proves value. |
 
 ## Core Capabilities
@@ -526,6 +578,8 @@ This architecture is based on founder-origin experience, existing Foundation and
 | C-011 | Diagnostics and validation | Diagnostics Module | Exposes gaps before execution. | `/diagnose` and `/validate` report severity, affected docs, next action. | Deterministic checks still useful without AI. | Scope, Validation docs. |
 | C-012 | Status and continuation | Workspace / TUI | Supports re-entry and repeat use. | `/status` and `/continue` summarize progress and next action. | Show recovery if state is incomplete. | User Journeys. |
 | C-013 | Permission and recovery gates | Permission Module | Protects trust and local control. | Confirm writes, remote use, root changes, decision confirmation. | Block risky actions without consent. | UX, Interaction, UI docs. |
+| C-014 | Executive Axis compilation | Executive Compiler Module | Turns normative clarity into portable execution structure. | Generate Executive JSON from the normative baseline with readiness status and source traceability. | Block external exports when baseline readiness is insufficient; mark draft outputs review-needed. | Executive Axis Specification, Scope. |
+| C-015 | Executive export adapters | Executive Compiler / Generation | Transfers execution structure without owning live work. | Export Markdown, HTML, GitHub issue files, and agent packs; Linear/Notion mappings remain planned until implemented. | Mark unsupported targets unavailable; preserve metadata for later import. | Executive mappings, Integration Architecture. |
 
 ## Supporting Capabilities
 
@@ -578,9 +632,11 @@ This architecture is based on founder-origin experience, existing Foundation and
 | CAP-018 | Diagnostics with next action | core | Diagnostics / AI optional | MVP / validation-required | must-have | CAP-017, optional CAP-007 | 7 | defined |
 | CAP-019 | Recovery surfaces | cross-cutting | Permission / TUI | MVP | must-have | all state-changing capabilities | throughout | defined |
 | CAP-020 | Output browser | support | Generation / TUI | preferred MVP | medium | CAP-016 | later MVP | provisional |
-| CAP-021 | Search/retrieval | support | TUI / State | deferred | low | CAP-009 scale | post-MVP | deferred |
-| CAP-022 | Hosted collaboration | external | deferred module | deferred | none for MVP | cloud/account model | post-validation | deferred |
-| CAP-023 | Profile marketplace | external | deferred module | deferred | none for MVP | profile governance | post-validation | deferred |
+| CAP-021 | Executive JSON generation | support | Executive Compiler | post-baseline / validation-required | medium | CAP-013, CAP-017 | after normative baseline | defined |
+| CAP-022 | Executive export adapters | support | Executive Compiler / Generation | post-baseline | medium | CAP-021 | after executive JSON | defined/planned by adapter |
+| CAP-023 | Search/retrieval | support | TUI / State | deferred | low | CAP-009 scale | post-MVP | deferred |
+| CAP-024 | Hosted collaboration | external | deferred module | deferred | none for MVP | cloud/account model | post-validation | deferred |
+| CAP-025 | Profile marketplace | external | deferred module | deferred | none for MVP | profile governance | post-validation | deferred |
 
 ## Module Relationships
 

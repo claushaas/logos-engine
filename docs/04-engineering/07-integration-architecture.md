@@ -9,6 +9,7 @@ The integration posture is **ports-and-adapters first**:
 - external AI/model providers are accessed only through provider-agnostic ports;
 - local filesystem, profile YAML, environment variables, and optional OS credential stores are accessed through adapters;
 - generated HTML artifacts and agent packs are file outputs, not live external integrations;
+- Executive Axis exports are file or payload outputs generated from Executive JSON, not live bidirectional integrations;
 - npm/GitHub release channels are distribution dependencies, not runtime product integrations;
 - Git is a user workflow tool; LOGOS does not control Git operations in MVP.
 
@@ -24,6 +25,7 @@ Critical and important integrations:
 | GitHub Releases / repository hosting | provisional operational dependency | Supports release notes, source distribution, and open-source workflow, but is not required at runtime. |
 | Browser rendering of HTML artifacts | supporting output compatibility | Generated HTML must render in evergreen browsers but is not a hosted web app. |
 | Downstream agents consuming agent packs | supporting / validation-required | Agent packs package context for reviewers/builders, but agents cannot call LOGOS to mutate state. |
+| Executive export adapters | supporting / post-baseline | Markdown, HTML, GitHub Issue-compatible files, and agent packs transfer execution structure without live sync. |
 
 Excluded or deferred integrations:
 
@@ -36,7 +38,7 @@ Excluded or deferred integrations:
 - event streams;
 - queues/workers;
 - external research APIs;
-- project-management, CRM, marketplace, or collaboration integrations.
+- live project-management sync, CRM, marketplace, or collaboration integrations.
 
 Highest-risk integration dependencies are AI providers and credential handling. Provider failures must not corrupt local state, provider schemas must not leak into domain logic, and remote provider calls must not happen without explicit user disclosure.
 
@@ -54,6 +56,8 @@ Highest-risk integration dependencies are AI providers and credential handling. 
 | INT-008 | npm Registry | npm | distribution | MVP operational | Install and update the `logos` binary package. | distribution | important operational | Deployment/Release | package distribution | package download | npm ecosystem | N/A | no product secret | package metadata/code | npm limits/policies unknown | outside runtime | user retries install/update | N/A | manual install/update guidance | install unavailable | release notes/checks | package smoke tests | source install/future binaries | registry outage, supply chain | Deployment, Release |
 | INT-009 | GitHub Repository/Releases | GitHub | source/release platform | provisional operational | Host source, release notes, issues, and open-source workflow. | open-source distribution/support | optional runtime / important ops | Release/Support | operational platform | maintainer upload, user download/read | maintainer auth outside product | repo permissions | maintainer credentials outside product | public project metadata | GitHub limits/policies unknown | outside runtime | maintainer/user retry | N/A | npm/source fallback | release channel degraded | release checks/issues | release process tests/checklist | mirror/source archive | platform dependency | Release, Support |
 | INT-010 | Git User Workflow | user's Git CLI/tools | external user workflow | outside product | Users may review/version generated files. | inspectability | supporting external | Product/Support | no product contract | user-controlled file reads/writes | user Git auth if any | external | no product credential | generated docs/state if committed | external | external | external | N/A | no product action | N/A | no hidden Git operations | documentation guidance | no direct integration | LOGOS must not assume Git commit status | Support |
+| INT-011 | Executive Export Files | local filesystem / user-selected import tools | file exchange | post-baseline | Generate Markdown, HTML, GitHub Issue-compatible files, Linear/Notion payloads when supported, and agent packs from Executive JSON. | executive handoff | supporting | Integration/API/Test | Executive Export Adapter | outbound local file | none enforced by LOGOS | user-controlled import | no product credential | sensitive project context | N/A | local operation budget review-needed | regenerate rather than retry | output id/source refs | canonical docs and Executive JSON remain source; exports can be regenerated | export unavailable/stale | generation report, adapter errors | schema and golden export tests | adapter mappings can be replaced | stale exports, unsupported target confusion | API, Test, Operations |
+| INT-012 | External Execution Tools | GitHub Issues, Linear, Notion, CSV/spreadsheets | external operational surface | deferred/planned for live sync | Users may import generated execution exports into tools that own daily execution. | implementation handoff | optional/deferred | Product/Integration | no live LOGOS runtime contract in MVP | user-controlled import/export outside LOGOS | tool-specific user auth outside LOGOS | external | no LOGOS credential | project execution data | external | external | external | N/A | no product action | N/A | no LOGOS status sync | documentation guidance | generated file fallback | users expect bidirectional sync | Product, Support |
 
 ## Integration Classification
 
@@ -73,7 +77,8 @@ Current classification summary:
 - **critical:** filesystem adapter, profile YAML source.
 - **important:** AI provider abstraction, environment/credential source, npm distribution.
 - **supporting:** HTML artifact browser compatibility, agent pack consumption, Git user workflow.
-- **deferred/excluded:** public APIs, webhooks, queues, hosted services, telemetry, external research APIs, cloud sync, auth providers.
+- **supporting/post-baseline:** Executive JSON and supported file exports.
+- **deferred/excluded:** public APIs, webhooks, queues, hosted services, telemetry, external research APIs, cloud sync, auth providers, live project-management sync.
 
 Classification affects release gates. Critical and important integrations need deterministic tests and failure simulation. Supporting integrations need golden/smoke tests. Deferred and excluded integrations must be called out so downstream documents do not silently add them.
 
@@ -159,6 +164,7 @@ Anti-corruption rules:
 | Filesystem | state/output writes | file contents, metadata, parse results | structured state is durable; outputs are generated; safe writes required | avoid writing secrets; output caveats preserved | generation reports, migration records, checksums if adopted |
 | Profile YAML | profile path/id | profile contract snapshot | profile definitions remain contract source; not project truth | profiles are data, never executable | profile id/version/source path in state/report |
 | Agent Pack | compact project context | none from agent in MVP | generated pack is derived and regenerable | exclude unrelated repo files and raw provider tokens | output record with source refs |
+| Executive Export | Executive JSON and selected target mapping | none from external tool in MVP | generated export is derived and regenerable | include only source refs, acceptance criteria, dependencies, caveats, and metadata required by adapter | executive plan id, adapter id/version, source normative docs |
 | npm/GitHub | package/release artifacts | package download/release metadata | no runtime product state | no project state included | release management records outside runtime |
 
 Remote provider data must not be trusted because it came from a provider. It must be validated, normalized, and routed through user review and domain rules.
@@ -244,6 +250,10 @@ LOGOS uses local file exchange as its main non-provider integration mode.
 | Canonical documents | outbound local file | Markdown | renderer/generation checks | generation report lists skipped/blocked/failed | user-owned files | MVP |
 | HTML artifacts | outbound local file | HTML | renderer checks/accessibility review downstream | partial generation report | derived/regenerable | MVP |
 | Agent packs | outbound local file | Markdown | caveat/source preservation | partial generation report | derived/regenerable | MVP |
+| Executive JSON | outbound local file | JSON | executive schema validation and source document checks | blocked/failed executive report | derived exchange model | post-baseline |
+| Executive Markdown snapshots | outbound local file | Markdown | adapter mapping and source traceability checks | partial export report | derived snapshot | post-baseline |
+| GitHub Issue-compatible exports | outbound local file | Markdown | adapter mapping and metadata preservation | partial export report | user imports manually | post-baseline |
+| Linear/Notion payloads | outbound local file | JSON/CSV or future API payload | adapter mapping when implemented | unsupported/planned until validated | user imports manually | planned |
 | Import from external systems | inbound | N/A | N/A | N/A | N/A | excluded |
 | Scheduled/bulk sync | bidirectional | N/A | N/A | N/A | N/A | excluded |
 

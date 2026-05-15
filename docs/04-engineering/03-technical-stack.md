@@ -2,7 +2,7 @@
 
 ## Stack Overview
 
-LOGOS Engine uses a local-first TypeScript stack optimized for a repository-scoped TUI product, filesystem-only state, profile YAML contracts, deterministic validation, provider-agnostic AI assistance, and Git-friendly generated outputs.
+LOGOS Engine uses a local-first TypeScript stack optimized for a repository-scoped TUI product, filesystem-only state, profile YAML contracts, deterministic validation, provider-agnostic AI assistance, portable Executive JSON generation, and Git-friendly generated outputs.
 
 The current implementation stack is:
 
@@ -11,7 +11,7 @@ The current implementation stack is:
 - **Primary interface:** Ink `^7.0.2` with React `^19.2.6`.
 - **Entrypoint parser:** Commander `^14.0.3`, bounded to launching the TUI.
 - **Package manager:** pnpm `10.33.2`.
-- **State and output storage:** local filesystem using JSON, YAML, Markdown, and derived HTML/Markdown artifacts.
+- **State and output storage:** local filesystem using JSON, YAML, Markdown, Executive JSON, and derived HTML/Markdown/export artifacts.
 - **Schema validation:** Zod `^4.4.3`.
 - **Profile parsing:** YAML `^2.8.4`.
 - **Testing:** Vitest `^4.1.5` with V8 coverage.
@@ -52,6 +52,7 @@ The stack favors inspectability, local ownership, small operational surface, and
 | TSTK-012 | Canonical Output Format | Markdown | committed | Profile-defined paths under configured root. | N/A | Git-friendly human-readable output. | HTML-first, DOCX, proprietary docs. | Manual edit safety required. | Data Model, Frontend |
 | TSTK-013 | Derived Artifact Format | HTML | provisional implementation | Renderer library unresolved. | unresolved | Profile contracts require navigable review artifacts. | Markdown only, static site generator, custom templates. | Accessibility and stale tracking required. | Frontend, Integration |
 | TSTK-014 | Agent Pack Format | Markdown | committed concept / format review-needed | Profile-defined compact prompts. | N/A | Supports downstream agent review without chat history. | JSON packs, no agent packs. | Must preserve caveats and avoid becoming canonical. | Integration |
+| TSTK-014A | Executive Exchange Format | JSON | committed concept / schema exists | `profiles/standard/executive/executive-plan.schema.json`. | N/A | Provides portable execution graph and export source. | Manual YAML task tree, live task database. | Must validate, preserve source refs, and remain derived from the Normative Axis. | Data Model, Integration |
 | TSTK-015 | AI Provider Layer | Provider-agnostic adapters | committed | Adapter contract stable; provider SDK choices review-needed. | unresolved by provider | Supports local and remote provider modes. | Single provider SDK throughout app. | Adapter maintenance and provider drift. | Integration, Security |
 | TSTK-016 | Testing | Vitest | committed | Semver range; CI default. | `^4.1.5` | Fast TypeScript-compatible tests with fixtures/mocks. | Jest, Node test runner. | Test suite must avoid live AI/network by default. | Test Strategy |
 | TSTK-017 | Coverage | V8 coverage via Vitest | committed | Semver range. | `^4.1.5` | Lightweight coverage integrated with test runner. | Istanbul standalone. | Exact thresholds belong to Test Strategy. | Test Strategy |
@@ -107,7 +108,9 @@ TypeScript is the sole implementation language for the application codebase.
 | Profile contracts | YAML | committed | Data format only; not executable code. |
 | Structured state | JSON | committed | Versioned schemas and validation required. |
 | Canonical documents | Markdown | committed | Rendered output, not source state. |
+| Executive plan | JSON | committed concept / schema exists | Portable exchange model derived from normative documents. |
 | Derived HTML artifacts | HTML | committed output / renderer unresolved | Derived from canonical content and contracts. |
+| Executive exports | Markdown/HTML/JSON/CSV depending adapter | supported/planned by adapter | Derived snapshots for review/import, not live sync. |
 | Scripts | TypeScript or JavaScript | committed / practical | Scripts must not bypass quality/security rules. |
 
 Language rules:
@@ -195,8 +198,10 @@ Storage is local and filesystem-only.
 | Internal workspace state | JSON files through filesystem adapter | committed | Durable structured state and metadata. | Versioned, schema-validated, safe-write protected. |
 | Profile contracts | YAML files | committed | Profile, phase, document, output, validation contract definitions. | Schema-validated; never executable. |
 | Canonical documents | Markdown files | committed | Human-readable rendered project documentation. | Generated under configured LOGOS documentation root. |
+| Executive plan | JSON file | committed concept / schema exists | Portable execution graph. | Generated under configured LOGOS documentation root and schema-validated. |
 | HTML artifacts | HTML files | committed output / renderer unresolved | Navigable derived review artifacts. | Derived, stale-aware, accessibility-reviewed. |
 | Agent packs | Markdown files | committed output / format review-needed | Compact downstream agent context. | Derived and caveat-preserving. |
+| Executive exports | Markdown/HTML/JSON/CSV files | supported/planned by adapter | External-tool import/review snapshots. | Derived, source-referenced, no live sync. |
 | Temporary files | Filesystem temp/safe-write files | provisional | Support atomic writes and recovery. | Must not leak secrets or stale partial content. |
 | Logs | None by default; optional local debug logs deferred | deferred | Support troubleshooting if approved. | Redacted, opt-in, local only. |
 | Large assets | None | excluded | Product does not manage media/blob uploads in MVP. | Future need requires storage review. |

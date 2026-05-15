@@ -2,15 +2,16 @@
 
 ## Data Model Overview
 
-LOGOS Engine uses a local, filesystem-backed data model. The product has no database, no hosted backend, no user accounts, no cloud sync, and no telemetry store in the MVP. Data is represented as versioned JSON state records, YAML profile contracts, Markdown canonical documents, derived HTML artifacts, derived Markdown agent packs, and generation/validation reports.
+LOGOS Engine uses a local, filesystem-backed data model. The product has no database, no hosted backend, no user accounts, no cloud sync, and no telemetry store in the MVP. Data is represented as versioned JSON state records, YAML profile contracts, Markdown canonical documents, Executive JSON exchange models, derived HTML artifacts, derived Markdown agent packs, executive export files, and generation/validation reports.
 
-The model separates four data categories:
+The model separates five data categories:
 
 | Category | Source of Truth | Storage Role | Notes |
 | --- | --- | --- | --- |
 | Profile contracts | Profile YAML files | Contract source | Defines phases, document contracts, outputs, completion criteria, and review rules. |
 | Project clarity state | Local structured JSON state | Durable product truth | Stores decisions, assumptions, open questions, risks, validation findings, diagnostics, generation status, and configuration metadata. |
 | Canonical documents | Markdown under the configured LOGOS documentation root | Human-readable projection | Rendered from structured state and profile contracts. Canonical for review, but not the only state authority. |
+| Executive exchange model | JSON under the configured LOGOS documentation root | Portable derived execution model | Generated from the Normative Axis to represent execution graph, readiness, confidence, source refs, and export metadata. |
 | Derived outputs | HTML artifacts and agent packs under the configured root | Regenerable derived output | Must preserve caveats and traceability; never becomes source of truth. |
 
 The default generated documentation root is `logos/`, and it is configurable. This root is distinct from internal workspace state. The recommended internal state root is `.logos/`, inherited from prior architecture material, but it remains an internal storage decision rather than a user-facing documentation root.
@@ -19,7 +20,7 @@ Most consequential data decisions:
 
 - structured state, not chat history, drives continuity and generation;
 - profile YAML drives document contracts but does not contain project truth;
-- Markdown, HTML, and agent packs are generated outputs;
+- Markdown, Executive JSON, HTML, export files, and agent packs are generated outputs;
 - deterministic validation findings are separate from AI diagnostics and AI proposals;
 - AI provider configuration can persist only redacted metadata, never raw tokens;
 - local state schema versioning and migration must be release-blocking because there is no database layer to absorb schema drift.
@@ -40,6 +41,8 @@ MVP storage is filesystem-only.
 | Internal workspace state | JSON files under internal state root, recommended `.logos/` | canonical for structured project state | local-only | Preserve workspace config, decisions, assumptions, questions, risks, findings, output status, and reports. | committed |
 | Profile contracts | YAML files in bundled or selected profile directories | canonical for document contracts | local-only | Define profile, phases, document schemas, outputs, quality checks, review rules. | committed |
 | Canonical Markdown | Markdown files under configured root, default `logos/` | canonical human-readable projection | local-only | Reviewable project documentation generated from state and contracts. | committed |
+| Executive JSON | JSON file under configured root, default `logos/outcomes/executive/executive-plan.json` | portable derived execution model | local-only | Execution graph compiled from normative documents and profile contracts. | committed concept / schema exists |
+| Executive export files | Markdown, HTML, JSON, or CSV files under configured root outcomes path | derived export snapshots | local-only | Import/review artifacts generated from Executive JSON through adapter mappings. | supported/planned by adapter |
 | Derived HTML artifacts | HTML files under configured root outcomes path | derived | local-only | Navigable review artifacts regenerated from canonical inputs. | committed output / renderer provisional |
 | Derived agent packs | Markdown files under configured root outcomes path | derived | local-only | Compact context packs for downstream agents. | committed concept |
 | Temporary write files | Filesystem temp files beside target or in safe temp location | temporary | local-only | Support atomic writes and crash recovery. | committed concept |
@@ -66,6 +69,8 @@ The storage strategy favors inspectability and Git-friendly files over query pow
 | Validation Finding | `ValidationRunRecord` and `ValidationFindingRecord` | deterministic result | Validation rules | Reproducible without live AI. |
 | Diagnostic Finding | `DiagnosticRunRecord` and `DiagnosticFindingRecord` | advisory/local result | Diagnostics service | Explains gaps and next action; must not mutate confirmed state. |
 | Generation Report | `GenerationRunRecord` and `OutputRecord` | canonical local status | Generation service | Tracks generated, skipped, blocked, failed, stale outputs. |
+| Executive Plan | `ExecutivePlanRecord` plus `executive-plan.json` | derived execution exchange model | Executive Compiler | Generated from normative inputs; validates against executive schema. |
+| Executive Export | `ExecutiveExportRecord` plus file | derived export | Export Adapter | Markdown, HTML, GitHub issue, Linear, Notion, or agent-pack output generated from Executive JSON. |
 | HTML Artifact | `OutputRecord` plus file | derived | Renderer output | Regenerable from canonical inputs. |
 | Agent Pack | `OutputRecord` plus file | derived | Renderer output | Regenerable and caveat-preserving. |
 | Provider Configuration | `ProviderConfigRecord` | redacted local config | User configuration | Stores mode, endpoint/model metadata, token source reference, never raw token. |
@@ -124,6 +129,8 @@ The structures below are logical records/documents, not SQL tables.
 | DiagnosticFindingRecord | JSON collection | local filesystem | Explain gaps, contradictions, risks, next actions. | Diagnostic Finding | Diagnostics | advisory/local-only | active, acknowledged, resolved, obsolete | TUI, reports | affected docs/state | severity and affected object required | severity, affected doc | sensitive project context | latest active retained | may be regenerated | Frontend, Support | MVP |
 | GenerationRunRecord | JSON object/history | local filesystem | Record generation attempt and outcome. | Generation Report | Generation | canonical status/history | planned, running, partial, complete, failed, obsolete | `/generate`, `/status`, support | outputs, root, profile, state version | partial failures visible | run id, timestamp, status | local paths/project context | retain latest; history optional | stale metadata required | Observability, Support | MVP |
 | OutputRecord | JSON collection | local filesystem | Track canonical and derived file status. | Generated Output | Generation | canonical status for generated files | planned, generated, skipped, blocked, failed, stale, missing | output browsing, generation, status | contract, run, file path | path under configured root; kind classified | output id/path, kind, status | local path/project content refs | retain while output exists; stale after changes | checksum/mtime strategy review-needed | Frontend, API, Test | MVP |
+| ExecutivePlanRecord | JSON object/history | local filesystem | Track Executive JSON generation, readiness, source refs, schema version, and stale status. | Executive Plan | Executive Compiler | derived/exchange model status | planned, draft, generated, stale, blocked, failed | generation, status, export planning | normative docs, profile, outputs, exports | validates against executive schema; source docs declared | plan id, generatedAt, readiness | sensitive project context refs | retain latest; history optional | schema version required | API, Integration, Test | post-baseline |
+| ExecutiveExportRecord | JSON collection | local filesystem | Track executive export artifacts generated through adapter mappings. | Executive Export | Executive Compiler / Export Adapter | derived/export status | planned, generated, unsupported, skipped, blocked, failed, stale | output browsing, export reports | executive plan, adapter mapping, output file | export target supported; source plan valid; path under root | target, output path, status | local path/project context refs | retain while output exists | adapter version migration possible | Integration, Test, Support | post-baseline |
 | ProviderConfigRecord | JSON object | local filesystem | Store provider mode, endpoint/model, redacted token source. | Provider Configuration | Configuration | canonical redacted config | unconfigured, configured, invalid, unavailable | `/config ai`, intake, status | workspace, provider port | no raw tokens; remote disclosure required | provider id/mode | secret-adjacent metadata | retain until cleared | token source shape may evolve | Security, Integration | MVP |
 | AuditEventRecord | JSON collection or embedded history | local filesystem | Trace sensitive state changes and migrations. | Domain Events | State/Observability | audit/history | recorded, compacted, migrated | support, recovery, test fixtures | workspace, actor, command, affected object | actor/source/time/command required for material mutations | event id, aggregate id, timestamp | sensitive project context | retain for relevant state lifetime | can start embedded before separate log | Observability, Security | MVP / format review-needed |
 | MigrationRecord | JSON collection or workspace metadata | local filesystem | Track state schema/profile migrations. | Migration | State | audit/history | planned, applied, failed, rolled-forward | startup, release support | workspace schema, profile lock | failed migration enters recovery | migration id, schema version | local project metadata | retain permanently or until major cleanup | release-blocking | Deployment, Release | MVP |
@@ -167,7 +174,7 @@ Fields are grouped by logical record. Exact TypeScript/Zod syntax belongs in imp
 | DiagnosticFindingRecord | nextAction | string | yes | null | no | must not mutate state itself | no | sensitive project context | redact in logs | no | TUI | none | Advisory. |
 | GenerationRunRecord | resultStatus | enum | no | planned | no | planned/running/partial/complete/failed | no | low | none | yes | generation report | none | Partial failure must be visible. |
 | OutputRecord | outputPath | string | no | from contract/root | no | resolves under configured root | yes per kind/root | local path metadata | none | yes | output browsing | root migration-sensitive | Safety-critical. |
-| OutputRecord | outputKind | enum | no | canonicalMarkdown | no | canonicalMarkdown/derivedHtml/derivedAgentPack/report | no | low | none | yes | report | enum may grow | Derived classification required. |
+| OutputRecord | outputKind | enum | no | canonicalMarkdown | no | canonicalMarkdown/executiveJson/executiveExport/derivedHtml/derivedAgentPack/report | no | low | none | yes | report | enum may grow | Derived and exchange classification required. |
 | OutputRecord | sourceVersionRefs | string[] | no | [] | no | refs to profile/state/generation | no | sensitive refs | none | no | status | checksum strategy review | Supports stale detection. |
 | OutputRecord | checksum | string | yes | null | yes | hash if computed | no | low | none | no | internal | algorithm migration possible | Manual edit detection. |
 | ProviderConfigRecord | providerMode | enum | no | unconfigured | no | local/remote/custom/unconfigured | no | secret-adjacent metadata | none | yes | `/config ai` | provider enum evolves | Remote mode requires disclosure. |
@@ -190,6 +197,8 @@ Fields are grouped by logical record. Exact TypeScript/Zod syntax belongs in imp
 | Raw provider tokens must never be stored. | ProviderConfigRecord | security/privacy | FR-036, NFR-SEC-001 | Configuration service and persistence adapter | Reject unsafe config; redact status. | immediate | secret scanning fixtures | Security |
 | Remote provider transmission requires disclosure. | ProviderConfigRecord, IntakeSessionRecord | privacy/permission | FR-018, NFR-PRIV-002 | Permission/config/intake services | Block provider call. | immediate | remote disclosure tests | Security, Integration |
 | Derived outputs cannot become canonical state. | OutputRecord | classification | FR-027 | Generation/reporting/state model | Mark as derived; do not read as project truth. | immediate | output classification tests | Integration |
+| Executive JSON must declare normative sources and validate before export. | ExecutivePlanRecord, Executive JSON file | schema/traceability | FR-051, FR-052, FR-053 | Executive compiler and export preflight | Block or mark draft/failed; do not export as ready. | immediate for executive generation | schema/source-reference tests | API, Integration |
+| Executive exports cannot become live execution state. | ExecutiveExportRecord, OutputRecord | product boundary | FR-054, FR-057 | Export adapter/reporting | Mark as derived snapshot; do not sync status back into LOGOS. | immediate | export classification tests | Integration, Operations |
 | Partial generation failure must be visible. | GenerationRunRecord | reliability/observability | FR-019, NFR-REL-005 | Generation service | Report partial/failed categories. | immediate | failure-path tests | Observability |
 | Decision revisions preserve history. | DecisionRevisionRecord | audit/integrity | NFR-REL-002 | Decision service | Create revision/supersession; never silent overwrite. | immediate | revision tests | Observability |
 | Logical references must resolve or be marked historical/orphaned. | All `*Ref` fields | referential integrity | Data model integrity | State validation and migration | Warn/block depending severity. | checked on read/validate | orphan fixture tests | Diagnostics |
@@ -221,6 +230,7 @@ All LOGOS-owned MVP data is local by default.
 | Canonical Markdown | durable generated output | rendered from structured state/profile | files under configured root | stale when source changes; manual edit warning | Human-readable projection. |
 | HTML artifacts | durable derived output | regenerated from canonical inputs | files under configured root outcomes path | stale when source changes | Derived only. |
 | Agent packs | durable derived output | regenerated from canonical inputs | Markdown under configured root outcomes path | stale when source changes | Derived only. |
+| Executive JSON and exports | durable derived/exchange output | regenerated from normative baseline and Executive JSON | files under configured root outcomes path | stale when normative docs, profile contracts, or source decisions change | JSON is the portable exchange model; exports are snapshots only. |
 | Provider config metadata | durable | redacted config state | provider mode, model/endpoint, token source ref | invalid/unavailable status | No raw token values. |
 | Temporary write files | temporary | none | temp files | cleanup after success/failure | Must avoid secret leakage. |
 | Presentation state | temporary | none | in-memory TUI state | discarded on exit | Reconstructed from durable state. |

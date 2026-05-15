@@ -200,6 +200,24 @@ The following items are in scope for the current product definition. They are in
 
 **Reconsider trigger:** evidence that agent packs are unused, misleading, too broad, or better deferred.
 
+### SC-014: Executive Axis Compilation and Exports
+
+**Classification:** supporting / post-documentation-baseline / validation-required.
+
+**Description:** The product compiles the current Normative Axis into a portable Executive JSON execution model, then exports derived execution artifacts such as Markdown implementation plans, GitHub Issue-compatible files, HTML executive overviews, and agent task packs under the configured LOGOS documentation root.
+
+**Rationale:** The Executive Axis translates project clarity into transferable execution structure without making LOGOS a task manager. The canonical execution exchange model is JSON; all Markdown, HTML, GitHub, Linear, Notion, and agent-pack outputs are generated exports or snapshots.
+
+**Evidence basis:** Executive Axis Specification, `profiles/standard/executive/executive-generation.yml`, executive mappings, Foundation Boundaries.
+
+**Priority:** should-have after core canonical document generation is reliable.
+
+**Dependencies:** configured LOGOS documentation root, completed or draft-ready normative baseline, Standard profile contracts, structured state, generation reports, executive schema validation, export adapter mappings.
+
+**Downstream implications:** Product Architecture, Functional Requirements, Acceptance Criteria, Engineering Architecture, Data Model, API Contracts, Integration Architecture, Testing Strategy, and Operations must distinguish Executive JSON from derived exports and from live external execution tools.
+
+**Reconsider trigger:** evidence that users need execution exports before canonical clarity is reliable, or that generated executive artifacts create false authority or stale planning burden.
+
 ### SC-011: Diagnostics and Validation
 
 **Classification:** core / MVP / validation-required.
@@ -334,9 +352,9 @@ Pricing, payment flows, packaging, revenue claims, CAC, LTV, retention, and will
 
 **Classification:** out of scope / identity boundary.
 
-The product may generate downstream plans, risks, or execution context, but it will not become a task board, calendar, sprint manager, CRM, reporting dashboard, or team operating system.
+The product may generate downstream plans, risks, portable Executive JSON, and execution export artifacts, but it will not become a task board, calendar, sprint manager, CRM, reporting dashboard, or team operating system.
 
-**Reconsider trigger:** none for replacing the product identity; specific derived execution artifacts may be revisited after core value is validated.
+**Reconsider trigger:** none for replacing the product identity. Portable Executive Axis generation and export adapters are allowed only as derived, snapshot-style outputs; live task ownership, bidirectional sync, comments, assignments, and status workflows remain outside scope.
 
 ### OOS-011: Full Dependency Graph Visualization
 

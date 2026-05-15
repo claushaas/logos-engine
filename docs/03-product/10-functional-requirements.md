@@ -117,6 +117,33 @@ The register below lists all functional requirements identified from Product Sco
 | FR-048 | The product must support profile marketplace or broad profile authoring UI as a deferred capability. | User | Admin | deferred | won't-have | OOS-006, DD-002 | review |
 | FR-049 | The product must support hosted collaboration as a deferred capability only after validated demand. | User | Admin | deferred | won't-have | OOS-004, DD-003 | review |
 | FR-050 | The product must expose validation caveats, unsupported claims, and assumption labels in generated documents and diagnostics. | System | System | core / MVP | must-have | Validation Report, J-006 | review |
+| FR-051 | The product must be able to compile a portable Executive JSON model from the current Normative Axis when readiness gates allow generation. | System | System | supporting / post-baseline | should-have | SC-014, CAP-021 | inspection |
+| FR-052 | Executive JSON generation must declare source normative documents, readiness status, confidence, inferred items requiring review, and unresolved gaps. | System | Data | supporting / post-baseline | must-have for executive generation | SC-014, Executive Profile | inspection |
+| FR-053 | Executive JSON must represent an execution graph with roadmaps, milestones, workstreams, initiatives, execution items, decisions, risks, artifacts, dependencies, acceptance criteria, and export metadata. | System | Data | supporting / post-baseline | must-have for executive generation | Executive Axis Specification | schema validation |
+| FR-054 | The product must export executive artifacts through adapter mappings without treating exports as live execution state. | System | Integration | supporting / post-baseline | should-have | SC-014, CAP-022 | inspection |
+| FR-055 | The product must support supported file exports for executive Markdown snapshots, GitHub Issue-compatible Markdown, HTML executive overview, and agent task packs. | System | Integration | supporting / post-baseline | should-have | Executive mappings | inspection |
+| FR-056 | The product must treat Linear and Notion executive mappings as planned adapter contracts unless implemented and validated; they must not imply live sync in MVP. | System | Business Rule | deferred/planned | won't-have for live sync | Executive mappings, OOS-010 | review |
+| FR-057 | The product must not provide live task ownership, bidirectional sync, assignment, comment, notification, or calendar workflows as part of the Executive Axis MVP. | System | Business Rule | excluded | won't-have | Foundation Boundaries, OOS-010 | review |
+
+---
+
+## Executive Axis Requirements
+
+Executive Axis requirements apply after the normative documentation baseline is sufficient for compilation. They extend generation, but they do not replace the primary clarification and canonical Markdown workflow.
+
+The required behavior is:
+
+- generate `outcomes/executive/executive-plan.json` as the portable execution exchange model;
+- validate it against `profiles/standard/executive/executive-plan.schema.json`;
+- derive it from normative documents and profile contracts, not from private chat history;
+- preserve source normative document references for generated work;
+- classify inferred work as review-needed where confidence is low or source coverage is incomplete;
+- export Markdown, HTML, GitHub Issue-compatible files, and agent task packs as derived artifacts;
+- keep Linear and Notion mappings as planned adapter contracts until implementation validates them;
+- block or clearly mark external-tool exports when readiness is only draft;
+- report created, skipped, blocked, failed, stale, and unsupported executive outputs in the generation report.
+
+The Executive Axis must not introduce a task board, live execution database, background sync engine, or external project-management authority.
 
 ---
 
@@ -889,6 +916,7 @@ Functional requirements change only through lightweight, explicit governance tha
 ### Proposal Rules
 
 A new functional requirement may be proposed when one of the following is true:
+
 - It is required for the Product Brief's core promise or primary use case.
 - It preserves a Foundation boundary.
 - It is required by the profile document contract.
@@ -899,6 +927,7 @@ A new functional requirement may be proposed when one of the following is true:
 ### Proposal Content
 
 Each proposal must include:
+
 - Requirement name and statement.
 - Classification and priority.
 - Rationale and evidence basis or assumption label.
@@ -922,6 +951,7 @@ Each proposal must include:
 ### Downstream Update Obligations
 
 After a requirement change, the following documents must be reviewed and updated if affected:
+
 - Product Scope (if scope classification changes).
 - Feature Specification.
 - Acceptance Criteria.
@@ -951,6 +981,7 @@ After a requirement change, the following documents must be reviewed and updated
 ### Feature Specification
 
 Feature Specification must convert each active requirement into concrete MVP behavior, including:
+
 - TUI input routing for slash commands versus conversation.
 - `/init`, `/continue`, `/generate`, `/diagnose`, `/validate`, `/status`, `/config ai`, `/help`, `/exit` behavior.
 - Decision proposal, review, confirmation, revision, and deferral flows.
@@ -966,6 +997,7 @@ Feature Specification must not introduce hosted collaboration, task-board workfl
 ### Acceptance Criteria
 
 Acceptance Criteria must verify:
+
 - Users can initialize, continue, generate, diagnose, validate, and configure from the target repository.
 - `logos/` is the default documentation root and is configurable.
 - AI-led intake does not require deterministic question IDs.
@@ -988,6 +1020,7 @@ Non-Functional Requirements must inherit local-first defaults, Git-friendly text
 ### Engineering Brief and System Architecture
 
 Engineering must inherit:
+
 - Local-first, repository-directory, text-based, profile-driven direction.
 - Explicit AI boundaries.
 - Configurable LOGOS documentation root defaulting to `logos/`.
@@ -999,6 +1032,7 @@ Engineering must inherit:
 ### Data Model
 
 Data Model must define product object lifecycles for all objects listed in Information Architecture and Data Requirements, preserving:
+
 - Local-first inspectability.
 - Git-friendly text state where appropriate.
 - Configurable documentation root.
@@ -1009,6 +1043,7 @@ Data Model must define product object lifecycles for all objects listed in Infor
 ### API Contracts
 
 API Contracts must preserve interaction semantics:
+
 - Command handlers return structured results with status, messages, affected objects, state changes, and recovery options.
 - AI interpretation APIs return proposed, advisory, or needs-review output.
 - Generation APIs return file-level and category-level results.
@@ -1020,6 +1055,7 @@ API Contracts must preserve interaction semantics:
 ### Operations
 
 Operating Model must eventually define:
+
 - Profile maintenance and quality review.
 - Support for provider setup problems.
 - Handling user reports about lost files or overwrite confusion.

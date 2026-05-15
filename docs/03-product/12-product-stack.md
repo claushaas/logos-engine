@@ -9,7 +9,7 @@ The organizing principle is simple: the product runs where the user works, store
 The stack must support:
 
 - A keyboard-first TUI that runs inside the target repository directory.
-- Local structured state and canonical Markdown outputs without a database or hosted backend.
+- Local structured state, canonical Markdown outputs, and portable Executive JSON without a database or hosted backend.
 - Explicit AI provider configuration with clear local versus remote behavior.
 - Deterministic validation, diagnostics, and generation from profile YAML contracts.
 - Cross-platform terminal execution on macOS, Linux, and Windows (via WSL).
@@ -155,6 +155,7 @@ The following choices are product-level commitments or provisional assumptions t
 | STK-008 | YAML (profile contracts) | contract format | committed | Human-readable profile definitions; phases, documents, questions, validations, and outputs are defined in YAML. | Users can inspect profile contracts if desired; agents can read them. | Profile system is YAML-native; no GUI profile editor in MVP. | Requires robust YAML parser; malformed profile must fail clearly. | YAML parsing errors or schema drift may break profile loading. |
 | STK-009 | Provider-agnostic AI abstraction | AI layer | committed | Avoids lock-in to a single provider; supports local and remote modes; preserves user choice. | Users can choose local (Ollama, LM Studio) or remote (OpenAI, Anthropic, OpenRouter) providers. | Requires abstraction layer and per-provider configuration. | Each provider has different API shapes, rate limits, and privacy policies. | Abstraction may lag behind provider features; local provider setup may frustrate users. |
 | STK-010 | Markdown (canonical output) | document format | committed | Human-readable, Git-friendly, diffable, editable with care, universally supported. | Users read and optionally edit generated documents with standard tools. | All canonical documents are Markdown; no rich-text or proprietary format. | Must preserve manual edits safely during regeneration. | Manual edit conflicts with regeneration require careful handling. |
+| STK-010A | Executive JSON (portable execution model) | exchange format | committed concept / schema exists | The Executive Axis needs a tool-agnostic execution graph derived from normative documents. | Users can export execution structure without LOGOS owning live task state. | Executive JSON is not a task database and does not replace canonical documents. | Must validate against schema and preserve source normative document references. | Users may confuse export snapshots with live execution state. |
 
 ### Provisional Assumptions
 
@@ -311,7 +312,7 @@ Must inherit:
 - Local-first, repository-directory, TUI-first product direction.
 - Node.js >=22 runtime; TypeScript sole language.
 - Ink (React) as TUI rendering layer; Commander bounded to entrypoint only.
-- Filesystem-only storage (JSON + Markdown + YAML); no database or hosted backend.
+- Filesystem-only storage (JSON + Markdown + YAML + Executive JSON); no database or hosted backend.
 - Provider-agnostic AI abstraction with explicit local/remote disclosure.
 - Zod for runtime schema validation.
 - Safe write patterns and state recovery requirements.
@@ -339,7 +340,7 @@ Must inherit:
 Must inherit:
 
 - Filesystem-only persistence; no database schema.
-- JSON for structured state; Markdown for canonical docs; YAML for profile contracts.
+- JSON for structured state and Executive JSON; Markdown for canonical docs and export snapshots; YAML for profile contracts.
 - Versioned state format for future migration.
 - Safe write semantics.
 

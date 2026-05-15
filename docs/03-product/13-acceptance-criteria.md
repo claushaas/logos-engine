@@ -247,25 +247,32 @@ Every accepted feature must be traceable to:
 | AC-FN-021 | The product provides a no-provider recovery path with local status and setup guidance. | FR-042, NFR-AVA-002 | observable test | release-blocking | draft |
 | AC-FN-022 | The product warns before overwriting manual edits or colliding with existing files. | FR-031 | observable test | release-blocking | draft |
 | AC-FN-023 | Generated documents expose validation caveats, unsupported claims, and assumption labels. | FR-050 | review | degrade gracefully | draft |
+| AC-FN-024 | Executive JSON generation produces `outcomes/executive/executive-plan.json` from normative documents with readiness, confidence, source document references, and review-needed labels for inferred items. | FR-051, FR-052 | inspection | feature-blocking for Executive Axis | draft |
+| AC-FN-025 | Executive JSON validates against the executive plan schema and represents roadmaps, milestones, workstreams, initiatives, items, decisions, risks, artifacts, dependencies, acceptance criteria, and export metadata. | FR-053 | automated test | feature-blocking for Executive Axis | draft |
+| AC-FN-026 | Executive exports are marked as derived snapshots and are not treated as live task state or canonical project truth. | FR-054, FR-057 | inspection | feature-blocking for Executive Axis | draft |
+| AC-FN-027 | Supported executive exports can generate Markdown implementation snapshots, GitHub Issue-compatible Markdown files, HTML executive overview, and agent task packs under the configured LOGOS documentation root. | FR-055 | inspection | degrade gracefully | draft |
+| AC-FN-028 | Linear and Notion mappings are reported as planned or unsupported unless implemented and validated; no live sync is implied. | FR-056 | review | release-blocking for claim accuracy | draft |
 
 ### Edge Cases and Failure Behavior
 
 | ID | Statement | Source | Verification | Release Impact | Status |
 |----|-----------|--------|------------|----------------|--------|
-| AC-FN-024 | Malformed AI output is rejected before corrupting confirmed state. | FR-007, NFR-REL-001 | automated test | release-blocking | draft |
-| AC-FN-025 | Invalid or missing profile blocks generation and reports failure clearly. | FR-005, CR-004 | observable test | degrade gracefully | draft |
-| AC-FN-026 | Invalid documentation root blocks generation and reports the issue. | FR-004, CR-003 | observable test | degrade gracefully | draft |
-| AC-FN-027 | Unrecognized slash commands produce helpful error feedback without destroying conversational context. | Interaction Model Command Router | observable test | degrade gracefully | draft |
-| AC-FN-028 | Partial generation preserves completed outputs and reports blocked or failed items. | NFR-REL-005 | observable test | degrade gracefully | draft |
+| AC-FN-029 | Malformed AI output is rejected before corrupting confirmed state. | FR-007, NFR-REL-001 | automated test | release-blocking | draft |
+| AC-FN-030 | Invalid or missing profile blocks generation and reports failure clearly. | FR-005, CR-004 | observable test | degrade gracefully | draft |
+| AC-FN-031 | Invalid documentation root blocks generation and reports the issue. | FR-004, CR-003 | observable test | degrade gracefully | draft |
+| AC-FN-032 | Unrecognized slash commands produce helpful error feedback without destroying conversational context. | Interaction Model Command Router | observable test | degrade gracefully | draft |
+| AC-FN-033 | Partial generation preserves completed outputs and reports blocked or failed items. | NFR-REL-005 | observable test | degrade gracefully | draft |
+| AC-FN-034 | Executive external-tool exports are blocked or marked unavailable when the normative baseline is draft and export rules do not allow draft export. | FR-052, FR-054 | automated test | feature-blocking for Executive Axis | draft |
 
 ### State Transitions
 
 | ID | Statement | Source | Verification | Release Impact | Status |
 |----|-----------|--------|------------|----------------|--------|
-| AC-FN-029 | Proposed decision → confirmed requires explicit user confirmation. | Interaction Model State Transitions | automated test | release-blocking | draft |
-| AC-FN-030 | Confirmed decision → superseded requires explicit confirmation and affected-document warning. | Interaction Model State Transitions | automated test | release-blocking | draft |
-| AC-FN-031 | Generated output becomes stale when source state changes; stale indicator is visible. | Interaction Model Automatic Transitions | automated test | degrade gracefully | draft |
-| AC-FN-032 | Assumption → confirmed fact is blocked; assumptions remain visibly caveated. | Interaction Model Blocked Transitions | automated test | release-blocking | draft |
+| AC-FN-035 | Proposed decision → confirmed requires explicit user confirmation. | Interaction Model State Transitions | automated test | release-blocking | draft |
+| AC-FN-036 | Confirmed decision → superseded requires explicit confirmation and affected-document warning. | Interaction Model State Transitions | automated test | release-blocking | draft |
+| AC-FN-037 | Generated output becomes stale when source state changes; stale indicator is visible. | Interaction Model Automatic Transitions | automated test | degrade gracefully | draft |
+| AC-FN-038 | Assumption → confirmed fact is blocked; assumptions remain visibly caveated. | Interaction Model Blocked Transitions | automated test | release-blocking | draft |
+| AC-FN-039 | Executive JSON and exports become stale when normative documents, profile contracts, acceptance criteria, or source decisions change. | FR-051, FR-052, FR-054 | automated test | feature-blocking for Executive Axis | draft |
 
 ---
 

@@ -8,7 +8,7 @@ Deployment must guarantee:
 
 - the package builds from committed source using Node.js and pnpm;
 - the `logos` binary points to the compiled CLI entrypoint;
-- bundled profiles, schemas, docs, README, LICENSE, and runtime assets needed by the CLI are included;
+- bundled profiles, executive mappings/templates/schemas, docs, README, LICENSE, and runtime assets needed by the CLI are included;
 - release gates pass without live AI provider calls, hidden network access, or raw provider tokens;
 - users retain local ownership of state under the target repository;
 - no telemetry, hosted service, background worker, cloud sync, dashboard, queue, or public API is introduced accidentally;
@@ -123,10 +123,10 @@ Deployable units:
 | Unit | Runtime | Production Meaning | Scaling Assumption | Access |
 | --- | --- | --- | --- | --- |
 | npm/package artifact | Node.js package with `bin.logos -> ./dist/cli.js`. | Version users install. | Single-user local CLI invocation. | Public/private registry based on release decision. |
-| Bundled profiles | YAML/document schema files included in package. | Contract source for generation. | Local filesystem reads. | Read by CLI runtime. |
+| Bundled profiles and executive contracts | YAML/document schema files plus executive mappings, templates, and schema included in package. | Contract source for generation and executive exports. | Local filesystem reads. | Read by CLI runtime. |
 | Documentation and examples | Packaged docs/README/examples as support material. | User/developer reference. | Static files. | Read by users/maintainers. |
 | End-user workspace state | User local `.logos/` state. | User-owned runtime state, not deployed by LOGOS. | Per repository. | Local OS user. |
-| Generated outputs | User local `logos/` or custom root. | User-owned generated docs/artifacts. | Per repository. | Local OS user. |
+| Generated outputs | User local `logos/` or custom root. | User-owned generated docs/artifacts, Executive JSON, and export snapshots. | Per repository. | Local OS user. |
 
 Production constraints:
 
@@ -160,7 +160,7 @@ Configuration is split into package configuration, project workspace configurati
 | --- | --- | --- | --- | --- | --- |
 | Package metadata | `package.json`, lockfile, tsconfig. | Build/release. | Build/typecheck/package inspection. | CI diff/review. | No secrets. |
 | Runtime defaults | Code/config constants. | Runtime. | Unit/contract tests. | Regression tests. | No secrets. |
-| Profile contracts | Bundled `profiles/standard` YAML/schema. | Runtime read/package artifact. | Profile loader/schema tests. | Snapshot/contract tests. | Custom profile paths may be sensitive. |
+| Profile and executive contracts | Bundled `profiles/standard` YAML/schema plus `profiles/standard/executive` mappings/templates/schema. | Runtime read/package artifact. | Profile loader/schema tests and executive schema/export fixture tests. | Snapshot/contract tests. | Custom profile paths may be sensitive. |
 | Workspace config | Local `.logos/config.json` or equivalent. | Runtime/user workspace. | Zod/schema validation. | `/status`/state validation. | Redacted token source only. |
 | Documentation root | Workspace config; default `logos/`. | Runtime. | Path safety validation. | Root/status/generation tests. | Local path metadata. |
 | Provider config | Workspace/user config. | Runtime. | Provider mode/endpoint/token-source validation. | `/config ai --test` if used. | Raw token external only. |
@@ -177,7 +177,7 @@ Configuration defaults must be safe. Missing provider config should degrade to n
 | `CI` | Indicates CI environment. | boolean-ish | No. | CI. | platform-defined | Used only for test/tool behavior. | Low. | Build/test. | No production behavior dependency. | Engineering |
 | Future debug flag | Enable local debug logging if implemented. | boolean/path | No. | Local user runtime. | disabled | Explicit opt-in only. | Sensitive-adjacent. | Runtime. | No debug logs by default. | Engineering |
 
-Sensitive values are secrets, not ordinary config. They must not be committed, bundled, logged, snapshotted, or written to `.logos/`, `logos/`, generated HTML artifacts, or agent packs.
+Sensitive values are secrets, not ordinary config. They must not be committed, bundled, logged, snapshotted, or written to `.logos/`, `logos/`, Executive JSON, executive exports, generated HTML artifacts, or agent packs.
 
 ## Secrets Per Environment
 
@@ -220,7 +220,7 @@ Build cache must not hide stale generated outputs. Release builds should start f
 | npm/package tarball | package/publish process. | Git tag/commit. | Semver package version. | package.json, lockfile ref, CI evidence. | Package registry/release artifacts. | Immutable after publish; use new version for fixes. | Registry policy. | Publish only after release gates. | Pack inspection, smoke install if added. | Maintainer |
 | Bundled profiles | Source tree packaged with release. | Git commit/profile version. | Package version/profile version. | Schema version. | Package artifact. | Immutable per package version. | Package lifetime. | Promote with package. | Profile contract tests. | Engineering/profile owner |
 | Release evidence bundle | CI/release checklist. | Git commit/tag. | Release version. | Test outputs, smoke result, manual sign-off, known risks. | Release notes/CI artifacts. | Append-only after release. | Release policy. | Required for release. | Checklist review. | Product/engineering |
-| Generated user docs/artifacts | User runtime `/generate`. | User workspace state/profile. | User local generation run. | Output kind/status/source refs. | User repository root, default `logos/`. | User-owned, not package artifact. | User-managed. | N/A. | Generation report. | User |
+| Generated user docs/artifacts | User runtime `/generate`. | User workspace state/profile/executive mappings. | User local generation run. | Output kind/status/source refs. | User repository root, default `logos/`. | User-owned, not package artifact. | User-managed. | N/A. | Generation and executive export reports. | User |
 
 No artifact may contain raw provider tokens, auth headers, local secret values, or unredacted provider payloads.
 
@@ -260,7 +260,7 @@ Migrations are local state/profile/package compatibility concerns, not database 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Workspace state schema | `.logos/` JSON state. | On startup/command after package update. | New app must detect old/unsupported schema. | Versioned migration or recovery guidance. | Prefer roll-forward; package downgrade may not read migrated state. | Backfill required fields deterministically. | Schema validation/migration record. | Preserve prior state copy where feasible; block mutation on failure. | Old-state fixtures and migration tests. | Release-blocking when schema changes. |
 | Profile contract/schema | Bundled profile YAML/document schema. | Package release/profile load. | Existing state refs should become stale/orphaned, not silently deleted. | Compatibility validation and migration notes. | Install prior package/profile if needed. | Map renamed docs/fields where defined. | Profile validation and compatibility tests. | Block generation or show remediation. | Profile snapshot/contract tests. | Release-blocking for Standard profile. |
-| Generated output format | Markdown/HTML/agent pack shape. | Next `/generate`. | Existing outputs may be stale/manual-edited. | Regenerate with confirmation and report. | Use prior package or restore generated files from Git. | N/A; outputs derived. | Generation report/stale detection. | Regenerate or skip/confirm overwrite. | Golden output tests. | Release-blocking for canonical docs if breaking. |
+| Generated output format | Markdown/Executive JSON/executive export/HTML/agent pack shape. | Next `/generate`. | Existing outputs may be stale/manual-edited. | Regenerate with confirmation and report. | Use prior package or restore generated files from Git. | N/A; outputs derived. | Generation report/stale detection. | Regenerate or skip/confirm overwrite. | Golden output and executive export tests. | Release-blocking for canonical docs if breaking; feature-blocking for executive exports. |
 | Provider config shape | `.logos/config.json` redacted metadata. | Provider config read/test. | Raw token must never be introduced. | Validate/migrate token source refs. | Clear/reconfigure provider. | N/A. | Provider config validation. | Route to `/config ai`. | Provider config fixtures. | Release-blocking if token safety affected. |
 | Hosted/database migration | Hosted database. | N/A. | N/A. | N/A. | N/A. | N/A. | N/A. | N/A. | N/A. | Excluded MVP |
 

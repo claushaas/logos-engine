@@ -2,7 +2,7 @@
 
 ## Architecture Overview
 
-LOGOS Engine is a local-first, repository-scoped, modular TypeScript TUI application. It runs as a single local process started by the `logos` command from the target repository directory. The system manages local structured project state, loads profile YAML contracts, coordinates AI-led intake through provider adapters, enforces user-reviewed decision state, runs deterministic validation and diagnostics, and renders canonical Markdown plus derived HTML artifacts and agent packs under the configured LOGOS documentation root.
+LOGOS Engine is a local-first, repository-scoped, modular TypeScript TUI application. It runs as a single local process started by the `logos` command from the target repository directory. The system manages local structured project state, loads profile YAML contracts, coordinates AI-led intake through provider adapters, enforces user-reviewed decision state, runs deterministic validation and diagnostics, renders canonical Markdown plus derived HTML artifacts and agent packs under the configured LOGOS documentation root, and can compile a portable Executive JSON model from the normative documentation baseline.
 
 The architecture is shaped by five primary drivers:
 
@@ -10,6 +10,7 @@ The architecture is shaped by five primary drivers:
 - **Repository scope:** the active repository is the system boundary for workspace configuration and generated outputs.
 - **Decision safety:** AI can propose or draft, but only user action can confirm decisions.
 - **Profile contracts:** profile YAML drives phase, document, output, completion, and quality behavior.
+- **Execution portability:** the Executive Axis is generated as portable JSON and exported through adapters, not managed as live task state.
 - **Deterministic verification:** validation, diagnostics, tests, and release gates must work without live AI or network.
 
 At a macro level, the system has the following shape:
@@ -32,6 +33,7 @@ TUI Shell
   |       +--> Validation Service
   |       +--> Diagnostics Service
   |       +--> Generation Service
+  |       +--> Executive Compiler Service
   |       +--> Configuration Service
   |
   +--> Presentation State
@@ -48,6 +50,7 @@ Application Services
           +--> Markdown Renderer
           +--> HTML Artifact Renderer
           +--> Agent Pack Renderer
+          +--> Executive Export Adapters
 ```
 
 The major system components are:
@@ -65,6 +68,7 @@ The major system components are:
 | Validation Service | Run deterministic validation checks against state and profile contracts. | Does not require live AI. |
 | Diagnostics Service | Produce severity-grouped gaps, contradictions, risks, affected documents, and next actions. | AI advice, if used later, remains advisory. |
 | Generation Service | Render canonical Markdown and derived outputs with reports, stale tracking, and write safety. | Does not invent decisions. |
+| Executive Compiler Service | Compile Executive JSON from normative documents and export derived execution artifacts through adapter mappings. | Does not own live task state, assignments, comments, or bidirectional sync. |
 | File System Adapter | Read/write local state and generated files safely. | Must be accessed through application ports, not directly by UI/domain code. |
 | AI Provider Adapters | Call local or remote providers through a provider-agnostic contract. | Must validate output and preserve privacy boundaries. |
 
@@ -78,8 +82,9 @@ Core flows supported by the architecture:
 6. User review confirms, revises, rejects, or defers proposals.
 7. Deterministic validation and diagnostics identify gaps and readiness.
 8. `/generate` renders canonical Markdown and derived outputs under the configured root.
-9. Generation reports and stale markers update local state.
-10. `/continue` resumes from structured state without relying on raw chat as truth.
+9. After the normative baseline is draft-ready or baseline-ready, the Executive Compiler can derive Executive JSON and supported export artifacts under the configured root.
+10. Generation reports and stale markers update local state.
+11. `/continue` resumes from structured state without relying on raw chat as truth.
 
 ## Architectural Style
 
@@ -504,6 +509,7 @@ No hosted metrics, alerting, tracing, analytics, crash reporting, or behavioral 
 | Terminal too small or lacks color. | TUI | Layout capability observation. | UI may be hard to read. | Collapse non-critical detail and use text labels. | Resize terminal or use command output views. | degrade gracefully |
 | Process interrupted during generation. | Generation, File System, State | Partial writes or missing report. | Outputs may be partially updated. | Safe write strategy and partial report where possible. | Re-run generation; status identifies stale/partial outputs. | release-risk |
 | Derived artifact generation fails. | HTML/Agent Pack Renderer | Renderer error. | Markdown may exist without derived outputs. | Keep canonical docs; mark derived failure. | Retry derived generation. | degrade gracefully |
+| Executive compilation or export fails. | Executive Compiler, Export Adapters, File System | Schema validation, adapter support, readiness gate. | Execution artifacts may be absent, stale, or unsafe to import. | Preserve canonical docs; mark executive outputs blocked/failed/unsupported. | Resolve normative gaps, regenerate Executive JSON, or retry selected export. | feature-blocking for Executive Axis |
 | Test suite accidentally calls live AI. | Test Strategy, Provider | CI/network/token guard. | Releases become non-deterministic and unsafe. | Fixture provider required by default. | Fix tests; fail release gate. | release-blocking |
 
 ## Architecture Decisions
@@ -519,6 +525,7 @@ No hosted metrics, alerting, tracing, analytics, crash reporting, or behavioral 
 | ADR-007 | Keep deterministic validation independent of AI. | committed | Release gates and validation must work offline. | AI-based validation, mixed validator/AI flow. | Keeps checks testable and reliable. | AI explanations must be clearly separate. | hard to reverse | FR-013, NFR-REL-006 | Test Strategy | None for MVP. |
 | ADR-008 | Use `logos/` as default generated documentation root, configurable per workspace. | committed | Avoids colliding with existing `docs/` directories. | Default `docs/`, root beside repo, hidden output. | Protects existing docs and makes outputs visible. | Requires root resolution everywhere. | reversible by product decision | FR-004, AC-FN-003 | System, Data, Security | User evidence that default blocks adoption. |
 | ADR-009 | Exclude hosted backend, accounts, telemetry, and marketplace from MVP architecture. | committed | Validation is incomplete and local-first is core. | Hosted platform baseline. | Prevents scope creep and operational burden. | Limits collaboration and remote analytics. | reversible after validation | Product Scope, Validation Report | Infrastructure, Operations | Explicit scope change after evidence. |
+| ADR-010 | Treat Executive Axis as generated portable JSON plus derived exports, not live execution state. | committed | Executive Axis Specification defines LOGOS as execution compiler, not task manager. | Manual execution docs, embedded task board, direct live project-management sync. | Preserves traceability and avoids stale manually maintained execution YAML. | Requires schema, adapter, readiness, and stale-output discipline. | partially reversible only by product scope change | FR-051 through FR-057 | Data, API, Integration, Testing, Operations | Evidence that users need live task ownership inside LOGOS and scope is explicitly reopened. |
 
 ## Architecture Risks
 

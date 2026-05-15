@@ -80,6 +80,7 @@ A risk is release-blocking when it can cause token leakage, hidden remote transm
 | TR-022 | Manual edit conflict policy for generated Markdown remains unresolved. | data, sync/state, UX | Data Model; Sync and State | Generated Markdown may be user-edited, but merge/overwrite policy is review-needed. | Markdown renderer, generation reports, status. | medium | high | medium | Regeneration overwrites edits or blocks users without clear recovery. | Checksum/mtime metadata, overwrite confirmation, manual-edit warnings. | Skip file, restore from Git, or require explicit overwrite. | Engineering/product | review-needed | release-blocking if overwrite unsafe | Support |
 | TR-023 | Accessibility claims exceed evidence. | frontend, testing, operational-readiness | Acceptance Criteria; Testing Strategy | TUI screen reader behavior and generated HTML accessibility are not fully validated. | TUI, HTML artifacts, docs. | medium | medium/high | high | State communicated by color only; compact terminal hides risk/root text. | Keyboard-first tests, text labels, manual accessibility review, no certification claim. | Accept risk with explicit scope; fix critical labels. | Product/engineering | accepted/monitoring | accepted-risk pending validation | Support, GTM |
 | TR-024 | Local backup/restore responsibility is misunderstood. | operational-readiness, data | Deployment; Sync and State | No hosted backup, recovery environment, or operator restore in MVP. | User state, generated files, support. | medium | high | high | Users expect LOGOS to recover deleted/corrupt local files. | Clear docs, recovery mode, Git/OS backup guidance, migration tests. | User restores from Git/backup; patch recovery guidance. | Product/support | accepted | accepted-risk | Support, Risk Management |
+| TR-025 | Executive Axis exports are mistaken for live execution state. | architecture, integration, data, operational-readiness | Executive Axis Specification; Product Architecture; Integration Architecture | Executive JSON and exports resemble task-management artifacts and may be treated as a task database or bidirectional sync. | Executive compiler, Executive JSON, GitHub/Linear/Notion exports, Markdown snapshots, agent packs. | medium | high | medium | Users ask why LOGOS task status is stale; exports omit source metadata; Linear/Notion mappings imply live sync. | Derived/export labels, source refs, readiness gates, unsupported-target reporting, no live sync API, export tests. | Disable affected export adapter; clarify docs; regenerate from normative baseline. | Product/engineering | open | feature-blocking/release-warning | Support, Operations |
 
 ## Architecture Risks
 
@@ -129,6 +130,7 @@ MVP has no public network API, so API risks are internal contract risks.
 | TR-006 | State repository contract. | Unsupported schema mutates instead of entering recovery. | Schema versioning and mutation blocking. |
 | TR-007 | Provider adapter contract. | Real provider errors do not map to stable internal errors. | Error mapping tests and fake/live provider review. |
 | TR-014 | Agent pack contract. | Pack consumers treat derived context as canonical. | Derived labels, source refs, review prompt wording. |
+| TR-025 | Executive export contract. | Export files become perceived live task state. | Snapshot labels, source refs, no sync API, unsupported-target reports. |
 
 ## Integration Risks
 
@@ -138,6 +140,7 @@ MVP has no public network API, so API risks are internal contract risks.
 | TR-007 | AI provider APIs. | Provider outage, API drift, rate limits, malformed output. | Retry/reconfigure/no-provider; adapter hotfix. |
 | TR-018 | npm/GitHub distribution. | Package/dependency/release channel compromise or outage. | Pin prior version, source install, deprecate/hotfix. |
 | TR-014 | Downstream agents. | Sensitive or stale context is reused outside LOGOS. | Regenerate packs, caveats, no credentials. |
+| TR-025 | External execution tools. | Users expect LOGOS to own status after import. | Document external tools own live execution; exports are regenerable snapshots. |
 
 ## Security and Privacy Risks
 
@@ -173,6 +176,7 @@ LOGOS has no remote sync in MVP, so the primary state risks are local source-of-
 | TR-013 | HTML artifact safety not fully covered. | Escaping/no-external-script/semantic HTML tests before relying on HTML artifacts. |
 | TR-019 | Performance assumptions unmeasured. | Timing smoke/benchmark spike. |
 | TR-023 | Accessibility evidence incomplete. | Manual terminal and HTML review; no certification claim. |
+| TR-025 | Executive schema/export coverage incomplete. | Executive JSON schema fixtures, golden exports, unsupported-target tests, readiness-gate tests. |
 
 ## Observability Risks
 

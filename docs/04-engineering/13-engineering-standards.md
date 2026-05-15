@@ -10,6 +10,7 @@ The standards should be strict where mistakes can break trust:
 - Raw provider tokens must never be stored in project files, logs, fixtures, generated Markdown, HTML artifacts, or agent packs.
 - Generated files must stay under the configured documentation root, defaulting to `logos/`.
 - Profile YAML and local structured state must remain the sources of truth for contracts and decisions.
+- Executive JSON must be generated from normative documents and treated as a portable exchange model, not live task state.
 - Deterministic validation and default tests must not require live AI, network access, or real credentials.
 - The TUI must route state-changing behavior through application/domain services, not direct filesystem or provider calls.
 
@@ -67,6 +68,7 @@ Code organization follows a modular monolith with hexagonal boundaries.
 | Domain | Owns product invariants, state machines, statuses, and deterministic rules. | Unit/domain tests. |
 | Ports/adapters | Filesystem, provider, renderer, credential, and environment access happen through explicit boundaries. | Review, integration tests. |
 | Renderers | Convert state/profile contracts into Markdown, HTML artifacts, and agent packs. | Golden/output tests. |
+| Executive compiler/export adapters | Compile Executive JSON from normative docs and transform it into derived export artifacts. | Executive schema, source-trace, and golden adapter tests. |
 
 Public module surfaces should be intentional. Export only functions, types, and schemas needed by other modules. Avoid broad barrel exports that hide dependency direction or make private internals easy to import.
 
@@ -89,6 +91,7 @@ Prohibited organization patterns:
 | Provider to state | Provider output becomes validated proposal/advisory data only. | Provider creating confirmed decisions or authorizing writes. | AI tests, decision tests. |
 | Validation to AI | Deterministic validation runs without live provider. | Validation depending on AI judgment or network. | Tests, review. |
 | Generation to root | Generation writes only under configured root after permission checks. | Path traversal, absolute unsafe writes, silent overwrite. | Path/generation tests. |
+| Executive to external tools | Executive adapters write derived files or payloads only; external tools own live status after user import. | Bidirectional sync, live assignments/comments, treating exported issues as canonical LOGOS state. | Schema/export tests, review. |
 
 Dependency injection should be explicit at application-service boundaries. Use fakes/mocks for tests, but validate fakes against the same contracts as real adapters.
 
@@ -107,7 +110,7 @@ Dependency injection should be explicit at application-service boundaries. Use f
 | Audit/events | PascalCase event names or stable event ids. | `GenerationRunCompleted`. | Free-form log strings as event identity. | Observability review. |
 | Feature/config flags | Descriptive config names, not experiment codenames. | `providerMode`, `debugLoggingEnabled`. | `newThing`, `v2Magic`. | Review. |
 
-Domain terms must remain stable: profile, workspace, documentation root, structured state, proposed decision, confirmed decision, canonical Markdown, derived HTML artifact, derived agent pack, validation finding, diagnostic finding, generation report, provider mode.
+Domain terms must remain stable: profile, workspace, documentation root, structured state, proposed decision, confirmed decision, canonical Markdown, Normative Axis, Executive Axis, Executive JSON, execution graph, export adapter, derived HTML artifact, derived agent pack, validation finding, diagnostic finding, generation report, provider mode.
 
 Avoid abbreviations that blur meaning: "doc root" is acceptable in local code if defined, but "docs root" must not imply the generated root is `docs/`.
 

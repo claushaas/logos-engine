@@ -32,6 +32,8 @@ In scope for the initial product:
 - Capturing answers, assumptions, open questions, and proposed decisions.
 - Storing decisions and project state locally.
 - Rendering canonical Markdown documentation from structured state.
+- Compiling a portable Executive Axis JSON model from the current normative documentation baseline when readiness gates allow it.
+- Exporting derived executive artifacts such as Markdown implementation snapshots, GitHub Issue-compatible files, HTML review views, and agent packs.
 - Running diagnostics for gaps, risks, contradictions, and incomplete areas.
 - Validating phase readiness.
 - Supporting a repository-oriented workflow with text-based, diff-friendly files.
@@ -48,7 +50,7 @@ These are out of scope now, but not permanently forbidden:
 - **Plugin marketplace**: deferred. Extensibility matters, but a marketplace before the core model is stable would create avoidable complexity.
 - **Multi-profile authoring UI**: deferred. Future profiles matter, but the profile model should be validated before building a broad authoring surface.
 - **Advanced graph visualization**: deferred. Dependencies should be tracked, but full graph visualization is not required to prove the thesis.
-- **Roadmap-to-task export and issue generation**: future candidate. Useful only after canonical decisions and documents are reliable.
+- **Live roadmap, task, and issue management**: deferred. LOGOS may generate portable execution models and export files, but live operational status, comments, assignments, and collaboration belong in external tools.
 - **Figma export, presentation exports, and rich generated views**: future candidates. They must remain derived artifacts, not sources of truth.
 
 ### Permanent Exclusions
@@ -219,6 +221,16 @@ Protected thesis claim: documentation should derive from structured decisions be
 
 Violation example: replacing the core intake and document workflow with a full task execution environment.
 
+### Execution Compiler, Not Task Manager
+
+**Classification:** identity boundary.
+
+The Executive Axis may compile the Normative Axis into a portable JSON execution model and export that model into external execution formats. LOGOS owns clarification, derivation, traceability, readiness gates, export adapters, and review artifacts. External tools own live execution state: daily status, comments, assignments, labels, notifications, calendars, and collaboration.
+
+Protected thesis claim: execution should be derived from canonical clarity, but LOGOS should not become another project management product.
+
+Violation example: adding a LOGOS task board where users manage live work status instead of exporting an execution model to GitHub, Linear, Notion, Markdown, HTML, or agent packs.
+
 ### Generic Across Project Types, Not Domain-Locked
 
 **Classification:** strategic boundary.
@@ -233,7 +245,7 @@ Violation example: hard-coding all documentation, language, and validation assum
 
 **Classification:** prohibited to violate.
 
-Canonical truth should live in structured local state and Markdown/YAML documents inside the configured LOGOS documentation root. The default root is `logos/`, not the repository's existing `docs/` folder, because user projects may already have their own documentation there. HTML views, dashboards, presentations, and agent packs may exist, but they must remain derived outputs.
+Canonical truth should live in structured local state and Markdown/YAML documents inside the configured LOGOS documentation root. The default root is `logos/`, not the repository's existing `docs/` folder, because user projects may already have their own documentation there. The Executive Axis JSON is a portable exchange model derived from the Normative Axis. HTML views, dashboards, presentations, Markdown execution snapshots, GitHub issue exports, Linear/Notion payloads, and agent packs may exist, but they must remain generated or exported outputs rather than live operational truth.
 
 Protected principles: Local First, Structure Over Presentation, Git Friendly.
 

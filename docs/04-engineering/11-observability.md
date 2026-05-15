@@ -13,7 +13,7 @@ LOGOS Engine observability must make local failures understandable without turni
 - Were secrets, raw tokens, prompts, provider payloads, and unrelated files kept out of logs and reports?
 - What is the next safe action?
 
-The maturity target for MVP is local diagnostic observability: structured command results, validation findings, diagnostics, generation reports, state/recovery labels, redacted provider status, and audit-style records for sensitive local actions. LOGOS does not have hosted observability, remote dashboards, external telemetry, SLO-backed operations, or centralized incident detection in the MVP.
+The maturity target for MVP is local diagnostic observability: structured command results, validation findings, diagnostics, generation reports, executive generation/export reports, state/recovery labels, redacted provider status, and audit-style records for sensitive local actions. LOGOS does not have hosted observability, remote dashboards, external telemetry, SLO-backed operations, or centralized incident detection in the MVP.
 
 Observability does not guarantee provider-side visibility, cloud uptime, legal compliance, managed backups, or automatic incident response. Those require future hosted architecture and operations design.
 
@@ -25,7 +25,8 @@ Observability does not guarantee provider-side visibility, cloud uptime, legal c
 | Status summary | Show repository, root, profile, provider, state health, progress, stale outputs. | Required. | User-visible/local. | `/status` is the main readiness signal. |
 | Validation finding | Deterministic rule result with affected object and severity. | Required. | User-visible/local. | No AI dependency. |
 | Diagnostic finding | Explain gaps, contradictions, risks, and next moves. | Required. | User-visible/local. | AI-assisted diagnostics are advisory when used. |
-| Generation report | Show created, updated, skipped, blocked, failed, partial, stale, missing outputs. | Required. | User-visible/local. | Must distinguish canonical and derived outputs. |
+| Generation report | Show created, updated, skipped, blocked, failed, partial, stale, missing, and unsupported outputs. | Required. | User-visible/local. | Must distinguish canonical, executive, and derived outputs. |
+| Executive export report | Show Executive JSON readiness, source normative docs, selected targets, unsupported adapters, and generated export files. | Post-baseline. | User-visible/local. | Must not imply live sync or external-tool status ownership. |
 | Audit event | Record sensitive state transitions and confirmations. | Required concept; exact storage format review-needed. | Local/support-visible. | Not telemetry. |
 | Error result | Stable error code/message/recovery action. | Required. | User-visible/local. | Avoid raw stack/payload exposure. |
 | Provider status/error | Show provider mode, availability, timeout/auth/malformed-output classes. | Required. | User-visible/local. | Redacted token source only. |
@@ -88,6 +89,7 @@ There is no runtime metrics pipeline in MVP. Metrics are local/test/release sign
 | command.duration | histogram | Command wrapper. | Detect slow startup/status/generation. | command, outcome. | Low. | local/pre-release. | ms. | Internal local performance. | No. | Deferred. | Engineering |
 | validation.findings.count | gauge/counter | Validation service. | Summarize readiness by severity. | severity, profile id. | Low. | per run. | count. | Internal quality. | No. | Status/report. | Engineering |
 | generation.outputs.count | counter | Generation service. | Summarize created/updated/skipped/failed/stale outputs. | output kind, status. | Low. | per run. | count. | Internal reliability. | No. | Generation report. | Engineering |
+| executive.exports.count | counter | Executive compiler/export adapters. | Summarize generated/skipped/unsupported/blocked/failed executive exports. | target, status. | Low/medium. | per run. | count. | Export reliability. | No. | Executive export report. | Engineering |
 | provider.call.duration | histogram | Provider adapter. | Understand provider timeout/performance. | provider mode, outcome. | Medium if provider ids vary. | local only. | ms. | Internal provider health. | No. | Deferred. | Engineering |
 | provider.failures.count | counter | Provider adapter. | Diagnose timeout/auth/malformed output rates in local reports. | error class, provider mode. | Low. | per session/run if recorded. | count. | Internal reliability. | No. | Deferred. | Engineering |
 | state.read.failures.count | counter | State reader. | Detect state corruption/recovery needs. | state category, error class. | Low. | local. | count. | Internal reliability. | No. | Status/report. | Engineering |
