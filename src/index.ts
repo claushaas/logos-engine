@@ -63,6 +63,27 @@ export {
 	planInitWorkspace,
 	preflightInit,
 } from './init/index.js';
+// Step 4.1 — Question Planning from Profile Contracts
+export type {
+	PlannedQuestion,
+	QuestionBlockingLevel,
+	QuestionCandidate,
+	QuestionCluster,
+	QuestionDuplicateKey,
+	QuestionGap,
+	QuestionPlanningDiagnostic,
+	QuestionPlanningInput,
+	QuestionPlanningOptions,
+	QuestionPlanningResult,
+	QuestionPlanReason,
+	QuestionPlanStatus,
+	QuestionPriority,
+	QuestionSource,
+} from './intake/index.js';
+export {
+	collectQuestionCandidates,
+	planNextQuestions,
+} from './intake/index.js';
 export type {
 	AgentPackOutputDeclaration,
 	ArtifactOutputDeclaration,
