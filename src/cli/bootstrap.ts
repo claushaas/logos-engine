@@ -41,8 +41,16 @@ export async function bootstrap(argv: string[]): Promise<number> {
 	program
 		.command('doctor')
 		.description('Run non-mutating local diagnostics')
-		.action(async () => {
-			actionExitCode = await doctorCommand();
+		.option('--json', 'Emit structured JSON output to stdout')
+		.option(
+			'--dry-run',
+			'Show diagnostics without making any changes (default for doctor)',
+		)
+		.action(async (options) => {
+			actionExitCode = await doctorCommand({
+				dryRun: options.dryRun ?? false,
+				json: options.json ?? false,
+			});
 		});
 
 	try {

@@ -117,6 +117,43 @@ export {
 	ProfileRegistryError,
 	validateProfileRegistry,
 } from './profiles/profile-registry.js';
+// Step 2.4 — Error, Logging, Dry-Run, and JSON Result Conventions
+export type {
+	CommandChangedPath,
+	CommandError,
+	CommandExecutionMode,
+	CommandMessage,
+	CommandResult,
+	CommandResultMetadata,
+	CommandStatus,
+	CommandWarning,
+	CreateCommandResultOptions,
+	JsonSerializableCommandResult,
+	LoggerOptions,
+	LogLevel,
+	LogSink,
+	MemoryLogSink,
+	RedactionOptionsType,
+	StructuredError,
+	StructuredErrorOptions,
+} from './runtime/index.js';
+export {
+	ConsoleLogSink,
+	createCommandResult,
+	createStructuredError,
+	defaultLogger,
+	formatCommandResultForHuman,
+	formatStructuredError,
+	formatStructuredErrors,
+	Logger,
+	redactAndRelativize,
+	redactString,
+	redactValue,
+	relativizePaths,
+	statusToExitCode,
+	toCommandError,
+	toJsonSerializable,
+} from './runtime/index.js';
 export type {
 	DetectProjectContextOptions,
 	DocumentationRootConfig,

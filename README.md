@@ -94,10 +94,13 @@ This profile guides you through the complete documentation needed to design and 
 ### Usage
 
 ```bash
-logos           # Open the interactive TUI shell
-logos --help    # Show CLI help
-logos --version # Show package version
-logos doctor    # Run non-mutating local diagnostics (detects project root and workspace state)
+logos                        # Open the interactive TUI shell
+logos --help                 # Show CLI help
+logos --version              # Show package version
+logos doctor                 # Run non-mutating local diagnostics (detects project root and workspace state)
+logos doctor --json          # Emit automation-friendly structured JSON diagnostics to stdout
+logos doctor --dry-run       # Show diagnostics without making any changes
+logos doctor --json --dry-run # Combined JSON + dry-run output
 ```
 
 Inside the TUI, slash commands drive system operations:

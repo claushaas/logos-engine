@@ -61,6 +61,30 @@ function main() {
 		['Project root:', 'Initialization state:'],
 	);
 
+	// doctor --json
+	const doctorJsonResult = run(['doctor', '--json']);
+	assertOutput(
+		doctorJsonResult,
+		['doctor', '--json'],
+		['"status"', '"command"'],
+	);
+	// Validate it is parseable JSON
+	try {
+		const parsed = JSON.parse(doctorJsonResult.stdout);
+		if (!parsed || typeof parsed !== 'object') {
+			throw new Error('Parsed JSON is not an object');
+		}
+	} catch (_e) {
+		console.error('Smoke failed: doctor --json did not emit valid JSON');
+		console.error('--- stdout ---');
+		console.error(doctorJsonResult.stdout ?? '(empty)');
+		process.exit(1);
+	}
+
+	// doctor --dry-run
+	const doctorDryResult = run(['doctor', '--dry-run']);
+	assertOutput(doctorDryResult, ['doctor', '--dry-run'], ['dry-run']);
+
 	console.log('Smoke passed: CLI bootstrap verified.');
 	process.exit(0);
 }
