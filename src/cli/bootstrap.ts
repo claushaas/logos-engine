@@ -1,5 +1,6 @@
 import { Command, CommanderError } from 'commander';
 import { getPackageMetadata } from '../index.js';
+import { startTui } from '../tui/index.js';
 import { doctorCommand } from './commands.js';
 import {
 	EXIT_STARTUP_FAILURE,
@@ -21,11 +22,19 @@ export async function bootstrap(argv: string[]): Promise<number> {
 		)
 		.version(version, '-v, --version', 'Show version number')
 		.helpOption('-h, --help', 'Display help for command')
-		.action(() => {
-			console.log(`${binaryName} v${version}`);
-			console.log('');
-			console.log('The TUI shell is the primary entrypoint for LOGOS Engine.');
-			console.log('Interactive mode will be implemented in Step 2.2.');
+		.action(async () => {
+			if (process.stdin.isTTY) {
+				await startTui();
+			} else {
+				console.log(`${binaryName} v${version}`);
+				console.log('');
+				console.log(
+					'The TUI shell is the primary entrypoint for LOGOS Engine.',
+				);
+				console.log(
+					'Run this command in an interactive terminal to start the TUI.',
+				);
+			}
 			actionExitCode = EXIT_SUCCESS;
 		});
 

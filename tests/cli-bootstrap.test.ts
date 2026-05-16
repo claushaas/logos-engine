@@ -52,7 +52,7 @@ describe('CLI bootstrap', () => {
 		const output = stdout.join('\n');
 		expect(output).toContain('logos');
 		expect(output).toContain('TUI');
-		expect(output).toContain('Step 2.2');
+		expect(output).toContain('interactive terminal');
 	});
 
 	it('logos --help returns 0 and prints help with doctor command', async () => {

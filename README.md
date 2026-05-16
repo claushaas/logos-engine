@@ -77,7 +77,7 @@ pnpm format        # Mutating format with Biome — fixes auto-fixable issues
 
 `pnpm check` is the strict CI/release gate and must not mutate files. `pnpm format` is the local write command.
 
-The `smoke:cli` script is a Phase 0 preflight. The CLI bootstrap (`--help`, `--version`, `doctor`) is implemented in Step 2.1. The Ink TUI shell arrives in Step 2.2.
+The `smoke:cli` script is a Phase 0 preflight. The CLI bootstrap (`--help`, `--version`, `doctor`) is implemented in Step 2.1. The Ink TUI shell and slash router are implemented in Step 2.2.
 
 > **Step 0.4 status:** `pnpm check` passes cleanly. Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and select profile templates are excluded from markdownlint via `.markdownlintignore` until a documentation-hardening pass cleans them up.
 
@@ -94,22 +94,29 @@ This profile guides you through the complete documentation needed to design and 
 ### Usage
 
 ```bash
-logos           # Open the TUI (currently shows a startup placeholder)
+logos           # Open the interactive TUI shell
 logos --help    # Show CLI help
 logos --version # Show package version
 logos doctor    # Run non-mutating local diagnostics
 ```
 
-Inside the TUI, slash commands will drive system operations:
+Inside the TUI, slash commands drive system operations:
 
 ```bash
-/init           # Create a workspace (select standard profile)
-/continue       # Resume or start the AI-led conversation
+/help           # Show available slash commands
+/status         # Show runtime status (CWD, profile, provider)
+/exit           # Exit the shell
+
+/init           # Create a workspace (recognized stub)
+/continue       # Resume or start the AI-led conversation (recognized stub)
 # Type freely: "I'm building a fitness app for personal trainers..."
-/generate       # Render the canonical document tree
-/validate       # Check for missing decisions and gaps
-/diagnose       # Get AI-assisted diagnostics and next-step recommendations
+/generate       # Render the canonical document tree (recognized stub)
+/validate       # Check for missing decisions and gaps (recognized stub)
+/diagnose       # Get AI-assisted diagnostics (recognized stub)
+/config ai      # Configure AI provider (recognized stub)
 ```
+
+In this step, `/help`, `/status`, and `/exit` are functional. `/init`, `/continue`, `/generate`, `/diagnose`, `/validate`, and `/config ai` are recognized stubs and will be implemented in later phases.
 
 All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) are in-TUI commands, not external CLI subcommands.
 
