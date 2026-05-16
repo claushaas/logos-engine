@@ -7,6 +7,12 @@ import {
 } from '../src/index.js';
 
 const FIXTURES_ROOT = resolve(process.cwd(), 'tests', 'fixtures', 'profiles');
+const STANDARD_SCHEMA_PATH = resolve(
+	process.cwd(),
+	'profiles',
+	'standard',
+	'document.schema.yml',
+);
 
 describe('buildContractGraph', () => {
 	describe('Standard profile success', () => {
@@ -121,6 +127,7 @@ describe('buildContractGraph', () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'invalid-status',
 				profileRoot: join(FIXTURES_ROOT, 'invalid-status'),
+				schemaPath: STANDARD_SCHEMA_PATH,
 			});
 			const result = buildContractGraph(contract);
 
@@ -130,7 +137,7 @@ describe('buildContractGraph', () => {
 			expect(statusDiag).toBeDefined();
 			expect(statusDiag?.fieldPath).toBe('status');
 			expect(statusDiag?.severity).toBe('error');
-			expect(statusDiag?.message).toContain('draft');
+			expect(statusDiag?.message).toContain('drafting');
 		});
 
 		it('canTransitionStatus accepts valid explicit transitions', async () => {
@@ -171,6 +178,7 @@ describe('buildContractGraph', () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'status-workflow-conservative',
 				profileRoot: join(FIXTURES_ROOT, 'status-workflow-conservative'),
+				schemaPath: STANDARD_SCHEMA_PATH,
 			});
 			const result = buildContractGraph(contract);
 			const workflow = result.graph.statusWorkflow;
@@ -252,6 +260,29 @@ describe('buildContractGraph', () => {
 			}
 		});
 
+		it('normalizes data and executive outputs', async () => {
+			const contract = await loadDocumentationContract({
+				profileId: 'output-targets',
+				profileRoot: join(FIXTURES_ROOT, 'output-targets'),
+				schemaPath: STANDARD_SCHEMA_PATH,
+			});
+			const result = buildContractGraph(contract);
+
+			const dataOutput = result.graph.outputs.find((o) => o.kind === 'data');
+			expect(dataOutput).toBeDefined();
+			expect(dataOutput?.format).toBe('json');
+			expect(dataOutput?.role).toBe('data');
+			expect(dataOutput?.isCanonical).toBe(false);
+
+			const executiveOutput = result.graph.outputs.find(
+				(o) => o.kind === 'executive',
+			);
+			expect(executiveOutput).toBeDefined();
+			expect(executiveOutput?.format).toBe('json');
+			expect(executiveOutput?.role).toBe('execution_plan');
+			expect(executiveOutput?.isCanonical).toBe(false);
+		});
+
 		it('preserves source paths and field pointers for outputs', async () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'standard',
@@ -297,6 +328,7 @@ describe('buildContractGraph', () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'unknown-dependency',
 				profileRoot: join(FIXTURES_ROOT, 'unknown-dependency'),
+				schemaPath: STANDARD_SCHEMA_PATH,
 			});
 			const result = buildContractGraph(contract);
 
@@ -309,10 +341,38 @@ describe('buildContractGraph', () => {
 			expect(diag?.message).toContain('nonexistent-doc');
 		});
 
+		it('resolves feeds to declared output ids and paths', async () => {
+			const contract = await loadDocumentationContract({
+				profileId: 'output-targets',
+				profileRoot: join(FIXTURES_ROOT, 'output-targets'),
+				schemaPath: STANDARD_SCHEMA_PATH,
+			});
+			const result = buildContractGraph(contract);
+
+			const outputRefs = result.graph.dependencies.filter(
+				(d) => d.targetKind === 'output',
+			);
+			expect(outputRefs).toHaveLength(2);
+			expect(outputRefs[0]?.targetOutputId).toBe('data.test_summary');
+			expect(outputRefs[0]?.targetOutputPath).toBe(
+				'out/data/test-summary.json',
+			);
+			expect(outputRefs[1]?.targetOutputId).toBe('executive.test_plan');
+			expect(outputRefs[1]?.targetOutputPath).toBe(
+				'out/executive/test-plan.json',
+			);
+			expect(
+				result.diagnostics.some(
+					(d) => d.code === 'E_GRAPH_UNKNOWN_DEPENDENCY_TARGET',
+				),
+			).toBe(false);
+		});
+
 		it('detects direct circular dependencies', async () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'circular-dependency-direct',
 				profileRoot: join(FIXTURES_ROOT, 'circular-dependency-direct'),
+				schemaPath: STANDARD_SCHEMA_PATH,
 			});
 			const result = buildContractGraph(contract);
 
@@ -330,6 +390,7 @@ describe('buildContractGraph', () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'circular-dependency-multi',
 				profileRoot: join(FIXTURES_ROOT, 'circular-dependency-multi'),
+				schemaPath: STANDARD_SCHEMA_PATH,
 			});
 			const result = buildContractGraph(contract);
 
@@ -346,6 +407,7 @@ describe('buildContractGraph', () => {
 			const contract = await loadDocumentationContract({
 				profileId: 'non-circular-chain',
 				profileRoot: join(FIXTURES_ROOT, 'non-circular-chain'),
+				schemaPath: STANDARD_SCHEMA_PATH,
 			});
 			const result = buildContractGraph(contract);
 

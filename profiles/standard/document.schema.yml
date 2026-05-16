@@ -155,9 +155,12 @@ schema:
           Current lifecycle state of the document.
         allowedValues:
           - "not_started"
-          - "draft"
-          - "in_review"
+          - "drafting"
+          - "drafted"
+          - "needs_review"
+          - "reviewed"
           - "approved"
+          - "needs_revision"
           - "deprecated"
         default: "not_started"
 
@@ -388,6 +391,39 @@ schema:
               purpose:
                 type: "string"
                 required: true
+              schemaRef:
+                type: "string"
+                required: false
+
+          executive:
+            type: "array<object>"
+            required: false
+            default: []
+            description: >
+              Executive-axis outputs declared by normative documents for later
+              compilation. These are declarations only in Phase 1; no executive
+              files are generated here.
+            itemSchema:
+              id:
+                type: "string"
+                required: true
+              format:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "json"
+                  - "markdown"
+                  - "html"
+                  - "yaml"
+              path:
+                type: "string"
+                required: true
+              purpose:
+                type: "string"
+                required: true
+              role:
+                type: "string"
+                required: false
               schemaRef:
                 type: "string"
                 required: false

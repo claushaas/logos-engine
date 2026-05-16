@@ -5,7 +5,6 @@ import type { DocumentDescriptor } from './document-descriptor.js';
 import {
 	DocumentDescriptorValidationErrorClass,
 	loadAndValidateDocumentDescriptor,
-	loadDocumentSchema,
 } from './document-descriptor.js';
 import type {
 	LoadProfileRegistryOptions,
@@ -77,7 +76,9 @@ export interface DocumentationContract {
 }
 
 export interface LoadDocumentationContractOptions
-	extends LoadProfileRegistryOptions {}
+	extends LoadProfileRegistryOptions {
+	schemaPath?: string;
+}
 
 export interface DocumentationContractDiagnostic {
 	code: string;
@@ -86,6 +87,7 @@ export interface DocumentationContractDiagnostic {
 	fieldPath: string | undefined;
 	expected?: string | undefined;
 	received?: string | undefined;
+	sourcePaths?: string[] | undefined;
 }
 
 export class DocumentationContractError extends Error {
@@ -134,14 +136,6 @@ export async function loadDocumentationContract(
 
 	// Load profile registry (Step 1.1)
 	const registry = await loadProfileRegistry(options);
-
-	// Pre-load document schema so bulk validation is efficient (Step 1.2)
-	try {
-		await loadDocumentSchema({ profileRoot: registry.paths.profileRoot });
-	} catch (_err) {
-		// Schema will be loaded on-demand by loadAndValidateDocumentDescriptor.
-		// We continue so that individual document diagnostics can surface schema issues.
-	}
 
 	const phases: LoadedPhaseDescriptor[] = [];
 	const documents: LoadedDocumentDescriptor[] = [];
@@ -402,8 +396,14 @@ export async function loadDocumentationContract(
 
 			let descriptor: DocumentDescriptor;
 			try {
+				const descriptorOptions = options.schemaPath
+					? {
+							profileRoot: registry.paths.profileRoot,
+							schemaPath: options.schemaPath,
+						}
+					: { profileRoot: registry.paths.profileRoot };
 				descriptor = await loadAndValidateDocumentDescriptor(docPath, {
-					profileRoot: registry.paths.profileRoot,
+					...descriptorOptions,
 				});
 			} catch (err) {
 				if (err instanceof DocumentDescriptorValidationErrorClass) {
@@ -453,8 +453,8 @@ export async function loadDocumentationContract(
 
 			const existing = canonicalIdToSourcePath.get(canonicalId);
 			if (existing) {
-				diagnostics.push(
-					createPhaseDiagnostic(
+				diagnostics.push({
+					...createPhaseDiagnostic(
 						'E_DOCUMENT_DUPLICATE_ID',
 						`Duplicate document ID "${canonicalId}" found in ${docPath} (first defined in ${existing.path})`,
 						docPath,
@@ -462,7 +462,8 @@ export async function loadDocumentationContract(
 						'unique id',
 						canonicalId,
 					),
-				);
+					sourcePaths: [existing.path, docPath],
+				});
 				continue;
 			}
 

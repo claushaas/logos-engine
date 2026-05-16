@@ -3,6 +3,7 @@ import type {
 	DocumentDescriptorOutputArtifact,
 	DocumentDescriptorOutputCanonical,
 	DocumentDescriptorOutputData,
+	DocumentDescriptorOutputExecutive,
 } from './document-descriptor.js';
 import type {
 	CanonicalDocumentId,
@@ -95,6 +96,7 @@ export interface DataOutputDeclaration extends BaseOutputDeclaration {
 
 export interface ExecutiveOutputDeclaration extends BaseOutputDeclaration {
 	kind: 'executive';
+	schemaRef: string | undefined;
 }
 
 export type OutputDeclaration =
@@ -109,13 +111,18 @@ export type OutputDeclaration =
 // ---------------------------------------------------------------------------
 
 export type DependencyReferenceKind = 'dependsOn' | 'feeds';
+export type DependencyTargetKind = 'document' | 'output';
 
 export interface DependencyReference {
 	kind: DependencyReferenceKind;
 	sourceDocumentCanonicalId: CanonicalDocumentId;
 	targetDocumentId: string;
-	/** Resolved canonical ID if the target exists in the contract. */
+	/** Resolved canonical ID if the target is a document in the contract. */
 	targetDocumentCanonicalId: CanonicalDocumentId | undefined;
+	/** Resolved output declaration if the target is a declared output. */
+	targetOutputId: string | undefined;
+	targetOutputPath: string | undefined;
+	targetKind: DependencyTargetKind | undefined;
 	sourcePath: string;
 	fieldPath: string;
 	raw: unknown;
@@ -374,6 +381,28 @@ function normalizeDataOutput(
 	};
 }
 
+function normalizeExecutiveOutput(
+	doc: LoadedDocumentDescriptor,
+	executive: DocumentDescriptorOutputExecutive,
+	index: number,
+): ExecutiveOutputDeclaration {
+	return {
+		documentCanonicalId: doc.canonicalId,
+		fieldPath: `outputs.executive[${index}]`,
+		format: executive.format,
+		isCanonical: false,
+		kind: 'executive',
+		outputId: executive.id,
+		path: executive.path,
+		phaseId: doc.phaseId,
+		purpose: executive.purpose,
+		raw: executive as unknown as Record<string, unknown>,
+		role: executive.role ?? 'executive',
+		schemaRef: executive.schemaRef,
+		sourcePath: doc.sourcePath,
+	};
+}
+
 function normalizeDocumentOutputs(
 	doc: LoadedDocumentDescriptor,
 	_diagnostics: ContractGraphDiagnostic[],
@@ -413,6 +442,15 @@ function normalizeDocumentOutputs(
 		}
 	}
 
+	if (Array.isArray(descriptorOutputs.executive)) {
+		for (let i = 0; i < descriptorOutputs.executive.length; i++) {
+			const executive = descriptorOutputs.executive[i];
+			if (executive !== undefined) {
+				outputs.push(normalizeExecutiveOutput(doc, executive, i));
+			}
+		}
+	}
+
 	return outputs;
 }
 
@@ -426,31 +464,75 @@ function normalizeDocumentOutputs(
  * The Standard profile uses `<phase>/<document-id>` notation in dependsOn/feeds.
  * We first try the raw value as-is, then fall back to the segment after the last slash.
  */
+interface ResolvedReferenceTarget {
+	targetDocumentCanonicalId: CanonicalDocumentId | undefined;
+	targetOutputId: string | undefined;
+	targetOutputPath: string | undefined;
+	targetKind: DependencyTargetKind | undefined;
+}
+
 function resolveDependencyTarget(
 	rawTarget: string,
 	knownIds: ReadonlySet<CanonicalDocumentId>,
-): CanonicalDocumentId | undefined {
+	knownOutputs: ReadonlyMap<string, OutputDeclaration>,
+	kind: DependencyReferenceKind,
+): ResolvedReferenceTarget {
 	const trimmed = rawTarget.trim();
-	if (trimmed.length === 0) return undefined;
+	if (trimmed.length === 0) {
+		return {
+			targetDocumentCanonicalId: undefined,
+			targetKind: undefined,
+			targetOutputId: undefined,
+			targetOutputPath: undefined,
+		};
+	}
 
 	if (knownIds.has(trimmed)) {
-		return trimmed;
+		return {
+			targetDocumentCanonicalId: trimmed,
+			targetKind: 'document',
+			targetOutputId: undefined,
+			targetOutputPath: undefined,
+		};
 	}
 
 	const lastSlash = trimmed.lastIndexOf('/');
 	if (lastSlash >= 0) {
 		const candidate = trimmed.slice(lastSlash + 1);
 		if (knownIds.has(candidate)) {
-			return candidate;
+			return {
+				targetDocumentCanonicalId: candidate,
+				targetKind: 'document',
+				targetOutputId: undefined,
+				targetOutputPath: undefined,
+			};
 		}
 	}
 
-	return undefined;
+	if (kind === 'feeds') {
+		const output = knownOutputs.get(trimmed);
+		if (output !== undefined) {
+			return {
+				targetDocumentCanonicalId: undefined,
+				targetKind: 'output',
+				targetOutputId: output.outputId,
+				targetOutputPath: output.path,
+			};
+		}
+	}
+
+	return {
+		targetDocumentCanonicalId: undefined,
+		targetKind: undefined,
+		targetOutputId: undefined,
+		targetOutputPath: undefined,
+	};
 }
 
 function normalizeDocumentDependencies(
 	doc: LoadedDocumentDescriptor,
 	knownIds: ReadonlySet<CanonicalDocumentId>,
+	knownOutputs: ReadonlyMap<string, OutputDeclaration>,
 	diagnostics: ContractGraphDiagnostic[],
 ): DependencyReference[] {
 	const refs: DependencyReference[] = [];
@@ -466,10 +548,15 @@ function normalizeDocumentDependencies(
 			const raw = rawValues[i];
 			if (typeof raw !== 'string') continue;
 
-			const resolved = resolveDependencyTarget(raw, knownIds);
+			const resolved = resolveDependencyTarget(
+				raw,
+				knownIds,
+				knownOutputs,
+				kind,
+			);
 			const fieldPath = `${fieldPrefix}[${i}]`;
 
-			if (resolved === undefined) {
+			if (resolved.targetKind === undefined) {
 				diagnostics.push(
 					createDiagnostic(
 						'E_GRAPH_UNKNOWN_DEPENDENCY_TARGET',
@@ -477,7 +564,9 @@ function normalizeDocumentDependencies(
 						`Dependency target "${raw}" does not resolve to a known document in the contract`,
 						doc.sourcePath,
 						fieldPath,
-						'known canonical document ID',
+						kind === 'feeds'
+							? 'known canonical document ID or output id/path'
+							: 'known canonical document ID',
 						raw,
 					),
 				);
@@ -489,8 +578,11 @@ function normalizeDocumentDependencies(
 				raw,
 				sourceDocumentCanonicalId: doc.canonicalId,
 				sourcePath: doc.sourcePath,
-				targetDocumentCanonicalId: resolved,
+				targetDocumentCanonicalId: resolved.targetDocumentCanonicalId,
 				targetDocumentId: raw,
+				targetKind: resolved.targetKind,
+				targetOutputId: resolved.targetOutputId,
+				targetOutputPath: resolved.targetOutputPath,
 			});
 		}
 	}
@@ -659,12 +751,21 @@ export function buildContractGraph(
 		outputs.push(...docOutputs);
 	}
 
+	const knownOutputs = new Map<string, OutputDeclaration>();
+	for (const output of outputs) {
+		if (output.outputId !== undefined) {
+			knownOutputs.set(output.outputId, output);
+		}
+		knownOutputs.set(output.path, output);
+	}
+
 	// Normalize dependencies (deterministic: document order, then field order).
 	const dependencies: DependencyReference[] = [];
 	for (const node of nodes) {
 		const docDeps = normalizeDocumentDependencies(
 			node.document,
 			knownIds,
+			knownOutputs,
 			diagnostics,
 		);
 		dependencies.push(...docDeps);

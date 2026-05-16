@@ -3,10 +3,86 @@ import { describe, expect, it } from 'vitest';
 import {
 	loadProfileRegistry,
 	ProfileRegistryError,
+	validateProfileRegistry,
 } from '../src/profiles/profile-registry.js';
 
 const FIXTURES_ROOT = resolve(process.cwd(), 'tests', 'fixtures', 'profiles');
 const STANDARD_PROFILE_ROOT = resolve(process.cwd(), 'profiles', 'standard');
+
+function createValidRegistryFixture(): Record<string, unknown> {
+	return {
+		agentPolicy: {
+			defaultMode: 'test',
+			requiredAgentOutputs: ['test'],
+			rules: ['test'],
+		},
+		axes: [
+			{
+				description: 'Test',
+				id: 'normative',
+				phases: ['01-test'],
+				title: 'Normative',
+			},
+		],
+		contentVersion: '0.1.0',
+		dependencyPolicy: {
+			circularDependency: 'block',
+			crossPhaseDependency: 'allow',
+			missingOptionalInput: 'continue',
+			missingRequiredInput: 'block',
+			staleDependency: 'warn',
+		},
+		documentationSystem: {
+			id: 'test-docs',
+			purpose: 'Test purpose',
+			title: 'Test Docs',
+		},
+		globalRules: {
+			agentPackRole: 'test',
+			antiDuplicationRule: 'test',
+			assumptionRule: 'test',
+			boundaryRule: 'test',
+			decisionRule: 'test',
+			htmlRole: 'test',
+			markdownRole: 'test',
+			questionsLocation: 'test',
+			regenerationRule: 'test',
+			traceabilityRule: 'test',
+			yamlRole: 'test',
+		},
+		outputModel: {
+			agentPacks: { editable: false, format: 'markdown', role: 'test' },
+			canonical: { editable: true, format: 'markdown', role: 'test' },
+			presentation: { editable: false, format: 'html', role: 'test' },
+			structure: { editable: true, format: 'yaml', role: 'test' },
+		},
+		phaseDefinitions: {
+			'01-test': { purpose: 'Test' },
+		},
+		phaseRegistry: {
+			directory: 'phases',
+			files: [{ id: '01-test', path: 'phases/01-test.yml', required: true }],
+		},
+		project: { id: 'test', purpose: 'Test purpose', title: 'Test' },
+		qualityModel: {
+			failurePolicy: { incompleteRequiredSection: 'block' },
+			requiredChecks: ['completeness'],
+		},
+		registryType: 'documentation_registry',
+		roadmapIntegration: {
+			enabled: true,
+			outputs: ['test.md'],
+			role: 'test',
+			sources: ['01-test'],
+		},
+		schemaVersion: 1,
+		statusWorkflow: {
+			allowed: ['not_started', 'drafting'],
+			terminal: ['not_started'],
+			transitions: { not_started: ['drafting'] },
+		},
+	};
+}
 
 describe('loadProfileRegistry', () => {
 	it('loads the Standard profile successfully from disk', async () => {
@@ -149,6 +225,48 @@ describe('loadProfileRegistry', () => {
 			expect(err).toBeInstanceOf(ProfileRegistryError);
 			const error = err as ProfileRegistryError;
 			expect(error.diagnostics[0].code).toBe('E_PROFILE_MISSING_OPTIONS');
+		}
+	});
+
+	it('fails when axis phase entries are not strings', () => {
+		const raw = createValidRegistryFixture();
+		(raw.axes as Array<Record<string, unknown>>)[0].phases = ['01-test', 42];
+
+		expect(() =>
+			validateProfileRegistry('test', raw, '/tmp/docs.yml', '/tmp'),
+		).toThrow(ProfileRegistryError);
+
+		try {
+			validateProfileRegistry('test', raw, '/tmp/docs.yml', '/tmp');
+			expect.fail('Expected validateProfileRegistry to throw');
+		} catch (err) {
+			expect(err).toBeInstanceOf(ProfileRegistryError);
+			const error = err as ProfileRegistryError;
+			const diag = error.diagnostics.find(
+				(d) => d.fieldPath === 'axes[0].phases[1]',
+			);
+			expect(diag).toBeDefined();
+			expect(diag?.code).toBe('E_PROFILE_FIELD_TYPE');
+		}
+	});
+
+	it('fails when status transitions reference unknown statuses', () => {
+		const raw = createValidRegistryFixture();
+		(raw.statusWorkflow as Record<string, unknown>).transitions = {
+			not_started: ['missing_status'],
+		};
+
+		try {
+			validateProfileRegistry('test', raw, '/tmp/docs.yml', '/tmp');
+			expect.fail('Expected validateProfileRegistry to throw');
+		} catch (err) {
+			expect(err).toBeInstanceOf(ProfileRegistryError);
+			const error = err as ProfileRegistryError;
+			const diag = error.diagnostics.find(
+				(d) => d.fieldPath === 'statusWorkflow.transitions.not_started[0]',
+			);
+			expect(diag).toBeDefined();
+			expect(diag?.code).toBe('E_PROFILE_DISALLOWED_VALUE');
 		}
 	});
 });

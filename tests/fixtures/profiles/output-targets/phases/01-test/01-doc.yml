@@ -1,0 +1,33 @@
+document:
+  id: "01-doc"
+  title: "Output Targets Document"
+  phase: "01-test"
+  status: "not_started"
+  type: "test"
+  purpose: "Test purpose."
+  centralQuestion: "Test question?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/01-test/01-doc.md"
+    data:
+      - id: "data.test_summary"
+        format: "json"
+        path: "out/data/test-summary.json"
+        purpose: "Expose machine-readable test summary."
+        schemaRef: "schemas/test-summary.schema.json"
+    executive:
+      - id: "executive.test_plan"
+        format: "json"
+        path: "out/executive/test-plan.json"
+        purpose: "Declare future executive plan output."
+        role: "execution_plan"
+        schemaRef: "schemas/executive-plan.schema.json"
+  feeds:
+    - "data.test_summary"
+    - "out/executive/test-plan.json"
+  sections:
+    - id: "sec-1"
+      title: "Section 1"
+      questions:
+        - "What?"

@@ -453,6 +453,22 @@ describe('loadAndValidateDocumentDescriptor', () => {
 		}
 	});
 
+	it('fails instead of falling back when the descriptor schema is missing', async () => {
+		try {
+			await loadAndValidateDocumentDescriptor(
+				join(FIXTURES_ROOT, 'valid-minimal.yml'),
+				{ schemaPath: '/nonexistent/document.schema.yml' },
+			);
+			expect.fail('Expected loadAndValidateDocumentDescriptor to throw');
+		} catch (err) {
+			expect(err).toBeInstanceOf(DocumentDescriptorValidationErrorClass);
+			const error = err as DocumentDescriptorValidationErrorClass;
+			expect(error.errors).toHaveLength(1);
+			expect(error.errors[0].code).toBe('E_SCHEMA_MISSING_FILE');
+			expect(error.errors[0].path).toBe('/nonexistent/document.schema.yml');
+		}
+	});
+
 	it('fails with path-aware diagnostic for missing id fixture', async () => {
 		try {
 			await loadAndValidateDocumentDescriptor(

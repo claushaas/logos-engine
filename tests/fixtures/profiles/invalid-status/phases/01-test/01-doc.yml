@@ -2,7 +2,7 @@ document:
   id: "01-doc"
   title: "Invalid Status Document"
   phase: "01-test"
-  status: "draft"
+  status: "drafting"
   type: "test"
   purpose: "Test purpose."
   centralQuestion: "Test question?"

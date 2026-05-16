@@ -6,9 +6,12 @@ export type DocumentDescriptorId = string;
 
 export type DocumentDescriptorStatus =
 	| 'not_started'
-	| 'draft'
-	| 'in_review'
+	| 'drafting'
+	| 'drafted'
+	| 'needs_review'
+	| 'reviewed'
 	| 'approved'
+	| 'needs_revision'
 	| 'deprecated';
 
 export interface DocumentDescriptorOutputCanonical {
@@ -45,11 +48,21 @@ export interface DocumentDescriptorOutputData {
 	schemaRef?: string;
 }
 
+export interface DocumentDescriptorOutputExecutive {
+	id: string;
+	format: string;
+	path: string;
+	purpose: string;
+	role?: string;
+	schemaRef?: string;
+}
+
 export interface DocumentDescriptorOutput {
 	canonical: DocumentDescriptorOutputCanonical;
 	artifacts?: DocumentDescriptorOutputArtifact[];
 	agentPacks?: DocumentDescriptorOutputAgentPack[];
 	data?: DocumentDescriptorOutputData[];
+	executive?: DocumentDescriptorOutputExecutive[];
 }
 
 export interface DocumentDescriptorDependency {
@@ -112,6 +125,7 @@ export interface DocumentDescriptorValidationResult {
 export interface DocumentDescriptorValidationOptions {
 	profileRoot?: string;
 	schemaPath?: string;
+	schema?: DocumentSchema;
 }
 
 export interface LoadAndValidateDocumentDescriptorOptions
@@ -145,7 +159,8 @@ export interface DocumentSchema {
 	fields: Record<string, SchemaFieldDef>;
 }
 
-let cachedSchema: DocumentSchema | undefined;
+const schemaCache = new Map<string, DocumentSchema>();
+let validationSchemaOverride: DocumentSchema | undefined;
 
 function extractFieldDef(fieldRaw: Record<string, unknown>): SchemaFieldDef {
 	const def: SchemaFieldDef = {
@@ -263,6 +278,10 @@ export async function loadDocumentSchema(
 	options?: DocumentDescriptorValidationOptions,
 ): Promise<DocumentSchema> {
 	const schemaPath = getDefaultSchemaPath(options);
+	const cached = schemaCache.get(schemaPath);
+	if (cached !== undefined) {
+		return cached;
+	}
 
 	let rawContent: string;
 	try {
@@ -336,7 +355,9 @@ export async function loadDocumentSchema(
 		]);
 	}
 
-	return extractDocumentSchema(documentSchema);
+	const schema = extractDocumentSchema(documentSchema);
+	schemaCache.set(schemaPath, schema);
+	return schema;
 }
 
 function collectErrors(
@@ -583,12 +604,12 @@ export function validateDocumentDescriptor(
 	// we use the cached schema populated by an earlier call, or we
 	// perform a lightweight structural validation without the full
 	// schema when the cache is cold.
-	const schema = cachedSchema;
+	const schema = options?.schema ?? validationSchemaOverride;
 
 	if (schema === undefined) {
-		// Without a parsed schema, we perform a conservative manual
-		// validation of the known required surface so that the function
-		// remains useful even when called in isolation.
+		// Without an explicit parsed schema, this synchronous helper performs a
+		// conservative manual validation. File-based loading must use the real
+		// profile schema and does not silently fall back.
 		performFallbackValidation(targetObj, path, errors);
 		return { errors, valid: errors.length === 0 };
 	}
@@ -973,18 +994,12 @@ export async function loadAndValidateDocumentDescriptor(
 
 	const descriptor = (parsed as Record<string, unknown>).document;
 
-	// Ensure schema is loaded and cached before validation
-	if (cachedSchema === undefined) {
-		try {
-			cachedSchema = await loadDocumentSchema(options);
-		} catch (_err) {
-			// If schema loading fails, proceed with fallback validation
-		}
-	}
+	const schema = options?.schema ?? (await loadDocumentSchema(options));
 
 	const result = validateDocumentDescriptor(descriptor, {
 		...options,
 		descriptorPath: path,
+		schema,
 	});
 	if (!result.valid) {
 		throw new DocumentDescriptorValidationErrorClass(result.errors);
@@ -994,5 +1009,5 @@ export async function loadAndValidateDocumentDescriptor(
 }
 
 export function setDocumentSchemaForValidation(schema: DocumentSchema): void {
-	cachedSchema = schema;
+	validationSchemaOverride = schema;
 }

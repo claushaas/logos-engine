@@ -9,6 +9,7 @@ import {
 
 const FIXTURES_ROOT = resolve(process.cwd(), 'tests', 'fixtures', 'profiles');
 const STANDARD_PROFILE_ROOT = resolve(process.cwd(), 'profiles', 'standard');
+const STANDARD_SCHEMA_PATH = join(STANDARD_PROFILE_ROOT, 'document.schema.yml');
 
 describe('loadDocumentationContract', () => {
 	describe('Standard profile success', () => {
@@ -181,6 +182,7 @@ describe('loadDocumentationContract', () => {
 				await loadDocumentationContract({
 					profileId: 'missing-phase',
 					profileRoot: join(FIXTURES_ROOT, 'missing-phase'),
+					schemaPath: STANDARD_SCHEMA_PATH,
 				});
 				expect.fail('Expected loadDocumentationContract to throw');
 			} catch (err) {
@@ -202,6 +204,7 @@ describe('loadDocumentationContract', () => {
 				await loadDocumentationContract({
 					profileId: 'missing-document',
 					profileRoot: join(FIXTURES_ROOT, 'missing-document'),
+					schemaPath: STANDARD_SCHEMA_PATH,
 				});
 				expect.fail('Expected loadDocumentationContract to throw');
 			} catch (err) {
@@ -222,6 +225,7 @@ describe('loadDocumentationContract', () => {
 				await loadDocumentationContract({
 					profileId: 'duplicate-document-id',
 					profileRoot: join(FIXTURES_ROOT, 'duplicate-document-id'),
+					schemaPath: STANDARD_SCHEMA_PATH,
 				});
 				expect.fail('Expected loadDocumentationContract to throw');
 			} catch (err) {
@@ -236,6 +240,7 @@ describe('loadDocumentationContract', () => {
 				// Should mention both source paths
 				expect(diag?.message).toContain('01-doc.yml');
 				expect(diag?.message).toContain('02-doc.yml');
+				expect(diag?.sourcePaths).toHaveLength(2);
 			}
 		});
 
@@ -244,6 +249,7 @@ describe('loadDocumentationContract', () => {
 				await loadDocumentationContract({
 					profileId: 'malformed-phase',
 					profileRoot: join(FIXTURES_ROOT, 'malformed-phase'),
+					schemaPath: STANDARD_SCHEMA_PATH,
 				});
 				expect.fail('Expected loadDocumentationContract to throw');
 			} catch (err) {
@@ -263,6 +269,7 @@ describe('loadDocumentationContract', () => {
 				await loadDocumentationContract({
 					profileId: 'invalid-document',
 					profileRoot: join(FIXTURES_ROOT, 'invalid-document'),
+					schemaPath: STANDARD_SCHEMA_PATH,
 				});
 				expect.fail('Expected loadDocumentationContract to throw');
 			} catch (err) {

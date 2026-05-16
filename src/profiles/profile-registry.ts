@@ -207,6 +207,44 @@ function assertArray(
 	return isArr;
 }
 
+function validateStringArray(
+	value: unknown,
+	diagnostics: ProfileRegistryDiagnostic[],
+	path: string,
+	fieldPath: string,
+	options: { allowEmpty?: boolean } = {},
+): string[] {
+	if (!assertArray(value, diagnostics, path, fieldPath)) {
+		return [];
+	}
+
+	if (options.allowEmpty !== true && value.length === 0) {
+		diagnostics.push({
+			code: 'E_PROFILE_EMPTY_ARRAY',
+			fieldPath,
+			message: `${fieldPath} must not be empty`,
+			path,
+		});
+	}
+
+	const result: string[] = [];
+	for (let i = 0; i < value.length; i++) {
+		const item = value[i];
+		if (typeof item !== 'string' || item.length === 0) {
+			diagnostics.push({
+				code: 'E_PROFILE_FIELD_TYPE',
+				fieldPath: `${fieldPath}[${i}]`,
+				message: `Expected ${fieldPath}[${i}] to be a non-empty string`,
+				path,
+			});
+			continue;
+		}
+		result.push(item);
+	}
+
+	return result;
+}
+
 function validateAxes(
 	raw: unknown,
 	diagnostics: ProfileRegistryDiagnostic[],
@@ -226,31 +264,32 @@ function validateAxes(
 		assertString(axis.title, diagnostics, path, `axes[${i}].title`);
 		assertString(axis.description, diagnostics, path, `axes[${i}].description`);
 
-		const phases = axis.phases;
-		if (phases !== undefined && !Array.isArray(phases)) {
-			diagnostics.push({
-				code: 'E_PROFILE_FIELD_TYPE',
-				fieldPath: `axes[${i}].phases`,
-				message: `Expected axes[${i}].phases to be an array`,
-				path,
-			});
-		}
-
-		const artifacts = axis.artifacts;
-		if (artifacts !== undefined && !Array.isArray(artifacts)) {
-			diagnostics.push({
-				code: 'E_PROFILE_FIELD_TYPE',
-				fieldPath: `axes[${i}].artifacts`,
-				message: `Expected axes[${i}].artifacts to be an array`,
-				path,
-			});
-		}
+		const phases =
+			axis.phases !== undefined
+				? validateStringArray(
+						axis.phases,
+						diagnostics,
+						path,
+						`axes[${i}].phases`,
+						{ allowEmpty: true },
+					)
+				: undefined;
+		const artifacts =
+			axis.artifacts !== undefined
+				? validateStringArray(
+						axis.artifacts,
+						diagnostics,
+						path,
+						`axes[${i}].artifacts`,
+						{ allowEmpty: true },
+					)
+				: undefined;
 
 		axes.push({
-			artifacts: artifacts as string[] | undefined,
+			artifacts,
 			description: String(axis.description ?? ''),
 			id: String(axis.id ?? `axis-${i}`),
-			phases: phases as string[] | undefined,
+			phases,
 			title: String(axis.title ?? ''),
 		});
 	}
@@ -457,10 +496,16 @@ function validateStatusWorkflow(
 		return { allowed: [], terminal: [], transitions: {} };
 	}
 
-	const allowed = raw.allowed;
-	if (!assertArray(allowed, diagnostics, path, 'statusWorkflow.allowed')) {
+	if (!Array.isArray(raw.allowed)) {
+		assertArray(raw.allowed, diagnostics, path, 'statusWorkflow.allowed');
 		return { allowed: [], terminal: [], transitions: {} };
 	}
+	const allowed = validateStringArray(
+		raw.allowed,
+		diagnostics,
+		path,
+		'statusWorkflow.allowed',
+	);
 	if (allowed.length === 0) {
 		diagnostics.push({
 			code: 'E_PROFILE_EMPTY_ARRAY',
@@ -470,9 +515,28 @@ function validateStatusWorkflow(
 		});
 	}
 
-	const terminal = raw.terminal;
-	if (!assertArray(terminal, diagnostics, path, 'statusWorkflow.terminal')) {
-		return { allowed: allowed as string[], terminal: [], transitions: {} };
+	if (!Array.isArray(raw.terminal)) {
+		assertArray(raw.terminal, diagnostics, path, 'statusWorkflow.terminal');
+		return { allowed, terminal: [], transitions: {} };
+	}
+	const terminal = validateStringArray(
+		raw.terminal,
+		diagnostics,
+		path,
+		'statusWorkflow.terminal',
+		{ allowEmpty: true },
+	);
+	const allowedSet = new Set(allowed);
+	for (let i = 0; i < terminal.length; i++) {
+		const status = terminal[i];
+		if (status !== undefined && !allowedSet.has(status)) {
+			diagnostics.push({
+				code: 'E_PROFILE_DISALLOWED_VALUE',
+				fieldPath: `statusWorkflow.terminal[${i}]`,
+				message: `Expected statusWorkflow.terminal[${i}] to be listed in statusWorkflow.allowed`,
+				path,
+			});
+		}
 	}
 
 	const transitions = raw.transitions;
@@ -480,16 +544,46 @@ function validateStatusWorkflow(
 		!assertObject(transitions, diagnostics, path, 'statusWorkflow.transitions')
 	) {
 		return {
-			allowed: allowed as string[],
-			terminal: terminal as string[],
+			allowed,
+			terminal,
 			transitions: {},
 		};
 	}
+	const normalizedTransitions: Record<string, string[]> = {};
+	for (const [from, rawTargets] of Object.entries(transitions)) {
+		if (!allowedSet.has(from)) {
+			diagnostics.push({
+				code: 'E_PROFILE_DISALLOWED_VALUE',
+				fieldPath: `statusWorkflow.transitions.${from}`,
+				message: `Expected statusWorkflow.transitions.${from} to reference an allowed source status`,
+				path,
+			});
+		}
+		const targets = validateStringArray(
+			rawTargets,
+			diagnostics,
+			path,
+			`statusWorkflow.transitions.${from}`,
+			{ allowEmpty: true },
+		);
+		for (let i = 0; i < targets.length; i++) {
+			const target = targets[i];
+			if (target !== undefined && !allowedSet.has(target)) {
+				diagnostics.push({
+					code: 'E_PROFILE_DISALLOWED_VALUE',
+					fieldPath: `statusWorkflow.transitions.${from}[${i}]`,
+					message: `Expected statusWorkflow.transitions.${from}[${i}] to reference an allowed target status`,
+					path,
+				});
+			}
+		}
+		normalizedTransitions[from] = targets;
+	}
 
 	return {
-		allowed: allowed as string[],
-		terminal: terminal as string[],
-		transitions: transitions as Record<string, string[]>,
+		allowed,
+		terminal,
+		transitions: normalizedTransitions,
 	};
 }
 
