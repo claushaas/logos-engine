@@ -1,5 +1,6 @@
 /** TUI slash command and routing types */
 
+import type { StartupBriefing } from '../intake/startup-briefing-types.js';
 import type { ProjectContext } from '../runtime/project-context.js';
 
 export type ParsedInput =
@@ -18,4 +19,5 @@ export interface SlashCommandResult {
 
 export interface RouterContext {
 	projectContext: ProjectContext;
+	startupBriefing?: StartupBriefing | undefined;
 }

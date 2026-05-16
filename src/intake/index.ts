@@ -6,6 +6,23 @@ export {
 	isTokenLike,
 	redactIntakeContext,
 } from './context-redaction.js';
+export type {
+	ContextualSuggestion,
+	ContextualSuggestionDiagnostic,
+	ContextualSuggestionInput,
+	ContextualSuggestionKind,
+	ContextualSuggestionReason,
+	ContextualSuggestionRenderOptions,
+	ContextualSuggestionResult,
+	ContextualSuggestionSource,
+	ContextualSuggestionStatus,
+} from './contextual-suggestion-types.js';
+export { DEFAULT_SUGGESTION_RENDER_OPTIONS } from './contextual-suggestion-types.js';
+// Step 4.4 — Contextual Suggestions
+export {
+	generateContextualSuggestions,
+	resetSuggestionCounter,
+} from './contextual-suggestions.js';
 // Step 4.2 — Intake Context Builder
 export { buildIntakeContext } from './intake-context-builder.js';
 export type {
@@ -105,3 +122,25 @@ export type {
 	QuestionPriority,
 	QuestionSource,
 } from './question-planner-types.js';
+export type { BuildAiStartupBriefingOptions } from './startup-briefing.js';
+// Step 4.4 — Startup Briefing
+export {
+	buildAiStartupBriefing,
+	buildDeterministicStartupBriefing,
+} from './startup-briefing.js';
+export { renderStartupBriefing } from './startup-briefing-renderer.js';
+export type {
+	StartupBriefing,
+	StartupBriefingAction,
+	StartupBriefingDiagnostic,
+	StartupBriefingFallbackReason,
+	StartupBriefingInput,
+	StartupBriefingMode,
+	StartupBriefingRenderOptions,
+	StartupBriefingResult,
+	StartupBriefingSection,
+	StartupBriefingSource,
+	StartupBriefingStatus,
+} from './startup-briefing-types.js';
+export { DEFAULT_RENDER_OPTIONS as DEFAULT_BRIEFING_RENDER_OPTIONS } from './startup-briefing-types.js';
+export { renderContextualSuggestions } from './suggestion-renderer.js';

@@ -1,12 +1,15 @@
 /** Ink TUI root component */
 
-/** Ink TUI root component */
-
 import { Box, Text, useApp, useInput } from 'ink';
 import type React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+	buildDeterministicStartupBriefing,
+	renderStartupBriefing,
+} from '../intake/index.js';
 import { formatProviderStatus } from '../runtime/project-context.js';
 import {
+	buildStartupBriefingInputFromContext,
 	createRouterContext,
 	type Message,
 	processCommand,
@@ -20,6 +23,7 @@ export function App(): React.JSX.Element {
 	const [processing, setProcessing] = useState(false);
 	const context = createRouterContext();
 	const ctx = context.projectContext;
+	const briefingShown = useRef(false);
 
 	const addMessages = useCallback(
 		(newMessages: Message[]) => {
@@ -32,6 +36,53 @@ export function App(): React.JSX.Element {
 		},
 		[nextId],
 	);
+
+	// Generate and show startup briefing on mount
+	useEffect(() => {
+		if (briefingShown.current) return;
+		briefingShown.current = true;
+
+		const projectRoot = ctx.root.rootPath ?? ctx.cwd;
+		if (ctx.workspace.initializationState === 'initialized') {
+			buildStartupBriefingInputFromContext(projectRoot)
+				.then((briefingInput) => {
+					if (!briefingInput) return;
+					const briefing = buildDeterministicStartupBriefing(briefingInput);
+					const lines = renderStartupBriefing(briefing, {
+						maxWidth: undefined,
+						showActions: true,
+						showDiagnostics: false,
+						showLabels: true,
+					});
+					addMessages(
+						lines.map((text) => ({ id: 0, sender: 'system' as const, text })),
+					);
+				})
+				.catch(() => {
+					// Silently ignore briefing failures — don't block TUI startup
+				});
+		} else {
+			// For uninitialized workspaces, show a concise recovery path
+			const lines = [
+				'',
+				'LOGOS Engine',
+				'',
+				'Workspace is not initialized.',
+				'',
+				'Run /init to initialize a LOGOS workspace.',
+				'Run /help to see available commands.',
+				'',
+			];
+			addMessages(
+				lines.map((text) => ({ id: 0, sender: 'system' as const, text })),
+			);
+		}
+	}, [
+		ctx.workspace.initializationState,
+		ctx.root.rootPath,
+		ctx.cwd,
+		addMessages,
+	]);
 
 	useInput((inputChar, key) => {
 		if (key.return) {
