@@ -47,13 +47,17 @@ function main() {
 
 	// --help
 	const helpResult = run(['--help']);
-	assertOutput(helpResult, ['--help'], ['logos', 'Usage']);
+	assertOutput(helpResult, ['--help'], ['logos', 'Usage', 'doctor']);
 
 	// --version
 	const versionResult = run(['--version']);
 	assertOutput(versionResult, ['--version'], ['0.1.0']);
 
-	console.log('Smoke passed: CLI starts in non-interactive mode.');
+	// doctor
+	const doctorResult = run(['doctor']);
+	assertOutput(doctorResult, ['doctor'], ['Bootstrap: operational']);
+
+	console.log('Smoke passed: CLI bootstrap verified.');
 	process.exit(0);
 }
 

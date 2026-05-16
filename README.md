@@ -77,7 +77,7 @@ pnpm format        # Mutating format with Biome — fixes auto-fixable issues
 
 `pnpm check` is the strict CI/release gate and must not mutate files. `pnpm format` is the local write command.
 
-The `smoke:cli` script is a Phase 0 preflight. The executable `logos` command and Ink TUI are Phase 2 scope.
+The `smoke:cli` script is a Phase 0 preflight. The CLI bootstrap (`--help`, `--version`, `doctor`) is implemented in Step 2.1. The Ink TUI shell arrives in Step 2.2.
 
 > **Step 0.4 status:** `pnpm check` passes cleanly. Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and select profile templates are excluded from markdownlint via `.markdownlintignore` until a documentation-hardening pass cleans them up.
 
@@ -94,7 +94,15 @@ This profile guides you through the complete documentation needed to design and 
 ### Usage
 
 ```bash
-logos           # Open the TUI
+logos           # Open the TUI (currently shows a startup placeholder)
+logos --help    # Show CLI help
+logos --version # Show package version
+logos doctor    # Run non-mutating local diagnostics
+```
+
+Inside the TUI, slash commands will drive system operations:
+
+```bash
 /init           # Create a workspace (select standard profile)
 /continue       # Resume or start the AI-led conversation
 # Type freely: "I'm building a fitness app for personal trainers..."
@@ -103,7 +111,7 @@ logos           # Open the TUI
 /diagnose       # Get AI-assisted diagnostics and next-step recommendations
 ```
 
-All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) remain available for explicit system operations while ordinary text input drives the AI conversation.
+All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) are in-TUI commands, not external CLI subcommands.
 
 ## Core Principle
 
