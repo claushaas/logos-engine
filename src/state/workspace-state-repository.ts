@@ -355,6 +355,7 @@ function createEmptyState(projectRoot: string): WorkspaceState {
 		migrations: [],
 		openQuestions: [],
 		profile: { profileId: 'standard', source: 'bundled' },
+		proposals: [],
 		risks: [],
 		runs: [],
 		schemaVersion: WORKSPACE_STATE_SCHEMA_VERSION,

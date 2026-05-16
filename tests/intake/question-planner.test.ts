@@ -6,6 +6,9 @@ import {
 	buildContractGraph,
 	collectQuestionCandidates,
 	createDefaultWorkspaceState,
+	type DocumentationContract,
+	type DocumentDescriptor,
+	type LoadedPhaseDescriptor,
 	loadDocumentationContract,
 	planNextQuestions,
 	type QuestionPlanningResult,
@@ -197,11 +200,14 @@ describe('question-planner', () => {
 			const result = planNextQuestions({ contract, graph, state });
 
 			// The first questions should be blocking if any blocking questions exist
-			const hasBlocking = result.cluster!.questions.some(
+			expect(result.cluster).toBeDefined();
+			const { cluster } = result;
+			if (!cluster) throw new Error('Expected cluster');
+			const hasBlocking = cluster.questions.some(
 				(q) => q.blockingLevel === 'blocking',
 			);
 			if (hasBlocking) {
-				expect(result.cluster!.questions[0].blockingLevel).toBe('blocking');
+				expect(cluster.questions[0]?.blockingLevel).toBe('blocking');
 			}
 		});
 
@@ -213,8 +219,13 @@ describe('question-planner', () => {
 			const result1 = planNextQuestions({ contract, graph, state });
 			const result2 = planNextQuestions({ contract, graph, state });
 
-			expect(result1.cluster!.questions.map((q) => q.id)).toEqual(
-				result2.cluster!.questions.map((q) => q.id),
+			expect(result1.cluster).toBeDefined();
+			expect(result2.cluster).toBeDefined();
+			const c1 = result1.cluster;
+			const c2 = result2.cluster;
+			if (!c1 || !c2) throw new Error('Expected clusters');
+			expect(c1.questions.map((q) => q.id)).toEqual(
+				c2.questions.map((q) => q.id),
 			);
 		});
 
@@ -225,7 +236,9 @@ describe('question-planner', () => {
 
 			const result = planNextQuestions({ contract, graph, state });
 
-			expect(result.cluster!.sourceDocuments.length).toBeGreaterThan(0);
+			expect(result.cluster).toBeDefined();
+			if (!result.cluster) throw new Error('Expected cluster');
+			expect(result.cluster.sourceDocuments.length).toBeGreaterThan(0);
 		});
 
 		it('no AI/provider calls occur', async () => {
@@ -631,7 +644,7 @@ describe('question-planner', () => {
 								status: 'not_started',
 								title: 'Test Document',
 								type: 'test',
-							} as any,
+							} as unknown as DocumentDescriptor,
 							documentOrder: 0,
 							globalOrder: 0,
 							phaseId: '01-test',
@@ -659,7 +672,7 @@ describe('question-planner', () => {
 							sourcePath: '/tmp/phase.yml',
 							status: 'active',
 							title: 'Test Phase',
-						} as any,
+						} as unknown as LoadedPhaseDescriptor,
 					],
 					profileId: 'test',
 					profileRoot: '/tmp',
@@ -759,8 +772,9 @@ describe('question-planner', () => {
 			const state = createEmptyWorkspaceState();
 
 			const result = planNextQuestions({ contract, state });
-			const cluster = result.cluster!;
-
+			expect(result.cluster).toBeDefined();
+			const cluster = result.cluster;
+			if (!cluster) throw new Error('Expected cluster');
 			// Most questions in a small cluster should come from the same phase
 			const firstPhaseId = cluster.questions[0]?.source.phaseId;
 			const samePhaseCount = cluster.questions.filter(
@@ -829,15 +843,20 @@ describe('question-planner', () => {
 
 			// This is a type test; runtime behavior:
 			expect(() =>
-				planNextQuestions({ contract: undefined as any, state }),
+				planNextQuestions({
+					contract: undefined as unknown as DocumentationContract,
+					state,
+				}),
 			).not.toThrow();
 		});
 
 		it('returns error when state is missing', async () => {
 			const contract = await loadStandardContract();
 
-			const result = planNextQuestions({ contract, state: undefined as any });
-
+			const result = planNextQuestions({
+				contract,
+				state: undefined as unknown as WorkspaceState,
+			});
 			expect(result.success).toBe(false);
 			expect(
 				result.diagnostics.some((d) => d.code === 'E_PLAN_MISSING_STATE'),
@@ -873,7 +892,9 @@ describe('question-planner', () => {
 			);
 
 			expect(result.cluster).toBeDefined();
-			for (const q of result.cluster!.questions) {
+			const focusCluster = result.cluster;
+			if (!focusCluster) throw new Error('Expected cluster');
+			for (const q of focusCluster.questions) {
 				expect(q.source.phaseId).toBe('01-foundation');
 			}
 		});
@@ -888,7 +909,9 @@ describe('question-planner', () => {
 			);
 
 			expect(result.cluster).toBeDefined();
-			for (const q of result.cluster!.questions) {
+			const focusCluster = result.cluster;
+			if (!focusCluster) throw new Error('Expected cluster');
+			for (const q of focusCluster.questions) {
 				expect(q.source.documentCanonicalId).toBe('01-thesis');
 			}
 		});

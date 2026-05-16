@@ -20,6 +20,7 @@ exports[`WorkspaceState schema > snapshot tests > default initialized state matc
     "profileVersion": undefined,
     "source": "bundled",
   },
+  "proposals": [],
   "provider": undefined,
   "risks": [],
   "runs": [],
@@ -162,6 +163,7 @@ exports[`WorkspaceState schema > snapshot tests > sample populated state matches
     "profileVersion": "1.0.0",
     "source": "bundled",
   },
+  "proposals": [],
   "provider": {
     "disclosureAcceptedAt": "2024-06-01T00:00:00.000Z",
     "enabled": true,

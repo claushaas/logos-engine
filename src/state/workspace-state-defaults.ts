@@ -46,6 +46,7 @@ export function createDefaultWorkspaceState(
 			profileVersion: options.profileVersion,
 			source: 'bundled',
 		},
+		proposals: [],
 		provider: options.providerId
 			? {
 					enabled: false,

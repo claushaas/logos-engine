@@ -423,6 +423,65 @@ export type WorkspaceMigrationRecord = z.infer<
 >;
 
 // ---------------------------------------------------------------------------
+// Proposal
+// ---------------------------------------------------------------------------
+
+export const ProposalKindSchema = z.enum([
+	'decision',
+	'assumption',
+	'hypothesis',
+	'open_question',
+	'risk',
+	'document_content_hint',
+]);
+
+export const ProposalStatusSchema = z.enum([
+	'proposed',
+	'accepted',
+	'rejected',
+	'revised',
+	'superseded',
+]);
+
+export const ProposalExtractionMetadataSchema = z.object({
+	operation: z.string().optional(),
+	providerId: z.string().optional(),
+	providerKind: z.string().optional(),
+	responseId: z.string().optional(),
+});
+
+export const ProposalRevisionSchema = z.object({
+	previousBody: z.string().min(1),
+	previousTitle: z.string().min(1),
+	reason: z.string().optional(),
+	revisedAt: nonEmptyString,
+});
+
+export const WorkspaceProposalSchema = z.object({
+	body: z.string().default(''),
+	confidence: z.enum(['low', 'medium', 'high', 'advisory']).optional(),
+	createdAt: isoTimestamp,
+	evidence: z.string().optional(),
+	extractionMetadata: ProposalExtractionMetadataSchema.optional(),
+	kind: ProposalKindSchema,
+	proposalId: nonEmptyString,
+	rejectionReason: z.string().optional(),
+	revisionHistory: z.array(ProposalRevisionSchema).optional(),
+	sourceAnswerId: z.string().optional(),
+	sourceDocumentCanonicalId: z.string().optional(),
+	sourcePhaseId: z.string().optional(),
+	sourceQuestionId: z.string().optional(),
+	sourceSessionId: z.string().optional(),
+	status: ProposalStatusSchema.default('proposed'),
+	supersededByProposalId: z.string().optional(),
+	targetConfirmedRecordId: z.string().optional(),
+	title: nonEmptyString,
+	updatedAt: isoTimestamp,
+});
+
+export type WorkspaceProposal = z.infer<typeof WorkspaceProposalSchema>;
+
+// ---------------------------------------------------------------------------
 // Unified Run Record (validation, diagnostic, generation, executive)
 // ---------------------------------------------------------------------------
 
@@ -474,6 +533,7 @@ export const WorkspaceStateSchema = z
 		migrations: z.array(WorkspaceMigrationRecordSchema).default([]),
 		openQuestions: z.array(WorkspaceOpenQuestionSchema).default([]),
 		profile: WorkspaceProfileLockSchema,
+		proposals: z.array(WorkspaceProposalSchema).default([]),
 		provider: WorkspaceProviderConfigReferenceSchema.optional(),
 		risks: z.array(WorkspaceRiskSchema).default([]),
 		runs: z.array(WorkspaceRunRecordSchema).default([]),
