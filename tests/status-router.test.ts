@@ -1,4 +1,10 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { registerArtifact } from '../src/state/artifact-registry.js';
+import { createRunRecord } from '../src/state/run-repository.js';
+import { createSessionRecord } from '../src/state/session-repository.js';
+import { createDefaultWorkspaceState } from '../src/state/workspace-state-defaults.js';
 import { routeSlashCommand } from '../src/tui/slash-router.js';
 import type { RouterContext } from '../src/tui/types.js';
 
@@ -33,6 +39,16 @@ function makeContext(
 			...overrides,
 		} as RouterContext['projectContext'],
 	};
+}
+
+async function createTempDir(): Promise<string> {
+	const os = await import('node:os');
+	const crypto = await import('node:crypto');
+	const tmpDir = os.tmpdir();
+	const randomName = `logos-status-test-${crypto.randomUUID()}`;
+	const fullPath = join(tmpDir, randomName);
+	await mkdir(fullPath, { recursive: true });
+	return fullPath;
 }
 
 describe('/status TUI rendering', () => {
@@ -123,5 +139,61 @@ describe('/status TUI rendering', () => {
 		);
 		const text = result.messages.join('\n');
 		expect(text).toContain('logos/');
+	});
+
+	it('includes sessions/runs/artifact summary after records exist', async () => {
+		const tmpDir = await createTempDir();
+		let state = createDefaultWorkspaceState({
+			projectRootPath: tmpDir,
+			workspaceId: 'status-test',
+		});
+		state.workspace.initializationState = 'initialized';
+		state = createSessionRecord({
+			input: { sessionType: 'intake', status: 'completed' },
+			state,
+		}).state;
+		state = createRunRecord({
+			input: { runType: 'validation', status: 'completed' },
+			state,
+		}).state;
+		state = registerArtifact({
+			input: { artifactType: 'canonical_markdown', path: 'a.md' },
+			state,
+		}).state;
+
+		const logosDir = join(tmpDir, '.logos');
+		await mkdir(logosDir, { recursive: true });
+		await writeFile(
+			join(logosDir, 'workspace.json'),
+			JSON.stringify(state, null, 2),
+			'utf-8',
+		);
+
+		const ctx = makeContext({
+			root: {
+				cwd: tmpDir,
+				inferred: true,
+				rootKind: 'git' as const,
+				rootPath: tmpDir,
+			},
+			workspace: {
+				diagnostics: [],
+				exists: true,
+				initializationState: 'initialized',
+				logosPath: join(tmpDir, '.logos'),
+			},
+		});
+
+		const result = await routeSlashCommand(
+			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
+			ctx,
+		);
+		const text = result.messages.join('\n');
+		expect(text).toContain('Session summary');
+		expect(text).toContain('Total sessions');
+		expect(text).toContain('Run summary');
+		expect(text).toContain('Total runs');
+		expect(text).toContain('Artifact summary');
+		expect(text).toContain('Total artifacts');
 	});
 });

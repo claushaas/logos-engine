@@ -14,6 +14,7 @@ import {
 	formatProjectContextLines,
 } from '../runtime/project-context.js';
 import { redactAndRelativize } from '../runtime/redaction.js';
+import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
 import { EXIT_STARTUP_FAILURE, EXIT_SUCCESS } from './exit-codes.js';
 
 export interface DoctorOptions {
@@ -40,6 +41,22 @@ export interface DoctorData {
 		path: string | null;
 		recoveryHint: string | null;
 	}>;
+	sessionSummary?: {
+		totalSessions: number;
+		activeSessions: number;
+	};
+	runSummary?: {
+		totalRuns: number;
+		totalValidationRuns: number;
+		totalDiagnosticRuns: number;
+		totalGenerationRuns: number;
+		totalExecutiveRuns: number;
+	};
+	artifactSummary?: {
+		totalArtifacts: number;
+		canonicalCount: number;
+		nonCanonicalCount: number;
+	};
 }
 
 export async function doctorCommand(
@@ -49,6 +66,18 @@ export async function doctorCommand(
 	const dryRun = options.dryRun ?? false;
 
 	const ctx = detectProjectContext();
+
+	// Try to load workspace status summary for enhanced reporting
+	let statusSummary:
+		| Awaited<ReturnType<typeof getWorkspaceStatusSummary>>
+		| undefined;
+	try {
+		statusSummary = await getWorkspaceStatusSummary({
+			projectRoot: ctx.root.rootPath ?? ctx.cwd,
+		});
+	} catch {
+		// Non-mutating: ignore state read failures in doctor
+	}
 
 	const data: DoctorData = {
 		activeProfile: ctx.config.activeProfileId,
@@ -70,6 +99,25 @@ export async function doctorCommand(
 		providerStatus: formatProviderStatusForJson(ctx.config.providerStatus),
 		rootKind: ctx.root.rootKind,
 	};
+
+	if (statusSummary && statusSummary.initializationState === 'initialized') {
+		data.sessionSummary = {
+			activeSessions: statusSummary.sessionSummary.activeSessions,
+			totalSessions: statusSummary.sessionSummary.totalSessions,
+		};
+		data.runSummary = {
+			totalDiagnosticRuns: statusSummary.runSummary.totalDiagnosticRuns,
+			totalExecutiveRuns: statusSummary.runSummary.totalExecutiveRuns,
+			totalGenerationRuns: statusSummary.runSummary.totalGenerationRuns,
+			totalRuns: statusSummary.runSummary.totalRuns,
+			totalValidationRuns: statusSummary.runSummary.totalValidationRuns,
+		};
+		data.artifactSummary = {
+			canonicalCount: statusSummary.artifactSummary.canonicalCount,
+			nonCanonicalCount: statusSummary.artifactSummary.nonCanonicalCount,
+			totalArtifacts: statusSummary.artifactSummary.totalArtifacts,
+		};
+	}
 
 	const warnings: CommandResult['warnings'] = [];
 	const errors: CommandResult['errors'] = [];
@@ -102,6 +150,23 @@ export async function doctorCommand(
 			message: `Bundled profile load failed: ${message}`,
 			recoveryHint: 'Ensure the package installation is complete.',
 			severity: 'error',
+		});
+	}
+
+	// Enhanced status summary (non-mutating)
+	if (statusSummary && statusSummary.initializationState === 'initialized') {
+		messages.push({ level: 'info', text: '' });
+		messages.push({
+			level: 'info',
+			text: `Sessions:                ${statusSummary.sessionSummary.totalSessions} total, ${statusSummary.sessionSummary.activeSessions} active`,
+		});
+		messages.push({
+			level: 'info',
+			text: `Runs:                    ${statusSummary.runSummary.totalRuns} total (${statusSummary.runSummary.totalValidationRuns} validation, ${statusSummary.runSummary.totalDiagnosticRuns} diagnostic, ${statusSummary.runSummary.totalGenerationRuns} generation, ${statusSummary.runSummary.totalExecutiveRuns} executive)`,
+		});
+		messages.push({
+			level: 'info',
+			text: `Artifacts:               ${statusSummary.artifactSummary.totalArtifacts} total (${statusSummary.artifactSummary.canonicalCount} canonical, ${statusSummary.artifactSummary.nonCanonicalCount} non-canonical)`,
 		});
 	}
 

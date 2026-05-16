@@ -305,16 +305,70 @@ async function getInitResult(
 	};
 }
 
-function getStatusResult(context: RouterContext): SlashCommandResult {
+import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
+
+async function getStatusResult(
+	context: RouterContext,
+): Promise<SlashCommandResult> {
 	const ctx = context.projectContext;
+	const projectRoot = ctx.root.rootPath ?? ctx.cwd;
+
+	// Attempt state-backed summary
+	let summary:
+		| Awaited<ReturnType<typeof getWorkspaceStatusSummary>>
+		| undefined;
+	try {
+		summary = await getWorkspaceStatusSummary({ projectRoot });
+	} catch {
+		// Fall back to context-only status
+	}
+
 	const lines: string[] = [
 		'Status:',
-		`  Repository path:    ${ctx.root.rootPath ?? ctx.cwd}`,
+		`  Repository path:    ${projectRoot}`,
 		`  Documentation root: ${ctx.config.documentationRoot.rootPath}`,
 		`  Active profile:     ${ctx.config.activeProfileId ?? 'unknown'}`,
 		`  Provider status:    ${formatProviderStatus(ctx.config.providerStatus)}`,
 		`  Workspace:          ${formatInitializationState(ctx.workspace.initializationState)}`,
 	];
+
+	if (summary) {
+		lines.push('');
+		lines.push('Session summary:');
+		lines.push(`  Total sessions:   ${summary.sessionSummary.totalSessions}`);
+		lines.push(`  Active sessions:  ${summary.sessionSummary.activeSessions}`);
+		if (summary.sessionSummary.latestSession) {
+			lines.push(
+				`  Latest session:   ${summary.sessionSummary.latestSession.sessionType} (${summary.sessionSummary.latestSession.status})`,
+			);
+		}
+
+		lines.push('');
+		lines.push('Run summary:');
+		lines.push(`  Total runs:       ${summary.runSummary.totalRuns}`);
+		lines.push(`  Validation runs:  ${summary.runSummary.totalValidationRuns}`);
+		lines.push(`  Diagnostic runs:  ${summary.runSummary.totalDiagnosticRuns}`);
+		lines.push(`  Generation runs:  ${summary.runSummary.totalGenerationRuns}`);
+		lines.push(`  Executive runs:   ${summary.runSummary.totalExecutiveRuns}`);
+		if (summary.runSummary.latestRun) {
+			lines.push(
+				`  Latest run:       ${summary.runSummary.latestRun.runType} (${summary.runSummary.latestRun.status})`,
+			);
+		}
+
+		lines.push('');
+		lines.push('Artifact summary:');
+		lines.push(`  Total artifacts:  ${summary.artifactSummary.totalArtifacts}`);
+		lines.push(`  Canonical:        ${summary.artifactSummary.canonicalCount}`);
+		lines.push(
+			`  Non-canonical:    ${summary.artifactSummary.nonCanonicalCount}`,
+		);
+		if (summary.artifactSummary.latestArtifact) {
+			lines.push(
+				`  Latest artifact:  ${summary.artifactSummary.latestArtifact.artifactType} (${summary.artifactSummary.latestArtifact.status})`,
+			);
+		}
+	}
 
 	if (ctx.workspace.initializationState === 'missing') {
 		lines.push('');

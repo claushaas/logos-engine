@@ -389,6 +389,43 @@ export type WorkspaceMigrationRecord = z.infer<
 >;
 
 // ---------------------------------------------------------------------------
+// Unified Run Record (validation, diagnostic, generation, executive)
+// ---------------------------------------------------------------------------
+
+export const RunTypeSchema = z.enum([
+	'validation',
+	'diagnostic',
+	'generation',
+	'executive',
+]);
+
+export const RunStatusSchema = z.enum([
+	'planned',
+	'running',
+	'completed',
+	'failed',
+	'cancelled',
+	'blocked',
+]);
+
+export const WorkspaceRunRecordSchema = z.object({
+	changedPaths: z.array(z.string()).default([]),
+	command: z.string().optional(),
+	completedAt: z.string().optional(),
+	dryRun: z.boolean().default(false),
+	errors: z.array(z.string()).default([]),
+	findingIds: z.array(z.string()).default([]),
+	relatedArtifactIds: z.array(z.string()).default([]),
+	runId: nonEmptyString,
+	runType: RunTypeSchema,
+	startedAt: nonEmptyString,
+	status: RunStatusSchema.default('planned'),
+	warnings: z.array(z.string()).default([]),
+});
+
+export type WorkspaceRunRecord = z.infer<typeof WorkspaceRunRecordSchema>;
+
+// ---------------------------------------------------------------------------
 // Top-level WorkspaceState
 // ---------------------------------------------------------------------------
 
@@ -404,6 +441,7 @@ export const WorkspaceStateSchema = z.object({
 	profile: WorkspaceProfileLockSchema,
 	provider: WorkspaceProviderConfigReferenceSchema.optional(),
 	risks: z.array(WorkspaceRiskSchema).default([]),
+	runs: z.array(WorkspaceRunRecordSchema).default([]),
 	schemaVersion: z.string().min(1),
 	sessions: z.array(WorkspaceSessionSchema).default([]),
 	validationRuns: z.array(WorkspaceValidationRunSchema).default([]),

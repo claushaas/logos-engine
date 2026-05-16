@@ -219,6 +219,49 @@ export {
 	formatProjectContextLines,
 	formatProviderStatus,
 } from './runtime/project-context.js';
+// Step 3.4 — Artifact Registry
+export type {
+	ArtifactRegistryEntryInput,
+	ArtifactSummary,
+	ListArtifactsOptions,
+	RegisterArtifactOptions,
+	UpdateArtifactRecordOptions,
+} from './state/artifact-registry.js';
+export {
+	isArtifactCanonical,
+	listArtifacts,
+	registerArtifact,
+	summarizeArtifacts,
+	updateArtifactRecord,
+} from './state/artifact-registry.js';
+// Step 3.4 — Run Repository
+export type {
+	CreateRunRecordOptions,
+	ListRunRecordsOptions,
+	RunRecordInput,
+	RunSummary,
+	UpdateRunRecordOptions,
+} from './state/run-repository.js';
+export {
+	createRunRecord,
+	listRunRecords,
+	summarizeRuns,
+	updateRunRecord,
+} from './state/run-repository.js';
+// Step 3.4 — Session Repository
+export type {
+	CreateSessionRecordOptions,
+	ListSessionRecordsOptions,
+	SessionRecordInput,
+	SessionSummary,
+	UpdateSessionRecordOptions,
+} from './state/session-repository.js';
+export {
+	createSessionRecord,
+	getCurrentSessionSummary,
+	listSessionRecords,
+	updateSessionRecord,
+} from './state/session-repository.js';
 // Step 3.1 — Workspace State Schemas
 export type {
 	WorkspaceArtifact,
@@ -270,6 +313,23 @@ export {
 } from './state/workspace-state.schema.js';
 export type { CreateDefaultWorkspaceStateOptions } from './state/workspace-state-defaults.js';
 export { createDefaultWorkspaceState } from './state/workspace-state-defaults.js';
+// Step 3.4 — Workspace State Repository
+export type {
+	Clock,
+	WorkspaceStateReadOptions,
+	WorkspaceStateReadResult,
+	WorkspaceStateRepositoryDiagnostic,
+	WorkspaceStateUpdateOptions,
+	WorkspaceStateUpdateResult,
+	WorkspaceStateWriteOptions,
+	WorkspaceStateWriteResult,
+} from './state/workspace-state-repository.js';
+export {
+	readWorkspaceState,
+	requireWorkspaceState,
+	updateWorkspaceState,
+	writeWorkspaceState,
+} from './state/workspace-state-repository.js';
 export type {
 	WorkspaceStateValidationError,
 	WorkspaceStateValidationResult,
@@ -281,3 +341,9 @@ export {
 	safeParseWorkspaceState,
 	validateWorkspaceState,
 } from './state/workspace-state-validation.js';
+// Step 3.4 — Workspace Status
+export type {
+	WorkspaceStatusQueryOptions,
+	WorkspaceStatusSummary,
+} from './state/workspace-status.js';
+export { getWorkspaceStatusSummary } from './state/workspace-status.js';

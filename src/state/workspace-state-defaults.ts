@@ -46,6 +46,7 @@ export function createDefaultWorkspaceState(
 				}
 			: undefined,
 		risks: [],
+		runs: [],
 		schemaVersion: WORKSPACE_STATE_SCHEMA_VERSION,
 		sessions: [],
 		validationRuns: [],
