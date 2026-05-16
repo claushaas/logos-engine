@@ -40,13 +40,13 @@ describe('planInitWorkspace', () => {
 		});
 		expect(plan.executable).toBe(true);
 		expect(plan.collision.kind).toBe('none');
-		expect(plan.targetPaths.documentationRoot).toBe('logos');
+		expect(plan.targetPaths.documentationRoot).toBe('logos/');
 		expect(plan.targetPaths.logosDir).toBe(join(tempDir, '.logos'));
 		expect(plan.targetPaths.workspaceStateFile).toBe(
 			join(tempDir, '.logos', 'workspace.json'),
 		);
 		expect(plan.documentationRoot.isDefault).toBe(true);
-		expect(plan.documentationRoot.rootPath).toBe('logos');
+		expect(plan.documentationRoot.rootPath).toBe('logos/');
 	});
 
 	it('plans selected profile standard', async () => {
@@ -222,7 +222,7 @@ describe('planInitWorkspace', () => {
 			_testTimestamp: '2024-01-01T00:00:00.000Z',
 			projectRoot: tempDir,
 		});
-		expect(plan.state.documentation.rootPath).toBe('logos');
+		expect(plan.state.documentation.rootPath).toBe('logos/');
 		expect(plan.state.documentation.isDefault).toBe(true);
 	});
 

@@ -19,6 +19,10 @@ export async function initWorkspace(
 	// 1. Plan
 	const plan = await planInitWorkspace(options);
 
+	if (!dryRun && options.confirm !== true) {
+		return buildConfirmationRequiredResult(plan);
+	}
+
 	if (!plan.executable && plan.collision.kind !== 'none') {
 		return buildCollisionResult(plan, dryRun);
 	}
@@ -150,6 +154,47 @@ export async function initWorkspace(
 // ---------------------------------------------------------------------------
 // Result builders
 // ---------------------------------------------------------------------------
+
+function buildConfirmationRequiredResult(
+	plan: InitWorkspacePlan,
+): InitWorkspaceResult {
+	const messages: string[] = [
+		'Workspace initialization requires confirmation.',
+		'',
+		'Target paths:',
+		`  .logos/ directory:   ${plan.targetPaths.logosDir}`,
+		`  Workspace state file: ${plan.targetPaths.workspaceStateFile}`,
+		`  Documentation root:   ${plan.targetPaths.documentationRoot}`,
+		'',
+		'No files have been written.',
+		'Run /init --confirm to create the workspace.',
+		'Run /init --dry-run for a detailed dry-run plan.',
+	];
+
+	if (plan.collision.kind !== 'none') {
+		messages.splice(6, 0, '', `Collision: ${plan.collision.message}`);
+		if (plan.collision.recoveryHint) {
+			messages.splice(8, 0, `  Recovery: ${plan.collision.recoveryHint}`);
+		}
+	}
+
+	return {
+		changedPaths: [
+			{ action: 'planned', path: plan.targetPaths.logosDir },
+			{ action: 'planned', path: plan.targetPaths.workspaceStateFile },
+		],
+		createdTimestamp: plan.state.workspace.createdAt,
+		documentationRoot: plan.documentationRoot,
+		errors: plan.diagnostics.filter((d) => d.severity === 'error'),
+		messages,
+		mode: 'confirm_only',
+		profile: plan.profile,
+		status: plan.executable ? 'warning' : 'error',
+		success: false,
+		targetPaths: plan.targetPaths,
+		warnings: plan.diagnostics.filter((d) => d.severity === 'warning'),
+	};
+}
 
 function buildCollisionResult(
 	plan: InitWorkspacePlan,

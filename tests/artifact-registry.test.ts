@@ -119,6 +119,7 @@ describe('artifact-registry', () => {
 			const result = registerArtifact({
 				input: {
 					artifactType: 'html',
+					isCanonical: true,
 					path: 'logos/out/frontend.html',
 				},
 				state,
@@ -147,6 +148,24 @@ describe('artifact-registry', () => {
 			});
 			expect(updated.found).toBe(true);
 			expect(updated.artifact.status).toBe('generated');
+		});
+
+		it('does not allow updates to mark derived artifacts canonical', () => {
+			const state = makeState();
+			const created = registerArtifact({
+				input: {
+					artifactType: 'html',
+					path: 'logos/out/frontend.html',
+				},
+				state,
+			});
+			const updated = updateArtifactRecord({
+				artifactId: created.artifact.artifactId,
+				state: created.state,
+				updates: { isCanonical: true },
+			});
+			expect(updated.found).toBe(true);
+			expect(updated.artifact.isCanonical).toBe(false);
 		});
 
 		it('returns found false for unknown artifact', () => {

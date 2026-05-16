@@ -24,11 +24,20 @@ describe('session-repository', () => {
 		it('creates TUI session metadata', () => {
 			const state = makeState();
 			const result = createSessionRecord({
-				input: { sessionType: 'manual' },
+				input: { sessionType: 'tui' },
 				state,
 			});
-			expect(result.session.sessionType).toBe('manual');
+			expect(result.session.sessionType).toBe('tui');
 			expect(result.state.sessions).toHaveLength(1);
+		});
+
+		it('creates executive session metadata', () => {
+			const state = makeState();
+			const result = createSessionRecord({
+				input: { sessionType: 'executive' },
+				state,
+			});
+			expect(result.session.sessionType).toBe('executive');
 		});
 
 		it('creates intake session metadata', () => {
@@ -112,7 +121,7 @@ describe('session-repository', () => {
 			const s2 = createSessionRecord({
 				clock: { now: () => '2024-01-01T11:00:00.000Z' },
 				idFactory: () => 's2',
-				input: { sessionType: 'manual' },
+				input: { sessionType: 'tui' },
 				state,
 			});
 			state = s2.state;
@@ -129,7 +138,7 @@ describe('session-repository', () => {
 			});
 			state = s1.state;
 			const s2 = createSessionRecord({
-				input: { sessionType: 'manual' },
+				input: { sessionType: 'tui' },
 				state,
 			});
 			state = s2.state;
@@ -182,7 +191,7 @@ describe('session-repository', () => {
 				state,
 			}).state;
 			state = createSessionRecord({
-				input: { sessionType: 'manual', status: 'completed' },
+				input: { sessionType: 'tui', status: 'completed' },
 				state,
 			}).state;
 			state = createSessionRecord({

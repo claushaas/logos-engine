@@ -81,6 +81,48 @@ describe('Token persistence guard', () => {
 		}
 	});
 
+	it('rejects raw token-like values in session metadata', () => {
+		const state = {
+			...getEmptyWorkspaceState(),
+			sessions: [
+				{
+					sessionId: 'session-secret-test',
+					sessionType: 'intake',
+					startedAt: '2024-01-01T00:00:00.000Z',
+					status: 'open',
+					summary: 'sk-abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLM',
+				},
+			],
+		};
+		const result = validateWorkspaceState(state);
+		expect(result.success).toBe(false);
+		expect(result.errors.some((e) => e.path === 'sessions.0.summary')).toBe(
+			true,
+		);
+	});
+
+	it('rejects raw token-like values in artifact metadata', () => {
+		const state = {
+			...getEmptyWorkspaceState(),
+			artifacts: [
+				{
+					artifactId: 'artifact-secret-test',
+					artifactType: 'report',
+					metadata: {
+						credential: 'Bearer abcdefghijklmnopqrstuvwxyz1234567890',
+					},
+					path: 'logos/out/report.md',
+					status: 'planned',
+				},
+			],
+		};
+		const result = validateWorkspaceState(state);
+		expect(result.success).toBe(false);
+		expect(
+			result.errors.some((e) => e.path === 'artifacts.0.metadata.credential'),
+		).toBe(true);
+	});
+
 	it('JSON serialization of valid state does not include raw token values', () => {
 		const state = getEmptyWorkspaceState();
 		const withEnvVar = {

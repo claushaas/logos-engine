@@ -97,6 +97,39 @@ function looksLikeSecret(value: string): boolean {
 	return false;
 }
 
+function addSecretLikeStringIssues(
+	value: unknown,
+	ctx: z.RefinementCtx,
+	path: (string | number)[] = [],
+): void {
+	if (typeof value === 'string') {
+		if (looksLikeSecret(value)) {
+			ctx.addIssue({
+				code: 'custom',
+				message:
+					'State contains a raw secret-like value. Store environment-variable references or redacted metadata only.',
+				path,
+			});
+		}
+		return;
+	}
+
+	if (Array.isArray(value)) {
+		value.forEach((item, index) => {
+			addSecretLikeStringIssues(item, ctx, [...path, index]);
+		});
+		return;
+	}
+
+	if (value !== null && typeof value === 'object') {
+		for (const [key, item] of Object.entries(
+			value as Record<string, unknown>,
+		)) {
+			addSecretLikeStringIssues(item, ctx, [...path, key]);
+		}
+	}
+}
+
 export const TokenSourceSchema = z
 	.string()
 	.refine((val: string) => !looksLikeSecret(val), {
@@ -216,11 +249,12 @@ export type WorkspaceRisk = z.infer<typeof WorkspaceRiskSchema>;
 // ---------------------------------------------------------------------------
 
 export const SessionTypeSchema = z.enum([
+	'tui',
 	'intake',
 	'generation',
 	'validation',
 	'diagnostic',
-	'manual',
+	'executive',
 ]);
 export const SessionStatusSchema = z.enum([
 	'open',
@@ -429,23 +463,27 @@ export type WorkspaceRunRecord = z.infer<typeof WorkspaceRunRecordSchema>;
 // Top-level WorkspaceState
 // ---------------------------------------------------------------------------
 
-export const WorkspaceStateSchema = z.object({
-	artifacts: z.array(WorkspaceArtifactSchema).default([]),
-	assumptions: z.array(WorkspaceAssumptionSchema).default([]),
-	auditEvents: z.array(WorkspaceAuditEventSchema).default([]),
-	decisions: z.array(WorkspaceDecisionSchema).default([]),
-	documentation: DocumentationRootConfigSchema,
-	generationRuns: z.array(WorkspaceGenerationRunSchema).default([]),
-	migrations: z.array(WorkspaceMigrationRecordSchema).default([]),
-	openQuestions: z.array(WorkspaceOpenQuestionSchema).default([]),
-	profile: WorkspaceProfileLockSchema,
-	provider: WorkspaceProviderConfigReferenceSchema.optional(),
-	risks: z.array(WorkspaceRiskSchema).default([]),
-	runs: z.array(WorkspaceRunRecordSchema).default([]),
-	schemaVersion: z.string().min(1),
-	sessions: z.array(WorkspaceSessionSchema).default([]),
-	validationRuns: z.array(WorkspaceValidationRunSchema).default([]),
-	workspace: WorkspaceMetadataSchema,
-});
+export const WorkspaceStateSchema = z
+	.object({
+		artifacts: z.array(WorkspaceArtifactSchema).default([]),
+		assumptions: z.array(WorkspaceAssumptionSchema).default([]),
+		auditEvents: z.array(WorkspaceAuditEventSchema).default([]),
+		decisions: z.array(WorkspaceDecisionSchema).default([]),
+		documentation: DocumentationRootConfigSchema,
+		generationRuns: z.array(WorkspaceGenerationRunSchema).default([]),
+		migrations: z.array(WorkspaceMigrationRecordSchema).default([]),
+		openQuestions: z.array(WorkspaceOpenQuestionSchema).default([]),
+		profile: WorkspaceProfileLockSchema,
+		provider: WorkspaceProviderConfigReferenceSchema.optional(),
+		risks: z.array(WorkspaceRiskSchema).default([]),
+		runs: z.array(WorkspaceRunRecordSchema).default([]),
+		schemaVersion: z.literal(WORKSPACE_STATE_SCHEMA_VERSION),
+		sessions: z.array(WorkspaceSessionSchema).default([]),
+		validationRuns: z.array(WorkspaceValidationRunSchema).default([]),
+		workspace: WorkspaceMetadataSchema,
+	})
+	.superRefine((state, ctx) => {
+		addSecretLikeStringIssues(state, ctx);
+	});
 
 export type WorkspaceState = z.infer<typeof WorkspaceStateSchema>;

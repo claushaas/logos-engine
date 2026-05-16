@@ -3,7 +3,10 @@
 import { readFile } from 'node:fs/promises';
 import { join, normalize } from 'node:path';
 import { type SafeFsAdapter, writeJsonAtomic } from '../fs/safe-filesystem.js';
-import type { WorkspaceState } from './workspace-state.schema.js';
+import {
+	WORKSPACE_STATE_SCHEMA_VERSION,
+	type WorkspaceState,
+} from './workspace-state.schema.js';
 import { validateWorkspaceState } from './workspace-state-validation.js';
 
 // ---------------------------------------------------------------------------
@@ -354,7 +357,7 @@ function createEmptyState(projectRoot: string): WorkspaceState {
 		profile: { profileId: 'standard', source: 'bundled' },
 		risks: [],
 		runs: [],
-		schemaVersion: '3.1.0',
+		schemaVersion: WORKSPACE_STATE_SCHEMA_VERSION,
 		sessions: [],
 		validationRuns: [],
 		workspace: {

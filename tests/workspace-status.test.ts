@@ -63,7 +63,7 @@ describe('workspace-status', () => {
 				state,
 			}).state;
 			state = createSessionRecord({
-				input: { sessionType: 'manual', status: 'completed' },
+				input: { sessionType: 'tui', status: 'completed' },
 				state,
 			}).state;
 			state.workspace.initializationState = 'initialized';

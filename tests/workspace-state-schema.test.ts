@@ -101,6 +101,13 @@ describe('WorkspaceState schema', () => {
 			expect(result.errors.some((e) => e.path === 'schemaVersion')).toBe(true);
 		});
 
+		it('fails when schemaVersion is unsupported', () => {
+			const state = { ...getEmptyWorkspaceState(), schemaVersion: '999.0.0' };
+			const result = validateWorkspaceState(state);
+			expect(result.success).toBe(false);
+			expect(result.errors.some((e) => e.path === 'schemaVersion')).toBe(true);
+		});
+
 		it('fails when workspace metadata is invalid', () => {
 			const state = getInvalidWorkspaceMetadataState();
 			const result = validateWorkspaceState(state);
@@ -198,7 +205,8 @@ describe('WorkspaceState schema', () => {
 		it('accepts custom documentation root', () => {
 			const state = createDefaultWorkspaceState({ documentationRoot: 'docs/' });
 			expect(state.documentation.rootPath).toBe('docs/');
-			expect(state.documentation.isDefault).toBe(true);
+			expect(state.documentation.isDefault).toBe(false);
+			expect(state.documentation.wasExplicitlyConfigured).toBe(true);
 		});
 
 		it('accepts custom profile', () => {

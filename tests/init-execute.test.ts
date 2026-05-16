@@ -33,6 +33,17 @@ describe('initWorkspace (execution)', () => {
 		cleanupTempDir(tempDir);
 	});
 
+	it('unconfirmed init discloses paths and writes nothing', async () => {
+		const result = await initWorkspace({
+			_testTimestamp: '2024-01-01T00:00:00.000Z',
+			projectRoot: tempDir,
+		});
+		expect(result.success).toBe(false);
+		expect(result.mode).toBe('confirm_only');
+		expect(result.messages.join('\n')).toContain('Target paths:');
+		expect(existsSync(join(tempDir, '.logos'))).toBe(false);
+	});
+
 	it('confirmed init creates .logos/ in a temp project', async () => {
 		const result = await initWorkspace({
 			_testTimestamp: '2024-01-01T00:00:00.000Z',
@@ -93,7 +104,7 @@ describe('initWorkspace (execution)', () => {
 			'utf-8',
 		);
 		const parsed = JSON.parse(raw);
-		expect(parsed.documentation.rootPath).toBe('logos');
+		expect(parsed.documentation.rootPath).toBe('logos/');
 		expect(parsed.documentation.isDefault).toBe(true);
 	});
 

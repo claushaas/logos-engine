@@ -81,9 +81,10 @@ export function registerArtifact(options: RegisterArtifactOptions): {
 } {
 	const idFactory = options.idFactory ?? defaultIdFactory;
 
-	const isCanonical =
-		options.input.isCanonical ??
-		isArtifactCanonical(options.input.artifactType);
+	const isCanonical = NON_CANONICAL_TYPES.has(options.input.artifactType)
+		? false
+		: (options.input.isCanonical ??
+			isArtifactCanonical(options.input.artifactType));
 
 	const artifact: WorkspaceArtifact = {
 		artifactId: idFactory(),
@@ -122,6 +123,9 @@ export function updateArtifactRecord(options: UpdateArtifactRecordOptions): {
 		if (a.artifactId !== options.artifactId) return a;
 		found = true;
 		updatedArtifact = { ...a, ...options.updates };
+		if (NON_CANONICAL_TYPES.has(updatedArtifact.artifactType)) {
+			updatedArtifact.isCanonical = false;
+		}
 		return updatedArtifact;
 	});
 

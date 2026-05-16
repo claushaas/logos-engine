@@ -16,19 +16,26 @@ export interface CreateDefaultWorkspaceStateOptions {
 	providerId?: string;
 }
 
+function isDefaultDocumentationRoot(rootPath: string): boolean {
+	return rootPath === 'logos/' || rootPath === 'logos';
+}
+
 export function createDefaultWorkspaceState(
 	options: CreateDefaultWorkspaceStateOptions = {},
 ): WorkspaceState {
 	const now = options.createdAt ?? new Date().toISOString();
+	const documentationRoot = options.documentationRoot ?? 'logos/';
+	const isDefaultRoot = isDefaultDocumentationRoot(documentationRoot);
 	return {
 		artifacts: [],
 		assumptions: [],
 		auditEvents: [],
 		decisions: [],
 		documentation: {
-			isDefault: true,
-			rootPath: options.documentationRoot ?? 'logos/',
-			wasExplicitlyConfigured: false,
+			isDefault: isDefaultRoot,
+			rootPath: documentationRoot,
+			wasExplicitlyConfigured:
+				options.documentationRoot !== undefined && !isDefaultRoot,
 		},
 		generationRuns: [],
 		migrations: [],

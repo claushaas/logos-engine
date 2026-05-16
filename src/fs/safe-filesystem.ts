@@ -643,7 +643,7 @@ export async function writeJsonAtomic(
 			policyResult.action === 'write' ||
 			policyResult.action === 'backup_then_write'
 		) {
-			const dirsToCreate = computeMissingDirectories(targetDir);
+			const dirsToCreate = await computeMissingDirectories(targetDir);
 			for (const d of dirsToCreate) {
 				wouldCreateDirs.push(d);
 				changedPaths.push({ path: d, role: 'planned' });
@@ -687,6 +687,7 @@ export async function writeJsonAtomic(
 		policyResult.action === 'write' ||
 		policyResult.action === 'backup_then_write'
 	) {
+		const dirsToCreate = await computeMissingDirectories(targetDir);
 		try {
 			await fs.mkdir(targetDir, { recursive: true });
 		} catch (err: unknown) {
@@ -709,8 +710,7 @@ export async function writeJsonAtomic(
 			};
 		}
 
-		const createdDirs = computeMissingDirectories(targetDir);
-		for (const d of createdDirs) {
+		for (const d of dirsToCreate) {
 			changedPaths.push({ path: d, role: 'directory_created' });
 		}
 	}
@@ -955,6 +955,10 @@ export async function writeFileAtomic(
 		if (policyResult.action === 'skip') {
 			changedPaths.push({ path: normalizedTarget, role: 'planned' });
 		} else {
+			const dirsToCreate = await computeMissingDirectories(targetDir);
+			for (const d of dirsToCreate) {
+				changedPaths.push({ path: d, role: 'planned' });
+			}
 			if (policyResult.action === 'backup_then_write') {
 				const backupDir = options.backupDir ?? targetDir;
 				const base = basename(normalizedTarget);
@@ -993,6 +997,7 @@ export async function writeFileAtomic(
 		policyResult.action === 'write' ||
 		policyResult.action === 'backup_then_write'
 	) {
+		const dirsToCreate = await computeMissingDirectories(targetDir);
 		try {
 			await fs.mkdir(targetDir, { recursive: true });
 		} catch (err: unknown) {
@@ -1013,6 +1018,10 @@ export async function writeFileAtomic(
 				success: false,
 				targetPath: normalizedTarget,
 			};
+		}
+
+		for (const d of dirsToCreate) {
+			changedPaths.push({ path: d, role: 'directory_created' });
 		}
 	}
 
@@ -1156,7 +1165,8 @@ export async function writeFileAtomic(
 // Helpers
 // ---------------------------------------------------------------------------
 
-function computeMissingDirectories(targetDir: string): string[] {
+async function computeMissingDirectories(targetDir: string): Promise<string[]> {
+	const { stat } = await import('node:fs/promises');
 	const parts: string[] = [];
 	const normalized = normalize(targetDir);
 	let current = normalized;
@@ -1171,13 +1181,16 @@ function computeMissingDirectories(targetDir: string): string[] {
 
 	parts.reverse();
 
-	const existingDirs = new Set<string>();
 	const missing: string[] = [];
 	for (const dir of parts) {
-		if (!existingDirs.has(dir)) {
+		try {
+			const dirStat = await stat(dir);
+			if (!dirStat.isDirectory()) {
+				missing.push(dir);
+			}
+		} catch {
 			missing.push(dir);
 		}
-		existingDirs.add(dir);
 	}
 	return missing;
 }

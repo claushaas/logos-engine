@@ -10,6 +10,7 @@ import {
 	formatInitializationState,
 	formatProviderStatus,
 } from '../src/runtime/project-context.js';
+import { createDefaultWorkspaceState } from '../src/state/workspace-state-defaults.js';
 
 function makeTempDir(prefix: string): string {
 	return mkdtempSync(join(tmpdir(), prefix));
@@ -114,10 +115,20 @@ describe('detectWorkspace', () => {
 		);
 	});
 
-	it('valid minimal config reports initialized', () => {
+	it('valid workspace state reports initialized', () => {
 		const root = makeTempDir('logos-init-');
 		mkdirSync(join(root, '.logos'));
-		writeFileSync(join(root, '.logos', 'workspace.json'), JSON.stringify({}));
+		const state = createDefaultWorkspaceState({
+			createdAt: '2024-01-01T00:00:00.000Z',
+			projectRootPath: root,
+			updatedAt: '2024-01-01T00:00:00.000Z',
+			workspaceId: 'project-context-init',
+		});
+		state.workspace.initializationState = 'initialized';
+		writeFileSync(
+			join(root, '.logos', 'workspace.json'),
+			JSON.stringify(state),
+		);
 		const rootResult = detectProjectRoot({ cwd: root });
 		const ws = detectWorkspace(rootResult);
 		expect(ws.exists).toBe(true);
@@ -137,9 +148,17 @@ describe('detectWorkspaceConfig', () => {
 	it('configured documentation root is detected when present', () => {
 		const root = makeTempDir('logos-docroot-');
 		mkdirSync(join(root, '.logos'));
+		const state = createDefaultWorkspaceState({
+			createdAt: '2024-01-01T00:00:00.000Z',
+			documentationRoot: 'docs-custom/',
+			projectRootPath: root,
+			updatedAt: '2024-01-01T00:00:00.000Z',
+			workspaceId: 'project-context-docroot',
+		});
+		state.workspace.initializationState = 'initialized';
 		writeFileSync(
 			join(root, '.logos', 'workspace.json'),
-			JSON.stringify({ documentationRoot: 'docs-custom/' }),
+			JSON.stringify(state),
 		);
 		const rootResult = detectProjectRoot({ cwd: root });
 		const ws = detectWorkspace(rootResult);
@@ -151,9 +170,17 @@ describe('detectWorkspaceConfig', () => {
 	it('active profile is detected when present', () => {
 		const root = makeTempDir('logos-profile-');
 		mkdirSync(join(root, '.logos'));
+		const state = createDefaultWorkspaceState({
+			createdAt: '2024-01-01T00:00:00.000Z',
+			profileId: 'custom',
+			projectRootPath: root,
+			updatedAt: '2024-01-01T00:00:00.000Z',
+			workspaceId: 'project-context-profile',
+		});
+		state.workspace.initializationState = 'initialized';
 		writeFileSync(
 			join(root, '.logos', 'workspace.json'),
-			JSON.stringify({ activeProfile: 'custom' }),
+			JSON.stringify(state),
 		);
 		const rootResult = detectProjectRoot({ cwd: root });
 		const ws = detectWorkspace(rootResult);
@@ -178,7 +205,7 @@ describe('detectWorkspaceConfig', () => {
 		expect(cfg.activeProfileId).toBe('standard');
 	});
 
-	it('provider status never exposes token values', () => {
+	it('invalid provider token values keep workspace config unavailable', () => {
 		const root = makeTempDir('logos-provider-');
 		mkdirSync(join(root, '.logos'));
 		writeFileSync(
@@ -190,10 +217,8 @@ describe('detectWorkspaceConfig', () => {
 		const rootResult = detectProjectRoot({ cwd: root });
 		const ws = detectWorkspace(rootResult);
 		const cfg = detectWorkspaceConfig(ws);
-		expect(cfg.providerStatus.kind).toBe('configured');
-		if (cfg.providerStatus.kind === 'configured') {
-			expect(cfg.providerStatus.providerId).toBe('openai');
-		}
+		expect(ws.initializationState).toBe('invalid');
+		expect(cfg.providerStatus.kind).toBe('not_configured');
 		const formatted = formatProviderStatus(cfg.providerStatus);
 		expect(formatted).not.toContain('secret');
 		expect(formatted).not.toContain('sk-');

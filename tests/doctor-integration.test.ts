@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { createDefaultWorkspaceState } from '../src/state/workspace-state-defaults.js';
 
 const DIST_CLI = join(process.cwd(), 'dist', 'cli.js');
 
@@ -82,10 +83,31 @@ describe('logos doctor integration', () => {
 		expect(existsSync(join(dir, '.logos'))).toBe(false);
 	});
 
-	it('reports initialized state when workspace config exists', () => {
+	it('reports invalid state when workspace state fails schema validation', () => {
 		const dir = makeTempDir('logos-doctor-init-');
 		mkdirSync(join(dir, '.logos'));
 		writeFileSync(join(dir, '.logos', 'workspace.json'), JSON.stringify({}));
+		const output = execSync(`node "${DIST_CLI}" doctor`, {
+			cwd: dir,
+			encoding: 'utf-8',
+		});
+		expect(output).toContain('invalid');
+	});
+
+	it('reports initialized state when valid workspace state exists', () => {
+		const dir = makeTempDir('logos-doctor-valid-init-');
+		mkdirSync(join(dir, '.logos'));
+		const state = createDefaultWorkspaceState({
+			createdAt: '2024-01-01T00:00:00.000Z',
+			projectRootPath: dir,
+			updatedAt: '2024-01-01T00:00:00.000Z',
+			workspaceId: 'doctor-valid-workspace',
+		});
+		state.workspace.initializationState = 'initialized';
+		writeFileSync(
+			join(dir, '.logos', 'workspace.json'),
+			JSON.stringify(state, null, 2),
+		);
 		const output = execSync(`node "${DIST_CLI}" doctor`, {
 			cwd: dir,
 			encoding: 'utf-8',
@@ -96,9 +118,17 @@ describe('logos doctor integration', () => {
 	it('reads custom documentation root from workspace config', () => {
 		const dir = makeTempDir('logos-doctor-custom-root-');
 		mkdirSync(join(dir, '.logos'));
+		const state = createDefaultWorkspaceState({
+			createdAt: '2024-01-01T00:00:00.000Z',
+			documentationRoot: 'custom-docs/',
+			projectRootPath: dir,
+			updatedAt: '2024-01-01T00:00:00.000Z',
+			workspaceId: 'doctor-custom-root-workspace',
+		});
+		state.workspace.initializationState = 'initialized';
 		writeFileSync(
 			join(dir, '.logos', 'workspace.json'),
-			JSON.stringify({ documentationRoot: 'custom-docs/' }),
+			JSON.stringify(state, null, 2),
 		);
 		const output = execSync(`node "${DIST_CLI}" doctor`, {
 			cwd: dir,

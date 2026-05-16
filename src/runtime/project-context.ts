@@ -2,6 +2,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { validateWorkspaceState } from '../state/workspace-state-validation.js';
 
 export type ProjectRootKind = 'git' | 'package' | 'explicit' | 'none';
 
@@ -218,8 +219,27 @@ export function detectWorkspace(
 		};
 	}
 
-	// Config exists and is valid JSON — treat as initialized for this step.
-	// We do not enforce a full schema because Step 3.1 will own workspace schemas.
+	if (configFile === configPath) {
+		const validation = validateWorkspaceState(parsed);
+		if (!validation.success) {
+			diagnostics.push({
+				code: 'workspace_invalid',
+				message:
+					'Workspace state file exists but does not match the supported schema',
+				path: configFile,
+				recoveryHint:
+					'Review or repair .logos/workspace.json before running mutating commands.',
+				severity: 'warning',
+			});
+			return {
+				diagnostics,
+				exists: true,
+				initializationState: 'invalid',
+				logosPath,
+			};
+		}
+	}
+
 	return {
 		diagnostics,
 		exists: true,
@@ -266,22 +286,40 @@ export function detectWorkspaceConfig(
 	if (configFile) {
 		const parsed = readJsonSafe(configFile);
 		if (isRecord(parsed)) {
-			if (typeof parsed.documentationRoot === 'string') {
+			const validation =
+				configFile === configPath ? validateWorkspaceState(parsed) : undefined;
+			if (validation?.success && validation.state) {
+				documentationRoot = {
+					isDefault: validation.state.documentation.isDefault,
+					rootPath: validation.state.documentation.rootPath,
+				};
+				activeProfileId = validation.state.profile.profileId;
+				if (validation.state.provider?.enabled) {
+					providerStatus = {
+						kind: 'configured',
+						providerId: validation.state.provider.providerId,
+					};
+				}
+			} else if (typeof parsed.documentationRoot === 'string') {
 				documentationRoot = {
 					isDefault: parsed.documentationRoot === DEFAULT_DOCUMENTATION_ROOT,
 					rootPath: parsed.documentationRoot,
 				};
 			}
-			if (typeof parsed.activeProfile === 'string') {
+			if (validation?.success) {
+				// handled above
+			} else if (typeof parsed.activeProfile === 'string') {
 				activeProfileId = parsed.activeProfile;
 			} else if (typeof parsed.profileId === 'string') {
 				activeProfileId = parsed.profileId;
 			}
-			const providerConfig = isRecord(parsed.provider)
-				? parsed.provider
-				: isRecord(parsed.ai)
-					? parsed.ai
-					: null;
+			const providerConfig = validation?.success
+				? null
+				: isRecord(parsed.provider)
+					? parsed.provider
+					: isRecord(parsed.ai)
+						? parsed.ai
+						: null;
 			if (providerConfig) {
 				const providerId =
 					typeof providerConfig.providerId === 'string'

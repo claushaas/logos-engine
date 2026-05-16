@@ -839,6 +839,20 @@ describe('Safe Filesystem Adapter', () => {
 			expect(dirPaths.length).toBeGreaterThan(0);
 		});
 
+		it('result records only directories created by the write', async () => {
+			const dir = await createTempDir();
+			const target = join(dir, 'sub1', 'sub2', 'data.json');
+			const result = await writeJsonAtomic(
+				target,
+				{ x: 1 },
+				{ policy: 'fail_if_exists' },
+			);
+			const dirPaths = result.changedPaths
+				.filter((cp) => cp.role === 'directory_created')
+				.map((cp) => cp.path);
+			expect(dirPaths).toEqual([join(dir, 'sub1'), join(dir, 'sub1', 'sub2')]);
+		});
+
 		it('result records written target', async () => {
 			const dir = await createTempDir();
 			const target = join(dir, 'data.json');

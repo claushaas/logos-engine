@@ -171,8 +171,9 @@ function computeTargetPaths(
 	projectRoot: string,
 	customRoot: string | undefined,
 ): InitWorkspaceTargetPaths {
-	const rawRoot = customRoot ?? DEFAULT_DOCUMENTATION_ROOT;
-	const normalizedRoot = normalize(rawRoot).replace(/\/$/, '') || rawRoot;
+	const normalizedRoot = normalizeDocumentationRoot(
+		customRoot ?? DEFAULT_DOCUMENTATION_ROOT,
+	);
 	const absoluteRoot = isAbsolute(normalizedRoot)
 		? resolve(normalizedRoot)
 		: resolve(projectRoot, normalizedRoot);
@@ -190,13 +191,23 @@ function computeTargetPaths(
 	};
 }
 
+function normalizeDocumentationRoot(rootPath: string): string {
+	const normalized = normalize(rootPath);
+	if (normalized === 'logos' || rootPath === DEFAULT_DOCUMENTATION_ROOT) {
+		return DEFAULT_DOCUMENTATION_ROOT;
+	}
+	return normalized.replace(/[\\/]+$/, '') || normalized;
+}
+
 function validateDocumentationRoot(
 	targetPaths: InitWorkspaceTargetPaths,
 	projectRoot: string,
 	customRoot: string | undefined,
 	diagnostics: InitWorkspaceDiagnostic[],
 ): InitWorkspaceDocumentationRootSelection {
-	const isDefault = !customRoot || customRoot === DEFAULT_DOCUMENTATION_ROOT;
+	const isDefault =
+		!customRoot ||
+		normalizeDocumentationRoot(customRoot) === DEFAULT_DOCUMENTATION_ROOT;
 	const wasExplicitlyConfigured = customRoot !== undefined && !isDefault;
 
 	let valid = true;
