@@ -126,8 +126,13 @@ export async function doctorCommand(
 		console.log(JSON.stringify(serializable, null, 2));
 	} else {
 		for (const line of formatCommandResultForHuman(result)) {
+			const safeLine = String(
+				redactAndRelativize(line, {
+					projectRoot: ctx.root.rootPath ?? ctx.cwd,
+				}),
+			);
 			// eslint-disable-next-line no-console
-			console.log(line);
+			console.log(safeLine);
 		}
 	}
 

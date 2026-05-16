@@ -1,6 +1,6 @@
 /** Redaction helpers for paths and secret-like values */
 
-import { isAbsolute, relative } from 'node:path';
+import { isAbsolute, relative, sep } from 'node:path';
 
 /** Keys that suggest secret-like values */
 const SECRET_KEY_PATTERNS = [
@@ -63,7 +63,7 @@ function shouldRedactKey(key: string, additionalKeys?: string[]): boolean {
 /** Redact a string in-place, replacing secret-like values */
 export function redactString(
 	input: string,
-	_options?: RedactionOptions,
+	options?: RedactionOptions,
 ): string {
 	if (!input || typeof input !== 'string') return input;
 
@@ -92,6 +92,32 @@ export function redactString(
 	result = result.replace(/\b(gsk_[a-zA-Z0-9]{20,})\b/g, REDACTED_PLACEHOLDER);
 	result = result.replace(/\b(hf_[a-zA-Z0-9]{20,})\b/g, REDACTED_PLACEHOLDER);
 
+	if (options?.projectRoot) {
+		result = relativizeEmbeddedProjectRoot(result, options.projectRoot);
+	}
+
+	return result;
+}
+
+function escapeRegExp(input: string): string {
+	return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function relativizeEmbeddedProjectRoot(
+	input: string,
+	projectRoot: string,
+): string {
+	if (!projectRoot) return input;
+	const normalizedRoot = projectRoot.endsWith(sep)
+		? projectRoot.slice(0, -1)
+		: projectRoot;
+	if (!normalizedRoot) return input;
+
+	let result = input.replace(
+		new RegExp(`${escapeRegExp(normalizedRoot)}${escapeRegExp(sep)}`, 'g'),
+		'',
+	);
+	result = result.replace(new RegExp(escapeRegExp(normalizedRoot), 'g'), '.');
 	return result;
 }
 

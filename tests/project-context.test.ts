@@ -200,6 +200,24 @@ describe('detectWorkspaceConfig', () => {
 		expect(formatted).not.toContain('token');
 	});
 
+	it('detects documented ai provider config shape from config.json', () => {
+		const root = makeTempDir('logos-ai-provider-');
+		mkdirSync(join(root, '.logos'));
+		writeFileSync(
+			join(root, '.logos', 'config.json'),
+			JSON.stringify({
+				ai: { provider: 'openai', tokenEnv: 'LOGOS_LLM_API_KEY' },
+			}),
+		);
+		const rootResult = detectProjectRoot({ cwd: root });
+		const ws = detectWorkspace(rootResult);
+		const cfg = detectWorkspaceConfig(ws);
+		expect(cfg.providerStatus.kind).toBe('configured');
+		if (cfg.providerStatus.kind === 'configured') {
+			expect(cfg.providerStatus.providerId).toBe('openai');
+		}
+	});
+
 	it('falls back to config.json when workspace.json is absent', () => {
 		const root = makeTempDir('logos-alt-config-');
 		mkdirSync(join(root, '.logos'));

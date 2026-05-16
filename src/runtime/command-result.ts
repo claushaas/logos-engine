@@ -119,11 +119,10 @@ export function toJsonSerializable<TData>(
 	result: CommandResult<TData>,
 	redactFn?: (value: unknown) => unknown,
 ): JsonSerializableCommandResult {
-	const data = redactFn ? redactFn(result.data) : result.data;
-	return {
+	const serializable: JsonSerializableCommandResult = {
 		changedPaths: result.changedPaths,
 		command: result.metadata.command,
-		data,
+		data: result.data,
 		dryRun: result.dryRun,
 		errors: result.errors.map((e) => ({
 			code: e.code,
@@ -138,6 +137,9 @@ export function toJsonSerializable<TData>(
 		status: result.status,
 		warnings: result.warnings,
 	};
+	return (
+		redactFn ? redactFn(serializable) : serializable
+	) as JsonSerializableCommandResult;
 }
 
 export function formatCommandResultForHuman<TData>(

@@ -92,6 +92,14 @@ describe('redactString', () => {
 		const result = redactString(input);
 		expect(result).toBe(input);
 	});
+
+	it('relativizes embedded project-root paths when requested', () => {
+		const result = redactString(
+			'Project root: /tmp/logos-project and file /tmp/logos-project/.logos/workspace.json',
+			{ projectRoot: '/tmp/logos-project' },
+		);
+		expect(result).toBe('Project root: . and file .logos/workspace.json');
+	});
 });
 
 describe('relativizePaths', () => {

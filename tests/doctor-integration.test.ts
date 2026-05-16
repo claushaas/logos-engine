@@ -21,7 +21,7 @@ describe('logos doctor integration', () => {
 		expect(output).toContain('not initialized');
 	});
 
-	it('output includes root path or not-detected status', () => {
+	it('output includes redacted root path or not-detected status', () => {
 		const dir = makeTempDir('logos-doctor-root-');
 		mkdirSync(join(dir, '.git'));
 		const output = execSync(`node "${DIST_CLI}" doctor`, {
@@ -29,7 +29,8 @@ describe('logos doctor integration', () => {
 			encoding: 'utf-8',
 		});
 		expect(output).toContain('Project root:');
-		expect(output).toContain(dir);
+		expect(output).toContain('. (git)');
+		expect(output).not.toContain(dir);
 	});
 
 	it('output includes initialization state', () => {

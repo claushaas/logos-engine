@@ -90,6 +90,22 @@ describe('logos doctor --json integration', () => {
 		expect(output).not.toContain('secret456');
 	});
 
+	it('JSON redacts and relativizes the full result envelope', () => {
+		const dir = makeTempDir('logos-doctor-json-envelope-');
+		mkdirSync(join(dir, '.git'));
+		const output = execSync(`node "${DIST_CLI}" doctor --json`, {
+			cwd: dir,
+			encoding: 'utf-8',
+		});
+		const parsed = JSON.parse(output);
+		expect(output).not.toContain(dir);
+		expect(parsed.messages.join('\n')).toContain(
+			'Current working directory: .',
+		);
+		expect(parsed.data.cwd).toBe('.');
+		expect(parsed.data.logosPath).toBe('.logos');
+	});
+
 	it('JSON has changedPaths: []', () => {
 		const dir = makeTempDir('logos-doctor-json-cp-');
 		const output = execSync(`node "${DIST_CLI}" doctor --json`, {

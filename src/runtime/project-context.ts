@@ -277,13 +277,20 @@ export function detectWorkspaceConfig(
 			} else if (typeof parsed.profileId === 'string') {
 				activeProfileId = parsed.profileId;
 			}
-			if (isRecord(parsed.provider)) {
+			const providerConfig = isRecord(parsed.provider)
+				? parsed.provider
+				: isRecord(parsed.ai)
+					? parsed.ai
+					: null;
+			if (providerConfig) {
 				const providerId =
-					typeof parsed.provider.providerId === 'string'
-						? parsed.provider.providerId
-						: typeof parsed.provider.id === 'string'
-							? parsed.provider.id
-							: 'unknown';
+					typeof providerConfig.providerId === 'string'
+						? providerConfig.providerId
+						: typeof providerConfig.id === 'string'
+							? providerConfig.id
+							: typeof providerConfig.provider === 'string'
+								? providerConfig.provider
+								: 'unknown';
 				providerStatus = { kind: 'configured', providerId };
 			} else if (parsed.provider === null || parsed.provider === undefined) {
 				providerStatus = { kind: 'not_configured' };
