@@ -176,3 +176,66 @@ export {
 	formatProjectContextLines,
 	formatProviderStatus,
 } from './runtime/project-context.js';
+
+// Step 3.1 — Workspace State Schemas
+export type {
+	WorkspaceArtifact,
+	WorkspaceAssumption,
+	WorkspaceAuditEvent,
+	WorkspaceDecision,
+	WorkspaceDocumentationRootConfig,
+	WorkspaceGenerationRun,
+	WorkspaceMigrationRecord,
+	WorkspaceOpenQuestion,
+	WorkspaceProfileLock,
+	WorkspaceProviderConfigReference,
+	WorkspaceRisk,
+	WorkspaceSession,
+	WorkspaceState,
+	WorkspaceValidationRun,
+} from './state/workspace-state.schema.js';
+export {
+	ArtifactStatusSchema,
+	ArtifactTypeSchema,
+	AssumptionStatusSchema,
+	DecisionStatusSchema,
+	DocumentationRootConfigSchema,
+	GenerationRunStatusSchema,
+	MigrationStatusSchema,
+	OpenQuestionStatusSchema,
+	ProfileSourceSchema,
+	RiskSeveritySchema,
+	RiskStatusSchema,
+	SessionStatusSchema,
+	SessionTypeSchema,
+	TokenSourceSchema,
+	ValidationRunStatusSchema,
+	WORKSPACE_STATE_SCHEMA_VERSION,
+	WorkspaceArtifactSchema,
+	WorkspaceAssumptionSchema,
+	WorkspaceAuditEventSchema,
+	WorkspaceDecisionSchema,
+	WorkspaceGenerationRunSchema,
+	WorkspaceMetadataSchema,
+	WorkspaceMigrationRecordSchema,
+	WorkspaceOpenQuestionSchema,
+	WorkspaceProfileLockSchema,
+	WorkspaceProviderConfigReferenceSchema,
+	WorkspaceRiskSchema,
+	WorkspaceSessionSchema,
+	WorkspaceStateSchema,
+	WorkspaceValidationRunSchema,
+} from './state/workspace-state.schema.js';
+export type { CreateDefaultWorkspaceStateOptions } from './state/workspace-state-defaults.js';
+export { createDefaultWorkspaceState } from './state/workspace-state-defaults.js';
+export type {
+	WorkspaceStateValidationError,
+	WorkspaceStateValidationResult,
+} from './state/workspace-state-validation.js';
+export {
+	isLikelyRawSecret,
+	parseWorkspaceState,
+	redactSecretValue,
+	safeParseWorkspaceState,
+	validateWorkspaceState,
+} from './state/workspace-state-validation.js';
