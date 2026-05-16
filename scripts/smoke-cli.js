@@ -55,7 +55,11 @@ function main() {
 
 	// doctor
 	const doctorResult = run(['doctor']);
-	assertOutput(doctorResult, ['doctor'], ['Bootstrap: operational']);
+	assertOutput(
+		doctorResult,
+		['doctor'],
+		['Project root:', 'Initialization state:'],
+	);
 
 	console.log('Smoke passed: CLI bootstrap verified.');
 	process.exit(0);

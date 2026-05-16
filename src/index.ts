@@ -117,3 +117,25 @@ export {
 	ProfileRegistryError,
 	validateProfileRegistry,
 } from './profiles/profile-registry.js';
+export type {
+	DetectProjectContextOptions,
+	DocumentationRootConfig,
+	ProjectContext,
+	ProjectContextDiagnostic,
+	ProjectContextError,
+	ProjectRootDetectionResult,
+	ProjectRootKind,
+	ProviderConfigStatus,
+	WorkspaceConfigDetectionResult,
+	WorkspaceDetectionResult,
+	WorkspaceInitializationState,
+} from './runtime/project-context.js';
+export {
+	detectProjectContext,
+	detectProjectRoot,
+	detectWorkspace,
+	detectWorkspaceConfig,
+	formatInitializationState,
+	formatProjectContextLines,
+	formatProviderStatus,
+} from './runtime/project-context.js';

@@ -1,5 +1,7 @@
 /** TUI slash command and routing types */
 
+import type { ProjectContext } from '../runtime/project-context.js';
+
 export type ParsedInput =
 	| { kind: 'empty' }
 	| { kind: 'free-form'; text: string }
@@ -15,9 +17,5 @@ export interface SlashCommandResult {
 }
 
 export interface RouterContext {
-	cwd: string;
-	docRoot: string;
-	profile: string;
-	providerStatus: string;
-	workspaceInitialized: boolean;
+	projectContext: ProjectContext;
 }

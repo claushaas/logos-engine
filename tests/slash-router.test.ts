@@ -2,13 +2,40 @@ import { describe, expect, it } from 'vitest';
 import { routeSlashCommand } from '../src/tui/slash-router.js';
 import type { RouterContext } from '../src/tui/types.js';
 
-const defaultContext: RouterContext = {
-	cwd: '/test/project',
-	docRoot: 'logos/',
-	profile: 'standard',
-	providerStatus: 'not configured',
-	workspaceInitialized: false,
-};
+function makeContext(
+	overrides?: Partial<RouterContext['projectContext']>,
+): RouterContext {
+	const base = {
+		config: {
+			activeProfileId: 'standard',
+			diagnostics: [],
+			documentationRoot: { isDefault: true, rootPath: 'logos/' },
+			providerStatus: { kind: 'not_configured' } as const,
+		},
+		cwd: '/test/project',
+		diagnostics: [],
+		root: {
+			cwd: '/test/project',
+			inferred: true,
+			rootKind: 'git' as const,
+			rootPath: '/test/project',
+		},
+		workspace: {
+			diagnostics: [],
+			exists: false,
+			initializationState: 'missing' as const,
+			logosPath: '/test/project/.logos',
+		},
+	};
+	return {
+		projectContext: {
+			...base,
+			...overrides,
+		} as RouterContext['projectContext'],
+	};
+}
+
+const defaultContext = makeContext();
 
 describe('routeSlashCommand', () => {
 	it('/help returns available command help', () => {
@@ -37,6 +64,14 @@ describe('routeSlashCommand', () => {
 		expect(result.messages.join('\n')).toContain('standard');
 		expect(result.messages.join('\n')).toContain('not configured');
 		expect(result.messages.join('\n')).toContain('not initialized');
+	});
+
+	it('/status returns recovery hint when uninitialized', () => {
+		const result = routeSlashCommand(
+			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
+			defaultContext,
+		);
+		expect(result.messages.join('\n')).toContain('Recovery');
 	});
 
 	it('/exit returns exit intent', () => {

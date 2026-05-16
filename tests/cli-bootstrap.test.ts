@@ -105,9 +105,10 @@ describe('CLI bootstrap', () => {
 		const output = stdout.join('\n');
 		expect(output).toContain('Node.js:');
 		expect(output).toContain('Package:');
-		expect(output).toContain('CWD:');
-		expect(output).toContain('Bootstrap: operational');
-		expect(output).toContain('Profile:   standard (loaded successfully)');
+		expect(output).toContain('Current working directory:');
+		expect(output).toContain('Project root:');
+		expect(output).toContain('Initialization state:');
+		expect(output).toContain('standard');
 		expect(stderr.join('\n')).not.toContain('failed');
 	});
 

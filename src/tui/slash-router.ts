@@ -1,5 +1,9 @@
 /** Pure slash command router — returns typed results, performs no side effects */
 
+import {
+	formatInitializationState,
+	formatProviderStatus,
+} from '../runtime/project-context.js';
 import type {
 	ParsedInput,
 	RouterContext,
@@ -145,17 +149,32 @@ function getHelpMessages(): string[] {
 }
 
 function getStatusResult(context: RouterContext): SlashCommandResult {
+	const ctx = context.projectContext;
+	const lines: string[] = [
+		'Status:',
+		`  Repository path:    ${ctx.root.rootPath ?? ctx.cwd}`,
+		`  Documentation root: ${ctx.config.documentationRoot.rootPath}`,
+		`  Active profile:     ${ctx.config.activeProfileId ?? 'unknown'}`,
+		`  Provider status:    ${formatProviderStatus(ctx.config.providerStatus)}`,
+		`  Workspace:          ${formatInitializationState(ctx.workspace.initializationState)}`,
+	];
+
+	if (ctx.workspace.initializationState === 'missing') {
+		lines.push('');
+		lines.push('  Recovery: Run /init to initialize the workspace.');
+	}
+
+	for (const diag of ctx.diagnostics) {
+		if (diag.recoveryHint) {
+			lines.push(`  [${diag.severity.toUpperCase()}] ${diag.message}`);
+			lines.push(`    Recovery: ${diag.recoveryHint}`);
+		}
+	}
+
 	return {
 		command: 'status',
 		kind: 'info',
-		messages: [
-			'Status:',
-			`  Repository path:    ${context.cwd}`,
-			`  Documentation root: ${context.docRoot}`,
-			`  Active profile:     ${context.profile}`,
-			`  Provider status:    ${context.providerStatus}`,
-			`  Workspace:          ${context.workspaceInitialized ? 'initialized' : 'not initialized'}`,
-		],
+		messages: lines,
 		shouldExit: false,
 	};
 }

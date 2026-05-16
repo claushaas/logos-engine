@@ -97,14 +97,14 @@ This profile guides you through the complete documentation needed to design and 
 logos           # Open the interactive TUI shell
 logos --help    # Show CLI help
 logos --version # Show package version
-logos doctor    # Run non-mutating local diagnostics
+logos doctor    # Run non-mutating local diagnostics (detects project root and workspace state)
 ```
 
 Inside the TUI, slash commands drive system operations:
 
 ```bash
 /help           # Show available slash commands
-/status         # Show runtime status (CWD, profile, provider)
+/status         # Show runtime status (project root, documentation root, profile, provider, workspace init state)
 /exit           # Exit the shell
 
 /init           # Create a workspace (recognized stub)

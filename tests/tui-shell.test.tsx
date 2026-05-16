@@ -38,7 +38,9 @@ describe('processCommand', () => {
 		expect(shouldExit).toBe(false);
 		const texts = messages.map((m) => m.text);
 		expect(texts.some((t) => t.includes('Status:'))).toBe(true);
-		expect(texts.some((t) => t.includes(context.cwd))).toBe(true);
+		expect(texts.some((t) => t.includes(context.projectContext.cwd))).toBe(
+			true,
+		);
 		expect(texts.some((t) => t.includes('standard'))).toBe(true);
 		expect(texts.some((t) => t.includes('not configured'))).toBe(true);
 	});

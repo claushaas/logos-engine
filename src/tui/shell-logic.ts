@@ -1,5 +1,6 @@
 /** TUI shell logic — extracted for testability */
 
+import { detectProjectContext } from '../runtime/project-context.js';
 import { parseSlashCommand } from './slash-parser.js';
 import { routeSlashCommand } from './slash-router.js';
 import type { RouterContext } from './types.js';
@@ -12,11 +13,7 @@ export interface Message {
 
 export function createRouterContext(): RouterContext {
 	return {
-		cwd: process.cwd(),
-		docRoot: 'logos/',
-		profile: 'standard',
-		providerStatus: 'not configured',
-		workspaceInitialized: false,
+		projectContext: detectProjectContext(),
 	};
 }
 

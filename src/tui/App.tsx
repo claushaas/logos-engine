@@ -1,8 +1,11 @@
 /** Ink TUI root component */
 
+/** Ink TUI root component */
+
 import { Box, Text, useApp, useInput } from 'ink';
 import type React from 'react';
 import { useCallback, useState } from 'react';
+import { formatProviderStatus } from '../runtime/project-context.js';
 import {
 	createRouterContext,
 	type Message,
@@ -15,6 +18,7 @@ export function App(): React.JSX.Element {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [nextId, setNextId] = useState(0);
 	const context = createRouterContext();
+	const ctx = context.projectContext;
 
 	const addMessages = useCallback(
 		(newMessages: Message[]) => {
@@ -69,13 +73,13 @@ export function App(): React.JSX.Element {
 			</Box>
 			<Box>
 				<Text>
-					{context.cwd}
+					{ctx.cwd}
 					{' | '}
-					{context.docRoot}
+					{ctx.config.documentationRoot.rootPath}
 					{' | '}
-					{context.profile}
+					{ctx.config.activeProfileId ?? 'unknown'}
 					{' | '}
-					{context.providerStatus}
+					{formatProviderStatus(ctx.config.providerStatus)}
 				</Text>
 			</Box>
 		</Box>
