@@ -20,6 +20,29 @@ export function getPackageMetadata(): LogosPackageMetadata {
 	};
 }
 
+// Step 3.2 — Safe Filesystem Writes
+export type {
+	AtomicJsonWriteOptions,
+	BackupOptions,
+	BackupResult,
+	DryRunWritePlan,
+	PathSafetyOptions,
+	SafeFsAdapter,
+	SafeWriteChangedPath,
+	SafeWriteChangedPathRole,
+	SafeWriteDiagnostic,
+	SafeWriteOptions,
+	SafeWritePolicy,
+	SafeWriteResult,
+} from './fs/safe-filesystem.js';
+export {
+	checkPathSafety,
+	createBackup,
+	resolveWritePolicy,
+	serializeJson,
+	writeFileAtomic,
+	writeJsonAtomic,
+} from './fs/safe-filesystem.js';
 export type {
 	AgentPackOutputDeclaration,
 	ArtifactOutputDeclaration,
@@ -176,7 +199,6 @@ export {
 	formatProjectContextLines,
 	formatProviderStatus,
 } from './runtime/project-context.js';
-
 // Step 3.1 — Workspace State Schemas
 export type {
 	WorkspaceArtifact,
