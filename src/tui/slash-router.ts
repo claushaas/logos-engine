@@ -1,5 +1,6 @@
 /** Pure slash command router — returns typed results, performs no side effects */
 
+import { initWorkspace, preflightInit } from '../init/index.js';
 import {
 	formatInitializationState,
 	formatProviderStatus,
@@ -10,10 +11,10 @@ import type {
 	SlashCommandResult,
 } from './types.js';
 
-export function routeSlashCommand(
+export async function routeSlashCommand(
 	parsed: ParsedInput,
 	context: RouterContext,
-): SlashCommandResult {
+): Promise<SlashCommandResult> {
 	if (parsed.kind === 'empty') {
 		return {
 			command: '',
@@ -68,15 +69,7 @@ export function routeSlashCommand(
 				shouldExit: true,
 			};
 		case 'init':
-			return {
-				command: 'init',
-				kind: 'warning',
-				messages: [
-					'/init is recognized but not yet implemented.',
-					'Planned for Step 2.3 / Phase 3 — Local State and Sessions.',
-				],
-				shouldExit: false,
-			};
+			return getInitResult(args, context);
 		case 'continue':
 			return {
 				command: 'continue',
@@ -134,7 +127,11 @@ function getHelpMessages(): string[] {
 	return [
 		'LOGOS Engine — TUI slash commands:',
 		'',
-		'  /init        — Initialize workspace (not yet implemented)',
+		'  /init        — Initialize LOGOS workspace',
+		'  /init --confirm — Confirm and execute workspace creation',
+		'  /init --root <path> — Set custom documentation root',
+		'  /init --profile <id> — Select profile (default: standard)',
+		'  /init --dry-run — Plan workspace without creating files',
 		'  /continue    — Continue intake session (not yet implemented)',
 		'  /generate    — Generate canonical Markdown (not yet implemented)',
 		'  /diagnose    — Run diagnostics (not yet implemented)',
@@ -146,6 +143,166 @@ function getHelpMessages(): string[] {
 		'',
 		'You can also type free-form text for the intake engine (not yet implemented).',
 	];
+}
+
+async function getInitResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const isConfirm = args.includes('--confirm');
+	const isDryRun = args.includes('--dry-run');
+
+	// Extract --root <path>
+	let customRoot: string | undefined;
+	const rootIdx = args.indexOf('--root');
+	if (rootIdx !== -1 && rootIdx + 1 < args.length) {
+		customRoot = args[rootIdx + 1];
+	}
+
+	// Extract --profile <id>
+	let profileId: string | undefined;
+	const profileIdx = args.indexOf('--profile');
+	if (profileIdx !== -1 && profileIdx + 1 < args.length) {
+		profileId = args[profileIdx + 1];
+	}
+
+	// Use the project root from the existing context if available
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+
+	if (isDryRun) {
+		const plan = await preflightInit({
+			documentationRoot: customRoot,
+			dryRun: true,
+			profileId,
+			projectRoot,
+		});
+
+		const lines: string[] = [
+			'Dry-run: workspace initialization plan',
+			'',
+			'Target paths:',
+			`  Project root:        ${plan.targetPaths.projectRoot}`,
+			`  .logos/ directory:   ${plan.targetPaths.logosDir}`,
+			`  Workspace state file: ${plan.targetPaths.workspaceStateFile}`,
+			`  Documentation root:   ${plan.targetPaths.documentationRoot}`,
+			'',
+			'Profile:',
+			`  ID:      ${plan.profile.profileId}`,
+			`  Source:  ${plan.profile.source}`,
+			`  Validated: ${plan.profile.validated}`,
+			'',
+			'Documentation root:',
+			`  Path:    ${plan.documentationRoot.rootPath}`,
+			`  Default: ${plan.documentationRoot.isDefault}`,
+			`  Valid:   ${plan.documentationRoot.valid}`,
+		];
+
+		if (!plan.safe) {
+			lines.push('');
+			lines.push('Warnings / Errors:');
+			for (const diag of plan.diagnostics) {
+				lines.push(`  [${diag.severity.toUpperCase()}] ${diag.message}`);
+				if (diag.recoveryHint) {
+					lines.push(`    Recovery: ${diag.recoveryHint}`);
+				}
+			}
+		}
+
+		if (plan.collision.kind !== 'none') {
+			lines.push('');
+			lines.push(`Collision: ${plan.collision.message}`);
+			if (plan.collision.recoveryHint) {
+				lines.push(`  Recovery: ${plan.collision.recoveryHint}`);
+			}
+		}
+
+		lines.push('');
+		lines.push('(dry-run: no files were written)');
+		lines.push('Run /init --confirm to execute.');
+
+		return {
+			command: 'init',
+			kind: plan.safe ? 'info' : 'warning',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	if (isConfirm) {
+		const result = await initWorkspace({
+			confirm: true,
+			documentationRoot: customRoot,
+			profileId,
+			projectRoot,
+		});
+
+		return {
+			command: 'init',
+			kind:
+				result.status === 'success' || result.status === 'dry_run'
+					? 'success'
+					: result.status === 'already_initialized'
+						? 'warning'
+						: 'error',
+			messages: result.messages,
+			shouldExit: false,
+		};
+	}
+
+	// Default: show preflight plan, require confirmation
+	const preflight = await preflightInit({
+		documentationRoot: customRoot,
+		profileId,
+		projectRoot,
+	});
+
+	const lines: string[] = [
+		'Workspace initialization preflight',
+		'',
+		'The following paths will be created:',
+		`  Project root:        ${preflight.targetPaths.projectRoot}`,
+		`  .logos/ directory:   ${preflight.targetPaths.logosDir}`,
+		`  Workspace state:     ${preflight.targetPaths.workspaceStateFile}`,
+		'',
+		'Configuration:',
+		`  Documentation root:  ${preflight.documentationRoot.rootPath} (absolute: ${preflight.documentationRoot.absolutePath})`,
+		`  Default root:        ${preflight.documentationRoot.isDefault}`,
+		`  Profile:             ${preflight.profile.profileId} (${preflight.profile.source})`,
+		'',
+	];
+
+	if (!preflight.safe) {
+		lines.push('Preflight found issues:');
+		for (const diag of preflight.diagnostics) {
+			lines.push(`  [${diag.severity.toUpperCase()}] ${diag.message}`);
+			if (diag.recoveryHint) {
+				lines.push(`    Recovery: ${diag.recoveryHint}`);
+			}
+		}
+		lines.push('');
+	}
+
+	if (preflight.collision.kind !== 'none') {
+		lines.push(`Warning: ${preflight.collision.message}`);
+		if (preflight.collision.recoveryHint) {
+			lines.push(`  ${preflight.collision.recoveryHint}`);
+		}
+		lines.push('');
+	}
+
+	lines.push('No files have been written.');
+	lines.push('Run /init --confirm to create the workspace.');
+	lines.push('Run /init --dry-run for a detailed dry-run plan.');
+	lines.push('Run /init --root <path> to set a custom documentation root.');
+
+	const kind = preflight.safe ? 'info' : 'warning';
+
+	return {
+		command: 'init',
+		kind,
+		messages: lines,
+		shouldExit: false,
+	};
 }
 
 function getStatusResult(context: RouterContext): SlashCommandResult {

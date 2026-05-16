@@ -23,8 +23,8 @@ describe('App', () => {
 describe('processCommand', () => {
 	const context = createRouterContext();
 
-	it('submitting /help returns help messages', () => {
-		const { messages, shouldExit } = processCommand('/help', context);
+	it('submitting /help returns help messages', async () => {
+		const { messages, shouldExit } = await processCommand('/help', context);
 		expect(shouldExit).toBe(false);
 		const texts = messages.map((m) => m.text);
 		expect(texts.some((t) => t.includes('/help'))).toBe(true);
@@ -33,8 +33,8 @@ describe('processCommand', () => {
 		expect(texts.some((t) => t.includes('/init'))).toBe(true);
 	});
 
-	it('submitting /status returns status messages', () => {
-		const { messages, shouldExit } = processCommand('/status', context);
+	it('submitting /status returns status messages', async () => {
+		const { messages, shouldExit } = await processCommand('/status', context);
 		expect(shouldExit).toBe(false);
 		const texts = messages.map((m) => m.text);
 		expect(texts.some((t) => t.includes('Status:'))).toBe(true);
@@ -45,23 +45,23 @@ describe('processCommand', () => {
 		expect(texts.some((t) => t.includes('not configured'))).toBe(true);
 	});
 
-	it('submitting unknown command returns graceful error', () => {
-		const { messages, shouldExit } = processCommand('/unknown', context);
+	it('submitting unknown command returns graceful error', async () => {
+		const { messages, shouldExit } = await processCommand('/unknown', context);
 		expect(shouldExit).toBe(false);
 		const texts = messages.map((m) => m.text);
 		expect(texts.some((t) => t.includes('Unknown command'))).toBe(true);
 		expect(texts.some((t) => t.includes('/help'))).toBe(true);
 	});
 
-	it('submitting /exit returns exit intent', () => {
-		const { messages, shouldExit } = processCommand('/exit', context);
+	it('submitting /exit returns exit intent', async () => {
+		const { messages, shouldExit } = await processCommand('/exit', context);
 		expect(shouldExit).toBe(true);
 		const texts = messages.map((m) => m.text);
 		expect(texts.some((t) => t.includes('Goodbye.'))).toBe(true);
 	});
 
-	it('submitting empty input returns empty result', () => {
-		const { messages, shouldExit } = processCommand('', context);
+	it('submitting empty input returns empty result', async () => {
+		const { messages, shouldExit } = await processCommand('', context);
 		expect(messages).toEqual([]);
 		expect(shouldExit).toBe(false);
 	});

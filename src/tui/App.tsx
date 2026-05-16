@@ -17,6 +17,7 @@ export function App(): React.JSX.Element {
 	const [input, setInput] = useState('');
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [nextId, setNextId] = useState(0);
+	const [processing, setProcessing] = useState(false);
 	const context = createRouterContext();
 	const ctx = context.projectContext;
 
@@ -34,16 +35,20 @@ export function App(): React.JSX.Element {
 
 	useInput((inputChar, key) => {
 		if (key.return) {
-			const { messages: newMessages, shouldExit } = processCommand(
-				input,
-				context,
+			if (processing) return;
+			const submitted = input;
+			setProcessing(true);
+			processCommand(submitted, context).then(
+				({ messages: newMessages, shouldExit }) => {
+					if (newMessages.length > 0) {
+						addMessages(newMessages);
+					}
+					if (shouldExit) {
+						exit();
+					}
+					setProcessing(false);
+				},
 			);
-			if (newMessages.length > 0) {
-				addMessages(newMessages);
-			}
-			if (shouldExit) {
-				exit();
-			}
 			setInput('');
 		} else if (key.backspace || key.delete) {
 			setInput((prev) => prev.slice(0, -1));

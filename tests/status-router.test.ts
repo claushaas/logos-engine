@@ -36,7 +36,7 @@ function makeContext(
 }
 
 describe('/status TUI rendering', () => {
-	it('renders project context when initialized', () => {
+	it('renders project context when initialized', async () => {
 		const ctx = makeContext({
 			config: {
 				activeProfileId: 'custom',
@@ -51,7 +51,7 @@ describe('/status TUI rendering', () => {
 				logosPath: '/test/project/.logos',
 			},
 		});
-		const result = routeSlashCommand(
+		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
 			ctx,
 		);
@@ -63,9 +63,9 @@ describe('/status TUI rendering', () => {
 		expect(text).toContain('initialized');
 	});
 
-	it('renders recoverable missing initialization state', () => {
+	it('renders recoverable missing initialization state', async () => {
 		const ctx = makeContext();
-		const result = routeSlashCommand(
+		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
 			ctx,
 		);
@@ -75,7 +75,7 @@ describe('/status TUI rendering', () => {
 		expect(text).toContain('/init');
 	});
 
-	it('does not expose provider secrets', () => {
+	it('does not expose provider secrets', async () => {
 		const ctx = makeContext({
 			config: {
 				activeProfileId: 'standard',
@@ -84,7 +84,7 @@ describe('/status TUI rendering', () => {
 				providerStatus: { kind: 'configured', providerId: 'openai' },
 			},
 		});
-		const result = routeSlashCommand(
+		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
 			ctx,
 		);
@@ -95,20 +95,19 @@ describe('/status TUI rendering', () => {
 		expect(text).toContain('configured (openai)');
 	});
 
-	it('does not mutate files', () => {
+	it('does not mutate files', async () => {
 		const ctx = makeContext();
-		const result = routeSlashCommand(
+		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
 			ctx,
 		);
 		expect(result.kind).toBe('info');
 		expect(result.shouldExit).toBe(false);
-		// No side effects to assert because router is pure.
 	});
 
-	it('shows default profile when config is missing and bundled profile available', () => {
+	it('shows default profile when config is missing and bundled profile available', async () => {
 		const ctx = makeContext();
-		const result = routeSlashCommand(
+		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
 			ctx,
 		);
@@ -116,9 +115,9 @@ describe('/status TUI rendering', () => {
 		expect(text).toContain('standard');
 	});
 
-	it('shows default documentation root when config is missing', () => {
+	it('shows default documentation root when config is missing', async () => {
 		const ctx = makeContext();
-		const result = routeSlashCommand(
+		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'status', raw: '/status' },
 			ctx,
 		);

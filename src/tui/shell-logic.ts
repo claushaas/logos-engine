@@ -17,10 +17,10 @@ export function createRouterContext(): RouterContext {
 	};
 }
 
-export function processCommand(
+export async function processCommand(
 	input: string,
 	context: RouterContext,
-): { messages: Message[]; shouldExit: boolean } {
+): Promise<{ messages: Message[]; shouldExit: boolean }> {
 	const trimmed = input.trim();
 	if (trimmed.length === 0) {
 		return { messages: [], shouldExit: false };
@@ -28,7 +28,7 @@ export function processCommand(
 
 	const messages: Message[] = [{ id: 0, sender: 'user', text: trimmed }];
 	const parsed = parseSlashCommand(trimmed);
-	const result = routeSlashCommand(parsed, context);
+	const result = await routeSlashCommand(parsed, context);
 
 	for (const msg of result.messages) {
 		messages.push({ id: messages.length, sender: 'system', text: msg });

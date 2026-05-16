@@ -43,6 +43,26 @@ export {
 	writeFileAtomic,
 	writeJsonAtomic,
 } from './fs/safe-filesystem.js';
+// Step 3.3 — Init Workspace Creation
+export type {
+	InitWorkspaceChangedPath,
+	InitWorkspaceCollision,
+	InitWorkspaceCollisionKind,
+	InitWorkspaceDiagnostic,
+	InitWorkspaceDocumentationRootSelection,
+	InitWorkspaceMode,
+	InitWorkspaceOptions,
+	InitWorkspacePlan,
+	InitWorkspacePreflightResult,
+	InitWorkspaceProfileSelection,
+	InitWorkspaceResult,
+	InitWorkspaceTargetPaths,
+} from './init/index.js';
+export {
+	initWorkspace,
+	planInitWorkspace,
+	preflightInit,
+} from './init/index.js';
 export type {
 	AgentPackOutputDeclaration,
 	ArtifactOutputDeclaration,
