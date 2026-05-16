@@ -21,6 +21,34 @@ export function getPackageMetadata(): LogosPackageMetadata {
 }
 
 export type {
+	AgentPackOutputDeclaration,
+	ArtifactOutputDeclaration,
+	BuildContractGraphOptions,
+	BuildContractGraphResult,
+	CanonicalOutputDeclaration,
+	ContractGraph,
+	ContractGraphDiagnostic,
+	ContractGraphEdge,
+	ContractGraphNode,
+	DataOutputDeclaration,
+	DependencyReference,
+	DependencyReferenceKind,
+	ExecutiveOutputDeclaration,
+	OutputDeclaration,
+	OutputDeclarationKind,
+	OutputDeclarationRole,
+	StatusTransition,
+	StatusTransitionResult,
+	StatusValue,
+	StatusWorkflow,
+} from './profiles/contract-graph.js';
+export {
+	buildContractGraph,
+	buildStatusWorkflow,
+	ContractGraphError,
+	canTransitionStatus,
+} from './profiles/contract-graph.js';
+export type {
 	DocumentDescriptor,
 	DocumentDescriptorDependency,
 	DocumentDescriptorId,

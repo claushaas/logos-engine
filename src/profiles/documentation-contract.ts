@@ -10,6 +10,7 @@ import {
 import type {
 	LoadProfileRegistryOptions,
 	ProfileId,
+	ProfileStatusWorkflow,
 } from './profile-registry.js';
 import { loadProfileRegistry } from './profile-registry.js';
 
@@ -72,6 +73,7 @@ export interface DocumentationContract {
 	documents: LoadedDocumentDescriptor[];
 	documentsByCanonicalId: Map<CanonicalDocumentId, LoadedDocumentDescriptor>;
 	documentsByPhaseId: Map<PhaseId, LoadedDocumentDescriptor[]>;
+	statusWorkflow: ProfileStatusWorkflow;
 }
 
 export interface LoadDocumentationContractOptions
@@ -508,6 +510,7 @@ export async function loadDocumentationContract(
 		profileId: registry.id,
 		profileRoot: registry.paths.profileRoot,
 		registryPath: registry.paths.registryPath,
+		statusWorkflow: registry.statusWorkflow,
 	};
 }
 

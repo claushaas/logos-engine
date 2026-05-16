@@ -1,0 +1,6370 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`buildContractGraph > Snapshot > matches a stable Standard graph index snapshot 1`] = `
+[
+  {
+    "canonicalDocumentId": "01-thesis",
+    "dependencies": [
+      {
+        "kind": "feeds",
+        "target": "02-problem",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-audience",
+      },
+      {
+        "kind": "feeds",
+        "target": "04-principles",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-success-definition",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/01-thesis.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/thesis-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/thesis-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "02-problem",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-audience",
+      },
+      {
+        "kind": "feeds",
+        "target": "04-principles",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-success-definition",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/02-problem.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/problem-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/problem-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "03-audience",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "feeds",
+        "target": "04-principles",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-success-definition",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/03-audience.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/audience-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/audience-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "04-principles",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-success-definition",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/04-principles.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/principles-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/principles-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "05-boundaries",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-success-definition",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/05-boundaries.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/boundaries-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/boundaries-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "06-success-definition",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "feeds",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/06-success-definition.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/success-scorecard.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/success-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "07-glossary",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-operations-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/01-foundation/07-glossary.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/01-foundation/glossary-index.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/01-foundation/glossary-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "01-foundation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "01-validation-strategy",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "feeds",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/01-validation-strategy.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/validation-strategy-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/validation-strategy-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "02-core-assumptions",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "feeds",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/02-core-assumptions.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/assumptions-risk-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/core-assumptions-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "03-hypotheses",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "feeds",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/03-hypotheses.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/hypothesis-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/hypotheses-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "04-research-plan",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/04-research-plan.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/research-plan-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/research-plan-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "05-experiments",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/05-experiments.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/experiment-dashboard.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/experiments-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "06-economic-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "feeds",
+        "target": "07-business-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "feeds",
+        "target": "11-financial-operations",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/06-economic-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/economic-model-dashboard.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/economic-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "07-business-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-economic-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "11-financial-operations",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/07-business-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/business-model-canvas.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/business-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "08-evidence-log",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-economic-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-business-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/08-evidence-log.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/evidence-index.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/evidence-log-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "09-decision-record",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/09-decision-record.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/decision-record-index.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/decision-record-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "10-validation-report",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-core-assumptions",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-economic-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-business-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "11-financial-operations",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/02-validation/10-validation-report.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/02-validation/validation-report-summary.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/02-validation/validation-report-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "02-validation",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "01-product-brief",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-hypotheses",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/01-product-brief.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/product-brief-summary.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/product-brief-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "02-scope",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/02-scope.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/scope-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/scope-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "03-user-journeys",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/03-user-journeys.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/user-journey-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/user-journeys-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "04-ux-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/04-ux-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/ux-model-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/ux-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "05-information-architecture",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/05-information-architecture.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/information-architecture-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/information-architecture-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "06-interaction-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/06-interaction-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/interaction-model-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/interaction-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "07-ui-specification",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/07-ui-specification.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/ui-specification-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/ui-specification-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "08-design-system",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/08-design-system.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/design-system-reference.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/design-system-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "09-product-architecture",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-design-system",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/09-product-architecture.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/product-architecture-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/product-architecture-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "10-functional-requirements",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/10-functional-requirements.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/functional-requirements-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/functional-requirements-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "11-non-functional-requirements",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/11-non-functional-requirements.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/non-functional-requirements-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/non-functional-requirements-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "12-product-stack",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-design-system",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "feeds",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/12-product-stack.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/product-stack-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/product-stack-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "13-acceptance-criteria",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-ux-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-design-system",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/03-product/13-acceptance-criteria.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/03-product/acceptance-criteria-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/03-product/acceptance-criteria-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "03-product",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "01-engineering-brief",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-ui-specification",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-design-system",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/01-engineering-brief.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/engineering-brief-summary.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/engineering-brief-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "02-system-architecture",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/02-system-architecture.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/system-architecture-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/system-architecture-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "03-technical-stack",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "feeds",
+        "target": "07-integration-architecture",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/03-technical-stack.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/technical-stack-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/technical-stack-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "04-domain-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "feeds",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/04-domain-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/domain-model-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/domain-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "05-data-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/05-data-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/data-model-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/data-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "06-api-contracts",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-glossary",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "feeds",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/06-api-contracts.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/api-contracts-reference.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/api-contracts-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "07-integration-architecture",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/07-integration-architecture.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/integration-architecture-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/integration-architecture-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "08-security-and-privacy",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/08-security-and-privacy.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/security-and-privacy-architecture.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/security-and-privacy-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "09-sync-and-state",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-information-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-interaction-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-product-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-product-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/09-sync-and-state.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/sync-and-state-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/sync-and-state-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "10-testing-strategy",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sync-and-state",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/10-testing-strategy.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/testing-strategy-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/testing-strategy-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "11-observability",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sync-and-state",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/11-observability.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/observability-plan.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/observability-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "12-deployment-and-environments",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sync-and-state",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/12-deployment-and-environments.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/deployment-and-environments-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/deployment-and-environments-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "13-engineering-standards",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sync-and-state",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/13-engineering-standards.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/engineering-standards-reference.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/engineering-standards-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "14-technical-risks",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-technical-stack",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-domain-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-api-contracts",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-integration-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sync-and-state",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-engineering-standards",
+      },
+      {
+        "kind": "feeds",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/04-engineering/14-technical-risks.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/04-engineering/technical-risk-register.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/04-engineering/technical-risks-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "04-engineering",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "01-go-to-market-brief",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/01-go-to-market-brief.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/go-to-market-brief-summary.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/go-to-market-brief-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "02-market-definition",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/02-market-definition.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/market-definition-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/market-definition-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "03-positioning",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/03-positioning.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/positioning-reference.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/positioning-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "04-messaging",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/04-messaging.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/messaging-reference.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/messaging-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "05-customer-segments",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "02-problem",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "feeds",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/05-customer-segments.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/customer-segments-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/customer-segments-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "06-channel-strategy",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "feeds",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/06-channel-strategy.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/channel-strategy-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/channel-strategy-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "07-launch-plan",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/07-launch-plan.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/launch-plan-timeline.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/launch-plan-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "08-conversion-funnel",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/08-conversion-funnel.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/conversion-funnel-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/conversion-funnel-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "09-sales-strategy",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "feeds",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/09-sales-strategy.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/sales-strategy-playbook.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/sales-strategy-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "10-pricing-and-packaging",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/10-pricing-and-packaging.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/pricing-and-packaging-reference.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/pricing-and-packaging-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "11-marketing-assets",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/11-marketing-assets.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/marketing-assets-inventory.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/marketing-assets-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "12-growth-metrics",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-marketing-assets",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/12-growth-metrics.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/growth-metrics-dashboard-spec.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/growth-metrics-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "13-go-to-market-risks",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "03-audience",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-decision-record",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-validation-report",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-market-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-positioning",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-channel-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-marketing-assets",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/05-go-to-market/13-go-to-market-risks.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/05-go-to-market/go-to-market-risk-register.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/05-go-to-market/go-to-market-risks-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "05-go-to-market",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "01-operations-brief",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-engineering-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-engineering-standards",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-go-to-market-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "feeds",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/01-operations-brief.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/operations-brief-summary.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/operations-brief-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "02-operating-model",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-engineering-standards",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/02-operating-model.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/operating-model-map.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/operating-model-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "03-team-and-responsibilities",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-system-architecture",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-engineering-standards",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/03-team-and-responsibilities.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/team-responsibilities-matrix.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/team-responsibilities-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "04-customer-support",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/04-customer-support.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/customer-support-playbook.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/customer-support-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "05-customer-success",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-segments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-sales-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/05-customer-success.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/customer-success-playbook.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/customer-success-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "06-business-processes",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-conversion-funnel",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "feeds",
+        "target": "11-financial-operations",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/06-business-processes.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/business-process-catalog.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/business-processes-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "07-operational-metrics",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/07-operational-metrics.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/operational-metrics-dashboard-spec.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/operational-metrics-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "08-reporting-and-cadence",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/08-reporting-and-cadence.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/reporting-and-cadence-calendar.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/reporting-and-cadence-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "09-incident-management",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-reporting-and-cadence",
+      },
+      {
+        "kind": "feeds",
+        "target": "11-financial-operations",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/09-incident-management.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/incident-management-runbook.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/incident-management-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "10-risk-and-compliance",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-reporting-and-cadence",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-incident-management",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/10-risk-and-compliance.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/risk-and-compliance-register.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/risk-and-compliance-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "11-financial-operations",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-data-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-reporting-and-cadence",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-incident-management",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-risk-and-compliance",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/11-financial-operations.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/financial-operations-playbook.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/financial-operations-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "12-knowledge-management",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-engineering-standards",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-messaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-reporting-and-cadence",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-incident-management",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-risk-and-compliance",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-financial-operations",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/12-knowledge-management.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/knowledge-management-system.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/knowledge-management-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "13-continuous-improvement",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-engineering-standards",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-reporting-and-cadence",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-incident-management",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-risk-and-compliance",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-financial-operations",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-knowledge-management",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/13-continuous-improvement.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/continuous-improvement-system.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/continuous-improvement-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+  {
+    "canonicalDocumentId": "14-operational-risks",
+    "dependencies": [
+      {
+        "kind": "dependsOn",
+        "target": "04-principles",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-boundaries",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-non-functional-requirements",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-acceptance-criteria",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-security-and-privacy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-testing-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-observability",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-deployment-and-environments",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "14-technical-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-launch-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-pricing-and-packaging",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-growth-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-go-to-market-risks",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-operations-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-operating-model",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-team-and-responsibilities",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-customer-support",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-customer-success",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "06-business-processes",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "07-operational-metrics",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-reporting-and-cadence",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "09-incident-management",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "10-risk-and-compliance",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "11-financial-operations",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "12-knowledge-management",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "13-continuous-improvement",
+      },
+    ],
+    "outputs": [
+      {
+        "kind": "canonical",
+        "path": "docs/06-operations/14-operational-risks.md",
+        "role": "canonical",
+      },
+      {
+        "kind": "artifact",
+        "path": "outcomes/html/06-operations/operational-risk-register.html",
+        "role": "presentation",
+      },
+      {
+        "kind": "agentPack",
+        "path": "outcomes/agents/06-operations/operational-risks-review-prompt.md",
+        "role": "agentPack",
+      },
+    ],
+    "phaseId": "06-operations",
+    "status": "not_started",
+  },
+]
+`;
