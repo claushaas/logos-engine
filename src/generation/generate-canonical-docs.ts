@@ -148,6 +148,20 @@ export async function planGenerateCanonicalDocs(
 				buildRenderOptions(options),
 			);
 
+			for (const rd of renderResults.flatMap((r) => r.diagnostics)) {
+				diagnostics.push(
+					createDiagnostic(
+						rd.code,
+						rd.severity,
+						rd.message,
+						rd.documentId,
+						rd.sourcePath,
+						rd.fieldPointer,
+						rd.recoveryHint,
+					),
+				);
+			}
+
 			const writePlan = await planMarkdownWrites(
 				{
 					planItems: eligibleItems,
@@ -308,6 +322,20 @@ export async function executeGenerateCanonicalDocs(
 		buildRenderOptions(options),
 	);
 
+	for (const rd of renderResults.flatMap((r) => r.diagnostics)) {
+		diagnostics.push(
+			createDiagnostic(
+				rd.code,
+				rd.severity,
+				rd.message,
+				rd.documentId,
+				rd.sourcePath,
+				rd.fieldPointer,
+				rd.recoveryHint,
+			),
+		);
+	}
+
 	// Write rendered documents
 	const writeResult = await writeMarkdownDocuments(
 		{
@@ -394,6 +422,7 @@ export async function executeGenerateCanonicalDocs(
 				idFactory: artifactIdFactory,
 				input: {
 					artifactType: 'canonical_markdown',
+					checksum: wi.checksum,
 					generatedAt:
 						options.deterministicTimestamp ?? new Date().toISOString(),
 					isCanonical: true,
@@ -623,6 +652,14 @@ function buildReportItems(
 	renderResults: {
 		documentCanonicalId: string;
 		markdown: string;
+		diagnostics: {
+			code: string;
+			severity: 'error' | 'warning' | 'info';
+			message: string;
+			documentId?: string | undefined;
+			sourcePath?: string | undefined;
+			recoveryHint?: string | undefined;
+		}[];
 		metadata: { documentId?: string } | null;
 	}[],
 ): GenerateCanonicalDocsReportItem[] {
@@ -639,12 +676,43 @@ function buildReportItems(
 
 		const hasMarkdown = rr ? rr.markdown.length > 0 : false;
 		const wasRendered = hasMarkdown;
+		const itemDiagnostics: GenerateCanonicalDocsDiagnostic[] = [];
+		if (rr) {
+			for (const d of rr.diagnostics) {
+				itemDiagnostics.push(
+					createDiagnostic(
+						d.code,
+						d.severity,
+						d.message,
+						d.documentId,
+						undefined,
+						d.sourcePath,
+						d.recoveryHint,
+					),
+				);
+			}
+		}
+		if (wi) {
+			for (const d of wi.diagnostics) {
+				itemDiagnostics.push(
+					createDiagnostic(
+						d.code,
+						d.severity,
+						d.message,
+						d.documentCanonicalId,
+						d.targetPath,
+						undefined,
+						d.recoveryHint,
+					),
+				);
+			}
+		}
 
 		return {
 			action: pi.action,
-			checksum: undefined,
+			checksum: wi?.checksum,
 			collisionMessage: wi?.collision?.recoveryHint,
-			diagnostics: [],
+			diagnostics: itemDiagnostics,
 			documentCanonicalId: pi.documentCanonicalId,
 			documentId: pi.documentId,
 			gaps: pi.gaps.map((g) => g.message),

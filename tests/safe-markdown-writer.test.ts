@@ -382,7 +382,7 @@ describe('detectManualEdit', () => {
 			targetPath: '/fake/file.md',
 		});
 
-		expect(result.status).toBe('metadata_invalid');
+		expect(result.status).toBe('metadata_missing');
 	});
 
 	it('target with invalid metadata returns metadata_invalid', async () => {

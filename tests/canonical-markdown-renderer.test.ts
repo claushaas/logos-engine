@@ -506,6 +506,21 @@ describe('renderCanonicalMarkdownDocument', () => {
 			expect(result.markdown).toContain('## Sources & Traceability');
 		});
 
+		it('metadata frontmatter includes traceability records', () => {
+			const contract = createMinimalContract();
+			const state = createStateWithDecision('a', 'dec-001');
+			const input = createRenderInput(contract, 'a', state);
+			const result = renderCanonicalMarkdownDocument(
+				input,
+				createRenderOptions(),
+			);
+
+			const frontmatter = result.markdown.split('---')[1] ?? '';
+			expect(frontmatter).toContain('traceability:');
+			expect(frontmatter).toContain('recordId: dec-001');
+			expect(frontmatter).toContain('recordType: decision');
+		});
+
 		it('output includes decisions section when relevant', () => {
 			const contract = createMinimalContract();
 			const state = createStateWithDecision('a', 'dec-001');

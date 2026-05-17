@@ -1071,12 +1071,8 @@ export function renderCanonicalMarkdownDocument(
 
 	const _languagePolicy = options.languagePolicy ?? DEFAULT_LANGUAGE;
 
-	// Build sections in order
+	// Build sections in order. Frontmatter is prepended after sources are known.
 	const mdParts: string[] = [];
-
-	// Frontmatter
-	const metadata = buildMetadataHeader(input, options, allSources);
-	mdParts.push(buildYamlFrontmatter(metadata));
 
 	// Document title
 	mdParts.push(buildTitleSection(input));
@@ -1222,7 +1218,7 @@ export function renderCanonicalMarkdownDocument(
 	// Update metadata to include all sources
 	const finalMetadata = buildMetadataHeader(input, options, allSources);
 
-	const markdown = mdParts.join('\n');
+	const markdown = [buildYamlFrontmatter(finalMetadata), ...mdParts].join('\n');
 
 	return {
 		canonicalOutputPath: planItem.canonicalOutputPath,

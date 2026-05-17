@@ -1,7 +1,7 @@
 /** Safe Markdown Writer — safe writes, manual edit detection, checksums, and write policies */
 
 import { createHash, randomUUID } from 'node:crypto';
-import { mkdir, readFile, rename, stat, writeFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 import {
 	basename,
 	dirname,
@@ -12,7 +12,7 @@ import {
 	relative,
 	resolve,
 } from 'node:path';
-import { checkPathSafety } from '../fs/safe-filesystem.js';
+import { checkPathSafety, writeFileAtomic } from '../fs/safe-filesystem.js';
 import type {
 	GeneratedMarkdownMetadata,
 	ManualEditDetectionInput,
@@ -501,8 +501,11 @@ async function detectManualEdit(
 	const currentChecksum = computeBodyChecksum(fileContent);
 
 	if (!parsed.parsedSuccessfully) {
+		const missingMetadata = parsed.parseErrors.includes(
+			'no_frontmatter_delimiter',
+		);
 		diagnostics.push({
-			code: 'metadata_parse_failed',
+			code: missingMetadata ? 'metadata_missing' : 'metadata_parse_failed',
 			message: `Could not parse generated metadata from file: ${parsed.parseErrors.join(', ')}`,
 			recoveryHint:
 				'The file may have been manually created or the metadata format is corrupted.',
@@ -513,7 +516,7 @@ async function detectManualEdit(
 			diagnostics,
 			parsedMetadata: parsed,
 			previousChecksum: parsed.checksum || undefined,
-			status: 'metadata_invalid',
+			status: missingMetadata ? 'metadata_missing' : 'metadata_invalid',
 			targetExists,
 			targetPath,
 		};
@@ -805,11 +808,13 @@ async function planMarkdownWrites(
 	for (const renderResult of input.renderResults) {
 		const docId = renderResult.documentCanonicalId;
 		const planItem = planItemsLookup.get(docId);
-		const relativePath = renderResult.canonicalOutputPath.replace(
-			/^docs\//,
-			'',
-		);
-		const targetPath = join(projectRoot, documentationRoot, relativePath);
+		const relativePath =
+			planItem?.documentationRootRelativePath ??
+			resolveDocumentationRootRelativePath(
+				renderResult.canonicalOutputPath,
+				documentationRoot,
+			);
+		const targetPath = join(projectRoot, relativePath);
 
 		const normalizedTarget = normalize(targetPath);
 
@@ -1057,96 +1062,42 @@ async function writeMarkdownDocuments(
 			markdown,
 			bodyChecksum,
 		);
-
-		const targetDir = dirname(item.targetPath);
-
-		try {
-			await mkdir(targetDir, { recursive: true });
-			changedPaths.push({ path: targetDir, role: 'directory_created' });
-		} catch {
-			diagnostics.push({
-				code: 'mkdir_failed',
-				documentCanonicalId: item.documentCanonicalId,
-				message: `Failed to create directory: ${targetDir}`,
-				recoveryHint: 'Check filesystem permissions and disk space.',
-				severity: 'error',
-				targetPath: item.targetPath,
-			});
-			item.status = 'failed';
-			allSuccess = false;
-			continue;
-		}
-
-		if (item.backupPath) {
-			try {
-				const backupDir = dirname(item.backupPath);
-				await mkdir(backupDir, { recursive: true });
-
-				const existingContent = await readFile(item.targetPath, {
-					encoding: 'utf-8',
-				});
-				await writeFile(item.backupPath, existingContent, {
-					encoding: 'utf-8',
-					flush: true,
-				});
-				changedPaths.push({
-					path: item.backupPath,
-					role: 'backup_created',
-				});
-			} catch (err: unknown) {
-				diagnostics.push({
-					code: 'backup_failed',
-					documentCanonicalId: item.documentCanonicalId,
-					message: `Failed to create backup: ${String(err)}`,
-					recoveryHint: 'The original file has not been modified.',
-					severity: 'error',
-					targetPath: item.targetPath,
-				});
-				item.status = 'failed';
-				allSuccess = false;
-				continue;
-			}
-		}
-
-		const randomId =
-			options.deterministicRandomId ??
-			randomUUID().replace(/-/g, '').slice(0, 12);
-		const tempPath = join(
-			targetDir,
-			`.${basename(item.targetPath)}.${randomId}.tmp`,
+		const writeResult = await writeFileAtomic(
+			item.targetPath,
+			markdownWithChecksum,
+			{
+				_testRandomId:
+					options.deterministicRandomId ??
+					randomUUID().replace(/-/g, '').slice(0, 12),
+				_testTimestamp: options.deterministicTimestamp,
+				allowedBaseDir: join(
+					options.projectRoot ?? resolve('.'),
+					resolveDocumentationRoot(options),
+				),
+				backupDir: item.backupPath ? dirname(item.backupPath) : undefined,
+				policy: item.backupPath ? 'backup_and_overwrite' : 'overwrite',
+			},
 		);
 
-		try {
-			await writeFile(tempPath, markdownWithChecksum, {
-				encoding: 'utf-8',
-				flush: true,
-			});
+		for (const cp of writeResult.changedPaths) {
+			changedPaths.push({ path: cp.path, role: cp.role });
+		}
+		if (writeResult.backupPath) item.backupPath = writeResult.backupPath;
+		item.checksum = bodyChecksum;
 
-			await rename(tempPath, item.targetPath);
-
-			changedPaths.push({
-				path: item.targetPath,
-				role: item.status === 'created' ? 'file_created' : 'file_updated',
-			});
-		} catch (err: unknown) {
-			diagnostics.push({
-				code: 'write_failed',
-				documentCanonicalId: item.documentCanonicalId,
-				message: `Failed to write markdown: ${String(err)}`,
-				recoveryHint:
-					'The target file should be untouched. A temp file may remain.',
-				severity: 'error',
-				targetPath: item.targetPath,
-			});
+		if (!writeResult.success) {
+			diagnostics.push(
+				...writeResult.diagnostics.map((d) => ({
+					code: d.code,
+					documentCanonicalId: item.documentCanonicalId,
+					message: d.message,
+					recoveryHint: d.recoveryHint,
+					severity: d.severity,
+					targetPath: d.targetPath ?? item.targetPath,
+				})),
+			);
 			item.status = 'failed';
 			allSuccess = false;
-
-			try {
-				const { rm } = await import('node:fs/promises');
-				await rm(tempPath, { force: true });
-			} catch {
-				// Best effort cleanup
-			}
 		}
 	}
 
@@ -1179,3 +1130,19 @@ export {
 	resolveMarkdownWriteAction,
 	writeMarkdownDocuments,
 };
+
+function resolveDocumentationRootRelativePath(
+	canonicalOutputPath: string,
+	documentationRoot: string,
+): string {
+	const normalizedRoot = documentationRoot.endsWith('/')
+		? documentationRoot
+		: `${documentationRoot}/`;
+	const segments = canonicalOutputPath.split('/').filter(Boolean);
+	if (segments.includes('..')) {
+		return `${normalizedRoot}${canonicalOutputPath}`;
+	}
+	const outputWithoutDeclaredRoot =
+		segments.length > 1 ? segments.slice(1).join('/') : segments.join('/');
+	return `${normalizedRoot}${outputWithoutDeclaredRoot}`;
+}

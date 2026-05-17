@@ -103,6 +103,10 @@ function addSecretLikeStringIssues(
 	path: (string | number)[] = [],
 ): void {
 	if (typeof value === 'string') {
+		const fieldName = String(path[path.length - 1] ?? '').toLowerCase();
+		if (fieldName === 'checksum' || fieldName === 'contentchecksum') {
+			return;
+		}
 		if (looksLikeSecret(value)) {
 			ctx.addIssue({
 				code: 'custom',

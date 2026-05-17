@@ -462,6 +462,7 @@ describe('executeGenerateCanonicalDocs (execution)', () => {
 				const art = artifacts.find((a) => a.artifactId === artId);
 				expect(art?.artifactType).toBe('canonical_markdown');
 				expect(art?.isCanonical).toBe(true);
+				expect(art?.checksum).toMatch(/^[a-f0-9]{64}$/);
 			}
 		} finally {
 			cleanDir(dir);

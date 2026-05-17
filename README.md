@@ -114,13 +114,15 @@ Inside the TUI, slash commands drive system operations:
 /init --confirm # Create .logos/workspace.json after confirmation
 /continue       # Show the next read-only intake question cluster
 # Type freely: "I'm building a fitness app for personal trainers..."
-/generate       # Render the canonical document tree (recognized stub)
+/generate       # Preview canonical Markdown generation
+/generate --dry-run # Report planned generation without writes
+/generate --confirm # Render canonical Markdown under the configured root
 /validate       # Check for missing decisions and gaps (recognized stub)
 /diagnose       # Get AI-assisted diagnostics (recognized stub)
 /config ai      # Configure AI provider (recognized stub)
 ```
 
-In this step, `/help`, `/status`, `/exit`, `/init`, and `/continue` are functional. `/generate`, `/diagnose`, `/validate`, and `/config ai` are recognized stubs and will be implemented in later phases.
+In this step, `/help`, `/status`, `/exit`, `/init`, `/continue`, and `/generate` are functional. `/diagnose`, `/validate`, and `/config ai` are recognized stubs and will be implemented in later phases.
 
 All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) are in-TUI commands, not external CLI subcommands.
 

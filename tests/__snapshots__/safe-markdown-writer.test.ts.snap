@@ -3,7 +3,7 @@
 exports[`Snapshot > snapshots collision diagnostic 1`] = `
 {
   "documentCanonicalId": "test-doc",
-  "manualEditStatus": "metadata_invalid",
+  "manualEditStatus": "metadata_missing",
   "selectedPolicy": "fail",
   "suggestedActions": [
     "skip",

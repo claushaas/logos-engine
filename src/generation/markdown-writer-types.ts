@@ -177,6 +177,7 @@ export interface MarkdownWritePlanItem {
 	documentCanonicalId: string;
 	targetPath: string;
 	status: MarkdownWriteStatus;
+	checksum?: string | undefined;
 	manualEditStatus?: ManualEditStatus | undefined;
 	backupPath?: string | undefined;
 	diagnostics: MarkdownWriteDiagnostic[];
