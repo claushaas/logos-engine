@@ -1,10 +1,14 @@
 /** Pure slash command router — returns typed results, performs no side effects */
 
 import { initWorkspace, preflightInit } from '../init/index.js';
+import { planNextQuestions } from '../intake/question-planner.js';
+import { buildContractGraph } from '../profiles/contract-graph.js';
+import { loadDocumentationContract } from '../profiles/documentation-contract.js';
 import {
 	formatInitializationState,
 	formatProviderStatus,
 } from '../runtime/project-context.js';
+import { readWorkspaceState } from '../state/workspace-state-repository.js';
 import type {
 	ParsedInput,
 	RouterContext,
@@ -71,15 +75,7 @@ export async function routeSlashCommand(
 		case 'init':
 			return getInitResult(args, context);
 		case 'continue':
-			return {
-				command: 'continue',
-				kind: 'warning',
-				messages: [
-					'/continue is recognized but not yet implemented.',
-					'Planned for Phase 4 — Intake and Question Engine.',
-				],
-				shouldExit: false,
-			};
+			return getContinueResult(context);
 		case 'generate':
 			return {
 				command: 'generate',
@@ -132,7 +128,7 @@ function getHelpMessages(): string[] {
 		'  /init --root <path> — Set custom documentation root',
 		'  /init --profile <id> — Select profile (default: standard)',
 		'  /init --dry-run — Plan workspace without creating files',
-		'  /continue    — Continue intake session (not yet implemented)',
+		'  /continue    — Continue intake with the next question cluster',
 		'  /generate    — Generate canonical Markdown (not yet implemented)',
 		'  /diagnose    — Run diagnostics (not yet implemented)',
 		'  /validate    — Run validation (not yet implemented)',
@@ -143,6 +139,108 @@ function getHelpMessages(): string[] {
 		'',
 		'You can also type free-form text for the intake engine (not yet implemented).',
 	];
+}
+
+async function getContinueResult(
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'continue',
+			kind: 'error',
+			messages: [
+				'Cannot continue intake because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const readResult = await readWorkspaceState({ projectRoot });
+	if (!readResult.success || !readResult.state) {
+		return {
+			command: 'continue',
+			kind: 'warning',
+			messages: [
+				'Cannot continue intake because the LOGOS workspace is not initialized.',
+				'Run /init to create a workspace, then run /continue again.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	try {
+		const contract = await loadDocumentationContract({
+			profileId: readResult.state.profile.profileId,
+			repoRoot: projectRoot,
+		});
+		const graphResult = buildContractGraph(contract);
+		const plan = planNextQuestions({
+			contract,
+			graph: graphResult.graph,
+			state: readResult.state,
+		});
+
+		if (!plan.success || !plan.cluster || plan.cluster.questions.length === 0) {
+			return {
+				command: 'continue',
+				kind: 'info',
+				messages: [
+					'No next intake questions are available for the current workspace state.',
+					'Run /status to review workspace state and recovery hints.',
+				],
+				shouldExit: false,
+			};
+		}
+
+		const lines = [
+			'Next intake question cluster:',
+			'',
+			plan.cluster.reasonSummary,
+			`Source documents: ${plan.cluster.sourceDocuments.join(', ')}`,
+			'',
+		];
+
+		for (const [index, question] of plan.cluster.questions.entries()) {
+			lines.push(`${index + 1}. ${question.text}`);
+			lines.push(
+				`   Source: ${question.source.documentCanonicalId} (${question.source.phaseId})`,
+			);
+			lines.push(
+				`   Classification: ${question.blockingLevel}, ${question.priority}, ${question.reason}`,
+			);
+			if (question.existingOpenQuestionId) {
+				lines.push(
+					`   Preserved open question: ${question.existingOpenQuestionId}`,
+				);
+			}
+		}
+
+		lines.push('');
+		lines.push(
+			'Type an answer in the TUI to capture input evidence; proposals still require explicit review before becoming confirmed state.',
+		);
+
+		return {
+			command: 'continue',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'continue',
+			kind: 'error',
+			messages: [
+				'Cannot continue intake because the active profile could not be loaded.',
+				message,
+				'Run /status to inspect workspace configuration.',
+			],
+			shouldExit: false,
+		};
+	}
 }
 
 async function getInitResult(

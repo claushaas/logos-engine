@@ -513,3 +513,58 @@ export type {
 	WorkspaceStatusSummary,
 } from './state/workspace-status.js';
 export { getWorkspaceStatusSummary } from './state/workspace-status.js';
+
+// ---------------------------------------------------------------------------
+// Step 5.1 — Generation Planner
+// ---------------------------------------------------------------------------
+
+export type {
+	DependencySatisfaction,
+	GenerationAction,
+	GenerationBlocker,
+	GenerationDependencyState,
+	GenerationDryRunSummary,
+	GenerationGap,
+	GenerationOutputTarget,
+	GenerationPlan,
+	GenerationPlanDiagnostic,
+	GenerationPlanInput,
+	GenerationPlanItem,
+	GenerationPlanOptions,
+	GenerationPlanResult,
+	GenerationPlanSummaryCounts,
+	GenerationReadiness,
+	GenerationStalenessReason,
+} from './generation/index.js';
+export {
+	createGenerationPlan,
+	planDocumentGeneration,
+	summarizeGenerationPlan,
+} from './generation/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 5.2 — Canonical Markdown Renderer
+// ---------------------------------------------------------------------------
+
+export type {
+	CanonicalMarkdownDocument,
+	CanonicalMarkdownRenderDiagnostic,
+	CanonicalMarkdownRenderInput,
+	CanonicalMarkdownRenderOptions,
+	CanonicalMarkdownRenderResult,
+	ConfirmedStateCollections,
+	MarkdownGapMarker,
+	MarkdownLanguagePolicy,
+	MarkdownMetadataHeader,
+	MarkdownQualityNote,
+	MarkdownSectionRenderStatus,
+	MarkdownSourceReference,
+	MarkdownTraceabilityReference,
+	RenderedMarkdownSection,
+	RenderFromPlanInput,
+	SectionRenderContext,
+} from './generation/index.js';
+export {
+	renderCanonicalMarkdownDocument,
+	renderCanonicalMarkdownFromPlan,
+} from './generation/index.js';

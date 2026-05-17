@@ -4,6 +4,7 @@ import type {
 	CanonicalDocumentId,
 	PhaseId,
 } from '../profiles/documentation-contract.js';
+import { redactString } from '../runtime/redaction.js';
 import type {
 	ProposalDiagnostic,
 	ProposalKind,
@@ -44,6 +45,10 @@ function normalizeText(value: unknown): string {
 	if (typeof value === 'number' || typeof value === 'boolean')
 		return String(value);
 	return '';
+}
+
+function redactProposalText(value: string): string {
+	return redactString(value).trim();
 }
 
 function extractTextFromFields(fields: Record<string, unknown>): {
@@ -128,7 +133,7 @@ function mapAnswerToProposals(
 	source.documentCanonicalId = questionClusterSource.documentCanonicalId;
 	source.phaseId = questionClusterSource.phaseId;
 
-	const normalizedAnswer = answer.answer.trim();
+	const normalizedAnswer = redactProposalText(answer.answer);
 
 	if (!normalizedAnswer) {
 		allDiagnostics.push({
@@ -360,7 +365,9 @@ function mapExtractionsToProposals(
 			continue;
 		}
 
-		const { title, body } = extractTextFromFields(record.fields);
+		const extracted = extractTextFromFields(record.fields);
+		const title = redactProposalText(extracted.title);
+		const body = redactProposalText(extracted.body);
 		if (!title && !body) {
 			unmappableItems.push({
 				code: 'E_EMPTY_EXTRACTION',

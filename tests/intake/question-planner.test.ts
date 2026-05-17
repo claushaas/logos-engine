@@ -536,6 +536,34 @@ describe('question-planner', () => {
 			expect(result.cluster).toBeDefined();
 		});
 
+		it('generated artifact metadata does not satisfy document dependencies', async () => {
+			const contract = await loadStandardContract();
+			const graph = buildContractGraph(contract).graph;
+			const state = createEmptyWorkspaceState();
+
+			state.artifacts.push({
+				artifactId: 'art-generated-thesis',
+				artifactType: 'canonical_markdown',
+				generatedAt: '2024-01-01T00:00:00.000Z',
+				isCanonical: true,
+				path: 'logos/01-foundation/01-thesis.md',
+				sourceDocumentIds: ['01-thesis'],
+				status: 'generated',
+			});
+
+			const candidates = collectQuestionCandidates(contract, graph, state, {
+				focusDocumentIds: ['02-problem'],
+			});
+
+			expect(
+				candidates.some(
+					(c) =>
+						c.reason === 'unresolved_dependency' &&
+						c.relatedDependencyId === '01-thesis',
+				),
+			).toBe(true);
+		});
+
 		it('planner does not invoke generation/validation/executive behavior', async () => {
 			const contract = await loadStandardContract();
 			const state = createEmptyWorkspaceState();

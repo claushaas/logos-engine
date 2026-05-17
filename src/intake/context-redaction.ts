@@ -7,13 +7,7 @@ import {
 } from '../runtime/redaction.js';
 import type {
 	IntakeContext,
-	IntakeContextAssumption,
-	IntakeContextDecision,
-	IntakeContextOpenQuestion,
 	IntakeContextRedactionResult,
-	IntakeContextRelevantAnswer,
-	IntakeContextRisk,
-	IntakeContextValidationGap,
 } from './intake-context-types.js';
 
 // ---------------------------------------------------------------------------
@@ -50,129 +44,65 @@ function isSecretKey(key: string): boolean {
 }
 
 // ---------------------------------------------------------------------------
-// Individual record redaction
-// ---------------------------------------------------------------------------
-
-function redactDecision(item: IntakeContextDecision): IntakeContextDecision {
-	return {
-		...item,
-		body: item.body !== undefined ? redactString(item.body) : undefined,
-		title: redactString(item.title),
-	};
-}
-
-function redactAssumption(
-	item: IntakeContextAssumption,
-): IntakeContextAssumption {
-	return {
-		...item,
-		body: item.body !== undefined ? redactString(item.body) : undefined,
-		caveat: item.caveat !== undefined ? redactString(item.caveat) : undefined,
-		title: redactString(item.title),
-	};
-}
-
-function redactOpenQuestion(
-	item: IntakeContextOpenQuestion,
-): IntakeContextOpenQuestion {
-	return {
-		...item,
-		body: item.body !== undefined ? redactString(item.body) : undefined,
-		question: redactString(item.question),
-	};
-}
-
-function redactRisk(item: IntakeContextRisk): IntakeContextRisk {
-	return {
-		...item,
-		body: item.body !== undefined ? redactString(item.body) : undefined,
-		rationale:
-			item.rationale !== undefined ? redactString(item.rationale) : undefined,
-		title: redactString(item.title),
-	};
-}
-
-function redactValidationGap(
-	item: IntakeContextValidationGap,
-): IntakeContextValidationGap {
-	return {
-		...item,
-		description: redactString(item.description),
-		sourcePath:
-			item.sourcePath !== undefined ? redactString(item.sourcePath) : undefined,
-	};
-}
-
-function redactAnswer(
-	item: IntakeContextRelevantAnswer,
-): IntakeContextRelevantAnswer {
-	return {
-		...item,
-		answer: redactString(item.answer),
-		questionText: redactString(item.questionText),
-	};
-}
-
-// ---------------------------------------------------------------------------
 // Redaction result builder
 // ---------------------------------------------------------------------------
+
+function scanForRedactions(
+	value: unknown,
+	category: string | undefined,
+	seenCategories: Set<string>,
+	seen?: WeakSet<object>,
+): number {
+	if (value === null || value === undefined) return 0;
+
+	if (typeof value === 'string') {
+		if (isTokenLike(value)) {
+			if (category) seenCategories.add(category);
+			return 1;
+		}
+		return 0;
+	}
+
+	if (typeof value !== 'object') return 0;
+
+	const objectSeen = seen ?? new WeakSet<object>();
+	if (objectSeen.has(value)) return 0;
+	objectSeen.add(value);
+
+	let count = 0;
+	if (Array.isArray(value)) {
+		for (const item of value) {
+			count += scanForRedactions(item, category, seenCategories, objectSeen);
+		}
+		objectSeen.delete(value);
+		return count;
+	}
+
+	for (const [key, item] of Object.entries(value)) {
+		const itemCategory = category ?? key;
+		if (isSecretKey(key)) {
+			seenCategories.add(itemCategory);
+			count++;
+			continue;
+		}
+		count += scanForRedactions(item, itemCategory, seenCategories, objectSeen);
+	}
+
+	objectSeen.delete(value);
+	return count;
+}
 
 function buildRedactionResult(
 	context: IntakeContext,
 	options?: { projectRoot?: string },
 ): IntakeContextRedactionResult {
-	const redactedCategories: string[] = [];
-	let redactedKeyCount = 0;
-
-	// Scan all context records for secret-like values
-	const allRecords: Array<{
-		category: string;
-		record: Record<string, unknown>;
-	}> = [
-		...context.decisions.map((d) => ({
-			category: 'decisions',
-			record: d as unknown as Record<string, unknown>,
-		})),
-		...context.assumptions.map((a) => ({
-			category: 'assumptions',
-			record: a as unknown as Record<string, unknown>,
-		})),
-		...context.openQuestions.map((q) => ({
-			category: 'openQuestions',
-			record: q as unknown as Record<string, unknown>,
-		})),
-		...context.risks.map((r) => ({
-			category: 'risks',
-			record: r as unknown as Record<string, unknown>,
-		})),
-		...context.validationGaps.map((g) => ({
-			category: 'validationGaps',
-			record: g as unknown as Record<string, unknown>,
-		})),
-		...context.answers.map((a) => ({
-			category: 'answers',
-			record: a as unknown as Record<string, unknown>,
-		})),
-	];
-
 	const seenCategories = new Set<string>();
-
-	for (const { category, record } of allRecords) {
-		for (const [key, value] of Object.entries(record)) {
-			if (isSecretKey(key)) {
-				redactedKeyCount++;
-				seenCategories.add(category);
-			}
-			if (typeof value === 'string' && isTokenLike(value)) {
-				redactedKeyCount++;
-				seenCategories.add(category);
-			}
-		}
-	}
-
-	for (const cat of seenCategories) {
-		redactedCategories.push(cat);
-	}
+	const redactedKeyCount = scanForRedactions(
+		context,
+		undefined,
+		seenCategories,
+	);
+	const redactedCategories = [...seenCategories].sort();
 
 	const summaryLines: string[] = [];
 	if (redactedCategories.length > 0) {
@@ -203,16 +133,9 @@ export function redactIntakeContext(
 	context: IntakeContext,
 	options?: { projectRoot?: string },
 ): IntakeContext {
-	const redacted = {
-		...context,
-		answers: context.answers.map(redactAnswer),
-		assumptions: context.assumptions.map(redactAssumption),
-		decisions: context.decisions.map(redactDecision),
-		openQuestions: context.openQuestions.map(redactOpenQuestion),
-		redaction: buildRedactionResult(context, options),
-		risks: context.risks.map(redactRisk),
-		validationGaps: context.validationGaps.map(redactValidationGap),
-	};
+	const redaction = buildRedactionResult(context, options);
+	const redacted = redactValue(context, options) as IntakeContext;
+	redacted.redaction = redaction;
 
 	if (options?.projectRoot) {
 		return relativizePaths(

@@ -854,11 +854,7 @@ function getUnresolvedDependencies(
 		const depId = depRef.includes('/') ? depRef.split('/').pop() : depRef;
 		if (!depId) continue;
 
-		// Check if there's an artifact or decision that satisfies this
-		const hasArtifact = state.artifacts.some(
-			(a) => a.sourceDocumentIds.includes(depId) && a.status === 'generated',
-		);
-
+		// Artifact metadata is not canonical proof that a prerequisite is satisfied.
 		const hasConfirmedDecision = state.decisions.some(
 			(d) =>
 				d.status === 'confirmed' &&
@@ -867,9 +863,9 @@ function getUnresolvedDependencies(
 		);
 
 		// A dependency is unresolved if the document is not marked as reviewed/approved
-		// and there's no generated artifact or confirmed decision
+		// and there's no confirmed decision that explicitly covers it.
 		// Conservative: treat as unresolved unless we have strong evidence
-		if (!hasArtifact && !hasConfirmedDecision) {
+		if (!hasConfirmedDecision) {
 			unresolved.push(depId);
 		}
 	}

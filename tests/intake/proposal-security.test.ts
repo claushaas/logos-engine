@@ -156,6 +156,55 @@ describe('proposal-security', () => {
 			expect(result.proposals.length).toBeGreaterThan(0);
 		});
 
+		it('mapped proposal text redacts raw token-like answer evidence', () => {
+			const result = mapAnswersToProposals(
+				makeInput({
+					answers: [
+						{
+							answer:
+								'We decide to use sk-abcdefghijklmnopqrstuvwxyz1234567890ABCD for testing.',
+							answerId: 'ans-sec-redact-001',
+							questionId: 'q-001',
+							questionText: 'How to test?',
+						},
+					],
+				}),
+			);
+
+			expect(result.success).toBe(true);
+			expect(result.proposals.length).toBeGreaterThan(0);
+			const json = JSON.stringify(result.proposals);
+			expect(json).not.toMatch(/sk-[a-zA-Z0-9]{20,}/);
+			expect(json).toContain('[REDACTED]');
+		});
+
+		it('mapped extraction proposals redact raw token-like provider output', () => {
+			const result = mapAnswersToProposals(
+				makeInput({
+					validatedExtractions: [
+						{
+							confidence: 'medium',
+							fields: {
+								body: 'Use hf_abcdefghijklmnopqrstuvwxyz1234567890ABCD for a fixture only.',
+								title:
+									'Decision with sk-abcdefghijklmnopqrstuvwxyz1234567890ABCD',
+							},
+							isProposed: true,
+							recordId: 'ext-sec-001',
+							recordType: 'decision',
+						},
+					],
+				}),
+			);
+
+			expect(result.success).toBe(true);
+			expect(result.proposals.length).toBe(1);
+			const json = JSON.stringify(result.proposals);
+			expect(json).not.toMatch(/sk-[a-zA-Z0-9]{20,}/);
+			expect(json).not.toMatch(/hf_[a-zA-Z0-9]{20,}/);
+			expect(json).toContain('[REDACTED]');
+		});
+
 		it('fake raw provider token from extraction is not persisted in state', async () => {
 			const proposal = makeProposal({
 				body: 'No tokens here',

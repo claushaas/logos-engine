@@ -192,7 +192,7 @@ describe('routeSlashCommand', () => {
 		expect(text).toContain('/test/project');
 	});
 
-	it('/continue returns non-mutating stub', async () => {
+	it('/continue returns recovery guidance when workspace is uninitialized', async () => {
 		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'continue', raw: '/continue' },
 			defaultContext,
@@ -200,7 +200,8 @@ describe('routeSlashCommand', () => {
 		expect(result.kind).toBe('warning');
 		expect(result.command).toBe('continue');
 		expect(result.shouldExit).toBe(false);
-		expect(result.messages.join('\n')).toContain('not yet implemented');
+		expect(result.messages.join('\n')).toContain('not initialized');
+		expect(result.messages.join('\n')).toContain('/init');
 	});
 
 	it('/generate returns non-mutating stub', async () => {

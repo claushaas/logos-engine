@@ -2,10 +2,13 @@
 
 import {
 	buildDeterministicStartupBriefing,
+	planNextQuestions,
 	type StartupBriefing,
 	type StartupBriefingInput,
 } from '../intake/index.js';
 import { renderStartupBriefing } from '../intake/startup-briefing-renderer.js';
+import { buildContractGraph } from '../profiles/contract-graph.js';
+import { loadDocumentationContract } from '../profiles/documentation-contract.js';
 import { detectProjectContext } from '../runtime/project-context.js';
 import { readWorkspaceState } from '../state/workspace-state-repository.js';
 import { parseSlashCommand } from './slash-parser.js';
@@ -68,6 +71,31 @@ export async function buildStartupBriefingInputFromContext(
 		severity: d.severity,
 	}));
 
+	let questionCluster: StartupBriefingInput['questionCluster'];
+	let questionClusterSummary: string | undefined;
+	try {
+		const contract = await loadDocumentationContract({
+			profileId: state.profile.profileId,
+			repoRoot: projectRoot,
+		});
+		const graphResult = buildContractGraph(contract);
+		const plan = planNextQuestions({
+			contract,
+			graph: graphResult.graph,
+			state,
+		});
+		questionCluster = plan.cluster;
+		questionClusterSummary = plan.cluster?.reasonSummary;
+	} catch {
+		workspaceDiagnostics.push({
+			code: 'startup_question_cluster_unavailable',
+			message: 'Startup briefing could not plan the next question cluster.',
+			recoveryHint:
+				'Run /status to inspect workspace state and profile loading.',
+			severity: 'warning',
+		});
+	}
+
 	return {
 		acceptedProposalCount: acceptedProposals,
 		activeProfileId: state.profile.profileId,
@@ -81,8 +109,8 @@ export async function buildStartupBriefingInputFromContext(
 		providerConfigured,
 		providerConsent,
 		providerKind,
-		questionCluster: undefined,
-		questionClusterSummary: undefined,
+		questionCluster,
+		questionClusterSummary,
 		riskCount: risks.length,
 		runCount: runs.length,
 		sessionCount: sessions.length,

@@ -574,6 +574,40 @@ describe('contextual-suggestions', () => {
 			expect(lines.some((l) => l.includes('not confirmed facts'))).toBe(true);
 		});
 
+		it('redacts token-like values from suggestion titles and rendered output', () => {
+			resetSuggestionCounter();
+			const input: ContextualSuggestionInput = {
+				...emptyInput(),
+				decisions: [
+					{
+						affectedDocumentIds: ['docs/secret'],
+						id: 'dec-secret',
+						status: 'confirmed',
+						title: 'Use sk-abcdefghijklmnopqrstuvwxyz1234567890ABCD',
+					},
+				],
+				plannedQuestions: [
+					{
+						existingOpenQuestionId: undefined,
+						id: 'pq-secret',
+						reason: 'missing_required_section',
+						relatedDependencyId: undefined,
+						sourceDocumentId: 'docs/secret',
+						sourcePhaseId: 'phase-secret',
+						text: 'Should this mention hf_abcdefghijklmnopqrstuvwxyz1234567890ABCD?',
+					},
+				],
+			};
+
+			const result = generateContextualSuggestions(input);
+			const lines = renderContextualSuggestions(result.suggestions);
+			const json = JSON.stringify({ lines, suggestions: result.suggestions });
+
+			expect(json).not.toMatch(/sk-[a-zA-Z0-9]{20,}/);
+			expect(json).not.toMatch(/hf_[a-zA-Z0-9]{20,}/);
+			expect(json).toContain('[REDACTED]');
+		});
+
 		it('respects maxSuggestions limit', () => {
 			resetSuggestionCounter();
 			const input: ContextualSuggestionInput = {

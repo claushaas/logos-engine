@@ -266,6 +266,52 @@ describe('context redaction', () => {
 		});
 	});
 
+	describe('question cluster redaction', () => {
+		it('redacts token-like values embedded in planned question clusters', () => {
+			const ctx = buildIntakeContext(
+				makeInput({
+					questionCluster: {
+						gapsConsidered: [],
+						phaseCoverage: [],
+						questions: [
+							{
+								blockingLevel: 'blocking',
+								existingOpenQuestionId: undefined,
+								id: 'q-secret-cluster',
+								isSchemaDerived: false,
+								planStatus: 'planned',
+								priority: 'high',
+								reason: 'existing_open_question',
+								reasonDescription: 'Existing open question',
+								relatedDependencyId: undefined,
+								relatedSectionId: undefined,
+								source: {
+									descriptorPath: 'profiles/standard/test.yml',
+									documentCanonicalId: 'doc-secret',
+									documentTitle: 'Secret Test',
+									fieldPointer: undefined,
+									phaseId: 'phase-secret',
+									sectionId: undefined,
+									sectionTitle: undefined,
+								},
+								text: 'Should we use sk-abcdefghijklmnopqrstuvwxyz1234567890ABCD here?',
+							},
+						],
+						reasonSummary:
+							'Cluster mentions hf_abcdefghijklmnopqrstuvwxyz1234567890ABCD',
+						skippedCount: 0,
+						sourceDocuments: ['doc-secret'],
+					},
+				}),
+			);
+
+			const json = JSON.stringify(ctx);
+			expect(json).not.toMatch(/sk-[a-zA-Z0-9]{20,}/);
+			expect(json).not.toMatch(/hf_[a-zA-Z0-9]{20,}/);
+			expect(ctx.redaction.redactedCategories).toContain('questionCluster');
+		});
+	});
+
 	describe('provider secret-like values', () => {
 		it('redacts provider secret-like values', () => {
 			const state: WorkspaceState = {

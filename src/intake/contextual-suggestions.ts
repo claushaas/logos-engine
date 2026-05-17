@@ -51,6 +51,10 @@ function redactEmbeddedSecrets(value: string): string {
 	return redactString(result);
 }
 
+function truncateRedacted(value: string, maxLength: number): string {
+	return redactEmbeddedSecrets(value).slice(0, maxLength);
+}
+
 // ---------------------------------------------------------------------------
 // Generate contextual suggestions
 // ---------------------------------------------------------------------------
@@ -182,7 +186,7 @@ function suggestDependentQuestionClarifications(
 				sourceDocumentId: q.sourceDocumentId as CanonicalDocumentId,
 				sourcePhaseId: q.sourcePhaseId as PhaseId,
 				sourceQuestionId: q.id,
-				title: `Review prior decision for: ${q.text.slice(0, 60)}`,
+				title: `Review prior decision for: ${truncateRedacted(q.text, 60)}`,
 			});
 		}
 
@@ -214,7 +218,7 @@ function suggestDependentQuestionClarifications(
 				sourceDocumentId: q.sourceDocumentId as CanonicalDocumentId,
 				sourcePhaseId: q.sourcePhaseId as PhaseId,
 				sourceQuestionId: q.id,
-				title: `Verify assumption for: ${q.text.slice(0, 60)}`,
+				title: `Verify assumption for: ${truncateRedacted(q.text, 60)}`,
 			});
 		}
 	}
@@ -260,7 +264,7 @@ function suggestOpenQuestionReview(
 					sourceDocumentId: q.sourceDocumentId as CanonicalDocumentId,
 					sourcePhaseId: q.sourcePhaseId as PhaseId,
 					sourceQuestionId: q.id,
-					title: `Unresolved open question: ${existing.question.slice(0, 60)}`,
+					title: `Unresolved open question: ${truncateRedacted(existing.question, 60)}`,
 				});
 			}
 		}
@@ -341,7 +345,7 @@ function suggestProposalReview(
 					| PhaseId
 					| undefined,
 				sourceQuestionId: q.id,
-				title: `Review pending proposal: ${relatedProposal.title.slice(0, 60)}`,
+				title: `Review pending proposal: ${truncateRedacted(relatedProposal.title, 60)}`,
 			});
 		}
 	}
@@ -420,7 +424,7 @@ function suggestRiskAddressal(
 				sourceDocumentId: q.sourceDocumentId as CanonicalDocumentId,
 				sourcePhaseId: q.sourcePhaseId as PhaseId,
 				sourceQuestionId: q.id,
-				title: `Risk: ${relatedRisk.title.slice(0, 60)}`,
+				title: `Risk: ${truncateRedacted(relatedRisk.title, 60)}`,
 			});
 		}
 	}
@@ -484,7 +488,7 @@ function suggestValidationGapResolution(
 			sourceDocumentId: undefined,
 			sourcePhaseId: undefined,
 			sourceQuestionId: undefined,
-			title: `Validation gap: ${gap.description.slice(0, 60)}`,
+			title: `Validation gap: ${truncateRedacted(gap.description, 60)}`,
 		});
 	}
 

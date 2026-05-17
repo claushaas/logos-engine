@@ -78,8 +78,8 @@ exports[`question-planner > advanced workspace > advanced workspace cluster snap
         "text": "What does this project assert that other systems neglect?",
       },
     ],
-    "reasonSummary": "Selected 5 questions, 5 blocking; 8776 questions deferred",
-    "skippedCount": 8776,
+    "reasonSummary": "Selected 5 questions, 5 blocking; 8789 questions deferred",
+    "skippedCount": 8789,
     "sourceDocuments": [
       "01-thesis",
     ],
