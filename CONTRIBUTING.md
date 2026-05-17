@@ -60,23 +60,26 @@ pnpm install
 Run these before opening a PR:
 
 ```bash
-pnpm check       # Full non-mutating quality gate (lint + typecheck + test + build + smoke)
+pnpm check              # Full non-mutating quality gate (lint + typecheck + test + validation + build + smoke)
 ```
 
 Individual quality commands:
 
 ```bash
-pnpm lint        # Non-mutating lint (Biome + markdownlint)
-pnpm lint:biome  # Code/style lint — non-mutating
-pnpm lint:md     # Markdown lint — non-mutating
-pnpm typecheck   # Type-check src/ tree without emit
-pnpm test        # Run Vitest baseline
-pnpm build       # Build src/ to dist/
-pnpm smoke:cli   # Verify built CLI starts
-pnpm format      # Mutating format with Biome — fixes auto-fixable issues
+pnpm lint              # Non-mutating lint (Biome + markdownlint)
+pnpm lint:biome        # Code/style lint — non-mutating
+pnpm lint:md           # Markdown lint — non-mutating
+pnpm typecheck         # Type-check src/ tree without emit
+pnpm test              # Run Vitest baseline
+pnpm check:validation  # Validate bundled Standard profile contracts and generated-output fixtures
+pnpm build             # Build src/ to dist/
+pnpm smoke:cli         # Verify built CLI starts
+pnpm format            # Mutating format with Biome — fixes auto-fixable issues
 ```
 
 `pnpm check` is the strict CI/release gate and must not mutate files. `pnpm format` is the local write command.
+
+`pnpm check:validation` runs deterministic validation of the bundled Standard profile contracts using the Step 6.1 validation service and Step 6.2 semantic lint rules. It validates profile registry shape, phase and document descriptors, output declarations, dependency references, and generated-output fixtures. It does not require AI credentials, an initialized `.logos/` workspace, or network access.
 
 Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and select profile templates are excluded from markdownlint via `.markdownlintignore` until a documentation-hardening pass cleans them up.
 
