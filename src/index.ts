@@ -687,3 +687,38 @@ export {
 	parseMarkdownStructure,
 	SEMANTIC_LINT_RULE_REGISTRY,
 } from './validation/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 6.3 — /validate, /diagnose, and Review Reports
+// ---------------------------------------------------------------------------
+
+export type {
+	DiagnoseCommandData,
+	DiagnoseCommandMode,
+	DiagnoseCommandOptions,
+	DiagnosticExplanation,
+	DiagnosticFindingGroup,
+	DiagnosticInterpretation,
+	DiagnosticInterpretationSource,
+	DiagnosticSuggestedAction,
+	ValidateCommandData,
+	ValidateCommandMode,
+	ValidateCommandOptions,
+	ValidateCommandScope,
+	ValidationReportArtifact,
+	ValidationReportFormat,
+	ValidationReportKind,
+	ValidationReportParams,
+	ValidationReportSummary,
+	ValidationReportWritePolicy,
+} from './validation/index.js';
+
+export {
+	computeReportChecksum,
+	createReportSummary,
+	planReportPath,
+	renderValidationReportJson,
+	renderValidationReportMarkdown,
+	runDiagnoseCommand,
+	runValidateCommand,
+} from './validation/index.js';

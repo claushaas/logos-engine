@@ -11,6 +11,8 @@ import {
 	formatProviderStatus,
 } from '../runtime/project-context.js';
 import { readWorkspaceState } from '../state/workspace-state-repository.js';
+import { runDiagnoseCommand } from '../validation/diagnose-command.js';
+import { runValidateCommand } from '../validation/validate-command.js';
 import type {
 	ParsedInput,
 	RouterContext,
@@ -81,25 +83,9 @@ export async function routeSlashCommand(
 		case 'generate':
 			return getGenerateResult(args, context);
 		case 'diagnose':
-			return {
-				command: 'diagnose',
-				kind: 'warning',
-				messages: [
-					'/diagnose is recognized but not yet implemented.',
-					'Planned for Phase 6 — Validation, Linting, and Review Gates.',
-				],
-				shouldExit: false,
-			};
+			return getDiagnoseResult(args, context);
 		case 'validate':
-			return {
-				command: 'validate',
-				kind: 'warning',
-				messages: [
-					'/validate is recognized but not yet implemented.',
-					'Planned for Phase 6 — Validation, Linting, and Review Gates.',
-				],
-				shouldExit: false,
-			};
+			return getValidateResult(args, context);
 		default:
 			return {
 				command: name,
@@ -127,8 +113,11 @@ function getHelpMessages(): string[] {
 		'  /generate --confirm — Confirm and execute generation',
 		'  /generate --dry-run — Plan generation without writes',
 		'  /generate --policy <name> --confirm — Use specific write policy',
-		'  /diagnose    — Run diagnostics (not yet implemented)',
-		'  /validate    — Run validation (not yet implemented)',
+		'  /diagnose    — Run diagnostic analysis',
+		'  /diagnose --dry-run — Run diagnosis without writes',
+		'  /validate    — Run deterministic validation',
+		'  /validate --dry-run — Run validation without writes',
+		'  /validate --scope <scope> — Scope validation (contracts, state, artifacts, outputs)',
 		'  /status      — Show runtime status',
 		'  /config ai   — Configure AI provider (not yet implemented)',
 		'  /help        — Show this help',
@@ -715,6 +704,284 @@ async function getGenerateResult(
 }
 
 import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
+
+async function getValidateResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'validate',
+			kind: 'error',
+			messages: [
+				'Cannot run validation because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const isDryRun = args.includes('--dry-run');
+	let scopeArg: string | undefined;
+	const scopeIdx = args.indexOf('--scope');
+	if (scopeIdx !== -1 && scopeIdx + 1 < args.length) {
+		scopeArg = args[scopeIdx + 1];
+	}
+
+	const scopes: string[] | undefined = scopeArg ? [scopeArg] : undefined;
+
+	try {
+		const result = await runValidateCommand({
+			mode: isDryRun ? 'dry_run' : 'execute',
+			projectRoot,
+			scopes: scopes as
+				| ('contracts' | 'state' | 'artifacts' | 'outputs' | 'all')[]
+				| undefined,
+		});
+
+		if (result.status === 'error') {
+			const lines: string[] = [];
+			for (const e of result.errors) {
+				lines.push(`[${e.severity.toUpperCase()}] ${e.message}`);
+				if (e.recoveryHint) lines.push(`  Recovery: ${e.recoveryHint}`);
+			}
+			return {
+				command: 'validate',
+				kind: 'error',
+				messages: lines,
+				shouldExit: false,
+			};
+		}
+
+		const data = result.data;
+		const lines: string[] = [];
+
+		lines.push(`Gate Status: ${data.gateStatus.toUpperCase()}`);
+		lines.push('');
+		lines.push(`Findings: ${data.findingCounts.total} total`);
+		lines.push(`  Fatal:    ${data.findingCounts.fatal}`);
+		lines.push(`  Errors:   ${data.findingCounts.error}`);
+		lines.push(`  Warnings: ${data.findingCounts.warning}`);
+		lines.push(`  Info:     ${data.findingCounts.info}`);
+		lines.push('');
+
+		if (data.topFindings.length > 0) {
+			lines.push('Top findings:');
+			for (const f of data.topFindings.slice(0, 10)) {
+				lines.push(`  [${f.severity.toUpperCase()}] ${f.message}`);
+				if (f.path) lines.push(`    Path: ${f.path}`);
+			}
+			if (data.topFindings.length > 10) {
+				lines.push(`  ... and ${data.topFindings.length - 10} more`);
+			}
+			lines.push('');
+		}
+
+		if (data.reportPath) {
+			lines.push(`Report: ${data.reportPath}`);
+			if (data.reportId) lines.push(`Report ID: ${data.reportId}`);
+			if (data.runId) lines.push(`Run ID: ${data.runId}`);
+			lines.push('');
+		}
+
+		if (data.changedPaths.length > 0) {
+			lines.push('Changed paths:');
+			for (const p of data.changedPaths.slice(0, 5)) {
+				lines.push(`  ${p}`);
+			}
+			if (data.changedPaths.length > 5) {
+				lines.push(`  ... and ${data.changedPaths.length - 5} more`);
+			}
+			lines.push('');
+		}
+
+		if (data.recoveryHints.length > 0) {
+			lines.push('Recovery hints:');
+			for (const hint of data.recoveryHints.slice(0, 5)) {
+				lines.push(`  - ${hint}`);
+			}
+			lines.push('');
+		}
+
+		if (isDryRun) {
+			lines.push('(dry-run: no files were written)');
+		} else if (!data.reportPath) {
+			lines.push('(report generation was skipped)');
+		}
+
+		lines.push('');
+		lines.push('Next: Run /diagnose for analysis or /status to review state.');
+
+		return {
+			command: 'validate',
+			kind:
+				data.gateStatus === 'fail'
+					? 'warning'
+					: data.gateStatus === 'pass_with_warnings'
+						? 'warning'
+						: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'validate',
+			kind: 'error',
+			messages: ['Validation failed:', message],
+			shouldExit: false,
+		};
+	}
+}
+
+async function getDiagnoseResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'diagnose',
+			kind: 'error',
+			messages: [
+				'Cannot run diagnosis because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const isDryRun = args.includes('--dry-run');
+
+	try {
+		const result = await runDiagnoseCommand({
+			mode: isDryRun ? 'dry_run' : 'execute',
+			projectRoot,
+		});
+
+		if (result.status === 'error') {
+			const lines: string[] = [];
+			for (const e of result.errors) {
+				lines.push(`[${e.severity.toUpperCase()}] ${e.message}`);
+				if (e.recoveryHint) lines.push(`  Recovery: ${e.recoveryHint}`);
+			}
+			return {
+				command: 'diagnose',
+				kind: 'error',
+				messages: lines,
+				shouldExit: false,
+			};
+		}
+
+		const data = result.data;
+		const lines: string[] = [];
+
+		lines.push(`Gate Status: ${data.gateStatus.toUpperCase()}`);
+		lines.push(`Interpretation: ${data.interpretationSource}`);
+		if (data.fallbackReason) {
+			lines.push(`  Fallback reason: ${data.fallbackReason}`);
+		}
+		lines.push('');
+		lines.push(`Findings: ${data.findingCounts.total} total`);
+		lines.push(`  Fatal:    ${data.findingCounts.fatal}`);
+		lines.push(`  Errors:   ${data.findingCounts.error}`);
+		lines.push(`  Warnings: ${data.findingCounts.warning}`);
+		lines.push(`  Info:     ${data.findingCounts.info}`);
+		lines.push('');
+
+		if (data.explanations.length > 0) {
+			lines.push('Explanation:');
+			for (const exp of data.explanations.slice(0, 5)) {
+				lines.push(`  ${exp.text}`);
+			}
+			if (data.explanations.length > 5) {
+				lines.push(`  ... and ${data.explanations.length - 5} more`);
+			}
+			lines.push('');
+		}
+
+		if (data.groupedFindings.length > 0) {
+			lines.push('Finding groups:');
+			for (const group of data.groupedFindings.slice(0, 5)) {
+				lines.push(`  ${group.label}: ${group.reason}`);
+			}
+			if (data.groupedFindings.length > 5) {
+				lines.push(`  ... and ${data.groupedFindings.length - 5} more`);
+			}
+			lines.push('');
+		}
+
+		if (data.suggestedActions.length > 0) {
+			lines.push('Suggested actions:');
+			for (const action of data.suggestedActions.slice(0, 7)) {
+				lines.push(
+					`  [${action.priority.toUpperCase()}] [${action.category}] ${action.text}`,
+				);
+			}
+			if (data.suggestedActions.length > 7) {
+				lines.push(`  ... and ${data.suggestedActions.length - 7} more`);
+			}
+			lines.push('');
+		}
+
+		if (data.reportPath) {
+			lines.push(`Report: ${data.reportPath}`);
+			if (data.reportId) lines.push(`Report ID: ${data.reportId}`);
+			if (data.runId) lines.push(`Run ID: ${data.runId}`);
+			lines.push('');
+		}
+
+		if (data.changedPaths.length > 0) {
+			lines.push('Changed paths:');
+			for (const p of data.changedPaths.slice(0, 5)) {
+				lines.push(`  ${p}`);
+			}
+			if (data.changedPaths.length > 5) {
+				lines.push(`  ... and ${data.changedPaths.length - 5} more`);
+			}
+			lines.push('');
+		}
+
+		if (data.interpretationSource !== 'deterministic') {
+			lines.push(
+				'Note: AI interpretation is explanatory only and does not alter deterministic findings, severity, or gate status.',
+			);
+			lines.push('');
+		}
+
+		if (isDryRun) {
+			lines.push('(dry-run: no files were written)');
+		} else if (!data.reportPath) {
+			lines.push('(report generation was skipped)');
+		}
+
+		lines.push('');
+		lines.push(
+			'Next: Run /validate for raw findings or /status to review state.',
+		);
+
+		return {
+			command: 'diagnose',
+			kind:
+				data.gateStatus === 'fail'
+					? 'warning'
+					: data.gateStatus === 'pass_with_warnings'
+						? 'warning'
+						: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'diagnose',
+			kind: 'error',
+			messages: ['Diagnosis failed:', message],
+			shouldExit: false,
+		};
+	}
+}
 
 async function getStatusResult(
 	context: RouterContext,

@@ -215,26 +215,28 @@ describe('routeSlashCommand', () => {
 		expect(result.messages.join('\n')).toContain('/init');
 	});
 
-	it('/diagnose returns non-mutating stub', async () => {
+	it('/diagnose fails gracefully without workspace', async () => {
 		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'diagnose', raw: '/diagnose' },
 			defaultContext,
 		);
-		expect(result.kind).toBe('warning');
+		expect(result.kind).toBe('error');
 		expect(result.command).toBe('diagnose');
 		expect(result.shouldExit).toBe(false);
-		expect(result.messages.join('\n')).toContain('not yet implemented');
+		expect(result.messages.join('\n')).toContain('Cannot run diagnosis');
+		expect(result.messages.join('\n')).toContain('initialized');
 	});
 
-	it('/validate returns non-mutating stub', async () => {
+	it('/validate fails gracefully without workspace', async () => {
 		const result = await routeSlashCommand(
 			{ args: [], kind: 'slash', name: 'validate', raw: '/validate' },
 			defaultContext,
 		);
-		expect(result.kind).toBe('warning');
+		expect(result.kind).toBe('error');
 		expect(result.command).toBe('validate');
 		expect(result.shouldExit).toBe(false);
-		expect(result.messages.join('\n')).toContain('not yet implemented');
+		expect(result.messages.join('\n')).toContain('Cannot run full validation');
+		expect(result.messages.join('\n')).toContain('initialized');
 	});
 
 	it('/config ai returns non-mutating stub', async () => {
