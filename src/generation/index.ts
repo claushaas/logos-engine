@@ -52,3 +52,40 @@ export type {
 	RenderedMarkdownSection,
 	SectionRenderContext,
 } from './markdown-renderer-types.js';
+
+// ---------------------------------------------------------------------------
+// Step 5.3 — Safe Markdown Writer
+// ---------------------------------------------------------------------------
+
+export type {
+	GeneratedMarkdownMetadata,
+	ManualEditDetectionInput,
+	ManualEditDetectionResult,
+	ManualEditFsAdapter,
+	ManualEditStatus,
+	MarkdownChecksum,
+	MarkdownFileMetadata,
+	MarkdownFileTraceabilityRef,
+	MarkdownWriteChangedPath,
+	MarkdownWriteChangedPathRole,
+	MarkdownWriteCollision,
+	MarkdownWriteDiagnostic,
+	MarkdownWritePlan,
+	MarkdownWritePlanItem,
+	MarkdownWritePlanSummary,
+	MarkdownWriteStatus,
+	SafeMarkdownWriteInput,
+	SafeMarkdownWriteOptions,
+	SafeMarkdownWritePolicy,
+	SafeMarkdownWriteResult,
+} from './markdown-writer-types.js';
+export {
+	computeBodyChecksum,
+	computeFullChecksum,
+	detectManualEdit,
+	injectChecksumIntoMarkdown,
+	parseFrontmatter,
+	planMarkdownWrites,
+	resolveMarkdownWriteAction,
+	writeMarkdownDocuments,
+} from './safe-markdown-writer.js';
