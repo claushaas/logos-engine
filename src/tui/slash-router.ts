@@ -1,5 +1,7 @@
 /** Pure slash command router — returns typed results, performs no side effects */
 
+import { generateCanonicalDocs } from '../generation/generate-canonical-docs.js';
+import type { GenerateCanonicalDocsWritePolicy } from '../generation/generate-types.js';
 import { initWorkspace, preflightInit } from '../init/index.js';
 import { planNextQuestions } from '../intake/question-planner.js';
 import { buildContractGraph } from '../profiles/contract-graph.js';
@@ -77,15 +79,7 @@ export async function routeSlashCommand(
 		case 'continue':
 			return getContinueResult(context);
 		case 'generate':
-			return {
-				command: 'generate',
-				kind: 'warning',
-				messages: [
-					'/generate is recognized but not yet implemented.',
-					'Planned for Phase 5 — Canonical Markdown Generation.',
-				],
-				shouldExit: false,
-			};
+			return getGenerateResult(args, context);
 		case 'diagnose':
 			return {
 				command: 'diagnose',
@@ -129,7 +123,10 @@ function getHelpMessages(): string[] {
 		'  /init --profile <id> — Select profile (default: standard)',
 		'  /init --dry-run — Plan workspace without creating files',
 		'  /continue    — Continue intake with the next question cluster',
-		'  /generate    — Generate canonical Markdown (not yet implemented)',
+		'  /generate    — Generate canonical Markdown documentation',
+		'  /generate --confirm — Confirm and execute generation',
+		'  /generate --dry-run — Plan generation without writes',
+		'  /generate --policy <name> --confirm — Use specific write policy',
 		'  /diagnose    — Run diagnostics (not yet implemented)',
 		'  /validate    — Run validation (not yet implemented)',
 		'  /status      — Show runtime status',
@@ -401,6 +398,320 @@ async function getInitResult(
 		messages: lines,
 		shouldExit: false,
 	};
+}
+
+async function getGenerateResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'generate',
+			kind: 'error',
+			messages: [
+				'Cannot generate canonical documentation because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const readResult = await readWorkspaceState({ projectRoot });
+	if (!readResult.success || !readResult.state) {
+		return {
+			command: 'generate',
+			kind: 'warning',
+			messages: [
+				'Cannot generate documentation because the LOGOS workspace is not initialized.',
+				'Run /init to create a workspace, then run /generate again.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const isConfirm = args.includes('--confirm');
+	const isDryRun = args.includes('--dry-run');
+
+	let writePolicy: GenerateCanonicalDocsWritePolicy | undefined;
+	const policyIdx = args.indexOf('--policy');
+	if (policyIdx !== -1 && policyIdx + 1 < args.length) {
+		const raw = args[policyIdx + 1] as string | undefined;
+		if (raw) {
+			if (
+				raw === 'skip' ||
+				raw === 'fail' ||
+				raw === 'backup_and_write' ||
+				raw === 'backup-and-write' ||
+				raw === 'overwrite'
+			) {
+				writePolicy =
+					raw === 'backup-and-write'
+						? 'backup_and_write'
+						: (raw as GenerateCanonicalDocsWritePolicy);
+			} else {
+				return {
+					command: 'generate',
+					kind: 'error',
+					messages: [
+						`Invalid write policy: "${raw}"`,
+						'Valid policies: skip, fail, backup_and_write, overwrite',
+					],
+					shouldExit: false,
+				};
+			}
+		}
+	}
+
+	if (isDryRun) {
+		try {
+			const result = await generateCanonicalDocs({
+				mode: 'dry_run',
+				projectRoot,
+				writePolicy,
+			});
+
+			if (result.mode !== 'dry_run') {
+				return {
+					command: 'generate',
+					kind: 'error',
+					messages: ['Unexpected result mode from dry-run generation.'],
+					shouldExit: false,
+				};
+			}
+
+			const lines: string[] = [
+				'Generation dry-run report',
+				'',
+				`Profile:            ${result.profileId}`,
+				`Documentation root: ${result.documentationRoot}`,
+				`Write policy:       ${result.writePolicy}`,
+				'',
+				'Planned actions:',
+				`  Generate:   ${result.documentCounts.generate}`,
+				`  Update:     ${result.documentCounts.update}`,
+				`  Skip:       ${result.documentCounts.skip}`,
+				`  Incomplete: ${result.documentCounts.incomplete}`,
+				`  Blocked:    ${result.documentCounts.blocked}`,
+				`  Failed:     ${result.documentCounts.failed}`,
+				`  Stale:      ${result.documentCounts.stale}`,
+				'',
+				'Write plan:',
+				`  Created:   ${result.writePlanSummary.created}`,
+				`  Updated:   ${result.writePlanSummary.updated}`,
+				`  Skipped:   ${result.writePlanSummary.skipped}`,
+				`  Collisions: ${result.writePlanSummary.collisions}`,
+				`  Failed:    ${result.writePlanSummary.failed}`,
+				'',
+			];
+
+			if (result.collisionPaths.length > 0) {
+				lines.push('Collisions (manual edits detected):');
+				for (const p of result.collisionPaths.slice(0, 10)) {
+					lines.push(`  ${p}`);
+				}
+				if (result.collisionPaths.length > 10) {
+					lines.push(`  ... and ${result.collisionPaths.length - 10} more`);
+				}
+				lines.push('');
+			}
+
+			if (result.targetPaths.length > 0) {
+				lines.push('Target paths:');
+				for (const p of result.targetPaths.slice(0, 10)) {
+					lines.push(`  ${p}`);
+				}
+				if (result.targetPaths.length > 10) {
+					lines.push(`  ... and ${result.targetPaths.length - 10} more`);
+				}
+				lines.push('');
+			}
+
+			lines.push('(dry-run: no files were written)');
+			lines.push('Run /generate --confirm to execute.');
+
+			return {
+				command: 'generate',
+				kind: 'info',
+				messages: lines,
+				shouldExit: false,
+			};
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return {
+				command: 'generate',
+				kind: 'error',
+				messages: ['Generation failed:', message],
+				shouldExit: false,
+			};
+		}
+	}
+
+	if (isConfirm) {
+		try {
+			const result = await generateCanonicalDocs({
+				mode: 'execute',
+				projectRoot,
+				writePolicy,
+			});
+
+			if (result.mode !== 'execute') {
+				return {
+					command: 'generate',
+					kind: 'error',
+					messages: ['Unexpected result mode from generation execution.'],
+					shouldExit: false,
+				};
+			}
+
+			const lines: string[] = [
+				'Generation complete',
+				'',
+				'Outcomes:',
+				`  Created:    ${result.createdPaths.length}`,
+				`  Updated:    ${result.updatedPaths.length}`,
+				`  Skipped:    ${result.skippedPaths.length}`,
+				`  Incomplete: ${result.incompleteDocumentIds.length}`,
+				`  Blocked:    ${result.blockedDocumentIds.length}`,
+				`  Failed:     ${result.failedDocumentIds.length}`,
+				`  Stale:      ${result.staleDocumentIds.length}`,
+				`  Collisions: ${result.collisionPaths.length}`,
+				'',
+				`Documentation root: ${result.documentationRoot}`,
+				`Run ID:             ${result.runId}`,
+				'',
+			];
+
+			if (result.changedPaths.length > 0) {
+				lines.push('Changed paths:');
+				for (const p of result.changedPaths.slice(0, 10)) {
+					lines.push(`  ${p}`);
+				}
+				if (result.changedPaths.length > 10) {
+					lines.push(`  ... and ${result.changedPaths.length - 10} more`);
+				}
+				lines.push('');
+			}
+
+			if (result.collisionPaths.length > 0) {
+				lines.push('Collisions (manual edits were protected):');
+				for (const p of result.collisionPaths.slice(0, 10)) {
+					lines.push(`  ${p}`);
+				}
+				lines.push('');
+			}
+
+			lines.push('Next: Run /status to review updated state.');
+			lines.push('Future: Run /validate (Phase 6) to check generated output.');
+
+			const hasErrors =
+				result.collisionPaths.length > 0 ||
+				result.diagnostics.some((d) => d.severity === 'error');
+			const hasWarnings = result.diagnostics.some(
+				(d) => d.severity === 'warning',
+			);
+
+			return {
+				command: 'generate',
+				kind: hasErrors ? 'error' : hasWarnings ? 'warning' : 'success',
+				messages: lines,
+				shouldExit: false,
+			};
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return {
+				command: 'generate',
+				kind: 'error',
+				messages: ['Generation failed:', message],
+				shouldExit: false,
+			};
+		}
+	}
+
+	// Default: show preflight
+	try {
+		const preflight = await generateCanonicalDocs({
+			mode: 'preflight',
+			projectRoot,
+			writePolicy,
+		});
+
+		if (preflight.mode !== 'preflight') {
+			return {
+				command: 'generate',
+				kind: 'error',
+				messages: ['Unexpected result mode from generation preflight.'],
+				shouldExit: false,
+			};
+		}
+
+		const lines: string[] = [
+			'Generation preflight',
+			'',
+			`Profile:            ${preflight.profileId}`,
+			`Documentation root: ${preflight.documentationRoot}`,
+			'',
+			'Planned actions:',
+			`  Generate:   ${preflight.documentCounts.generate}`,
+			`  Update:     ${preflight.documentCounts.update}`,
+			`  Skip:       ${preflight.documentCounts.skip}`,
+			`  Incomplete: ${preflight.documentCounts.incomplete}`,
+			`  Blocked:    ${preflight.documentCounts.blocked}`,
+			`  Failed:     ${preflight.documentCounts.failed}`,
+			`  Stale:      ${preflight.documentCounts.stale}`,
+			'',
+		];
+
+		if (preflight.collisionPaths.length > 0) {
+			lines.push('Manual edits detected (will be protected):');
+			for (const p of preflight.collisionPaths.slice(0, 5)) {
+				lines.push(`  ${p}`);
+			}
+			if (preflight.collisionPaths.length > 5) {
+				lines.push(`  ... and ${preflight.collisionPaths.length - 5} more`);
+			}
+			lines.push('');
+		}
+
+		if (preflight.targetPaths.length > 0) {
+			lines.push('Target paths:');
+			for (const p of preflight.targetPaths.slice(0, 10)) {
+				lines.push(`  ${p}`);
+			}
+			if (preflight.targetPaths.length > 10) {
+				lines.push(`  ... and ${preflight.targetPaths.length - 10} more`);
+			}
+			lines.push('');
+		}
+
+		lines.push('No files have been written.');
+		lines.push('Run /generate --confirm to execute generation.');
+		lines.push('Run /generate --dry-run for a detailed dry-run report.');
+		lines.push('Supported policies: skip, fail, backup_and_write, overwrite');
+		lines.push(
+			'  Use /generate --policy backup_and_write --confirm to backup before overwrite.',
+		);
+
+		const hasWarnings =
+			preflight.documentCounts.blocked > 0 ||
+			preflight.documentCounts.failed > 0 ||
+			preflight.collisionPaths.length > 0;
+
+		return {
+			command: 'generate',
+			kind: hasWarnings ? 'warning' : 'info',
+			messages: lines,
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'generate',
+			kind: 'error',
+			messages: ['Generation preflight failed:', message],
+			shouldExit: false,
+		};
+	}
 }
 
 import { getWorkspaceStatusSummary } from '../state/workspace-status.js';

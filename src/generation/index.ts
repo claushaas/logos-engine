@@ -89,3 +89,23 @@ export {
 	resolveMarkdownWriteAction,
 	writeMarkdownDocuments,
 } from './safe-markdown-writer.js';
+
+// ---------------------------------------------------------------------------
+// Step 5.4 — Generate Canonical Docs (orchestration)
+// ---------------------------------------------------------------------------
+
+export {
+	executeGenerateCanonicalDocs,
+	generateCanonicalDocs,
+	planGenerateCanonicalDocs,
+} from './generate-canonical-docs.js';
+export type {
+	GenerateCanonicalDocsDiagnostic,
+	GenerateCanonicalDocsDryRunResult,
+	GenerateCanonicalDocsMode,
+	GenerateCanonicalDocsOptions,
+	GenerateCanonicalDocsPreflight,
+	GenerateCanonicalDocsReportItem,
+	GenerateCanonicalDocsResult,
+	GenerateCanonicalDocsWritePolicy,
+} from './generate-types.js';

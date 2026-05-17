@@ -605,3 +605,23 @@ export {
 	resolveMarkdownWriteAction,
 	writeMarkdownDocuments,
 } from './generation/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 5.4 — Generate Canonical Docs Orchestration
+// ---------------------------------------------------------------------------
+
+export type {
+	GenerateCanonicalDocsDiagnostic,
+	GenerateCanonicalDocsDryRunResult,
+	GenerateCanonicalDocsMode,
+	GenerateCanonicalDocsOptions,
+	GenerateCanonicalDocsPreflight,
+	GenerateCanonicalDocsReportItem,
+	GenerateCanonicalDocsResult,
+	GenerateCanonicalDocsWritePolicy,
+} from './generation/index.js';
+export {
+	executeGenerateCanonicalDocs,
+	generateCanonicalDocs,
+	planGenerateCanonicalDocs,
+} from './generation/index.js';
