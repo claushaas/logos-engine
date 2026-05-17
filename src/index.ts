@@ -722,3 +722,45 @@ export {
 	runDiagnoseCommand,
 	runValidateCommand,
 } from './validation/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 7.1 — Dependency Graph
+// ---------------------------------------------------------------------------
+
+export type {
+	DependencyGraphBuildInput,
+	DependencyGraphBuildOptions,
+	DependencyGraphBuildResult,
+	DependencyGraphCycle,
+	DependencyGraphDiagnostic,
+	DependencyGraphEdge,
+	DependencyGraphEdgeId,
+	DependencyGraphEdgeKind,
+	DependencyGraphNode,
+	DependencyGraphNodeId,
+	DependencyGraphNodeKind,
+	DependencyGraphSummary,
+	DependencyGraphTraversalOptions,
+	DependencyGraphTraversalResult,
+	DependencyGraphUnresolvedReference,
+	DocumentDependencyGraph,
+	ExecutiveCfgExportTarget,
+	ExecutiveCfgOutput,
+	ExecutiveGenerationConfig,
+} from './dependency-graph/index.js';
+export {
+	buildDocumentDependencyGraph,
+	getCanonicalOutputForDocument,
+	getDerivedArtifactsForDocument,
+	getDirectDependencies,
+	getDirectDependents,
+	getDocumentNode,
+	getDownstreamNodes,
+	getExecutiveOutputs,
+	getNode,
+	getOutputsForDocument,
+	getPhaseDocuments,
+	getTopologicalDocumentOrder,
+	getUpstreamNodes,
+	summarizeDependencyGraph,
+} from './dependency-graph/index.js';
