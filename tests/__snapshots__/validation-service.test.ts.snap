@@ -1,0 +1,176 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`artifact registry validation > reports invalid canonicality, unknown IDs, invalid path, duplicate path, checksum, and missing file 1`] = `
+[
+  {
+    "code": "path_traversal",
+    "pointer": "/artifacts/0/path",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_checksum_invalid",
+    "pointer": "/artifacts/0/checksum",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_invalid_canonicality",
+    "pointer": "/artifacts/1/isCanonical",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_unknown_document",
+    "pointer": "/artifacts/1/sourceDocumentIds/0",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_unknown_phase",
+    "pointer": "/artifacts/2/metadata/phaseId",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_duplicate_path",
+    "pointer": "/artifacts/2/path",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_duplicate_path",
+    "pointer": "/artifacts/3/path",
+    "severity": "error",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_file_missing",
+    "pointer": "/artifacts/2/path",
+    "severity": "warning",
+    "source": "artifact_registry",
+  },
+  {
+    "code": "artifact_file_missing",
+    "pointer": "/artifacts/3/path",
+    "severity": "warning",
+    "source": "artifact_registry",
+  },
+]
+`;
+
+exports[`contract validation > validates Standard profile contracts deterministically 1`] = `
+[
+  {
+    "code": "document_missing_dependency",
+    "pointer": "/feeds[2]",
+    "severity": "info",
+    "source": "contract_graph",
+  },
+  {
+    "code": "document_missing_dependency",
+    "pointer": "/feeds[1]",
+    "severity": "info",
+    "source": "contract_graph",
+  },
+  {
+    "code": "document_missing_dependency",
+    "pointer": "/feeds[2]",
+    "severity": "info",
+    "source": "contract_graph",
+  },
+]
+`;
+
+exports[`contract validation > wraps missing and invalid registry diagnostics as findings 1`] = `
+[
+  {
+    "code": "profile_registry_invalid",
+    "pointer": "/axes",
+    "severity": "error",
+    "source": "profile_registry",
+  },
+]
+`;
+
+exports[`generated output metadata validation > reports missing, invalid, mismatched, overclaiming, modified, registry-mismatched, and traversal metadata 1`] = `
+[
+  {
+    "code": "path_traversal",
+    "pointer": "/outputPaths/2",
+    "severity": "error",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_path_mismatch",
+    "pointer": "/canonicalOutput",
+    "severity": "error",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_document_mismatch",
+    "pointer": "/documentId",
+    "severity": "error",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_phase_mismatch",
+    "pointer": "/phaseId",
+    "severity": "error",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_profile_mismatch",
+    "pointer": "/profileId",
+    "severity": "error",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_manual_edit_status",
+    "pointer": "/contentChecksum",
+    "severity": "warning",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_registry_mismatch",
+    "pointer": "/contentChecksum",
+    "severity": "warning",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_validation_overclaim",
+    "pointer": "/frontmatter",
+    "severity": "warning",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_invalid",
+    "pointer": "/generationStatus",
+    "severity": "warning",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_invalid",
+    "pointer": "/frontmatter",
+    "severity": "warning",
+    "source": "generated_output_metadata",
+  },
+  {
+    "code": "output_metadata_missing",
+    "pointer": "/frontmatter",
+    "severity": "warning",
+    "source": "generated_output_metadata",
+  },
+]
+`;
+
+exports[`workspace state validation > reports missing workspace, invalid JSON, schema version mismatch, invalid roots, and profile mismatch 1`] = `
+[
+  {
+    "code": "workspace_schema_version_unsupported",
+    "pointer": "/schemaVersion",
+    "severity": "error",
+    "source": "workspace_state",
+  },
+]
+`;

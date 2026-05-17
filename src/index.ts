@@ -625,3 +625,41 @@ export {
 	generateCanonicalDocs,
 	planGenerateCanonicalDocs,
 } from './generation/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 6.1 — Deterministic Validation Service
+// ---------------------------------------------------------------------------
+
+export type {
+	ValidationDiagnostic,
+	ValidationFinding,
+	ValidationFindingCode,
+	ValidationFindingLocation,
+	ValidationFindingRecoveryHint,
+	ValidationFindingSeverity,
+	ValidationFindingSource,
+	ValidationGateStatus,
+	ValidationRunInput,
+	ValidationRunOptions,
+	ValidationRunResult,
+	ValidationScope,
+	ValidationSummary,
+	ValidationTarget,
+} from './validation/index.js';
+export {
+	createValidationFinding,
+	createValidationRunResult,
+	determineValidationGateStatus,
+	looksLikeSecretLikeValue,
+	redactSecretLikeString,
+	redactValidationValue,
+	sortValidationFindings,
+	summarizeValidationFindings,
+	VALIDATION_FINDING_SORT_ORDER,
+	validateArtifactRegistry,
+	validateContracts,
+	validateGeneratedOutputMetadata,
+	validateWorkspace,
+	validateWorkspaceState as validateWorkspaceStateScope,
+	validationSchemas,
+} from './validation/index.js';

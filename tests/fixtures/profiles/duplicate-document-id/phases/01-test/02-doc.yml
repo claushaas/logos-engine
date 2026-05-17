@@ -10,6 +10,7 @@ document:
     canonical:
       format: "markdown"
       path: "docs/test.md"
+      purpose: "Store test doc."
   sections:
     - id: "sec-1"
       title: "Section 1"
