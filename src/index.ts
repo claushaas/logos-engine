@@ -663,3 +663,27 @@ export {
 	validateWorkspaceState as validateWorkspaceStateScope,
 	validationSchemas,
 } from './validation/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 6.2 — Document Completeness and Semantic Lints
+// ---------------------------------------------------------------------------
+
+export type {
+	DocumentSemanticLintContext,
+	DocumentSemanticLintInput,
+	DocumentSemanticLintOptions,
+	DocumentSemanticLintResult,
+	DocumentSemanticLintRule,
+	DocumentSemanticLintRuleId,
+	DocumentSemanticLintRuleResult,
+	MarkdownDocumentStructure,
+	MarkdownHeadingIndex,
+	MarkdownLintDiagnostic,
+} from './validation/index.js';
+export {
+	createSemanticLintRules,
+	lintCanonicalMarkdownDocument,
+	lintCanonicalMarkdownDocuments,
+	parseMarkdownStructure,
+	SEMANTIC_LINT_RULE_REGISTRY,
+} from './validation/index.js';
