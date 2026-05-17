@@ -71,7 +71,7 @@ pnpm typecheck     # Type-check src/ tree without emit
 pnpm test          # Run Vitest baseline
 pnpm build         # Build src/ to dist/
 pnpm smoke:cli     # Verify built CLI starts
-pnpm check         # Full non-mutating quality gate (lint + typecheck + test + build + smoke)
+pnpm check         # Full non-mutating quality gate (lint + typecheck + test + validation + build + smoke)
 pnpm format        # Mutating format with Biome — fixes auto-fixable issues
 ```
 
@@ -117,12 +117,15 @@ Inside the TUI, slash commands drive system operations:
 /generate       # Preview canonical Markdown generation
 /generate --dry-run # Report planned generation without writes
 /generate --confirm # Render canonical Markdown under the configured root
-/validate       # Check for missing decisions and gaps (recognized stub)
-/diagnose       # Get AI-assisted diagnostics (recognized stub)
+/validate       # Run deterministic validation and write a local review report
+/validate --dry-run # Run validation without report/state writes
+/validate --scope contracts # Validate bundled profile contracts without an initialized workspace
+/diagnose       # Run deterministic diagnosis, with optional guarded AI interpretation when configured
+/diagnose --dry-run # Run diagnosis without report/state writes
 /config ai      # Configure AI provider (recognized stub)
 ```
 
-In this step, `/help`, `/status`, `/exit`, `/init`, `/continue`, and `/generate` are functional. `/diagnose`, `/validate`, and `/config ai` are recognized stubs and will be implemented in later phases.
+In this step, `/help`, `/status`, `/exit`, `/init`, `/continue`, `/generate`, `/validate`, and `/diagnose` are functional. `/config ai` is a recognized stub and will be implemented in a later phase.
 
 All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) are in-TUI commands, not external CLI subcommands.
 

@@ -1,13 +1,19 @@
-import { mkdir, rm } from 'node:fs/promises';
+import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
+import { WORKSPACE_STATE_SCHEMA_VERSION } from '../src/index.js';
 import { initWorkspace } from '../src/init/init-execute.js';
-import { readWorkspaceState } from '../src/state/workspace-state-repository.js';
+import {
+	readWorkspaceState,
+	writeWorkspaceState,
+} from '../src/state/workspace-state-repository.js';
 import { runValidateCommand } from '../src/validation/validate-command.js';
 
 const ID_FACTORY = () => 'val-0001';
 const CLOCK = { now: () => '2025-01-01T00:00:00.000Z' };
+const ZERO_SHA = '0'.repeat(64);
+const FAKE_TOKEN = `sk-${'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGH'}`;
 
 const tempDirs: string[] = [];
 
@@ -35,6 +41,69 @@ async function initTempWorkspace(projectRoot: string): Promise<void> {
 		projectRoot,
 	});
 	if (!result.success) throw new Error('Failed to init workspace in test');
+}
+
+async function addGeneratedMarkdownWithTokenLeak(
+	projectRoot: string,
+): Promise<void> {
+	const relativePath = 'logos/docs/01-foundation/01-thesis.md';
+	const fullPath = join(projectRoot, relativePath);
+	await mkdir(dirname(fullPath), { recursive: true });
+	await writeFile(
+		fullPath,
+		`---
+documentId: 01-thesis
+phaseId: 01-foundation
+profileId: standard
+canonicalOutput: ${relativePath}
+generatedBy: logos-engine
+generatedAt: 2025-01-01T00:00:00.000Z
+generationStatus: generated
+sourceStateSchemaVersion: ${WORKSPACE_STATE_SCHEMA_VERSION}
+contentChecksum: ${ZERO_SHA}
+---
+
+# Founding Thesis
+
+## Core Thesis
+
+Token-like value should fail the aggregate validation gate.
+
+## Secret Material
+
+token: ${FAKE_TOKEN}
+`,
+		'utf-8',
+	);
+
+	const stateRead = await readWorkspaceState({ projectRoot });
+	if (!stateRead.success || !stateRead.state) {
+		throw new Error('Expected initialized workspace state');
+	}
+
+	const writeResult = await writeWorkspaceState({
+		policy: 'overwrite',
+		projectRoot,
+		state: {
+			...stateRead.state,
+			artifacts: [
+				...stateRead.state.artifacts,
+				{
+					artifactId: 'art-token-leak',
+					artifactType: 'canonical_markdown',
+					checksum: ZERO_SHA,
+					generatedAt: '2025-01-01T00:00:00.000Z',
+					isCanonical: true,
+					metadata: { phaseId: '01-foundation' },
+					path: relativePath,
+					runId: 'run-token-leak',
+					sourceDocumentIds: ['01-thesis'],
+					status: 'generated',
+				},
+			],
+		},
+	});
+	expect(writeResult.success).toBe(true);
 }
 
 describe('runValidateCommand', () => {
@@ -240,6 +309,26 @@ describe('runValidateCommand', () => {
 		expect(typeof result.data.findingCounts.fatal).toBe('number');
 		expect(typeof result.data.findingCounts.warning).toBe('number');
 		expect(typeof result.data.findingCounts.info).toBe('number');
+	});
+
+	it('fails the gate when semantic lint findings include errors', async () => {
+		const projectRoot = await createTempDir();
+		await initTempWorkspace(projectRoot);
+		await addGeneratedMarkdownWithTokenLeak(projectRoot);
+
+		const result = await runValidateCommand({
+			clock: CLOCK,
+			idFactory: ID_FACTORY,
+			mode: 'dry_run',
+			projectRoot,
+			scopes: ['outputs'],
+		});
+
+		expect(result.data.topFindings.map((f) => f.code)).toContain(
+			'document_token_like_value',
+		);
+		expect(result.data.findingCounts.error).toBeGreaterThan(0);
+		expect(result.data.gateStatus).toBe('fail');
 	});
 
 	it('does not mutate canonical Markdown files', async () => {

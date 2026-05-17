@@ -36,7 +36,11 @@ import type {
 	ValidationGateStatus,
 	ValidationScope,
 } from './validation-finding.js';
-import { summarizeValidationFindings } from './validation-finding.js';
+import {
+	determineValidationGateStatus,
+	sortValidationFindings,
+	summarizeValidationFindings,
+} from './validation-finding.js';
 
 export type DiagnoseCommandMode = 'execute' | 'dry_run';
 
@@ -470,14 +474,12 @@ ${JSON.stringify(findingSummaries, null, 2)}`,
 			};
 		}
 
-		const aiText = response.messages.map((m) => m.content).join('\n');
-
 		return {
 			interpretation: {
 				explanations: [
 					{
 						findingIds: findings.map((f) => f.id),
-						text: aiText.slice(0, 2000),
+						text: 'AI interpretation completed through the configured provider. Raw provider responses are not persisted; deterministic findings, groups, suggested actions, and gate status remain authoritative.',
 					},
 				],
 				groupedFindings: [],
@@ -591,7 +593,6 @@ export async function runDiagnoseCommand(
 
 	const validateData = validateResult.data;
 	const _allFindings = validateData.topFindings;
-	const gateStatus = validateData.gateStatus;
 
 	const _fullFindings: ValidationFinding[] = [];
 	// We need the actual finding objects from the validation service for proper diagnosis
@@ -648,10 +649,12 @@ export async function runDiagnoseCommand(
 		}
 	}
 
-	const allFullFindings = [
+	const allFullFindings = sortValidationFindings([
 		...validationResult.findings,
 		...semanticLintFindings,
-	];
+	]);
+	const fullSummary = summarizeValidationFindings(allFullFindings);
+	const gateStatus = determineValidationGateStatus(allFullFindings);
 
 	const deterministicInterpretation: DiagnosticInterpretation = {
 		explanations: generateDeterministicExplanations(allFullFindings),
@@ -701,7 +704,13 @@ export async function runDiagnoseCommand(
 				dryRun: true,
 				explanations: interpretation.explanations,
 				fallbackReason: interpretation.fallbackReason,
-				findingCounts: validateData.findingCounts,
+				findingCounts: {
+					error: fullSummary.bySeverity.error,
+					fatal: fullSummary.bySeverity.fatal,
+					info: fullSummary.bySeverity.info,
+					total: fullSummary.totalFindings,
+					warning: fullSummary.bySeverity.warning,
+				},
 				gateStatus,
 				groupedFindings: interpretation.groupedFindings,
 				interpretationSource: interpretation.source,
@@ -760,7 +769,7 @@ export async function runDiagnoseCommand(
 			reportKind: 'diagnostic' as const,
 			runId,
 			scopesChecked: validateData.scopesChecked,
-			summary: summarizeValidationFindings(allFullFindings),
+			summary: fullSummary,
 			title: 'Diagnostic Report',
 		};
 
@@ -898,7 +907,13 @@ export async function runDiagnoseCommand(
 			dryRun,
 			explanations: interpretation.explanations,
 			fallbackReason: interpretation.fallbackReason,
-			findingCounts: validateData.findingCounts,
+			findingCounts: {
+				error: fullSummary.bySeverity.error,
+				fatal: fullSummary.bySeverity.fatal,
+				info: fullSummary.bySeverity.info,
+				total: fullSummary.totalFindings,
+				warning: fullSummary.bySeverity.warning,
+			},
 			gateStatus,
 			groupedFindings: interpretation.groupedFindings,
 			interpretationSource: interpretation.source,

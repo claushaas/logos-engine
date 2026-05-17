@@ -33,7 +33,11 @@ import type {
 	ValidationGateStatus,
 	ValidationScope,
 } from './validation-finding.js';
-import { summarizeValidationFindings } from './validation-finding.js';
+import {
+	determineValidationGateStatus,
+	sortValidationFindings,
+	summarizeValidationFindings,
+} from './validation-finding.js';
 import { validateWorkspace } from './validation-service.js';
 
 export type ValidateCommandMode = 'execute' | 'dry_run';
@@ -287,9 +291,12 @@ export async function runValidateCommand(
 		}
 	}
 
-	const allFindings = [...validationResult.findings, ...semanticLintFindings];
+	const allFindings = sortValidationFindings([
+		...validationResult.findings,
+		...semanticLintFindings,
+	]);
 	const summary = summarizeValidationFindings(allFindings);
-	const gateStatus = validationResult.status;
+	const gateStatus = determineValidationGateStatus(allFindings);
 
 	if (dryRun) {
 		const topFindings = getTopFindings(allFindings, 20);
