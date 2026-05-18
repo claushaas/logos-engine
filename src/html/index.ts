@@ -115,3 +115,39 @@ export {
 	renderStaticHtmlArtifact,
 	staticHtmlRenderer,
 } from './static-html-renderer.js';
+
+// ---------------------------------------------------------------------------
+// Step 9.3 — HTML Review View Generation
+// ---------------------------------------------------------------------------
+
+export type {
+	HtmlReviewArtifactRecord,
+	HtmlReviewChangedPath,
+	HtmlReviewGenerationDiagnostic,
+	HtmlReviewGenerationInput,
+	HtmlReviewGenerationItem,
+	HtmlReviewGenerationOptions,
+	HtmlReviewGenerationResult,
+	HtmlReviewGenerationSecuritySummary,
+	HtmlReviewGenerationStatus,
+	HtmlReviewGenerationSummary,
+	HtmlReviewViewDataInput,
+	HtmlReviewViewKind,
+	HtmlReviewWritePolicy,
+} from './html-review-generation-types.js';
+export { HTML_REVIEW_GENERATION_STATUS_ORDER } from './html-review-generation-types.js';
+export {
+	generateHtmlReviewViews,
+	performSecurityAudit,
+} from './html-review-generator.js';
+export {
+	buildDashboardViewData,
+	buildDecisionMapViewData,
+	buildDocumentViewData,
+	buildExecutiveReadinessViewData,
+	buildPhaseMapViewData,
+	buildReadinessViewData,
+	buildRiskMapViewData,
+	buildValidationSummaryViewData,
+	getViewDataBuilder,
+} from './html-review-view-builders.js';
