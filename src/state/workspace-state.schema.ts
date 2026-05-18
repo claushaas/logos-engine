@@ -526,11 +526,42 @@ export type WorkspaceRunRecord = z.infer<typeof WorkspaceRunRecordSchema>;
 // Top-level WorkspaceState
 // ---------------------------------------------------------------------------
 
+const ProvenanceSourceRecordSchema = z
+	.object({
+		confidence: z.string().min(1),
+		sourceId: nonEmptyString,
+		sourceType: z.string().min(1),
+		status: z.string().min(1),
+		title: nonEmptyString,
+	})
+	.passthrough();
+
+const ProvenanceClaimRecordSchema = z
+	.object({
+		claimId: nonEmptyString,
+		claimType: z.string().min(1),
+		confidence: z.string().min(1),
+		reviewState: z.string().min(1),
+		status: z.string().min(1),
+		summary: nonEmptyString,
+	})
+	.passthrough();
+
+const ProvenanceClaimSourceLinkSchema = z
+	.object({
+		claimId: nonEmptyString,
+		linkType: z.string().min(1),
+		sourceId: nonEmptyString,
+	})
+	.passthrough();
+
 export const WorkspaceStateSchema = z
 	.object({
 		artifacts: z.array(WorkspaceArtifactSchema).default([]),
 		assumptions: z.array(WorkspaceAssumptionSchema).default([]),
 		auditEvents: z.array(WorkspaceAuditEventSchema).default([]),
+		claimSourceLinks: z.array(ProvenanceClaimSourceLinkSchema).default([]),
+		claims: z.array(ProvenanceClaimRecordSchema).default([]),
 		decisions: z.array(WorkspaceDecisionSchema).default([]),
 		documentation: DocumentationRootConfigSchema,
 		generationRuns: z.array(WorkspaceGenerationRunSchema).default([]),
@@ -543,6 +574,7 @@ export const WorkspaceStateSchema = z
 		runs: z.array(WorkspaceRunRecordSchema).default([]),
 		schemaVersion: z.literal(WORKSPACE_STATE_SCHEMA_VERSION),
 		sessions: z.array(WorkspaceSessionSchema).default([]),
+		sources: z.array(ProvenanceSourceRecordSchema).default([]),
 		validationRuns: z.array(WorkspaceValidationRunSchema).default([]),
 		workspace: WorkspaceMetadataSchema,
 	})

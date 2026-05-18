@@ -30,6 +30,8 @@ export function createDefaultWorkspaceState(
 		artifacts: [],
 		assumptions: [],
 		auditEvents: [],
+		claimSourceLinks: [],
+		claims: [],
 		decisions: [],
 		documentation: {
 			isDefault: isDefaultRoot,
@@ -57,6 +59,7 @@ export function createDefaultWorkspaceState(
 		runs: [],
 		schemaVersion: WORKSPACE_STATE_SCHEMA_VERSION,
 		sessions: [],
+		sources: [],
 		validationRuns: [],
 		workspace: {
 			createdAt: now,

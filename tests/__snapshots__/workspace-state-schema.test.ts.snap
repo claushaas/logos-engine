@@ -5,6 +5,8 @@ exports[`WorkspaceState schema > snapshot tests > default initialized state matc
   "artifacts": [],
   "assumptions": [],
   "auditEvents": [],
+  "claimSourceLinks": [],
+  "claims": [],
   "decisions": [],
   "documentation": {
     "isDefault": true,
@@ -26,6 +28,7 @@ exports[`WorkspaceState schema > snapshot tests > default initialized state matc
   "runs": [],
   "schemaVersion": "3.1.0",
   "sessions": [],
+  "sources": [],
   "validationRuns": [],
   "workspace": {
     "createdAt": "2024-01-01T00:00:00.000Z",
@@ -89,6 +92,8 @@ exports[`WorkspaceState schema > snapshot tests > sample populated state matches
       "timestamp": "2024-06-01T00:00:00.000Z",
     },
   ],
+  "claimSourceLinks": [],
+  "claims": [],
   "decisions": [
     {
       "affectedDocumentIds": [
@@ -211,6 +216,7 @@ exports[`WorkspaceState schema > snapshot tests > sample populated state matches
       "summary": "Initial project intake completed.",
     },
   ],
+  "sources": [],
   "validationRuns": [
     {
       "changedPaths": [],

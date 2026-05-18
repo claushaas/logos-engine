@@ -345,6 +345,8 @@ function createEmptyState(projectRoot: string): WorkspaceState {
 		artifacts: [],
 		assumptions: [],
 		auditEvents: [],
+		claimSourceLinks: [],
+		claims: [],
 		decisions: [],
 		documentation: {
 			isDefault: true,
@@ -360,6 +362,7 @@ function createEmptyState(projectRoot: string): WorkspaceState {
 		runs: [],
 		schemaVersion: WORKSPACE_STATE_SCHEMA_VERSION,
 		sessions: [],
+		sources: [],
 		validationRuns: [],
 		workspace: {
 			createdAt: new Date().toISOString(),
