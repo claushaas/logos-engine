@@ -1,16 +1,20 @@
 /** Pure slash command router — returns typed results, performs no side effects */
 
+import { buildDocumentDependencyGraph } from '../dependency-graph/index.js';
 import { generateCanonicalDocs } from '../generation/generate-canonical-docs.js';
 import type { GenerateCanonicalDocsWritePolicy } from '../generation/generate-types.js';
 import { initWorkspace, preflightInit } from '../init/index.js';
 import { planNextQuestions } from '../intake/question-planner.js';
 import { buildContractGraph } from '../profiles/contract-graph.js';
 import { loadDocumentationContract } from '../profiles/documentation-contract.js';
+import { loadProfileRegistry } from '../profiles/profile-registry.js';
 import {
 	formatInitializationState,
 	formatProviderStatus,
 } from '../runtime/project-context.js';
+import { detectStaleness } from '../staleness/index.js';
 import { readWorkspaceState } from '../state/workspace-state-repository.js';
+import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
 import { runDiagnoseCommand } from '../validation/diagnose-command.js';
 import { runValidateCommand } from '../validation/validate-command.js';
 import type {
@@ -702,9 +706,6 @@ async function getGenerateResult(
 		};
 	}
 }
-
-import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
-
 async function getValidateResult(
 	args: string[],
 	context: RouterContext,
@@ -989,12 +990,162 @@ async function getStatusResult(
 	const ctx = context.projectContext;
 	const projectRoot = ctx.root.rootPath ?? ctx.cwd;
 
+	// Attempt staleness detection (read-only, best-effort)
+	let stalenessResult:
+		| {
+				currentCount: number;
+				staleCount: number;
+				missingCount: number;
+				blockedCount: number;
+				orphanedCount: number;
+				unknownCount: number;
+				total: number;
+				optionalDependencyWarningCount: number;
+				topStaleReasons: string[];
+				topBlockingReasons: string[];
+		  }
+		| undefined;
+
+	try {
+		const readResult = await readWorkspaceState({ projectRoot });
+		if (readResult.success && readResult.state) {
+			const state = readResult.state;
+			const contract = await loadDocumentationContract({
+				profileId: state.profile.profileId,
+				repoRoot: projectRoot,
+			});
+
+			const registry = await loadProfileRegistry({
+				profileId: state.profile.profileId,
+				repoRoot: projectRoot,
+			});
+
+			const graphResult = buildDocumentDependencyGraph({
+				contract,
+				registry,
+			});
+
+			const detection = await detectStaleness({
+				artifactRegistryEntries: state.artifacts.map((a) => ({
+					artifactId: a.artifactId,
+					artifactType: a.artifactType,
+					checksum: a.checksum,
+					generatedAt: a.generatedAt,
+					isCanonical: a.isCanonical,
+					metadata: a.metadata,
+					path: a.path,
+					runId: a.runId,
+					sourceDocumentIds: a.sourceDocumentIds,
+					status: a.status,
+				})),
+				assumptions: state.assumptions.map((a) => ({
+					affectedDocumentIds: a.affectedDocumentIds,
+					body: a.body,
+					createdAt: a.createdAt,
+					id: a.id,
+					status: a.status,
+					title: a.title,
+					updatedAt: a.updatedAt,
+				})),
+				decisions: state.decisions.map((d) => ({
+					affectedDocumentIds: d.affectedDocumentIds,
+					body: d.body,
+					createdAt: d.createdAt,
+					id: d.id,
+					status: d.status,
+					title: d.title,
+					updatedAt: d.updatedAt,
+				})),
+				dependencyGraph: {
+					edges: graphResult.graph.edges,
+					nodeMap: graphResult.graph.nodeMap,
+					nodes: graphResult.graph.nodes,
+					upstreamEdges: graphResult.graph.upstreamEdges,
+				},
+				documentationRoot: state.documentation.rootPath,
+				generatedMetadataOverrides: new Map(),
+				generationRuns: state.runs
+					.filter(
+						(r) => r.runType === 'generation' || r.runType === 'executive',
+					)
+					.map((r) => ({
+						completedAt: r.completedAt,
+						relatedArtifactIds: r.relatedArtifactIds,
+						runId: r.runId,
+						startedAt: r.startedAt,
+						status: r.status,
+					})),
+				loadedDescriptorData: new Map(
+					contract.documents.map((doc) => [
+						doc.canonicalId,
+						{
+							canonicalOutput: doc.descriptor.outputs.canonical.path,
+							inputs: (doc.descriptor.inputs ?? []).map((i) => ({
+								id: i.id,
+								required: i.required,
+								type: i.type,
+							})),
+							outputs: flattenDescriptorOutputs(doc.descriptor.outputs),
+							phaseId: doc.phaseId,
+							status: doc.descriptor.status,
+							title: doc.descriptor.title,
+						},
+					]),
+				),
+				openQuestions: state.openQuestions.map((q) => ({
+					affectedDocumentIds: q.affectedDocumentIds,
+					body: q.body,
+					createdAt: q.createdAt,
+					id: q.id,
+					question: q.question,
+					status: q.status,
+					updatedAt: q.updatedAt,
+				})),
+				phaseDescriptors: contract.phases.map((p) => ({
+					id: p.id,
+					sourcePath: p.sourcePath,
+					title: p.title,
+				})),
+				profileId: state.profile.profileId,
+				profileRegistryFingerprint: '',
+				profileRoot: contract.profileRoot,
+				profileVersion: state.profile.profileVersion,
+				risks: state.risks.map((r) => ({
+					affectedDocumentIds: r.affectedDocumentIds,
+					body: r.body,
+					createdAt: r.createdAt,
+					id: r.id,
+					severity: r.severity,
+					status: r.status,
+					title: r.title,
+					updatedAt: r.updatedAt,
+				})),
+			});
+
+			stalenessResult = {
+				blockedCount: detection.summary.blockedCount,
+				currentCount: detection.summary.currentCount,
+				missingCount: detection.summary.missingCount,
+				optionalDependencyWarningCount:
+					detection.summary.optionalDependencyWarningCount,
+				orphanedCount: detection.summary.orphanedCount,
+				staleCount: detection.summary.staleCount,
+				topBlockingReasons: [...detection.summary.topBlockingReasons],
+				topStaleReasons: [...detection.summary.topStaleReasons],
+				total: detection.summary.total,
+				unknownCount: detection.summary.unknownCount,
+			};
+		}
+	} catch {
+		stalenessResult = undefined;
+	}
+
 	// Attempt state-backed summary
 	let summary:
 		| Awaited<ReturnType<typeof getWorkspaceStatusSummary>>
 		| undefined;
 	try {
-		summary = await getWorkspaceStatusSummary({ projectRoot });
+		summary = await getWorkspaceStatusSummary({ projectRoot }, stalenessResult);
 	} catch {
 		// Fall back to context-only status
 	}
@@ -1044,6 +1195,40 @@ async function getStatusResult(
 				`  Latest artifact:  ${summary.artifactSummary.latestArtifact.artifactType} (${summary.artifactSummary.latestArtifact.status})`,
 			);
 		}
+
+		// Staleness summary
+		if (summary.stalenessSummary && summary.stalenessSummary.total > 0) {
+			const s = summary.stalenessSummary;
+			lines.push('');
+			lines.push('Staleness:');
+			lines.push(`  Total outputs:    ${s.total}`);
+			lines.push(`  Current:          ${s.currentCount}`);
+			lines.push(`  Stale:            ${s.staleCount}`);
+			lines.push(`  Missing:          ${s.missingCount}`);
+			lines.push(`  Blocked:          ${s.blockedCount}`);
+			lines.push(`  Orphaned:         ${s.orphanedCount}`);
+			lines.push(`  Unknown:          ${s.unknownCount}`);
+			if (s.optionalDependencyWarningCount > 0) {
+				lines.push(
+					`  Optional dep warnings: ${s.optionalDependencyWarningCount}`,
+				);
+			}
+			if (s.topStaleReasons.length > 0) {
+				lines.push('  Top stale reasons:');
+				for (const r of s.topStaleReasons.slice(0, 3)) {
+					lines.push(`    - ${r}`);
+				}
+			}
+			if (s.topBlockingReasons.length > 0) {
+				lines.push('  Top blocking reasons:');
+				for (const r of s.topBlockingReasons.slice(0, 3)) {
+					lines.push(`    - ${r}`);
+				}
+			}
+		} else if (summary.stalenessSummary?.total === 0) {
+			lines.push('');
+			lines.push('Staleness:  (no generated outputs exist yet)');
+		}
 	}
 
 	if (ctx.workspace.initializationState === 'missing') {
@@ -1064,4 +1249,42 @@ async function getStatusResult(
 		messages: lines,
 		shouldExit: false,
 	};
+}
+
+function _findCanonicalOutputPath(descriptor: {
+	outputs?: { canonical?: { path: string } };
+}): string {
+	return descriptor.outputs?.canonical?.path ?? '';
+}
+
+function flattenDescriptorOutputs(outputs: {
+	canonical: { path: string; format: string };
+	artifacts?: { id: string; path: string; format: string }[];
+	agentPacks?: { id: string; path: string; format: string }[];
+	data?: { id: string; path: string; format: string }[];
+	executive?: { id: string; path: string; format: string }[];
+}): { kind: string; path: string | undefined; format: string | undefined }[] {
+	const result: {
+		kind: string;
+		path: string | undefined;
+		format: string | undefined;
+	}[] = [];
+	result.push({
+		format: outputs.canonical.format,
+		kind: 'canonical',
+		path: outputs.canonical.path,
+	});
+	for (const a of outputs.artifacts ?? []) {
+		result.push({ format: a.format, kind: 'artifact', path: a.path });
+	}
+	for (const p of outputs.agentPacks ?? []) {
+		result.push({ format: p.format, kind: 'agentPack', path: p.path });
+	}
+	for (const d of outputs.data ?? []) {
+		result.push({ format: d.format, kind: 'data', path: d.path });
+	}
+	for (const e of outputs.executive ?? []) {
+		result.push({ format: e.format, kind: 'executive', path: e.path });
+	}
+	return result;
 }

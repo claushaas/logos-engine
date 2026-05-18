@@ -764,3 +764,69 @@ export {
 	getUpstreamNodes,
 	summarizeDependencyGraph,
 } from './dependency-graph/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 7.2 — Staleness Detection
+// ---------------------------------------------------------------------------
+
+export type {
+	ArtifactStalenessRecord,
+	DocumentStalenessRecord,
+	StalenessComparison,
+	StalenessDependencyImpact,
+	StalenessDetectionInput,
+	StalenessDetectionOptions,
+	StalenessDetectionResult,
+	StalenessDiagnostic,
+	StalenessFingerprint,
+	StalenessReason,
+	StalenessReasonCode,
+	StalenessSeverity,
+	StalenessSourceKind,
+	StalenessStatus,
+	StalenessSummary,
+	StalenessTarget,
+	StalenessTargetKind,
+} from './staleness/index.js';
+export {
+	buildStalenessStatusSummary,
+	compareStalenessStatus,
+	computeArtifactMetadataFingerprint,
+	computeDependencyGraphFingerprint,
+	computeDocumentDescriptorFingerprint,
+	computeGeneratedMetadataFingerprint,
+	computeProfileContractFingerprint,
+	computeRelevantStateFingerprint,
+	computeStableFingerprint,
+	computeStringFingerprint,
+	detectStaleness,
+	graphKindToStalenessTargetKind,
+} from './staleness/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 7.3 — Regeneration Planning
+// ---------------------------------------------------------------------------
+
+export type {
+	RegenerationPlan,
+	RegenerationPlanAction,
+	RegenerationPlanBlockedReason,
+	RegenerationPlanDependency,
+	RegenerationPlanDiagnostic,
+	RegenerationPlanDryRunSummary,
+	RegenerationPlanInput,
+	RegenerationPlanItem,
+	RegenerationPlanOptions,
+	RegenerationPlanReason,
+	RegenerationPlanReasonCode,
+	RegenerationPlanResult,
+	RegenerationPlanSkippedReason,
+	RegenerationPlanSourceChange,
+	RegenerationPlanStatus,
+	RegenerationPlanSummary,
+	RegenerationPlanTargetKind,
+} from './regeneration/index.js';
+export {
+	createRegenerationPlan,
+	summarizeRegenerationPlan,
+} from './regeneration/index.js';

@@ -67,6 +67,20 @@ export interface WorkspaceStatusSummary {
 			  }
 			| undefined;
 	};
+	stalenessSummary?:
+		| {
+				currentCount: number;
+				staleCount: number;
+				missingCount: number;
+				blockedCount: number;
+				orphanedCount: number;
+				unknownCount: number;
+				total: number;
+				optionalDependencyWarningCount: number;
+				topStaleReasons: readonly string[];
+				topBlockingReasons: readonly string[];
+		  }
+		| undefined;
 	diagnostics: Array<{
 		code: string;
 		message: string;
@@ -81,18 +95,31 @@ export interface WorkspaceStatusSummary {
 
 export async function getWorkspaceStatusSummary(
 	options: WorkspaceStatusQueryOptions,
+	stalenessResult?: {
+		currentCount: number;
+		staleCount: number;
+		missingCount: number;
+		blockedCount: number;
+		orphanedCount: number;
+		unknownCount: number;
+		total: number;
+		optionalDependencyWarningCount: number;
+		topStaleReasons: readonly string[];
+		topBlockingReasons: readonly string[];
+	},
 ): Promise<WorkspaceStatusSummary> {
 	const readResult = await readWorkspaceState({
 		_fs: options._fs,
 		projectRoot: options.projectRoot,
 	});
 
-	return buildStatusSummary(options.projectRoot, readResult);
+	return buildStatusSummary(options.projectRoot, readResult, stalenessResult);
 }
 
 function buildStatusSummary(
 	projectRoot: string,
 	readResult: WorkspaceStateReadResult,
+	stalenessResult?: WorkspaceStatusSummary['stalenessSummary'],
 ): WorkspaceStatusSummary {
 	const state = readResult.state;
 	const diagnostics = readResult.diagnostics.map((d) => ({
@@ -126,6 +153,7 @@ function buildStatusSummary(
 				activeSessions: 0,
 				totalSessions: 0,
 			},
+			stalenessSummary: stalenessResult,
 			workspacePath: readResult.workspaceFilePath,
 		};
 	}
@@ -184,6 +212,7 @@ function buildStatusSummary(
 				: undefined,
 			totalSessions: sessionSummary.totalSessions,
 		},
+		stalenessSummary: stalenessResult,
 		workspacePath: readResult.workspaceFilePath,
 	};
 }
