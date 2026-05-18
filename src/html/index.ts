@@ -1,4 +1,4 @@
-/** Step 9.1 — HTML Artifact Planner barrel exports */
+/** Step 9.1 + 9.2 — HTML Artifact Planner and Static HTML Renderer barrel exports */
 
 export type { DiscoverDeclarationsResult } from './html-artifact-declarations.js';
 export {
@@ -37,3 +37,81 @@ export {
 	HTML_ARTIFACT_KIND_ORDER,
 	HTML_ARTIFACT_STATUS_ORDER,
 } from './html-artifact-types.js';
+
+// ---------------------------------------------------------------------------
+// Step 9.2 — Safe Static HTML Renderer
+// ---------------------------------------------------------------------------
+
+export {
+	escapeHtmlAttribute,
+	escapeHtmlText,
+	escapePathForDisplay,
+	isUnsafeHtmlAttribute,
+	looksLikeSecretValue,
+	markAsTrusted,
+	normalizePathSeparators,
+	redactSecretString,
+	sanitizeLocalHref,
+	sanitizeTextContent,
+} from './html-escaping.js';
+export {
+	buildDocumentWrappers,
+	renderDerivedArtifactWarning,
+	renderDiagnosticsSection,
+	renderHtmlDocumentEnd,
+	renderHtmlDocumentStart,
+	renderMetadataBlock,
+	renderThemeCss,
+} from './html-layout.js';
+export type {
+	HtmlEscapedString,
+	HtmlRenderArtifact,
+	HtmlRenderBoundary,
+	HtmlRenderDecisionData,
+	HtmlRenderDiagnostic,
+	HtmlRenderDocumentData,
+	HtmlRendererMetadata,
+	HtmlRendererTheme,
+	HtmlRenderInput,
+	HtmlRenderOptions,
+	HtmlRenderPhaseData,
+	HtmlRenderResult,
+	HtmlRenderRiskData,
+	HtmlRenderSection,
+	HtmlRenderSectionKind,
+	HtmlRenderSecuritySummary,
+	HtmlRenderSource,
+	HtmlRenderStatus,
+	HtmlRenderSummaryData,
+	HtmlRenderTraceabilityClaimItem,
+	HtmlRenderTraceabilityData,
+	HtmlRenderTraceabilitySourceItem,
+	HtmlRenderValidationFindingData,
+	HtmlTrustedTemplate,
+	SanitizedHrefResult,
+	StaticHtmlRenderer,
+} from './html-render-types.js';
+export {
+	DEFAULT_HTML_RENDERER_THEME,
+	HTML_RENDER_BOUNDARY_ORDER,
+	HTML_RENDER_SECTION_KIND_ORDER,
+	HTML_RENDER_STATUS_ORDER,
+} from './html-render-types.js';
+export {
+	renderDecisionListSection,
+	renderDocumentListSection,
+	renderEmptyStateSection,
+	renderPhaseListSection,
+	renderReadinessStatusSection,
+	renderRiskListSection,
+	renderSourceReferencesSection,
+	renderSummarySection,
+	renderTraceabilitySection,
+	renderValidationFindingsSection,
+} from './renderer-sections.js';
+export {
+	createStaticHtmlRenderer,
+	renderHtmlDocument,
+	renderStaticHtmlArtifact,
+	staticHtmlRenderer,
+} from './static-html-renderer.js';
