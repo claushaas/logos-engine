@@ -1245,3 +1245,58 @@ export {
 	resolveAgentPackOutputPath,
 	summarizeAgentPackPlan,
 } from './agent-packs/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 10.2 — Bounded Context Bundle
+// ---------------------------------------------------------------------------
+
+export type {
+	ContextBundle,
+	ContextBundleAcceptanceCriterion,
+	ContextBundleAcceptanceCriterionInput,
+	ContextBundleAssumption,
+	ContextBundleAssumptionInput,
+	ContextBundleBlocker,
+	ContextBundleBuilder,
+	ContextBundleCanonicalDocMeta,
+	ContextBundleConsistencyFinding,
+	ContextBundleConsistencyFindingInput,
+	ContextBundleConstraint,
+	ContextBundleDecision,
+	ContextBundleDecisionInput,
+	ContextBundleDiagnostic,
+	ContextBundleHypothesis,
+	ContextBundleHypothesisInput,
+	ContextBundleInput,
+	ContextBundleMetadata,
+	ContextBundleNonGoal,
+	ContextBundleNonGoalInput,
+	ContextBundleOpenQuestion,
+	ContextBundleOpenQuestionInput,
+	ContextBundleOptions,
+	ContextBundleRedactionSummary,
+	ContextBundleRegisterData,
+	ContextBundleRequiredChange,
+	ContextBundleRequiredChangeInput,
+	ContextBundleRequirement,
+	ContextBundleResult,
+	ContextBundleRisk,
+	ContextBundleRiskInput,
+	ContextBundleSection,
+	ContextBundleSectionItem,
+	ContextBundleSectionKind,
+	ContextBundleSizeBudget,
+	ContextBundleSizeSummary,
+	ContextBundleSource,
+	ContextBundleSourceKind,
+	ContextBundleStatus,
+	ContextBundleTraceabilityEntry,
+	ContextBundleTraceabilityEntryInput,
+	ContextBundleValidationFinding,
+	ContextBundleValidationFindingInput,
+} from './agent-packs/index.js';
+export {
+	buildBoundedContextBundle,
+	DEFAULT_SCOPE_OPTIONS,
+	DEFAULT_SIZE_BUDGET,
+} from './agent-packs/index.js';
