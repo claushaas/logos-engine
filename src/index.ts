@@ -1209,3 +1209,39 @@ export {
 	sanitizeTextContent,
 	staticHtmlRenderer,
 } from './html/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 10.1 — Agent Pack Planner
+// ---------------------------------------------------------------------------
+
+export type {
+	AgentPackAction,
+	AgentPackBlocker,
+	AgentPackDeclaration,
+	AgentPackDeclarationSource,
+	AgentPackDependency,
+	AgentPackDiagnostic,
+	AgentPackKind,
+	AgentPackOutputPath,
+	AgentPackPlan,
+	AgentPackPlanInput,
+	AgentPackPlanItem,
+	AgentPackPlanOptions,
+	AgentPackPlanResult,
+	AgentPackReadiness,
+	AgentPackReasonCode,
+	AgentPackRequiredContext,
+	AgentPackSource,
+	AgentPackSourceKind,
+	AgentPackStatus,
+	AgentPackSummary,
+} from './agent-packs/index.js';
+export {
+	AGENT_PACK_KIND_ORDER,
+	AGENT_PACK_STATUS_ORDER,
+	createAgentPackPlan,
+	discoverAgentPackDeclarations,
+	isAgentPackOutputPathSafe,
+	resolveAgentPackOutputPath,
+	summarizeAgentPackPlan,
+} from './agent-packs/index.js';
