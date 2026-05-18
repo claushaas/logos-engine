@@ -1,7 +1,7 @@
 /** Step 9.3 — HTML Review View Generation: orchestrator for safe, local, static HTML review artifacts */
 
 import { createHash } from 'node:crypto';
-import { resolve } from 'node:path';
+import { isAbsolute, relative, resolve } from 'node:path';
 import type { SafeWritePolicy } from '../fs/safe-filesystem.js';
 import { writeFileAtomic } from '../fs/safe-filesystem.js';
 import type { OutputDeclaration } from '../profiles/contract-graph.js';
@@ -298,11 +298,39 @@ function resolveSafeOutputPath(
 	diagnostics: HtmlReviewGenerationDiagnostic[];
 } {
 	const diagnostics: HtmlReviewGenerationDiagnostic[] = [];
-	const root = artifactRoot ?? documentationRoot;
-	const resolvedRoot = resolve(projectRoot, root);
-	const target = resolve(resolvedRoot, outputPath);
+	const root = normalizeRootRelativePath(artifactRoot ?? documentationRoot);
+	const normalizedOutput = outputPath.replace(/\\/g, '/');
 
-	if (!target.startsWith(`${resolvedRoot}/`) && target !== resolvedRoot) {
+	if (
+		normalizedOutput.trim().length === 0 ||
+		normalizedOutput.startsWith('/') ||
+		/^[A-Za-z]:/.test(normalizedOutput)
+	) {
+		diagnostics.push(
+			createDiagnostic(
+				'E_HTML_OUTPUT_PATH_TRAVERSAL',
+				'error',
+				`Output path is not a safe project-relative path: ${outputPath}`,
+				{ outputPath },
+			),
+		);
+		return {
+			diagnostics,
+			resolvedPath: resolve(projectRoot, outputPath),
+			safe: false,
+		};
+	}
+
+	const cleanOutput = normalizeRootRelativePath(normalizedOutput);
+	const rootPrefixedOutput =
+		cleanOutput === root || cleanOutput.startsWith(`${root}/`)
+			? cleanOutput
+			: `${root}/${cleanOutput}`;
+	const resolvedRoot = resolve(projectRoot, root);
+	const target = resolve(projectRoot, rootPrefixedOutput);
+	const relativeToRoot = relative(resolvedRoot, target);
+
+	if (relativeToRoot.startsWith('..') || isAbsolute(relativeToRoot)) {
 		diagnostics.push(
 			createDiagnostic(
 				'E_HTML_OUTPUT_PATH_TRAVERSAL',
@@ -315,6 +343,10 @@ function resolveSafeOutputPath(
 	}
 
 	return { diagnostics, resolvedPath: target, safe: true };
+}
+
+function normalizeRootRelativePath(value: string): string {
+	return value.replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 }
 
 // ---------------------------------------------------------------------------

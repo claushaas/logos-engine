@@ -160,11 +160,23 @@ export function resolveHtmlOutputPath(
 	artifactRoot: string | undefined,
 ): string {
 	const baseRoot = artifactRoot ?? documentationRoot.replace(/\/$/, '');
-	const normalizedRoot = baseRoot.endsWith('/') ? baseRoot : `${baseRoot}/`;
+	const normalizedRoot = baseRoot.replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+	const normalizedPath = declaredPath.replace(/\\/g, '/');
 
-	const normalizedPath = declaredPath.replace(/\\/g, '/').replace(/^\/+/, '');
+	if (pathIsUnsafeAbsolute(normalizedPath)) return normalizedPath;
 
-	return `${normalizedRoot}${normalizedPath}`;
+	const rootRelativePath = normalizedPath
+		.replace(/^\.\/+/, '')
+		.replace(/^\/+/, '');
+
+	if (
+		rootRelativePath === normalizedRoot ||
+		rootRelativePath.startsWith(`${normalizedRoot}/`)
+	) {
+		return rootRelativePath;
+	}
+
+	return `${normalizedRoot}/${rootRelativePath}`;
 }
 
 /**

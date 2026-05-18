@@ -1,6 +1,6 @@
 /** Step 9.3 — HTML Review View Generation comprehensive tests */
 
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { HtmlReviewViewDataInput } from '../src/html/index.js';
@@ -177,6 +177,18 @@ async function initTempWorkspace(): Promise<{
 	await writeFile(workspacePath, json, 'utf-8');
 
 	return { docRoot, logosDir, projectRoot };
+}
+
+async function initTempWorkspaceWithProfiles(): Promise<{
+	projectRoot: string;
+	docRoot: string;
+	logosDir: string;
+}> {
+	const workspace = await initTempWorkspace();
+	await cp(resolve('profiles'), join(workspace.projectRoot, 'profiles'), {
+		recursive: true,
+	});
+	return workspace;
 }
 
 // ==========================================================================
@@ -605,6 +617,40 @@ describe('generation orchestration', () => {
 		expect(Array.isArray(result.failedPaths)).toBe(true);
 		expect(Array.isArray(result.diagnostics)).toBe(true);
 		expect(Array.isArray(result.artifactRecords)).toBe(true);
+	});
+
+	it('writes generated HTML under the configured root without double-prefixing it', async () => {
+		const { projectRoot } = await initTempWorkspaceWithProfiles();
+
+		const result = await generateHtmlReviewViews({
+			artifactRoot: undefined,
+			documentationRoot: 'logos/',
+			options: {
+				dryRun: false,
+				generatedAt: TEST_TIMESTAMP,
+				writePolicy: 'overwrite',
+			},
+			profileId: 'standard',
+			projectRoot,
+		});
+
+		const htmlPath = result.changedPaths.find((p) => p.endsWith('.html'));
+		expect(htmlPath).toBeDefined();
+		expect(
+			result.changedPaths.some((p) =>
+				p.replace(/\\/g, '/').includes('/logos/logos/'),
+			),
+		).toBe(false);
+		expect(htmlPath?.replace(/\\/g, '/')).toContain(
+			`${projectRoot.replace(/\\/g, '/')}/logos/outcomes/html/`,
+		);
+
+		const html = await readFile(htmlPath as string, 'utf-8');
+		expect(html).toContain('Derived Non-Canonical Review Artifact');
+		expect(result.artifactRegistryEntriesCreated).toBeGreaterThan(0);
+		expect(result.artifactRecords.every((r) => r.isCanonical === false)).toBe(
+			true,
+		);
 	});
 
 	it('generation handles empty workspace gracefully', async () => {

@@ -51,6 +51,7 @@ export {
 	markAsTrusted,
 	normalizePathSeparators,
 	redactSecretString,
+	sanitizeCssClassToken,
 	sanitizeLocalHref,
 	sanitizeTextContent,
 } from './html-escaping.js';

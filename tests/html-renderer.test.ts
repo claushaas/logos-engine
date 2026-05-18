@@ -181,6 +181,59 @@ describe('renderer escaping', () => {
 		const result = renderHtmlDocument(input, defaultOptions());
 		expect(result.html).not.toMatch(/<\w+\s+on\w+=/i);
 	});
+
+	it('does not allow class attribute injection from status-like fields', () => {
+		const input = baseInput({
+			artifactKind: 'decision_map',
+			decisions: [
+				{
+					affectedDocumentIds: [],
+					confidence: 'explicit" onclick="alert(1)',
+					id: 'dec-1',
+					isInferred: false,
+					reviewRequired: false,
+					reviewState: 'approved',
+					sourceIds: [],
+					status: 'confirmed" onclick="alert(1)',
+					summary: 'Summary',
+					title: 'Decision',
+				},
+			],
+			sections: [
+				{ rendered: true, sectionKind: 'decision_list', title: 'Decisions' },
+			],
+		});
+
+		const result = renderHtmlDocument(input, defaultOptions());
+
+		expect(result.html).not.toMatch(/<\w+[^>]+\s+onclick=/i);
+		expect(result.html).toContain('confirmed" onclick="alert(1)');
+	});
+
+	it('neutralizes unsafe custom theme values', () => {
+		const result = renderHtmlDocument(
+			baseInput(),
+			defaultOptions({
+				theme: {
+					backgroundColor: '#fff; background: url("https://evil.example/x")',
+					borderColor: '#d1d5db',
+					errorColor: '#dc2626',
+					fontFamily: 'Inter, url("https://fonts.example/font.woff2")',
+					headerColor: '#1f2937',
+					infoColor: '#3b82f6',
+					linkColor: '#1d4ed8',
+					mutedColor: '#6b7280',
+					successColor: '#16a34a',
+					textColor: '#111827',
+					warningColor: '#d97706',
+				},
+			}),
+		);
+
+		expect(result.html).not.toContain('evil.example');
+		expect(result.html).not.toContain('fonts.example');
+		expect(result.securitySummary.externalAssetCount).toBe(0);
+	});
 });
 
 // ---------------------------------------------------------------------------

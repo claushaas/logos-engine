@@ -10,6 +10,7 @@ import {
 	markAsTrusted,
 	normalizePathSeparators,
 	redactSecretString,
+	sanitizeCssClassToken,
 	sanitizeLocalHref,
 	sanitizeTextContent,
 } from '../src/html/index.js';
@@ -214,6 +215,18 @@ describe('isUnsafeHtmlAttribute', () => {
 		expect(isUnsafeHtmlAttribute('href')).toBe(false);
 		expect(isUnsafeHtmlAttribute('class')).toBe(false);
 		expect(isUnsafeHtmlAttribute('id')).toBe(false);
+	});
+});
+
+describe('sanitizeCssClassToken', () => {
+	it('keeps safe status tokens stable', () => {
+		expect(sanitizeCssClassToken('missing_source')).toBe('missing_source');
+	});
+
+	it('removes attribute-breaking characters from class tokens', () => {
+		expect(sanitizeCssClassToken('ready" onclick="alert(1)')).toBe(
+			'ready-onclick-alert-1',
+		);
 	});
 });
 

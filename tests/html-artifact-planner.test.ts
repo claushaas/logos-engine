@@ -382,6 +382,28 @@ describe('HTML Artifact Declaration Discovery', () => {
 		);
 	});
 
+	it('does not double-prefix paths that already include the documentation root', () => {
+		const resolved = resolveHtmlOutputPath(
+			'logos/outcomes/html/dashboard.html',
+			'logos/',
+			undefined,
+		);
+
+		expect(resolved).toBe('logos/outcomes/html/dashboard.html');
+	});
+
+	it('preserves absolute declarations so path safety can reject them', () => {
+		const resolved = resolveHtmlOutputPath(
+			'/tmp/outcomes/html/dashboard.html',
+			'logos/',
+			undefined,
+		);
+		const safety = isHtmlOutputPathSafe(resolved, 'logos/');
+
+		expect(safety.safe).toBe(false);
+		expect(safety.reason).toContain('absolute path');
+	});
+
 	it('produces diagnostic for empty path in declaration', () => {
 		const doc = contractDocument('01-thesis', '01-foundation', {
 			outputArtifacts: [{ format: 'html', id: 'bad', path: '' }],

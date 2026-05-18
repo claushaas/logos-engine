@@ -164,6 +164,16 @@ export function isUnsafeHtmlAttribute(name: string): boolean {
 	return hasEventLikeAttribute(trimmed);
 }
 
+export function sanitizeCssClassToken(value: string): string {
+	const normalized = value
+		.trim()
+		.toLowerCase()
+		.replace(/[^a-z0-9_-]+/g, '-')
+		.replace(/^-+|-+$/g, '');
+
+	return normalized.length > 0 ? normalized.slice(0, 80) : 'unknown';
+}
+
 export function escapePathForDisplay(value: string): HtmlEscapedString {
 	return escapeHtmlText(value);
 }

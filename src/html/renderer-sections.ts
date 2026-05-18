@@ -3,6 +3,7 @@
 import {
 	escapeHtmlText,
 	markAsTrusted,
+	sanitizeCssClassToken,
 	sanitizeLocalHref,
 	sanitizeTextContent,
 } from './html-escaping.js';
@@ -25,7 +26,7 @@ import type {
 
 function renderStatusBadge(status: string): string {
 	const safeStatus = escapeHtmlText(status);
-	const cssClass = `status-badge status-${status.replace(/_/g, '-')}`;
+	const cssClass = `status-badge status-${sanitizeCssClassToken(status)}`;
 	return `<span class="${cssClass}">${safeStatus}</span>`;
 }
 
@@ -35,7 +36,7 @@ function renderStatusBadge(status: string): string {
 
 function renderConfidenceLabel(confidence: string): string {
 	const safeConf = escapeHtmlText(confidence);
-	const cssClass = `confidence-${confidence}`;
+	const cssClass = `confidence-${sanitizeCssClassToken(confidence)}`;
 	return `<span class="${cssClass}">${safeConf}</span>`;
 }
 
@@ -310,7 +311,7 @@ export function renderValidationFindingsSection(
 				finding.recoveryHint !== undefined
 					? sanitizeTextContent(finding.recoveryHint)
 					: '—';
-			const severityClass = `severity-${escapeHtmlText(finding.severity)}`;
+			const severityClass = `severity-${sanitizeCssClassToken(finding.severity)}`;
 
 			html += '<tr>\n';
 			html += `<td><span class="${severityClass}">${safeSeverity.toUpperCase()}</span>${finding.isReleaseBlocker ? ' <span class="release-blocker-tag">BLOCKER</span>' : ''}</td>\n`;
@@ -342,7 +343,7 @@ export function renderValidationFindingsSection(
 				finding.recoveryHint !== undefined
 					? sanitizeTextContent(finding.recoveryHint)
 					: '—';
-			const severityClass = `severity-${escapeHtmlText(finding.severity)}`;
+			const severityClass = `severity-${sanitizeCssClassToken(finding.severity)}`;
 
 			html += '<tr>\n';
 			html += `<td><span class="${severityClass}">${safeSeverity.toUpperCase()}</span></td>\n`;

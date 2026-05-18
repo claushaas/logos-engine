@@ -4,6 +4,7 @@ import {
 	escapeHtmlAttribute,
 	escapeHtmlText,
 	markAsTrusted,
+	sanitizeCssClassToken,
 	sanitizeTextContent,
 } from './html-escaping.js';
 import type {
@@ -13,18 +14,19 @@ import type {
 import { DEFAULT_HTML_RENDERER_THEME } from './html-render-types.js';
 
 export function renderThemeCss(theme: HtmlRendererTheme): HtmlTrustedTemplate {
+	const safeTheme = sanitizeTheme(theme);
 	return markAsTrusted(`:root {
-  --font-family: ${theme.fontFamily};
-  --bg-color: ${theme.backgroundColor};
-  --text-color: ${theme.textColor};
-  --header-color: ${theme.headerColor};
-  --border-color: ${theme.borderColor};
-  --warning-color: ${theme.warningColor};
-  --error-color: ${theme.errorColor};
-  --info-color: ${theme.infoColor};
-  --success-color: ${theme.successColor};
-  --link-color: ${theme.linkColor};
-  --muted-color: ${theme.mutedColor};
+  --font-family: ${safeTheme.fontFamily};
+  --bg-color: ${safeTheme.backgroundColor};
+  --text-color: ${safeTheme.textColor};
+  --header-color: ${safeTheme.headerColor};
+  --border-color: ${safeTheme.borderColor};
+  --warning-color: ${safeTheme.warningColor};
+  --error-color: ${safeTheme.errorColor};
+  --info-color: ${safeTheme.infoColor};
+  --success-color: ${safeTheme.successColor};
+  --link-color: ${safeTheme.linkColor};
+  --muted-color: ${safeTheme.mutedColor};
 }
 *,
 *::before,
@@ -257,6 +259,71 @@ footer {
 `);
 }
 
+function sanitizeCssValue(value: string, fallback: string): string {
+	const trimmed = value.trim();
+	if (
+		trimmed.length === 0 ||
+		/[{};<>]/.test(trimmed) ||
+		/url\s*\(/i.test(trimmed) ||
+		/@import/i.test(trimmed) ||
+		/https?:/i.test(trimmed) ||
+		/\/\//.test(trimmed) ||
+		/\b(?:javascript|data|vbscript):/i.test(trimmed)
+	) {
+		return fallback;
+	}
+	return trimmed;
+}
+
+function sanitizeTheme(theme: HtmlRendererTheme): HtmlRendererTheme {
+	return {
+		backgroundColor: sanitizeCssValue(
+			theme.backgroundColor,
+			DEFAULT_HTML_RENDERER_THEME.backgroundColor,
+		),
+		borderColor: sanitizeCssValue(
+			theme.borderColor,
+			DEFAULT_HTML_RENDERER_THEME.borderColor,
+		),
+		errorColor: sanitizeCssValue(
+			theme.errorColor,
+			DEFAULT_HTML_RENDERER_THEME.errorColor,
+		),
+		fontFamily: sanitizeCssValue(
+			theme.fontFamily,
+			DEFAULT_HTML_RENDERER_THEME.fontFamily,
+		),
+		headerColor: sanitizeCssValue(
+			theme.headerColor,
+			DEFAULT_HTML_RENDERER_THEME.headerColor,
+		),
+		infoColor: sanitizeCssValue(
+			theme.infoColor,
+			DEFAULT_HTML_RENDERER_THEME.infoColor,
+		),
+		linkColor: sanitizeCssValue(
+			theme.linkColor,
+			DEFAULT_HTML_RENDERER_THEME.linkColor,
+		),
+		mutedColor: sanitizeCssValue(
+			theme.mutedColor,
+			DEFAULT_HTML_RENDERER_THEME.mutedColor,
+		),
+		successColor: sanitizeCssValue(
+			theme.successColor,
+			DEFAULT_HTML_RENDERER_THEME.successColor,
+		),
+		textColor: sanitizeCssValue(
+			theme.textColor,
+			DEFAULT_HTML_RENDERER_THEME.textColor,
+		),
+		warningColor: sanitizeCssValue(
+			theme.warningColor,
+			DEFAULT_HTML_RENDERER_THEME.warningColor,
+		),
+	};
+}
+
 export function renderHtmlDocumentStart(
 	title: string,
 	theme: HtmlRendererTheme,
@@ -339,8 +406,8 @@ export function renderMetadataBlock(meta: {
 			? escapeHtmlText(meta.traceabilitySummary)
 			: undefined;
 
-	const statusClass = `status-badge status-${meta.status.replace(/_/g, '-')}`;
-	const boundaryClass = `status-badge status-${meta.outputBoundary.replace(/_/g, '-')}`;
+	const statusClass = `status-badge status-${sanitizeCssClassToken(meta.status)}`;
+	const boundaryClass = `status-badge status-${sanitizeCssClassToken(meta.outputBoundary)}`;
 
 	let html = '<section class="metadata-block">\n<h2>Metadata</h2>\n<dl>\n';
 	html += `<dt>Artifact ID</dt><dd>${safeArtifactId}</dd>\n`;
@@ -403,7 +470,7 @@ export function renderDiagnosticsSection(
 				? sanitizeTextContent(diag.recoveryHint)
 				: undefined;
 
-		const sevClass = `diagnostic diagnostic-${diag.severity}`;
+		const sevClass = `diagnostic diagnostic-${sanitizeCssClassToken(diag.severity)}`;
 		html += `<div class="${sevClass}">\n<strong>[${safeCode}]</strong> ${safeMessage}\n`;
 		if (safeSourcePath !== undefined)
 			html += `<br><span class="source-path">Source: ${safeSourcePath}</span>\n`;
