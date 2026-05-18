@@ -22,6 +22,32 @@ export {
 	summarizeDependencyGraph,
 } from './dependency-graph.js';
 export type {
+	GraphJsonReport,
+	GraphOutputDiagnostic,
+	GraphOutputDocumentSummary,
+	GraphOutputEdgeSummary,
+	GraphOutputFilter,
+	GraphOutputFormat,
+	GraphOutputInput,
+	GraphOutputNodeSummary,
+	GraphOutputOptions,
+	GraphOutputPhaseSummary,
+	GraphOutputRenderMode,
+	GraphOutputResult,
+	GraphOutputRow,
+	GraphOutputScope,
+	GraphOutputSection,
+	GraphOutputStalenessItem,
+	GraphOutputStatus,
+	GraphOutputSummary,
+	GraphTextReport,
+} from './graph-output.js';
+export {
+	createInspectableGraphOutput,
+	renderGraphJsonReport,
+	renderGraphTextReport,
+} from './graph-output.js';
+export type {
 	DependencyGraphTraversalOptions,
 	DependencyGraphTraversalResult,
 } from './graph-queries.js';

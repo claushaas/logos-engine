@@ -1,6 +1,9 @@
 /** Pure slash command router — returns typed results, performs no side effects */
 
-import { buildDocumentDependencyGraph } from '../dependency-graph/index.js';
+import {
+	buildDocumentDependencyGraph,
+	createInspectableGraphOutput,
+} from '../dependency-graph/index.js';
 import { generateCanonicalDocs } from '../generation/generate-canonical-docs.js';
 import type { GenerateCanonicalDocsWritePolicy } from '../generation/generate-types.js';
 import { initWorkspace, preflightInit } from '../init/index.js';
@@ -90,6 +93,8 @@ export async function routeSlashCommand(
 			return getDiagnoseResult(args, context);
 		case 'validate':
 			return getValidateResult(args, context);
+		case 'graph':
+			return getGraphResult(args, context);
 		default:
 			return {
 				command: name,
@@ -123,6 +128,11 @@ function getHelpMessages(): string[] {
 		'  /validate --dry-run — Run validation without writes',
 		'  /validate --scope <scope> — Scope validation (contracts, state, artifacts, outputs)',
 		'  /status      — Show runtime status',
+		'  /graph       — Show dependency graph output',
+		'  /graph --json — Show graph output as JSON',
+		'  /graph --phase <phaseId> — Filter graph by phase',
+		'  /graph --doc <documentId> — Filter graph by document',
+		'  /graph --mode full — Show full graph output',
 		'  /config ai   — Configure AI provider (not yet implemented)',
 		'  /help        — Show this help',
 		'  /exit        — Exit the shell',
@@ -1006,6 +1016,15 @@ async function getStatusResult(
 		  }
 		| undefined;
 
+	let graphSummary:
+		| {
+				phaseCount: number;
+				documentCount: number;
+				outputCount: number;
+				edgeCount: number;
+		  }
+		| undefined;
+
 	try {
 		const readResult = await readWorkspaceState({ projectRoot });
 		if (readResult.success && readResult.state) {
@@ -1024,6 +1043,27 @@ async function getStatusResult(
 				contract,
 				registry,
 			});
+
+			graphSummary = {
+				documentCount: graphResult.graph.nodes.filter(
+					(n) => n.kind === 'document',
+				).length,
+				edgeCount: graphResult.graph.edges.length,
+				outputCount: graphResult.graph.nodes.filter(
+					(n) =>
+						n.kind === 'canonical_output' ||
+						n.kind === 'html_artifact' ||
+						n.kind === 'agent_pack' ||
+						n.kind === 'data_artifact' ||
+						n.kind === 'report_artifact' ||
+						n.kind === 'executive_output' ||
+						n.kind === 'executive_json' ||
+						n.kind === 'executive_markdown' ||
+						n.kind === 'executive_html',
+				).length,
+				phaseCount: graphResult.graph.nodes.filter((n) => n.kind === 'phase')
+					.length,
+			};
 
 			const detection = await detectStaleness({
 				artifactRegistryEntries: state.artifacts.map((a) => ({
@@ -1229,6 +1269,16 @@ async function getStatusResult(
 			lines.push('');
 			lines.push('Staleness:  (no generated outputs exist yet)');
 		}
+
+		// Compact graph summary (always when graph was built)
+		if (graphSummary) {
+			lines.push('');
+			lines.push('Graph summary:');
+			lines.push(`  Phases:     ${graphSummary.phaseCount}`);
+			lines.push(`  Documents:  ${graphSummary.documentCount}`);
+			lines.push(`  Outputs:    ${graphSummary.outputCount}`);
+			lines.push(`  Edges:      ${graphSummary.edgeCount}`);
+		}
 	}
 
 	if (ctx.workspace.initializationState === 'missing') {
@@ -1249,6 +1299,264 @@ async function getStatusResult(
 		messages: lines,
 		shouldExit: false,
 	};
+}
+
+async function getGraphResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const ctx = context.projectContext;
+	const projectRoot = ctx.root.rootPath ?? ctx.cwd;
+
+	const useJson = args.includes('--json');
+	const phaseFilter = extractFlagValue(args, '--phase');
+	const docFilter = extractFlagValue(args, '--doc');
+	const modeFlag = extractFlagValue(args, '--mode');
+
+	const renderMode = (() => {
+		switch (modeFlag) {
+			case 'summary':
+			case 'phase_tree':
+			case 'document_dependencies':
+			case 'outputs':
+			case 'staleness':
+			case 'regeneration':
+			case 'full':
+				return modeFlag;
+			default:
+				return 'summary';
+		}
+	})();
+
+	try {
+		const readResult = await readWorkspaceState({ projectRoot });
+
+		let _graphTried = false;
+		let graphError: string | undefined;
+
+		// Try to build graph from workspace
+		if (readResult.success && readResult.state) {
+			try {
+				const state = readResult.state;
+				const contract = await loadDocumentationContract({
+					profileId: state.profile.profileId,
+					repoRoot: projectRoot,
+				});
+
+				const registry = await loadProfileRegistry({
+					profileId: state.profile.profileId,
+					repoRoot: projectRoot,
+				});
+
+				const graphResult = buildDocumentDependencyGraph({
+					contract,
+					registry,
+				});
+
+				let stalenessResult:
+					| Awaited<ReturnType<typeof detectStaleness>>
+					| undefined;
+
+				try {
+					stalenessResult = await detectStaleness({
+						artifactRegistryEntries: state.artifacts.map((a) => ({
+							artifactId: a.artifactId,
+							artifactType: a.artifactType,
+							checksum: a.checksum,
+							generatedAt: a.generatedAt,
+							isCanonical: a.isCanonical,
+							metadata: a.metadata,
+							path: a.path,
+							runId: a.runId,
+							sourceDocumentIds: a.sourceDocumentIds,
+							status: a.status,
+						})),
+						assumptions: state.assumptions.map((a) => ({
+							affectedDocumentIds: a.affectedDocumentIds,
+							body: a.body,
+							createdAt: a.createdAt,
+							id: a.id,
+							status: a.status,
+							title: a.title,
+							updatedAt: a.updatedAt,
+						})),
+						decisions: state.decisions.map((d) => ({
+							affectedDocumentIds: d.affectedDocumentIds,
+							body: d.body,
+							createdAt: d.createdAt,
+							id: d.id,
+							status: d.status,
+							title: d.title,
+							updatedAt: d.updatedAt,
+						})),
+						dependencyGraph: {
+							edges: graphResult.graph.edges,
+							nodeMap: graphResult.graph.nodeMap,
+							nodes: graphResult.graph.nodes,
+							upstreamEdges: graphResult.graph.upstreamEdges,
+						},
+						documentationRoot: state.documentation.rootPath,
+						generatedMetadataOverrides: new Map(),
+						generationRuns: state.runs
+							.filter(
+								(r) => r.runType === 'generation' || r.runType === 'executive',
+							)
+							.map((r) => ({
+								completedAt: r.completedAt,
+								relatedArtifactIds: r.relatedArtifactIds,
+								runId: r.runId,
+								startedAt: r.startedAt,
+								status: r.status,
+							})),
+						loadedDescriptorData: new Map(
+							contract.documents.map((doc) => [
+								doc.canonicalId,
+								{
+									canonicalOutput: doc.descriptor.outputs.canonical.path,
+									inputs: (doc.descriptor.inputs ?? []).map((i) => ({
+										id: i.id,
+										required: i.required,
+										type: i.type,
+									})),
+									outputs: flattenDescriptorOutputs(doc.descriptor.outputs),
+									phaseId: doc.phaseId,
+									status: doc.descriptor.status,
+									title: doc.descriptor.title,
+								},
+							]),
+						),
+						openQuestions: state.openQuestions.map((q) => ({
+							affectedDocumentIds: q.affectedDocumentIds,
+							body: q.body,
+							createdAt: q.createdAt,
+							id: q.id,
+							question: q.question,
+							status: q.status,
+							updatedAt: q.updatedAt,
+						})),
+						phaseDescriptors: contract.phases.map((p) => ({
+							id: p.id,
+							sourcePath: p.sourcePath,
+							title: p.title,
+						})),
+						profileId: state.profile.profileId,
+						profileRegistryFingerprint: '',
+						profileRoot: contract.profileRoot,
+						profileVersion: state.profile.profileVersion,
+						risks: state.risks.map((r) => ({
+							affectedDocumentIds: r.affectedDocumentIds,
+							body: r.body,
+							createdAt: r.createdAt,
+							id: r.id,
+							severity: r.severity,
+							status: r.status,
+							title: r.title,
+							updatedAt: r.updatedAt,
+						})),
+					});
+				} catch {
+					stalenessResult = undefined;
+				}
+
+				_graphTried = true;
+
+				const output = createInspectableGraphOutput(
+					{ graph: graphResult.graph, stalenessResult },
+					{
+						filter: {
+							documentId: docFilter ?? undefined,
+							phaseId: phaseFilter ?? undefined,
+						},
+						format: useJson ? 'json' : 'text',
+						mode: renderMode,
+					},
+				);
+
+				const resultText =
+					useJson && output.jsonOutput
+						? output.jsonOutput
+						: (output.textOutput ?? '');
+
+				return {
+					command: 'graph',
+					kind: 'success',
+					messages: resultText.split('\n').filter((line) => line !== ''),
+					shouldExit: false,
+				};
+			} catch (err) {
+				graphError =
+					err instanceof Error ? err.message : 'Unknown graph build error';
+			}
+		}
+
+		// Fallback: try to build graph from profile contract (no workspace)
+		try {
+			const profileId = ctx.config.activeProfileId ?? 'standard';
+			const contract = await loadDocumentationContract({
+				profileId,
+				repoRoot: projectRoot,
+			});
+			const registry = await loadProfileRegistry({
+				profileId,
+				repoRoot: projectRoot,
+			});
+			const graphResult = buildDocumentDependencyGraph({ contract, registry });
+
+			const output = createInspectableGraphOutput(
+				{ graph: graphResult.graph },
+				{
+					filter: {
+						documentId: docFilter ?? undefined,
+						phaseId: phaseFilter ?? undefined,
+					},
+					format: useJson ? 'json' : 'text',
+					mode: renderMode,
+				},
+			);
+
+			const resultText =
+				useJson && output.jsonOutput
+					? output.jsonOutput
+					: (output.textOutput ?? '');
+
+			return {
+				command: 'graph',
+				kind: 'success',
+				messages: resultText.split('\n').filter((line) => line !== ''),
+				shouldExit: false,
+			};
+		} catch (err) {
+			const fallbackError =
+				err instanceof Error ? err.message : 'Unknown error';
+			return {
+				command: 'graph',
+				kind: 'error',
+				messages: [
+					'Failed to build dependency graph:',
+					graphError ? `  Workspace: ${graphError}` : undefined,
+					`  Profile contract: ${fallbackError}`,
+					'Ensure you are in a repository with a valid profile, or run /init first.',
+				].filter(Boolean) as string[],
+				shouldExit: false,
+			};
+		}
+	} catch (err) {
+		const message = err instanceof Error ? err.message : 'Unknown error';
+		return {
+			command: 'graph',
+			kind: 'error',
+			messages: ['Graph output failed:', message],
+			shouldExit: false,
+		};
+	}
+}
+
+function extractFlagValue(args: string[], flag: string): string | undefined {
+	const idx = args.indexOf(flag);
+	if (idx >= 0 && idx + 1 < args.length) {
+		return args[idx + 1] ?? undefined;
+	}
+	return undefined;
 }
 
 function _findCanonicalOutputPath(descriptor: {
