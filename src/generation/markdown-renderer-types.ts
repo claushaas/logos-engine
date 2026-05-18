@@ -13,6 +13,7 @@ import type {
 	WorkspaceRisk,
 	WorkspaceState,
 } from '../state/workspace-state.schema.js';
+import type { TraceabilityMetadata } from '../traceability/traceability-types.js';
 import type {
 	GenerationAction,
 	GenerationPlanItem,
@@ -103,6 +104,23 @@ export interface MarkdownMetadataHeader {
 	sourceStateSchemaVersion: string;
 	traceability: MarkdownTraceabilityReference[];
 	nonCanonicalArtifacts?: string[];
+	boundary?:
+		| 'canonical'
+		| 'derived'
+		| 'non_canonical'
+		| 'review_only'
+		| 'execution_aid'
+		| undefined;
+	sourceCount?: number | undefined;
+	claimCount?: number | undefined;
+	reviewRequiredCount?: number | undefined;
+	inferredClaimCount?: number | undefined;
+	unresolvedQuestionCount?: number | undefined;
+	blockingOpenQuestionCount?: number | undefined;
+	missingSourceCount?: number | undefined;
+	generationRunId?: string | undefined;
+	artifactId?: string | undefined;
+	traceabilitySummary?: TraceabilityMetadata | undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -166,6 +184,12 @@ export interface CanonicalMarkdownRenderInput {
 	state: WorkspaceState;
 	profileId: string;
 	schemaVersion: string;
+	provenanceGraph?:
+		| import('../provenance/provenance-types.js').ProvenanceGraph
+		| undefined;
+	registerCollections?:
+		| import('../registers/register-types.js').RegisterCollections
+		| undefined;
 }
 
 // ---------------------------------------------------------------------------

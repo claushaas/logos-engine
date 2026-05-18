@@ -538,6 +538,22 @@ export const CLAIM_CONFIDENCE_ORDER: Record<ClaimConfidence, number> = {
 	unknown: 3,
 };
 
+export const CLAIM_REVIEW_STATE_ORDER: Record<ClaimReviewState, number> = {
+	approved: 3,
+	blocked: 5,
+	in_review: 2,
+	not_required: 0,
+	rejected: 4,
+	required: 1,
+};
+
+export const SOURCE_CONFIDENCE_ORDER: Record<SourceConfidence, number> = {
+	derived: 1,
+	explicit: 0,
+	inferred: 2,
+	unknown: 3,
+};
+
 export const LINK_TYPE_ORDER: Record<ClaimSourceLinkType, number> = {
 	contradicts: 1,
 	derived_from: 3,

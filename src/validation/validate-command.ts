@@ -17,6 +17,7 @@ import {
 	readWorkspaceState,
 	writeWorkspaceState,
 } from '../state/workspace-state-repository.js';
+import { buildTraceabilityResult } from '../traceability/traceability-renderer.js';
 import { lintCanonicalMarkdownDocuments } from './document-semantic-lints.js';
 import {
 	computeReportChecksum,
@@ -361,6 +362,20 @@ export async function runValidateCommand(
 		});
 
 		const recoveryHints = collectRecoveryHints(allFindings);
+		const traceabilityResult = buildTraceabilityResult(
+			{
+				boundary: 'non_canonical',
+				claims: [],
+				findings: allFindings,
+				generatedAt: completedAt,
+				outputKind: 'validation_report',
+				profileId,
+				sources: [],
+				validationRunId: runId,
+			},
+			{ projectRoot },
+		);
+
 		const reportParams = {
 			activeProfileId: profileId,
 			aiInterpretationSource: undefined as string | undefined,
@@ -379,6 +394,7 @@ export async function runValidateCommand(
 			scopesChecked: scopes,
 			summary,
 			title: 'Validation Report',
+			traceabilityMetadata: traceabilityResult.metadata,
 		};
 
 		const content =

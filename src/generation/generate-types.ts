@@ -1,5 +1,6 @@
 /** Generate Canonical Docs Types — orchestration contracts for /generate */
 
+import type { TraceabilityMetadata } from '../traceability/traceability-types.js';
 import type { GenerationPlanSummaryCounts } from './generation-planner-types.js';
 import type {
 	MarkdownWriteStatus,
@@ -136,4 +137,5 @@ export interface GenerateCanonicalDocsResult {
 		failed: number;
 	};
 	suggestedNextCommands: string[];
+	traceabilityMetadata?: TraceabilityMetadata | undefined;
 }

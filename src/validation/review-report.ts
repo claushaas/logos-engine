@@ -1,6 +1,7 @@
 /** Step 6.3 — Review report artifact generation. Local non-canonical artifacts. */
 
 import { createHash } from 'node:crypto';
+import type { TraceabilityMetadata } from '../traceability/traceability-types.js';
 import type {
 	ValidationFinding,
 	ValidationGateStatus,
@@ -45,6 +46,7 @@ export interface ValidationReportParams {
 	dryRun: boolean;
 	aiInterpretationSection?: string | undefined;
 	aiInterpretationSource?: string | undefined;
+	traceabilityMetadata?: TraceabilityMetadata | undefined;
 }
 
 export interface ValidationReportSummary {
@@ -124,6 +126,33 @@ export function renderValidationReportMarkdown(
 	lines.push(`- Warnings: ${params.summary.bySeverity.warning}`);
 	lines.push(`- Info: ${params.summary.bySeverity.info}`);
 	lines.push('');
+
+	if (params.traceabilityMetadata) {
+		lines.push('## Traceability Summary');
+		lines.push('');
+		lines.push(`- **Output Kind:** ${params.traceabilityMetadata.outputKind}`);
+		lines.push(`- **Boundary:** ${params.traceabilityMetadata.boundary}`);
+		lines.push(`- **Sources:** ${params.traceabilityMetadata.sourceCount}`);
+		lines.push(`- **Claims:** ${params.traceabilityMetadata.claimCount}`);
+		lines.push(
+			`- **Review Required:** ${params.traceabilityMetadata.reviewRequiredCount}`,
+		);
+		lines.push(
+			`- **Inferred Claims:** ${params.traceabilityMetadata.inferredClaimCount}`,
+		);
+		lines.push(
+			`- **Unresolved Questions:** ${params.traceabilityMetadata.unresolvedQuestionCount}`,
+		);
+		if (params.traceabilityMetadata.blockingOpenQuestionCount > 0) {
+			lines.push(
+				`- **Blocking Open Questions:** ${params.traceabilityMetadata.blockingOpenQuestionCount}`,
+			);
+		}
+		lines.push(
+			`- **Missing Sources:** ${params.traceabilityMetadata.missingSourceCount}`,
+		);
+		lines.push('');
+	}
 
 	if (Object.keys(params.summary.bySource).length > 0) {
 		lines.push('### By Source Kind');

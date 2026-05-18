@@ -1,0 +1,150 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`traceability integration snapshots > snapshot derived artifact traceability metadata 1`] = `
+{
+  "artifactId": undefined,
+  "blockingOpenQuestionCount": 0,
+  "boundary": "derived",
+  "claimCount": 1,
+  "claimReferences": [
+    {
+      "claimId": "claim-001",
+      "claimType": "decision",
+      "confidence": "explicit",
+      "isGenerated": false,
+      "isInferred": false,
+      "primarySourceId": "src-001",
+      "relatedDocumentCanonicalId": undefined,
+      "relatedPhaseId": undefined,
+      "relatedSectionId": undefined,
+      "relatedSectionPath": undefined,
+      "reviewRequiredMarker": false,
+      "reviewState": "approved",
+      "shortSummary": "Test decision claim",
+      "sourceCount": 1,
+      "status": "confirmed",
+    },
+  ],
+  "diagnostics": [],
+  "documentCanonicalId": undefined,
+  "generatedAt": "2025-06-01T12:00:00.000Z",
+  "generationRunId": "gen-run-001",
+  "inferredClaimCount": 0,
+  "missingSourceCount": 0,
+  "outputKind": "html_artifact",
+  "outputPath": undefined,
+  "phaseId": undefined,
+  "profileId": "standard",
+  "registerSummary": {
+    "assumptionCount": 1,
+    "blockingOpenQuestionCount": 1,
+    "decisionCount": 1,
+    "hypothesisCount": 0,
+    "missingSourceCount": 2,
+    "openQuestionCount": 1,
+    "reviewRequiredCount": 1,
+    "riskCount": 0,
+  },
+  "reviewRequiredCount": 0,
+  "sourceCount": 1,
+  "sourceReferences": [
+    {
+      "confidence": "explicit",
+      "lineReference": undefined,
+      "pointer": undefined,
+      "relatedClaimId": undefined,
+      "relatedDocumentCanonicalId": undefined,
+      "relatedPhaseId": undefined,
+      "relatedRegisterItemId": undefined,
+      "relatedValidationFindingId": undefined,
+      "relativeSourcePath": "logos/01-foundation/thesis.md",
+      "reviewMarker": "approved",
+      "section": undefined,
+      "sourceId": "src-md",
+      "sourceTimestamp": "2025-06-01T12:00:00.000Z",
+      "sourceType": "document",
+      "status": "confirmed",
+      "title": "Canonical Markdown Document",
+    },
+  ],
+  "unresolvedQuestionCount": 0,
+  "validationRunId": undefined,
+}
+`;
+
+exports[`traceability integration snapshots > snapshot generated metadata header with traceability summary 1`] = `
+"boundary: canonical
+sourceCount: 1
+claimCount: 1
+reviewRequiredCount: 0
+inferredClaimCount: 0
+unresolvedQuestionCount: 0
+blockingOpenQuestionCount: 0
+missingSourceCount: 0
+generationRunId: gen-run-001"
+`;
+
+exports[`traceability integration snapshots > snapshot generation report traceability summary 1`] = `
+"## Traceability Summary
+
+- **Output Kind:** Canonical Markdown
+- **Boundary:** Canonical editable output
+- **Sources:** 1
+- **Claims:** 1
+- **Review Required:** 0
+- **Inferred Claims:** 0
+- **Unresolved Questions:** 0
+- **Missing Sources:** 0
+"
+`;
+
+exports[`traceability integration snapshots > snapshot rendered markdown traceability section 1`] = `
+{
+  "metadataHeaderAddon": "boundary: canonical
+sourceCount: 1
+claimCount: 2
+reviewRequiredCount: 1
+inferredClaimCount: 1
+unresolvedQuestionCount: 0
+blockingOpenQuestionCount: 0
+missingSourceCount: 1",
+  "traceabilitySection": "## Traceability Summary
+
+- **Output Kind:** Canonical Markdown
+- **Boundary:** Canonical editable output
+- **Sources:** 1
+- **Claims:** 2
+- **Review Required:** 1
+- **Inferred Claims:** 1
+- **Unresolved Questions:** 0
+- **Missing Sources:** 1
+
+### Sources
+
+| Source ID | Type | Status | Confidence | Title | Document | Phase | Review |
+| --------- | ---- | ------ | ---------- | ----- | -------- | ----- | ------ |
+| src-001 | document | confirmed | ✓ explicit | Test Document | - | - | ✓ approved |
+
+### Claims
+
+| Claim ID | Type | Status | Confidence | Review | Summary | Sources |
+| -------- | ---- | ------ | ---------- | ------ | ------- | ------- |
+| claim-001 | decision | confirmed | ✓ explicit | ✓ approved | Test decision claim | 1 |
+| c-inf | assumption | requires_review | ⚠ inferred | 🔍 requires review | Inferred assumption | 0 |
+",
+}
+`;
+
+exports[`traceability integration snapshots > snapshot validation report traceability summary 1`] = `
+"## Traceability Summary
+
+- **Output Kind:** Validation Report
+- **Boundary:** Non-canonical review artifact
+- **Sources:** 1
+- **Claims:** 1
+- **Review Required:** 0
+- **Inferred Claims:** 0
+- **Unresolved Questions:** 0
+- **Missing Sources:** 0
+"
+`;

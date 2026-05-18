@@ -8,6 +8,16 @@ import type {
 	WorkspaceRisk,
 	WorkspaceState,
 } from '../state/workspace-state.schema.js';
+import {
+	renderTraceabilitySectionMarkdown,
+	sortTraceabilityClaims,
+	sortTraceabilitySources,
+} from '../traceability/traceability-renderer.js';
+import type {
+	TraceabilityClaimItem,
+	TraceabilityMetadata,
+	TraceabilitySourceItem,
+} from '../traceability/traceability-types.js';
 import type {
 	GenerationPlan,
 	GenerationPlanItem,
@@ -210,6 +220,233 @@ function collectConfirmedState(
 // Plan item status gate
 // ---------------------------------------------------------------------------
 
+function buildTraceabilityFromState(
+	input: CanonicalMarkdownRenderInput,
+	confirmedState: ConfirmedStateCollections,
+	options: CanonicalMarkdownRenderOptions,
+): TraceabilityMetadata | undefined {
+	const { state, profileId, documentDescriptor, planItem } = input;
+	const projectRoot = state.workspace.projectRootPath ?? '';
+
+	// Build source items from workspace state
+	const sourceItems: TraceabilitySourceItem[] = [];
+
+	// Document descriptor source
+	sourceItems.push({
+		confidence: 'explicit',
+		pointer: `/documents/${documentDescriptor.id}`,
+		relatedDocumentCanonicalId: planItem.documentCanonicalId,
+		relatedPhaseId: documentDescriptor.phaseId,
+		relativeSourcePath: planItem.descriptorSourcePath
+			? planItem.descriptorSourcePath.replace(/\\/g, '/')
+			: undefined,
+		reviewMarker: 'approved',
+		sourceId: `doc:${documentDescriptor.id}`,
+		sourceType: 'document',
+		status: 'confirmed',
+		title: documentDescriptor.title,
+	});
+
+	// Profile source
+	sourceItems.push({
+		confidence: 'explicit',
+		pointer: `/profiles/${profileId}`,
+		relatedPhaseId: documentDescriptor.phaseId,
+		relativeSourcePath: `profiles/${profileId}/docs.yml`,
+		reviewMarker: 'approved',
+		sourceId: `profile:${profileId}`,
+		sourceType: 'profile_descriptor',
+		status: 'confirmed',
+		title: `Profile ${profileId}`,
+	});
+
+	for (const d of confirmedState.confirmedDecisions) {
+		sourceItems.push({
+			confidence: 'explicit',
+			pointer: `/decisions/${d.id}`,
+			relatedDocumentCanonicalId:
+				d.affectedDocumentIds.length > 0 ? d.affectedDocumentIds[0] : undefined,
+			relativeSourcePath: projectRoot ? '.logos/workspace.json' : undefined,
+			reviewMarker: d.status === 'confirmed' ? 'approved' : 'required',
+			sourceId: `decision:${d.id}`,
+			sourceType: 'confirmed_decision',
+			status: d.status === 'confirmed' ? 'confirmed' : 'proposed',
+			title: d.title,
+		});
+	}
+
+	for (const a of confirmedState.confirmedAssumptions) {
+		sourceItems.push({
+			confidence: 'derived',
+			pointer: `/assumptions/${a.id}`,
+			relatedDocumentCanonicalId:
+				a.affectedDocumentIds.length > 0 ? a.affectedDocumentIds[0] : undefined,
+			relativeSourcePath: projectRoot ? '.logos/workspace.json' : undefined,
+			reviewMarker: a.status === 'active' ? 'approved' : 'required',
+			sourceId: `assumption:${a.id}`,
+			sourceType: 'assumption',
+			status: a.status === 'active' ? 'confirmed' : 'proposed',
+			title: a.title,
+		});
+	}
+
+	for (const r of confirmedState.relatedRisks) {
+		sourceItems.push({
+			confidence: 'derived',
+			pointer: `/risks/${r.id}`,
+			relatedDocumentCanonicalId:
+				r.affectedDocumentIds.length > 0 ? r.affectedDocumentIds[0] : undefined,
+			relativeSourcePath: projectRoot ? '.logos/workspace.json' : undefined,
+			reviewMarker: 'not_required',
+			sourceId: `risk:${r.id}`,
+			sourceType: 'manual_note',
+			status: 'confirmed',
+			title: r.title,
+		});
+	}
+
+	for (const q of confirmedState.unresolvedQuestions) {
+		sourceItems.push({
+			confidence: 'inferred',
+			pointer: `/openQuestions/${q.id}`,
+			relatedDocumentCanonicalId:
+				q.affectedDocumentIds.length > 0 ? q.affectedDocumentIds[0] : undefined,
+			relativeSourcePath: projectRoot ? '.logos/workspace.json' : undefined,
+			reviewMarker: 'required',
+			sourceId: `question:${q.id}`,
+			sourceType: 'external_reference',
+			status: q.status === 'open' ? 'requires_review' : 'confirmed',
+			title: q.question,
+		});
+	}
+
+	// Build claim items from workspace state
+	const claimItems: TraceabilityClaimItem[] = [];
+
+	for (const d of confirmedState.confirmedDecisions) {
+		const isInferred = d.confidence !== 'high' && d.confidence !== 'medium';
+		claimItems.push({
+			claimId: `claim:decision:${d.id}`,
+			claimType: 'decision',
+			confidence: isInferred ? 'inferred' : 'explicit',
+			isGenerated: false,
+			isInferred,
+			primarySourceId: `decision:${d.id}`,
+			relatedDocumentCanonicalId:
+				d.affectedDocumentIds.length > 0 ? d.affectedDocumentIds[0] : undefined,
+			reviewRequiredMarker: isInferred,
+			reviewState: isInferred ? 'required' : 'not_required',
+			shortSummary: d.title,
+			sourceCount: d.sourceRefs.length,
+			status: d.status === 'confirmed' ? 'confirmed' : 'proposed',
+		});
+	}
+
+	for (const a of confirmedState.confirmedAssumptions) {
+		claimItems.push({
+			claimId: `claim:assumption:${a.id}`,
+			claimType: 'assumption',
+			confidence: 'derived',
+			isGenerated: false,
+			isInferred: true,
+			primarySourceId: `assumption:${a.id}`,
+			relatedDocumentCanonicalId:
+				a.affectedDocumentIds.length > 0 ? a.affectedDocumentIds[0] : undefined,
+			reviewRequiredMarker: true,
+			reviewState: 'required',
+			shortSummary: a.title,
+			sourceCount: a.sourceRefs.length,
+			status: a.status === 'active' ? 'confirmed' : 'proposed',
+		});
+	}
+
+	for (const r of confirmedState.relatedRisks) {
+		const isConfirmed = r.status === 'mitigated' || r.status === 'accepted';
+		claimItems.push({
+			claimId: `claim:risk:${r.id}`,
+			claimType: 'risk',
+			confidence: isConfirmed ? 'explicit' : 'derived',
+			isGenerated: false,
+			isInferred: !isConfirmed,
+			primarySourceId: `risk:${r.id}`,
+			relatedDocumentCanonicalId:
+				r.affectedDocumentIds.length > 0 ? r.affectedDocumentIds[0] : undefined,
+			reviewRequiredMarker: !isConfirmed,
+			reviewState: isConfirmed ? 'not_required' : 'required',
+			shortSummary: r.title,
+			sourceCount: r.sourceRefs.length,
+			status: isConfirmed ? 'confirmed' : 'proposed',
+		});
+	}
+
+	for (const q of confirmedState.unresolvedQuestions) {
+		claimItems.push({
+			claimId: `claim:question:${q.id}`,
+			claimType: 'open_question',
+			confidence: 'inferred',
+			isGenerated: false,
+			isInferred: true,
+			primarySourceId: `question:${q.id}`,
+			relatedDocumentCanonicalId:
+				q.affectedDocumentIds.length > 0 ? q.affectedDocumentIds[0] : undefined,
+			reviewRequiredMarker: true,
+			reviewState: 'required',
+			shortSummary: q.question,
+			sourceCount: q.sourceRefs.length,
+			status: q.status === 'answered' ? 'confirmed' : 'requires_review',
+		});
+	}
+
+	const sortedSources = sortTraceabilitySources(sourceItems);
+	const sortedClaims = sortTraceabilityClaims(claimItems);
+
+	const reviewRequiredCount = sortedClaims.filter(
+		(c) => c.reviewRequiredMarker,
+	).length;
+	const inferredClaimCount = sortedClaims.filter((c) => c.isInferred).length;
+	const unresolvedQuestionCount = sortedClaims.filter(
+		(c) => c.claimType === 'open_question' && c.status !== 'confirmed',
+	).length;
+	const blockingOpenQuestionCount = sortedClaims.filter(
+		(c) =>
+			c.claimType === 'open_question' &&
+			(c.status === 'requires_review' || c.status === 'proposed'),
+	).length;
+	const missingSourceCount = sortedClaims.filter(
+		(c) => c.sourceCount === 0,
+	).length;
+
+	return {
+		blockingOpenQuestionCount,
+		boundary: 'canonical',
+		claimCount: sortedClaims.length,
+		claimReferences: sortedClaims,
+		diagnostics: [],
+		documentCanonicalId: planItem.documentCanonicalId,
+		generatedAt: options.generatedAt ?? new Date().toISOString(),
+		inferredClaimCount,
+		missingSourceCount,
+		outputKind: 'canonical_markdown',
+		outputPath: planItem.canonicalOutputPath,
+		phaseId: documentDescriptor.phaseId,
+		profileId,
+		registerSummary: {
+			assumptionCount: confirmedState.confirmedAssumptions.length,
+			blockingOpenQuestionCount,
+			decisionCount: confirmedState.confirmedDecisions.length,
+			hypothesisCount: 0,
+			missingSourceCount,
+			openQuestionCount: confirmedState.unresolvedQuestions.length,
+			reviewRequiredCount,
+			riskCount: confirmedState.relatedRisks.length,
+		},
+		reviewRequiredCount,
+		sourceCount: sortedSources.length,
+		sourceReferences: sortedSources,
+		unresolvedQuestionCount,
+	};
+}
+
 function checkPlanItemStatus(
 	planItem: GenerationPlanItem,
 	options: CanonicalMarkdownRenderOptions,
@@ -286,6 +523,27 @@ function buildMetadataHeader(
 	};
 }
 
+function enhanceMetadataWithTraceability(
+	metadata: MarkdownMetadataHeader,
+	traceability: TraceabilityMetadata | undefined,
+): MarkdownMetadataHeader {
+	if (!traceability) return metadata;
+	return {
+		...metadata,
+		artifactId: traceability.artifactId,
+		blockingOpenQuestionCount: traceability.blockingOpenQuestionCount,
+		boundary: traceability.boundary,
+		claimCount: traceability.claimCount,
+		generationRunId: traceability.generationRunId,
+		inferredClaimCount: traceability.inferredClaimCount,
+		missingSourceCount: traceability.missingSourceCount,
+		reviewRequiredCount: traceability.reviewRequiredCount,
+		sourceCount: traceability.sourceCount,
+		traceabilitySummary: traceability,
+		unresolvedQuestionCount: traceability.unresolvedQuestionCount,
+	};
+}
+
 // ---------------------------------------------------------------------------
 // YAML frontmatter builder
 // ---------------------------------------------------------------------------
@@ -303,6 +561,39 @@ function buildYamlFrontmatter(metadata: MarkdownMetadataHeader): string {
 	lines.push(
 		`sourceStateSchemaVersion: ${escapeTableCell(metadata.sourceStateSchemaVersion)}`,
 	);
+
+	if (metadata.boundary !== undefined) {
+		lines.push(`boundary: ${metadata.boundary}`);
+	}
+	if (metadata.sourceCount !== undefined) {
+		lines.push(`sourceCount: ${metadata.sourceCount}`);
+	}
+	if (metadata.claimCount !== undefined) {
+		lines.push(`claimCount: ${metadata.claimCount}`);
+	}
+	if (metadata.reviewRequiredCount !== undefined) {
+		lines.push(`reviewRequiredCount: ${metadata.reviewRequiredCount}`);
+	}
+	if (metadata.inferredClaimCount !== undefined) {
+		lines.push(`inferredClaimCount: ${metadata.inferredClaimCount}`);
+	}
+	if (metadata.unresolvedQuestionCount !== undefined) {
+		lines.push(`unresolvedQuestionCount: ${metadata.unresolvedQuestionCount}`);
+	}
+	if (metadata.blockingOpenQuestionCount !== undefined) {
+		lines.push(
+			`blockingOpenQuestionCount: ${metadata.blockingOpenQuestionCount}`,
+		);
+	}
+	if (metadata.missingSourceCount !== undefined) {
+		lines.push(`missingSourceCount: ${metadata.missingSourceCount}`);
+	}
+	if (metadata.generationRunId !== undefined) {
+		lines.push(`generationRunId: ${metadata.generationRunId}`);
+	}
+	if (metadata.artifactId !== undefined) {
+		lines.push(`artifactId: ${metadata.artifactId}`);
+	}
 
 	if (metadata.traceability !== undefined && metadata.traceability.length > 0) {
 		lines.push('traceability:');
@@ -1049,6 +1340,11 @@ export function renderCanonicalMarkdownDocument(
 	}
 
 	const confirmedState = collectConfirmedState(planItem, input.state);
+	const traceabilityMetadata = buildTraceabilityFromState(
+		input,
+		confirmedState,
+		options,
+	);
 
 	// Warn about proposed (unaccepted) proposals
 	if (confirmedState.proposedProposals.length > 0) {
@@ -1203,6 +1499,29 @@ export function renderCanonicalMarkdownDocument(
 		}
 	}
 
+	// Enhanced traceability section
+	if (traceabilityMetadata) {
+		const traceabilitySection =
+			renderTraceabilitySectionMarkdown(traceabilityMetadata);
+		if (traceabilitySection) {
+			// Insert after existing sources section or at end
+			const sourcesIdx = mdParts.findIndex((p) =>
+				p.startsWith('## Sources & Traceability'),
+			);
+			if (sourcesIdx >= 0) {
+				mdParts.splice(sourcesIdx + 1, 0, traceabilitySection);
+			} else {
+				mdParts.push(traceabilitySection);
+			}
+		}
+	}
+
+	// Boundary label (human-readable)
+	if (traceabilityMetadata) {
+		const boundaryLabel = `*Boundary: ${traceabilityMetadata.boundary === 'canonical' ? 'Canonical editable output' : traceabilityMetadata.boundary}*`;
+		mdParts.push(`\n${boundaryLabel}\n`);
+	}
+
 	// Gaps section
 	const gapsMarkdown = buildGapsSection(allGaps, planItem);
 	if (gapsMarkdown) {
@@ -1215,8 +1534,11 @@ export function renderCanonicalMarkdownDocument(
 		mdParts.push(qualityNotesMarkdown);
 	}
 
-	// Update metadata to include all sources
-	const finalMetadata = buildMetadataHeader(input, options, allSources);
+	// Update metadata to include all sources and traceability
+	const finalMetadata = enhanceMetadataWithTraceability(
+		buildMetadataHeader(input, options, allSources),
+		traceabilityMetadata,
+	);
 
 	const markdown = [buildYamlFrontmatter(finalMetadata), ...mdParts].join('\n');
 

@@ -554,7 +554,7 @@ function checkValidationOverclaimBoundary(
 			if (h.status === 'validated') {
 				const hasEvidence =
 					(h as HypothesisRegisterItem).evidenceSourceIds &&
-					(h as HypothesisRegisterItem).evidenceSourceIds?.length > 0;
+					((h as HypothesisRegisterItem).evidenceSourceIds?.length ?? 0) > 0;
 				if (!hasEvidence) {
 					violations.push(
 						createViolation(
