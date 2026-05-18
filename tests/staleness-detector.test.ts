@@ -129,9 +129,10 @@ describe('detectStaleness — status classification', () => {
 		const targets = result.targets.filter(
 			(t) => t.documentCanonicalId === node?.documentCanonicalId,
 		);
-		// For canonical_output with descriptor but no file/artifact, expect missing or unknown
+		// For canonical/derived targets with descriptor but no file/artifact, expect
+		// missing/unknown/current, or blocked when a required canonical prerequisite is missing.
 		for (const t of targets) {
-			expect(['missing', 'unknown', 'current']).toContain(t.status);
+			expect(['missing', 'unknown', 'current', 'blocked']).toContain(t.status);
 		}
 	});
 
@@ -282,6 +283,7 @@ describe('detectStaleness — upstream dependency impact', () => {
 				id: 'output:canonical:phase-2/doc-b:canonical',
 				kind: 'canonical_output' as const,
 				orderIndex: 3,
+				outputTargetPath: 'logos/phase-2/doc-b.md',
 				phaseId: 'phase-2',
 			},
 		];
@@ -330,7 +332,19 @@ describe('detectStaleness — upstream dependency impact', () => {
 				upstreamEdges,
 			},
 			documentationRoot: 'logos/',
-			generatedMetadataOverrides: new Map(),
+			generatedMetadataOverrides: new Map([
+				[
+					'logos/phase-2/doc-b.md',
+					{
+						canonicalOutput: 'logos/phase-2/doc-b.md',
+						documentId: 'phase-2/doc-b',
+						generatedAt: '2025-06-15T00:00:00Z',
+						generationStatus: 'complete',
+						phaseId: 'phase-2',
+						profileId: 'standard',
+					},
+				],
+			]),
 			generationRuns: [],
 			loadedDescriptorData: new Map([
 				[
@@ -368,14 +382,18 @@ describe('detectStaleness — upstream dependency impact', () => {
 			risks: [],
 		};
 
-		const result = await detectStaleness(input);
+		const result = await detectStaleness(input, {
+			outputFileExists: async (path) => path === 'logos/phase-2/doc-b.md',
+		});
 		expect(result.readOnly).toBe(true);
-		// Output for doc-b should not be current if its upstream decision changed
-		// (it would be classified based on metadata availability)
 		const docBOutput = result.targets.find(
 			(t) => t.documentCanonicalId === 'phase-2/doc-b',
 		);
 		expect(docBOutput).toBeDefined();
+		expect(docBOutput?.status).toBe('stale');
+		expect(docBOutput?.reasons.map((reason) => reason.code)).toContain(
+			'workspace_state_changed',
+		);
 	});
 
 	it('optional dependency change produces warning and does not automatically block', async () => {
@@ -597,6 +615,13 @@ describe('detectStaleness — upstream dependency impact', () => {
 
 		const result = await detectStaleness(input);
 		expect(result.readOnly).toBe(true);
+		const dependent = result.targets.find(
+			(t) => t.targetId === 'output:canonical:phase-2/doc-b:canonical',
+		);
+		expect(dependent?.status).toBe('blocked');
+		expect(dependent?.reasons.map((reason) => reason.code)).toContain(
+			'upstream_required_missing',
+		);
 	});
 });
 

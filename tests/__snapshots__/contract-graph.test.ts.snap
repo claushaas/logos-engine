@@ -3535,6 +3535,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "02-problem",
       },
       {
@@ -3555,6 +3559,22 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "09-decision-record",
       },
       {
@@ -3568,6 +3588,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -3623,6 +3647,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "02-problem",
       },
       {
@@ -3639,6 +3667,22 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "01-validation-strategy",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "09-decision-record",
       },
       {
@@ -3648,6 +3692,14 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -3683,6 +3735,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "02-problem",
       },
       {
@@ -3703,6 +3759,18 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "09-decision-record",
       },
       {
@@ -3716,6 +3784,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -3767,6 +3839,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "02-problem",
       },
       {
@@ -3783,6 +3859,14 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
@@ -3792,6 +3876,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -3843,6 +3931,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "02-problem",
       },
       {
@@ -3859,6 +3951,18 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
@@ -3868,6 +3972,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -3935,6 +4043,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -3947,11 +4059,31 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4019,6 +4151,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -4035,6 +4171,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "09-decision-record",
       },
       {
@@ -4048,6 +4188,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4131,6 +4275,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -4147,11 +4295,23 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4235,6 +4395,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -4247,11 +4411,23 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4339,6 +4515,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -4355,6 +4535,14 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
@@ -4364,6 +4552,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4467,6 +4659,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -4479,6 +4675,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-validation-report",
       },
       {
@@ -4488,6 +4688,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4580,6 +4784,14 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4679,6 +4891,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "03-audience",
       },
       {
@@ -4695,6 +4911,18 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "04-research-plan",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "08-evidence-log",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "05-experiments",
+      },
+      {
+        "kind": "dependsOn",
         "target": "09-decision-record",
       },
       {
@@ -4708,6 +4936,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4811,6 +5043,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
     "dependencies": [
       {
         "kind": "dependsOn",
+        "target": "01-thesis",
+      },
+      {
+        "kind": "dependsOn",
         "target": "04-principles",
       },
       {
@@ -4824,6 +5060,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -4931,6 +5171,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
         "target": "11-non-functional-requirements",
       },
       {
@@ -5020,6 +5264,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -5127,6 +5375,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-functional-requirements",
       },
       {
@@ -5228,6 +5480,14 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "01-product-brief",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -5336,6 +5596,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "03-user-journeys",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -5755,6 +6019,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-functional-requirements",
       },
       {
@@ -5872,6 +6140,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -5995,6 +6267,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       },
       {
         "kind": "dependsOn",
+        "target": "02-scope",
+      },
+      {
+        "kind": "dependsOn",
         "target": "10-functional-requirements",
       },
       {
@@ -6112,6 +6388,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",
@@ -6248,6 +6528,10 @@ exports[`buildContractGraph > Snapshot > matches a stable Standard graph index s
       {
         "kind": "dependsOn",
         "target": "06-success-definition",
+      },
+      {
+        "kind": "dependsOn",
+        "target": "02-scope",
       },
       {
         "kind": "dependsOn",

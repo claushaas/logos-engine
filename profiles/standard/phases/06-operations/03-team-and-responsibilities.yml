@@ -67,7 +67,7 @@ document:
     - "01-foundation/04-principles"
     - "01-foundation/05-boundaries"
     - "01-foundation/06-success-definition"
-    - "03-product/08-product-scope"
+    - "03-product/02-scope"
     - "03-product/11-non-functional-requirements"
     - "03-product/13-acceptance-criteria"
     - "04-engineering/02-system-architecture"

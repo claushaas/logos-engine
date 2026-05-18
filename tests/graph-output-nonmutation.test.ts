@@ -44,6 +44,20 @@ async function createTempDir(): Promise<string> {
 	return fullPath;
 }
 
+function requireTextOutput(result: { textOutput?: string }): string {
+	if (typeof result.textOutput !== 'string') {
+		throw new Error('Expected text output');
+	}
+	return result.textOutput;
+}
+
+function requireJsonOutput(result: { jsonOutput?: string }): string {
+	if (typeof result.jsonOutput !== 'string') {
+		throw new Error('Expected JSON output');
+	}
+	return result.jsonOutput;
+}
+
 // ---------------------------------------------------------------------------
 // Non-mutation tests
 // ---------------------------------------------------------------------------
@@ -226,7 +240,7 @@ describe('graph output non-mutation', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).not.toContain('sk-ant-api');
 		expect(text).not.toContain('sk-proj-');
 		expect(text).not.toContain('Bearer ');
@@ -238,7 +252,7 @@ describe('graph output non-mutation', () => {
 	it('graph output does not include raw secrets in JSON output', async () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphJsonReport({ graph });
-		const jsonStr = result.jsonOutput!;
+		const jsonStr = requireJsonOutput(result);
 
 		expect(jsonStr).not.toContain('sk-ant-api');
 		expect(jsonStr).not.toContain('sk-proj-');

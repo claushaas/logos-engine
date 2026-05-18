@@ -47,7 +47,9 @@ export function getPhaseDocuments(
 	graph: DocumentDependencyGraph,
 	phaseId: PhaseId,
 ): readonly DependencyGraphNode[] {
-	return graph.nodesByPhaseId.get(phaseId) ?? [];
+	return (graph.nodesByPhaseId.get(phaseId) ?? []).filter(
+		(node) => node.kind === 'document',
+	);
 }
 
 // ---------------------------------------------------------------------------

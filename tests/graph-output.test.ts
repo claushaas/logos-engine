@@ -65,6 +65,20 @@ function makeStalenessResult(
 	};
 }
 
+function requireTextOutput(result: { textOutput?: string }): string {
+	if (typeof result.textOutput !== 'string') {
+		throw new Error('Expected text output');
+	}
+	return result.textOutput;
+}
+
+function requireJsonOutput(result: { jsonOutput?: string }): string {
+	if (typeof result.jsonOutput !== 'string') {
+		throw new Error('Expected JSON output');
+	}
+	return result.jsonOutput;
+}
+
 // ---------------------------------------------------------------------------
 // Text output tests
 // ---------------------------------------------------------------------------
@@ -77,7 +91,7 @@ describe('renderGraphTextReport', () => {
 		expect(result.format).toBe('text');
 		expect(result.textOutput).toBeTruthy();
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Graph Output');
 		expect(text).toContain('Profile: standard');
 		expect(text).toContain('Graph Summary:');
@@ -94,7 +108,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Phases');
 		expect(text).toContain('Phase: 01-foundation');
 		expect(text).toContain('Phase: 02-validation');
@@ -108,7 +122,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('document:01-thesis');
 		expect(text).toContain('document:02-problem');
 		expect(text).toContain('document:03-audience');
@@ -119,7 +133,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toMatch(/canonical output \[canonical\]/);
 	});
 
@@ -127,7 +141,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		const hasHtml = text.includes('html_artifact [derived]');
 		const hasAgent = text.includes('agent_pack [derived]');
 		if (hasHtml || hasAgent) {
@@ -140,7 +154,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		// Executive outputs should appear if the graph has them
 		const _hasExec =
 			text.includes('executive_json') ||
@@ -154,7 +168,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'outputs' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Outputs');
 		// Should contain some output kind labels
 		expect(text).toMatch(
@@ -166,7 +180,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('[canonical]');
 		// derived artifacts should appear with derived marker or [canonical] for canonical
 	});
@@ -195,7 +209,7 @@ describe('renderGraphTextReport', () => {
 			{ mode: 'staleness' },
 		);
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Staleness');
 		expect(text).toContain('Stale:');
 		expect(text).toContain('3');
@@ -207,7 +221,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Warnings');
 		// Either shows (none) or actual warnings
 	});
@@ -216,7 +230,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Warnings');
 	});
 
@@ -224,7 +238,7 @@ describe('renderGraphTextReport', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'summary' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		// Summary mode should not contain raw edge listings
 		expect(text).not.toContain('Edge: ');
 		expect(text).not.toContain('EdgeKind: ');
@@ -274,7 +288,7 @@ describe('renderGraphJsonReport', () => {
 		expect(result.format).toBe('json');
 		expect(result.jsonOutput).toBeTruthy();
 
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 		expect(parsed).toBeTruthy();
 		expect(typeof parsed).toBe('object');
 	});
@@ -282,7 +296,7 @@ describe('renderGraphJsonReport', () => {
 	it('JSON includes profileId, summary, nodes, edges, phases, documents, outputs, staleness, diagnostics', async () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphJsonReport({ graph });
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 
 		expect(parsed.profileId).toBe('standard');
 		expect(parsed.formatVersion).toBe('1.0.0');
@@ -307,7 +321,7 @@ describe('renderGraphJsonReport', () => {
 		expect(r1.jsonOutput).toBe(r2.jsonOutput);
 
 		// Verify phases are in order
-		const parsed = JSON.parse(r1.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(r1));
 		const phaseIds = parsed.phases.map((p: { phaseId: string }) => p.phaseId);
 		expect(phaseIds).toEqual([
 			'01-foundation',
@@ -324,7 +338,7 @@ describe('renderGraphJsonReport', () => {
 		const staleness = makeStalenessResult();
 
 		const result = renderGraphJsonReport({ graph, stalenessResult: staleness });
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 
 		expect(parsed.staleness.currentCount).toBe(10);
 		expect(parsed.staleness.staleCount).toBe(3);
@@ -347,8 +361,8 @@ describe('renderGraphJsonReport', () => {
 		const result = renderGraphJsonReport({ graph });
 
 		// JSON.stringify handles circular detection – if it succeeds, no circular refs
-		expect(() => JSON.parse(result.jsonOutput!)).not.toThrow();
-		const parsed = JSON.parse(result.jsonOutput!);
+		expect(() => JSON.parse(requireJsonOutput(result))).not.toThrow();
+		const parsed = JSON.parse(requireJsonOutput(result));
 
 		// Verify we can re-serialize
 		expect(() => JSON.stringify(parsed)).not.toThrow();
@@ -357,7 +371,7 @@ describe('renderGraphJsonReport', () => {
 	it('JSON does not include absolute paths as stable IDs', async () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphJsonReport({ graph });
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 
 		// Node IDs should not be absolute paths
 		for (const node of parsed.nodes) {
@@ -386,7 +400,7 @@ describe('renderGraphJsonReport', () => {
 	it('JSON does not include raw fake secrets', async () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphJsonReport({ graph });
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 
 		const jsonStr = JSON.stringify(parsed);
 		expect(jsonStr).not.toContain('sk-ant-');
@@ -410,7 +424,7 @@ describe('graph output filters', () => {
 			},
 		);
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('Phase: 01-foundation');
 		expect(text).toContain('document:01-thesis');
 		// Should NOT contain documents from other phases
@@ -428,7 +442,7 @@ describe('graph output filters', () => {
 			},
 		);
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).toContain('document:01-thesis');
 		expect(text).not.toContain('document:02-problem');
 		expect(text).not.toContain('document:03-audience');
@@ -461,7 +475,7 @@ describe('graph output filters', () => {
 			},
 		);
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		// Staleness mode with staleness result should show staleness counts
 		expect(text).toContain('Staleness');
 		expect(text).toContain('Current:');
@@ -473,7 +487,7 @@ describe('graph output filters', () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphTextReport({ graph }, { mode: 'phase_tree' });
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		// derived artifacts should be visible by default
 		expect(text).toContain('[derived]');
 	});
@@ -488,7 +502,7 @@ describe('graph output filters', () => {
 			},
 		);
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		// Should not contain derived artifact markers when excluded
 		expect(text).not.toContain('[derived]');
 	});
@@ -511,7 +525,7 @@ describe('graph output filters', () => {
 			},
 		);
 
-		const text = result.textOutput!;
+		const text = requireTextOutput(result);
 		expect(text).not.toContain('executive_json');
 		expect(text).not.toContain('executive_markdown');
 		expect(text).not.toContain('executive_html');
@@ -522,7 +536,7 @@ describe('graph output filters', () => {
 
 		// Without full edges
 		const defaultResult = renderGraphJsonReport({ graph });
-		const defaultParsed = JSON.parse(defaultResult.jsonOutput!);
+		const defaultParsed = JSON.parse(requireJsonOutput(defaultResult));
 		expect(defaultParsed.edges.length).toBe(0);
 
 		// With full edges
@@ -530,7 +544,7 @@ describe('graph output filters', () => {
 			{ graph },
 			{ filter: { includeFullEdges: true } },
 		);
-		const fullParsed = JSON.parse(fullResult.jsonOutput!);
+		const fullParsed = JSON.parse(requireJsonOutput(fullResult));
 		expect(fullParsed.edges.length).toBeGreaterThan(0);
 	});
 
@@ -588,7 +602,7 @@ describe('createInspectableGraphOutput', () => {
 
 		expect(result.format).toBe('json');
 		expect(result.jsonOutput).toBeTruthy();
-		expect(() => JSON.parse(result.jsonOutput!)).not.toThrow();
+		expect(() => JSON.parse(requireJsonOutput(result))).not.toThrow();
 	});
 
 	it('is deterministic for text', async () => {
@@ -625,7 +639,7 @@ describe('createInspectableGraphOutput', () => {
 			{ format: 'json', generatedAt: timestamp },
 		);
 
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 		expect(parsed.renderedAt).toBe(timestamp);
 	});
 
@@ -663,7 +677,7 @@ describe('createInspectableGraphOutput', () => {
 	it('staleness is not_evaluated when no staleness result is provided', async () => {
 		const graph = await buildStandardGraph();
 		const result = renderGraphJsonReport({ graph });
-		const parsed = JSON.parse(result.jsonOutput!);
+		const parsed = JSON.parse(requireJsonOutput(result));
 
 		if (parsed.nodes.length > 0) {
 			const outputNode = parsed.nodes.find(

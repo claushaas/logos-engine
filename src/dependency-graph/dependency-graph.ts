@@ -736,21 +736,22 @@ export function buildDocumentDependencyGraph(
 			});
 		}
 
-		// Canonical output → derived artifact: derived_from edge
+		// Canonical output → derived artifact: derived_from edge. Graph traversal
+		// treats fromNodeId as upstream/source and toNodeId as downstream/affected.
 		if (!decl.isCanonical) {
 			const canonicalNid = canonicalOutputNodeId(decl.documentCanonicalId);
 			if (mg.nodeMap.has(canonicalNid)) {
 				addEdge(mg, {
 					fieldPath: decl.fieldPath,
-					fromNodeId: nid,
+					fromNodeId: canonicalNid,
 					id: nextEdgeId(mg, 'e'),
 					kind: 'derived_from' as const,
 					orderIndex: mg.edgeCount,
 					recoveryHint: undefined,
-					required: false,
+					required: true,
 					sourceDeclarationKind: 'output',
 					sourcePath: decl.sourcePath,
-					toNodeId: canonicalNid,
+					toNodeId: nid,
 				});
 			}
 		}
@@ -782,6 +783,30 @@ export function buildDocumentDependencyGraph(
 					sourcePath: dep.sourcePath,
 					toNodeId: sourceNid,
 				});
+
+				const targetCanonicalNid = canonicalOutputNodeId(
+					dep.targetDocumentCanonicalId,
+				);
+				const sourceCanonicalNid = canonicalOutputNodeId(
+					dep.sourceDocumentCanonicalId,
+				);
+				if (
+					mg.nodeMap.has(targetCanonicalNid) &&
+					mg.nodeMap.has(sourceCanonicalNid)
+				) {
+					addEdge(mg, {
+						fieldPath: dep.fieldPath,
+						fromNodeId: targetCanonicalNid,
+						id: nextEdgeId(mg, 'e'),
+						kind: 'depends_on' as const,
+						orderIndex: mg.edgeCount,
+						recoveryHint: undefined,
+						required: true,
+						sourceDeclarationKind: 'dependsOn',
+						sourcePath: dep.sourcePath,
+						toNodeId: sourceCanonicalNid,
+					});
+				}
 			} else {
 				addUnresolvedRef(mg, {
 					code: 'E_DEP_GRAPH_UNRESOLVED_DEPENDS_ON',

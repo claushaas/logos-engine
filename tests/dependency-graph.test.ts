@@ -217,21 +217,12 @@ describe('buildDocumentDependencyGraph', () => {
 	// -----------------------------------------------------------------------
 
 	describe('Standard profile validation', () => {
-		it('builds and reports unresolved dependencies with proper diagnostics', async () => {
+		it('builds with no unresolved required references', async () => {
 			const graph = await buildStandardGraph();
 			const unresolvedErrors = graph.unresolvedReferences.filter(
 				(r) => r.severity === 'error',
 			);
-			// Standard profile v0.1.0 has some unresolved dependsOn references
-			// due to naming inconsistencies between feed/dep references and actual
-			// document IDs (e.g. 02-product-scope vs 02-scope).
-			// These are correctly detected and reported as diagnostics.
-			for (const ref of unresolvedErrors) {
-				expect(ref.code).toContain('E_DEP_GRAPH_');
-				expect(ref.sourcePath).toBeTruthy();
-				expect(ref.referenceValue).toBeTruthy();
-				expect(ref.referenceKind).toBe('dependsOn');
-			}
+			expect(unresolvedErrors).toEqual([]);
 		});
 
 		it('has no blocking cycles', async () => {
@@ -364,8 +355,8 @@ describe('buildDocumentDependencyGraph', () => {
 			const docs = getPhaseDocuments(graph, '01-foundation');
 			expect(docs.length).toBeGreaterThan(0);
 
-			const docNodes = docs.filter((n) => n.kind === 'document');
-			for (const node of docNodes) {
+			for (const node of docs) {
+				expect(node.kind).toBe('document');
 				expect(node.phaseId).toBe('01-foundation');
 			}
 		});
@@ -481,6 +472,39 @@ describe('buildDocumentDependencyGraph', () => {
 	// -----------------------------------------------------------------------
 
 	describe('Output queries', () => {
+		it('derived artifacts depend downstream from canonical output nodes', async () => {
+			const graph = await buildStandardGraph();
+			const derivedEdges = graph.edges.filter((e) => e.kind === 'derived_from');
+			expect(derivedEdges.length).toBeGreaterThan(0);
+
+			for (const edge of derivedEdges) {
+				const fromNode = graph.nodeMap.get(edge.fromNodeId);
+				const toNode = graph.nodeMap.get(edge.toNodeId);
+				expect(fromNode?.kind).toBe('canonical_output');
+				expect(toNode?.kind).not.toBe('canonical_output');
+				expect(edge.required).toBe(true);
+			}
+		});
+
+		it('document dependsOn declarations also connect canonical outputs', async () => {
+			const graph = await buildStandardGraph();
+			const outputDependencyEdges = graph.edges.filter((edge) => {
+				if (edge.kind !== 'depends_on') return false;
+				const fromNode = graph.nodeMap.get(edge.fromNodeId);
+				const toNode = graph.nodeMap.get(edge.toNodeId);
+				return (
+					fromNode?.kind === 'canonical_output' &&
+					toNode?.kind === 'canonical_output'
+				);
+			});
+
+			expect(outputDependencyEdges.length).toBeGreaterThan(0);
+			for (const edge of outputDependencyEdges) {
+				expect(edge.sourceDeclarationKind).toBe('dependsOn');
+				expect(edge.required).toBe(true);
+			}
+		});
+
 		it('get canonical output for document', async () => {
 			const graph = await buildStandardGraph();
 			const canonical = getCanonicalOutputForDocument(graph, '01-thesis');
