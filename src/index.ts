@@ -1071,3 +1071,36 @@ export {
 	unlinkRegisterItemFromAffectedDocument,
 	validateHypothesis,
 } from './registers/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 8.3 — Contradiction and Boundary Violation Detection
+// ---------------------------------------------------------------------------
+
+export type {
+	BoundaryViolationKind,
+	BoundaryViolationRecord,
+	ConsistencyCheckDiagnostic,
+	ConsistencyCheckInput,
+	ConsistencyCheckOptions,
+	ConsistencyCheckResult,
+	ConsistencyEvidence,
+	ConsistencyEvidenceLink,
+	ConsistencyRule,
+	ConsistencyRuleCategory,
+	ConsistencyRuleId,
+	ConsistencySummary,
+	ConsistencyViolation,
+	ContradictionKind,
+	ContradictionRecord,
+	ExportReadinessBlocker,
+	ExportReadinessStatus,
+	GeneratedOutputMetadataEntry,
+	GenerationReportSummary,
+} from './consistency/index.js';
+
+export {
+	CONSISTENCY_RULE_ORDER,
+	getAllConsistencyRules,
+	getConsistencyRuleById,
+	runConsistencyCheck,
+} from './consistency/index.js';

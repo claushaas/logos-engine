@@ -10,6 +10,8 @@ import {
 	resolve,
 } from 'node:path';
 import { z } from 'zod';
+import type { ConsistencyCheckInput } from '../consistency/consistency-types.js';
+import { runConsistencyCheck } from '../consistency/contradiction-detector.js';
 import { parseFrontmatter } from '../generation/safe-markdown-writer.js';
 import {
 	buildContractGraph,
@@ -25,6 +27,11 @@ import {
 	loadProfileRegistry,
 	ProfileRegistryError,
 } from '../profiles/profile-registry.js';
+import type {
+	ClaimRecord,
+	SourceRecord,
+} from '../provenance/provenance-types.js';
+import type { RegisterCollections } from '../registers/register-types.js';
 import {
 	WORKSPACE_STATE_SCHEMA_VERSION,
 	type WorkspaceArtifact,
@@ -1579,6 +1586,30 @@ async function runValidation(
 	if (scopes.includes('artifacts')) await validateArtifactScope(context, input);
 	if (scopes.includes('outputs')) await validateOutputScope(context, input);
 
+	// Step 8.3 — Consistency/contradiction detection (integrated into all validation runs)
+	if (context.state) {
+		try {
+			const consistencyInput = buildConsistencyInputFromContext(context, input);
+			const consistencyResult = runConsistencyCheck(consistencyInput, {
+				allowInfoFindingsToPass: options.allowInfoFindingsToPass ?? true,
+				includeInfo: options.includeInfo ?? true,
+			});
+			context.findings.push(...consistencyResult.findings);
+			context.diagnostics.push(
+				...consistencyResult.diagnostics.map((d) => ({
+					code: d.code,
+					message: d.message,
+					path: d.sourcePath ?? context.workspacePath,
+					scope: 'all' as const,
+					severity: d.severity,
+					source: 'validation_service' as const,
+				})),
+			);
+		} catch {
+			// Consistency checks are best-effort; failures should not crash validation
+		}
+	}
+
 	return createValidationRunResult({
 		allowInfoFindingsToPass: options.allowInfoFindingsToPass ?? true,
 		diagnostics: context.diagnostics,
@@ -1590,6 +1621,101 @@ async function runValidation(
 		validatedProfileId: context.profileId,
 		workspacePath: context.workspacePath,
 	});
+}
+
+function buildConsistencyInputFromContext(
+	context: ValidationContext,
+	_input: ValidationRunInput,
+): ConsistencyCheckInput {
+	const state = context.state;
+	const artifacts =
+		state?.artifacts.map((a) => ({
+			artifactId: a.artifactId,
+			artifactType: a.artifactType,
+			checksum: a.checksum,
+			generatedAt: a.generatedAt,
+			isCanonical: a.isCanonical,
+			metadata: a.metadata as Record<string, unknown> | undefined,
+			path: a.path,
+			sourceDocumentIds: a.sourceDocumentIds,
+			status: a.status,
+		})) ?? [];
+
+	const contract: ConsistencyCheckInput['contract'] = context.contract
+		? {
+				documentsByCanonicalId: context.contract.documentsByCanonicalId,
+				phases: context.contract.phases.map((p) => ({
+					documents: p.documents.map((d) => ({
+						id: d.id,
+						outputs: {
+							canonical: {
+								path: (d as unknown as Record<string, unknown>).output as
+									| string
+									| undefined,
+							},
+						},
+					})),
+					id: p.id,
+				})),
+			}
+		: undefined;
+
+	const checkState: ConsistencyCheckInput['state'] = state
+		? {
+				artifacts,
+				claims: (state as Record<string, unknown>).claims as
+					| ClaimRecord[]
+					| undefined,
+				decisions: (state as Record<string, unknown>).decisions as
+					| Array<Record<string, unknown>>
+					| undefined,
+				documentation: { rootPath: state.documentation.rootPath },
+				generationRuns: state.generationRuns.map((r) => ({
+					runId: r.runId,
+					status: r.status,
+				})),
+				openQuestions: (state as Record<string, unknown>).openQuestions as
+					| Array<Record<string, unknown>>
+					| undefined,
+				profile: { profileId: state.profile.profileId },
+				proposals: state.proposals.map((p) => ({
+					proposalId: p.proposalId,
+					sourceDocumentCanonicalId: p.sourceDocumentCanonicalId,
+					sourceSessionId: p.sourceSessionId,
+					status: p.status,
+				})),
+				registers: (state as Record<string, unknown>).registers as
+					| RegisterCollections
+					| undefined,
+				risks: (state as Record<string, unknown>).risks as
+					| Array<Record<string, unknown>>
+					| undefined,
+				sources: (state as Record<string, unknown>).sources as
+					| SourceRecord[]
+					| undefined,
+				validationRuns: state.validationRuns.map((r) => ({
+					runId: r.runId,
+					status: r.status,
+				})),
+			}
+		: undefined;
+
+	return {
+		contract,
+		documentationRoot: context.documentationRoot,
+		existingFindings: [...context.findings],
+		generatedOutputs: artifacts
+			.filter((a) => a.artifactType === 'canonical_markdown')
+			.map((a) => ({
+				artifactType: a.artifactType,
+				isCanonical: a.isCanonical,
+				path: a.path,
+			})),
+		profileId: context.profileId,
+		projectRoot: context.projectRoot,
+		state: checkState,
+		workspacePath: context.workspacePath,
+	};
 }
 
 export async function validateWorkspace(

@@ -3,6 +3,12 @@
 exports[`artifact registry validation > reports invalid canonicality, unknown IDs, invalid path, duplicate path, checksum, and missing file 1`] = `
 [
   {
+    "code": "consistency_root_path_consistency",
+    "pointer": "/artifacts/art-001/path",
+    "severity": "fatal",
+    "source": "root_path",
+  },
+  {
     "code": "path_traversal",
     "pointer": "/artifacts/0/path",
     "severity": "error",
@@ -43,6 +49,12 @@ exports[`artifact registry validation > reports invalid canonicality, unknown ID
     "pointer": "/artifacts/3/path",
     "severity": "error",
     "source": "artifact_registry",
+  },
+  {
+    "code": "consistency_canonical_source_of_truth_boundary",
+    "pointer": "/artifacts/art-002/isCanonical",
+    "severity": "error",
+    "source": "validation_service",
   },
   {
     "code": "artifact_file_missing",

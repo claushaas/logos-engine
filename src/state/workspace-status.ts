@@ -1,5 +1,9 @@
 /** Workspace Status Summary — state-backed status query */
 
+import {
+	type ConsistencyCheckInput,
+	runConsistencyCheck,
+} from '../consistency/index.js';
 import { summarizeArtifacts } from './artifact-registry.js';
 import { summarizeRuns } from './run-repository.js';
 import { getCurrentSessionSummary } from './session-repository.js';
@@ -92,6 +96,16 @@ export interface WorkspaceStatusSummary {
 				blockingOpenQuestions: number;
 				unresolvedOpenQuestions: number;
 				reviewRequired: number;
+		  }
+		| undefined;
+	consistencySummary?:
+		| {
+				contradictionCount: number;
+				releaseBlockingCount: number;
+				boundaryWarningCount: number;
+				unresolvedBlockingQuestionCount: number;
+				gateStatus: string;
+				exportReadiness: string;
 		  }
 		| undefined;
 	diagnostics: Array<{
@@ -231,6 +245,32 @@ function buildStatusSummary(
 	const artifactSummary = summarizeArtifacts(state);
 	const registerSummary = computeRegisterSummary(state);
 
+	// Step 8.3 — Deterministic consistency summary (read-only, no file writes)
+	let consistencySummary: WorkspaceStatusSummary['consistencySummary'];
+	try {
+		const consistencyResult = runConsistencyCheck(
+			{
+				documentationRoot: state.documentation.rootPath,
+				profileId: state.profile.profileId,
+				projectRoot,
+				state: state as unknown as ConsistencyCheckInput['state'],
+				workspacePath: readResult.workspaceFilePath,
+			},
+			{ includeInfo: false },
+		);
+		consistencySummary = {
+			boundaryWarningCount: consistencyResult.summary.boundaryViolationCount,
+			contradictionCount: consistencyResult.summary.contradictionCount,
+			exportReadiness: consistencyResult.summary.exportReadiness,
+			gateStatus: consistencyResult.summary.gateStatus,
+			releaseBlockingCount: consistencyResult.summary.releaseBlockingCount,
+			unresolvedBlockingQuestionCount:
+				consistencyResult.summary.unresolvedBlockingQuestionCount,
+		};
+	} catch {
+		consistencySummary = undefined;
+	}
+
 	return {
 		activeProfileId: state.profile.profileId,
 		artifactSummary: {
@@ -248,6 +288,7 @@ function buildStatusSummary(
 			nonCanonicalCount: artifactSummary.nonCanonicalCount,
 			totalArtifacts: artifactSummary.totalArtifacts,
 		},
+		consistencySummary,
 		diagnostics,
 		documentationRoot: state.documentation.rootPath,
 		initializationState: readResult.initializationState,
