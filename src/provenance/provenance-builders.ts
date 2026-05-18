@@ -1,5 +1,6 @@
 /** Step 8.1 — Provenance builder functions from existing state */
 
+import { isAbsolute, relative } from 'node:path';
 import type { RenderedMarkdownSection } from '../generation/markdown-renderer-types.js';
 import type { LoadedDocumentDescriptor } from '../profiles/documentation-contract.js';
 import type {
@@ -60,6 +61,35 @@ function orderFromContext(context: ProvenanceBuilderContext): number {
 	return context.orderIndex ?? nextId();
 }
 
+function portableSourcePath(
+	path: string | undefined,
+	context: ProvenanceBuilderContext,
+): string | undefined {
+	if (!path) return undefined;
+	const normalized = path.replace(/\\/g, '/');
+	if (!isAbsolute(normalized)) return normalized;
+	if (!context.projectRoot) return '[absolute-path-redacted]';
+	const relativePath = relative(context.projectRoot, normalized).replace(
+		/\\/g,
+		'/',
+	);
+	if (relativePath.startsWith('..') || isAbsolute(relativePath)) {
+		return '[absolute-path-redacted]';
+	}
+	return relativePath || '.';
+}
+
+function workspaceStateSourcePath(context: ProvenanceBuilderContext): string {
+	return (
+		portableSourcePath(
+			context.projectRoot
+				? `${context.projectRoot}/.logos/workspace.json`
+				: '.logos/workspace.json',
+			context,
+		) ?? '.logos/workspace.json'
+	);
+}
+
 // ---------------------------------------------------------------------------
 // Diagnostic helpers
 // ---------------------------------------------------------------------------
@@ -118,9 +148,7 @@ export function sourceFromConversationAnswer(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: context.projectRoot
-				? `${context.projectRoot}/.logos/workspace.json`
-				: undefined,
+			path: workspaceStateSourcePath(context),
 			pointer: answer.sessionId ? `/sessions/${answer.sessionId}` : undefined,
 		},
 		metadata: {
@@ -162,9 +190,7 @@ export function sourceFromConfirmedDecision(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: context.projectRoot
-				? `${context.projectRoot}/.logos/workspace.json`
-				: undefined,
+			path: workspaceStateSourcePath(context),
 			pointer: `/decisions/${decision.id}`,
 		},
 		metadata: {
@@ -209,9 +235,7 @@ export function sourceFromAssumption(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: context.projectRoot
-				? `${context.projectRoot}/.logos/workspace.json`
-				: undefined,
+			path: workspaceStateSourcePath(context),
 			pointer: `/assumptions/${assumption.id}`,
 		},
 		metadata: {
@@ -257,7 +281,7 @@ export function sourceFromDocumentDescriptor(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: loaded.sourcePath,
+			path: portableSourcePath(loaded.sourcePath, context),
 			pointer: `/documents/${loaded.canonicalId}`,
 		},
 		metadata: {
@@ -265,7 +289,7 @@ export function sourceFromDocumentDescriptor(
 			documentId: loaded.descriptor.id,
 			label: loaded.descriptor.title,
 			phaseId: loaded.phaseId,
-			sourcePath: loaded.sourcePath,
+			sourcePath: portableSourcePath(loaded.sourcePath, context),
 		},
 		orderIndex: orderFromContext(context),
 		relatedDocumentCanonicalId: loaded.canonicalId,
@@ -302,11 +326,14 @@ export function sourceFromProfileDescriptor(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: profileDescriptor.descriptorPath,
+			path: portableSourcePath(profileDescriptor.descriptorPath, context),
 			pointer: `/profiles/${profileDescriptor.profileId}`,
 		},
 		metadata: {
-			descriptorPath: profileDescriptor.descriptorPath,
+			descriptorPath: portableSourcePath(
+				profileDescriptor.descriptorPath,
+				context,
+			),
 			label: profileDescriptor.label,
 			profileId: profileDescriptor.profileId,
 		},
@@ -335,7 +362,7 @@ export function sourceFromValidationFinding(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: finding.source.path,
+			path: portableSourcePath(finding.source.path, context),
 			pointer: finding.location.pointer,
 		},
 		metadata: {
@@ -378,7 +405,7 @@ export function sourceFromManualNote(
 		confidence: 'explicit',
 		externalUri: undefined,
 		location: {
-			path: note.path,
+			path: portableSourcePath(note.path, context),
 			pointer: `/notes/${note.noteId}`,
 		},
 		metadata: {

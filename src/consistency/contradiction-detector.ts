@@ -880,10 +880,11 @@ function checkAiAuthorityBoundary(
 	const violations: ConsistencyViolation[] = [];
 	const registers = getRegisterItems(input);
 
-	// Proposals with AI source that became confirmed without explicit acceptance
+	// Proposals with AI source must not be treated as confirmed. An "accepted"
+	// proposal is the explicit review boundary from Phase 4 and is allowed.
 	if (input.state?.proposals) {
 		for (const proposal of input.state.proposals) {
-			if (proposal.status === 'confirmed' || proposal.status === 'accepted') {
+			if (proposal.status === 'confirmed') {
 				const hasAiSource =
 					(proposal as Record<string, unknown>).sourceAnswerId !== undefined ||
 					(proposal as Record<string, unknown>).extractionMetadata !==

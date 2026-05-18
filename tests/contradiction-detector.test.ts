@@ -417,6 +417,46 @@ describe('contradiction detector', () => {
 			expect(finding).toBeDefined();
 			expect(finding?.severity).toBe('error');
 		});
+
+		it('does not flag an explicitly accepted AI-sourced proposal', () => {
+			const input = baseInput({
+				state: {
+					proposals: [
+						{
+							proposalId: 'prop-1',
+							sourceAnswerId: 'ans-1',
+							status: 'accepted',
+							targetConfirmedRecordId: 'rec-1',
+						},
+					],
+				},
+			});
+			const result = runConsistencyCheck(input);
+			const finding = result.findings.find(
+				(f) => f.code === 'consistency_ai_authority_boundary',
+			);
+			expect(finding).toBeUndefined();
+		});
+
+		it('flags an AI-sourced proposal recorded as confirmed', () => {
+			const input = baseInput({
+				state: {
+					proposals: [
+						{
+							proposalId: 'prop-1',
+							sourceAnswerId: 'ans-1',
+							status: 'confirmed',
+						},
+					],
+				},
+			});
+			const result = runConsistencyCheck(input);
+			const finding = result.findings.find(
+				(f) => f.code === 'consistency_ai_authority_boundary',
+			);
+			expect(finding).toBeDefined();
+			expect(finding?.severity).toBe('error');
+		});
 	});
 
 	describe('unresolved question visibility', () => {

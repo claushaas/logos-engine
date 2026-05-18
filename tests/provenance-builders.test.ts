@@ -135,6 +135,20 @@ describe('Source builders', () => {
 		expect(result.source.metadata.answerId).toBe('ans-1');
 	});
 
+	it('uses portable relative state paths for conversation answer sources', () => {
+		const result = sourceFromConversationAnswer(
+			{
+				answerId: 'ans-1',
+				sessionId: 'sess-1',
+				text: 'The project should use TypeScript.',
+			},
+			{ projectRoot: '/tmp/logos-project' },
+		);
+
+		expect(result.source.location.path).toBe('.logos/workspace.json');
+		expect(result.source.location.path).not.toContain('/tmp/logos-project');
+	});
+
 	it('builds source from confirmed decision', () => {
 		const decision = mockWorkspaceDecision();
 		const { source } = sourceFromConfirmedDecision(decision);
@@ -143,6 +157,21 @@ describe('Source builders', () => {
 		expect(source.confidence).toBe('explicit');
 		expect(source.title).toBe('Use TypeScript');
 		expect(source.relatedWorkspaceRecordId).toBe('dec-1');
+	});
+
+	it('uses portable relative state paths for decision and assumption sources', () => {
+		const decision = mockWorkspaceDecision();
+		const assumption = mockWorkspaceAssumption();
+		const context = { projectRoot: '/tmp/logos-project' };
+
+		const decisionSource = sourceFromConfirmedDecision(
+			decision,
+			context,
+		).source;
+		const assumptionSource = sourceFromAssumption(assumption, context).source;
+
+		expect(decisionSource.location.path).toBe('.logos/workspace.json');
+		expect(assumptionSource.location.path).toBe('.logos/workspace.json');
 	});
 
 	it('builds source from assumption', () => {
@@ -163,6 +192,20 @@ describe('Source builders', () => {
 		expect(source.sourceType).toBe('profile_descriptor');
 		expect(source.confidence).toBe('explicit');
 		expect(source.title).toBe('Standard Profile');
+	});
+
+	it('relativizes absolute descriptor paths when project root is known', () => {
+		const { source } = sourceFromProfileDescriptor(
+			{
+				descriptorPath: '/tmp/logos-project/profiles/standard/docs.yml',
+				label: 'Standard Profile',
+				profileId: 'standard',
+			},
+			{ projectRoot: '/tmp/logos-project' },
+		);
+
+		expect(source.location.path).toBe('profiles/standard/docs.yml');
+		expect(source.metadata.descriptorPath).toBe('profiles/standard/docs.yml');
 	});
 
 	it('builds source from validation finding', () => {
