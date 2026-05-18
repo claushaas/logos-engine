@@ -1270,6 +1270,31 @@ async function getStatusResult(
 			lines.push('Staleness:  (no generated outputs exist yet)');
 		}
 
+		// Register summary (Step 8.2)
+		if (summary.registerSummary) {
+			const rs = summary.registerSummary;
+			lines.push('');
+			lines.push('Register summary:');
+			lines.push(
+				`  Decisions:      ${rs.decisions.total} (${formatCounts(rs.decisions.byStatus)})`,
+			);
+			lines.push(
+				`  Assumptions:    ${rs.assumptions.total} (${formatCounts(rs.assumptions.byStatus)})`,
+			);
+			lines.push(
+				`  Hypotheses:     ${rs.hypotheses.total} (${formatCounts(rs.hypotheses.byStatus)})`,
+			);
+			lines.push(
+				`  Risks:          ${rs.risks.total} (${formatCounts(rs.risks.byStatus)})`,
+			);
+			lines.push(
+				`  Open Questions: ${rs.openQuestions.total} (${formatCounts(rs.openQuestions.byStatus)})`,
+			);
+			lines.push(`  Blocking open:  ${rs.blockingOpenQuestions}`);
+			lines.push(`  Unresolved:     ${rs.unresolvedOpenQuestions}`);
+			lines.push(`  Review req'd:   ${rs.reviewRequired}`);
+		}
+
 		// Compact graph summary (always when graph was built)
 		if (graphSummary) {
 			lines.push('');
@@ -1279,6 +1304,12 @@ async function getStatusResult(
 			lines.push(`  Outputs:    ${graphSummary.outputCount}`);
 			lines.push(`  Edges:      ${graphSummary.edgeCount}`);
 		}
+	}
+
+	function formatCounts(byStatus: Record<string, number>): string {
+		return Object.entries(byStatus)
+			.map(([k, v]) => `${k}:${v}`)
+			.join(', ');
 	}
 
 	if (ctx.workspace.initializationState === 'missing') {

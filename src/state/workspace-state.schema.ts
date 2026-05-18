@@ -555,6 +555,95 @@ const ProvenanceClaimSourceLinkSchema = z
 	})
 	.passthrough();
 
+// ---------------------------------------------------------------------------
+// Registers (Step 8.2)
+// ---------------------------------------------------------------------------
+
+const RegisterLifecycleEventSchemaRuntime = z
+	.object({
+		eventId: nonEmptyString,
+		eventType: z.string().min(1),
+		occurredAt: nonEmptyString,
+		registerItemId: nonEmptyString,
+	})
+	.passthrough();
+
+const RegisterSourceLinkSchemaRuntime = z
+	.object({
+		linkedAt: nonEmptyString,
+		sourceId: nonEmptyString,
+	})
+	.passthrough();
+
+const RegisterAffectedDocumentLinkSchemaRuntime = z
+	.object({
+		documentCanonicalId: nonEmptyString,
+		linkedAt: nonEmptyString,
+	})
+	.passthrough();
+
+const BaseRegisterItemSchemaRuntime = z.object({
+	affectedDocumentLinks: z
+		.array(RegisterAffectedDocumentLinkSchemaRuntime)
+		.default([]),
+	confidence: z.string().min(1),
+	createdAt: nonEmptyString,
+	id: nonEmptyString,
+	kind: z.enum([
+		'decision',
+		'assumption',
+		'hypothesis',
+		'risk',
+		'open_question',
+	]),
+	lifecycleHistory: z.array(RegisterLifecycleEventSchemaRuntime).default([]),
+	reviewState: z.string().min(1),
+	sourceLinks: z.array(RegisterSourceLinkSchemaRuntime).default([]),
+	status: z.string().min(1),
+	title: nonEmptyString,
+	updatedAt: nonEmptyString,
+});
+
+const DecisionRegisterItemSchemaRuntime = BaseRegisterItemSchemaRuntime.extend({
+	decisionStatement: nonEmptyString,
+	kind: z.literal('decision'),
+}).passthrough();
+
+const AssumptionRegisterItemSchemaRuntime =
+	BaseRegisterItemSchemaRuntime.extend({
+		assumptionStatement: nonEmptyString,
+		kind: z.literal('assumption'),
+	}).passthrough();
+
+const HypothesisRegisterItemSchemaRuntime =
+	BaseRegisterItemSchemaRuntime.extend({
+		hypothesisStatement: nonEmptyString,
+		kind: z.literal('hypothesis'),
+	}).passthrough();
+
+const RiskRegisterItemSchemaRuntime = BaseRegisterItemSchemaRuntime.extend({
+	kind: z.literal('risk'),
+	riskStatement: nonEmptyString,
+}).passthrough();
+
+const OpenQuestionRegisterItemSchemaRuntime =
+	BaseRegisterItemSchemaRuntime.extend({
+		isBlocking: z.boolean().default(false),
+		kind: z.literal('open_question'),
+		questionText: nonEmptyString,
+	}).passthrough();
+
+const RegisterCollectionsSchemaRuntime = z
+	.object({
+		assumptions: z.array(AssumptionRegisterItemSchemaRuntime).default([]),
+		decisions: z.array(DecisionRegisterItemSchemaRuntime).default([]),
+		hypotheses: z.array(HypothesisRegisterItemSchemaRuntime).default([]),
+		lifecycleEvents: z.array(RegisterLifecycleEventSchemaRuntime).default([]),
+		openQuestions: z.array(OpenQuestionRegisterItemSchemaRuntime).default([]),
+		risks: z.array(RiskRegisterItemSchemaRuntime).default([]),
+	})
+	.passthrough();
+
 export const WorkspaceStateSchema = z
 	.object({
 		artifacts: z.array(WorkspaceArtifactSchema).default([]),
@@ -570,6 +659,7 @@ export const WorkspaceStateSchema = z
 		profile: WorkspaceProfileLockSchema,
 		proposals: z.array(WorkspaceProposalSchema).default([]),
 		provider: WorkspaceProviderConfigReferenceSchema.optional(),
+		registers: RegisterCollectionsSchemaRuntime.optional(),
 		risks: z.array(WorkspaceRiskSchema).default([]),
 		runs: z.array(WorkspaceRunRecordSchema).default([]),
 		schemaVersion: z.literal(WORKSPACE_STATE_SCHEMA_VERSION),

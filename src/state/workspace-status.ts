@@ -3,6 +3,7 @@
 import { summarizeArtifacts } from './artifact-registry.js';
 import { summarizeRuns } from './run-repository.js';
 import { getCurrentSessionSummary } from './session-repository.js';
+import type { WorkspaceState } from './workspace-state.schema.js';
 import {
 	readWorkspaceState,
 	type WorkspaceStateReadResult,
@@ -81,6 +82,18 @@ export interface WorkspaceStatusSummary {
 				topBlockingReasons: readonly string[];
 		  }
 		| undefined;
+	registerSummary?:
+		| {
+				decisions: { total: number; byStatus: Record<string, number> };
+				assumptions: { total: number; byStatus: Record<string, number> };
+				hypotheses: { total: number; byStatus: Record<string, number> };
+				risks: { total: number; byStatus: Record<string, number> };
+				openQuestions: { total: number; byStatus: Record<string, number> };
+				blockingOpenQuestions: number;
+				unresolvedOpenQuestions: number;
+				reviewRequired: number;
+		  }
+		| undefined;
 	diagnostics: Array<{
 		code: string;
 		message: string;
@@ -116,6 +129,60 @@ export async function getWorkspaceStatusSummary(
 	return buildStatusSummary(options.projectRoot, readResult, stalenessResult);
 }
 
+function computeRegisterSummary(
+	state: WorkspaceState,
+): WorkspaceStatusSummary['registerSummary'] {
+	const raw = (state as Record<string, unknown>).registers as
+		| {
+				decisions?: Array<{ status: string }> | undefined;
+				assumptions?: Array<{ status: string }> | undefined;
+				hypotheses?: Array<{ status: string }> | undefined;
+				risks?: Array<{ status: string }> | undefined;
+				openQuestions?:
+					| Array<{ status: string; isBlocking?: boolean }>
+					| undefined;
+		  }
+		| undefined;
+
+	if (!raw) return undefined;
+
+	const decisions = raw.decisions ?? [];
+	const assumptions = raw.assumptions ?? [];
+	const hypotheses = raw.hypotheses ?? [];
+	const risks = raw.risks ?? [];
+	const openQuestions = raw.openQuestions ?? [];
+
+	const byStatus = (items: Array<{ status: string }>) => {
+		const m: Record<string, number> = {};
+		for (const item of items) {
+			m[item.status] = (m[item.status] ?? 0) + 1;
+		}
+		return m;
+	};
+
+	const blocking = openQuestions.filter(
+		(q: { status: string; isBlocking?: boolean }) =>
+			q.status === 'open' && q.isBlocking,
+	).length;
+	const unresolved = openQuestions.filter(
+		(q: { status: string }) => q.status === 'open',
+	).length;
+
+	return {
+		assumptions: { byStatus: byStatus(assumptions), total: assumptions.length },
+		blockingOpenQuestions: blocking,
+		decisions: { byStatus: byStatus(decisions), total: decisions.length },
+		hypotheses: { byStatus: byStatus(hypotheses), total: hypotheses.length },
+		openQuestions: {
+			byStatus: byStatus(openQuestions),
+			total: openQuestions.length,
+		},
+		reviewRequired: 0,
+		risks: { byStatus: byStatus(risks), total: risks.length },
+		unresolvedOpenQuestions: unresolved,
+	};
+}
+
 function buildStatusSummary(
 	projectRoot: string,
 	readResult: WorkspaceStateReadResult,
@@ -142,6 +209,7 @@ function buildStatusSummary(
 			documentationRoot: 'logos/',
 			initializationState: readResult.initializationState,
 			projectRoot,
+			registerSummary: undefined,
 			runSummary: {
 				totalDiagnosticRuns: 0,
 				totalExecutiveRuns: 0,
@@ -161,6 +229,7 @@ function buildStatusSummary(
 	const sessionSummary = getCurrentSessionSummary(state);
 	const runSummary = summarizeRuns(state);
 	const artifactSummary = summarizeArtifacts(state);
+	const registerSummary = computeRegisterSummary(state);
 
 	return {
 		activeProfileId: state.profile.profileId,
@@ -185,6 +254,7 @@ function buildStatusSummary(
 		profileSource: state.profile.source,
 		profileVersion: state.profile.profileVersion,
 		projectRoot,
+		registerSummary,
 		runSummary: {
 			latestRun: runSummary.latestRun
 				? {

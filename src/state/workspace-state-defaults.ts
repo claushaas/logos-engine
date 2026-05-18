@@ -55,6 +55,14 @@ export function createDefaultWorkspaceState(
 					providerId: options.providerId,
 				}
 			: undefined,
+		registers: {
+			assumptions: [],
+			decisions: [],
+			hypotheses: [],
+			lifecycleEvents: [],
+			openQuestions: [],
+			risks: [],
+		},
 		risks: [],
 		runs: [],
 		schemaVersion: WORKSPACE_STATE_SCHEMA_VERSION,
