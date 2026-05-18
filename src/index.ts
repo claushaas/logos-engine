@@ -1104,3 +1104,38 @@ export {
 	getConsistencyRuleById,
 	runConsistencyCheck,
 } from './consistency/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 9.1 — HTML Artifact Planner
+// ---------------------------------------------------------------------------
+
+export type {
+	HtmlArtifactAction,
+	HtmlArtifactBlocker,
+	HtmlArtifactDeclaration,
+	HtmlArtifactDeclarationSource,
+	HtmlArtifactDependency,
+	HtmlArtifactDiagnostic,
+	HtmlArtifactKind,
+	HtmlArtifactOutputPath,
+	HtmlArtifactPlan,
+	HtmlArtifactPlanInput,
+	HtmlArtifactPlanItem,
+	HtmlArtifactPlanOptions,
+	HtmlArtifactPlanResult,
+	HtmlArtifactReadiness,
+	HtmlArtifactReasonCode,
+	HtmlArtifactSource,
+	HtmlArtifactSourceKind,
+	HtmlArtifactStatus,
+	HtmlArtifactSummary,
+} from './html/index.js';
+export {
+	createHtmlArtifactPlan,
+	discoverHtmlArtifactDeclarations,
+	HTML_ARTIFACT_KIND_ORDER,
+	HTML_ARTIFACT_STATUS_ORDER,
+	isHtmlOutputPathSafe,
+	resolveHtmlOutputPath,
+	summarizeHtmlArtifactPlan,
+} from './html/index.js';
