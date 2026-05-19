@@ -1,5 +1,53 @@
 /** Step 11 — Executive Axis compilation exports */
 
+export { executiveAgentPackExportAdapter } from './executive-agent-pack-export.js';
+export { generateExecutiveExports } from './executive-export-generation.js';
+export type {
+	ExecutiveExportMappingFile,
+	ExecutiveExportMappingLoadResult,
+	KnownMappingEntry,
+} from './executive-export-mappings.js';
+export {
+	getKnownMappingEntries,
+	loadExecutiveExportMappings,
+	loadKnownMappings,
+} from './executive-export-mappings.js';
+// Step 11.3 — Executive Export Adapters
+export type {
+	ExecutiveExportAdapter,
+	ExecutiveExportAdapterKind,
+	ExecutiveExportArtifactRecord,
+	ExecutiveExportChangedPath,
+	ExecutiveExportDiagnostic,
+	ExecutiveExportGenerationInput,
+	ExecutiveExportGenerationItem,
+	ExecutiveExportGenerationOptions,
+	ExecutiveExportGenerationResult,
+	ExecutiveExportGenerationStatus,
+	ExecutiveExportInput,
+	ExecutiveExportMapping,
+	ExecutiveExportMappingOutput,
+	ExecutiveExportMappingTarget,
+	ExecutiveExportOptions,
+	ExecutiveExportRenderedFile,
+	ExecutiveExportReport,
+	ExecutiveExportResult,
+	ExecutiveExportResultMetadata,
+	ExecutiveExportSecurityCheck,
+	ExecutiveExportSecuritySummary,
+	ExecutiveExportSupportStatus,
+	ExecutiveExportTarget,
+	ExecutiveExportWritePolicy,
+} from './executive-export-model.js';
+export {
+	ADAPTER_KIND_ORDER,
+	isPlannedAdapterContract,
+	isSupportedFileExport,
+	sortExportTargets,
+} from './executive-export-model.js';
+export { executiveGitHubIssuesExportAdapter } from './executive-github-issues-export.js';
+export { executiveHtmlExportAdapter } from './executive-html-export.js';
+export { executiveMarkdownExportAdapter } from './executive-markdown-export.js';
 // Step 11.2 — Compiler function
 export {
 	assertExecutiveCompilation,

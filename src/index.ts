@@ -1432,3 +1432,51 @@ export {
 	WORK_ITEM_KIND_ORDER,
 	WORK_ITEM_KIND_TO_SCHEMA_TYPE,
 } from './executive/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 11.3 — Executive Export Adapters
+// ---------------------------------------------------------------------------
+
+export type {
+	ExecutiveExportAdapter,
+	ExecutiveExportAdapterKind,
+	ExecutiveExportArtifactRecord,
+	ExecutiveExportChangedPath,
+	ExecutiveExportDiagnostic,
+	ExecutiveExportGenerationInput,
+	ExecutiveExportGenerationItem,
+	ExecutiveExportGenerationOptions,
+	ExecutiveExportGenerationResult,
+	ExecutiveExportGenerationStatus,
+	ExecutiveExportInput,
+	ExecutiveExportMapping,
+	ExecutiveExportMappingFile,
+	ExecutiveExportMappingLoadResult,
+	ExecutiveExportMappingOutput,
+	ExecutiveExportMappingTarget,
+	ExecutiveExportOptions,
+	ExecutiveExportRenderedFile,
+	ExecutiveExportReport,
+	ExecutiveExportResult,
+	ExecutiveExportResultMetadata,
+	ExecutiveExportSecurityCheck,
+	ExecutiveExportSecuritySummary,
+	ExecutiveExportSupportStatus,
+	ExecutiveExportTarget,
+	ExecutiveExportWritePolicy,
+	KnownMappingEntry,
+} from './executive/index.js';
+export {
+	ADAPTER_KIND_ORDER,
+	executiveAgentPackExportAdapter,
+	executiveGitHubIssuesExportAdapter,
+	executiveHtmlExportAdapter,
+	executiveMarkdownExportAdapter,
+	generateExecutiveExports,
+	getKnownMappingEntries,
+	isPlannedAdapterContract,
+	isSupportedFileExport,
+	loadExecutiveExportMappings,
+	loadKnownMappings,
+	sortExportTargets,
+} from './executive/index.js';
