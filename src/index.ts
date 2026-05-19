@@ -1300,3 +1300,41 @@ export {
 	DEFAULT_SCOPE_OPTIONS,
 	DEFAULT_SIZE_BUDGET,
 } from './agent-packs/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 10.3 — Agent Pack Renderer & Generation
+// ---------------------------------------------------------------------------
+
+export type {
+	AgentPackArtifactRecord,
+	AgentPackChangedPath,
+	AgentPackGenerationInput,
+	AgentPackGenerationItem,
+	AgentPackGenerationOptions,
+	AgentPackGenerationReport,
+	AgentPackGenerationResult,
+	AgentPackGenerationStatus,
+	AgentPackRenderDiagnostic,
+	AgentPackRenderedMarkdown,
+	AgentPackRenderInput,
+	AgentPackRenderMetadata,
+	AgentPackRenderOptions,
+	AgentPackRenderResult,
+	AgentPackRenderSection,
+	AgentPackRenderSectionKind,
+	AgentPackSecuritySummary,
+	AgentPackTemplate,
+	AgentPackTemplateKind,
+	AgentPackWritePolicy,
+} from './agent-packs/index.js';
+export {
+	AGENT_PACK_TEMPLATE_KIND_ORDER,
+	buildAgentPackArtifactRecords,
+	checkAgentPackSecurity,
+	generateAgentPacks,
+	generateAgentPacksAsync,
+	isPathTraversalSuspected,
+	mapPackKindToTemplateKind,
+	renderAgentPack,
+	SECTION_SORT_ORDER,
+} from './agent-packs/index.js';

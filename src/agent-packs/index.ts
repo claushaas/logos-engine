@@ -91,3 +91,50 @@ export {
 	DEFAULT_SCOPE_OPTIONS,
 	DEFAULT_SIZE_BUDGET,
 } from './context-bundle-model.js';
+
+// ---------------------------------------------------------------------------
+// Step 10.3 — Agent Pack Renderer & Generation
+// ---------------------------------------------------------------------------
+
+export {
+	buildAgentPackArtifactRecords,
+	generateAgentPacks,
+	generateAgentPacksAsync,
+} from './agent-pack-generation.js';
+export type {
+	AgentPackArtifactRecord,
+	AgentPackChangedPath,
+	AgentPackGenerationInput,
+	AgentPackGenerationItem,
+	AgentPackGenerationOptions,
+	AgentPackGenerationReport,
+	AgentPackGenerationResult,
+	AgentPackGenerationStatus,
+	AgentPackRenderDiagnostic,
+	AgentPackRenderedMarkdown,
+	AgentPackRenderInput,
+	AgentPackRenderMetadata,
+	AgentPackRenderOptions,
+	AgentPackRenderResult,
+	AgentPackRenderSection,
+	AgentPackRenderSectionKind,
+	AgentPackSecuritySummary,
+	AgentPackTemplate,
+	AgentPackTemplateKind,
+	AgentPackWritePolicy,
+} from './agent-pack-render-types.js';
+export {
+	AGENT_PACK_TEMPLATE_KIND_ORDER,
+	mapPackKindToTemplateKind,
+	SECTION_SORT_ORDER,
+} from './agent-pack-render-types.js';
+export { renderAgentPack } from './agent-pack-renderer.js';
+export {
+	checkAgentPackSecurity,
+	isPathTraversalSuspected,
+} from './agent-pack-security.js';
+export {
+	DERIVED_WARNING,
+	TEMPLATES,
+	UNIVERSAL_CONSTRAINTS,
+} from './agent-pack-templates.js';
