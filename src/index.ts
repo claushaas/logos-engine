@@ -1379,3 +1379,56 @@ export {
 	SEVERITY_ORDER,
 	WARNING_KIND_ORDER,
 } from './executive/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 11.2 — Executive Plan JSON Compilation
+// ---------------------------------------------------------------------------
+
+export type {
+	ExecutivePlanAcceptanceCriterion,
+	ExecutivePlanBlocker,
+	ExecutivePlanChangedPath,
+	ExecutivePlanCompilationMode,
+	ExecutivePlanCompilationStatus,
+	ExecutivePlanCompileInput,
+	ExecutivePlanCompileOptions,
+	ExecutivePlanCompileResult,
+	ExecutivePlanDependency,
+	ExecutivePlanDiagnostic,
+	ExecutivePlanExportMetadata,
+	ExecutivePlanGenerationResult,
+	ExecutivePlanItemOrigin,
+	ExecutivePlanItemPriority,
+	ExecutivePlanItemStatus,
+	ExecutivePlanItemType,
+	ExecutivePlanJson,
+	ExecutivePlanJsonArtifact,
+	ExecutivePlanJsonConfidenceLevel,
+	ExecutivePlanJsonDecision,
+	ExecutivePlanJsonExportConfig,
+	ExecutivePlanJsonInitiative,
+	ExecutivePlanJsonItem,
+	ExecutivePlanJsonMilestone,
+	ExecutivePlanJsonProject,
+	ExecutivePlanJsonRisk,
+	ExecutivePlanJsonRoadmap,
+	ExecutivePlanJsonSource,
+	ExecutivePlanJsonWorkstream,
+	ExecutivePlanMilestone,
+	ExecutivePlanPhase,
+	ExecutivePlanReadinessSnapshot,
+	ExecutivePlanRisk,
+	ExecutivePlanSourceReference,
+	ExecutivePlanSuggestedExecutor,
+	ExecutivePlanTraceability,
+	ExecutivePlanWorkItem,
+	ExecutivePlanWorkItemKind,
+	ExecutivePlanWorkItemStatus,
+} from './executive/index.js';
+export {
+	assertExecutiveCompilation,
+	compileExecutivePlan,
+	ITEM_TYPE_ORDER,
+	WORK_ITEM_KIND_ORDER,
+	WORK_ITEM_KIND_TO_SCHEMA_TYPE,
+} from './executive/index.js';

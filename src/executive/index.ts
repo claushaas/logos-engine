@@ -1,5 +1,58 @@
-/** Step 11.1 — Executive Axis readiness gate exports */
+/** Step 11 — Executive Axis compilation exports */
 
+// Step 11.2 — Compiler function
+export {
+	assertExecutiveCompilation,
+	compileExecutivePlan,
+} from './executive-plan-compiler.js';
+// Step 11.2 — Executive Plan JSON compilation types
+export type {
+	ExecutivePlanAcceptanceCriterion,
+	ExecutivePlanBlocker,
+	ExecutivePlanChangedPath,
+	ExecutivePlanCompilationMode,
+	ExecutivePlanCompilationStatus,
+	ExecutivePlanCompileInput,
+	ExecutivePlanCompileOptions,
+	ExecutivePlanCompileResult,
+	ExecutivePlanDependency,
+	ExecutivePlanDiagnostic,
+	ExecutivePlanExportMetadata,
+	ExecutivePlanGenerationResult,
+	ExecutivePlanItemOrigin,
+	ExecutivePlanItemPriority,
+	ExecutivePlanItemStatus,
+	ExecutivePlanItemType,
+	ExecutivePlanJson,
+	ExecutivePlanJsonArtifact,
+	ExecutivePlanJsonConfidenceLevel,
+	ExecutivePlanJsonDecision,
+	ExecutivePlanJsonExportConfig,
+	ExecutivePlanJsonInitiative,
+	ExecutivePlanJsonItem,
+	ExecutivePlanJsonMilestone,
+	ExecutivePlanJsonProject,
+	ExecutivePlanJsonRisk,
+	ExecutivePlanJsonRoadmap,
+	ExecutivePlanJsonSource,
+	ExecutivePlanJsonWorkstream,
+	ExecutivePlanMilestone,
+	ExecutivePlanPhase,
+	ExecutivePlanReadinessSnapshot,
+	ExecutivePlanRisk,
+	ExecutivePlanSourceReference,
+	ExecutivePlanSuggestedExecutor,
+	ExecutivePlanTraceability,
+	ExecutivePlanWorkItem,
+	ExecutivePlanWorkItemKind,
+	ExecutivePlanWorkItemStatus,
+} from './executive-plan-model.js';
+export {
+	ITEM_TYPE_ORDER,
+	WORK_ITEM_KIND_ORDER,
+	WORK_ITEM_KIND_TO_SCHEMA_TYPE,
+} from './executive-plan-model.js';
+// Step 11.1 — Readiness gate types
 export type {
 	ExecutiveCompilationGateStatus,
 	ExecutiveReadinessReport,
