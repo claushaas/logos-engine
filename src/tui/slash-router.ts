@@ -1304,6 +1304,25 @@ async function getStatusResult(
 			lines.push(`  Outputs:    ${graphSummary.outputCount}`);
 			lines.push(`  Edges:      ${graphSummary.edgeCount}`);
 		}
+
+		// Executive readiness summary (Step 11.1 — concise, read-only)
+		if (summary.registerSummary) {
+			const rs = summary.registerSummary;
+			lines.push('');
+			lines.push('Executive readiness:');
+			lines.push('  Note: Executive Axis compilation is not yet implemented.');
+			lines.push('  The normative baseline readiness gate is available.');
+			lines.push(`  Blocking open questions: ${rs.blockingOpenQuestions}`);
+			if (stalenessResult) {
+				lines.push(`  Stale normative outputs:  ${stalenessResult.staleCount}`);
+				lines.push(
+					`  Missing normative outputs: ${stalenessResult.missingCount}`,
+				);
+				lines.push(
+					`  Blocked outputs:          ${stalenessResult.blockedCount}`,
+				);
+			}
+		}
 	}
 
 	function formatCounts(byStatus: Record<string, number>): string {
