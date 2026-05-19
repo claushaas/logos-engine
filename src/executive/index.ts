@@ -1,6 +1,26 @@
 /** Step 11 — Executive Axis compilation exports */
 
 export { executiveAgentPackExportAdapter } from './executive-agent-pack-export.js';
+export { executiveCompileWorkflow } from './executive-compile-workflow.js';
+// Step 11.4 — Executive Compile Workflow
+export type {
+	ExecutiveCompileAction,
+	ExecutiveCompileChangedPath,
+	ExecutiveCompileDiagnostic,
+	ExecutiveCompileInput,
+	ExecutiveCompileMode,
+	ExecutiveCompileOptions,
+	ExecutiveCompilePlan,
+	ExecutiveCompilePreflight,
+	ExecutiveCompileReport,
+	ExecutiveCompileResult,
+	ExecutiveCompileRunMetadata,
+	ExecutiveCompileStatus,
+	ExecutiveCompileTarget,
+	ExecutiveCompileTargetKind,
+	ExecutiveCompileTargetStatus,
+} from './executive-compile-workflow-types.js';
+export { COMPILE_TARGET_TO_ADAPTER } from './executive-compile-workflow-types.js';
 export { generateExecutiveExports } from './executive-export-generation.js';
 export type {
 	ExecutiveExportMappingFile,

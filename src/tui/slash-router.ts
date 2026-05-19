@@ -4,6 +4,7 @@ import {
 	buildDocumentDependencyGraph,
 	createInspectableGraphOutput,
 } from '../dependency-graph/index.js';
+import { executiveCompileWorkflow } from '../executive/index.js';
 import { generateCanonicalDocs } from '../generation/generate-canonical-docs.js';
 import type { GenerateCanonicalDocsWritePolicy } from '../generation/generate-types.js';
 import { initWorkspace, preflightInit } from '../init/index.js';
@@ -21,6 +22,7 @@ import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
 import { runDiagnoseCommand } from '../validation/diagnose-command.js';
 import { runValidateCommand } from '../validation/validate-command.js';
 import type {
+	CommandResultStatus,
 	ParsedInput,
 	RouterContext,
 	SlashCommandResult,
@@ -95,6 +97,8 @@ export async function routeSlashCommand(
 			return getValidateResult(args, context);
 		case 'graph':
 			return getGraphResult(args, context);
+		case 'executive':
+			return getExecutiveResult(args, context);
 		default:
 			return {
 				command: name,
@@ -134,6 +138,8 @@ function getHelpMessages(): string[] {
 		'  /graph --doc <documentId> — Filter graph by document',
 		'  /graph --mode full — Show full graph output',
 		'  /config ai   — Configure AI provider (not yet implemented)',
+		'  /executive compile — Compile Executive Axis (JSON + exports)',
+		'  /executive compile --dry-run — Preflight executive compilation',
 		'  /help        — Show this help',
 		'  /exit        — Exit the shell',
 		'',
@@ -1607,6 +1613,254 @@ function extractFlagValue(args: string[], flag: string): string | undefined {
 		return args[idx + 1] ?? undefined;
 	}
 	return undefined;
+}
+
+async function getExecutiveResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const subCommand = args[0];
+
+	if (!subCommand || subCommand === 'help') {
+		return {
+			command: 'executive',
+			kind: 'info',
+			messages: [
+				'Executive Axis commands:',
+				'',
+				'  /executive compile           — Compile Executive Axis (JSON + exports)',
+				'  /executive compile --dry-run — Preflight executive compilation',
+				'  /executive compile --confirm — Execute compilation',
+				'  /executive compile --mode strict — Strict mode (block on readiness issues)',
+				'  /executive compile --mode diagnostic-preview — Diagnostic preview mode',
+				'  /executive compile --target json — Only Executive Plan JSON',
+				'  /executive compile --target markdown — Only Markdown export',
+				'  /executive compile --target html — Only HTML export',
+				'  /executive compile --target github-issues — Only GitHub issue files',
+				'  /executive compile --target agent-pack — Only Agent Pack files',
+				'  /executive compile --all-file-exports — All supported file exports',
+				'',
+				'Outputs are derived, non-canonical snapshots.',
+				'No external APIs are called. No external records are created.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	if (subCommand !== 'compile') {
+		return {
+			command: 'executive',
+			kind: 'error',
+			messages: [
+				`Unknown executive subcommand: ${subCommand}`,
+				'Valid subcommands: compile',
+				'Run /executive for help.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'executive compile',
+			kind: 'error',
+			messages: [
+				'Cannot compile Executive Axis because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const isDryRun = args.includes('--dry-run');
+	const isConfirm = args.includes('--confirm');
+
+	// Mode
+	let mode: 'strict' | 'diagnostic_preview' = 'strict';
+	const modeIdx = args.indexOf('--mode');
+	if (modeIdx !== -1 && modeIdx + 1 < args.length) {
+		const raw = args[modeIdx + 1];
+		if (raw === 'diagnostic-preview' || raw === 'diagnostic_preview') {
+			mode = 'diagnostic_preview';
+		} else if (raw === 'strict') {
+			mode = 'strict';
+		} else {
+			return {
+				command: 'executive compile',
+				kind: 'error',
+				messages: [
+					`Invalid mode: "${raw}"`,
+					'Valid modes: strict, diagnostic-preview',
+				],
+				shouldExit: false,
+			};
+		}
+	}
+
+	// Target selection
+	const isAllFileExports = args.includes('--all-file-exports');
+	let selectedTargets: string[] | undefined;
+	const targetIdx = args.indexOf('--target');
+	if (targetIdx !== -1 && targetIdx + 1 < args.length) {
+		const raw = args[targetIdx + 1] ?? '';
+		switch (raw) {
+			case 'json':
+				selectedTargets = ['executive_plan_json'];
+				break;
+			case 'markdown':
+				selectedTargets = ['markdown_export'];
+				break;
+			case 'html':
+				selectedTargets = ['html_export'];
+				break;
+			case 'github-issues':
+			case 'github_issues':
+				selectedTargets = ['github_issue_file_export'];
+				break;
+			case 'agent-pack':
+			case 'agent_pack':
+				selectedTargets = ['agent_pack_file_export'];
+				break;
+			default:
+				return {
+					command: 'executive compile',
+					kind: 'error',
+					messages: [
+						`Invalid target: "${raw}"`,
+						'Valid targets: json, markdown, html, github-issues, agent-pack',
+					],
+					shouldExit: false,
+				};
+		}
+	}
+
+	if (isAllFileExports) {
+		selectedTargets = [
+			'executive_plan_json',
+			'markdown_export',
+			'html_export',
+			'github_issue_file_export',
+			'agent_pack_file_export',
+		];
+	}
+
+	// Write policy
+	let writePolicy: string | undefined;
+	const policyIdx = args.indexOf('--write-policy');
+	if (policyIdx !== -1 && policyIdx + 1 < args.length) {
+		const raw = args[policyIdx + 1] ?? '';
+		switch (raw) {
+			case 'skip-existing':
+				writePolicy = 'skip_existing';
+				break;
+			case 'fail-on-collision':
+				writePolicy = 'fail_on_collision';
+				break;
+			case 'backup-and-write':
+				writePolicy = 'backup_and_write';
+				break;
+			case 'explicit-overwrite':
+				writePolicy = 'explicit_overwrite';
+				break;
+			default:
+				return {
+					command: 'executive compile',
+					kind: 'error',
+					messages: [
+						`Invalid write policy: "${raw}"`,
+						'Valid policies: skip-existing, fail-on-collision, backup-and-write, explicit-overwrite',
+					],
+					shouldExit: false,
+				};
+		}
+	}
+
+	try {
+		const compileInputBase = {
+			dryRun: isDryRun,
+			mode,
+			projectRoot,
+		};
+		const compileInput =
+			selectedTargets || writePolicy
+				? {
+						...compileInputBase,
+						...(selectedTargets ? { selectedTargets } : {}),
+						...(writePolicy ? { writePolicy } : {}),
+					}
+				: compileInputBase;
+
+		const result = await executiveCompileWorkflow(
+			compileInput as import('../executive/index.js').ExecutiveCompileInput,
+		);
+
+		const kindMap: Record<string, CommandResultStatus> = {
+			blocked: 'warning',
+			compiled: 'success',
+			compiled_with_warnings: 'warning',
+			dry_run: 'info',
+			failed: 'error',
+			unknown: 'warning',
+		};
+
+		if (isDryRun) {
+			// Add dry-run note
+			const displayLines = [
+				...(result.readyForDisplay ?? []),
+				'',
+				'(dry-run: no files were written)',
+				'Run /executive compile --confirm to execute.',
+			];
+			return {
+				command: 'executive compile',
+				kind: 'info',
+				messages: displayLines,
+				shouldExit: false,
+			};
+		}
+
+		if (isConfirm && result.status !== 'blocked') {
+			const displayLines = [
+				...(result.readyForDisplay ?? []),
+				'',
+				result.runId ? `Run ID: ${result.runId}` : '',
+				'',
+				'Next: Run /status to review updated state.',
+			].filter(Boolean);
+
+			return {
+				command: 'executive compile',
+				kind: kindMap[result.status] ?? 'info',
+				messages: displayLines,
+				shouldExit: false,
+			};
+		}
+
+		// Default: preflight display
+		const displayLines = [
+			...(result.readyForDisplay ?? []),
+			'',
+			'No files have been written.',
+			'Run /executive compile --confirm to execute.',
+			'Run /executive compile --dry-run for a detailed dry-run report.',
+		];
+
+		return {
+			command: 'executive compile',
+			kind: kindMap[result.status] ?? 'info',
+			messages: displayLines,
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'executive compile',
+			kind: 'error',
+			messages: ['Executive compilation failed:', message],
+			shouldExit: false,
+		};
+	}
 }
 
 function _findCanonicalOutputPath(descriptor: {

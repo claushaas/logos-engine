@@ -1480,3 +1480,29 @@ export {
 	loadKnownMappings,
 	sortExportTargets,
 } from './executive/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 11.4 — Executive Compile Workflow
+// ---------------------------------------------------------------------------
+
+export type {
+	ExecutiveCompileAction,
+	ExecutiveCompileChangedPath,
+	ExecutiveCompileDiagnostic,
+	ExecutiveCompileInput,
+	ExecutiveCompileMode,
+	ExecutiveCompileOptions,
+	ExecutiveCompilePlan,
+	ExecutiveCompilePreflight,
+	ExecutiveCompileReport,
+	ExecutiveCompileResult,
+	ExecutiveCompileRunMetadata,
+	ExecutiveCompileStatus,
+	ExecutiveCompileTarget,
+	ExecutiveCompileTargetKind,
+	ExecutiveCompileTargetStatus,
+} from './executive/index.js';
+export {
+	COMPILE_TARGET_TO_ADAPTER,
+	executiveCompileWorkflow,
+} from './executive/index.js';
