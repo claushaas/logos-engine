@@ -1,19 +1,23 @@
 /** Step 11.4 — Executive Compile Workflow Service */
 
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, normalize, resolve } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { normalize, resolve } from 'node:path';
+import { parse as parseYaml } from 'yaml';
 import { buildDocumentDependencyGraph } from '../dependency-graph/index.js';
+import { writeFileAtomic, writeJsonAtomic } from '../fs/safe-filesystem.js';
 import {
 	type CanonicalDocumentId,
 	loadDocumentationContract,
 } from '../profiles/documentation-contract.js';
 import { loadProfileRegistry } from '../profiles/profile-registry.js';
+import { detectStaleness } from '../staleness/index.js';
 import { registerArtifact } from '../state/artifact-registry.js';
 import { createRunRecord } from '../state/run-repository.js';
 import {
 	requireWorkspaceState,
 	updateWorkspaceState,
 } from '../state/workspace-state-repository.js';
+import { executiveAgentPackExportAdapter } from './executive-agent-pack-export.js';
 import type {
 	ExecutiveCompileChangedPath,
 	ExecutiveCompileDiagnostic,
@@ -35,7 +39,12 @@ import type {
 	ExecutiveExportAdapterKind,
 	ExecutiveExportGenerationInput,
 	ExecutiveExportGenerationResult,
+	ExecutiveExportInput,
+	ExecutiveExportResult,
 } from './executive-export-model.js';
+import { executiveGitHubIssuesExportAdapter } from './executive-github-issues-export.js';
+import { executiveHtmlExportAdapter } from './executive-html-export.js';
+import { executiveMarkdownExportAdapter } from './executive-markdown-export.js';
 import { compileExecutivePlan } from './executive-plan-compiler.js';
 import type {
 	ExecutivePlanCompilationMode,
@@ -55,6 +64,8 @@ import { evaluateNormativeBaselineReadiness } from './normative-baseline-readine
 const DEFAULT_DOCUMENTATION_ROOT = 'logos/';
 const DEFAULT_PLAN_ID_PREFIX = 'exec-compile';
 const EXECUTIVE_MAPPINGS_DIR = 'profiles/standard/executive/mappings';
+const EXECUTIVE_CONFIG_PATH =
+	'profiles/standard/executive/executive-generation.yml';
 
 // ---------------------------------------------------------------------------
 // Target kind labels
@@ -120,7 +131,7 @@ function deterministicIdFactory(
 	prefix: string,
 	counter: { n: number },
 ): () => string {
-	return () => `${prefix}-${Date.now()}-${(counter.n++).toString(36)}`;
+	return () => `${prefix}-${(counter.n++).toString(36).padStart(4, '0')}`;
 }
 
 function normalizeOptions(
@@ -142,6 +153,149 @@ function normalizeOptions(
 	};
 }
 
+function timestampForId(timestamp: string): string {
+	return timestamp.replace(/[^0-9A-Za-z]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function normalizeCoverageKey(value: string): string {
+	return value
+		.replace(/^[0-9]+[-_]/, '')
+		.replace(/[^a-zA-Z0-9]/g, '')
+		.toLowerCase();
+}
+
+function normalizeDocumentKey(value: string): string {
+	return normalizeCoverageKey(value);
+}
+
+function mapWritePolicy(
+	policy: ExecutiveCompileOptions['writePolicy'],
+): 'skip_if_exists' | 'fail_if_exists' | 'backup_and_overwrite' | 'overwrite' {
+	switch (policy) {
+		case 'backup_and_write':
+			return 'backup_and_overwrite';
+		case 'explicit_overwrite':
+			return 'overwrite';
+		case 'fail_on_collision':
+			return 'fail_if_exists';
+		default:
+			return 'skip_if_exists';
+	}
+}
+
+function prefixDocumentationRoot(
+	documentationRoot: string,
+	relativePath: string,
+): string {
+	return normalize(
+		`${documentationRoot.replace(/\\/g, '/').replace(/\/$/, '')}/${relativePath}`,
+	);
+}
+
+function loadExecutiveGenerationConfig(projectRoot: string): {
+	allowDraftGeneration: boolean;
+	allowExportWhenDraft: boolean;
+	diagnostics: readonly { code: string; message: string }[];
+	exportTargets: readonly string[];
+	loaded: boolean;
+	minimumCoverage:
+		| {
+				readonly [phaseKey: string]:
+					| {
+							readonly required: boolean;
+							readonly requiredDocuments: string[];
+					  }
+					| undefined;
+		  }
+		| undefined;
+	missingMappings: readonly string[];
+	plannedMappings: readonly string[];
+	requiredStatus: string | undefined;
+	valid: boolean;
+	version: string | undefined;
+} {
+	const diagnostics: { code: string; message: string }[] = [];
+	const configPath = resolve(projectRoot, EXECUTIVE_CONFIG_PATH);
+	try {
+		const raw = readFileSync(configPath, 'utf-8');
+		const parsed = parseYaml(raw) as Record<string, unknown>;
+		const readinessGate =
+			(parsed.readinessGate as Record<string, unknown> | undefined) ?? {};
+		const exportsConfig =
+			(parsed.exports as Record<string, unknown> | undefined) ?? {};
+		const targets =
+			(exportsConfig.targets as Record<string, unknown> | undefined) ?? {};
+		const targetIds = Object.keys(targets).map((id) =>
+			id === 'githubIssues'
+				? 'github-issues'
+				: id === 'agentPack'
+					? 'agent-pack'
+					: id,
+		);
+		const expectedMappingFiles: Record<string, string> = {
+			'agent-pack': 'agent-pack.mapping.yml',
+			'github-issues': 'github-issues.mapping.yml',
+			html: 'html.mapping.yml',
+			linear: 'linear.mapping.yml',
+			markdown: 'markdown.mapping.yml',
+			notion: 'notion.mapping.yml',
+		};
+		const missingMappings = Object.entries(expectedMappingFiles)
+			.filter(([id, filename]) => {
+				if (!targetIds.includes(id)) return false;
+				return !existsSync(
+					resolve(projectRoot, EXECUTIVE_MAPPINGS_DIR, filename),
+				);
+			})
+			.map(([id]) => id);
+		const plannedMappings = targetIds.filter(
+			(id) => id === 'linear' || id === 'notion',
+		);
+
+		return {
+			allowDraftGeneration: readinessGate.allowDraftGeneration === true,
+			allowExportWhenDraft: readinessGate.allowExportWhenDraft === true,
+			diagnostics,
+			exportTargets: targetIds,
+			loaded: true,
+			minimumCoverage:
+				(readinessGate.minimumCoverage as
+					| {
+							readonly [phaseKey: string]:
+								| {
+										readonly required: boolean;
+										readonly requiredDocuments: string[];
+								  }
+								| undefined;
+					  }
+					| undefined) ?? undefined,
+			missingMappings,
+			plannedMappings,
+			requiredStatus: readinessGate.requiredStatus as string | undefined,
+			valid: missingMappings.length === 0,
+			version: parsed.version as string | undefined,
+		};
+	} catch (error) {
+		diagnostics.push({
+			code: 'executive_config_load_failed',
+			message: error instanceof Error ? error.message : String(error),
+		});
+		return {
+			allowDraftGeneration: false,
+			allowExportWhenDraft: false,
+			diagnostics,
+			exportTargets: [],
+			loaded: false,
+			minimumCoverage: undefined,
+			missingMappings: [],
+			plannedMappings: [],
+			requiredStatus: undefined,
+			valid: false,
+			version: undefined,
+		};
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Build readiness input
 // ---------------------------------------------------------------------------
@@ -151,30 +305,70 @@ function buildReadinessInput(params: {
 	contract: Awaited<ReturnType<typeof loadDocumentationContract>>;
 	documentationRoot: string;
 	projectRoot: string;
+	stalenessResult?: Awaited<ReturnType<typeof detectStaleness>> | undefined;
 	timestamp: string;
 }): NormativeBaselineReadinessInput {
-	const { state, contract, documentationRoot, projectRoot, timestamp } = params;
+	const {
+		state,
+		contract,
+		documentationRoot,
+		projectRoot,
+		stalenessResult,
+		timestamp,
+	} = params;
+	const executiveGenerationConfig = loadExecutiveGenerationConfig(projectRoot);
 
 	const documentEntries = contract.documents.map((doc) => ({
 		canonicalOutputPath: doc.descriptor.outputs.canonical.path,
 		descriptorStatus: doc.descriptor.status ?? 'draft',
 		descriptorTitle: doc.descriptor.title,
 		documentCanonicalId: doc.canonicalId as CanonicalDocumentId,
-		documentOrder: 0,
+		documentOrder: doc.documentOrder,
 		phaseId: doc.phaseId,
-		phaseOrder: 0,
+		phaseOrder: doc.phaseOrder,
 		required: true,
 	}));
 
-	const requiredDocumentIds = contract.documents.map(
-		(d) => d.canonicalId as CanonicalDocumentId,
+	const phaseByCoverageKey = new Map(
+		contract.phases.map((phase) => [normalizeCoverageKey(phase.id), phase.id]),
 	);
-	const requiredPhaseIds = contract.phases.map((p) => p.id);
+	const docByPhaseAndCoverageKey = new Map<string, CanonicalDocumentId>();
+	for (const doc of contract.documents) {
+		docByPhaseAndCoverageKey.set(
+			`${doc.phaseId}:${normalizeDocumentKey(doc.canonicalId)}`,
+			doc.canonicalId as CanonicalDocumentId,
+		);
+	}
+
+	const requiredDocumentIds: CanonicalDocumentId[] = [];
+	const requiredPhaseIds: string[] = [];
+	const minimumCoverage = executiveGenerationConfig.minimumCoverage;
+	if (minimumCoverage) {
+		for (const [phaseKey, coverage] of Object.entries(minimumCoverage)) {
+			if (!coverage?.required) continue;
+			const phaseId = phaseByCoverageKey.get(normalizeCoverageKey(phaseKey));
+			if (!phaseId) continue;
+			requiredPhaseIds.push(phaseId);
+			for (const requiredDoc of coverage.requiredDocuments) {
+				const docId = docByPhaseAndCoverageKey.get(
+					`${phaseId}:${normalizeDocumentKey(requiredDoc)}`,
+				);
+				if (docId) requiredDocumentIds.push(docId);
+			}
+		}
+	}
+
+	if (requiredDocumentIds.length === 0) {
+		requiredDocumentIds.push(
+			...contract.documents.map((d) => d.canonicalId as CanonicalDocumentId),
+		);
+		requiredPhaseIds.push(...contract.phases.map((p) => p.id));
+	}
 
 	const phaseEntries = contract.phases.map((p, i) => ({
 		order: i,
 		phaseId: p.id,
-		required: true,
+		required: requiredPhaseIds.includes(p.id),
 		title: p.title,
 	}));
 
@@ -192,23 +386,141 @@ function buildReadinessInput(params: {
 		documentationRoot,
 		documentEntries,
 		evaluatedAt: timestamp,
-		executiveGenerationConfig: {
-			allowDraftGeneration: true,
-			allowExportWhenDraft: false,
-			loaded: true,
-			requiredStatus: 'baseline_ready',
-			valid: true,
-			version: '1.0.0',
-		},
+		executiveGenerationConfig,
 		phaseEntries,
 		profileId: state.profile.profileId,
 		profileVersion: state.profile.profileVersion ?? '1.0.0',
 		projectRoot,
 		registerCollections: undefined,
 		requiredDocumentIds,
-		requiredPhaseIds,
+		requiredPhaseIds: [...new Set(requiredPhaseIds)],
 		sources: undefined,
+		stalenessSummary: stalenessResult?.summary,
+		stalenessTargets: stalenessResult?.targets,
 	} as unknown as NormativeBaselineReadinessInput;
+}
+
+async function runWorkflowStalenessDetection(params: {
+	contract: Awaited<ReturnType<typeof loadDocumentationContract>>;
+	graphResult: ReturnType<typeof buildDocumentDependencyGraph>;
+	projectRoot: string;
+	state: Awaited<ReturnType<typeof requireWorkspaceState>>;
+}): Promise<Awaited<ReturnType<typeof detectStaleness>> | undefined> {
+	const { contract, graphResult, projectRoot, state } = params;
+	try {
+		return await detectStaleness(
+			{
+				artifactRegistryEntries: state.artifacts.map((a) => ({
+					artifactId: a.artifactId,
+					artifactType: a.artifactType,
+					checksum: a.checksum,
+					generatedAt: a.generatedAt,
+					isCanonical: a.isCanonical,
+					metadata: a.metadata,
+					path: a.path,
+					runId: a.runId,
+					sourceDocumentIds: a.sourceDocumentIds,
+					status: a.status,
+				})),
+				assumptions: state.assumptions.map((a) => ({
+					affectedDocumentIds: a.affectedDocumentIds,
+					body: a.body,
+					createdAt: a.createdAt,
+					id: a.id,
+					status: a.status,
+					title: a.title,
+					updatedAt: a.updatedAt,
+				})),
+				decisions: state.decisions.map((d) => ({
+					affectedDocumentIds: d.affectedDocumentIds,
+					body: d.body,
+					createdAt: d.createdAt,
+					id: d.id,
+					status: d.status,
+					title: d.title,
+					updatedAt: d.updatedAt,
+				})),
+				dependencyGraph: {
+					edges: graphResult.graph.edges,
+					nodeMap: graphResult.graph.nodeMap,
+					nodes: graphResult.graph.nodes,
+					upstreamEdges: graphResult.graph.upstreamEdges,
+				},
+				documentationRoot: state.documentation.rootPath,
+				generatedMetadataOverrides: new Map(),
+				generationRuns: state.runs
+					.filter(
+						(r) => r.runType === 'generation' || r.runType === 'executive',
+					)
+					.map((r) => ({
+						completedAt: r.completedAt,
+						relatedArtifactIds: r.relatedArtifactIds,
+						runId: r.runId,
+						startedAt: r.startedAt,
+						status: r.status,
+					})),
+				loadedDescriptorData: new Map(
+					contract.documents.map((doc) => [
+						doc.canonicalId,
+						{
+							canonicalOutput: doc.descriptor.outputs.canonical.path,
+							inputs: (doc.descriptor.inputs ?? []).map((i) => ({
+								id: i.id,
+								required: i.required,
+								type: i.type,
+							})),
+							outputs: doc.descriptor.outputs
+								? [
+										{
+											format: doc.descriptor.outputs.canonical.format,
+											kind: 'canonical',
+											path: doc.descriptor.outputs.canonical.path,
+										},
+									]
+								: [],
+							phaseId: doc.phaseId,
+							status: doc.descriptor.status,
+							title: doc.descriptor.title,
+						},
+					]),
+				),
+				openQuestions: state.openQuestions.map((q) => ({
+					affectedDocumentIds: q.affectedDocumentIds,
+					body: q.body,
+					createdAt: q.createdAt,
+					id: q.id,
+					question: q.question,
+					status: q.status,
+					updatedAt: q.updatedAt,
+				})),
+				phaseDescriptors: contract.phases.map((p) => ({
+					id: p.id,
+					sourcePath: p.sourcePath,
+					title: p.title,
+				})),
+				profileId: state.profile.profileId,
+				profileRegistryFingerprint: '',
+				profileRoot: contract.profileRoot,
+				profileVersion: state.profile.profileVersion,
+				risks: state.risks.map((r) => ({
+					affectedDocumentIds: r.affectedDocumentIds,
+					body: r.body,
+					createdAt: r.createdAt,
+					id: r.id,
+					severity: r.severity,
+					status: r.status,
+					title: r.title,
+					updatedAt: r.updatedAt,
+				})),
+			},
+			{
+				outputFileExists: async (outputPath: string) =>
+					existsSync(resolve(projectRoot, outputPath)),
+			},
+		);
+	} catch {
+		return undefined;
+	}
 }
 
 // ---------------------------------------------------------------------------
@@ -493,6 +805,23 @@ function adapterKindToArtifactType(
 	}
 }
 
+function renderExecutiveExport(
+	input: ExecutiveExportInput,
+): ExecutiveExportResult | undefined {
+	switch (input.mapping.adapterKind) {
+		case 'agent_pack_file':
+			return executiveAgentPackExportAdapter.render(input);
+		case 'github_issue_file':
+			return executiveGitHubIssuesExportAdapter.render(input);
+		case 'html':
+			return executiveHtmlExportAdapter.render(input);
+		case 'markdown':
+			return executiveMarkdownExportAdapter.render(input);
+		default:
+			return undefined;
+	}
+}
+
 // ---------------------------------------------------------------------------
 // Display lines
 // ---------------------------------------------------------------------------
@@ -631,17 +960,18 @@ export async function executiveCompileWorkflow(
 	const rawInput = input as unknown as Record<string, unknown>;
 	const projectRoot = resolve(rawInput.projectRoot as string);
 	const idCounter = { n: 0 };
+	const timestamp =
+		(rawInput.deterministicTimestamp as string) ?? new Date().toISOString();
 	const idPrefix =
-		(rawInput.deterministicIdPrefix as string) ?? DEFAULT_PLAN_ID_PREFIX;
+		(rawInput.deterministicIdPrefix as string) ??
+		`${DEFAULT_PLAN_ID_PREFIX}-${timestampForId(timestamp)}`;
 	const runIdFactory = deterministicIdFactory(`${idPrefix}-run`, idCounter);
 	const artifactIdFactory = deterministicIdFactory(
 		`${idPrefix}-art`,
 		idCounter,
 	);
-	const timestamp =
-		(rawInput.deterministicTimestamp as string) ?? new Date().toISOString();
 
-	const dryRun = options.dryRun;
+	const dryRun = options.dryRun || options.mode === 'diagnostic_preview';
 	const changedPaths: ExecutiveCompileChangedPath[] = [];
 
 	// ------------------------------------------------------------------
@@ -706,16 +1036,23 @@ export async function executiveCompileWorkflow(
 		registry = undefined;
 	}
 
-	const _graph = buildDocumentDependencyGraph({
+	const graphResult = buildDocumentDependencyGraph({
 		contract,
 		registry: (registry ?? { phases: [], profileId: 'unknown' }) as never,
 	} as never);
+	const stalenessResult = await runWorkflowStalenessDetection({
+		contract,
+		graphResult,
+		projectRoot,
+		state,
+	});
 
 	// Build readiness input
 	const readinessInput = buildReadinessInput({
 		contract,
 		documentationRoot,
 		projectRoot,
+		stalenessResult,
 		state,
 		timestamp,
 	});
@@ -847,19 +1184,55 @@ export async function executiveCompileWorkflow(
 		if (!dryRun) {
 			const fullPath = resolve(projectRoot, jsonOutputPath);
 			try {
-				const dir = dirname(fullPath);
-				if (!existsSync(dir)) {
-					mkdirSync(dir, { recursive: true });
-				}
-				writeFileSync(fullPath, JSON.stringify(planJson, null, '\t'), 'utf-8');
-
-				jsonArtifactId = artifactIdFactory();
-				changedPaths.push({
-					path: jsonOutputPath,
-					role: 'created',
-					targetKind: jsonTargetKind,
+				const writeResult = await writeJsonAtomic(fullPath, planJson, {
+					_testTimestamp: timestampForId(timestamp),
+					allowedBaseDir: resolve(projectRoot, documentationRoot),
+					dryRun: false,
+					enableSecretRedaction: true,
+					indent: 2,
+					policy: mapWritePolicy(options.writePolicy),
 				});
-				mutTarget(plan, jsonTargetKind, 'created', jsonOutputPath);
+				if (!writeResult.success) {
+					for (const diag of writeResult.diagnostics) {
+						diagnostics.push(
+							createDiagnostic(
+								`exec_compile_json_${diag.code}`,
+								'error',
+								diag.message,
+								{
+									outputPath: jsonOutputPath,
+									...(diag.recoveryHint
+										? { recoveryHint: diag.recoveryHint }
+										: {}),
+									targetKind: jsonTargetKind,
+								},
+							),
+						);
+					}
+					mutTarget(plan, jsonTargetKind, 'failed', jsonOutputPath);
+				} else {
+					const fileChange = writeResult.changedPaths.find(
+						(change) =>
+							change.role === 'file_created' ||
+							change.role === 'file_updated' ||
+							change.role === 'skipped',
+					);
+					const role =
+						fileChange?.role === 'file_updated'
+							? 'updated'
+							: fileChange?.role === 'skipped'
+								? 'skipped'
+								: 'created';
+					if (role !== 'skipped') {
+						jsonArtifactId = artifactIdFactory();
+					}
+					changedPaths.push({
+						path: jsonOutputPath,
+						role,
+						targetKind: jsonTargetKind,
+					});
+					mutTarget(plan, jsonTargetKind, role, jsonOutputPath);
+				}
 			} catch (error) {
 				const msg = error instanceof Error ? error.message : String(error);
 				diagnostics.push(
@@ -909,6 +1282,9 @@ export async function executiveCompileWorkflow(
 
 			exportResult = generateExecutiveExports(genInput, {
 				dryRun,
+				injectArtifactIds: Array.from({ length: 256 }, () =>
+					artifactIdFactory(),
+				),
 				strictMode: options.mode === 'strict',
 				writePolicy: options.writePolicy as never,
 			} as never);
@@ -940,23 +1316,25 @@ export async function executiveCompileWorkflow(
 
 				mutTarget(plan, targetKind, targetStatus, undefined, item.outputPaths);
 
-				for (const cp of exportResult.changedPaths) {
-					const roleMap: Record<
-						string,
-						'created' | 'updated' | 'skipped' | 'blocked' | 'failed'
-					> = {
-						blocked: 'blocked',
-						created: 'created',
-						failed: 'failed',
-						skipped: 'skipped',
-						updated: 'updated',
-					};
-					changedPaths.push({
-						checksum: cp.checksum,
-						path: cp.path,
-						role: roleMap[cp.role] ?? 'created',
-						targetKind,
-					});
+				if (dryRun) {
+					for (const cp of exportResult.changedPaths) {
+						const roleMap: Record<
+							string,
+							'created' | 'updated' | 'skipped' | 'blocked' | 'failed'
+						> = {
+							blocked: 'blocked',
+							created: 'created',
+							failed: 'failed',
+							skipped: 'skipped',
+							updated: 'updated',
+						};
+						changedPaths.push({
+							checksum: cp.checksum,
+							path: cp.path,
+							role: roleMap[cp.role] ?? 'created',
+							targetKind,
+						});
+					}
 				}
 			}
 
@@ -968,6 +1346,94 @@ export async function executiveCompileWorkflow(
 							? 'warning'
 							: 'info';
 				diagnostics.push(createDiagnostic(diag.code, sev, diag.message));
+			}
+
+			if (!dryRun) {
+				for (const mapping of filteredMappings) {
+					const targetKind = adapterKindToTargetKind(mapping.adapterKind);
+					if (!targetKind) continue;
+					const target = plan.targets.find((t) => t.targetKind === targetKind);
+					if (!target || target.status !== 'created') continue;
+					const rendered = renderExecutiveExport({
+						clock: () => timestamp,
+						documentationRoot,
+						mapping,
+						plan: planJson,
+						planFingerprint,
+						planId,
+						profileId,
+						profileVersion: state.profile.profileVersion,
+						readinessStatus: readiness.status,
+					});
+					if (!rendered) continue;
+					let targetFailed = false;
+					for (const file of rendered.renderedFiles) {
+						const targetPath = resolve(
+							projectRoot,
+							documentationRoot,
+							file.relativePath,
+						);
+						const writeResult = await writeFileAtomic(
+							targetPath,
+							file.content,
+							{
+								_testTimestamp: timestampForId(timestamp),
+								allowedBaseDir: resolve(projectRoot, documentationRoot),
+								dryRun: false,
+								enableSecretRedaction: true,
+								policy: mapWritePolicy(options.writePolicy),
+							},
+						);
+						if (!writeResult.success) {
+							targetFailed = true;
+							for (const diag of writeResult.diagnostics) {
+								diagnostics.push(
+									createDiagnostic(
+										`exec_compile_export_${diag.code}`,
+										'error',
+										diag.message,
+										{
+											adapterKind: mapping.adapterKind,
+											outputPath: prefixDocumentationRoot(
+												documentationRoot,
+												file.relativePath,
+											),
+											...(diag.recoveryHint
+												? { recoveryHint: diag.recoveryHint }
+												: {}),
+											targetKind,
+										},
+									),
+								);
+							}
+							continue;
+						}
+						const fileChange = writeResult.changedPaths.find(
+							(change) =>
+								change.role === 'file_created' ||
+								change.role === 'file_updated' ||
+								change.role === 'skipped',
+						);
+						const role =
+							fileChange?.role === 'file_updated'
+								? 'updated'
+								: fileChange?.role === 'skipped'
+									? 'skipped'
+									: 'created';
+						changedPaths.push({
+							checksum: file.checksum,
+							path: prefixDocumentationRoot(
+								documentationRoot,
+								file.relativePath,
+							),
+							role,
+							targetKind,
+						});
+					}
+					if (targetFailed) {
+						mutTarget(plan, targetKind, 'failed', undefined, []);
+					}
+				}
 			}
 		} catch (error) {
 			const msg = error instanceof Error ? error.message : String(error);
@@ -1008,7 +1474,14 @@ export async function executiveCompileWorkflow(
 
 		if (exportResult) {
 			for (const item of exportResult.items) {
+				const targetKind = adapterKindToTargetKind(item.adapterKind);
+				const targetStatus = plan.targets.find(
+					(t) => t.targetKind === targetKind,
+				)?.status;
 				if (item.status === 'created' || item.status === 'updated') {
+					if (targetStatus !== 'created' && targetStatus !== 'updated') {
+						continue;
+					}
 					for (let i = 0; i < item.artifactIds.length; i++) {
 						const artId = item.artifactIds[i] ?? artifactIdFactory();
 						const artPath =

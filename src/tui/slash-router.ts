@@ -1316,8 +1316,12 @@ async function getStatusResult(
 			const rs = summary.registerSummary;
 			lines.push('');
 			lines.push('Executive readiness:');
-			lines.push('  Note: Executive Axis compilation is not yet implemented.');
-			lines.push('  The normative baseline readiness gate is available.');
+			lines.push(
+				'  /executive compile runs the readiness gate before compiling.',
+			);
+			lines.push(
+				'  Default execution is a preflight; use --confirm to write outputs.',
+			);
 			lines.push(`  Blocking open questions: ${rs.blockingOpenQuestions}`);
 			if (stalenessResult) {
 				lines.push(`  Stale normative outputs:  ${stalenessResult.staleCount}`);
@@ -1777,8 +1781,9 @@ async function getExecutiveResult(
 	}
 
 	try {
+		const workflowDryRun = isDryRun || !isConfirm;
 		const compileInputBase = {
-			dryRun: isDryRun,
+			dryRun: workflowDryRun,
 			mode,
 			projectRoot,
 		};

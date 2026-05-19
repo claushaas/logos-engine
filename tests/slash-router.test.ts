@@ -1,4 +1,9 @@
+import { existsSync } from 'node:fs';
+import { mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { createDefaultWorkspaceState } from '../src/state/workspace-state-defaults.js';
 import { routeSlashCommand } from '../src/tui/slash-router.js';
 import type { RouterContext } from '../src/tui/types.js';
 
@@ -36,6 +41,24 @@ function makeContext(
 }
 
 const defaultContext = makeContext();
+
+async function createInitializedWorkspace(): Promise<string> {
+	const root = await mkdtemp(join(tmpdir(), 'logos-exec-router-'));
+	await symlink(join(process.cwd(), 'profiles'), join(root, 'profiles'), 'dir');
+	await mkdir(join(root, '.logos'), { recursive: true });
+	const state = createDefaultWorkspaceState({
+		documentationRoot: 'docs/',
+		projectRootPath: root,
+	});
+	state.workspace.initializationState = 'initialized';
+	state.workspace.initializedBy = '/init';
+	await writeFile(
+		join(root, '.logos', 'workspace.json'),
+		JSON.stringify(state, null, 2),
+		'utf-8',
+	);
+	return root;
+}
 
 describe('routeSlashCommand', () => {
 	it('/help returns available command help', async () => {
@@ -248,6 +271,50 @@ describe('routeSlashCommand', () => {
 		expect(result.command).toBe('config ai');
 		expect(result.shouldExit).toBe(false);
 		expect(result.messages.join('\n')).toContain('not yet implemented');
+	});
+
+	it('/executive compile defaults to preflight and writes nothing without --confirm', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContext({
+				config: {
+					activeProfileId: 'standard',
+					diagnostics: [],
+					documentationRoot: { isDefault: false, rootPath: 'docs/' },
+					providerStatus: { kind: 'not_configured' },
+				},
+				cwd: root,
+				root: {
+					cwd: root,
+					inferred: false,
+					rootKind: 'git',
+					rootPath: root,
+				},
+				workspace: {
+					diagnostics: [],
+					exists: true,
+					initializationState: 'initialized',
+					logosPath: join(root, '.logos'),
+				},
+			});
+
+			const result = await routeSlashCommand(
+				{
+					args: ['compile'],
+					kind: 'slash',
+					name: 'executive',
+					raw: '/executive compile',
+				},
+				ctx,
+			);
+
+			const text = result.messages.join('\n');
+			expect(text).toContain('No files have been written');
+			expect(text).toContain('/executive compile --confirm');
+			expect(existsSync(join(root, 'docs', 'executive'))).toBe(false);
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
 	});
 
 	it('empty input returns empty info result', async () => {
