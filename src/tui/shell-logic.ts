@@ -142,12 +142,43 @@ export async function processCommand(
 	}
 
 	const messages: Message[] = [{ id: 0, sender: 'user', text: trimmed }];
-	const parsed = parseSlashCommand(trimmed);
-	const result = await routeSlashCommand(parsed, context);
 
-	for (const msg of result.messages) {
-		messages.push({ id: messages.length, sender: 'system', text: msg });
+	try {
+		const parsed = parseSlashCommand(trimmed);
+		const result = await routeSlashCommand(parsed, context);
+
+		for (const msg of result.messages) {
+			messages.push({ id: messages.length, sender: 'system', text: msg });
+		}
+
+		return { messages, shouldExit: result.shouldExit };
+	} catch (err) {
+		// Safe error boundary: catch unknown errors and display safe diagnostics
+		// without crashing the TUI shell
+		const { wrapUnknownError, formatDiagnosticForTerminal } = await import(
+			'../runtime/diagnostics.js'
+		);
+		const { redactString } = await import('../runtime/redaction.js');
+
+		const diagnostic = wrapUnknownError(err, { area: 'TUI' });
+		messages.push({
+			id: messages.length,
+			sender: 'system',
+			text: '[ERROR] An unexpected error occurred while processing this command.',
+		});
+		for (const line of formatDiagnosticForTerminal(diagnostic)) {
+			messages.push({
+				id: messages.length,
+				sender: 'system',
+				text: `  ${redactString(line)}`,
+			});
+		}
+		messages.push({
+			id: messages.length,
+			sender: 'system',
+			text: 'The shell is still running. Run /help for available commands.',
+		});
+
+		return { messages, shouldExit: false };
 	}
-
-	return { messages, shouldExit: result.shouldExit };
 }

@@ -1,13 +1,30 @@
 /** Shared command result envelope — non-mutating runtime conventions */
 
+import type {
+	LogosChangedPath,
+	LogosChangedPathAction,
+	LogosNextAction,
+	LogosOperationStatus,
+} from './diagnostics.js';
+
+// ---------------------------------------------------------------------------
+// Status
+// ---------------------------------------------------------------------------
+
+/** Legacy status values preserved for backward compatibility */
 export type CommandStatus =
 	| 'success'
 	| 'warning'
 	| 'error'
 	| 'not_implemented'
-	| 'dry_run';
+	| 'dry_run'
+	| 'partial';
 
 export type CommandExecutionMode = 'normal' | 'dry_run';
+
+// ---------------------------------------------------------------------------
+// Message / Warning / Error
+// ---------------------------------------------------------------------------
 
 export interface CommandMessage {
 	level: 'info' | 'success';
@@ -20,10 +37,22 @@ export interface CommandWarning {
 	path?: string;
 }
 
+/** Extended changed path with kind/id for partial failure reporting */
 export interface CommandChangedPath {
 	path: string;
-	action: 'created' | 'modified' | 'deleted' | 'planned';
+	action:
+		| 'created'
+		| 'modified'
+		| 'deleted'
+		| 'planned'
+		| LogosChangedPathAction;
+	kind?: string | undefined;
+	id?: string | undefined;
 }
+
+// ---------------------------------------------------------------------------
+// Metadata
+// ---------------------------------------------------------------------------
 
 export interface CommandResultMetadata {
 	command: string;
@@ -35,6 +64,10 @@ export interface CommandResultMetadata {
 	mode: CommandExecutionMode;
 }
 
+// ---------------------------------------------------------------------------
+// Result Envelope
+// ---------------------------------------------------------------------------
+
 export interface CommandResult<TData = unknown> {
 	status: CommandStatus;
 	messages: CommandMessage[];
@@ -45,6 +78,8 @@ export interface CommandResult<TData = unknown> {
 	metadata: CommandResultMetadata;
 	/** Command-specific structured data */
 	data: TData;
+	/** Machine-readable next actions suggested by the command */
+	nextActions?: LogosNextAction[] | undefined;
 }
 
 export interface JsonSerializableCommandResult {
@@ -61,11 +96,26 @@ export interface JsonSerializableCommandResult {
 		pointer?: string | undefined;
 		recoveryHint?: string | undefined;
 	}>;
-	changedPaths: CommandChangedPath[];
+	changedPaths: Array<{
+		path: string;
+		action: string;
+		kind?: string | undefined;
+		id?: string | undefined;
+	}>;
 	data: unknown;
 	metadata: Omit<CommandResultMetadata, 'timestamp'> & {
 		timestamp?: string | undefined;
 	};
+	nextActions?:
+		| Array<{
+				id?: string | undefined;
+				severity: string;
+				category: string;
+				message: string;
+				command?: string | undefined;
+				path?: string | undefined;
+		  }>
+		| undefined;
 }
 
 export interface CreateCommandResultOptions<TData = unknown> {
@@ -80,6 +130,8 @@ export interface CreateCommandResultOptions<TData = unknown> {
 	data?: TData;
 	/** Set to false to omit timestamp for deterministic tests */
 	includeTimestamp?: boolean;
+	/** Optional next actions for recovery */
+	nextActions?: LogosNextAction[] | undefined;
 }
 
 export interface CommandError {
@@ -92,6 +144,10 @@ export interface CommandError {
 	/** Internal only; not exposed in user-facing output */
 	cause?: unknown;
 }
+
+// ---------------------------------------------------------------------------
+// Factory
+// ---------------------------------------------------------------------------
 
 export function createCommandResult<TData = unknown>(
 	options: CreateCommandResultOptions<TData>,
@@ -110,17 +166,27 @@ export function createCommandResult<TData = unknown>(
 			timestamp: now,
 			version: options.version,
 		},
+		nextActions: options.nextActions,
 		status: options.status ?? 'success',
 		warnings: options.warnings ?? [],
 	};
 }
+
+// ---------------------------------------------------------------------------
+// Serialization
+// ---------------------------------------------------------------------------
 
 export function toJsonSerializable<TData>(
 	result: CommandResult<TData>,
 	redactFn?: (value: unknown) => unknown,
 ): JsonSerializableCommandResult {
 	const serializable: JsonSerializableCommandResult = {
-		changedPaths: result.changedPaths,
+		changedPaths: result.changedPaths.map((p) => ({
+			action: p.action,
+			id: p.id,
+			kind: p.kind,
+			path: p.path,
+		})),
 		command: result.metadata.command,
 		data: result.data,
 		dryRun: result.dryRun,
@@ -134,6 +200,14 @@ export function toJsonSerializable<TData>(
 		})),
 		messages: result.messages.map((m) => m.text),
 		metadata: result.metadata,
+		nextActions: result.nextActions?.map((a) => ({
+			category: a.category,
+			command: a.command,
+			id: a.id,
+			message: a.message,
+			path: a.path,
+			severity: a.severity,
+		})),
 		status: result.status,
 		warnings: result.warnings,
 	};
@@ -141,6 +215,10 @@ export function toJsonSerializable<TData>(
 		redactFn ? redactFn(serializable) : serializable
 	) as JsonSerializableCommandResult;
 }
+
+// ---------------------------------------------------------------------------
+// Formatting
+// ---------------------------------------------------------------------------
 
 export function formatCommandResultForHuman<TData>(
 	result: CommandResult<TData>,
@@ -180,6 +258,10 @@ export function formatCommandResultForHuman<TData>(
 	return lines;
 }
 
+// ---------------------------------------------------------------------------
+// Exit Code Mapping
+// ---------------------------------------------------------------------------
+
 /** Map a CommandStatus to a suggested CLI exit code */
 export function statusToExitCode(status: CommandStatus): number {
 	switch (status) {
@@ -188,10 +270,56 @@ export function statusToExitCode(status: CommandStatus): number {
 			return 0;
 		case 'warning':
 			return 0;
+		case 'partial':
+			return 0;
 		case 'error':
 		case 'not_implemented':
 			return 1;
 		default:
 			return 1;
 	}
+}
+
+// ---------------------------------------------------------------------------
+// Operation Status Adapter (Step 13.1)
+// ---------------------------------------------------------------------------
+
+/**
+ * Convert a LogosOperationStatus to a CommandStatus.
+ * Used when services produce operation statuses that need to be
+ * represented in command result envelopes.
+ */
+export function operationStatusToCommandStatus(
+	status: LogosOperationStatus,
+): CommandStatus {
+	switch (status) {
+		case 'ok':
+			return 'success';
+		case 'ok_with_warnings':
+			return 'warning';
+		case 'blocked':
+			return 'error';
+		case 'failed':
+			return 'error';
+		case 'partial':
+			return 'partial';
+		case 'dry_run':
+			return 'dry_run';
+		case 'unknown':
+			return 'error';
+	}
+}
+
+/**
+ * Build changed paths from LogosChangedPath items.
+ */
+export function changedPathsFromLogos(
+	paths: LogosChangedPath[],
+): CommandChangedPath[] {
+	return paths.map((p) => ({
+		action: p.action,
+		id: p.id,
+		kind: p.kind,
+		path: p.path,
+	}));
 }
