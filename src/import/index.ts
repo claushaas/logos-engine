@@ -1,7 +1,7 @@
-/** Step 12.1 — Import module barrel exports */
+/** Steps 12.1 & 12.4 — Import module barrel exports */
 
 // ---------------------------------------------------------------------------
-// Model types
+// Model types (Step 12.1)
 // ---------------------------------------------------------------------------
 
 export type {
@@ -107,3 +107,67 @@ export {
 	safeContentSnippet,
 	scanForSecrets,
 } from './import-redaction.js';
+
+// ---------------------------------------------------------------------------
+// Step 12.4 — Candidate Fact/Decision Extraction Model
+// ---------------------------------------------------------------------------
+
+export type {
+	CandidateExtractedAcceptanceCriterion,
+	CandidateExtractedAssumption,
+	CandidateExtractedConstraint,
+	CandidateExtractedDecision,
+	CandidateExtractedEvidenceReference,
+	CandidateExtractedFact,
+	CandidateExtractedHypothesis,
+	CandidateExtractedItem,
+	CandidateExtractedItemBase,
+	CandidateExtractedItemConfidence,
+	CandidateExtractedItemKind,
+	CandidateExtractedItemStatus,
+	CandidateExtractedNonGoal,
+	CandidateExtractedOpenQuestion,
+	CandidateExtractedRequirement,
+	CandidateExtractedRisk,
+	CandidateExtractionActionKind,
+	CandidateExtractionBlocker,
+	CandidateExtractionChangedPath,
+	CandidateExtractionConflict,
+	CandidateExtractionConflictKind,
+	CandidateExtractionDiagnostic,
+	CandidateExtractionEvidence,
+	CandidateExtractionInput,
+	CandidateExtractionOptions,
+	CandidateExtractionReadiness,
+	CandidateExtractionResult,
+	CandidateExtractionReviewAction,
+	CandidateExtractionSource,
+	CandidateExtractionSourceKind,
+	CandidateExtractionSummary,
+	CandidateExtractionWarning,
+	CandidateFactDecisionExtractor,
+} from './candidate-extraction-model.js';
+
+export {
+	CANDIDATE_EXTRACTED_ITEM_CONFIDENCE_ORDER,
+	CANDIDATE_EXTRACTED_ITEM_KIND_ORDER,
+	CANDIDATE_EXTRACTED_ITEM_STATUS_ORDER,
+	CANDIDATE_EXTRACTION_ACTION_KIND_ORDER,
+	CANDIDATE_EXTRACTION_CONFLICT_KIND_ORDER,
+	CANDIDATE_EXTRACTION_READINESS_ORDER,
+	CANDIDATE_EXTRACTION_SOURCE_KIND_ORDER,
+	contentLooksLikeDerivedArtifactExtraction,
+	contentLooksLikeTranscriptExtraction,
+	getExtractionIdCounter,
+	nextExtractionId,
+	pathLooksLikeDerivedArtifactExtraction,
+	RECOGNIZED_FRONTMATTER_KEYS,
+	RECOGNIZED_HEADINGS,
+	resetExtractionIdCounter,
+} from './candidate-extraction-model.js';
+
+// ---------------------------------------------------------------------------
+// Step 12.4 — Candidate Fact/Decision Extractor
+// ---------------------------------------------------------------------------
+
+export { extractCandidateFactsAndDecisions } from './candidate-fact-extractor.js';
