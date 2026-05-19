@@ -339,9 +339,11 @@ export function scanRepository(
 	const targets: RepositoryScanTarget[] = [];
 	const artifacts: RepositoryScanArtifact[] = [];
 	const findings: RepositoryScanFinding[] = [];
-	let filesInspected = 0;
-	let directoriesInspected = 0;
-	let bytesInspected = 0;
+	const counters: ScanCounters = {
+		bytesInspected: 0,
+		directoriesInspected: 0,
+		filesInspected: 0,
+	};
 
 	// -----------------------------------------------------------------------
 	// 1. Repository root inspection
@@ -349,7 +351,7 @@ export function scanRepository(
 
 	const rootTarget = inspectRepositoryRoot(projectRoot, fs, policy, findings);
 	targets.push(rootTarget);
-	directoriesInspected += 1;
+	counters.directoriesInspected += 1;
 
 	// -----------------------------------------------------------------------
 	// 2. Workspace state inspection
@@ -387,8 +389,8 @@ export function scanRepository(
 		policy,
 		findings,
 		artifacts,
-		filesInspected,
-		bytesInspected,
+		counters.filesInspected,
+		counters.bytesInspected,
 	);
 	if (packageSummary.exists) {
 		targets.push({
@@ -405,8 +407,8 @@ export function scanRepository(
 	{
 		const pkgStat = fs.lstat(join(projectRoot, 'package.json'));
 		if (pkgStat) {
-			filesInspected += 1;
-			bytesInspected += pkgStat.size;
+			counters.filesInspected += 1;
+			counters.bytesInspected += pkgStat.size;
 		}
 	}
 
@@ -433,8 +435,8 @@ export function scanRepository(
 		});
 		const lockStat = fs.lstat(lockPath);
 		if (lockStat) {
-			filesInspected += 1;
-			bytesInspected += lockStat.size;
+			counters.filesInspected += 1;
+			counters.bytesInspected += lockStat.size;
 		}
 	}
 
@@ -467,8 +469,8 @@ export function scanRepository(
 			});
 			const cfgStat = fs.lstat(fullPath);
 			if (cfgStat) {
-				filesInspected += 1;
-				bytesInspected += cfgStat.size;
+				counters.filesInspected += 1;
+				counters.bytesInspected += cfgStat.size;
 			}
 		}
 	}
@@ -490,7 +492,7 @@ export function scanRepository(
 		sourceDirs,
 		testDirs,
 		scriptDirs,
-		{ bytesInspected, directoriesInspected, filesInspected },
+		counters,
 	);
 
 	// -----------------------------------------------------------------------
@@ -504,7 +506,7 @@ export function scanRepository(
 		policy,
 		findings,
 		artifacts,
-		{ bytesInspected, directoriesInspected, filesInspected },
+		counters,
 	);
 
 	// -----------------------------------------------------------------------
@@ -518,7 +520,7 @@ export function scanRepository(
 		policy,
 		findings,
 		artifacts,
-		{ bytesInspected, directoriesInspected, filesInspected },
+		counters,
 	);
 
 	// -----------------------------------------------------------------------
@@ -538,11 +540,14 @@ export function scanRepository(
 	// 10. Generated root inspection
 	// -----------------------------------------------------------------------
 
-	inspectGeneratedRoot(projectRoot, documentationRoot, fs, policy, findings, {
-		bytesInspected,
-		directoriesInspected,
-		filesInspected,
-	});
+	inspectGeneratedRoot(
+		projectRoot,
+		documentationRoot,
+		fs,
+		policy,
+		findings,
+		counters,
+	);
 
 	// -----------------------------------------------------------------------
 	// 11. CI workflow inspection
@@ -602,16 +607,16 @@ export function scanRepository(
 		activeProfileId,
 		artifacts,
 		boundarySummary,
-		bytesInspected,
+		bytesInspected: counters.bytesInspected,
 		changedPaths: [],
 		ciSummary,
 		configSummary,
 		diagnostics,
-		directoriesInspected,
+		directoriesInspected: counters.directoriesInspected,
 		documentationRoot,
 		documentationSummary: docSummary,
 		dryRun,
-		filesInspected,
+		filesInspected: counters.filesInspected,
 		findings: sortedFindings,
 		packageSummary,
 		profileVersion: input.profileVersion ?? null,
@@ -841,9 +846,7 @@ function inspectPackage(
 		typeof parsed.bin === 'string'
 			? parsed.bin
 			: typeof parsed.bin === 'object' && parsed.bin !== null
-				? ((parsed.bin as Record<string, unknown>)[name ?? ''] as
-						| string
-						| undefined)
+				? selectPackageBinaryPath(parsed.bin as Record<string, unknown>)
 				: undefined;
 
 	const declaredScripts: string[] = [];
@@ -973,6 +976,19 @@ function inspectPackage(
 		type,
 		version,
 	};
+}
+
+function selectPackageBinaryPath(
+	binEntries: Record<string, unknown>,
+): string | undefined {
+	const logosBin = binEntries.logos;
+	if (typeof logosBin === 'string') return logosBin;
+
+	for (const value of Object.values(binEntries)) {
+		if (typeof value === 'string') return value;
+	}
+
+	return undefined;
 }
 
 // ---------------------------------------------------------------------------

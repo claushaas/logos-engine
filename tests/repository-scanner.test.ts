@@ -128,6 +128,9 @@ describe('package and tooling inspection', () => {
 			[
 				'/test-repo/package.json',
 				JSON.stringify({
+					bin: {
+						logos: './dist/cli.js',
+					},
 					engines: { node: '>=22' },
 					name: 'test-project',
 					packageManager: 'pnpm@10.33.2',
@@ -153,9 +156,31 @@ describe('package and tooling inspection', () => {
 		);
 		expect(result.packageSummary.exists).toBe(true);
 		expect(result.packageSummary.name).toBe('test-project');
+		expect(result.packageSummary.binPath).toBe('./dist/cli.js');
 		expect(result.packageSummary.declaredScripts).toContain('build');
 		expect(result.packageSummary.declaredScripts).toContain('test');
 		expect(result.packageSummary.missingRequiredScripts).toEqual([]);
+	});
+
+	it('detects object-form package binary even when key differs from package name', () => {
+		const fixtures = new Map<string, string>([
+			[
+				'/test-repo/package.json',
+				JSON.stringify({
+					bin: { logos: './dist/cli.js' },
+					name: 'logos-engine',
+				}),
+			],
+		]);
+		const fixtureDirs = new Map<string, string[]>([
+			['/test-repo', ['package.json']],
+		]);
+
+		const result = scanRepository(
+			makeInput({ fixtureDirectories: fixtureDirs, fixtures }),
+		);
+
+		expect(result.packageSummary.binPath).toBe('./dist/cli.js');
 	});
 
 	it('detects missing required scripts', () => {
@@ -766,6 +791,7 @@ describe('source structure inspection', () => {
 		expect(srcArtifacts.length).toBeGreaterThanOrEqual(1);
 		expect(testArtifacts.length).toBeGreaterThanOrEqual(1);
 		expect(scriptArtifacts.length).toBeGreaterThanOrEqual(1);
+		expect(result.directoriesInspected).toBeGreaterThanOrEqual(4);
 	});
 });
 
