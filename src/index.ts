@@ -1627,3 +1627,51 @@ export {
 	scanRepository,
 	sortScanFindings,
 } from './scanner/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 12.3 — Docs-vs-Code Consistency Checks
+// ---------------------------------------------------------------------------
+
+export type {
+	DocsCodeArtifactBoundaryCheck,
+	DocsCodeBoundaryCheck,
+	DocsCodeCategorySummary,
+	DocsCodeChangedPath,
+	DocsCodeClaim,
+	DocsCodeClaimKind,
+	DocsCodeClaimSource,
+	DocsCodeCommandCheck,
+	DocsCodeComparison,
+	DocsCodeComparisonStatus,
+	DocsCodeConsistencyChecker,
+	DocsCodeConsistencyDiagnostic,
+	DocsCodeConsistencyFinding,
+	DocsCodeConsistencyFindingKind,
+	DocsCodeConsistencyInput,
+	DocsCodeConsistencyOptions,
+	DocsCodeConsistencyReport,
+	DocsCodeConsistencyResult,
+	DocsCodeConsistencySeverity,
+	DocsCodeConsistencySummary,
+	DocsCodeEvidence,
+	DocsCodeObservedFact,
+	DocsCodeObservedFactKind,
+	DocsCodeProfileCheck,
+	DocsCodeRecoveryHint,
+	DocsCodeRootCheck,
+	DocsCodeScriptCheck,
+	DocsCodeSecurityCheck,
+} from './consistency/index.js';
+export {
+	buildDocsCodeConsistencyReport,
+	buildObservedFacts,
+	claimKindToCategory,
+	compareDocsCodeSeverity,
+	extractDocsClaims,
+	findingKindToCategory,
+	isScriptMutating,
+	nextDocsCodeId,
+	resetDocsCodeIdCounter,
+	runDocsCodeConsistencyCheck,
+	sortDocsCodeFindings,
+} from './consistency/index.js';
