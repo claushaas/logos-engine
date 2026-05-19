@@ -581,7 +581,10 @@ function checkManualEditSafety(
 	}
 
 	for (const artifact of input.artifactRegistryEntries) {
-		if (artifact.path === outputPath && artifact.artifactType === 'agentPack') {
+		if (
+			artifact.path === outputPath &&
+			artifact.artifactType === 'agent_pack'
+		) {
 			if (artifact.status !== 'planned' && artifact.status !== 'failed') {
 				blockers.push(
 					createBlocker(
@@ -634,7 +637,7 @@ function compareWithArtifactRegistry(
 			result.existing = true;
 			result.existingArtifact = artifact;
 
-			if (artifact.artifactType !== 'agentPack') {
+			if (artifact.artifactType !== 'agent_pack') {
 				result.current = false;
 				result.stale = false;
 				break;
@@ -661,14 +664,14 @@ function compareWithArtifactRegistry(
 	}
 
 	// Check orphaned registries
+	const declaredPaths = new Set(
+		input.contractGraph.outputs
+			.filter((output) => output.kind === 'agentPack' && !output.isCanonical)
+			.map((output) => output.path),
+	);
 	for (const artifact of input.artifactRegistryEntries) {
-		if (artifact.artifactType !== 'agentPack') continue;
-		const hasDecl = input.contract.documents.some(() => {
-			for (const entry of input.artifactRegistryEntries) {
-				if (entry.path === artifact.path) return true;
-			}
-			return false;
-		});
+		if (artifact.artifactType !== 'agent_pack') continue;
+		const hasDecl = declaredPaths.has(artifact.path);
 		if (!hasDecl) {
 			result.orphaned = true;
 		}

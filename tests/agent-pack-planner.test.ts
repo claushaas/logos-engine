@@ -1169,6 +1169,11 @@ describe('agent-pack output paths', () => {
 		expect(safety.safe).toBe(false);
 	});
 
+	it('sibling roots are rejected by path safety', () => {
+		const safety = isAgentPackOutputPathSafe('logos-other/pack.md', 'logos/');
+		expect(safety.safe).toBe(false);
+	});
+
 	it('normalized output paths are deterministic', () => {
 		const r1 = resolveAgentPackOutputPath(
 			'outcomes\\agents\\pack.md',
@@ -1209,7 +1214,7 @@ describe('agent-pack artifact registry comparison', () => {
 			artifactRegistryEntries: [
 				{
 					artifactId: 'task-pack',
-					artifactType: 'agentPack',
+					artifactType: 'agent_pack',
 					checksum: 'abc123',
 					generatedAt: '2024-01-01T00:00:00.000Z',
 					isCanonical: false,
@@ -1277,7 +1282,7 @@ describe('agent-pack artifact registry comparison', () => {
 			artifactRegistryEntries: [
 				{
 					artifactId: 'task-pack',
-					artifactType: 'agentPack',
+					artifactType: 'agent_pack',
 					checksum: 'old_checksum',
 					generatedAt: '2024-01-01T00:00:00.000Z',
 					isCanonical: false,
@@ -1341,7 +1346,7 @@ describe('agent-pack artifact registry comparison', () => {
 			artifactRegistryEntries: [
 				{
 					artifactId: 'orphan-pack',
-					artifactType: 'agentPack',
+					artifactType: 'agent_pack',
 					checksum: 'xyz',
 					generatedAt: '2024-01-01T00:00:00.000Z',
 					isCanonical: false,

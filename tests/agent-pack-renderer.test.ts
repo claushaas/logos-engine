@@ -1115,6 +1115,37 @@ describe('Agent Pack generation', () => {
 		expect(result.updatedPaths).toEqual([]);
 	});
 
+	it('generation does not double-prefix planner output paths with documentation root', () => {
+		const planItem = makePlanItem('implementation', {
+			relativeOutputPath: 'logos/outcomes/agents/pack.md',
+		});
+		const bundle = makeBundle('implementation', {
+			metadata: {
+				...makeBundle('implementation').metadata,
+				packId: planItem.packId,
+			},
+		});
+		const projectRoot = pathResolve('.');
+		const result = generateAgentPacks({
+			allowBlockedBundles: false,
+			artifactRoot: undefined,
+			bundles: [bundle],
+			documentationRoot: 'logos',
+			dryRun: true,
+			generatedAt: TEST_TIMESTAMP,
+			planItems: [planItem],
+			profileId: 'standard',
+			profileVersion: '1.0.0',
+			projectRoot,
+			writePolicy: 'fail_on_collision',
+		});
+
+		expect(result.items[0]?.outputPath).toBe(
+			pathResolve(projectRoot, 'logos/outcomes/agents/pack.md'),
+		);
+		expect(result.items[0]?.outputPath).not.toContain('logos/logos');
+	});
+
 	it('generation item order is deterministic', () => {
 		const items = [
 			makePlanItem('review', {
@@ -1171,7 +1202,7 @@ describe('Agent Pack generation', () => {
 		expect(sorted[0]?.packId).toBe('pack-3'); // review, orderIndex 3 (but review sorts before impl within same phase)
 	});
 
-	it.skip('generation summary includes counts by status', () => {
+	it('generation summary includes counts by status', () => {
 		const planItem = makePlanItem('implementation');
 		const bundle = makeBundle('implementation');
 		const result = generateAgentPacks({
@@ -1315,6 +1346,46 @@ describe('Artifact registry integration', () => {
 		];
 
 		const records = buildAgentPackArtifactRecords(items, () => 'art-1');
+		expect(records).toHaveLength(0);
+	});
+
+	it('buildAgentPackArtifactRecords skips skipped and stale items', () => {
+		const baseItem: AgentPackGenerationItem = {
+			blockers: [],
+			bundleId: 'bundle-1',
+			checksum: 'abc123',
+			diagnostics: [],
+			markdown: '# Pack',
+			outputPath: '/tmp/pack.md',
+			packId: 'pack-1',
+			packKind: 'implementation',
+			reasons: [],
+			relativeOutputPath: 'agent-packs/pack.md',
+			securitySummary: {
+				blockReasons: [],
+				forbiddenModelResponseCount: 0,
+				forbiddenRawPromptCount: 0,
+				passed: true,
+				redactionCount: 0,
+				tokenLikeValueCount: 0,
+			},
+			sourceCanonicalPaths: [],
+			sourceDocumentIds: [],
+			status: 'skipped',
+			templateKind: 'coding_agent',
+		};
+		const records = buildAgentPackArtifactRecords(
+			[
+				baseItem,
+				{
+					...baseItem,
+					packId: 'pack-2',
+					status: 'stale',
+				},
+			],
+			() => 'art-1',
+		);
+
 		expect(records).toHaveLength(0);
 	});
 

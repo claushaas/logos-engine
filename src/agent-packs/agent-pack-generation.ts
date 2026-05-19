@@ -726,8 +726,18 @@ export function resolveOutputPath(
 	docRoot: string,
 	projectRoot: string,
 ): string {
-	const root = docRoot.endsWith('/') ? docRoot : `${docRoot}/`;
-	const fullRel = `${root}${relativePath}`;
+	const normalizedRoot = docRoot
+		.replace(/\\/g, '/')
+		.replace(/^\.\/+|\/+$/g, '');
+	const normalizedPath = relativePath
+		.replace(/\\/g, '/')
+		.replace(/^\.\/+/, '')
+		.replace(/^\/+/, '');
+	const fullRel =
+		normalizedPath === normalizedRoot ||
+		normalizedPath.startsWith(`${normalizedRoot}/`)
+			? normalizedPath
+			: `${normalizedRoot}/${normalizedPath}`;
 	return pathResolve(projectRoot, fullRel);
 }
 
@@ -820,7 +830,7 @@ export function buildAgentPackArtifactRecords(
 	}> = [];
 
 	for (const item of items) {
-		if (item.status === 'failed' || item.status === 'blocked') continue;
+		if (item.status !== 'created' && item.status !== 'updated') continue;
 
 		records.push({
 			artifactId: idFactory(),

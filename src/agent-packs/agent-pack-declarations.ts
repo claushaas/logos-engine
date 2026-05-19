@@ -266,7 +266,10 @@ export function isAgentPackOutputPathSafe(
 		.replace(/\/+$/, '');
 	const normalizedPath = resolvedPath.replace(/\\/g, '/');
 
-	if (!normalizedPath.startsWith(normalizedRoot)) {
+	if (
+		normalizedPath !== normalizedRoot &&
+		!normalizedPath.startsWith(`${normalizedRoot}/`)
+	) {
 		return {
 			reason: `Agent-pack output path "${normalizedPath}" is outside the configured documentation root "${normalizedRoot}"`,
 			safe: false,
