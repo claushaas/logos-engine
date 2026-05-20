@@ -1,5 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
 
 export type ProfileId = string;
@@ -936,6 +937,32 @@ export function validateProfileRegistry(
 	};
 }
 
+function tryResolvePackageRoot(): string | undefined {
+	try {
+		const modulePath = fileURLToPath(import.meta.url);
+		const moduleDir = dirname(modulePath);
+		// The compiled module is at dist/profiles/profile-registry.js.
+		// Package root is two levels up from dist/profiles/ (i.e. dist/../..).
+		const candidate = resolve(moduleDir, '../..');
+		if (existsSync(resolve(candidate, 'profiles', 'standard', 'docs.yml'))) {
+			return candidate;
+		}
+		// Fallback: walk up looking for the profile marker
+		let current = moduleDir;
+		for (let i = 0; i < 6; i++) {
+			const parent = dirname(current);
+			if (parent === current) break;
+			current = parent;
+			if (existsSync(resolve(current, 'profiles', 'standard', 'docs.yml'))) {
+				return current;
+			}
+		}
+	} catch {
+		// ignore
+	}
+	return undefined;
+}
+
 export async function loadProfileRegistry(
 	options: LoadProfileRegistryOptions = {},
 ): Promise<ProfileRegistry> {
@@ -973,21 +1000,60 @@ export async function loadProfileRegistry(
 		]);
 	}
 
-	const registryPath = resolve(resolvedProfileRoot, 'docs.yml');
+	let registryPath = resolve(resolvedProfileRoot, 'docs.yml');
 
 	let rawContent: string;
 	try {
 		rawContent = readFileSync(registryPath, 'utf-8');
 	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : String(error);
-		throw new ProfileRegistryError([
-			{
-				code: 'E_PROFILE_MISSING_FILE',
-				fieldPath: undefined,
-				message: `Profile registry file not found: ${registryPath} — ${errorMessage}`,
-				path: registryPath,
-			},
-		]);
+		// Fallback for bundled profiles: try resolving from the package installation directory
+		const packageRoot = tryResolvePackageRoot();
+		if (packageRoot) {
+			const fallbackRoot = resolve(packageRoot, 'profiles', resolvedProfileId);
+			const fallbackPath = resolve(fallbackRoot, 'docs.yml');
+			if (existsSync(fallbackPath)) {
+				resolvedProfileRoot = fallbackRoot;
+				registryPath = fallbackPath;
+				try {
+					rawContent = readFileSync(registryPath, 'utf-8');
+				} catch (fallbackError) {
+					const errorMessage =
+						fallbackError instanceof Error
+							? fallbackError.message
+							: String(fallbackError);
+					throw new ProfileRegistryError([
+						{
+							code: 'E_PROFILE_MISSING_FILE',
+							fieldPath: undefined,
+							message: `Profile registry file not found: ${registryPath} — ${errorMessage}`,
+							path: registryPath,
+						},
+					]);
+				}
+			} else {
+				const errorMessage =
+					error instanceof Error ? error.message : String(error);
+				throw new ProfileRegistryError([
+					{
+						code: 'E_PROFILE_MISSING_FILE',
+						fieldPath: undefined,
+						message: `Profile registry file not found: ${registryPath} — ${errorMessage}`,
+						path: registryPath,
+					},
+				]);
+			}
+		} else {
+			const errorMessage =
+				error instanceof Error ? error.message : String(error);
+			throw new ProfileRegistryError([
+				{
+					code: 'E_PROFILE_MISSING_FILE',
+					fieldPath: undefined,
+					message: `Profile registry file not found: ${registryPath} — ${errorMessage}`,
+					path: registryPath,
+				},
+			]);
+		}
 	}
 
 	let parsed: unknown;

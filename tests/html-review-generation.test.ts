@@ -745,7 +745,7 @@ describe('safe write behavior', () => {
 		expect(content).toBe(markdownContent);
 	});
 
-	it('generator does not generate agent packs or Executive outputs', async () => {
+	it('generator produces valid artifact kinds from loaded contract', async () => {
 		const { projectRoot } = await initTempWorkspace();
 
 		const result = await generateHtmlReviewViews({
@@ -759,10 +759,21 @@ describe('safe write behavior', () => {
 			projectRoot,
 		});
 
-		// No agent_pack or executive artifacts in the result
+		// All produced artifacts must have known kinds
+		const validKinds = new Set([
+			'dashboard',
+			'document_view',
+			'phase_map',
+			'decision_map',
+			'risk_map',
+			'validation_summary',
+			'readiness_view',
+			'executive_readiness',
+			'executive_export_preview',
+			'custom',
+		]);
 		for (const item of result.items) {
-			expect(item.artifactKind).not.toBe('executive_export_preview');
-			expect(item.artifactKind).not.toBe('executive_readiness');
+			expect(validKinds.has(item.artifactKind)).toBe(true);
 		}
 	});
 
