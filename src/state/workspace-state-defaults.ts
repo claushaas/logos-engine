@@ -40,6 +40,7 @@ export function createDefaultWorkspaceState(
 				options.documentationRoot !== undefined && !isDefaultRoot,
 		},
 		generationRuns: [],
+		intakeTurns: [],
 		migrations: [],
 		openQuestions: [],
 		profile: {

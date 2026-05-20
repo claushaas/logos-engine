@@ -117,6 +117,43 @@ function now(input: ProposalMappingInput): string {
 // Map user answers to proposals
 // ---------------------------------------------------------------------------
 
+function makeProposal(
+	kind: ReviewableProposal['kind'],
+	title: string,
+	body: string,
+	source: ProposalSource,
+	extractionMetadata: ProposalMappingInput['providerMetadata'],
+	clock: { now(): string },
+	idFactory: () => string,
+	overrides?: Partial<ReviewableProposal>,
+): ReviewableProposal {
+	const timestamp = clock.now();
+	return {
+		affectedDocumentIds: [],
+		auditEvents: undefined,
+		body,
+		caveat: undefined,
+		confidence: undefined,
+		createdAt: timestamp,
+		diagnostics: [],
+		evidence: body.substring(0, 200),
+		extractionMetadata,
+		kind,
+		proposalId: idFactory(),
+		rejectionReason: undefined,
+		revisionHistory: undefined,
+		source,
+		sourceLabel: 'user-authored',
+		sourceTurnId: undefined,
+		status: 'proposed',
+		supersededByProposalId: undefined,
+		targetConfirmedRecordId: undefined,
+		title,
+		updatedAt: timestamp,
+		...overrides,
+	};
+}
+
 function mapAnswerToProposals(
 	input: ProposalMappingInput,
 	answer: ProposalMappingInput['answers'][number],
@@ -152,23 +189,17 @@ function mapAnswerToProposals(
 			normalizedAnswer,
 		)
 	) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'decision',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title: extractFirstSentence(normalizedAnswer) || 'User-sourced decision',
-			updatedAt: timestamp,
-		});
+		proposals.push(
+			makeProposal(
+				'decision',
+				extractFirstSentence(normalizedAnswer) || 'User-sourced decision',
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	// Heuristic: extract potential assumption-like content
@@ -177,24 +208,17 @@ function mapAnswerToProposals(
 			normalizedAnswer,
 		)
 	) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'assumption',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title:
+		proposals.push(
+			makeProposal(
+				'assumption',
 				extractFirstSentence(normalizedAnswer) || 'User-sourced assumption',
-			updatedAt: timestamp,
-		});
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	// Heuristic: extract potential hypothesis-like content
@@ -203,24 +227,17 @@ function mapAnswerToProposals(
 			normalizedAnswer,
 		)
 	) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'hypothesis',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title:
+		proposals.push(
+			makeProposal(
+				'hypothesis',
 				extractFirstSentence(normalizedAnswer) || 'User-sourced hypothesis',
-			updatedAt: timestamp,
-		});
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	// Heuristic: extract potential question-like content
@@ -229,24 +246,17 @@ function mapAnswerToProposals(
 			normalizedAnswer,
 		)
 	) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'open_question',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title:
+		proposals.push(
+			makeProposal(
+				'open_question',
 				extractFirstSentence(normalizedAnswer) || 'User-sourced open question',
-			updatedAt: timestamp,
-		});
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	// Heuristic: extract potential risk-like content
@@ -255,23 +265,17 @@ function mapAnswerToProposals(
 			normalizedAnswer,
 		)
 	) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'risk',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title: extractFirstSentence(normalizedAnswer) || 'User-sourced risk',
-			updatedAt: timestamp,
-		});
+		proposals.push(
+			makeProposal(
+				'risk',
+				extractFirstSentence(normalizedAnswer) || 'User-sourced risk',
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	// Heuristic: potential document content hint
@@ -280,46 +284,33 @@ function mapAnswerToProposals(
 			normalizedAnswer,
 		)
 	) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'document_content_hint',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title:
+		proposals.push(
+			makeProposal(
+				'document_content_hint',
 				extractFirstSentence(normalizedAnswer) ||
-				'User-sourced document content hint',
-			updatedAt: timestamp,
-		});
+					'User-sourced document content hint',
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	// Fallback: if nothing matched, make a simple assumption
 	if (proposals.length === 0) {
-		proposals.push({
-			body: normalizedAnswer,
-			confidence: undefined,
-			createdAt: timestamp,
-			evidence: normalizedAnswer.substring(0, 200),
-			extractionMetadata: input.providerMetadata,
-			kind: 'assumption',
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title: extractFirstSentence(normalizedAnswer) || 'User-sourced input',
-			updatedAt: timestamp,
-		});
+		proposals.push(
+			makeProposal(
+				'assumption',
+				extractFirstSentence(normalizedAnswer) || 'User-sourced input',
+				normalizedAnswer,
+				source,
+				input.providerMetadata,
+				{ now: () => timestamp },
+				() => makeId(input),
+			),
+		);
 	}
 
 	return proposals;
@@ -396,28 +387,26 @@ function mapExtractionsToProposals(
 			continue;
 		}
 
-		proposals.push({
-			body,
-			confidence: record.confidence,
-			createdAt: timestamp,
-			evidence: body.substring(0, 200) || title,
-			extractionMetadata: input.providerMetadata ?? {
-				operation: undefined,
-				providerId: undefined,
-				providerKind: undefined,
-				responseId: record.recordId,
-			},
-			kind,
-			proposalId: makeId(input),
-			rejectionReason: undefined,
-			revisionHistory: undefined,
-			source,
-			status: 'proposed',
-			supersededByProposalId: undefined,
-			targetConfirmedRecordId: undefined,
-			title: title || 'Untitled extraction',
-			updatedAt: timestamp,
-		});
+		const sourceLabel = record.isProposed
+			? ('AI-interpreted' as const)
+			: ('user-authored' as const);
+		proposals.push(
+			makeProposal(
+				kind,
+				title || 'Untitled extraction',
+				body,
+				source,
+				input.providerMetadata ?? {
+					operation: undefined,
+					providerId: undefined,
+					providerKind: undefined,
+					responseId: record.recordId,
+				},
+				{ now: () => timestamp },
+				() => makeId(input),
+				{ confidence: record.confidence, sourceLabel },
+			),
+		);
 	}
 
 	return proposals;

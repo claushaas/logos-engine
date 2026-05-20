@@ -97,6 +97,32 @@ const MIGRATION_3_0_0_TO_3_1_0: WorkspaceMigrationDefinition = {
 };
 
 /**
+ * Migration: 3.1.0 → 3.2.0
+ *
+ * Adds intakeTurns array, expands proposal schema with new fields.
+ */
+const MIGRATION_3_1_0_TO_3_2_0: WorkspaceMigrationDefinition = {
+	affectedStateFiles: ['workspace.json'],
+	description:
+		'Upgrade workspace state from 3.1.0 to 3.2.0: add intake turns, expand proposal schema.',
+	directions: ['up'],
+	fromVersion: '3.1.0',
+	id: 'migrate-v3.1.0-to-v3.2.0',
+	postconditions: [
+		'schemaVersion is 3.2.0',
+		'intakeTurns array exists',
+		'proposal schema includes new fields',
+	],
+	preconditions: [
+		'workspace.json exists and is valid JSON',
+		'schemaVersion is 3.1.0',
+	],
+	supported: true,
+	toVersion: '3.2.0',
+	warnings: ['New proposal fields default to empty values; review if needed.'],
+};
+
+/**
  * Migration: 2.0.0 → 3.0.0
  *
  * Legacy migration path for very old workspaces.
@@ -150,6 +176,7 @@ const BUILTIN_MIGRATIONS: WorkspaceMigrationDefinition[] = [
 	MIGRATION_1_0_0_TO_2_0_0,
 	MIGRATION_2_0_0_TO_3_0_0,
 	MIGRATION_3_0_0_TO_3_1_0,
+	MIGRATION_3_1_0_TO_3_2_0,
 ];
 
 function sortMigrations(

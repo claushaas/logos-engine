@@ -6,7 +6,7 @@ import { z } from 'zod';
 // Schema Version
 // ---------------------------------------------------------------------------
 
-export const WORKSPACE_STATE_SCHEMA_VERSION = '3.1.0';
+export const WORKSPACE_STATE_SCHEMA_VERSION = '3.2.0';
 
 // ---------------------------------------------------------------------------
 // Primitive helpers
@@ -208,7 +208,9 @@ export const DecisionStatusSchema = z.enum([
 export const WorkspaceDecisionSchema = z.object({
 	affectedDocumentIds: z.array(z.string()).default([]),
 	body: z.string().optional(),
-	confidence: z.enum(['low', 'medium', 'high', 'advisory']).optional(),
+	confidence: z
+		.enum(['low', 'medium', 'high', 'advisory', 'unknown'])
+		.optional(),
 	createdAt: isoTimestamp,
 	id: nonEmptyString,
 	sourceRefs: z.array(z.string()).default([]),
@@ -482,6 +484,8 @@ export const ProposalStatusSchema = z.enum([
 	'rejected',
 	'revised',
 	'superseded',
+	'deferred',
+	'unknown',
 ]);
 
 export const ProposalExtractionMetadataSchema = z.object({
@@ -499,9 +503,24 @@ export const ProposalRevisionSchema = z.object({
 });
 
 export const WorkspaceProposalSchema = z.object({
+	affectedDocumentIds: z.array(z.string()).default([]),
+	auditEvents: z.array(WorkspaceAuditEventSchema).default([]),
 	body: z.string().default(''),
-	confidence: z.enum(['low', 'medium', 'high', 'advisory']).optional(),
+	caveat: z.string().optional(),
+	confidence: z
+		.enum(['low', 'medium', 'high', 'advisory', 'unknown'])
+		.optional(),
 	createdAt: isoTimestamp,
+	diagnostics: z
+		.array(
+			z.object({
+				code: z.string().min(1),
+				message: z.string().min(1),
+				recoveryHint: z.string().optional(),
+				severity: z.enum(['error', 'warning', 'info']),
+			}),
+		)
+		.default([]),
 	evidence: z.string().optional(),
 	extractionMetadata: ProposalExtractionMetadataSchema.optional(),
 	kind: ProposalKindSchema,
@@ -510,9 +529,19 @@ export const WorkspaceProposalSchema = z.object({
 	revisionHistory: z.array(ProposalRevisionSchema).optional(),
 	sourceAnswerId: z.string().optional(),
 	sourceDocumentCanonicalId: z.string().optional(),
+	sourceLabel: z
+		.enum([
+			'user-authored',
+			'deterministic',
+			'AI-interpreted',
+			'imported',
+			'unknown',
+		])
+		.optional(),
 	sourcePhaseId: z.string().optional(),
 	sourceQuestionId: z.string().optional(),
 	sourceSessionId: z.string().optional(),
+	sourceTurnId: z.string().optional(),
 	status: ProposalStatusSchema.default('proposed'),
 	supersededByProposalId: z.string().optional(),
 	targetConfirmedRecordId: z.string().optional(),
@@ -521,6 +550,70 @@ export const WorkspaceProposalSchema = z.object({
 });
 
 export type WorkspaceProposal = z.infer<typeof WorkspaceProposalSchema>;
+
+// ---------------------------------------------------------------------------
+// Intake Turn
+// ---------------------------------------------------------------------------
+
+export const IntakeTurnRoleSchema = z.enum([
+	'user',
+	'assistant',
+	'system',
+	'provider',
+	'deterministic_interpreter',
+]);
+
+export const IntakeTurnStatusSchema = z.enum([
+	'captured',
+	'interpreted',
+	'proposed',
+	'failed',
+	'deferred',
+	'unknown',
+]);
+
+export const IntakeInterpretationSummarySchema = z.object({
+	diagnostics: z
+		.array(
+			z.object({
+				code: z.string().min(1),
+				message: z.string().min(1),
+				recoveryHint: z.string().optional(),
+				severity: z.enum(['error', 'warning', 'info']),
+			}),
+		)
+		.default([]),
+	interpreterRole: IntakeTurnRoleSchema,
+	proposalCount: z.number().int().nonnegative().default(0),
+});
+
+export const WorkspaceIntakeTurnSchema = z.object({
+	createdAt: nonEmptyString,
+	deferredUntil: z.string().optional(),
+	derivedProposalIds: z.array(z.string()).default([]),
+	diagnostics: z
+		.array(
+			z.object({
+				code: z.string().min(1),
+				message: z.string().min(1),
+				recoveryHint: z.string().optional(),
+				severity: z.enum(['error', 'warning', 'info']),
+			}),
+		)
+		.default([]),
+	evidenceRef: z.string().min(1),
+	id: nonEmptyString,
+	interpretation: IntakeInterpretationSummarySchema.optional(),
+	providerMetadata: ProposalExtractionMetadataSchema.optional(),
+	redactionSummary: z.string().optional(),
+	role: IntakeTurnRoleSchema,
+	sessionId: nonEmptyString,
+	status: IntakeTurnStatusSchema,
+	text: z.string().default(''),
+	workspaceRef: z.string().optional(),
+});
+
+export type WorkspaceIntakeTurn = z.infer<typeof WorkspaceIntakeTurnSchema>;
 
 // ---------------------------------------------------------------------------
 // Unified Run Record (validation, diagnostic, generation, executive)
@@ -691,6 +784,7 @@ export const WorkspaceStateSchema = z
 		decisions: z.array(WorkspaceDecisionSchema).default([]),
 		documentation: DocumentationRootConfigSchema,
 		generationRuns: z.array(WorkspaceGenerationRunSchema).default([]),
+		intakeTurns: z.array(WorkspaceIntakeTurnSchema).default([]),
 		migrations: z.array(WorkspaceMigrationRecordSchema).default([]),
 		openQuestions: z.array(WorkspaceOpenQuestionSchema).default([]),
 		profile: WorkspaceProfileLockSchema,

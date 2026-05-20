@@ -283,7 +283,7 @@ describe('verifyBackupIntegrity', () => {
 			includedPaths: ['workspace.json'],
 			manifestVersion: '1.0.0',
 			reason: 'Test',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		};
 
@@ -327,7 +327,7 @@ describe('verifyBackupIntegrity', () => {
 			includedPaths: ['../etc/passwd'],
 			manifestVersion: '1.0.0',
 			reason: 'Test',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		};
 
@@ -348,7 +348,7 @@ describe('verifyBackupIntegrity', () => {
 			includedPaths: ['/etc/passwd'],
 			manifestVersion: '1.0.0',
 			reason: 'Test',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		};
 
@@ -369,7 +369,7 @@ describe('verifyBackupIntegrity', () => {
 			includedPaths: [],
 			manifestVersion: '',
 			reason: 'Test',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		} as WorkspaceBackupManifest;
 

@@ -43,7 +43,7 @@ function createTempDir(): string {
 		proposals: [],
 		risks: [],
 		runs: [],
-		schemaVersion: '3.1.0',
+		schemaVersion: '3.2.0',
 		sessions: [],
 		validationRuns: [],
 		workspace: {

@@ -24,7 +24,9 @@ export type ProposalStatus =
 	| 'accepted'
 	| 'rejected'
 	| 'revised'
-	| 'superseded';
+	| 'superseded'
+	| 'deferred'
+	| 'unknown';
 
 // ---------------------------------------------------------------------------
 // Proposal source evidence
@@ -85,7 +87,19 @@ export interface ReviewableProposal {
 	source: ProposalSource;
 	evidence: string | undefined;
 	extractionMetadata: ProposalExtractionMetadata | undefined;
-	confidence: 'low' | 'medium' | 'high' | 'advisory' | undefined;
+	confidence: 'low' | 'medium' | 'high' | 'advisory' | 'unknown' | undefined;
+	sourceTurnId: string | undefined;
+	sourceLabel:
+		| 'user-authored'
+		| 'deterministic'
+		| 'AI-interpreted'
+		| 'imported'
+		| 'unknown'
+		| undefined;
+	affectedDocumentIds: string[];
+	diagnostics: ProposalDiagnostic[];
+	auditEvents: ProposalAuditEvent[] | undefined;
+	caveat: string | undefined;
 	createdAt: string;
 	updatedAt: string;
 	revisionHistory: ProposalRevision[] | undefined;
@@ -130,8 +144,17 @@ export interface ProposalDiagnostic {
 	code: string;
 	severity: 'error' | 'warning' | 'info';
 	message: string;
-	path: string | undefined;
-	recoveryHint: string | undefined;
+	path?: string | undefined;
+	recoveryHint?: string | undefined;
+}
+
+export interface ProposalAuditEvent {
+	eventId: string;
+	eventType: string;
+	summary: string;
+	timestamp: string;
+	actor: string;
+	sessionRef: string | undefined;
 }
 
 // ---------------------------------------------------------------------------

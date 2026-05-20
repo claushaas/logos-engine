@@ -199,7 +199,7 @@ describe('initWorkspace (execution)', () => {
 					source: 'bundled',
 				},
 				risks: [],
-				schemaVersion: '3.1.0',
+				schemaVersion: '3.2.0',
 				sessions: [],
 				validationRuns: [],
 				workspace: {
@@ -270,7 +270,7 @@ describe('initWorkspace (execution)', () => {
 				source: 'bundled',
 			},
 			risks: [],
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sessions: [],
 			validationRuns: [],
 			workspace: {

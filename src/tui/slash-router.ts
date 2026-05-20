@@ -26,6 +26,14 @@ import { executiveCompileWorkflow } from '../executive/index.js';
 import { generateCanonicalDocs } from '../generation/generate-canonical-docs.js';
 import type { GenerateCanonicalDocsWritePolicy } from '../generation/generate-types.js';
 import { initWorkspace, preflightInit } from '../init/index.js';
+import {
+	getProposal,
+	acceptProposal as intakeAcceptProposal,
+	rejectProposal as intakeRejectProposal,
+	reviseProposal as intakeReviseProposal,
+	listProposals,
+} from '../intake/index.js';
+import { processFreeFormIntake } from '../intake/intake-service.js';
 import { planNextQuestions } from '../intake/question-planner.js';
 import { buildContractGraph } from '../profiles/contract-graph.js';
 import { loadDocumentationContract } from '../profiles/documentation-contract.js';
@@ -60,15 +68,7 @@ export async function routeSlashCommand(
 	}
 
 	if (parsed.kind === 'free-form') {
-		return {
-			command: 'intake',
-			kind: 'info',
-			messages: [
-				`Received: "${parsed.text}"`,
-				'Free-form intake routing will be implemented in a later phase.',
-			],
-			shouldExit: false,
-		};
+		return handleFreeFormIntake(parsed.text, context);
 	}
 
 	const { name, args } = parsed;
@@ -109,6 +109,10 @@ export async function routeSlashCommand(
 			return getGraphResult(args, context);
 		case 'executive':
 			return getExecutiveResult(args, context);
+		case 'proposals':
+			return getProposalsResult(args, context);
+		case 'decisions':
+			return getDecisionsResult(args, context);
 		default:
 			return {
 				command: name,
@@ -153,7 +157,26 @@ function getHelpMessages(): string[] {
 		'  /help        — Show this help',
 		'  /exit        — Exit the shell',
 		'',
-		'You can also type free-form text for the intake engine (not yet implemented).',
+		'Proposal review:',
+		'  /proposals [list]             — List reviewable proposals',
+		'  /proposals show <id>          — Show proposal details',
+		'  /proposals accept <id>        — Accept proposal (creates confirmed record)',
+		'  /proposals revise <id> <text> — Revise proposal',
+		'  /proposals reject <id>        — Reject proposal',
+		'  /proposals defer <id>         — Defer proposal',
+		'  /proposals affected <id>      — Show affected documents',
+		'  /proposals --kind <kind>      — Filter by kind (decision, assumption, etc.)',
+		'  /proposals --status <status>  — Filter by status',
+		'',
+		'Decision correction:',
+		'  /decisions [list]             — List confirmed decisions',
+		'  /decisions show <id>          — Show decision details',
+		'  /decisions revise <id> <text> — Revise confirmed decision',
+		'  /decisions supersede <id> <text> — Supersede confirmed decision',
+		'  /decisions affected <id>      — Show affected documents and stale outputs',
+		'',
+		'You can also type free-form text for conversational intake.',
+		'Non-slash input is captured as intake evidence and creates reviewable proposals.',
 	];
 }
 
@@ -1671,6 +1694,727 @@ async function getGraphResult(
 			shouldExit: false,
 		};
 	}
+}
+
+// ---------------------------------------------------------------------------
+// Free-form intake handler
+// ---------------------------------------------------------------------------
+
+async function handleFreeFormIntake(
+	text: string,
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'intake',
+			kind: 'error',
+			messages: [
+				'Cannot process intake because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const readResult = await readWorkspaceState({ projectRoot });
+	if (!readResult.success || !readResult.state) {
+		return {
+			command: 'intake',
+			kind: 'warning',
+			messages: [
+				'Cannot process intake because the LOGOS workspace is not initialized.',
+				'Run /init to create a workspace, then type free-form text again.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	try {
+		const result = await processFreeFormIntake({
+			projectRoot,
+			text,
+		});
+
+		const lines: string[] = [...result.messages];
+
+		if (result.proposals.length > 0) {
+			lines.push('');
+			lines.push('Proposals created:');
+			for (const p of result.proposals) {
+				const confLabel = p.confidence ? ` [${p.confidence} confidence]` : '';
+				const srcLabel = p.sourceLabel ? ` (${p.sourceLabel})` : '';
+				lines.push(
+					`  ${p.proposalId}: ${p.kind}${confLabel}${srcLabel} — ${p.title.substring(0, 80)}`,
+				);
+			}
+		}
+
+		if (result.nextActions.length > 0) {
+			lines.push('');
+			lines.push('Next actions:');
+			for (const action of result.nextActions.slice(0, 5)) {
+				lines.push(`  - ${action}`);
+			}
+		}
+
+		lines.push('');
+		lines.push(
+			'Proposals are not confirmed until explicitly accepted. Run /proposals list to review.',
+		);
+
+		return {
+			command: 'intake',
+			kind: result.success ? 'success' : 'warning',
+			messages: lines,
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'intake',
+			kind: 'error',
+			messages: [
+				'Intake processing failed:',
+				message,
+				'Your input has been preserved. Run /config ai status to check provider configuration.',
+			],
+			shouldExit: false,
+		};
+	}
+}
+
+// ---------------------------------------------------------------------------
+// /proposals command
+// ---------------------------------------------------------------------------
+
+async function getProposalsResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'proposals',
+			kind: 'error',
+			messages: ['Cannot list proposals because no project root was detected.'],
+			shouldExit: false,
+		};
+	}
+
+	const subCmd = args[0];
+
+	// /proposals list
+	if (!subCmd || subCmd === 'list') {
+		const kind = args.includes('--kind')
+			? args[args.indexOf('--kind') + 1]
+			: undefined;
+		const status = args.includes('--status')
+			? args[args.indexOf('--status') + 1]
+			: undefined;
+
+		const listResult = await listProposals({
+			kind,
+			projectRoot,
+			status,
+		});
+
+		if (!listResult.success) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: listResult.diagnostics.map((d) => d.message),
+				shouldExit: false,
+			};
+		}
+
+		const lines: string[] = ['Proposals:'];
+
+		if (listResult.proposals.length === 0) {
+			lines.push('  (none)');
+			lines.push('');
+			lines.push(
+				'No proposals exist yet. Type free-form text to create proposals from your input.',
+			);
+		} else {
+			lines.push(`  ${listResult.proposals.length} proposal(s):`);
+			lines.push('');
+			for (const p of listResult.proposals) {
+				const confLabel = p.confidence ? ` [${p.confidence}]` : '';
+				const srcLabel = p.sourceLabel ? ` (${p.sourceLabel})` : '';
+				lines.push(
+					`  ${p.proposalId} | ${p.kind} | ${p.status}${confLabel}${srcLabel}`,
+				);
+				lines.push(`    ${p.title.substring(0, 100)}`);
+			}
+			lines.push('');
+			lines.push(
+				'Commands: /proposals show <id>, /proposals accept <id>, /proposals revise <id> <text>, /proposals reject <id>, /proposals affected <id>',
+			);
+		}
+
+		return {
+			command: 'proposals',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	// /proposals show <id>
+	if (subCmd === 'show') {
+		const proposalId = args[1];
+		if (!proposalId) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: ['Usage: /proposals show <proposal-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const getResult = await getProposal({ projectRoot, proposalId });
+
+		if (!getResult.success || !getResult.proposal) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: getResult.diagnostics.map((d) => d.message),
+				shouldExit: false,
+			};
+		}
+
+		const p = getResult.proposal;
+		const lines: string[] = [
+			'Proposal detail:',
+			'',
+			`  ID:          ${p.proposalId}`,
+			`  Kind:        ${p.kind}`,
+			`  Status:      ${p.status}`,
+			`  Confidence:  ${p.confidence ?? 'not set'}`,
+			`  Source:      ${p.sourceLabel ?? 'not set'}`,
+			`  Turn:        ${p.sourceTurnId ?? 'not set'}`,
+			`  Title:       ${p.title}`,
+			`  Body:        ${p.body.substring(0, 200)}`,
+		];
+
+		if (p.caveat) {
+			lines.push(`  Caveat:      ${p.caveat}`);
+		}
+		if (p.rejectionReason) {
+			lines.push(`  Rejection:   ${p.rejectionReason}`);
+		}
+		if (p.affectedDocumentIds.length > 0) {
+			lines.push(`  Affected:    ${p.affectedDocumentIds.join(', ')}`);
+		}
+		if (p.diagnostics.length > 0) {
+			lines.push('  Diagnostics:');
+			for (const d of p.diagnostics.slice(0, 3)) {
+				lines.push(`    [${d.severity}] ${d.message}`);
+			}
+		}
+
+		lines.push('');
+		lines.push(
+			'Actions: /proposals accept <id>, /proposals revise <id> <text>, /proposals reject <id>, /proposals defer <id>, /proposals affected <id>',
+		);
+
+		return {
+			command: 'proposals',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	// /proposals accept <id>
+	if (subCmd === 'accept') {
+		const proposalId = args[1];
+		if (!proposalId) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: ['Usage: /proposals accept <proposal-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const result = await intakeAcceptProposal({ projectRoot, proposalId });
+
+		return formatProposalLifecycleResult('accept', result);
+	}
+
+	// /proposals revise <id> <text>
+	if (subCmd === 'revise') {
+		const proposalId = args[1];
+		const revisedText = args.slice(2).join(' ');
+		if (!proposalId || !revisedText.trim()) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: ['Usage: /proposals revise <proposal-id> <revised text>'],
+				shouldExit: false,
+			};
+		}
+
+		const result = await intakeReviseProposal({
+			body: revisedText.trim(),
+			projectRoot,
+			proposalId,
+			title: revisedText.trim().substring(0, 80),
+		});
+
+		return formatProposalLifecycleResult('revise', result);
+	}
+
+	// /proposals reject <id>
+	if (subCmd === 'reject') {
+		const proposalId = args[1];
+		if (!proposalId) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: ['Usage: /proposals reject <proposal-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const result = await intakeRejectProposal({ projectRoot, proposalId });
+
+		return formatProposalLifecycleResult('reject', result);
+	}
+
+	// /proposals defer <id>
+	if (subCmd === 'defer') {
+		const proposalId = args[1];
+		if (!proposalId) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: ['Usage: /proposals defer <proposal-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const { deferProposal: deferProposalFn } = await import(
+			'../intake/proposal-lifecycle.js'
+		);
+		const result = await deferProposalFn({
+			projectRoot,
+			proposalId,
+		});
+
+		return formatProposalLifecycleResult('defer', result);
+	}
+
+	// /proposals affected <id>
+	if (subCmd === 'affected') {
+		const proposalId = args[1];
+		if (!proposalId) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: ['Usage: /proposals affected <proposal-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const getResult = await getProposal({ projectRoot, proposalId });
+
+		if (!getResult.success || !getResult.proposal) {
+			return {
+				command: 'proposals',
+				kind: 'error',
+				messages: getResult.diagnostics.map((d) => d.message),
+				shouldExit: false,
+			};
+		}
+
+		const p = getResult.proposal;
+		const lines: string[] = ['Affected documents:'];
+
+		if (p.affectedDocumentIds.length === 0) {
+			lines.push('  (none reported)');
+			lines.push('');
+			lines.push(
+				'Run /validate or /diagnose to detect affected documents from state.',
+			);
+		} else {
+			for (const docId of p.affectedDocumentIds) {
+				lines.push(`  - ${docId}`);
+			}
+			lines.push('');
+			lines.push(
+				'If this proposal is accepted, these documents may need regeneration.',
+			);
+		}
+
+		return {
+			command: 'proposals',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	return {
+		command: 'proposals',
+		kind: 'error',
+		messages: [
+			`Unknown /proposals subcommand: ${subCmd}`,
+			'Valid: list, show <id>, accept <id>, revise <id> <text>, reject <id>, defer <id>, affected <id>',
+		],
+		shouldExit: false,
+	};
+}
+
+function formatProposalLifecycleResult(
+	action: string,
+	result: Awaited<ReturnType<typeof intakeAcceptProposal>>,
+): SlashCommandResult {
+	if (!result.success) {
+		return {
+			command: 'proposals',
+			kind: 'error',
+			messages: result.diagnostics.map((d) => d.message),
+			shouldExit: false,
+		};
+	}
+
+	const lines: string[] = [
+		`Proposal ${action}ed.`,
+		`  ID:     ${result.proposalId}`,
+	];
+
+	if (result.proposal) {
+		lines.push(`  Kind:   ${result.proposal.kind}`);
+		lines.push(`  Status: ${result.proposal.status}`);
+		lines.push(`  Title:  ${result.proposal.title.substring(0, 80)}`);
+	}
+
+	lines.push('');
+	lines.push('Run /proposals list to see all proposals.');
+
+	return {
+		command: 'proposals',
+		kind: 'success',
+		messages: lines,
+		shouldExit: false,
+	};
+}
+
+// ---------------------------------------------------------------------------
+// /decisions command
+// ---------------------------------------------------------------------------
+
+async function getDecisionsResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'decisions',
+			kind: 'error',
+			messages: ['Cannot list decisions because no project root was detected.'],
+			shouldExit: false,
+		};
+	}
+
+	const readResult = await readWorkspaceState({ projectRoot });
+	if (!readResult.success || !readResult.state) {
+		return {
+			command: 'decisions',
+			kind: 'error',
+			messages: [
+				'Cannot access decisions because workspace is not initialized.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const decisions = readResult.state.decisions;
+	const subCmd = args[0];
+
+	// /decisions list
+	if (!subCmd || subCmd === 'list') {
+		if (decisions.length === 0) {
+			return {
+				command: 'decisions',
+				kind: 'info',
+				messages: [
+					'No confirmed decisions exist.',
+					'Accept a decision proposal via /proposals accept <id> to create a confirmed decision.',
+				],
+				shouldExit: false,
+			};
+		}
+
+		const lines: string[] = ['Confirmed decisions:'];
+		for (const d of decisions) {
+			const confLabel = d.confidence ? ` [${d.confidence}]` : '';
+			lines.push(`  ${d.id} | ${d.status}${confLabel}`);
+			lines.push(`    ${d.title.substring(0, 100)}`);
+		}
+
+		lines.push('');
+		lines.push(
+			'Commands: /decisions show <id>, /decisions revise <id> <text>, /decisions supersede <id> <text>, /decisions affected <id>',
+		);
+
+		return {
+			command: 'decisions',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	// /decisions show <id>
+	if (subCmd === 'show') {
+		const decisionId = args[1];
+		if (!decisionId) {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: ['Usage: /decisions show <decision-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const decision = decisions.find((d) => d.id === decisionId);
+		if (!decision) {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: [
+					`Decision "${decisionId}" not found.`,
+					'Run /decisions list to see all decisions.',
+				],
+				shouldExit: false,
+			};
+		}
+
+		const lines: string[] = [
+			'Decision detail:',
+			'',
+			`  ID:          ${decision.id}`,
+			`  Status:      ${decision.status}`,
+			`  Confidence:  ${decision.confidence ?? 'not set'}`,
+			`  Title:       ${decision.title}`,
+			`  Body:        ${(decision.body ?? '').substring(0, 200)}`,
+		];
+
+		if (decision.affectedDocumentIds.length > 0) {
+			lines.push(`  Affected:    ${decision.affectedDocumentIds.join(', ')}`);
+		}
+		if (decision.sourceRefs.length > 0) {
+			lines.push(`  Sources:     ${decision.sourceRefs.join(', ')}`);
+		}
+
+		lines.push('');
+		lines.push(
+			'Actions: /decisions revise <id> <text>, /decisions supersede <id> <text>, /decisions affected <id>',
+		);
+
+		return {
+			command: 'decisions',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	// /decisions revise <id> <text>
+	if (subCmd === 'revise') {
+		const decisionId = args[1];
+		const revisedText = args.slice(2).join(' ');
+
+		if (!decisionId || !revisedText.trim()) {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: ['Usage: /decisions revise <decision-id> <revised text>'],
+				shouldExit: false,
+			};
+		}
+
+		try {
+			const { reviseDecision } = await import(
+				'../intake/decision-correction.js'
+			);
+			const result = await reviseDecision({
+				decisionId,
+				newBody: revisedText.trim(),
+				newTitle: revisedText.trim().substring(0, 80),
+				projectRoot,
+			});
+
+			if (!result.success) {
+				return {
+					command: 'decisions',
+					kind: 'error',
+					messages: result.diagnostics.map((d) => d.message),
+					shouldExit: false,
+				};
+			}
+
+			const lines: string[] = [
+				'Decision revised.',
+				`  ID:        ${result.decisionId}`,
+			];
+			if (result.affectedDocuments.length > 0) {
+				lines.push(`  Affected:  ${result.affectedDocuments.join(', ')}`);
+			}
+			lines.push('');
+			lines.push('Run /decisions list to see all decisions.');
+			lines.push('Run /generate to regenerate affected documents.');
+
+			return {
+				command: 'decisions',
+				kind: 'success',
+				messages: lines,
+				shouldExit: false,
+			};
+		} catch {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: ['Decision revision service not available.'],
+				shouldExit: false,
+			};
+		}
+	}
+
+	// /decisions supersede <id> <text>
+	if (subCmd === 'supersede') {
+		const decisionId = args[1];
+		const newText = args.slice(2).join(' ');
+
+		if (!decisionId || !newText.trim()) {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: ['Usage: /decisions supersede <decision-id> <new text>'],
+				shouldExit: false,
+			};
+		}
+
+		try {
+			const { supersedeDecision } = await import(
+				'../intake/decision-correction.js'
+			);
+			const result = await supersedeDecision({
+				decisionId,
+				newBody: newText.trim(),
+				newTitle: newText.trim().substring(0, 80),
+				projectRoot,
+			});
+
+			if (!result.success) {
+				return {
+					command: 'decisions',
+					kind: 'error',
+					messages: result.diagnostics.map((d) => d.message),
+					shouldExit: false,
+				};
+			}
+
+			const lines: string[] = [
+				'Decision superseded.',
+				`  Old ID:      ${result.decisionId}`,
+				`  New ID:      ${result.newDecisionId}`,
+			];
+			if (result.affectedDocuments.length > 0) {
+				lines.push(`  Affected:    ${result.affectedDocuments.join(', ')}`);
+			}
+			lines.push('');
+			lines.push('Run /generate to regenerate affected documents.');
+
+			return {
+				command: 'decisions',
+				kind: 'success',
+				messages: lines,
+				shouldExit: false,
+			};
+		} catch {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: ['Decision supersession service not available.'],
+				shouldExit: false,
+			};
+		}
+	}
+
+	// /decisions affected <id>
+	if (subCmd === 'affected') {
+		const decisionId = args[1];
+		if (!decisionId) {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: ['Usage: /decisions affected <decision-id>'],
+				shouldExit: false,
+			};
+		}
+
+		const decision = decisions.find((d) => d.id === decisionId);
+		if (!decision) {
+			return {
+				command: 'decisions',
+				kind: 'error',
+				messages: [`Decision "${decisionId}" not found.`],
+				shouldExit: false,
+			};
+		}
+
+		const lines: string[] = ['Affected documents:'];
+
+		if (decision.affectedDocumentIds.length === 0) {
+			lines.push('  (none reported)');
+		} else {
+			for (const docId of decision.affectedDocumentIds) {
+				lines.push(`  - ${docId}`);
+			}
+		}
+
+		// Also check artifacts
+		const affectedArtifacts = readResult.state.artifacts.filter(
+			(a) =>
+				a.status === 'stale' ||
+				a.sourceDocumentIds.some((id) =>
+					decision.affectedDocumentIds.includes(id),
+				),
+		);
+
+		if (affectedArtifacts.length > 0) {
+			lines.push('');
+			lines.push('Stale artifacts:');
+			for (const a of affectedArtifacts.slice(0, 5)) {
+				lines.push(`  - ${a.path} (${a.artifactType}, ${a.status})`);
+			}
+			lines.push('');
+			lines.push('Run /generate to regenerate stale outputs.');
+		}
+
+		return {
+			command: 'decisions',
+			kind: 'success',
+			messages: lines,
+			shouldExit: false,
+		};
+	}
+
+	return {
+		command: 'decisions',
+		kind: 'error',
+		messages: [
+			`Unknown /decisions subcommand: ${subCmd}`,
+			'Valid: list, show <id>, revise <id> <text>, supersede <id> <text>, affected <id>',
+		],
+		shouldExit: false,
+	};
 }
 
 function extractFlagValue(args: string[], flag: string): string | undefined {

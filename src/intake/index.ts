@@ -23,6 +23,22 @@ export {
 	generateContextualSuggestions,
 	resetSuggestionCounter,
 } from './contextual-suggestions.js';
+export type {
+	DecisionCorrectionDiagnostic,
+	ReviseDecisionOptions,
+	ReviseDecisionResult,
+	SupersedeDecisionOptions,
+	SupersedeDecisionResult,
+} from './decision-correction.js';
+// Phase 3 — Decision Correction
+export { reviseDecision, supersedeDecision } from './decision-correction.js';
+export type {
+	DeterministicInterpretationInput,
+	DeterministicInterpretationResult,
+	IntakeInterpretationDiagnostic,
+} from './deterministic-interpreter.js';
+// Phase 3 — Deterministic Interpreter
+export { interpretIntakeText } from './deterministic-interpreter.js';
 // Step 4.2 — Intake Context Builder
 export { buildIntakeContext } from './intake-context-builder.js';
 export type {
@@ -43,8 +59,36 @@ export type {
 	IntakeContextValidationGap,
 } from './intake-context-types.js';
 export { DEFAULT_BUILDER_OPTIONS } from './intake-context-types.js';
+export type {
+	FreeFormIntakeOptions,
+	FreeFormIntakeResult,
+} from './intake-service.js';
+// Phase 3 — Intake Service (free-form intake, turn persistence, interpretation)
+export { processFreeFormIntake } from './intake-service.js';
+// Phase 3 — Intake Turn Repository
+export {
+	createIntakeTurn,
+	getIntakeTurn,
+	listIntakeTurns,
+	updateIntakeTurn,
+} from './intake-turn-repository.js';
+export type {
+	CreateIntakeTurnOptions,
+	CreateIntakeTurnResult,
+	GetIntakeTurnOptions,
+	GetIntakeTurnResult,
+	IntakeTurn,
+	IntakeTurnDiagnostic,
+	IntakeTurnRole,
+	IntakeTurnStatus,
+	ListIntakeTurnsOptions,
+	ListIntakeTurnsResult,
+	UpdateIntakeTurnOptions,
+	UpdateIntakeTurnResult,
+} from './intake-turn-types.js';
 export {
 	acceptProposal,
+	deferProposal,
 	rejectProposal,
 	reviseProposal,
 } from './proposal-lifecycle.js';

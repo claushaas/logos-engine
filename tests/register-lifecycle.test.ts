@@ -69,7 +69,7 @@ function createTempDir(): string {
 		},
 		risks: [],
 		runs: [],
-		schemaVersion: '3.1.0' as const,
+		schemaVersion: '3.2.0' as const,
 		sessions: [],
 		sources: [],
 		validationRuns: [],

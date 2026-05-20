@@ -163,7 +163,7 @@ describe('planInitWorkspace', () => {
 				source: 'bundled',
 			},
 			risks: [],
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sessions: [],
 			validationRuns: [],
 			workspace: {
@@ -261,7 +261,7 @@ describe('planInitWorkspace', () => {
 			_testTimestamp: '2024-01-01T00:00:00.000Z',
 			projectRoot: tempDir,
 		});
-		expect(plan.state.schemaVersion).toBe('3.1.0');
+		expect(plan.state.schemaVersion).toBe('3.2.0');
 	});
 });
 

@@ -605,6 +605,8 @@ function applyMigrationToState(
 	migration: WorkspaceMigrationDefinition,
 ): Record<string, unknown> {
 	switch (migration.id) {
+		case 'migrate-v3.1.0-to-v3.2.0':
+			return applyV3_1_0_To_V3_2_0(state);
 		case 'migrate-v3.0.0-to-v3.1.0':
 			return applyV3_0_0_To_V3_1_0(state);
 		case 'migrate-v2.0.0-to-v3.0.0':
@@ -632,6 +634,35 @@ function applyV3_0_0_To_V3_1_0(
 	// Ensure runs array exists with proper types
 	if (!Array.isArray(result.runs)) {
 		result.runs = [];
+	}
+
+	return result;
+}
+
+function applyV3_1_0_To_V3_2_0(
+	state: Record<string, unknown>,
+): Record<string, unknown> {
+	const result = structuredClone(state);
+	result.schemaVersion = '3.2.0';
+
+	// Ensure intakeTurns array exists
+	if (!Array.isArray(result.intakeTurns)) {
+		result.intakeTurns = [];
+	}
+
+	// Ensure existing proposals have new fields
+	if (Array.isArray(result.proposals)) {
+		result.proposals = (result.proposals as Record<string, unknown>[]).map(
+			(p) => ({
+				...p,
+				affectedDocumentIds: p.affectedDocumentIds ?? [],
+				auditEvents: p.auditEvents ?? [],
+				caveat: p.caveat,
+				diagnostics: p.diagnostics ?? [],
+				sourceLabel: p.sourceLabel,
+				sourceTurnId: p.sourceTurnId,
+			}),
+		);
 	}
 
 	return result;

@@ -25,7 +25,7 @@ function validWorkspaceState(overrides: Record<string, unknown> = {}): unknown {
 		},
 		risks: [],
 		runs: [],
-		schemaVersion: '3.1.0',
+		schemaVersion: '3.2.0',
 		sessions: [],
 		sources: [],
 		validationRuns: [],

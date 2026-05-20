@@ -24,12 +24,12 @@ import {
 // ---------------------------------------------------------------------------
 
 describe('detectSchemaVersion', () => {
-	const CURRENT = '3.1.0';
+	const CURRENT = '3.2.0';
 
 	it('detects current schema version', () => {
-		const result = detectSchemaVersion({ schemaVersion: '3.1.0' }, CURRENT);
+		const result = detectSchemaVersion({ schemaVersion: '3.2.0' }, CURRENT);
 		expect(result.detection).toBe('current');
-		expect(result.detectedVersion).toBe('3.1.0');
+		expect(result.detectedVersion).toBe('3.2.0');
 	});
 
 	it('detects older schema version', () => {
@@ -82,24 +82,24 @@ describe('detectSchemaVersion', () => {
 
 describe('compareSchemaVersions', () => {
 	it('returns 0 for equal versions', () => {
-		expect(compareSchemaVersions('3.1.0', '3.1.0')).toBe(0);
+		expect(compareSchemaVersions('3.2.0', '3.2.0')).toBe(0);
 		expect(compareSchemaVersions('1.0.0', '1.0.0')).toBe(0);
 	});
 
 	it('returns negative when a < b', () => {
-		expect(compareSchemaVersions('3.0.0', '3.1.0')).toBeLessThan(0);
+		expect(compareSchemaVersions('3.1.0', '3.2.0')).toBeLessThan(0);
 		expect(compareSchemaVersions('2.9.9', '3.0.0')).toBeLessThan(0);
-		expect(compareSchemaVersions('1.0.0', '3.1.0')).toBeLessThan(0);
+		expect(compareSchemaVersions('1.0.0', '3.2.0')).toBeLessThan(0);
 	});
 
 	it('returns positive when a > b', () => {
-		expect(compareSchemaVersions('3.2.0', '3.1.0')).toBeGreaterThan(0);
-		expect(compareSchemaVersions('4.0.0', '3.1.0')).toBeGreaterThan(0);
+		expect(compareSchemaVersions('5.0.0', '3.2.0')).toBeGreaterThan(0);
+		expect(compareSchemaVersions('4.0.0', '3.2.0')).toBeGreaterThan(0);
 	});
 
 	it('handles patch version differences', () => {
-		expect(compareSchemaVersions('3.1.1', '3.1.0')).toBeGreaterThan(0);
-		expect(compareSchemaVersions('3.1.0', '3.1.1')).toBeLessThan(0);
+		expect(compareSchemaVersions('3.2.1', '3.2.0')).toBeGreaterThan(0);
+		expect(compareSchemaVersions('3.2.0', '3.2.1')).toBeLessThan(0);
 	});
 
 	it('handles non-standard version strings gracefully', () => {
@@ -206,13 +206,13 @@ describe('buildBackupId', () => {
 // ---------------------------------------------------------------------------
 
 describe('schema version detection snapshot', () => {
-	const CURRENT = '3.1.0';
+	const CURRENT = '3.2.0';
 
 	const testCases: Array<{
 		input: unknown;
 		expected: SchemaVersionDetection;
 	}> = [
-		{ expected: 'current', input: { schemaVersion: '3.1.0' } },
+		{ expected: 'current', input: { schemaVersion: '3.2.0' } },
 		{ expected: 'older', input: { schemaVersion: '3.0.0' } },
 		{ expected: 'older', input: { schemaVersion: '2.0.0' } },
 		{ expected: 'older', input: { schemaVersion: '1.0.0' } },

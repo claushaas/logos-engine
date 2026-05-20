@@ -205,7 +205,7 @@ describe('canonical Markdown traceability integration', () => {
 				unresolvedQuestionIds: [],
 			},
 			profileId: 'standard',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			state,
 		};
 		const result = renderCanonicalMarkdownDocument(input, {
@@ -303,7 +303,7 @@ function createCanonicalMarkdownInput(
 			unresolvedQuestionIds: state.openQuestions.map((q) => q.id),
 		},
 		profileId: 'standard',
-		schemaVersion: '3.1.0',
+		schemaVersion: '3.2.0',
 		state,
 	};
 }

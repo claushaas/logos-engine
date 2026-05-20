@@ -100,7 +100,7 @@ describe('findPath', () => {
 
 describe('CURRENT_SCHEMA_VERSION', () => {
 	it('matches workspace state schema version', () => {
-		expect(CURRENT_SCHEMA_VERSION).toBe('3.1.0');
+		expect(CURRENT_SCHEMA_VERSION).toBe('3.2.0');
 	});
 
 	it('is a valid semver-like string', () => {

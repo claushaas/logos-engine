@@ -14,6 +14,7 @@ exports[`WorkspaceState schema > snapshot tests > default initialized state matc
     "wasExplicitlyConfigured": false,
   },
   "generationRuns": [],
+  "intakeTurns": [],
   "migrations": [],
   "openQuestions": [],
   "profile": {
@@ -34,7 +35,7 @@ exports[`WorkspaceState schema > snapshot tests > default initialized state matc
   },
   "risks": [],
   "runs": [],
-  "schemaVersion": "3.1.0",
+  "schemaVersion": "3.2.0",
   "sessions": [],
   "sources": [],
   "validationRuns": [],
@@ -143,6 +144,7 @@ exports[`WorkspaceState schema > snapshot tests > sample populated state matches
       "warnings": [],
     },
   ],
+  "intakeTurns": [],
   "migrations": [
     {
       "appliedAt": "2024-06-15T12:00:00.000Z",
@@ -212,7 +214,7 @@ exports[`WorkspaceState schema > snapshot tests > sample populated state matches
     },
   ],
   "runs": [],
-  "schemaVersion": "3.1.0",
+  "schemaVersion": "3.2.0",
   "sessions": [
     {
       "commandOrTrigger": "/continue",

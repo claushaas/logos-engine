@@ -144,16 +144,15 @@ describe('routeSlashCommand', () => {
 		expect(result.messages.join('\n')).toContain('/help');
 	});
 
-	it('unprefixed text returns future intake placeholder', async () => {
+	it('non-slash text routes to intake service', async () => {
 		const result = await routeSlashCommand(
 			{ kind: 'free-form', text: 'hello world' },
 			defaultContext,
 		);
-		expect(result.kind).toBe('info');
+		expect(result.kind).toBe('warning'); // workspace not initialized
 		expect(result.command).toBe('intake');
 		expect(result.shouldExit).toBe(false);
-		expect(result.messages.join('\n')).toContain('hello world');
-		expect(result.messages.join('\n')).toContain('later phase');
+		expect(result.messages.join('\n')).toContain('workspace');
 	});
 
 	it('/init shows preflight plan and requires confirmation', async () => {

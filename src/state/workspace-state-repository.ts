@@ -354,6 +354,7 @@ function createEmptyState(projectRoot: string): WorkspaceState {
 			wasExplicitlyConfigured: false,
 		},
 		generationRuns: [],
+		intakeTurns: [],
 		migrations: [],
 		openQuestions: [],
 		profile: { profileId: 'standard', source: 'bundled' },

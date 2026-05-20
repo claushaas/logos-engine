@@ -101,9 +101,13 @@ function getProposalFromState(
 
 function proposalFromRecord(r: ProposalRecord): ReviewableProposal {
 	return {
+		affectedDocumentIds: [],
+		auditEvents: undefined,
 		body: r.body,
+		caveat: undefined,
 		confidence: r.confidence as ReviewableProposal['confidence'],
 		createdAt: '',
+		diagnostics: [],
 		evidence: r.evidence,
 		extractionMetadata: r.extractionMetadata,
 		kind: r.kind as ReviewableProposal['kind'],
@@ -117,6 +121,8 @@ function proposalFromRecord(r: ProposalRecord): ReviewableProposal {
 			questionId: r.sourceQuestionId,
 			sessionId: r.sourceSessionId,
 		},
+		sourceLabel: undefined,
+		sourceTurnId: undefined,
 		status: r.status as ReviewableProposal['status'],
 		supersededByProposalId: undefined,
 		targetConfirmedRecordId: r.targetConfirmedRecordId,
@@ -412,9 +418,13 @@ export async function acceptProposal(
 			};
 
 			finalProposal = {
+				affectedDocumentIds: [],
+				auditEvents: undefined,
 				body: updated.proposals[proposalIdx]?.body ?? '',
+				caveat: undefined,
 				confidence: updated.proposals[proposalIdx]?.confidence,
 				createdAt: updated.proposals[proposalIdx]?.createdAt ?? '',
+				diagnostics: [],
 				evidence: updated.proposals[proposalIdx]?.evidence,
 				extractionMetadata: updated.proposals[proposalIdx]?.extractionMetadata
 					? {
@@ -448,6 +458,8 @@ export async function acceptProposal(
 					questionId: updated.proposals[proposalIdx]?.sourceQuestionId,
 					sessionId: updated.proposals[proposalIdx]?.sourceSessionId,
 				},
+				sourceLabel: undefined,
+				sourceTurnId: updated.proposals[proposalIdx]?.sourceTurnId,
 				status: 'accepted',
 				supersededByProposalId: undefined,
 				targetConfirmedRecordId: isContentHint ? undefined : recordId,
@@ -523,9 +535,13 @@ export async function acceptProposal(
 			);
 			if (wp) {
 				finalProposal = {
+					affectedDocumentIds: [],
+					auditEvents: undefined,
 					body: wp.body ?? '',
+					caveat: undefined,
 					confidence: wp.confidence,
 					createdAt: wp.createdAt ?? '',
+					diagnostics: [],
 					evidence: wp.evidence,
 					extractionMetadata: wp.extractionMetadata
 						? {
@@ -553,6 +569,8 @@ export async function acceptProposal(
 						questionId: wp.sourceQuestionId,
 						sessionId: wp.sourceSessionId,
 					},
+					sourceLabel: undefined,
+					sourceTurnId: wp.sourceTurnId,
 					status: wp.status,
 					supersededByProposalId: undefined,
 					targetConfirmedRecordId: wp.targetConfirmedRecordId,
@@ -637,9 +655,13 @@ export async function rejectProposal(
 			};
 
 			finalProposal = {
+				affectedDocumentIds: [],
+				auditEvents: undefined,
 				body: updated.proposals[proposalIdx]?.body ?? '',
+				caveat: undefined,
 				confidence: updated.proposals[proposalIdx]?.confidence,
 				createdAt: updated.proposals[proposalIdx]?.createdAt ?? '',
+				diagnostics: [],
 				evidence: updated.proposals[proposalIdx]?.evidence,
 				extractionMetadata: updated.proposals[proposalIdx]?.extractionMetadata
 					? {
@@ -673,6 +695,8 @@ export async function rejectProposal(
 					questionId: updated.proposals[proposalIdx]?.sourceQuestionId,
 					sessionId: updated.proposals[proposalIdx]?.sourceSessionId,
 				},
+				sourceLabel: undefined,
+				sourceTurnId: updated.proposals[proposalIdx]?.sourceTurnId,
 				status: 'rejected',
 				supersededByProposalId: undefined,
 				targetConfirmedRecordId:
@@ -815,9 +839,13 @@ export async function reviseProposal(
 			// Create new revised proposal
 			const newProposalId = idFactory();
 			const newProposal: typeof proposal = {
+				affectedDocumentIds: proposal.affectedDocumentIds ?? [],
+				auditEvents: proposal.auditEvents ?? [],
 				body: options.body,
+				caveat: proposal.caveat,
 				confidence: proposal.confidence,
 				createdAt: now,
+				diagnostics: proposal.diagnostics ?? [],
 				evidence: proposal.evidence,
 				extractionMetadata: proposal.extractionMetadata,
 				kind: proposal.kind,
@@ -826,9 +854,11 @@ export async function reviseProposal(
 				revisionHistory,
 				sourceAnswerId: proposal.sourceAnswerId,
 				sourceDocumentCanonicalId: proposal.sourceDocumentCanonicalId,
+				sourceLabel: proposal.sourceLabel,
 				sourcePhaseId: proposal.sourcePhaseId,
 				sourceQuestionId: proposal.sourceQuestionId,
 				sourceSessionId: proposal.sourceSessionId,
+				sourceTurnId: proposal.sourceTurnId,
 				status: 'proposed',
 				supersededByProposalId: undefined,
 				targetConfirmedRecordId: undefined,
@@ -839,9 +869,13 @@ export async function reviseProposal(
 			updated.proposals = [...updated.proposals, newProposal];
 
 			finalProposal = {
+				affectedDocumentIds: [],
+				auditEvents: undefined,
 				body: options.body,
+				caveat: undefined,
 				confidence: proposal.confidence,
 				createdAt: now,
+				diagnostics: [],
 				evidence: proposal.evidence,
 				extractionMetadata: proposal.extractionMetadata
 					? {
@@ -862,6 +896,8 @@ export async function reviseProposal(
 					questionId: proposal.sourceQuestionId,
 					sessionId: proposal.sourceSessionId,
 				},
+				sourceLabel: undefined,
+				sourceTurnId: proposal.sourceTurnId,
 				status: 'proposed',
 				supersededByProposalId: undefined,
 				targetConfirmedRecordId: undefined,
@@ -919,6 +955,151 @@ export async function reviseProposal(
 		dryRun: options.dryRun ?? false,
 		proposal: finalProposal,
 		proposalId: finalProposal?.proposalId ?? options.proposalId,
+		success: true,
+	};
+}
+
+// ---------------------------------------------------------------------------
+// Defer
+// ---------------------------------------------------------------------------
+
+export interface DeferProposalOptions {
+	proposalId: string;
+	projectRoot: string;
+	reason?: string | undefined;
+	dryRun?: boolean | undefined;
+	clock?: { now(): string } | undefined;
+	_fs?: import('../fs/safe-filesystem.js').SafeFsAdapter | undefined;
+	_testTimestamp?: string | undefined;
+	_testRandomId?: string | undefined;
+}
+
+export async function deferProposal(
+	options: DeferProposalOptions,
+): Promise<ProposalLifecycleResult> {
+	const diagnostics: ProposalDiagnostic[] = [];
+	const clock = options.clock ?? { now: () => new Date().toISOString() };
+	let finalProposal: ReviewableProposal | undefined;
+
+	const result = await updateWorkspaceState({
+		_fs: options._fs,
+		_testRandomId: options._testRandomId,
+		_testTimestamp: options._testTimestamp,
+		dryRun: options.dryRun,
+		projectRoot: options.projectRoot,
+		updater: (state: WorkspaceState) => {
+			const proposalIdx = state.proposals.findIndex(
+				(p) => p.proposalId === options.proposalId,
+			);
+			if (proposalIdx === -1) {
+				diagnostics.push(
+					mkDiag(
+						'E_PROPOSAL_NOT_FOUND',
+						`Proposal "${options.proposalId}" not found.`,
+					),
+				);
+				return state;
+			}
+
+			const proposal = state.proposals[proposalIdx];
+			if (!proposal) return state;
+
+			// Only proposed proposals can be deferred
+			if (proposal.status !== 'proposed') {
+				diagnostics.push(
+					mkDiag(
+						'E_INVALID_TRANSITION',
+						`Cannot defer proposal with status "${proposal.status}"; only "proposed" proposals can be deferred.`,
+						'error',
+						`proposals.${options.proposalId}`,
+					),
+				);
+				return state;
+			}
+
+			const now = clock.now();
+			const updated = structuredClone(state);
+
+			// Create audit event
+			const auditEvent = {
+				actor: 'user',
+				changedPaths: [],
+				eventId: `audit-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+				eventType: 'proposal_deferred',
+				sessionRef: proposal.sourceSessionId,
+				summary: `Proposal "${options.proposalId}" deferred${options.reason ? `: ${options.reason}` : ''}.`,
+				timestamp: now,
+			};
+
+			updated.proposals[proposalIdx] = {
+				...proposal,
+				auditEvents: [...(proposal.auditEvents ?? []), auditEvent],
+				status: 'deferred',
+				updatedAt: now,
+			};
+
+			// Also add to global audit events
+			updated.auditEvents = [...updated.auditEvents, auditEvent];
+
+			finalProposal = proposalFromRecord(
+				getProposalFromState(updated, options.proposalId) ?? {
+					body: updated.proposals[proposalIdx]?.body ?? '',
+					confidence: updated.proposals[proposalIdx]?.confidence,
+					evidence: updated.proposals[proposalIdx]?.evidence,
+					extractionMetadata:
+						updated.proposals[proposalIdx]?.extractionMetadata,
+					kind: updated.proposals[proposalIdx]?.kind ?? 'decision',
+					proposalId: options.proposalId,
+					revisionHistory: undefined,
+					sourceAnswerId: updated.proposals[proposalIdx]?.sourceAnswerId,
+					sourceDocumentCanonicalId:
+						updated.proposals[proposalIdx]?.sourceDocumentCanonicalId,
+					sourcePhaseId: updated.proposals[proposalIdx]?.sourcePhaseId,
+					sourceQuestionId: updated.proposals[proposalIdx]?.sourceQuestionId,
+					sourceSessionId: updated.proposals[proposalIdx]?.sourceSessionId,
+					status: 'deferred',
+					targetConfirmedRecordId:
+						updated.proposals[proposalIdx]?.targetConfirmedRecordId,
+					title: updated.proposals[proposalIdx]?.title ?? '',
+				},
+			);
+
+			return updated;
+		},
+	});
+
+	if (!result.success) {
+		for (const d of result.diagnostics) {
+			diagnostics.push({
+				code: `state_${d.code}`,
+				message: d.message,
+				path: d.path,
+				recoveryHint: d.recoveryHint,
+				severity: d.severity,
+			});
+		}
+	}
+
+	const notFoundDiag = diagnostics.find(
+		(d) => d.code === 'E_PROPOSAL_NOT_FOUND',
+	);
+	if (notFoundDiag) {
+		return {
+			changedPaths: result.changedPaths,
+			diagnostics,
+			dryRun: options.dryRun ?? false,
+			proposal: undefined,
+			proposalId: options.proposalId,
+			success: false,
+		};
+	}
+
+	return {
+		changedPaths: result.changedPaths,
+		diagnostics,
+		dryRun: options.dryRun ?? false,
+		proposal: finalProposal,
+		proposalId: options.proposalId,
 		success: true,
 	};
 }

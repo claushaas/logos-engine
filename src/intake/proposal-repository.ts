@@ -24,9 +24,20 @@ function workspaceProposalToReviewable(
 	wp: WorkspaceProposal,
 ): ReviewableProposal {
 	return {
+		affectedDocumentIds: wp.affectedDocumentIds ?? [],
+		auditEvents: (wp.auditEvents ?? []).map((a) => ({
+			actor: a.actor,
+			eventId: a.eventId,
+			eventType: a.eventType,
+			sessionRef: a.sessionRef,
+			summary: a.summary,
+			timestamp: a.timestamp,
+		})),
 		body: wp.body ?? '',
+		caveat: wp.caveat,
 		confidence: wp.confidence,
 		createdAt: wp.createdAt ?? '',
+		diagnostics: wp.diagnostics ?? [],
 		evidence: wp.evidence,
 		extractionMetadata: wp.extractionMetadata
 			? {
@@ -54,6 +65,8 @@ function workspaceProposalToReviewable(
 			questionId: wp.sourceQuestionId,
 			sessionId: wp.sourceSessionId,
 		},
+		sourceLabel: wp.sourceLabel,
+		sourceTurnId: wp.sourceTurnId,
 		status: wp.status,
 		supersededByProposalId: wp.supersededByProposalId,
 		targetConfirmedRecordId: wp.targetConfirmedRecordId,
@@ -66,9 +79,25 @@ function reviewableToWorkspaceProposal(
 	p: ReviewableProposal,
 ): WorkspaceProposal {
 	return {
+		affectedDocumentIds: p.affectedDocumentIds ?? [],
+		auditEvents: (p.auditEvents ?? []).map((a) => ({
+			actor: a.actor,
+			changedPaths: [],
+			commandRef: undefined,
+			eventId: a.eventId,
+			eventType: a.eventType,
+			runRef: undefined,
+			sessionRef: a.sessionRef,
+			summary: a.summary,
+			targetEntityRef: undefined,
+			targetPath: undefined,
+			timestamp: a.timestamp,
+		})),
 		body: p.body,
+		caveat: p.caveat,
 		confidence: p.confidence,
 		createdAt: p.createdAt,
+		diagnostics: p.diagnostics ?? [],
 		evidence: p.evidence,
 		extractionMetadata: p.extractionMetadata
 			? {
@@ -91,9 +120,11 @@ function reviewableToWorkspaceProposal(
 			: undefined,
 		sourceAnswerId: p.source.answerId,
 		sourceDocumentCanonicalId: p.source.documentCanonicalId,
+		sourceLabel: p.sourceLabel,
 		sourcePhaseId: p.source.phaseId,
 		sourceQuestionId: p.source.questionId,
 		sourceSessionId: p.source.sessionId,
+		sourceTurnId: p.sourceTurnId,
 		status: p.status,
 		supersededByProposalId: p.supersededByProposalId,
 		targetConfirmedRecordId: p.targetConfirmedRecordId,
@@ -261,9 +292,13 @@ export async function createProposals(
 		dryRun: options.dryRun ?? false,
 		proposal: proposals[proposals.length - 1] ??
 			proposals[0] ?? {
+				affectedDocumentIds: [],
+				auditEvents: undefined,
 				body: '',
+				caveat: undefined,
 				confidence: undefined,
 				createdAt: '',
+				diagnostics: [],
 				evidence: undefined,
 				extractionMetadata: undefined,
 				kind: 'decision',
@@ -277,6 +312,8 @@ export async function createProposals(
 					questionId: undefined,
 					sessionId: undefined,
 				},
+				sourceLabel: undefined,
+				sourceTurnId: undefined,
 				status: 'proposed',
 				supersededByProposalId: undefined,
 				targetConfirmedRecordId: undefined,

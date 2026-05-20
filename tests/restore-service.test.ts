@@ -99,7 +99,7 @@ describe('planRestore', () => {
 			includedPaths: ['workspace.json'],
 			manifestVersion: '1.0.0',
 			reason: 'Test',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		};
 
@@ -119,7 +119,7 @@ describe('planRestore', () => {
 			includedPaths: ['workspace.json'],
 			manifestVersion: '1.0.0',
 			reason: 'Test',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		};
 
@@ -414,7 +414,7 @@ describe('restore plan snapshot', () => {
 			includedPaths: ['workspace.json'],
 			manifestVersion: '1.0.0',
 			reason: 'Test backup',
-			schemaVersion: '3.1.0',
+			schemaVersion: '3.2.0',
 			sourceWorkspacePath: '.',
 		};
 

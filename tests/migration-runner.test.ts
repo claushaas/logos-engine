@@ -528,7 +528,7 @@ describe('multi-step migrations', () => {
 			});
 
 			expect(plan.status).toBe('planned');
-			expect(plan.items.length).toBe(3); // 1.0.0->2.0.0, 2.0.0->3.0.0, 3.0.0->3.1.0
+			expect(plan.items.length).toBe(4); // 1.0.0->2.0.0, 2.0.0->3.0.0, 3.0.0->3.1.0, 3.1.0->3.2.0
 
 			const result = await applyMigrations({
 				options: {
@@ -542,7 +542,7 @@ describe('multi-step migrations', () => {
 			});
 
 			expect(result.success).toBe(true);
-			expect(result.appliedMigrations).toHaveLength(3);
+			expect(result.appliedMigrations).toHaveLength(4);
 
 			// Verify resulting state
 			const content = await readFile(workspaceFilePath, 'utf-8');
