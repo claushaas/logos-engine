@@ -1853,6 +1853,50 @@ export {
 } from './state/restore-service.js';
 
 // ---------------------------------------------------------------------------
+// Step 13.4 — Package and Release Candidate Smoke
+// ---------------------------------------------------------------------------
+
+export type {
+	PackageContentsEntry,
+	PackageContentsFinding,
+	PackageContentsResult,
+	PackageMetadataSummary,
+	PackageSmokeCheck,
+	PackageSmokeCheckKind,
+	PackageSmokeDiagnostic,
+	PackageSmokeInput,
+	PackageSmokeOptions,
+	PackageSmokeStatus,
+	ReleaseCandidateChangedPath,
+	ReleaseCandidateCommandSmokeResult,
+	ReleaseCandidateSmokeReport,
+	ReleaseCandidateSmokeResult,
+} from './release/index.js';
+export {
+	BUNDLED_PROFILE_EXPECTED,
+	BUNDLED_PROFILE_PHASE_EXPECTED,
+	buildReleaseCandidateSmokeReport,
+	checkPackageContents,
+	comparePackageSmokeCheckKind,
+	comparePackageSmokeStatus,
+	DIST_EXPECTED_FILES,
+	getExpectedIncludedFiles,
+	PACKAGE_EXCLUDED_PATTERNS,
+	PACKAGE_EXPECTED_FILES,
+	PACKAGE_SENSITIVE_MARKERS,
+	PACKAGE_SMOKE_CHECK_KIND_ORDER,
+	PACKAGE_SMOKE_RECOVERY_HINTS,
+	PACKAGE_SMOKE_STATUS_ORDER,
+	REQUIRED_PACKAGE_FIELDS,
+	REQUIRED_SCRIPTS,
+	runReleaseCandidateSmoke,
+	SMOKE_CLI_COMMANDS,
+	shouldExcludeFromPackage,
+	sortPackageSmokeChecks,
+	sortPackageSmokeDiagnostics,
+} from './release/index.js';
+
+// ---------------------------------------------------------------------------
 // Step 13.3 — Complete Security and Privacy Release Checks
 // ---------------------------------------------------------------------------
 
