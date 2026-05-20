@@ -216,18 +216,17 @@ describe('startup-briefing', () => {
 			);
 		});
 
-		it('does NOT claim unsupported commands are fully implemented', () => {
+		it('marks unimplemented commands accordingly', () => {
 			const briefing = buildDeterministicStartupBriefing(emptyInput);
 
 			const stubCommands = briefing.actions.filter((a) => !a.isImplemented);
-			expect(stubCommands.length).toBeGreaterThan(0);
-
+			// Only /config ai remains unimplemented
 			for (const action of stubCommands) {
-				expect(action.isImplemented).toBe(false);
+				expect(action.command).toBe('/config ai');
 			}
 		});
 
-		it('suggests /continue when question cluster available (even if stub)', () => {
+		it('suggests /continue when question cluster available', () => {
 			const briefing = buildDeterministicStartupBriefing({
 				...emptyInput,
 				questionCluster: {
@@ -267,8 +266,7 @@ describe('startup-briefing', () => {
 				(a) => a.actionId === 'continue',
 			);
 			expect(continueAction).toBeDefined();
-			// /continue is still a stub in Phase 4
-			expect(continueAction?.isImplemented).toBe(false);
+			expect(continueAction?.isImplemented).toBe(true);
 		});
 
 		it('handles uninitialized workspace gracefully', () => {

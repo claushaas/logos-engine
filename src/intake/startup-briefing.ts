@@ -142,8 +142,8 @@ export function buildDeterministicStartupBriefing(
 			actionId: 'continue',
 			command: '/continue',
 			description: 'Continue intake session',
-			isImplemented: false,
-			isSuggestion: true,
+			isImplemented: true,
+			isSuggestion: false,
 			priority: 'high',
 		});
 	}
@@ -164,18 +164,18 @@ export function buildDeterministicStartupBriefing(
 			actionId: 'review_questions',
 			command: '/continue',
 			description: `${input.openQuestionCount} open question(s) to address`,
-			isImplemented: false,
+			isImplemented: true,
 			isSuggestion: true,
 			priority: 'medium',
 		});
 	}
 
-	// Future stub commands (clearly labeled)
+	// Core commands
 	actions.push({
 		actionId: 'future_generate',
 		command: '/generate',
-		description: 'Generate canonical Markdown (not yet implemented)',
-		isImplemented: false,
+		description: 'Generate canonical Markdown documentation',
+		isImplemented: true,
 		isSuggestion: true,
 		priority: 'low',
 	});
@@ -183,8 +183,8 @@ export function buildDeterministicStartupBriefing(
 	actions.push({
 		actionId: 'future_validate',
 		command: '/validate',
-		description: 'Run validation (not yet implemented)',
-		isImplemented: false,
+		description: 'Run deterministic validation',
+		isImplemented: true,
 		isSuggestion: true,
 		priority: 'low',
 	});
@@ -192,8 +192,8 @@ export function buildDeterministicStartupBriefing(
 	actions.push({
 		actionId: 'future_diagnose',
 		command: '/diagnose',
-		description: 'Run diagnostics (not yet implemented)',
-		isImplemented: false,
+		description: 'Run diagnostic analysis',
+		isImplemented: true,
 		isSuggestion: true,
 		priority: 'low',
 	});
@@ -527,7 +527,7 @@ function buildActions(
 			actionId: item.id,
 			command: '/continue',
 			description: redactString(item.text),
-			isImplemented: false,
+			isImplemented: true,
 			isSuggestion: true,
 			priority: item.priority === 'critical' ? 'high' : item.priority,
 		});
@@ -548,8 +548,8 @@ function buildActions(
 			actionId: 'continue',
 			command: '/continue',
 			description: 'Continue intake session',
-			isImplemented: false,
-			isSuggestion: true,
+			isImplemented: true,
+			isSuggestion: false,
 			priority: 'high',
 		});
 	}
