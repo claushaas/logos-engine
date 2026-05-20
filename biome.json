@@ -32,6 +32,7 @@
 			"!**/*.spec.ts",
 			"!**/.github",
 			"!**/.rnstorybook",
+			"!**/.pi-lens",
 			"!**/executive-overview.html"
 		]
 	},

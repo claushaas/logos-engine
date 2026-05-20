@@ -150,14 +150,6 @@ function hasRawPromptMarkers(text: string): boolean {
 	return RAW_PROMPT_MARKERS.some((p) => p.test(text));
 }
 
-function looksLikeTranscript(text: string): boolean {
-	return contentLooksLikeTranscriptExtraction(text);
-}
-
-function looksLikeDerivedArtifact(text: string): boolean {
-	return contentLooksLikeDerivedArtifactExtraction(text);
-}
-
 // ---------------------------------------------------------------------------
 // Bounded snippet helpers
 // ---------------------------------------------------------------------------
@@ -324,7 +316,7 @@ function isDerivedArtifactCandidate(
 	return (
 		pathLooksLikeDerivedArtifactExtraction(candidate.relativePath) ||
 		(candidate.contentSnippet
-			? looksLikeDerivedArtifact(candidate.contentSnippet)
+			? contentLooksLikeDerivedArtifactExtraction(candidate.contentSnippet)
 			: false)
 	);
 }
@@ -335,7 +327,7 @@ function isTranscriptCandidate(
 	return (
 		candidate.kind === 'transcript' ||
 		(candidate.contentSnippet
-			? looksLikeTranscript(candidate.contentSnippet)
+			? contentLooksLikeTranscriptExtraction(candidate.contentSnippet)
 			: false)
 	);
 }

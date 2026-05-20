@@ -978,12 +978,13 @@ export async function loadProfileRegistry(
 	let rawContent: string;
 	try {
 		rawContent = readFileSync(registryPath, 'utf-8');
-	} catch (_err) {
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
 		throw new ProfileRegistryError([
 			{
 				code: 'E_PROFILE_MISSING_FILE',
 				fieldPath: undefined,
-				message: `Profile registry file not found: ${registryPath}`,
+				message: `Profile registry file not found: ${registryPath} — ${errorMessage}`,
 				path: registryPath,
 			},
 		]);

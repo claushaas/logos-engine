@@ -165,11 +165,13 @@ export async function loadDocumentationContract(
 		let rawContent: string;
 		try {
 			rawContent = readFileSync(phasePath, 'utf-8');
-		} catch (_err) {
+		} catch (error) {
+			const errorMessage =
+				error instanceof Error ? error.message : String(error);
 			diagnostics.push(
 				createPhaseDiagnostic(
 					'E_PHASE_READ_ERROR',
-					`Failed to read phase descriptor file: ${phasePath}`,
+					`Failed to read phase descriptor file: ${phasePath} — ${errorMessage}`,
 					phasePath,
 					undefined,
 				),
@@ -439,11 +441,13 @@ export async function loadDocumentationContract(
 			let canonicalId: CanonicalDocumentId;
 			try {
 				canonicalId = normalizeCanonicalId(descriptor.id);
-			} catch (_err) {
+			} catch (error) {
+				const errorMessage =
+					error instanceof Error ? error.message : String(error);
 				diagnostics.push(
 					createPhaseDiagnostic(
 						'E_DOCUMENT_EMPTY_ID',
-						`Document descriptor has an empty or whitespace-only ID`,
+						`Document descriptor has an empty or whitespace-only ID — ${errorMessage}`,
 						docPath,
 						'document.id',
 					),

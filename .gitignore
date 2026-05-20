@@ -6,3 +6,4 @@ coverage/
 .logos
 .env
 .env.*
+.pi-lens/

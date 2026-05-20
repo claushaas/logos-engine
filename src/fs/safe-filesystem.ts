@@ -147,7 +147,7 @@ const nodeFsAdapter: SafeFsAdapter = {
 	async mkdir(path: string, options?: { recursive?: boolean }) {
 		return mkdir(path, { recursive: options?.recursive ?? false });
 	},
-	async rename(oldPath: string, newPath: string) {
+	rename(oldPath: string, newPath: string) {
 		return rename(oldPath, newPath);
 	},
 	async writeFile(path: string, data: string | Uint8Array) {

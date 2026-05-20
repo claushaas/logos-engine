@@ -286,12 +286,13 @@ export async function loadDocumentSchema(
 	let rawContent: string;
 	try {
 		rawContent = readFileSync(schemaPath, 'utf-8');
-	} catch (_err) {
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
 		throw new DocumentDescriptorValidationErrorClass([
 			{
 				code: 'E_SCHEMA_MISSING_FILE',
 				fieldPath: undefined,
-				message: `Document schema file not found: ${schemaPath}`,
+				message: `Document schema file not found: ${schemaPath} — ${errorMessage}`,
 				path: schemaPath,
 			},
 		]);
@@ -949,12 +950,13 @@ export async function loadAndValidateDocumentDescriptor(
 	let rawContent: string;
 	try {
 		rawContent = readFileSync(path, 'utf-8');
-	} catch (_err) {
+	} catch (error) {
+		const errorMessage = error instanceof Error ? error.message : String(error);
 		throw new DocumentDescriptorValidationErrorClass([
 			{
 				code: 'E_DESCRIPTOR_MISSING_FILE',
 				fieldPath: undefined,
-				message: `Document descriptor file not found: ${path}`,
+				message: `Document descriptor file not found: ${path} — ${errorMessage}`,
 				path,
 			},
 		]);

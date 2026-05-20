@@ -164,10 +164,6 @@ function normalizeCoverageKey(value: string): string {
 		.toLowerCase();
 }
 
-function normalizeDocumentKey(value: string): string {
-	return normalizeCoverageKey(value);
-}
-
 function mapWritePolicy(
 	policy: ExecutiveCompileOptions['writePolicy'],
 ): 'skip_if_exists' | 'fail_if_exists' | 'backup_and_overwrite' | 'overwrite' {
@@ -335,7 +331,7 @@ function buildReadinessInput(params: {
 	const docByPhaseAndCoverageKey = new Map<string, CanonicalDocumentId>();
 	for (const doc of contract.documents) {
 		docByPhaseAndCoverageKey.set(
-			`${doc.phaseId}:${normalizeDocumentKey(doc.canonicalId)}`,
+			`${doc.phaseId}:${normalizeCoverageKey(doc.canonicalId)}`,
 			doc.canonicalId as CanonicalDocumentId,
 		);
 	}
@@ -351,7 +347,7 @@ function buildReadinessInput(params: {
 			requiredPhaseIds.push(phaseId);
 			for (const requiredDoc of coverage.requiredDocuments) {
 				const docId = docByPhaseAndCoverageKey.get(
-					`${phaseId}:${normalizeDocumentKey(requiredDoc)}`,
+					`${phaseId}:${normalizeCoverageKey(requiredDoc)}`,
 				);
 				if (docId) requiredDocumentIds.push(docId);
 			}

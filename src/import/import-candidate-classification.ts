@@ -537,6 +537,10 @@ function extractFrontmatterKeys(content: string): string[] {
 	return keys;
 }
 
+function escapeRegExp(input: string): string {
+	return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function extractFrontmatterValue(
 	content: string,
 	key: string,
@@ -544,7 +548,7 @@ function extractFrontmatterValue(
 	const fm = parseFrontmatterRaw(content);
 	if (!fm) return undefined;
 
-	const regex = new RegExp(`^${key}\\s*:\\s*(.+)$`, 'm');
+	const regex = new RegExp(`^${escapeRegExp(key)}\\s*:\\s*(.+)$`, 'm');
 	const match = fm.match(regex);
 	if (match?.[1]) {
 		return match[1].trim().replace(/^["']|["']$/g, '');
@@ -628,7 +632,7 @@ function extractYamlTopLevelKeys(content: string): string[] {
 }
 
 function extractYamlValue(content: string, key: string): string | undefined {
-	const regex = new RegExp(`^${key}\\s*:\\s*(.+)$`, 'm');
+	const regex = new RegExp(`^${escapeRegExp(key)}\\s*:\\s*(.+)$`, 'm');
 	const match = content.match(regex);
 	if (match?.[1]) {
 		return match[1].trim().replace(/^["']|["']$/g, '');
