@@ -103,7 +103,7 @@ Inside the TUI, slash commands drive system operations:
 | `/graph --phase <id>` | Filter graph by phase | No | No |
 | `/graph --doc <id>` | Filter graph by document | No | No |
 | `/graph --mode full` | Full graph output | No | No |
-| `/config ai` | Configure AI provider (recognized stub, not yet implemented) | No | No |
+| `/config ai` | Configure AI provider (status, mode, provider, model, endpoint, token, timeout, disclosure, test, disable, reset) | Yes | No |
 | `/executive compile` | Preflight Executive Axis compilation | No | Yes |
 | `/executive compile --confirm` | Execute Executive compilation (JSON + exports) | Yes | Yes |
 | `/executive compile --dry-run` | Dry-run executive compilation | No | Yes |
@@ -313,8 +313,10 @@ abstraction. Supported presets:
 - **LM Studio** — local models via OpenAI-compatible endpoint
 - **Custom** — any OpenAI-compatible endpoint
 
-Configure via `/config ai` in the TUI (currently a recognized stub, planned for
-a future phase) or edit `.logos/config.json`:
+Configure via `/config ai` in the TUI. Token values are configured by setting
+an environment variable name only (e.g., `/config ai token-env OPENAI_API_KEY`).
+Raw token values are never stored or displayed. Remote providers require
+disclosure acceptance before context will be sent.
 
 ```json
 {

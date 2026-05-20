@@ -132,9 +132,13 @@ describe('planInitWorkspace', () => {
 			projectRoot: tempDir,
 		});
 		expect(plan.profile.validated).toBe(false);
-		expect(plan.diagnostics.some((d) => d.code === 'unknown_profile')).toBe(
-			true,
-		);
+		expect(
+			plan.diagnostics.some(
+				(d) =>
+					d.code === 'LOGOS_PROFILE_REGISTRY_MISSING' ||
+					d.code === 'unknown_profile',
+			),
+		).toBe(true);
 	});
 
 	it('existing .logos/ valid state reports already initialized', async () => {

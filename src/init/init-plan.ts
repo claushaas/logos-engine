@@ -2,6 +2,10 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { isAbsolute, join, normalize, relative, resolve } from 'node:path';
+import {
+	type ActiveProfileSource,
+	resolveActiveProfileRuntimePaths,
+} from '../profiles/profile-runtime-paths.js';
 import { detectProjectRoot } from '../runtime/project-context.js';
 import { WORKSPACE_STATE_SCHEMA_VERSION } from '../state/workspace-state.schema.js';
 import { createDefaultWorkspaceState } from '../state/workspace-state-defaults.js';
@@ -68,9 +72,10 @@ export async function planInitWorkspace(
 	);
 
 	// 4. Validate and select profile
-	const profileSelection = await validateProfileSelection(
+	const profileSelection = validateProfileSelection(
 		options.profileId ?? undefined,
-		timestamp,
+		options.profileRoot ?? undefined,
+		projectRoot,
 		diagnostics,
 	);
 
@@ -102,11 +107,17 @@ export async function planInitWorkspace(
 	state.workspace.initializationState = 'initialized';
 	state.workspace.initializedBy = '/init';
 	state.profile.lockedAt = timestamp;
-	state.profile.source = profileSelection.source;
+	state.profile.source = profileSelection.source as ActiveProfileSource;
 	state.profile.profileSchemaVersion = WORKSPACE_STATE_SCHEMA_VERSION;
 	if (profileSelection.registryPath) {
 		state.profile.registryPath = profileSelection.registryPath;
 	}
+	if (profileSelection.safeProfileRoot) {
+		state.profile.safeProfileRoot = profileSelection.safeProfileRoot;
+	}
+	state.profile.contractStatus = profileSelection.contractStatus;
+	state.profile.executiveContractStatus =
+		profileSelection.executiveContractStatus;
 
 	// 6. Validate the state before proceeding
 	const validation = validateWorkspaceState(state);
@@ -249,70 +260,45 @@ function validateDocumentationRoot(
 	};
 }
 
-async function validateProfileSelection(
+function validateProfileSelection(
 	profileId: string | undefined,
-	_timestamp: string,
+	profileRoot: string | undefined,
+	projectRoot: string,
 	diagnostics: InitWorkspaceDiagnostic[],
-): Promise<InitWorkspaceProfileSelection> {
+): InitWorkspaceProfileSelection {
 	const id = profileId ?? DEFAULT_PROFILE_ID;
 
-	if (id !== DEFAULT_PROFILE_ID) {
-		try {
-			const { loadProfileRegistry } = await import(
-				'../profiles/profile-registry.js'
-			);
-			const profileRoot = resolve(import.meta.dirname, '../../profiles', id);
-			const registryPath = join(profileRoot, 'docs.yml');
+	const runtimePaths = resolveActiveProfileRuntimePaths({
+		profileId: id,
+		profileRoot,
+		projectRoot,
+		requireExecutive: false,
+	});
 
-			if (!existsSync(registryPath)) {
-				diagnostics.push({
-					code: 'unknown_profile',
-					message: `Profile "${id}" is not available as a bundled or local profile.`,
-					path: registryPath,
-					recoveryHint: `Use "standard" as the profile, or verify the profile "${id}" exists under profiles/.`,
-					severity: 'error',
-				});
-				return {
-					profileId: id,
-					source: 'bundled',
-					validated: false,
-				};
-			}
-
-			await loadProfileRegistry({
-				profileId: id,
-				profileRoot,
-			});
-
-			return {
-				profileId: id,
-				registryPath,
-				source: 'bundled',
-				validated: true,
-			};
-		} catch (err: unknown) {
-			const message = err instanceof Error ? err.message : String(err);
-			diagnostics.push({
-				code: 'profile_load_failed',
-				message: `Failed to load profile "${id}": ${message}`,
-				path: id,
-				recoveryHint:
-					'Use "standard" as the profile, or ensure the profile configuration is valid.',
-				severity: 'error',
-			});
-			return {
-				profileId: id,
-				source: 'bundled',
-				validated: false,
-			};
-		}
+	// Map contract diagnostics to init diagnostics
+	for (const diag of runtimePaths.contractDiagnostics) {
+		diagnostics.push({
+			code: diag.code,
+			message: diag.message,
+			path: diag.sourcePath ?? runtimePaths.safeDisplay.profileRoot,
+			recoveryHint: diag.recoveryHint,
+			severity: diag.severity,
+		});
 	}
 
-	// Standard profile — always valid for now
+	const validated =
+		runtimePaths.contractStatus === 'valid' &&
+		runtimePaths.source !== 'unknown';
+
 	return {
-		profileId: id,
-		source: 'bundled',
-		validated: true,
+		contractStatus: runtimePaths.contractStatus,
+		executiveContractStatus: runtimePaths.executiveContractStatus,
+		profileId: runtimePaths.profileId,
+		profileVersion: runtimePaths.profileVersion,
+		registryPath: runtimePaths.registryPath,
+		safeProfileRoot: runtimePaths.safeDisplay.profileRoot,
+		source: runtimePaths.source as InitWorkspaceProfileSelection['source'],
+		validated,
 	};
 }
 

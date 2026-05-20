@@ -1,0 +1,28 @@
+documentSchema:
+  version: "1.0.0-custom"
+  requiredFields:
+    - id
+    - title
+    - status
+  statusValues:
+    - draft
+    - review
+    - current
+  outputs:
+    canonical:
+      format: markdown
+      pathPattern: "{phase}/{documentId}.md"
+    html:
+      format: html
+      pathPattern: "{phase}/{documentId}.html"
+  sections:
+    - id: purpose
+      required: true
+    - id: content
+      required: true
+  qualityChecks:
+    - id: has-title
+      severity: error
+  antiPatterns:
+    - id: empty-section
+      severity: warning

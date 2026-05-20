@@ -996,6 +996,7 @@ function buildMetadata(
 	compilationMode: string,
 	diagnosticOnly: boolean,
 	executorVersion: string | undefined,
+	profileSource: string | undefined,
 ): Record<string, unknown> {
 	return {
 		baselineFingerprint: fingerprint,
@@ -1011,6 +1012,7 @@ function buildMetadata(
 		nonCanonical: true,
 		planId,
 		profileId: readiness.activeProfileId,
+		profileSource: profileSource ?? 'unknown',
 		profileVersion: readiness.profileVersion ?? 'unknown',
 		readinessStatus: readiness.status,
 		readinessSummary: readiness.summary,
@@ -1106,8 +1108,23 @@ function checkSecurity(plan: ExecutivePlanJson): {
 
 let _cachedSchema: Record<string, unknown> | null = null;
 let _schemaLoadAttempted = false;
+let _cachedSchemaPath: string | undefined;
 
-function _loadExecutiveSchema(): Record<string, unknown> | null {
+function _loadExecutiveSchema(
+	explicitPath?: string,
+): Record<string, unknown> | null {
+	if (_schemaLoadAttempted && explicitPath === _cachedSchemaPath)
+		return _cachedSchema;
+	if (explicitPath) {
+		try {
+			const raw = readFileSync(explicitPath, 'utf-8');
+			_cachedSchema = JSON.parse(raw);
+			_cachedSchemaPath = explicitPath;
+			return _cachedSchema;
+		} catch {
+			// fall through to default
+		}
+	}
 	if (_schemaLoadAttempted) return _cachedSchema;
 	_schemaLoadAttempted = true;
 	try {
@@ -1125,7 +1142,10 @@ function _loadExecutiveSchema(): Record<string, unknown> | null {
 	}
 }
 
-function validateAgainstSchema(plan: ExecutivePlanJson): {
+function validateAgainstSchema(
+	plan: ExecutivePlanJson,
+	_explicitSchemaPath?: string,
+): {
 	valid: boolean;
 	diagnostics: ExecutivePlanDiagnostic[];
 } {
@@ -1378,6 +1398,7 @@ export function compileExecutivePlan(
 		compilationMode,
 		diagnosticOnly,
 		input.executorVersion,
+		options.profileSource,
 	);
 	(metadata.summary as Record<string, unknown>).workItemCount = allItems.length;
 
@@ -1404,7 +1425,7 @@ export function compileExecutivePlan(
 	};
 
 	// Schema validation
-	const schemaResult = validateAgainstSchema(plan);
+	const schemaResult = validateAgainstSchema(plan, options.executiveSchemaPath);
 	diagnostics.push(...schemaResult.diagnostics);
 
 	// Security check

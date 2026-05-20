@@ -461,6 +461,7 @@ export interface NormativeBaselineReadinessInput {
 					| undefined;
 		  }
 		| undefined;
+	readonly executiveConfigSourcePath?: string | undefined;
 	readonly traceabilityEntries?:
 		| readonly {
 				readonly documentCanonicalId: CanonicalDocumentId | undefined;

@@ -1,0 +1,10 @@
+id: html
+version: "1.0.0-custom"
+status: supported
+exportType: file_export
+outputFormat: html
+name: HTML Export
+purpose: Export executive plan as HTML
+outputs:
+  executive-overview:
+    path: executive-overview.html

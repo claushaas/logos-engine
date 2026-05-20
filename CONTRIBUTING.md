@@ -110,7 +110,8 @@ Anonymized sample workspaces demonstrating real use are especially valuable.
 - **No generated user workspace dependency in `pnpm check`**: All quality gates
   must pass without an initialized `.logos/` workspace.
 - **No external APIs in default tests**: All default tests use fakes, fixtures,
-  and temp directories.
+  and temp directories. Provider config tests use `createDefaultWorkspaceState` in
+  temp dirs — no real `.logos`, no `.env`, no network.
 
 ## Test Strategy
 

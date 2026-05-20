@@ -30,6 +30,10 @@ export interface WorkspaceStatusSummary {
 	activeProfileId: string | null;
 	profileSource?: string | undefined;
 	profileVersion?: string | undefined;
+	profileRoot?: string | undefined;
+	contractStatus?: string | undefined;
+	executiveContractStatus?: string | undefined;
+	contractDiagnosticsCount?: number | undefined;
 	sessionSummary: {
 		totalSessions: number;
 		activeSessions: number;
@@ -289,9 +293,13 @@ function buildStatusSummary(
 			totalArtifacts: artifactSummary.totalArtifacts,
 		},
 		consistencySummary,
+		contractDiagnosticsCount: diagnostics.length,
+		contractStatus: state.profile.contractStatus,
 		diagnostics,
 		documentationRoot: state.documentation.rootPath,
+		executiveContractStatus: state.profile.executiveContractStatus,
 		initializationState: readResult.initializationState,
+		profileRoot: state.profile.safeProfileRoot,
 		profileSource: state.profile.source,
 		profileVersion: state.profile.profileVersion,
 		projectRoot,

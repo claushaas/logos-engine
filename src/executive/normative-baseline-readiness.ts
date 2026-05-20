@@ -1181,6 +1181,8 @@ function checkExecutiveProfile(
 ): NormativeBaselineReadinessBlocker[] {
 	const blockers: NormativeBaselineReadinessBlocker[] = [];
 	const cfg = input.executiveGenerationConfig;
+	const safeSourcePath =
+		input.executiveConfigSourcePath ?? 'executive/executive-generation.yml';
 
 	if (!cfg) {
 		blockers.push({
@@ -1195,12 +1197,11 @@ function checkExecutiveProfile(
 			phaseId: undefined,
 			pointer: undefined,
 			received: 'not loaded',
-			recoveryHint:
-				'Ensure profiles/standard/executive/executive-generation.yml is present and valid',
+			recoveryHint: `Ensure ${safeSourcePath} is present and valid`,
 			registerItemId: undefined,
 			severity: 'fatal',
 			sourceId: undefined,
-			sourcePath: 'profiles/standard/executive/executive-generation.yml',
+			sourcePath: safeSourcePath,
 			validationFindingId: undefined,
 		});
 		return blockers;
@@ -1219,11 +1220,11 @@ function checkExecutiveProfile(
 			phaseId: undefined,
 			pointer: undefined,
 			received: 'invalid',
-			recoveryHint: 'Fix validation errors in executive-generation.yml',
+			recoveryHint: `Fix validation errors in ${safeSourcePath}`,
 			registerItemId: undefined,
 			severity: 'fatal',
 			sourceId: undefined,
-			sourcePath: 'profiles/standard/executive/executive-generation.yml',
+			sourcePath: safeSourcePath,
 			validationFindingId: undefined,
 		});
 	}
@@ -1246,7 +1247,7 @@ function checkExecutiveProfile(
 			registerItemId: undefined,
 			severity: 'error',
 			sourceId: undefined,
-			sourcePath: 'profiles/standard/executive/executive-generation.yml',
+			sourcePath: safeSourcePath,
 			validationFindingId: undefined,
 		});
 	}

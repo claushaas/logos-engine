@@ -16,6 +16,9 @@ export interface InitWorkspaceOptions {
 	/** Profile id to lock. Defaults to 'standard'. */
 	profileId?: string | undefined;
 
+	/** Explicit profile root path (local custom profile). */
+	profileRoot?: string | undefined;
+
 	/** Whether to perform a dry run with no writes */
 	dryRun?: boolean | undefined;
 
@@ -53,7 +56,10 @@ export interface InitWorkspaceProfileSelection {
 	source: 'bundled' | 'local' | 'custom' | 'remote';
 	profileVersion?: string | undefined;
 	registryPath?: string | undefined;
+	safeProfileRoot?: string | undefined;
 	validated: boolean;
+	contractStatus?: string | undefined;
+	executiveContractStatus?: string | undefined;
 }
 
 // ---------------------------------------------------------------------------

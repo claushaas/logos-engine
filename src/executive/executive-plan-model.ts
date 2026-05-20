@@ -543,6 +543,8 @@ export interface ExecutivePlanCompileOptions {
 	readonly strictMode?: boolean | undefined;
 	readonly allowWarningsInStrict?: boolean | undefined;
 	readonly injectPlanId?: string | undefined;
+	readonly executiveSchemaPath?: string | undefined;
+	readonly profileSource?: string | undefined;
 }
 
 // ---------------------------------------------------------------------------

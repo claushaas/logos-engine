@@ -1,0 +1,7 @@
+id: linear
+version: "1.0.0-custom"
+status: planned
+exportType: adapter_contract
+outputFormat: json
+name: Linear Mapping
+purpose: Planned Linear adapter contract

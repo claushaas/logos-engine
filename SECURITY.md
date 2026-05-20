@@ -12,7 +12,7 @@ LOGOS Engine is a local-first CLI/TUI application. It runs on your machine and w
 
 ### In-Scope Concerns
 
-- **LLM token handling**: The engine loads API keys from environment variables (e.g. `LOGOS_LLM_API_KEY`) and never stores raw tokens in project files (`.logos/config.json`). Tokens are redacted from diagnostic output.
+- **LLM token handling**: The engine loads API keys from environment variables (e.g. `OPENAI_API_KEY`) referenced by the provider configuration. Token values are NEVER stored in workspace state (`.logos/workspace.json`). Only environment variable names are stored. Tokens are redacted from diagnostic output and never appear in status displays.
 - **Prompt safety**: Unrelated project files are excluded from AI context by default. Context sent to remote providers is limited to structured project state, profile definitions, and user answers.
 - **File safety**: The engine uses safe/atomic writes for JSON/YAML state. It refuses destructive overwrites during initialization.
 - **Input validation**: YAML profile files, user answers, and AI responses are schema-validated before use.

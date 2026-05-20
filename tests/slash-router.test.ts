@@ -42,6 +42,30 @@ function makeContext(
 
 const defaultContext = makeContext();
 
+function makeContextWithRoot(root: string): RouterContext {
+	return makeContext({
+		config: {
+			activeProfileId: 'standard',
+			diagnostics: [],
+			documentationRoot: { isDefault: false, rootPath: 'docs/' },
+			providerStatus: { kind: 'not_configured' },
+		},
+		cwd: root,
+		root: {
+			cwd: root,
+			inferred: false,
+			rootKind: 'explicit',
+			rootPath: root,
+		},
+		workspace: {
+			diagnostics: [],
+			exists: true,
+			initializationState: 'initialized',
+			logosPath: join(root, '.logos'),
+		},
+	});
+}
+
 async function createInitializedWorkspace(): Promise<string> {
 	const root = await mkdtemp(join(tmpdir(), 'logos-exec-router-'));
 	await symlink(join(process.cwd(), 'profiles'), join(root, 'profiles'), 'dir');
@@ -262,15 +286,341 @@ describe('routeSlashCommand', () => {
 		expect(result.messages.join('\n')).toContain('initialized');
 	});
 
-	it('/config ai returns non-mutating stub', async () => {
+	it('/config ai is no longer a stub and returns configuration info', async () => {
 		const result = await routeSlashCommand(
 			{ args: ['ai'], kind: 'slash', name: 'config', raw: '/config ai' },
 			defaultContext,
 		);
-		expect(result.kind).toBe('warning');
 		expect(result.command).toBe('config ai');
 		expect(result.shouldExit).toBe(false);
-		expect(result.messages.join('\n')).toContain('not yet implemented');
+		// No longer a stub — returns status/help
+		expect(result.messages.join('\n')).toContain('AI Provider');
+		expect(result.messages.join('\n')).not.toContain('not yet implemented');
+	});
+
+	it('/config ai status returns redacted status', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'status'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai status',
+				},
+				ctx,
+			);
+			expect(result.command).toBe('config ai status');
+			expect(result.messages.join('\n')).toContain('no_provider');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai mode disabled works', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'disabled'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode disabled',
+				},
+				ctx,
+			);
+			expect(result.command).toBe('config ai mode');
+			expect(result.kind).toBe('success');
+			expect(result.messages.join('\n')).toContain('disabled');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai mode remote works', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'remote'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode remote',
+				},
+				ctx,
+			);
+			expect(result.command).toBe('config ai mode');
+			expect(result.kind).toBe('success');
+			expect(result.messages.join('\n')).toContain('remote');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai mode invalid rejected', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'cloud'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode cloud',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('error');
+			expect(result.messages.join('\n')).toContain('Invalid');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai provider unknown rejected', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'provider', 'unknown'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai provider unknown',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('error');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai timeout too high rejected', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			// 200001 ms (exceeds 180000 max)
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'timeout', '200001'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai timeout 200001',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('error');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai disclosure shows preview', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'remote'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode remote',
+				},
+				ctx,
+			);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'provider', 'openai'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai provider openai',
+				},
+				ctx,
+			);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'disclosure'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai disclosure',
+				},
+				ctx,
+			);
+			expect(result.messages.join('\n')).toContain('Disclosure');
+			expect(result.messages.join('\n')).not.toContain('sk-');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai disclosure accept works', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'remote'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode remote',
+				},
+				ctx,
+			);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'provider', 'openai'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai provider openai',
+				},
+				ctx,
+			);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'disclosure', 'accept'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai disclosure accept',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('success');
+			expect(result.messages.join('\n')).toContain('accepted');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai test blocked without disclosure', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'remote'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode remote',
+				},
+				ctx,
+			);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'provider', 'openai'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai provider openai',
+				},
+				ctx,
+			);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'test'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai test',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('warning');
+			expect(result.messages.join('\n')).toContain('disclosure');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai disable works', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			await routeSlashCommand(
+				{
+					args: ['ai', 'mode', 'remote'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai mode remote',
+				},
+				ctx,
+			);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'disable'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai disable',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('success');
+			expect(result.messages.join('\n')).toContain('disabled');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai reset works', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'reset'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai reset',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('success');
+			expect(result.messages.join('\n')).toContain('reset');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai unknown subcommand returns stable diagnostic', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'bogus'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai bogus',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('error');
+			expect(result.messages.join('\n')).toContain('Unknown');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
+	});
+
+	it('/config ai token-env accepts env var name only', async () => {
+		const root = await createInitializedWorkspace();
+		try {
+			const ctx = makeContextWithRoot(root);
+			const result = await routeSlashCommand(
+				{
+					args: ['ai', 'token-env', 'OPENAI_API_KEY'],
+					kind: 'slash',
+					name: 'config',
+					raw: '/config ai token-env OPENAI_API_KEY',
+				},
+				ctx,
+			);
+			expect(result.kind).toBe('success');
+			expect(result.messages.join('\n')).toContain('OPENAI_API_KEY');
+			expect(result.messages.join('\n')).not.toContain('sk-');
+		} finally {
+			await rm(root, { force: true, recursive: true });
+		}
 	});
 
 	it('/executive compile defaults to preflight and writes nothing without --confirm', async () => {

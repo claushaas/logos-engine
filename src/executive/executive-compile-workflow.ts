@@ -10,6 +10,10 @@ import {
 	loadDocumentationContract,
 } from '../profiles/documentation-contract.js';
 import { loadProfileRegistry } from '../profiles/profile-registry.js';
+import {
+	type ActiveProfileRuntimePaths,
+	resolveActiveProfileRuntimePaths,
+} from '../profiles/profile-runtime-paths.js';
 import { detectStaleness } from '../staleness/index.js';
 import { registerArtifact } from '../state/artifact-registry.js';
 import { createRunRecord } from '../state/run-repository.js';
@@ -63,9 +67,6 @@ import { evaluateNormativeBaselineReadiness } from './normative-baseline-readine
 
 const DEFAULT_DOCUMENTATION_ROOT = 'logos/';
 const DEFAULT_PLAN_ID_PREFIX = 'exec-compile';
-const EXECUTIVE_MAPPINGS_DIR = 'profiles/standard/executive/mappings';
-const EXECUTIVE_CONFIG_PATH =
-	'profiles/standard/executive/executive-generation.yml';
 
 // ---------------------------------------------------------------------------
 // Target kind labels
@@ -188,7 +189,10 @@ function prefixDocumentationRoot(
 	);
 }
 
-function loadExecutiveGenerationConfig(projectRoot: string): {
+function loadExecutiveGenerationConfig(
+	configPath: string,
+	mappingsDir: string,
+): {
 	allowDraftGeneration: boolean;
 	allowExportWhenDraft: boolean;
 	diagnostics: readonly { code: string; message: string }[];
@@ -211,7 +215,6 @@ function loadExecutiveGenerationConfig(projectRoot: string): {
 	version: string | undefined;
 } {
 	const diagnostics: { code: string; message: string }[] = [];
-	const configPath = resolve(projectRoot, EXECUTIVE_CONFIG_PATH);
 	try {
 		const raw = readFileSync(configPath, 'utf-8');
 		const parsed = parseYaml(raw) as Record<string, unknown>;
@@ -239,9 +242,7 @@ function loadExecutiveGenerationConfig(projectRoot: string): {
 		const missingMappings = Object.entries(expectedMappingFiles)
 			.filter(([id, filename]) => {
 				if (!targetIds.includes(id)) return false;
-				return !existsSync(
-					resolve(projectRoot, EXECUTIVE_MAPPINGS_DIR, filename),
-				);
+				return !existsSync(resolve(mappingsDir, filename));
 			})
 			.map(([id]) => id);
 		const plannedMappings = targetIds.filter(
@@ -303,6 +304,7 @@ function buildReadinessInput(params: {
 	projectRoot: string;
 	stalenessResult?: Awaited<ReturnType<typeof detectStaleness>> | undefined;
 	timestamp: string;
+	runtimePaths: ActiveProfileRuntimePaths;
 }): NormativeBaselineReadinessInput {
 	const {
 		state,
@@ -311,8 +313,12 @@ function buildReadinessInput(params: {
 		projectRoot,
 		stalenessResult,
 		timestamp,
+		runtimePaths,
 	} = params;
-	const executiveGenerationConfig = loadExecutiveGenerationConfig(projectRoot);
+	const executiveGenerationConfig = loadExecutiveGenerationConfig(
+		runtimePaths.executiveGenerationConfigPath,
+		runtimePaths.executiveMappingsDirectory,
+	);
 
 	const documentEntries = contract.documents.map((doc) => ({
 		canonicalOutputPath: doc.descriptor.outputs.canonical.path,
@@ -382,6 +388,8 @@ function buildReadinessInput(params: {
 		documentationRoot,
 		documentEntries,
 		evaluatedAt: timestamp,
+		executiveConfigSourcePath:
+			runtimePaths.safeDisplay.executiveGenerationConfigPath,
 		executiveGenerationConfig,
 		phaseEntries,
 		profileId: state.profile.profileId,
@@ -1004,6 +1012,30 @@ export async function executiveCompileWorkflow(
 	const documentationRoot =
 		state.documentation.rootPath || DEFAULT_DOCUMENTATION_ROOT;
 
+	// Resolve active profile runtime paths (includes Executive contract paths)
+	const runtimePaths = resolveActiveProfileRuntimePaths({
+		profileLock: state.profile,
+		projectRoot,
+		requireExecutive: true,
+	});
+
+	// Surface active profile Executive contract diagnostics
+	for (const diag of runtimePaths.executiveContractDiagnostics) {
+		const sev: 'error' | 'warning' | 'info' =
+			diag.severity === 'error'
+				? 'error'
+				: diag.severity === 'warning'
+					? 'warning'
+					: 'info';
+		const diagOpts: Partial<{
+			recoveryHint: string;
+			sourcePath: string;
+		}> = {};
+		if (diag.recoveryHint) diagOpts.recoveryHint = diag.recoveryHint;
+		if (diag.sourcePath) diagOpts.sourcePath = diag.sourcePath;
+		diagnostics.push(createDiagnostic(diag.code, sev, diag.message, diagOpts));
+	}
+
 	// ------------------------------------------------------------------
 	// 2. Load profile contract
 	// ------------------------------------------------------------------
@@ -1048,6 +1080,7 @@ export async function executiveCompileWorkflow(
 		contract,
 		documentationRoot,
 		projectRoot,
+		runtimePaths,
 		stalenessResult,
 		state,
 		timestamp,
@@ -1117,8 +1150,11 @@ export async function executiveCompileWorkflow(
 			clock: () => timestamp,
 			compilationMode: options.mode as ExecutivePlanCompilationMode,
 			readinessResult: readiness,
-		} as never,
-		undefined as never,
+		},
+		{
+			executiveSchemaPath: runtimePaths.executiveSchemaPath,
+			profileSource: runtimePaths.source,
+		},
 	);
 
 	if (compileResult.status === 'failed') {
@@ -1255,7 +1291,7 @@ export async function executiveCompileWorkflow(
 
 	if (exportAdapterKinds.length > 0) {
 		try {
-			const mappingsDir = resolve(projectRoot, EXECUTIVE_MAPPINGS_DIR);
+			const mappingsDir = runtimePaths.executiveMappingsDirectory;
 			const mappingsLoadResult = loadExecutiveExportMappings(mappingsDir);
 			const mappings = mappingsLoadResult.mappings;
 

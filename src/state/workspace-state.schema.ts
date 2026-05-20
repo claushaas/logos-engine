@@ -56,14 +56,19 @@ export const ProfileSourceSchema = z.enum([
 	'local',
 	'custom',
 	'remote',
+	'unknown',
 ]);
 
 export const WorkspaceProfileLockSchema = z.object({
+	contractStatus: z.string().optional(),
+	executiveContractStatus: z.string().optional(),
 	lockedAt: z.string().optional(),
 	profileId: z.string().min(1).default('standard'),
+	profileRootPath: z.string().optional(),
 	profileSchemaVersion: z.string().optional(),
 	profileVersion: z.string().optional(),
 	registryPath: z.string().optional(),
+	safeProfileRoot: z.string().optional(),
 	source: ProfileSourceSchema.default('bundled'),
 });
 
@@ -140,16 +145,48 @@ export const TokenSourceSchema = z
 		message: `Provider token source appears to contain a raw secret value. Store only an environment variable name, not the token itself.`,
 	});
 
+export const AiProviderModeSchema = z.enum([
+	'disabled',
+	'no_provider',
+	'local',
+	'remote',
+]);
+
+export const WorkspaceProviderDisclosureStateSchema = z.object({
+	accepted: z.boolean().default(false),
+	acceptedAt: z.string().optional(),
+	contextCategories: z.array(z.string()).optional(),
+	declinedAt: z.string().optional(),
+	version: z.string().optional(),
+});
+
+export const WorkspaceProviderTestSummarySchema = z.object({
+	diagnosticCodes: z.array(z.string()).default([]),
+	durationMs: z.number().optional(),
+	endpointOrigin: z.string().optional(),
+	modelId: z.string().optional(),
+	providerId: z.string().optional(),
+	status: z
+		.enum(['never_run', 'passed', 'failed', 'blocked', 'skipped'])
+		.default('never_run'),
+	testedAt: z.string().optional(),
+});
+
 export const WorkspaceProviderConfigReferenceSchema = z.object({
 	apiKeyEnvVarName: TokenSourceSchema.optional(),
+	disclosure: WorkspaceProviderDisclosureStateSchema.optional(),
 	disclosureAcceptedAt: z.string().optional(),
-	enabled: z.boolean().default(false),
+	enabled: z.boolean().optional().default(false),
 	endpoint: z.string().optional(),
+	lastTest: WorkspaceProviderTestSummarySchema.optional(),
+	mode: AiProviderModeSchema.optional(),
 	modelId: z.string().optional(),
 	providerId: z.string().min(1),
 	providerName: z.string().optional(),
 	remotePolicyFlags: z.record(z.string(), z.unknown()).optional(),
+	timeoutMs: z.number().optional(),
 	tokenEnvVarName: TokenSourceSchema.optional(),
+	updatedAt: z.string().optional(),
 });
 
 export type WorkspaceProviderConfigReference = z.infer<
