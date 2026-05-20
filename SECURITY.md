@@ -16,6 +16,7 @@ LOGOS Engine is a local-first CLI/TUI application. It runs on your machine and w
 - **Prompt safety**: Unrelated project files are excluded from AI context by default. Context sent to remote providers is limited to structured project state, profile definitions, and user answers.
 - **File safety**: The engine uses safe/atomic writes for JSON/YAML state. It refuses destructive overwrites during initialization. Interactive TUI confirmations require explicit keyboard acceptance of destructive actions; cancel/no mutates nothing.
 - **Confirmation safety**: Keyboard confirmation does not bypass validation, path safety, security, readiness, or write-policy checks. Stale confirmations are rejected. Destructive actions are visibly marked as destructive.
+- **Documentation root safety**: The documentation root must remain inside the project root. Root configuration (`/root`) enforces path containment, rejects traversal (`..`), blocks reserved directories (`.git`, `.logos`, `node_modules`, `src`, `tests`, `profiles`, `scripts`, `dist`, `build`, `coverage`), blocks package metadata files (`package.json`, `README.md`, `SECURITY.md`), detects symlink escapes, and rejects active profile root overlap. Root changes require confirmation and never move, delete, or regenerate files automatically.
 - **Input validation**: YAML profile files, user answers, and AI responses are schema-validated before use.
 
 ### Out-of-Scope

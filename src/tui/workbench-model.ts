@@ -858,6 +858,8 @@ export function commandToViewKind(
 				return 'proposal_review';
 			case 'decisions':
 				return 'decision_detail';
+			case 'root':
+				return 'root_config';
 			default:
 				return 'recovery';
 		}
@@ -1165,7 +1167,45 @@ export function getDefaultActionsForView(
 				requiresConfirmation: false,
 			},
 		],
-		root_config: [...common],
+		root_config: [
+			...common,
+			{
+				category: 'config',
+				description: 'Show current documentation root',
+				label: '/root status',
+				mutating: false,
+				readOnly: true,
+				recommended: true,
+				requiresConfirmation: false,
+			},
+			{
+				category: 'config',
+				description: 'Preview a root change (read-only)',
+				label: '/root preview <path>',
+				mutating: false,
+				readOnly: true,
+				recommended: false,
+				requiresConfirmation: false,
+			},
+			{
+				category: 'config',
+				description: 'Change documentation root',
+				label: '/root set <path>',
+				mutating: true,
+				readOnly: false,
+				recommended: false,
+				requiresConfirmation: true,
+			},
+			{
+				category: 'config',
+				description: 'Reset to default logos/',
+				label: '/root reset',
+				mutating: true,
+				readOnly: false,
+				recommended: false,
+				requiresConfirmation: true,
+			},
+		],
 		startup: [
 			...common,
 			{

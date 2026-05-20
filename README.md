@@ -107,6 +107,13 @@ instead of requiring `--confirm` to be retyped.
 | `/graph --doc <id>` | Filter graph by document | No | No |
 | `/graph --mode full` | Full graph output | No | No |
 | `/config ai` | Configure AI provider (status, mode, provider, model, endpoint, token, timeout, disclosure, test, disable, reset) | Yes | No |
+| `/root` | Show documentation root configuration and status | No | No |
+| `/root status` | Show current root status (path, health, custom/default) | No | No |
+| `/root preview <path>` | Preview a root change with safety, collision, and affected-output reporting (read-only) | No | Yes |
+| `/root set <path>` | Change documentation root after keyboard confirmation; safety checks enforced | Yes | Yes |
+| `/root set <path> --dry-run` | Dry-run root change preview | No | Yes |
+| `/root reset` | Reset to default logos/ after keyboard confirmation | Yes | Yes |
+| `/root reset --dry-run` | Dry-run reset preview | No | Yes |
 | `/executive compile` | Preflight Executive Axis compilation; interactive TUI shows keyboard confirmation (Accept/Cancel) with readiness info | No | Yes |
 | `/executive compile --confirm` | Execute Executive compilation (JSON + exports) (non-interactive confirmation) | Yes | Yes |
 | `/executive compile --dry-run` | Dry-run executive compilation | No | Yes |

@@ -136,6 +136,7 @@ Anonymized sample workspaces demonstrating real use are especially valuable.
 - No real `.logos/` mutation — use temp directories only.
 - No real provider payloads — use synthetic provider output fixtures.
 - No real user data — all fixture data is synthetic.
+- Documentation root test fixtures use temp directories only; never mutate real project paths.
 
 ## Pull Request Checklist
 

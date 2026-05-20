@@ -48,6 +48,13 @@ import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
 import { runDiagnoseCommand } from '../validation/diagnose-command.js';
 import { runValidateCommand } from '../validation/validate-command.js';
 import {
+	applyResetToDefault,
+	applyRootChange,
+	getDocumentationRootStatus,
+	previewResetToDefault,
+	previewRootChange,
+} from '../workspace/index.js';
+import {
 	createTuiConfirmationRequest,
 	yesNoOptions,
 } from './confirmation-model.js';
@@ -121,6 +128,8 @@ export async function routeSlashCommand(
 			return getProposalsResult(args, context);
 		case 'decisions':
 			return getDecisionsResult(args, context);
+		case 'root':
+			return getRootResult(args, context);
 		default:
 			return {
 				command: name,
@@ -173,6 +182,15 @@ function getHelpMessages(): string[] {
 		'  /executive compile --dry-run — Preflight executive compilation',
 		'  /help        — Show this help',
 		'  /exit        — Exit the shell',
+		'',
+		'Documentation root:',
+		'  /root                     — Show documentation root configuration',
+		'  /root status              — Show current root status',
+		'  /root preview <path>      — Preview a root change (read-only)',
+		'  /root set <path>          — Change documentation root (requires confirmation)',
+		'  /root set <path> --dry-run — Dry-run root change',
+		'  /root reset               — Reset to default logos/ (requires confirmation)',
+		'  /root reset --dry-run     — Dry-run reset',
 		'',
 		'Proposal review:',
 		'  /proposals [list]             — List reviewable proposals',
@@ -1822,6 +1840,571 @@ async function getGraphResult(
 			shouldExit: false,
 		};
 	}
+}
+
+// ---------------------------------------------------------------------------
+// Root configuration handler
+// ---------------------------------------------------------------------------
+
+async function getRootResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+
+	if (!projectRoot) {
+		return {
+			command: 'root',
+			kind: 'error',
+			messages: [
+				'Cannot configure documentation root because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+			viewKind: 'recovery' as TuiViewKind,
+		};
+	}
+
+	const subcommand = args[0];
+	const isDryRun = args.includes('--dry-run');
+	const isConfirm = args.includes('--confirm');
+
+	// /root or /root status — show current root status
+	if (!subcommand || subcommand === 'status') {
+		try {
+			const status = await getDocumentationRootStatus({ projectRoot });
+
+			const lines: string[] = [
+				'Documentation Root Configuration',
+				'',
+				'Current root:',
+				`  Path:              ${status.root.safeDisplayPath}`,
+				`  Kind:              ${status.root.kind}`,
+				`  Explicitly set:    ${status.root.wasExplicitlyConfigured ? 'yes' : 'no'}`,
+				`  Inside project:    ${status.root.insideProjectRoot ? 'yes' : 'no'}`,
+				`  Exists:            ${status.root.exists ? 'yes' : 'no'}`,
+				`  Empty:             ${status.root.isEmpty ? 'yes' : 'no'}`,
+				`  Health:            ${status.health}`,
+			];
+
+			if (status.staleOutputCount > 0 || status.orphanedOutputCount > 0) {
+				lines.push('');
+				lines.push(`  Stale outputs:     ${status.staleOutputCount}`);
+				lines.push(`  Orphaned outputs:  ${status.orphanedOutputCount}`);
+			}
+
+			if (status.recoveryHint) {
+				lines.push('');
+				lines.push(`  Recovery hint: ${status.recoveryHint}`);
+			}
+
+			lines.push('');
+			lines.push('Available commands:');
+			lines.push(
+				'  /root status                — Show current root configuration',
+			);
+			lines.push(
+				'  /root preview <path>        — Preview a root change (read-only)',
+			);
+			lines.push(
+				'  /root set <path>            — Change documentation root (requires confirmation)',
+			);
+			lines.push(
+				'  /root set <path> --dry-run  — Preview root change without applying',
+			);
+			lines.push(
+				'  /root reset                 — Reset to default logos/ (requires confirmation)',
+			);
+			lines.push('  /root reset --dry-run       — Preview reset to default');
+			lines.push('');
+			lines.push(
+				'The documentation root is where LOGOS writes canonical Markdown, HTML artifacts,',
+			);
+			lines.push('agent packs, reports, and Executive outputs.');
+
+			return {
+				command: 'root',
+				kind: 'info',
+				messages: lines,
+				shouldExit: false,
+				viewKind: 'root_config' as TuiViewKind,
+			};
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return {
+				command: 'root',
+				kind: 'error',
+				messages: ['Failed to get root status:', message],
+				shouldExit: false,
+				viewKind: 'recovery' as TuiViewKind,
+			};
+		}
+	}
+
+	// /root preview <path>
+	if (subcommand === 'preview') {
+		const targetPath = args[1];
+		if (!targetPath) {
+			return {
+				command: 'root',
+				kind: 'error',
+				messages: [
+					'Usage: /root preview <path>',
+					'Please provide a target path to preview.',
+				],
+				shouldExit: false,
+				viewKind: 'root_config' as TuiViewKind,
+			};
+		}
+
+		try {
+			const preview = await previewRootChange({
+				projectRoot,
+				proposedPath: targetPath,
+			});
+
+			const lines: string[] = [
+				'Root Change Preview',
+				'',
+				'Current root:',
+				`  Path:      ${preview.current.safeDisplayPath}`,
+				`  Kind:      ${preview.current.kind}`,
+				`  Exists:    ${preview.current.exists ? 'yes' : 'no'}`,
+				'',
+				'Proposed root:',
+				`  Path:      ${preview.proposed.safeDisplayPath}`,
+				`  Kind:      ${preview.proposed.kind}`,
+				`  Exists:    ${preview.proposed.exists ? 'yes' : 'no'}`,
+				`  Empty:     ${preview.proposed.isEmpty ? 'yes' : 'no'}`,
+				`  Inside:    ${preview.proposed.insideProjectRoot ? 'yes' : 'no'}`,
+				'',
+				`Health:      ${preview.health}`,
+				`Safe:        ${preview.safety.safe ? 'yes' : 'no'}`,
+			];
+
+			// Safety checks
+			if (preview.safety.checks.length > 0) {
+				const failed = preview.safety.checks.filter((c) => !c.passed);
+				if (failed.length > 0) {
+					lines.push('');
+					lines.push('Safety checks:');
+					for (const check of failed) {
+						lines.push(`  [${check.severity.toUpperCase()}] ${check.message}`);
+						if (check.recoveryHint) {
+							lines.push(`    Recovery: ${check.recoveryHint}`);
+						}
+					}
+				}
+			}
+
+			// Collisions
+			if (preview.collisions.length > 0) {
+				lines.push('');
+				lines.push('Collisions detected:');
+				for (const collision of preview.collisions) {
+					lines.push(`  - ${collision.message}`);
+				}
+			}
+
+			// Affected outputs
+			if (
+				preview.affectedOutputs.canonicalOutputs.length > 0 ||
+				preview.affectedOutputs.derivedOutputs.length > 0
+			) {
+				lines.push('');
+				lines.push('Affected outputs:');
+				lines.push(
+					`  Canonical: ${preview.affectedOutputs.canonicalOutputs.length}`,
+				);
+				lines.push(
+					`  Derived:   ${preview.affectedOutputs.derivedOutputs.length}`,
+				);
+				lines.push(`  Stale:     ${preview.affectedOutputs.staleCount}`);
+				lines.push(`  Orphaned:  ${preview.affectedOutputs.orphanedCount}`);
+				lines.push(
+					`  Regenerate: ${preview.affectedOutputs.regenerationNeeded}`,
+				);
+				lines.push(
+					`  Manual cleanup: ${preview.affectedOutputs.manualCleanupNeeded}`,
+				);
+			} else {
+				lines.push('');
+				lines.push('Affected outputs: none');
+			}
+
+			// Diagnostics
+			if (preview.diagnostics.length > 0) {
+				const errors = preview.diagnostics.filter(
+					(d) => d.severity === 'error',
+				);
+				const warnings = preview.diagnostics.filter(
+					(d) => d.severity === 'warning',
+				);
+				if (errors.length > 0) {
+					lines.push('');
+					lines.push('Issues:');
+					for (const d of errors) {
+						lines.push(`  [ERROR] ${d.message}`);
+						for (const hint of d.recoveryHints) {
+							lines.push(`    ${hint.message}`);
+						}
+					}
+				}
+				if (warnings.length > 0) {
+					for (const d of warnings) {
+						lines.push(`  [WARN] ${d.message}`);
+					}
+				}
+			}
+
+			lines.push('');
+			lines.push('No files have been written.');
+			lines.push(
+				'Run /root set <path> to apply, or /root set <path> --dry-run for a fuller preview.',
+			);
+
+			return {
+				command: 'root',
+				kind: preview.safety.safe ? 'info' : 'warning',
+				messages: lines,
+				shouldExit: false,
+				viewKind: 'root_config' as TuiViewKind,
+			};
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return {
+				command: 'root',
+				kind: 'error',
+				messages: ['Failed to preview root change:', message],
+				shouldExit: false,
+				viewKind: 'recovery' as TuiViewKind,
+			};
+		}
+	}
+
+	// /root set <path>
+	if (subcommand === 'set') {
+		const targetPath = args[1];
+		if (!targetPath) {
+			return {
+				command: 'root',
+				kind: 'error',
+				messages: ['Usage: /root set <path>', 'Please provide a target path.'],
+				shouldExit: false,
+				viewKind: 'root_config' as TuiViewKind,
+			};
+		}
+
+		// Dry-run: show preview without writing
+		if (isDryRun) {
+			try {
+				const result = await applyRootChange({
+					confirmed: false,
+					dryRun: true,
+					projectRoot,
+					proposedPath: targetPath,
+				});
+
+				return {
+					command: 'root',
+					kind: 'info',
+					messages: result.messages,
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				return {
+					command: 'root',
+					kind: 'error',
+					messages: ['Failed to dry-run root change:', message],
+					shouldExit: false,
+					viewKind: 'recovery' as TuiViewKind,
+				};
+			}
+		}
+
+		// --confirm: apply directly
+		if (isConfirm) {
+			try {
+				const result = await applyRootChange({
+					confirmed: true,
+					dryRun: false,
+					projectRoot,
+					proposedPath: targetPath,
+				});
+
+				return {
+					command: 'root',
+					kind: result.applied ? 'success' : 'error',
+					messages: result.messages,
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				return {
+					command: 'root',
+					kind: 'error',
+					messages: ['Failed to apply root change:', message],
+					shouldExit: false,
+					viewKind: 'recovery' as TuiViewKind,
+				};
+			}
+		}
+
+		// Interactive: show preview and create confirmation
+		try {
+			const preview = await previewRootChange({
+				projectRoot,
+				proposedPath: targetPath,
+			});
+
+			const baseLines: string[] = [
+				'Root Change Confirmation Required',
+				'',
+				`Current root:  ${preview.current.safeDisplayPath}`,
+				`Proposed root: ${preview.proposed.safeDisplayPath}`,
+				`Health:        ${preview.health}`,
+				`Safe:          ${preview.safety.safe ? 'yes' : 'no'}`,
+				'',
+			];
+
+			if (!preview.safety.safe) {
+				return {
+					command: 'root',
+					kind: 'error',
+					messages: [
+						'Root change blocked: proposed root is not safe.',
+						'Run /root preview <path> for details.',
+					],
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			}
+
+			if (preview.collisions.length > 0) {
+				baseLines.push('Collisions:');
+				for (const c of preview.collisions.slice(0, 5)) {
+					baseLines.push(`  - ${c.message}`);
+				}
+				baseLines.push('');
+			}
+
+			baseLines.push(
+				`Affected outputs: ${preview.affectedOutputs.staleCount} stale, ${preview.affectedOutputs.orphanedCount} orphaned`,
+			);
+			baseLines.push('');
+
+			if (shouldUseKeyboardConfirmation(context)) {
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'config_change',
+					alternatives: [
+						'Run /root preview <path> for a detailed preview first.',
+						'Run /root reset to revert to the default logos/.',
+					],
+					consequences: [
+						`Documentation root will change from ${preview.current.safeDisplayPath} to ${preview.proposed.safeDisplayPath}`,
+						`${preview.affectedOutputs.staleCount} outputs will be marked stale`,
+						`${preview.affectedOutputs.orphanedCount} outputs will be orphaned`,
+						'No files will be moved or deleted.',
+						'Run /generate to regenerate outputs under the new root.',
+					],
+					destructive: preview.affectedOutputs.staleCount > 0,
+					message:
+						'Changing the documentation root will affect existing outputs. No files will be moved or deleted automatically.',
+					options: yesNoOptions({
+						acceptLabel: 'Change Root',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: `/root set ${targetPath}`,
+					target: {
+						kind: 'documentation_root',
+						path: preview.proposed.safeDisplayPath,
+					},
+					title: 'Change Documentation Root',
+				});
+
+				baseLines.push('Use the keyboard to accept or cancel below.');
+
+				return {
+					command: 'root',
+					confirmationRequest,
+					kind: 'info',
+					messages: baseLines,
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			}
+
+			// Non-interactive
+			baseLines.push('Run /root set <path> --confirm to apply.');
+			baseLines.push('Run /root set <path> --dry-run for a dry-run.');
+
+			return {
+				command: 'root',
+				kind: 'info',
+				messages: baseLines,
+				shouldExit: false,
+				viewKind: 'root_config' as TuiViewKind,
+			};
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return {
+				command: 'root',
+				kind: 'error',
+				messages: ['Failed to preview root change:', message],
+				shouldExit: false,
+				viewKind: 'recovery' as TuiViewKind,
+			};
+		}
+	}
+
+	// /root reset
+	if (subcommand === 'reset') {
+		if (isDryRun) {
+			try {
+				const result = await applyResetToDefault({
+					confirmed: false,
+					dryRun: true,
+					projectRoot,
+				});
+
+				return {
+					command: 'root',
+					kind: 'info',
+					messages: result.messages,
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				return {
+					command: 'root',
+					kind: 'error',
+					messages: ['Failed to dry-run reset:', message],
+					shouldExit: false,
+					viewKind: 'recovery' as TuiViewKind,
+				};
+			}
+		}
+
+		if (isConfirm) {
+			try {
+				const result = await applyResetToDefault({
+					confirmed: true,
+					dryRun: false,
+					projectRoot,
+				});
+
+				return {
+					command: 'root',
+					kind: result.applied ? 'success' : 'error',
+					messages: result.messages,
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			} catch (error) {
+				const message = error instanceof Error ? error.message : String(error);
+				return {
+					command: 'root',
+					kind: 'error',
+					messages: ['Failed to apply reset:', message],
+					shouldExit: false,
+					viewKind: 'recovery' as TuiViewKind,
+				};
+			}
+		}
+
+		// Interactive
+		try {
+			const preview = await previewResetToDefault({ projectRoot });
+
+			const baseLines: string[] = [
+				'Reset Documentation Root to Default',
+				'',
+				`Current root:  ${preview.current.safeDisplayPath}`,
+				`Default root:  ${preview.proposed.safeDisplayPath}`,
+				'',
+				'This will reset the documentation root to the default logos/.',
+				'Existing generated files will not be moved or deleted.',
+				'',
+			];
+
+			if (shouldUseKeyboardConfirmation(context)) {
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'config_change',
+					alternatives: [
+						'Run /root reset --dry-run to preview first.',
+						'Run /root set <path> to choose a custom root.',
+					],
+					consequences: [
+						'Documentation root will be reset to logos/',
+						'Existing outputs under the old root will not be moved or deleted.',
+						'Run /generate to regenerate under the default root.',
+					],
+					destructive: false,
+					message:
+						'Reset the documentation root to the default logos/ directory.',
+					options: yesNoOptions({
+						acceptLabel: 'Reset to Default',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: '/root reset',
+					target: {
+						kind: 'documentation_root',
+						path: 'logos/',
+					},
+					title: 'Reset Documentation Root',
+				});
+
+				baseLines.push('Use the keyboard to accept or cancel below.');
+
+				return {
+					command: 'root',
+					confirmationRequest,
+					kind: 'info',
+					messages: baseLines,
+					shouldExit: false,
+					viewKind: 'root_config' as TuiViewKind,
+				};
+			}
+
+			baseLines.push('Run /root reset --confirm to apply.');
+			baseLines.push('Run /root reset --dry-run for a dry-run.');
+
+			return {
+				command: 'root',
+				kind: 'info',
+				messages: baseLines,
+				shouldExit: false,
+				viewKind: 'root_config' as TuiViewKind,
+			};
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+			return {
+				command: 'root',
+				kind: 'error',
+				messages: ['Failed to preview reset:', message],
+				shouldExit: false,
+				viewKind: 'recovery' as TuiViewKind,
+			};
+		}
+	}
+
+	// Unknown subcommand
+	return {
+		command: 'root',
+		kind: 'error',
+		messages: [
+			`Unknown root subcommand: ${subcommand ?? '(empty)'}`,
+			'Available: status, preview <path>, set <path>, reset',
+		],
+		shouldExit: false,
+		viewKind: 'recovery' as TuiViewKind,
+	};
 }
 
 // ---------------------------------------------------------------------------
