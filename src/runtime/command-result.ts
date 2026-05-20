@@ -137,7 +137,7 @@ export interface CreateCommandResultOptions<TData = unknown> {
 export interface CommandError {
 	code: string;
 	message: string;
-	severity: 'error' | 'warning' | 'fatal';
+	severity: 'info' | 'error' | 'warning' | 'fatal';
 	path?: string | undefined;
 	pointer?: string | undefined;
 	recoveryHint?: string | undefined;

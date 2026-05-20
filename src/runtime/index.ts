@@ -33,6 +33,7 @@ export type {
 	LogosDiagnosticSeverity,
 	LogosNextAction,
 	LogosNextActionCategory,
+	LogosOperationPhase,
 	LogosOperationStatus,
 	LogosPartialFailure,
 	LogosRecoveryHint,

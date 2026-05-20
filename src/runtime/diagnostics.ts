@@ -331,6 +331,18 @@ export const OPERATION_STATUS_ORDER: Record<LogosOperationStatus, number> = {
 };
 
 // ---------------------------------------------------------------------------
+// Operation Phase
+// ---------------------------------------------------------------------------
+
+export type LogosOperationPhase =
+	| 'planning'
+	| 'preflight'
+	| 'execution'
+	| 'validation'
+	| 'cleanup'
+	| 'rollback';
+
+// ---------------------------------------------------------------------------
 // Changed Path Actions
 // ---------------------------------------------------------------------------
 

@@ -167,14 +167,14 @@ describe('diagnosticToStructuredError', () => {
 		expect(err.recoveryHint).toContain('Inspect .logos');
 	});
 
-	it('maps info severity to warning', () => {
+	it('preserves info severity through conversion', () => {
 		const diag = createDiagnostic({
 			code: diagnosticCode('CLI', 'INFO'),
 			message: 'Info',
 			severity: 'info',
 		});
 		const err = diagnosticToStructuredError(diag);
-		expect(err.severity).toBe('warning');
+		expect(err.severity).toBe('info');
 	});
 });
 

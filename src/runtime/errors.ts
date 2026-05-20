@@ -116,7 +116,7 @@ export const ErrorCodes = {
 export interface StructuredErrorOptions {
 	code: string;
 	message: string;
-	severity?: 'error' | 'warning' | 'fatal';
+	severity?: 'info' | 'error' | 'warning' | 'fatal';
 	path?: string | undefined;
 	pointer?: string | undefined;
 	recoveryHint?: string | undefined;
@@ -127,7 +127,7 @@ export interface StructuredErrorOptions {
 export interface StructuredError {
 	code: string;
 	message: string;
-	severity: 'error' | 'warning' | 'fatal';
+	severity: 'info' | 'error' | 'warning' | 'fatal';
 	path?: string | undefined;
 	pointer?: string | undefined;
 	recoveryHint?: string | undefined;
@@ -232,7 +232,7 @@ export function diagnosticToStructuredError(
 		pointer: diagnostic.pointer,
 		recoveryHint:
 			recoveryMessages.length > 0 ? recoveryMessages.join('; ') : undefined,
-		severity: diagnostic.severity === 'info' ? 'warning' : diagnostic.severity,
+		severity: diagnostic.severity,
 	};
 }
 
@@ -257,7 +257,11 @@ export function structuredErrorToDiagnostic(
 	}
 
 	const severity: LogosDiagnosticSeverity =
-		error.severity === 'warning' ? 'warning' : 'error';
+		error.severity === 'info'
+			? 'info'
+			: error.severity === 'warning'
+				? 'warning'
+				: 'error';
 
 	return createDiagnostic({
 		cause: error.cause,
