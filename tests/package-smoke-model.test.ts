@@ -51,6 +51,7 @@ describe('package smoke model', () => {
 				'cli_version',
 				'doctor_text',
 				'doctor_json',
+				'doctor_json_dry_run',
 				'doctor_dry_run',
 				'security_privacy',
 				'runtime_no_network',

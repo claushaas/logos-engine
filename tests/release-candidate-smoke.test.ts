@@ -753,6 +753,7 @@ describe('release candidate smoke', () => {
 					'cli_version',
 					'doctor_text',
 					'doctor_json',
+					'doctor_json_dry_run',
 					'doctor_dry_run',
 				].includes(c.kind),
 			);

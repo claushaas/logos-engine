@@ -42,6 +42,7 @@ export type PackageSmokeCheckKind =
 	| 'cli_version'
 	| 'doctor_text'
 	| 'doctor_json'
+	| 'doctor_json_dry_run'
 	| 'doctor_dry_run'
 	| 'security_privacy'
 	| 'runtime_no_network'
@@ -60,8 +61,9 @@ export const PACKAGE_SMOKE_CHECK_KIND_ORDER: Record<
 	cli_version: 8,
 	doctor_dry_run: 11,
 	doctor_json: 10,
+	doctor_json_dry_run: 10,
 	doctor_text: 9,
-	non_interactive: 15,
+	non_interactive: 16,
 	package_exclusions: 2,
 	package_files: 1,
 	package_metadata: 0,
@@ -69,7 +71,7 @@ export const PACKAGE_SMOKE_CHECK_KIND_ORDER: Record<
 	runtime_no_credentials: 14,
 	runtime_no_network: 13,
 	security_privacy: 12,
-	unknown: 16,
+	unknown: 17,
 };
 
 // ---------------------------------------------------------------------------
@@ -347,7 +349,7 @@ export const SMOKE_CLI_COMMANDS: Array<{
 		args: ['doctor', '--json', '--dry-run'],
 		expectJson: true,
 		expectSuccess: true,
-		label: 'doctor_json',
+		label: 'doctor_json_dry_run',
 	},
 ];
 

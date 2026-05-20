@@ -57,7 +57,7 @@ No npm registry publication has occurred yet.
 | `pnpm smoke:cli` | Verify built CLI starts and basic commands work | No | |
 | `pnpm security:check` | Run deterministic security/privacy release checker | No | Requires build |
 | `pnpm smoke:package` | Run release candidate package smoke | No | Requires build |
-| `pnpm check` | Full quality gate (lint + typecheck + test + validation + build + smoke) | No | Non-mutating CI/release gate |
+| `pnpm check` | Full quality gate (lint + typecheck + test + validation + build + smoke + package smoke) | No | Non-mutating CI/release gate |
 | `pnpm format` | Mutating format with Biome | Yes (formatting) | Fixes auto-fixable issues |
 
 ## CLI Usage

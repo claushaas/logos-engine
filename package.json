@@ -35,7 +35,9 @@
 		"docs",
 		"README.md",
 		"LICENSE",
-		"SECURITY.md"
+		"SECURITY.md",
+		"CONTRIBUTING.md",
+		"CODE_OF_CONDUCT.md"
 	],
 	"keywords": [
 		"documentation",
@@ -49,7 +51,7 @@
 	"packageManager": "pnpm@10.33.2",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:validation && pnpm build && pnpm smoke:cli",
+		"check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:validation && pnpm build && pnpm smoke:cli && pnpm smoke:package",
 		"check:validation": "vitest run tests/validation-gate.test.ts",
 		"format": "pnpm format:biome",
 		"format:biome": "biome check --write --unsafe .",

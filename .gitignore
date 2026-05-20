@@ -4,3 +4,5 @@ build/
 coverage/
 .DS_Store
 .logos
+.env
+.env.*
