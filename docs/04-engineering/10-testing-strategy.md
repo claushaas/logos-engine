@@ -43,7 +43,7 @@ Tests are not substitutes for product sign-off. Automated tests prove behavior; 
 
 | Source Document | Source Item | Behavior or Risk | Test Types | Required Evidence | Release Impact | Owner | Status | Gaps |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Acceptance Criteria | Gate 1 / NFR-OPS-002 | Default quality gate passes without live AI or network. | Static, unit, integration, workflow. | `pnpm check` plus smoke where release scope requires. | Release-blocking. | Engineering. | MVP. | `pnpm check` currently omits `smoke:cli`; release gate should include it explicitly. |
+| Acceptance Criteria | Gate 1 / NFR-OPS-002 | Default quality gate passes without live AI or network. | Static, unit, integration, workflow. | `pnpm check` passes (includes lint, typecheck, test, validation, build, and smoke:cli). | Release-blocking. | Engineering. | MVP. | None known; `pnpm check` includes all required gates. |
 | Acceptance Criteria | Gate 2 / NFR-SEC-001 | No raw token storage in `.logos/`, `logos/`, fixtures, logs, or generated outputs. | Security/privacy, fixtures, snapshots. | Redaction/secret tests and inspection. | Release-blocking. | Engineering. | MVP. | Dedicated repo-wide secret scan command review-needed. |
 | Acceptance Criteria | Gate 3 / NFR-PRIV-001 | No telemetry or hidden network calls by default. | Privacy, static review, optional network inspection. | Code review plus no-live-provider tests. | Release-blocking. | Engineering/product. | MVP/review-needed. | Automated network egress guard not yet specified. |
 | Functional Requirements | FR-003, FR-007, FR-014 | Workspace state persists and resumes across sessions. | Integration, workflow, state tests. | Temp workspace fixtures and continuation tests. | Release-blocking. | Engineering. | MVP. | Migration coverage must grow with schema changes. |
@@ -375,11 +375,11 @@ Do not mock domain invariants, schema validation, decision transition rules, roo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Local fast check | Before committing meaningful code. | Focused Vitest, relevant lint/typecheck where practical. | Minutes. | Changed area passes. | Fix before handoff or report blocker. | Explicitly document skipped checks. | Terminal output. | Engineer. | MVP |
 | PR/default check | Every PR/merge candidate. | `pnpm lint:biome`, `pnpm lint:md`, `pnpm test`, `pnpm build`; `pnpm typecheck` if kept separate. | Fast enough for routine PRs. | All pass. | Block merge unless accepted as non-task/pre-existing risk. | Product/engineering owner approval. | CI logs. | Engineering. | MVP |
-| Release quality gate | Pre-release. | `pnpm check`, `pnpm typecheck`, `pnpm smoke:cli`, release-blocking workflow/security/privacy tests, manual acceptance checklist. | Release window. | All release blockers pass or are formally accepted. | Block release. | Product owner signs accepted risk. | Release evidence bundle. | Product/engineering. | MVP |
+| Release quality gate | Pre-release. | `pnpm check`, `pnpm security:check`, `pnpm smoke:package`, release-blocking workflow/security/privacy tests, manual acceptance checklist. | Release window. | All release blockers pass or are formally accepted. | Block release. | Product owner signs accepted risk. | Release evidence bundle. | Product/engineering. | MVP |
 | Optional live provider check | Manual/pre-release only. | Provider connectivity against sandbox/user-owned tokens. | Bounded by provider timeout. | Does not mutate state; redacted output. | Does not block local-only release unless provider feature is release scope. | Never default; requires explicit credentials. | Redacted notes only. | Engineering/product. | Optional |
 | Nightly/deep check | Future. | Coverage, performance smoke, broader compatibility. | Longer. | Trends reviewed. | Investigate; not immediate release blocker unless critical. | N/A. | Reports. | Engineering. | Deferred |
 
-Current repo scripts include `pnpm check`, `pnpm test`, `pnpm test:coverage`, `pnpm lint:biome`, `pnpm lint:md`, `pnpm build`, `pnpm typecheck`, and `pnpm smoke:cli`. Release Management should decide whether `smoke:cli` becomes part of `pnpm check` or remains a separate release gate.
+Current repo scripts include `pnpm check`, `pnpm test`, `pnpm test:coverage`, `pnpm lint:biome`, `pnpm lint:md`, `pnpm build`, `pnpm typecheck`, `pnpm smoke:cli`, `pnpm security:check`, and `pnpm smoke:package`. The `pnpm check` script already includes `typecheck` and `smoke:cli`. The separate `pnpm security:check` and `pnpm smoke:package` scripts are release candidate gates.
 
 ## Release Gates
 
@@ -387,7 +387,9 @@ Release gates map to Acceptance Criteria:
 
 | Gate | Evidence | Failure Consequence | Exception Rule |
 | --- | --- | --- | --- |
-| Default suite passes | `pnpm check` and required supplemental gates pass without live AI/network. | Block release. | Only accepted by product/engineering owner with written risk. |
+| Default suite passes | `pnpm check` passes without live AI/network. | Block release. | Only accepted by product/engineering owner with written risk. |
+| Security/privacy checks pass | `pnpm security:check` passes with no errors or fatal findings. | Block release. | No silent exception. |
+| Package smoke passes | `pnpm smoke:package` passes. | Block release. | No silent exception. |
 | No raw token storage | Secret/redaction tests and inspection of state/outputs/fixtures. | Block release. | No silent exception. |
 | No default telemetry | Static review and network/no-live-provider evidence. | Block release. | No silent exception. |
 | AI output never silent-confirms | Decision/provider workflow tests. | Block release. | No exception for MVP. |
@@ -435,7 +437,7 @@ Every release-blocking suite needs an owner before release.
 | No network egress guard misses hidden calls. | Privacy/offline. | Blind spot. | Future dependency or telemetry code. | Medium. | High. | Unexpected outbound traffic in manual review. | Add automated egress test or static rule. | Security, CI. | Release-blocking once detected. |
 | Manual Markdown merge behavior under-tested. | Generation/state. | Data loss. | User edits generated docs. | High. | High. | Overwrite confusion or stale docs. | Collision/manual-edit tests; define merge policy. | Frontend, Support. | Must warn before MVP release. |
 | Accessibility claims exceed evidence. | TUI/HTML artifacts. | Compliance/trust. | Automated-only checks. | Medium. | Medium/high. | User accessibility issue reports. | Phrase claims narrowly; add manual review. | Frontend, Release. | Blocks unsupported claims. |
-| `pnpm check` omits smoke/typecheck expectations. | CI/release. | Gate ambiguity. | Script drift. | Medium. | Medium. | Release checklist differs from CI. | Define release gate explicitly; consider script update. | Deployment, Release. | Review-needed. |
+| `pnpm check` omits smoke/typecheck expectations. | CI/release. | Gate ambiguity. | Script drift. | Low. | Low. | Release checklist differs from CI. | `pnpm check` already includes `typecheck` and `smoke:cli` as of Step 13.5. | Deployment, Release. | Mitigated. |
 | Fixture drift from profile/schema contracts. | Contracts/generation. | False confidence. | Profile changes. | Medium. | High. | Tests pass with obsolete fixtures. | Profile contract snapshots and fixture versioning. | Release. | Release-blocking for profile changes. |
 | Concurrent process/state locking untested. | State integrity. | Hard-to-test gap. | Unsupported multi-client behavior. | Unknown. | High. | State corruption from two TUI sessions. | Document unsupported; add lock tests if support is added. | Infrastructure. | Accepted risk until feature support changes. |
 | Performance thresholds remain provisional. | Performance. | Unknown readiness. | Lack of benchmark evidence. | Medium. | Medium. | Slow generation/status in user trials. | Add smoke benchmarks before public release. | Observability, Release. | Review-needed. |

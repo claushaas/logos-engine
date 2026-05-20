@@ -43,6 +43,9 @@ An incident is an event that:
 | **Security** | Dependency CVE, token exposure in build artifact |
 | **Release** | Broken npm package, failed smoke test after tag |
 | **Supply chain** | Compromised dependency, compromised GitHub Actions runner |
+| **Local state** | Corrupt `.logos/` state, failed migration, invalid workspace |
+| **Command failure** | `/generate` partial failure, `/executive compile` blocked, doctor diagnostic warnings |
+| **Provider** | Provider unavailable, misconfigured credential, timeout during intake |
 
 ## Severity Levels
 
@@ -83,6 +86,8 @@ No approval is needed to declare. Declaring starts the response clock.
 | `pnpm audit` | Known vulnerabilities | manual / CI |
 | CI failure | Release gate failure | per commit / per release |
 | `pnpm smoke:cli` | Broken CLI behavior | per release |
+| `pnpm security:check` | Secret exposure, telemetry patterns, package safety | per release |
+| `pnpm smoke:package` | Release candidate package integrity | per release |
 | Manual code review | Security-sensitive changes | per PR |
 
 **Assumption**: No runtime alerting, no error telemetry, no automated intrusion detection.
@@ -122,6 +127,10 @@ Upon declaration:
 | Critical bug with no immediate fix | Document workaround in issue and README |
 | Dependency CVE | Update dependency; if no fix available, document risk and evaluate removal |
 | Data-loss bug | Warn users immediately; advise backup before running engine |
+| Corrupt `.logos/` state | Advise restore from backup; run `/diagnose` to assess damage |
+| Failed migration | Preserve prior state copy; document recovery path in issue |
+| Provider unavailable | Advise `/config ai` reconfiguration or no-provider mode |
+| Security check failure | Remove exposed secret; rotate token; add regression test |
 
 ## Rollback and Pause Rules
 

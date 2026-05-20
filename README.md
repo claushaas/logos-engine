@@ -1,184 +1,310 @@
 # LOGOS Engine
 
-LOGOS Engine is a local-first, open-source TUI system for structured externalization of intent.
+LOGOS Engine is a local-first CLI/TUI engine for structured externalization of intent
+and deterministic documentation generation. It runs inside a user's target repository
+and keeps the user's repository as the working boundary.
 
-Its purpose is to help people transform a diffuse idea into a complete, coherent, auditable documentation package before committing heavily to execution.
+LOGOS is not a document generator. It is a decision clarification engine that helps
+users transform ambiguous project ideas into structured decisions, canonical
+documentation, and derived execution artifacts.
 
-The first supported profile is **Standard**, focused on people who want to design, validate, document, and build an app-based venture. The system is intentionally designed to support other outcomes later, such as websites, SaaS products, courses, books, agencies, research projects, communities, and other structured initiatives.
+## Current Status
 
-LOGOS Engine is not a document generator.
+Release candidate — local package baseline (`v0.1.0`). The package is not yet
+published to a public registry. All quality gates, security checks, smoke tests,
+and package validation pass deterministically without AI credentials or network
+access.
 
-It is a decision clarification engine.
+## Requirements
 
-It helps users:
+- Node.js `>=22`
+- pnpm `10.33.2` (as declared in `package.json`)
+- No provider credentials required for deterministic local commands
+- No network access required for default tests, builds, or quality gates
 
-- clarify intent;
-- identify missing decisions;
-- separate facts from assumptions;
-- expose risks;
-- understand dependencies;
-- generate canonical documentation;
-- prepare consistent implementation artifacts;
-- avoid preventable late-stage pivots.
+## Installation
+
+Local development install:
+
+```bash
+git clone <repository-url>
+cd logos-engine
+pnpm install --frozen-lockfile
+pnpm build
+```
+
+Package usage (if built as a local package):
+
+```bash
+pnpm pack          # Produce a tarball for local inspection (does not publish)
+pnpm smoke:package # Verify release candidate package integrity
+```
+
+No npm registry publication has occurred yet.
+
+## Basic Commands
+
+| Command | Purpose | Mutating | Notes |
+|---|---|---|---|
+| `pnpm install --frozen-lockfile` | Install dependencies from lockfile | No (state) | |
+| `pnpm build` | Compile TypeScript to `dist/` | No (generates build output) | Required before CLI commands |
+| `pnpm test` | Run Vitest suite | No | 120+ test files, ~3270 tests |
+| `pnpm typecheck` | Type-check without emit | No | |
+| `pnpm lint` | Non-mutating lint (Biome + markdownlint) | No | |
+| `pnpm lint:biome` | Code/style lint only | No | |
+| `pnpm lint:md` | Markdown lint only | No | |
+| `pnpm check:validation` | Validate bundled Standard profile contracts | No | No workspace required |
+| `pnpm smoke:cli` | Verify built CLI starts and basic commands work | No | |
+| `pnpm security:check` | Run deterministic security/privacy release checker | No | Requires build |
+| `pnpm smoke:package` | Run release candidate package smoke | No | Requires build |
+| `pnpm check` | Full quality gate (lint + typecheck + test + validation + build + smoke) | No | Non-mutating CI/release gate |
+| `pnpm format` | Mutating format with Biome | Yes (formatting) | Fixes auto-fixable issues |
+
+## CLI Usage
+
+LOGOS Engine exposes a minimal external CLI; the primary workflow is through the TUI.
+
+```bash
+logos                 # Open the interactive TUI shell
+logos --help          # Show CLI help
+logos --version       # Show package version
+logos doctor          # Run non-mutating local diagnostics
+logos doctor --json   # Structured JSON diagnostics
+logos doctor --dry-run # Dry-run diagnostics
+logos doctor --json --dry-run # Combined JSON + dry-run
+```
+
+## TUI Slash Commands
+
+Inside the TUI, slash commands drive system operations:
+
+| Command | Purpose | Mutating | Requires Workspace |
+|---|---|---|---|
+| `/help` | Show available slash commands | No | No |
+| `/status` | Show runtime status (project root, doc root, profile, provider, workspace, registers, staleness, graph, executive readiness) | No | Works when present |
+| `/exit` | Exit the shell | No | No |
+| `/init` | Preview workspace creation paths | No | No |
+| `/init --confirm` | Create `.logos/workspace.json` | Yes | No |
+| `/init --dry-run` | Dry-run workspace initialization plan | No | No |
+| `/init --root <path>` | Set custom documentation root | Depends on mode | No |
+| `/init --profile <id>` | Select profile (default: `standard`) | Depends on mode | No |
+| `/continue` | Show the next intake question cluster (read-only, deterministic) | No | Yes |
+| `/generate` | Preflight canonical Markdown generation | No | Yes |
+| `/generate --confirm` | Execute canonical Markdown generation | Yes | Yes |
+| `/generate --dry-run` | Dry-run generation report | No | Yes |
+| `/generate --policy <name> --confirm` | Use specific write policy (skip, fail, backup_and_write, overwrite) | Yes | Yes |
+| `/validate` | Run deterministic validation and write a local report | Yes (report) | Yes |
+| `/validate --dry-run` | Run validation without writes | No | Yes |
+| `/validate --scope <scope>` | Scope validation (contracts, state, artifacts, outputs, all) | Depends | Depends |
+| `/diagnose` | Run diagnostic analysis | Yes (report) | Yes |
+| `/diagnose --dry-run` | Run diagnosis without writes | No | Yes |
+| `/graph` | Show dependency graph output (summary mode) | No | No (profile contract) |
+| `/graph --json` | Graph output as JSON | No | No |
+| `/graph --phase <id>` | Filter graph by phase | No | No |
+| `/graph --doc <id>` | Filter graph by document | No | No |
+| `/graph --mode full` | Full graph output | No | No |
+| `/config ai` | Configure AI provider (recognized stub, not yet implemented) | No | No |
+| `/executive compile` | Preflight Executive Axis compilation | No | Yes |
+| `/executive compile --confirm` | Execute Executive compilation (JSON + exports) | Yes | Yes |
+| `/executive compile --dry-run` | Dry-run executive compilation | No | Yes |
+| `/executive compile --mode strict` | Strict mode (block on readiness issues) | Depends | Yes |
+| `/executive compile --target <target>` | Specific export target (json, markdown, html, github-issues, agent-pack) | Depends | Yes |
+| `/executive compile --all-file-exports` | All supported file exports | Yes | Yes |
+
+Free-form text input is recognized but not yet implemented for intake routing.
+
+## Workspace Model
+
+- `.logos/` stores local structured state (workspace.json, config, session data).
+- Generated canonical documentation defaults to `logos/` (configurable at init).
+- The bundled profile is `standard` under `profiles/standard/`.
+- `.logos/workspace.json` and canonical Markdown are the authoritative sources of truth.
+- Provider credentials are referenced by environment variable name, never stored as raw values.
+
+## Generation Model
+
+- **Canonical Markdown** is generated from profile contracts and workspace state
+  under the configured documentation root (default `logos/`).
+- **Derived HTML artifacts** are static, escaped, local-safe review views.
+- **Derived Agent Packs** are labeled as non-canonical, regenerable execution aids.
+- **Executive Axis outputs** are derived snapshots from the normative documentation
+  baseline.
+
+All generated artifacts include source metadata, timestamps, and derived/non-canonical
+classification where applicable. Manual edits to generated files are detected and
+protected from silent overwrite.
+
+## Validation and Diagnostics
+
+- `/validate` runs deterministic, provider-free validation against profile contracts,
+  workspace state, artifacts, and generated outputs. Produces a local review report.
+- `/diagnose` runs deterministic diagnosis with optional guarded AI interpretation
+  (falls back to deterministic when AI is unavailable).
+- `logos doctor` runs non-mutating local diagnostics without requiring an initialized
+  workspace.
+- Deterministic checks never require AI credentials or network access.
+
+## Executive Axis
+
+- `/executive compile` runs a readiness gate before compiling.
+- Produces an **Executive Plan JSON** validated against the executive schema.
+- Supported local file exports: Markdown, HTML, GitHub Issue-compatible files,
+  Agent Pack files.
+- All exports are derived, non-canonical snapshots with source traceability.
+- Linear and Notion mappings are planned adapter contracts and are not yet implemented
+  as live integrations.
+
+## Import and Scanner
+
+- The import planner is read-only and bounded.
+- The repository scanner is read-only and bounded.
+- The docs-vs-code checker is read-only and bounded.
+- Candidate extraction produces reviewable candidates only; no imports are applied
+  automatically.
+- Transcript semantic import is deferred and not yet implemented.
+
+## Migrations and Backups
+
+- Local state schema versioning is supported.
+- `/init` and generation commands support dry-run planning before mutation.
+- Backups are created before mutating migrations (local only).
+- Backups exclude `.env`, provider tokens, and secret-like files.
+- Restore is user-managed via filesystem or Git; pre-restore backup creation is
+  recommended.
+- Partial failure reports include changed paths and recovery hints.
+- No cloud backup, remote migration, or managed restore is available in MVP.
+
+## Security and Privacy
+
+LOGOS Engine is local-first by default:
+
+- **No telemetry, remote logging, crash reporting, or analytics.**
+- **No external sync** by default — user repository stays local.
+- **Provider credentials** are opt-in, referenced by environment variable name only.
+  Raw tokens are never stored in `.logos/`, generated docs, artifacts, reports,
+  logs, backups, fixtures, or snapshots.
+- **Deterministic commands** (doctor, validate, diagnose, test, build, lint, check)
+  require no network access and no provider credentials.
+- **Provider calls** only occur when explicitly configured and disclosed to the user.
+- **Security/privacy release checks** are available via `pnpm security:check`.
+- **Package safety** excludes `.env`, `.logos`, backups, coverage, `node_modules`,
+  and private artifacts.
+
+See [SECURITY.md](./SECURITY.md) for the full security policy.
+
+## Limitations and Non-Goals
+
+- **No hosted SaaS** — LOGOS Engine runs locally only.
+- **No live external task sync** — GitHub/Linear/Notion exports are local file
+  snapshots, not bidirectional integrations.
+- **No automatic external research** — no web scraping, market data lookup, or
+  competitive analysis.
+- **No package publication** — the package is not yet published to npm.
+- **No formal security audit** — security checks are deterministic and local, not
+  a penetration test or CVE audit.
+- **No cloud backup** — backups and restore are user-managed.
+- **No provider credentials required** for deterministic operations.
+- **No profile marketplace** — only the bundled `standard` profile is supported.
+- **No multi-user collaboration** — single-user, local repository only.
+
+## Troubleshooting
+
+| Symptom | Likely Cause | Command | Recovery |
+|---|---|---|---|
+| `logos` command not found | Build missing | `pnpm build` | Verify `dist/cli.js` exists |
+| `logos` won't start | Non-TTY or missing Node | `node --version` | Use interactive terminal with Node >=22 |
+| `doctor` reports missing workspace | Not initialized | `/init` | Run `/init` to create workspace |
+| `/init` collision | `.logos/` already exists | `/init --dry-run` | Use `--confirm` if safe, or backup first |
+| Validation blockers | Incomplete state or contract issues | `/validate`, `/diagnose` | Review findings and resolve blocked inputs |
+| Stale generated docs | State changed since last generation | `/status`, `/generate --dry-run` | Run `/generate --confirm` |
+| Manual edit collision | User edited generated output | `/generate --dry-run` | Use write policy or review conflicts |
+| Generation/export partial failure | Missing inputs or blocked documents | `/status`, `/diagnose` | Resolve blocking inputs, retry generation |
+| Executive readiness blocked | Blocking open questions or stale outputs | `/status` | Resolve open questions, regenerate canonical docs |
+| Migration required | Schema version mismatch after update | `/status` | Follow migration guidance in output |
+| Migration partially failed | Interrupted migration or invalid state | `/diagnose` | Restore from backup, retry |
+| Restore from backup | Corrupt or unwanted state change | Manual | Copy backup over `.logos/`, verify with `/status` |
+| Package smoke missing profile | Build incomplete or profile missing | `pnpm build` | Verify `profiles/standard/` exists |
+| Security check found secret | Token or credential in source/fixtures | `pnpm security:check` | Remove secret, add regression test |
+| Provider unavailable | Credential or network issue | `/config ai`, `/status` | Check env vars, reconfigure or use no-provider mode |
+| No network expected | Network-dependent command attempted | Check command docs | Use deterministic commands without provider |
 
 ## Repository Structure
 
 ```text
-src/                  # TypeScript source (scaffolded in Step 0.2)
-  application/
-  ai/
-  domain/
-  foundation/
-  storage/
-  tui/
-tests/                # Test suite (added in Step 0.3)
-  fixtures/
+src/
+  agent-packs/       # Agent pack generation
+  ai/                # Provider abstraction, fake provider, disclosure
+  cli/               # CLI bootstrap and external commands
+  consistency/       # Consistency checks
+  dependency-graph/  # Contract graph, output graph, graph queries
+  executive/         # Executive Axis compilation
+  fs/                # Safe filesystem adapter, atomic writes
+  generation/        # Canonical Markdown generation and writing
+  html/              # HTML artifact planning, rendering, escaping
+  import/            # Import planner (read-only)
+  init/              # Workspace initialization
+  intake/            # Intake questions, context building, proposals
+  performance/       # Performance benchmarking
+  profiles/          # Profile YAML loading and contract assembly
+  provenance/        # Source and claim provenance
+  regeneration/      # Regeneration planning
+  registers/         # Decision, assumption, risk, question registers
+  release/           # Release candidate smoke
+  runtime/           # Project detection, diagnostics, redaction
+  scanner/           # Repository scanner (read-only)
+  security/          # Security/privacy release checks
+  staleness/         # Staleness detection
+  state/             # Workspace state schema and repository
+  traceability/      # Artifact traceability metadata
+  tui/               # Ink TUI shell, slash parser and router
+  validation/        # Deterministic validation and diagnosis
 scripts/
-  smoke-cli.js        # CLI smoke test (added in Step 0.3)
+  smoke-cli.js       # CLI smoke test
+  smoke-package.js   # Release candidate package smoke
+  security-check.js  # Security/privacy release check
 profiles/
-  standard/           # Initial bundled documentation profile
+  standard/          # Bundled Standard documentation profile
 docs/
-  01-foundation/
-  02-validation/
-  03-product/
-  04-engineering/
-  05-go-to-market/
-  06-operations/
+  01-foundation/     # Project thesis, problem, audience, principles
+  02-validation/     # Validation documents and evidence
+  03-product/        # Product architecture, requirements, UX
+  04-engineering/    # System architecture, data model, API, security, testing
+  05-go-to-market/   # Market, positioning, launch
+  06-operations/     # Operating model, support, incidents
+  roadmap/           # Implementation roadmap
+tests/               # Vitest test suite
 ```
-
-## Local Development
-
-LOGOS Engine uses Node.js, pnpm, TypeScript, Vitest, Biome, and markdownlint.
-
-Required baseline:
-
-- Node.js 22 or newer;
-- pnpm 10.33.2, as declared in `package.json`.
-
-Install dependencies:
-
-```bash
-pnpm install
-```
-
-Run the available quality commands:
-
-```bash
-pnpm lint          # Non-mutating lint (Biome + markdownlint)
-pnpm lint:biome    # Code/style lint — non-mutating
-pnpm lint:md       # Markdown lint — non-mutating
-pnpm typecheck     # Type-check src/ tree without emit
-pnpm test          # Run Vitest baseline
-pnpm build         # Build src/ to dist/
-pnpm smoke:cli     # Verify built CLI starts
-pnpm check         # Full non-mutating quality gate (lint + typecheck + test + validation + build + smoke)
-pnpm format        # Mutating format with Biome — fixes auto-fixable issues
-```
-
-`pnpm check` is the strict CI/release gate and must not mutate files. `pnpm format` is the local write command.
-
-The `smoke:cli` script is a Phase 0 preflight. The CLI bootstrap (`--help`, `--version`, `doctor`) is implemented in Step 2.1. The Ink TUI shell and slash router are implemented in Step 2.2.
-
-> **Step 0.4 status:** `pnpm check` passes cleanly. Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and select profile templates are excluded from markdownlint via `.markdownlintignore` until a documentation-hardening pass cleans them up.
-
-## First Outcome Profile
-
-The first canonical profile is:
-
-```text
-standard
-```
-
-This profile guides you through the complete documentation needed to design and execute an app-based business. Start a conversation with AI in the TUI — describe your idea, answer follow-up questions naturally, and LOGOS builds a structured workspace of decisions, assumptions, and generated documentation.
-
-### Usage
-
-```bash
-logos                        # Open the interactive TUI shell
-logos --help                 # Show CLI help
-logos --version              # Show package version
-logos doctor                 # Run non-mutating local diagnostics (detects project root and workspace state)
-logos doctor --json          # Emit automation-friendly structured JSON diagnostics to stdout
-logos doctor --dry-run       # Show diagnostics without making any changes
-logos doctor --json --dry-run # Combined JSON + dry-run output
-```
-
-Inside the TUI, slash commands drive system operations:
-
-```bash
-/help           # Show available slash commands
-/status         # Show runtime status (project root, documentation root, profile, provider, workspace init state)
-/exit           # Exit the shell
-
-/init           # Preview workspace creation paths
-/init --confirm # Create .logos/workspace.json after confirmation
-/continue       # Show the next read-only intake question cluster
-# Type freely: "I'm building a fitness app for personal trainers..."
-/generate       # Preview canonical Markdown generation
-/generate --dry-run # Report planned generation without writes
-/generate --confirm # Render canonical Markdown under the configured root
-/validate       # Run deterministic validation and write a local review report
-/validate --dry-run # Run validation without report/state writes
-/validate --scope contracts # Validate bundled profile contracts without an initialized workspace
-/diagnose       # Run deterministic diagnosis, with optional guarded AI interpretation when configured
-/diagnose --dry-run # Run diagnosis without report/state writes
-/config ai      # Configure AI provider (recognized stub)
-```
-
-In this step, `/help`, `/status`, `/exit`, `/init`, `/continue`, `/generate`, `/validate`, and `/diagnose` are functional. `/config ai` is a recognized stub and will be implemented in a later phase.
-
-All slash commands (`/init`, `/status`, `/validate`, `/diagnose`, `/generate`, `/config ai`) are in-TUI commands, not external CLI subcommands.
-
-## Core Principle
-
-The source of truth is not the generated Markdown.
-
-The source of truth is the structured decision registry.
-
-Markdown documents are rendered views of the current state of the project.
-
-## License Direction
-
-LOGOS Engine is open source and free to use.
-
-Code is licensed under MIT. Documentation template licensing can be refined when generated templates are introduced.
 
 ## AI Behavior
 
-AI is a first-class workflow layer in LOGOS Engine. It is used for:
-
-- Leading the intake conversation
-- Generating context-aware initial and follow-up questions during intake
-- Summarizing user answers into structured form
-- Extracting decision proposals from answers
-- Classifying assumptions and identifying gaps
-- Identifying risks and inconsistencies
-- Drafting document sections
-- Recommending the next useful conversational move
-
-AI output always enters the system with a status that keeps it distinct from confirmed state:
+AI is an advisory workflow layer, not an authority. AI output enters the system
+with a status that keeps it distinct from confirmed state:
 
 | Status | Meaning |
-|--------|---------|
+|---|---|
 | `draft` | Generated but not yet reviewed |
 | `proposed` | Ready for user review |
 | `needs_review` | Flagged for attention |
 | `rejected` | Reviewed and rejected by user |
 | `confirmed` | Reviewed and accepted by user |
 
-AI-generated decisions may become `confirmed` only after explicit user confirmation. This distinction is enforced in the data model: `DecisionStatus` and `AiOutputStatus` are separate concepts.
+AI-generated decisions may become `confirmed` only after explicit user confirmation.
+Provider output is advisory and provenance-bearing. Deterministic validation
+remains separate from AI judgment.
 
 ### Running Without A Live Remote Provider
 
-LOGOS Engine does not require live remote model calls for installation, tests, initialization, status, validation, or provider setup.
+LOGOS Engine does not require live remote model calls for installation, tests,
+initialization, status, validation, or provider setup. All deterministic commands
+work offline with no credentials.
 
-The core intake and documentation workflow is AI-led. Local development and tests may use mocked or fixture providers, and users may configure local providers such as Ollama or LM Studio. If no AI provider is enabled for an actual workspace, LOGOS should guide the user to configure AI instead of falling back to a deterministic questionnaire.
-
-Remote AI is always opt-in.
+Remote AI is always opt-in. If no AI provider is enabled, deterministic fallback
+behavior applies.
 
 ## Provider Configuration
 
-LOGOS Engine supports local and remote LLM providers through a provider-agnostic abstraction. Supported presets:
+LOGOS Engine supports local and remote LLM providers through a provider-agnostic
+abstraction. Supported presets:
 
 - **OpenAI** — `gpt-4o`, `gpt-4o-mini`, etc.
 - **Anthropic** — `claude-sonnet-4-20250514`, etc.
@@ -187,7 +313,8 @@ LOGOS Engine supports local and remote LLM providers through a provider-agnostic
 - **LM Studio** — local models via OpenAI-compatible endpoint
 - **Custom** — any OpenAI-compatible endpoint
 
-Configure via `/config ai` in the TUI or edit `.logos/config.json`:
+Configure via `/config ai` in the TUI (currently a recognized stub, planned for
+a future phase) or edit `.logos/config.json`:
 
 ```json
 {
@@ -199,38 +326,17 @@ Configure via `/config ai` in the TUI or edit `.logos/config.json`:
 }
 ```
 
-API keys are loaded from environment variables — never stored in project files. The config stores the name of the environment variable, not the key value.
-
-Full details: [Provider Configuration](./docs/07-ai-and-agent-behavior/03_PROVIDER_CONFIGURATION.md)
-
-## Privacy
-
-LOGOS Engine is local-first and does not collect telemetry, track usage, or phone home.
-
-When a remote AI provider is configured, the engine sends only relevant structured project state: answers, decisions, assumptions, open questions, document contracts, and profile phase definitions. Arbitrary source files are never sent by default.
-
-Use `/config ai --show` to inspect what context would be sent before making AI calls. Use local providers (Ollama, LM Studio) for zero-data-leaving-your-machine operation.
-
-Full details: [Privacy](./docs/07-ai-and-agent-behavior/04_PRIVACY.md)
-
-## AI Safety Baseline
-
-Repository defaults follow these rules:
-
-- default tests must not call live models;
-- default tests must not require network access or AI credentials;
-- raw LLM tokens must not be stored in project files;
-- AI output must remain draft, proposed, needs_review, rejected, or explicitly confirmed;
-- AI-generated decisions may become confirmed only after user confirmation;
-- deterministic validation stays separate from AI judgment.
+API keys are loaded from environment variables — never stored in project files.
+The config stores the name of the environment variable, not the key value.
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, contribution areas, and review guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup, quality gates,
+and review guidelines.
 
-## Open Source
+## License
 
-- **Code**: MIT License
+- **Code**: MIT License — see [LICENSE](./LICENSE)
 - **Documentation Templates**: Creative Commons Attribution 4.0
 - **Code of Conduct**: [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
 - **Security Policy**: [SECURITY.md](./SECURITY.md)

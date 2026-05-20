@@ -297,10 +297,10 @@ Promotion blockers:
 
 | Phase | Checks | Evidence | Failure Consequence |
 | --- | --- | --- | --- |
-| Pre-release | `pnpm check`, `pnpm typecheck`, focused release-blocking tests, profile validation, no-secret inspection. | CI/local command output. | Block release. |
-| Package verification | Build artifact exists, `bin.logos` points to `dist/cli.js`, required files included, no secrets. | Package inspection/dry-run when implemented. | Block publish. |
-| Smoke verification | `pnpm smoke:cli`; optional install/run smoke in temp directory. | Smoke output. | Block release for CLI failure. |
-| Security/privacy verification | no raw tokens, no telemetry, remote provider disclosure tests, path safety tests. | Test/review evidence. | Block release. |
+| Pre-release | `pnpm check`, `pnpm typecheck`, `pnpm security:check`, `pnpm smoke:package`, focused release-blocking tests, profile validation, no-secret inspection. | CI/local command output. | Block release. |
+| Package verification | Build artifact exists, `bin.logos` points to `dist/cli.js`, required files included, no secrets. | Package inspection via `pnpm smoke:package`. | Block publish. |
+| Smoke verification | `pnpm smoke:cli`; `pnpm smoke:package`; optional install/run smoke in temp directory. | Smoke output. | Block release for CLI or package failure. |
+| Security/privacy verification | `pnpm security:check` passes; no raw tokens, no telemetry, remote provider disclosure tests, path safety tests. | Test/review evidence. | Block release. |
 | Generated output verification | Markdown generation, derived output classification, root `logos/`, stale/partial report behavior. | Golden/report tests. | Block or accept deferral for derived outputs only. |
 | Manual acceptance | Founder/product owner primary journey and generated docs review. | Checklist/notes. | Block must-have journey failures. |
 | Post-release | Watch issues/support/manual install checks. | Issue/support notes. | Hotfix/new version if severe. |
@@ -318,6 +318,8 @@ No hosted post-deploy health endpoint exists in MVP.
 | Generation smoke | Temp fixture state. | `/generate` writes under `logos/` or custom root. | Synthetic state. | Blocks release for canonical generation. |
 | Provider config smoke | Fake provider. | `/config ai`/provider status redacts tokens. | Fake token source only. | Blocks provider feature release. |
 | Package install smoke | Release candidate. | Installed package exposes `logos`. | No provider token. | Recommended before publish. |
+| Package smoke | Release candidate. | `pnpm smoke:package` runs all checks. | None. | Blocks release for package integrity failure. |
+| Security/privacy smoke | Release candidate. | `pnpm security:check` runs all checks. | None. | Blocks release for security findings. |
 
 Smoke tests must be fast and deterministic. Live provider calls are optional manual checks, not default smoke tests.
 

@@ -460,3 +460,6 @@ Support Model, Incident Response, Risk Management, and Operations must inherit:
 - incidents involving tokens, unintended remote transmission, unsafe writes, state corruption, package compromise, or privacy exposure require containment and regression tests;
 - legal/compliance notification obligations are review-needed and must not be invented by product docs;
 - residual risks in this document must stay visible until accepted, mitigated, or routed to future scope.
+
+For the operational security policy, vulnerability reporting process, and security/privacy release check commands, see [SECURITY.md](../../SECURITY.md).
+For development quality gates and release candidate checklists, see [CONTRIBUTING.md](../../CONTRIBUTING.md).

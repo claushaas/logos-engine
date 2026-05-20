@@ -47,11 +47,16 @@ You can inspect what context would be sent using `/config ai --show`.
 
 ## Release Security and Privacy Checks
 
-LOGOS Engine includes a deterministic, read-only, non-mutating security/privacy release checker. It can be run at any time:
+LOGOS Engine includes a deterministic, read-only, non-mutating security/privacy release checker. It can be run at any time after building:
 
 ```bash
+pnpm build
 pnpm security:check
 ```
+
+> **Note:** `pnpm security:check` requires a prior build (`pnpm build`) because the
+> checker imports compiled TypeScript modules from `dist/`. It does not require
+> provider credentials, network access, or an initialized workspace.
 
 ### What the checker verifies
 
@@ -72,6 +77,7 @@ pnpm security:check
 ### Release status
 
 The checker produces one of four statuses:
+
 - `pass`: No findings at error or fatal severity.
 - `pass_with_warnings`: Warning-level findings only.
 - `blocked`: One or more error or fatal findings. Release is blocked.
@@ -84,3 +90,19 @@ The checker produces one of four statuses:
 - It does NOT perform formal penetration testing.
 - It does NOT scan for all possible secret formats.
 - It is a release gate, not a security guarantee.
+- No formal third-party security audit has been performed on LOGOS Engine.
+- The security posture depends on the user's local OS, filesystem permissions,
+  shell history, and OS backup security.
+
+## Operational Security Commands
+
+| Command | Purpose | Requires Build | Requires Workspace |
+|---|---|---|---|
+| `pnpm security:check` | Deterministic security/privacy release check | Yes | No |
+| `pnpm smoke:package` | Release candidate package smoke (includes security check) | Yes | No |
+| `pnpm smoke:cli` | CLI smoke test (help, version, doctor) | Yes | No |
+| `logos doctor` | Local diagnostics (includes provider config redaction) | Yes | No |
+| `/config ai --show` | Inspect what context would be sent to provider | Yes | Yes |
+
+For development and contribution guidelines, see [CONTRIBUTING.md](./CONTRIBUTING.md).
+For product-level security and privacy documentation, see [Security and Privacy](./docs/04-engineering/08-security-and-privacy.md).
