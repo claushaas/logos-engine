@@ -14,7 +14,8 @@ LOGOS Engine is a local-first CLI/TUI application. It runs on your machine and w
 
 - **LLM token handling**: The engine loads API keys from environment variables (e.g. `OPENAI_API_KEY`) referenced by the provider configuration. Token values are NEVER stored in workspace state (`.logos/workspace.json`). Only environment variable names are stored. Tokens are redacted from diagnostic output and never appear in status displays.
 - **Prompt safety**: Unrelated project files are excluded from AI context by default. Context sent to remote providers is limited to structured project state, profile definitions, and user answers.
-- **File safety**: The engine uses safe/atomic writes for JSON/YAML state. It refuses destructive overwrites during initialization.
+- **File safety**: The engine uses safe/atomic writes for JSON/YAML state. It refuses destructive overwrites during initialization. Interactive TUI confirmations require explicit keyboard acceptance of destructive actions; cancel/no mutates nothing.
+- **Confirmation safety**: Keyboard confirmation does not bypass validation, path safety, security, readiness, or write-policy checks. Stale confirmations are rejected. Destructive actions are visibly marked as destructive.
 - **Input validation**: YAML profile files, user answers, and AI responses are schema-validated before use.
 
 ### Out-of-Scope

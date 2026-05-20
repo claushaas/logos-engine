@@ -2,6 +2,7 @@
 
 import type { StartupBriefing } from '../intake/startup-briefing-types.js';
 import type { ProjectContext } from '../runtime/project-context.js';
+import type { TuiConfirmationRequest } from './confirmation-model.js';
 
 export type ParsedInput =
 	| { kind: 'empty' }
@@ -15,9 +16,15 @@ export interface SlashCommandResult {
 	command: string;
 	messages: string[];
 	shouldExit: boolean;
+	/** Optional confirmation request when interactive confirmation is needed */
+	confirmationRequest?: TuiConfirmationRequest | undefined;
 }
 
 export interface RouterContext {
 	projectContext: ProjectContext;
 	startupBriefing?: StartupBriefing | undefined;
+	/** Whether the TUI is running in interactive mode (keyboard confirmation available) */
+	interactive?: boolean | undefined;
+	/** Set to true to bypass confirmation (used by resolver after user accepts) */
+	confirmationBypass?: boolean | undefined;
 }

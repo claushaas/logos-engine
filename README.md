@@ -76,21 +76,24 @@ logos doctor --json --dry-run # Combined JSON + dry-run
 
 ## TUI Slash Commands
 
-Inside the TUI, slash commands drive system operations:
+Inside the TUI, slash commands drive system operations.
+Interactive mutating commands use keyboard-selectable confirmation controls
+instead of requiring `--confirm` to be retyped.
+`--confirm` remains available for non-interactive tests and scripts.
 
 | Command | Purpose | Mutating | Requires Workspace |
 |---|---|---|---|
 | `/help` | Show available slash commands | No | No |
 | `/status` | Show runtime status (project root, doc root, profile, provider, workspace, registers, staleness, graph, executive readiness) | No | Works when present |
 | `/exit` | Exit the shell | No | No |
-| `/init` | Preview workspace creation paths | No | No |
-| `/init --confirm` | Create `.logos/workspace.json` | Yes | No |
+| `/init` | Preview workspace creation paths; interactive TUI shows keyboard confirmation (Accept/Cancel) | No | No |
+| `/init --confirm` | Create `.logos/workspace.json` (non-interactive confirmation) | Yes | No |
 | `/init --dry-run` | Dry-run workspace initialization plan | No | No |
 | `/init --root <path>` | Set custom documentation root | Depends on mode | No |
 | `/init --profile <id>` | Select profile (default: `standard`) | Depends on mode | No |
 | `/continue` | Show the next intake question cluster (read-only, deterministic) | No | Yes |
-| `/generate` | Preflight canonical Markdown generation | No | Yes |
-| `/generate --confirm` | Execute canonical Markdown generation | Yes | Yes |
+| `/generate` | Preflight canonical Markdown generation; interactive TUI shows keyboard confirmation (Accept/Cancel) with output paths | No | Yes |
+| `/generate --confirm` | Execute canonical Markdown generation (non-interactive confirmation) | Yes | Yes |
 | `/generate --dry-run` | Dry-run generation report | No | Yes |
 | `/generate --policy <name> --confirm` | Use specific write policy (skip, fail, backup_and_write, overwrite) | Yes | Yes |
 | `/validate` | Run deterministic validation and write a local report | Yes (report) | Yes |
@@ -104,8 +107,8 @@ Inside the TUI, slash commands drive system operations:
 | `/graph --doc <id>` | Filter graph by document | No | No |
 | `/graph --mode full` | Full graph output | No | No |
 | `/config ai` | Configure AI provider (status, mode, provider, model, endpoint, token, timeout, disclosure, test, disable, reset) | Yes | No |
-| `/executive compile` | Preflight Executive Axis compilation | No | Yes |
-| `/executive compile --confirm` | Execute Executive compilation (JSON + exports) | Yes | Yes |
+| `/executive compile` | Preflight Executive Axis compilation; interactive TUI shows keyboard confirmation (Accept/Cancel) with readiness info | No | Yes |
+| `/executive compile --confirm` | Execute Executive compilation (JSON + exports) (non-interactive confirmation) | Yes | Yes |
 | `/executive compile --dry-run` | Dry-run executive compilation | No | Yes |
 | `/executive compile --mode strict` | Strict mode (block on readiness issues) | Depends | Yes |
 | `/executive compile --target <target>` | Specific export target (json, markdown, html, github-issues, agent-pack) | Depends | Yes |

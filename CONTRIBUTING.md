@@ -67,7 +67,7 @@ LOGOS Engine accepts contributions in several layers:
 
 ### Core Engine
 
-- TUI improvements
+- TUI improvements (including keyboard confirmation components — use `ink-testing-library` for component tests)
 - Renderer improvements
 - Validation engine
 - Profile loader

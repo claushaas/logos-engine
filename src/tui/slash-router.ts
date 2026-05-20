@@ -47,6 +47,10 @@ import { readWorkspaceState } from '../state/workspace-state-repository.js';
 import { getWorkspaceStatusSummary } from '../state/workspace-status.js';
 import { runDiagnoseCommand } from '../validation/diagnose-command.js';
 import { runValidateCommand } from '../validation/validate-command.js';
+import {
+	createTuiConfirmationRequest,
+	yesNoOptions,
+} from './confirmation-model.js';
 import type {
 	CommandResultStatus,
 	ParsedInput,
@@ -124,6 +128,14 @@ export async function routeSlashCommand(
 				shouldExit: false,
 			};
 	}
+}
+
+/**
+ * Check whether keyboard confirmation should be used for this context.
+ * Returns true when the TUI is interactive and confirmation hasn't been bypassed.
+ */
+function shouldUseKeyboardConfirmation(context: RouterContext): boolean {
+	return context.interactive === true && context.confirmationBypass !== true;
 }
 
 function getHelpMessages(): string[] {
@@ -395,7 +407,7 @@ async function getInitResult(
 		};
 	}
 
-	// Default: show preflight plan, require confirmation
+	// Default: show preflight plan, optionally with keyboard confirmation
 	const preflight = await preflightInit({
 		documentationRoot: customRoot,
 		profileId,
@@ -403,7 +415,7 @@ async function getInitResult(
 		projectRoot,
 	});
 
-	const lines: string[] = [
+	const baseLines: string[] = [
 		'Workspace initialization preflight',
 		'',
 		'The following paths will be created:',
@@ -419,36 +431,98 @@ async function getInitResult(
 	];
 
 	if (!preflight.safe) {
-		lines.push('Preflight found issues:');
+		baseLines.push('Preflight found issues:');
 		for (const diag of preflight.diagnostics) {
-			lines.push(`  [${diag.severity.toUpperCase()}] ${diag.message}`);
+			baseLines.push(`  [${diag.severity.toUpperCase()}] ${diag.message}`);
 			if (diag.recoveryHint) {
-				lines.push(`    Recovery: ${diag.recoveryHint}`);
+				baseLines.push(`    Recovery: ${diag.recoveryHint}`);
 			}
 		}
-		lines.push('');
+		baseLines.push('');
 	}
 
 	if (preflight.collision.kind !== 'none') {
-		lines.push(`Warning: ${preflight.collision.message}`);
+		baseLines.push(`Warning: ${preflight.collision.message}`);
 		if (preflight.collision.recoveryHint) {
-			lines.push(`  ${preflight.collision.recoveryHint}`);
+			baseLines.push(`  ${preflight.collision.recoveryHint}`);
 		}
-		lines.push('');
+		baseLines.push('');
 	}
 
-	lines.push('No files have been written.');
-	lines.push('Run /init --confirm to create the workspace.');
-	lines.push('Run /init --dry-run for a detailed dry-run plan.');
-	lines.push('Run /init --root <path> to set a custom documentation root.');
-	lines.push('Run /init --profile-root <path> to use a custom local profile.');
+	// Interactive keyboard confirmation
+	if (
+		shouldUseKeyboardConfirmation(context) &&
+		preflight.safe &&
+		preflight.collision.kind === 'none'
+	) {
+		const sourceCmd = ['/init'];
+		if (customRoot) sourceCmd.push('--root', customRoot);
+		if (profileId) sourceCmd.push('--profile', profileId);
+		if (profileRoot) sourceCmd.push('--profile-root', profileRoot);
+
+		const confirmationRequest = createTuiConfirmationRequest({
+			actionKind: 'workspace_init',
+			alternatives: [
+				'Run /init --dry-run first.',
+				'Choose a different profile.',
+			],
+			consequences: [
+				`Create .logos/ directory at: ${preflight.targetPaths.logosDir}`,
+				`Create workspace state file at: ${preflight.targetPaths.workspaceStateFile}`,
+				`Documentation root: ${preflight.documentationRoot.rootPath}`,
+				`Profile: ${preflight.profile.profileId}`,
+			],
+			destructive: false,
+			diagnostics: preflight.diagnostics.map((d) => ({
+				code: d.code,
+				message: d.message,
+				recoveryHints: d.recoveryHint
+					? [{ category: 'manual_review' as const, message: d.recoveryHint }]
+					: [],
+				severity:
+					d.severity === 'error'
+						? 'error'
+						: d.severity === 'warning'
+							? 'warning'
+							: 'info',
+			})),
+			message: 'Workspace files will be created in this repository.',
+			options: yesNoOptions(),
+			sensitive: false,
+			sourceCommand: sourceCmd.join(' '),
+			target: {
+				kind: 'workspace',
+				path: preflight.targetPaths.projectRoot,
+			},
+			title: 'Initialize LOGOS Workspace',
+		});
+
+		baseLines.push('Use the keyboard to accept or cancel below.');
+
+		return {
+			command: 'init',
+			confirmationRequest,
+			kind: 'info',
+			messages: baseLines,
+			shouldExit: false,
+		};
+	}
+
+	// Non-interactive: standard text prompt
+	baseLines.push('No files have been written.');
+	baseLines.push('Run /init --confirm to create the workspace.');
+	baseLines.push('Run /init --dry-run for a detailed dry-run plan.');
+	baseLines.push('Run /init --root <path> to set a custom documentation root.');
+	baseLines.push(
+		'Run /init --profile-root <path> to use a custom local profile.',
+	);
 
 	const kind = preflight.safe ? 'info' : 'warning';
 
 	return {
 		command: 'init',
 		kind,
-		messages: lines,
+		messages: baseLines,
 		shouldExit: false,
 	};
 }
@@ -681,7 +755,7 @@ async function getGenerateResult(
 		}
 	}
 
-	// Default: show preflight
+	// Default: show preflight, optionally with keyboard confirmation
 	try {
 		const preflight = await generateCanonicalDocs({
 			mode: 'preflight',
@@ -698,7 +772,7 @@ async function getGenerateResult(
 			};
 		}
 
-		const lines: string[] = [
+		const baseLines: string[] = [
 			'Generation preflight',
 			'',
 			`Profile:            ${preflight.profileId}`,
@@ -716,32 +790,81 @@ async function getGenerateResult(
 		];
 
 		if (preflight.collisionPaths.length > 0) {
-			lines.push('Manual edits detected (will be protected):');
+			baseLines.push('Manual edits detected (will be protected):');
 			for (const p of preflight.collisionPaths.slice(0, 5)) {
-				lines.push(`  ${p}`);
+				baseLines.push(`  ${p}`);
 			}
 			if (preflight.collisionPaths.length > 5) {
-				lines.push(`  ... and ${preflight.collisionPaths.length - 5} more`);
+				baseLines.push(`  ... and ${preflight.collisionPaths.length - 5} more`);
 			}
-			lines.push('');
+			baseLines.push('');
 		}
 
 		if (preflight.targetPaths.length > 0) {
-			lines.push('Target paths:');
+			baseLines.push('Target paths:');
 			for (const p of preflight.targetPaths.slice(0, 10)) {
-				lines.push(`  ${p}`);
+				baseLines.push(`  ${p}`);
 			}
 			if (preflight.targetPaths.length > 10) {
-				lines.push(`  ... and ${preflight.targetPaths.length - 10} more`);
+				baseLines.push(`  ... and ${preflight.targetPaths.length - 10} more`);
 			}
-			lines.push('');
+			baseLines.push('');
 		}
 
-		lines.push('No files have been written.');
-		lines.push('Run /generate --confirm to execute generation.');
-		lines.push('Run /generate --dry-run for a detailed dry-run report.');
-		lines.push('Supported policies: skip, fail, backup_and_write, overwrite');
-		lines.push(
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const sourceCmd = ['/generate'];
+			if (writePolicy) sourceCmd.push('--policy', writePolicy);
+
+			const confirmationRequest = createTuiConfirmationRequest({
+				actionKind: 'canonical_generation',
+				alternatives: [
+					'Run /generate --dry-run first.',
+					'Use a different write policy.',
+				],
+				consequences: [
+					`Profile: ${preflight.profileId}`,
+					`Documentation root: ${preflight.documentationRoot}`,
+					`Files to generate: ${preflight.documentCounts.generate}`,
+					`Files to update: ${preflight.documentCounts.update}`,
+					...(preflight.collisionPaths.length > 0
+						? [
+								`Manual edits detected in ${preflight.collisionPaths.length} file(s) — they will be protected.`,
+							]
+						: []),
+				],
+				destructive: false,
+				message:
+					'Markdown documents will be written under the documentation root.',
+				options: yesNoOptions(),
+				sensitive: false,
+				sourceCommand: sourceCmd.join(' '),
+				target: {
+					kind: 'documentation_root',
+					path: preflight.documentationRoot,
+				},
+				title: 'Generate Canonical Documentation',
+			});
+
+			baseLines.push('Use the keyboard to accept or cancel below.');
+
+			return {
+				command: 'generate',
+				confirmationRequest,
+				kind: 'info',
+				messages: baseLines,
+				shouldExit: false,
+			};
+		}
+
+		// Non-interactive: standard text prompt
+		baseLines.push('No files have been written.');
+		baseLines.push('Run /generate --confirm to execute generation.');
+		baseLines.push('Run /generate --dry-run for a detailed dry-run report.');
+		baseLines.push(
+			'Supported policies: skip, fail, backup_and_write, overwrite',
+		);
+		baseLines.push(
 			'  Use /generate --policy backup_and_write --confirm to backup before overwrite.',
 		);
 
@@ -753,7 +876,7 @@ async function getGenerateResult(
 		return {
 			command: 'generate',
 			kind: hasWarnings ? 'warning' : 'info',
-			messages: lines,
+			messages: baseLines,
 			shouldExit: false,
 		};
 	} catch (error) {
@@ -1939,6 +2062,53 @@ async function getProposalsResult(
 			};
 		}
 
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const getResult = await getProposal({ projectRoot, proposalId });
+			if (getResult.success && getResult.proposal) {
+				const p = getResult.proposal;
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'proposal_accept',
+					consequences: [
+						`Proposal "${p.title}" will become a confirmed ${p.kind} record.`,
+						...(p.affectedDocumentIds.length > 0
+							? [`Affected documents: ${p.affectedDocumentIds.join(', ')}`]
+							: []),
+						'This may affect generated outputs.',
+					],
+					destructive: false,
+					message: `Accepting this proposal will create a confirmed ${p.kind} record from the proposed content.`,
+					options: yesNoOptions(),
+					sensitive: false,
+					sourceCommand: `/proposals accept ${proposalId}`,
+					target: {
+						id: proposalId,
+						kind: 'proposal',
+						safeDisplay: p.title.substring(0, 100),
+					},
+					title: `Accept Proposal: ${p.title.substring(0, 60)}`,
+				});
+
+				const displayLines: string[] = [
+					'Proposal acceptance confirmation',
+					'',
+					`  ID:    ${p.proposalId}`,
+					`  Kind:  ${p.kind}`,
+					`  Title: ${p.title}`,
+					'',
+					'Use the keyboard to accept or cancel below.',
+				];
+
+				return {
+					command: 'proposals',
+					confirmationRequest,
+					kind: 'info',
+					messages: displayLines,
+					shouldExit: false,
+				};
+			}
+		}
+
 		const result = await intakeAcceptProposal({ projectRoot, proposalId });
 
 		return formatProposalLifecycleResult('accept', result);
@@ -1955,6 +2125,54 @@ async function getProposalsResult(
 				messages: ['Usage: /proposals revise <proposal-id> <revised text>'],
 				shouldExit: false,
 			};
+		}
+
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const getResult = await getProposal({ projectRoot, proposalId });
+			if (getResult.success && getResult.proposal) {
+				const p = getResult.proposal;
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'proposal_revise',
+					consequences: [
+						`Proposal "${p.title}" will be revised with new text.`,
+						`New text: ${revisedText.trim().substring(0, 120)}`,
+					],
+					destructive: false,
+					message: 'Revising a proposal updates its content before acceptance.',
+					options: yesNoOptions({
+						acceptLabel: 'Revise',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: `/proposals revise ${proposalId} ${revisedText.trim()}`,
+					target: {
+						id: proposalId,
+						kind: 'proposal',
+						safeDisplay: p.title.substring(0, 100),
+					},
+					title: `Revise Proposal: ${p.title.substring(0, 60)}`,
+				});
+
+				const displayLines: string[] = [
+					'Proposal revision confirmation',
+					'',
+					`  ID:      ${p.proposalId}`,
+					`  Kind:    ${p.kind}`,
+					`  Title:   ${p.title}`,
+					`  New:     ${revisedText.trim().substring(0, 100)}`,
+					'',
+					'Use the keyboard to revise or cancel below.',
+				];
+
+				return {
+					command: 'proposals',
+					confirmationRequest,
+					kind: 'info',
+					messages: displayLines,
+					shouldExit: false,
+				};
+			}
 		}
 
 		const result = await intakeReviseProposal({
@@ -1979,6 +2197,54 @@ async function getProposalsResult(
 			};
 		}
 
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const getResult = await getProposal({ projectRoot, proposalId });
+			if (getResult.success && getResult.proposal) {
+				const p = getResult.proposal;
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'proposal_reject',
+					consequences: [
+						`Proposal "${p.title}" will be marked as rejected.`,
+						'It will remain in state but cannot be accepted later.',
+					],
+					destructive: false,
+					message:
+						'Rejecting a proposal prevents it from being accepted in the future.',
+					options: yesNoOptions({
+						acceptLabel: 'Reject',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: `/proposals reject ${proposalId}`,
+					target: {
+						id: proposalId,
+						kind: 'proposal',
+						safeDisplay: p.title.substring(0, 100),
+					},
+					title: `Reject Proposal: ${p.title.substring(0, 60)}`,
+				});
+
+				const displayLines: string[] = [
+					'Proposal rejection confirmation',
+					'',
+					`  ID:    ${p.proposalId}`,
+					`  Kind:  ${p.kind}`,
+					`  Title: ${p.title}`,
+					'',
+					'Use the keyboard to reject or cancel below.',
+				];
+
+				return {
+					command: 'proposals',
+					confirmationRequest,
+					kind: 'info',
+					messages: displayLines,
+					shouldExit: false,
+				};
+			}
+		}
+
 		const result = await intakeRejectProposal({ projectRoot, proposalId });
 
 		return formatProposalLifecycleResult('reject', result);
@@ -1994,6 +2260,53 @@ async function getProposalsResult(
 				messages: ['Usage: /proposals defer <proposal-id>'],
 				shouldExit: false,
 			};
+		}
+
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const getResult = await getProposal({ projectRoot, proposalId });
+			if (getResult.success && getResult.proposal) {
+				const p = getResult.proposal;
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'proposal_defer',
+					consequences: [
+						`Proposal "${p.title}" will be deferred.`,
+						'It remains reviewable later.',
+					],
+					destructive: false,
+					message: 'Deferring keeps the proposal for later review.',
+					options: yesNoOptions({
+						acceptLabel: 'Defer',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: `/proposals defer ${proposalId}`,
+					target: {
+						id: proposalId,
+						kind: 'proposal',
+						safeDisplay: p.title.substring(0, 100),
+					},
+					title: `Defer Proposal: ${p.title.substring(0, 60)}`,
+				});
+
+				const displayLines: string[] = [
+					'Proposal deferral confirmation',
+					'',
+					`  ID:    ${p.proposalId}`,
+					`  Kind:  ${p.kind}`,
+					`  Title: ${p.title}`,
+					'',
+					'Use the keyboard to defer or cancel below.',
+				];
+
+				return {
+					command: 'proposals',
+					confirmationRequest,
+					kind: 'info',
+					messages: displayLines,
+					shouldExit: false,
+				};
+			}
 		}
 
 		const { deferProposal: deferProposalFn } = await import(
@@ -2239,6 +2552,61 @@ async function getDecisionsResult(
 			};
 		}
 
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const decision = decisions.find((d) => d.id === decisionId);
+			if (decision) {
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'decision_revise',
+					consequences: [
+						`Decision "${decision.title}" will be revised.`,
+						...(decision.affectedDocumentIds.length > 0
+							? [
+									`Affected documents: ${decision.affectedDocumentIds.join(', ')}`,
+								]
+							: []),
+						'Affected outputs may become stale.',
+					],
+					destructive: false,
+					message:
+						'Revising a confirmed decision updates its content and may affect downstream documents.',
+					options: yesNoOptions({
+						acceptLabel: 'Revise',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: `/decisions revise ${decisionId} ${revisedText.trim()}`,
+					target: {
+						id: decisionId,
+						kind: 'decision',
+						safeDisplay: decision.title.substring(0, 100),
+					},
+					title: `Revise Decision: ${decision.title.substring(0, 60)}`,
+				});
+
+				const displayLines: string[] = [
+					'Decision revision confirmation',
+					'',
+					`  ID:      ${decision.id}`,
+					`  Title:   ${decision.title}`,
+					`  New:     ${revisedText.trim().substring(0, 100)}`,
+					...(decision.affectedDocumentIds.length > 0
+						? [`  Affected: ${decision.affectedDocumentIds.join(', ')}`]
+						: []),
+					'',
+					'Use the keyboard to revise or cancel below.',
+				];
+
+				return {
+					command: 'decisions',
+					confirmationRequest,
+					kind: 'info',
+					messages: displayLines,
+					shouldExit: false,
+				};
+			}
+		}
+
 		try {
 			const { reviseDecision } = await import(
 				'../intake/decision-correction.js'
@@ -2298,6 +2666,62 @@ async function getDecisionsResult(
 				messages: ['Usage: /decisions supersede <decision-id> <new text>'],
 				shouldExit: false,
 			};
+		}
+
+		// Interactive keyboard confirmation
+		if (shouldUseKeyboardConfirmation(context)) {
+			const decision = decisions.find((d) => d.id === decisionId);
+			if (decision) {
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'decision_supersede',
+					consequences: [
+						`Decision "${decision.title}" will be superseded by a new decision.`,
+						'The original decision will be marked as superseded in state.',
+						...(decision.affectedDocumentIds.length > 0
+							? [
+									`Affected documents: ${decision.affectedDocumentIds.join(', ')}`,
+								]
+							: []),
+						'Affected outputs may become stale.',
+					],
+					destructive: true,
+					message:
+						'Superseding replaces a confirmed decision. This is a consequential action — a new decision record will be created.',
+					options: yesNoOptions({
+						acceptLabel: 'Supersede',
+						cancelLabel: 'Cancel',
+					}),
+					sensitive: false,
+					sourceCommand: `/decisions supersede ${decisionId} ${newText.trim()}`,
+					target: {
+						id: decisionId,
+						kind: 'decision',
+						safeDisplay: decision.title.substring(0, 100),
+					},
+					title: `Supersede Decision: ${decision.title.substring(0, 60)}`,
+				});
+
+				const displayLines: string[] = [
+					'Decision supersession confirmation',
+					'',
+					`  ID:      ${decision.id}`,
+					`  Title:   ${decision.title}`,
+					`  New:     ${newText.trim().substring(0, 100)}`,
+					...(decision.affectedDocumentIds.length > 0
+						? [`  Affected: ${decision.affectedDocumentIds.join(', ')}`]
+						: []),
+					'',
+					'Use the keyboard to supersede or cancel below.',
+				];
+
+				return {
+					command: 'decisions',
+					confirmationRequest,
+					kind: 'info',
+					messages: displayLines,
+					shouldExit: false,
+				};
+			}
 		}
 
 		try {
@@ -2648,7 +3072,51 @@ async function getExecutiveResult(
 			};
 		}
 
-		// Default: preflight display
+		// Default: preflight display, optionally with keyboard confirmation
+		// When interactive and not blocked, return confirmation
+		if (shouldUseKeyboardConfirmation(context) && result.status !== 'blocked') {
+			// Preserve original user args for sourceCommand (not internal normalized values)
+			const sourceCmd = [
+				'/executive',
+				...args.filter((a) => a !== '--confirm' && a !== '--dry-run'),
+			];
+
+			const confirmationRequest = createTuiConfirmationRequest({
+				actionKind: 'executive_compile',
+				alternatives: [
+					'Run /executive compile --dry-run first.',
+					'Select specific targets with --target.',
+				],
+				consequences: [
+					`Mode: ${mode}`,
+					...(selectedTargets
+						? [`Targets: ${selectedTargets.join(', ')}`]
+						: []),
+					...(result.readyForDisplay ?? []).slice(0, 5),
+				],
+				destructive: false,
+				message: 'Executive outputs will be compiled and written.',
+				options: yesNoOptions(),
+				sensitive: false,
+				sourceCommand: sourceCmd.join(' '),
+				title: 'Compile Executive Axis',
+			});
+
+			const displayLines = [
+				...(result.readyForDisplay ?? []),
+				'',
+				'Use the keyboard to accept or cancel below.',
+			];
+
+			return {
+				command: 'executive compile',
+				confirmationRequest,
+				kind: kindMap[result.status] ?? 'info',
+				messages: displayLines,
+				shouldExit: false,
+			};
+		}
+
 		const displayLines = [
 			...(result.readyForDisplay ?? []),
 			'',
@@ -3190,6 +3658,60 @@ async function getConfigAiResult(
 		}
 
 		if (action === 'accept') {
+			// Interactive keyboard confirmation before accepting disclosure
+			if (shouldUseKeyboardConfirmation(context)) {
+				const { preview, config: previewConfig } = await getDisclosurePreview({
+					projectRoot,
+				});
+
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'provider_disclosure',
+					alternatives: [
+						'Use local/no_provider mode instead.',
+						'Decline and stay local-only.',
+					],
+					consequences: [
+						'Project context categories may be sent to the remote provider.',
+						'You can revoke this consent at any time via /config ai disclosure decline.',
+						...(preview
+							? [
+									`Provider: ${preview.providerId}`,
+									...(preview.modelId ? [`Model: ${preview.modelId}`] : []),
+									`Timeout: ${previewConfig.timeoutMs}ms`,
+								]
+							: []),
+					],
+					destructive: false,
+					message:
+						'Remote provider disclosure describes what context may be sent when you use AI features. Accept only if you understand and consent to remote transmission.',
+					options: yesNoOptions({
+						acceptLabel: 'Accept Disclosure',
+						cancelLabel: 'Decline',
+					}),
+					sensitive: true,
+					sourceCommand: '/config ai disclosure accept',
+					title: 'Accept Remote Provider Disclosure',
+				});
+
+				const previewLines: string[] = ['Remote Provider Disclosure', ''];
+				if (preview) {
+					previewLines.push(`Provider: ${preview.providerId}`);
+					if (preview.modelId) previewLines.push(`Model: ${preview.modelId}`);
+					previewLines.push('');
+					previewLines.push(preview.statement);
+				}
+				previewLines.push('');
+				previewLines.push('Use the keyboard to accept or decline below.');
+
+				return {
+					command: 'config ai disclosure accept',
+					confirmationRequest,
+					kind: 'info',
+					messages: previewLines,
+					shouldExit: false,
+				};
+			}
+
 			const result = await acceptAiProviderDisclosure({ projectRoot });
 			const lines: string[] = [];
 			if (result.success) {

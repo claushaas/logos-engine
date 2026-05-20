@@ -21,8 +21,17 @@ export interface Message {
 	text: string;
 }
 
-export function createRouterContext(): RouterContext {
+export interface CreateRouterContextOptions {
+	interactive?: boolean | undefined;
+	confirmationBypass?: boolean | undefined;
+}
+
+export function createRouterContext(
+	options?: CreateRouterContextOptions,
+): RouterContext {
 	return {
+		confirmationBypass: options?.confirmationBypass,
+		interactive: options?.interactive,
 		projectContext: detectProjectContext(),
 	};
 }
@@ -132,10 +141,19 @@ export function renderBriefingAsMessages(briefing: StartupBriefing): string[] {
 	return renderStartupBriefing(briefing);
 }
 
+export interface ProcessCommandResult {
+	messages: Message[];
+	shouldExit: boolean;
+	/** Optional confirmation request requiring interactive resolution */
+	confirmationRequest?:
+		| import('./types.js').SlashCommandResult['confirmationRequest']
+		| undefined;
+}
+
 export async function processCommand(
 	input: string,
 	context: RouterContext,
-): Promise<{ messages: Message[]; shouldExit: boolean }> {
+): Promise<ProcessCommandResult> {
 	const trimmed = input.trim();
 	if (trimmed.length === 0) {
 		return { messages: [], shouldExit: false };
@@ -151,7 +169,11 @@ export async function processCommand(
 			messages.push({ id: messages.length, sender: 'system', text: msg });
 		}
 
-		return { messages, shouldExit: result.shouldExit };
+		return {
+			confirmationRequest: result.confirmationRequest,
+			messages,
+			shouldExit: result.shouldExit,
+		};
 	} catch (err) {
 		// Safe error boundary: catch unknown errors and display safe diagnostics
 		// without crashing the TUI shell
