@@ -44,3 +44,43 @@ When you configure a remote LLM provider:
 - Arbitrary source files are never sent to remote providers by default.
 
 You can inspect what context would be sent using `/config ai --show`.
+
+## Release Security and Privacy Checks
+
+LOGOS Engine includes a deterministic, read-only, non-mutating security/privacy release checker. It can be run at any time:
+
+```bash
+pnpm security:check
+```
+
+### What the checker verifies
+
+- **Redaction audit**: Scans for raw API keys, bearer tokens, authorization headers, private key blocks, credentials in URLs, and other secret-like values.
+- **Provider config safety**: Ensures provider tokens are stored as environment variable references, not raw strings.
+- **Workspace state safety**: Ensures no raw secrets are persisted in workspace state, run metadata, or session records.
+- **Backup safety**: Ensures backup manifests exclude `.env` contents and raw secrets.
+- **Generated artifact safety**:
+  - HTML artifacts must not contain `<script>`, `<iframe>`, `<form>`, `javascript:`, `vbscript:`, event handlers, or remote assets.
+  - Agent Packs must include derived/non-canonical warnings and must not contain instructions to exfiltrate secrets, override constraints, or claim canonical authority.
+  - Executive exports must be marked as derived snapshots, not live task managers.
+- **Derived artifact boundary**: Ensures HTML, Agent Packs, Executive exports, reports, scanner outputs, and consistency reports are marked as non-canonical.
+- **Package contents safety**: Verifies package excludes `.env`, `.logos`, backups, coverage, `.git`, `node_modules`, and private artifacts.
+- **Script safety**: Detects network/external tools (`curl`, `wget`, `npm publish`, etc.) in default check scripts. Flags telemetry, analytics, remote logging, crash upload, cloud backup, and external sync patterns.
+- **Dependency surface**: Flags unexpected dependencies that suggest telemetry, analytics, cloud services, or external sync.
+- **Network safety**: Confirms default CLI commands and tests do not require network access.
+
+### Release status
+
+The checker produces one of four statuses:
+- `pass`: No findings at error or fatal severity.
+- `pass_with_warnings`: Warning-level findings only.
+- `blocked`: One or more error or fatal findings. Release is blocked.
+- `unknown`: Insufficient evidence for critical checks (strict mode only).
+
+### Limitations
+
+- The security/privacy release checker does NOT perform network vulnerability audits.
+- It does NOT look up CVEs for dependencies.
+- It does NOT perform formal penetration testing.
+- It does NOT scan for all possible secret formats.
+- It is a release gate, not a security guarantee.

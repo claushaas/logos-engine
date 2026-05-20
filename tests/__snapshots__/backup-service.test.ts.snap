@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`backup manifest snapshot > snapshots a deterministic backup manifest 1`] = `
+[
+  "workspace.json",
+]
+`;
+
+exports[`backup manifest snapshot > snapshots a deterministic backup manifest 2`] = `
+[
+  "state",
+]
+`;
+
+exports[`backup manifest snapshot > snapshots a deterministic backup manifest 3`] = `"Snapshot backup"`;

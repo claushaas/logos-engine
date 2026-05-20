@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`restore plan snapshot > snapshots restore plan 1`] = `
+[
+  "/tmp/test-project/.logos/workspace.json",
+]
+`;
+
+exports[`restore plan snapshot > snapshots restore plan 2`] = `2`;
+
+exports[`restore plan snapshot > snapshots restore plan 3`] = `true`;

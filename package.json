@@ -55,6 +55,7 @@
 		"lint": "pnpm lint:biome && pnpm lint:md",
 		"lint:biome": "biome check .",
 		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
+		"security:check": "node scripts/security-check.js",
 		"smoke:cli": "node scripts/smoke-cli.js",
 		"test": "vitest run",
 		"test:coverage": "vitest run --coverage",

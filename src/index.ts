@@ -1772,3 +1772,125 @@ export {
 	RECOGNIZED_HEADINGS,
 	resetExtractionIdCounter,
 } from './import/index.js';
+
+// ---------------------------------------------------------------------------
+// Step 13.2 — Migrations, Backups, and Performance Baseline
+// ---------------------------------------------------------------------------
+
+export type {
+	BaselineOperation,
+	WorkspacePerformanceBaseline,
+	WorkspacePerformanceMeasurement,
+	WorkspacePerformanceResult,
+} from './performance/index.js';
+export {
+	BASELINE_OPERATIONS,
+	createBaseline,
+	createMeasurement,
+	evaluateMeasurement,
+	getDefaultThreshold,
+	measureDuration,
+	measureDurationSync,
+} from './performance/index.js';
+export type { BackupIntegrityInput } from './state/backup-service.js';
+export {
+	computeSha256,
+	createWorkspaceBackup,
+	verifyBackupIntegrity,
+	verifyBackupIntegrityOnDisk,
+} from './state/backup-service.js';
+export type {
+	SchemaVersionDetection,
+	WorkspaceBackupIntegrityResult,
+	WorkspaceBackupManifest,
+	WorkspaceBackupOptions,
+	WorkspaceBackupResult,
+	WorkspaceBackupStatus,
+	WorkspaceMigrationChangedPath,
+	WorkspaceMigrationDiagnostic,
+	WorkspaceMigrationDirection,
+	WorkspaceMigrationId,
+	WorkspaceMigrationInput,
+	WorkspaceMigrationOptions,
+	WorkspaceMigrationPlan,
+	WorkspaceMigrationPlanItem,
+	WorkspaceMigrationResult,
+	WorkspaceMigrationStatus,
+	WorkspaceRestoreOptions,
+	WorkspaceRestorePlan,
+	WorkspaceRestoreResult,
+	WorkspaceSchemaVersion,
+} from './state/migration-model.js';
+export {
+	BACKUP_STATUS_ORDER,
+	buildBackupId,
+	compareSchemaVersions,
+	DETERMINISTIC_BACKUP_ID,
+	detectSchemaVersion,
+	MIGRATION_DIRECTION_ORDER,
+	MIGRATION_STATUS_ORDER,
+} from './state/migration-model.js';
+export type {
+	WorkspaceMigrationDefinition,
+	WorkspaceMigrationRegistry,
+} from './state/migration-registry.js';
+export {
+	CURRENT_SCHEMA_VERSION,
+	createDefaultMigrationRegistry,
+	migrationToPlanItem,
+} from './state/migration-registry.js';
+export type {
+	MigrationApplyInput,
+	MigrationPlanInput,
+} from './state/migration-runner.js';
+export {
+	applyMigrations,
+	planMigrations,
+} from './state/migration-runner.js';
+export {
+	planRestore,
+	restoreWorkspaceFromBackup,
+} from './state/restore-service.js';
+
+// ---------------------------------------------------------------------------
+// Step 13.3 — Complete Security and Privacy Release Checks
+// ---------------------------------------------------------------------------
+
+export type {
+	SecurityPrivacyReleaseArtifactCheck,
+	SecurityPrivacyReleaseBackupCheck,
+	SecurityPrivacyReleaseCategorySummary,
+	SecurityPrivacyReleaseChangedPath,
+	SecurityPrivacyReleaseCheckCategory,
+	SecurityPrivacyReleaseCheckInput,
+	SecurityPrivacyReleaseCheckOptions,
+	SecurityPrivacyReleaseCheckReport,
+	SecurityPrivacyReleaseCheckResult,
+	SecurityPrivacyReleaseDiagnostic,
+	SecurityPrivacyReleaseEvidence,
+	SecurityPrivacyReleaseFinding,
+	SecurityPrivacyReleaseFindingKind,
+	SecurityPrivacyReleaseLogCheck,
+	SecurityPrivacyReleaseNetworkCheck,
+	SecurityPrivacyReleasePackageCheck,
+	SecurityPrivacyReleaseProviderCheck,
+	SecurityPrivacyReleaseRedactionResult,
+	SecurityPrivacyReleaseScope,
+	SecurityPrivacyReleaseSeverity,
+	SecurityPrivacyReleaseStateCheck,
+	SecurityPrivacyReleaseStatus,
+} from './security/index.js';
+export {
+	buildSecurityPrivacyReleaseFindingId,
+	compareSecurityPrivacyCategory,
+	compareSecurityPrivacyFindingKind,
+	compareSecurityPrivacySeverity,
+	createRedactionResult,
+	determineSecurityPrivacyReleaseStatus,
+	runSecurityPrivacyReleaseCheck,
+	SECURITY_PRIVACY_CHECK_CATEGORY_ORDER,
+	SECURITY_PRIVACY_RELEASE_FINDING_KIND_ORDER,
+	SECURITY_PRIVACY_RELEASE_SEVERITY_ORDER,
+	SECURITY_PRIVACY_RELEASE_STATUS_ORDER,
+	sortSecurityPrivacyReleaseFindings,
+} from './security/index.js';
