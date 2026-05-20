@@ -121,6 +121,11 @@ Anonymized sample workspaces demonstrating real use are especially valuable.
   loading, command routing, generation with temp directories.
 - **Snapshot tests**: Stable renderer output expectations. Update only with
   intentional output changes.
+- **TUI workbench tests**: View model, focus, state labels, and report
+  rendering tests are pure deterministic tests. The Ink component tests
+  (`tests/tui-shell.test.tsx`) verify the shell integrates workbench rendering.
+  Snapshot tests should verify text-visible labels, focus indicators, and
+  layout regions.
 - **No network/provider credentials** in default tests. Tests use fake providers,
   temp directories, and synthetic fixtures.
 

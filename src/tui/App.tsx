@@ -2,10 +2,11 @@
  * Ink TUI root component.
  *
  * Phase 4: Keyboard Confirmation Framework — Outcome 3 (confirmation flow integration).
+ * Phase 5: TUI Workbench Redesign — Outcome 3 (existing flows rendered through workbench).
  *
  * Interactive TUI confirmations use keyboard-selectable controls instead of
- * retyping `--confirm`. When a command returns a confirmation request, the
- * shell renders a ConfirmationPrompt and blocks normal input until resolution.
+ * retyping `--confirm`. The workbench layout provides orientation, context,
+ * action area, and report views.
  */
 
 import { Box, Text, useApp, useInput } from 'ink';
@@ -38,7 +39,220 @@ import {
 } from './shell-logic.js';
 import { parseSlashCommand } from './slash-parser.js';
 import { routeSlashCommand } from './slash-router.js';
-import type { RouterContext } from './types.js';
+import type { RouterContext, SlashCommandResult } from './types.js';
+import {
+	buildContextRailItems,
+	commandToViewKind,
+	createFeedbackMessage,
+	createWorkbenchViewModel,
+	getDefaultActionsForView,
+	messagesToFeedback,
+	STATE_LABEL_MAP,
+	type TuiFeedbackMessage,
+	type TuiViewKind,
+	type TuiWorkbenchViewModel,
+} from './workbench-model.js';
+import { renderWorkbench } from './workbench-renderer.js';
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Build initial view model from project context and startup data.
+ */
+function _buildInitialViewModel(
+	context: RouterContext,
+	startupLines: string[],
+	viewKind: TuiViewKind,
+	stateCounts?: {
+		openQuestions: number;
+		assumptions: number;
+		proposals: number;
+		risks: number;
+	},
+): TuiWorkbenchViewModel {
+	const ctx = context.projectContext;
+	const workspaceStatus =
+		ctx.workspace.initializationState === 'initialized'
+			? 'initialized'
+			: ctx.workspace.initializationState === 'missing'
+				? 'uninitialized'
+				: ctx.workspace.initializationState;
+
+	const providerStatusText = formatProviderStatus(ctx.config.providerStatus);
+	const providerConfigured = ctx.config.providerStatus.kind === 'configured';
+
+	const contextItems = buildContextRailItems({
+		assumptionCount: stateCounts?.assumptions ?? 0,
+		openQuestionCount: stateCounts?.openQuestions ?? 0,
+		proposalCount: stateCounts?.proposals ?? 0,
+		providerStatusText,
+		riskCount: stateCounts?.risks ?? 0,
+	});
+
+	const actions = getDefaultActionsForView(viewKind, {
+		providerConfigured,
+		workspaceInitialized: ctx.workspace.initializationState === 'initialized',
+	});
+
+	const feedbackMessages: TuiFeedbackMessage[] = [];
+	if (viewKind === 'first_run') {
+		feedbackMessages.push(
+			createFeedbackMessage(
+				'Workspace not initialized. Run /init to begin.',
+				'warning',
+				'provider_unconfigured',
+			),
+		);
+	}
+
+	return createWorkbenchViewModel({
+		actions,
+		activeProfileId: ctx.config.activeProfileId ?? 'unknown',
+		assumptionCount: stateCounts?.assumptions ?? 0,
+		content: startupLines,
+		contextItems,
+		documentationRoot: ctx.config.documentationRoot.rootPath,
+		feedbackMessages,
+		feedbackStatusKind: viewKind === 'first_run' ? 'warning' : 'idle',
+		isDryRun: false,
+		isMutating: false,
+		isReadOnly: true,
+		openQuestionCount: stateCounts?.openQuestions ?? 0,
+		projectRoot: ctx.root.rootPath ?? ctx.cwd,
+		proposalCount: stateCounts?.proposals ?? 0,
+		providerStatusText,
+		riskCount: stateCounts?.risks ?? 0,
+		stateLabels:
+			viewKind === 'first_run' ? [STATE_LABEL_MAP.provider_unconfigured] : [],
+		title: viewKind === 'first_run' ? 'First Run' : 'Startup',
+		viewKind,
+		workspaceStatus,
+	});
+}
+
+/**
+ * Build a view model from a command result.
+ */
+function _buildResultViewModel(
+	context: RouterContext,
+	result: SlashCommandResult,
+	viewKind: TuiViewKind,
+	stateCounts?: {
+		openQuestions: number;
+		assumptions: number;
+		proposals: number;
+		risks: number;
+	},
+	inputBlocked?: boolean,
+): TuiWorkbenchViewModel {
+	const ctx = context.projectContext;
+	const workspaceStatus =
+		ctx.workspace.initializationState === 'initialized'
+			? 'initialized'
+			: ctx.workspace.initializationState === 'missing'
+				? 'uninitialized'
+				: ctx.workspace.initializationState;
+
+	const providerStatusText = formatProviderStatus(ctx.config.providerStatus);
+	const providerConfigured = ctx.config.providerStatus.kind === 'configured';
+
+	const contextItems = buildContextRailItems({
+		assumptionCount: stateCounts?.assumptions ?? 0,
+		openQuestionCount: stateCounts?.openQuestions ?? 0,
+		proposalCount: stateCounts?.proposals ?? 0,
+		providerStatusText,
+		riskCount: stateCounts?.risks ?? 0,
+	});
+
+	const actions = getDefaultActionsForView(viewKind, {
+		providerConfigured,
+		workspaceInitialized: ctx.workspace.initializationState === 'initialized',
+	});
+
+	const feedbackMessages = messagesToFeedback(result.messages, result.kind);
+	// Use all messages as content (feedback gets first 3, all go to primary)
+	const content = result.messages.length > 3 ? result.messages : [];
+
+	const isDryRun =
+		result.messages.some((m) => m.includes('dry-run')) ||
+		result.messages.some((m) => m.includes('dry_run'));
+
+	const stateLabels =
+		result.kind === 'error'
+			? [STATE_LABEL_MAP.failed]
+			: result.kind === 'warning'
+				? [STATE_LABEL_MAP.warning]
+				: [];
+
+	return createWorkbenchViewModel({
+		actions,
+		activeProfileId: ctx.config.activeProfileId ?? 'unknown',
+		assumptionCount: stateCounts?.assumptions ?? 0,
+		content,
+		contextItems,
+		documentationRoot: ctx.config.documentationRoot.rootPath,
+		feedbackMessages,
+		feedbackStatusKind:
+			result.kind === 'success'
+				? 'success'
+				: result.kind === 'error'
+					? 'error'
+					: result.kind === 'warning'
+						? 'warning'
+						: 'info',
+		inputBlocked,
+		isDryRun,
+		isMutating: !isDryRun && viewKind === 'generation_report',
+		isReadOnly: isDryRun || viewKind !== 'generation_report',
+		openQuestionCount: stateCounts?.openQuestions ?? 0,
+		projectRoot: ctx.root.rootPath ?? ctx.cwd,
+		proposalCount: stateCounts?.proposals ?? 0,
+		providerStatusText,
+		riskCount: stateCounts?.risks ?? 0,
+		stateLabels,
+		summary: result.messages.length > 0 ? result.messages[0] : undefined,
+		title:
+			viewKind === 'startup'
+				? 'Startup'
+				: viewKind === 'first_run'
+					? 'First Run'
+					: viewKind === 'status'
+						? 'Status'
+						: viewKind === 'help'
+							? 'Help'
+							: viewKind === 'intake'
+								? 'Intake'
+								: viewKind === 'generation_confirmation'
+									? 'Generation Confirmation'
+									: viewKind === 'generation_report'
+										? 'Generation Report'
+										: viewKind === 'validation'
+											? 'Validation'
+											: viewKind === 'diagnostics'
+												? 'Diagnostics'
+												: viewKind === 'executive_compile_report'
+													? 'Executive Compile'
+													: viewKind === 'proposal_review'
+														? 'Proposal Review'
+														: viewKind === 'proposal_detail'
+															? 'Proposal Detail'
+															: viewKind === 'decision_detail'
+																? 'Decision Detail'
+																: viewKind === 'provider_config'
+																	? 'Provider Configuration'
+																	: viewKind === 'recovery'
+																		? 'Recovery'
+																		: result.command || viewKind,
+		viewKind,
+		workspaceStatus,
+	});
+}
+
+// ---------------------------------------------------------------------------
+// Main App component
+// ---------------------------------------------------------------------------
 
 export function App(): React.JSX.Element {
 	const { exit } = useApp();
@@ -47,6 +261,9 @@ export function App(): React.JSX.Element {
 	const [nextId, setNextId] = useState(0);
 	const [processing, setProcessing] = useState(false);
 	const briefingShown = useRef(false);
+	const [lastViewKind, setLastViewKind] = useState<TuiViewKind | undefined>(
+		undefined,
+	);
 
 	// Confirmation state
 	const [confirmation, setConfirmation] = useState<ConfirmationState>(
@@ -71,6 +288,115 @@ export function App(): React.JSX.Element {
 		},
 		[nextId],
 	);
+
+	// Build current view model from messages and context
+	const currentViewModel = useMemo<TuiWorkbenchViewModel>(() => {
+		const workspaceStatus =
+			ctx.workspace.initializationState === 'initialized'
+				? 'initialized'
+				: ctx.workspace.initializationState === 'missing'
+					? 'uninitialized'
+					: ctx.workspace.initializationState;
+
+		const providerStatusText = formatProviderStatus(ctx.config.providerStatus);
+
+		// Determine active view kind
+		let activeViewKind: TuiViewKind;
+		if (confirmation.inputBlocked && confirmation.pending) {
+			activeViewKind = 'generation_confirmation';
+		} else if (lastViewKind) {
+			activeViewKind = lastViewKind;
+		} else {
+			activeViewKind =
+				ctx.workspace.initializationState === 'initialized'
+					? 'startup'
+					: 'first_run';
+		}
+
+		// Extract content from messages, starting from latest result
+		const contentMessages = messages
+			.filter((m) => m.sender === 'system')
+			.slice(-30) // Last 30 system messages
+			.map((m) => m.text);
+
+		const actions = getDefaultActionsForView(activeViewKind, {
+			providerConfigured: ctx.config.providerStatus.kind === 'configured',
+			workspaceInitialized: ctx.workspace.initializationState === 'initialized',
+		});
+
+		const feedbackKind = processing ? ('info' as const) : ('idle' as const);
+
+		return createWorkbenchViewModel({
+			actions,
+			activeProfileId: ctx.config.activeProfileId ?? 'unknown',
+			content: contentMessages,
+			contextItems: buildContextRailItems({
+				providerStatusText,
+			}),
+			documentationRoot: ctx.config.documentationRoot.rootPath,
+			feedbackStatusKind: feedbackKind,
+			inputBlocked: confirmation.inputBlocked,
+			isDryRun: false,
+			isMutating: false,
+			isReadOnly: true,
+			projectRoot: ctx.root.rootPath ?? ctx.cwd,
+			providerStatusText,
+			stateLabels:
+				activeViewKind === 'first_run'
+					? [STATE_LABEL_MAP.provider_unconfigured]
+					: [],
+			summary: contentMessages.length > 0 ? contentMessages[0] : undefined,
+			title:
+				activeViewKind === 'startup'
+					? 'Startup'
+					: activeViewKind === 'first_run'
+						? 'First Run'
+						: activeViewKind === 'status'
+							? 'Status'
+							: activeViewKind === 'help'
+								? 'Help'
+								: activeViewKind === 'intake'
+									? 'Intake'
+									: activeViewKind === 'generation_confirmation'
+										? 'Generation Confirmation'
+										: activeViewKind === 'generation_report'
+											? 'Generation Report'
+											: activeViewKind === 'validation'
+												? 'Validation'
+												: activeViewKind === 'diagnostics'
+													? 'Diagnostics'
+													: activeViewKind === 'executive_compile_report'
+														? 'Executive Compile'
+														: activeViewKind === 'proposal_review'
+															? 'Proposal Review'
+															: activeViewKind === 'proposal_detail'
+																? 'Proposal Detail'
+																: activeViewKind === 'decision_detail'
+																	? 'Decision Detail'
+																	: activeViewKind === 'provider_config'
+																		? 'Provider Configuration'
+																		: activeViewKind === 'recovery'
+																			? 'Recovery'
+																			: 'LOGOS',
+			viewKind: activeViewKind,
+			width: process.stdout.columns,
+			workspaceStatus,
+		});
+	}, [
+		ctx,
+		messages,
+		processing,
+		confirmation.inputBlocked,
+		confirmation.pending,
+		lastViewKind,
+	]);
+
+	// Render workbench lines
+	const workbenchLines = useMemo(() => {
+		return renderWorkbench(currentViewModel, {
+			width: process.stdout.columns,
+		});
+	}, [currentViewModel]);
 
 	// Generate and show startup briefing on mount
 	useEffect(() => {
@@ -141,6 +467,10 @@ export function App(): React.JSX.Element {
 						})),
 					);
 				}
+
+				// Update view kind after confirmed command
+				const vk = result.viewKind ?? commandToViewKind(parsed);
+				setLastViewKind(vk);
 			} catch {
 				addMessages([
 					{
@@ -149,6 +479,7 @@ export function App(): React.JSX.Element {
 						text: '[ERROR] The confirmed command could not be executed.',
 					},
 				]);
+				setLastViewKind('recovery');
 			}
 			setProcessing(false);
 		},
@@ -194,6 +525,9 @@ export function App(): React.JSX.Element {
 						},
 					]);
 				}
+			} else {
+				// Cancelled or failed — return focus to command input
+				setLastViewKind((prev) => prev ?? 'status');
 			}
 		},
 		[confirmation, addMessages, executeConfirmedCommand],
@@ -208,6 +542,8 @@ export function App(): React.JSX.Element {
 				text: 'Confirmation cancelled. No changes were made.',
 			},
 		]);
+		// Return to previous view
+		setLastViewKind((prev) => prev ?? 'status');
 	}, [addMessages]);
 
 	const handleSelectionChange = useCallback((optionId: string) => {
@@ -236,59 +572,74 @@ export function App(): React.JSX.Element {
 			setProcessing(true);
 
 			processCommand(submitted, context)
-				.then(({ messages: cmdMessages, shouldExit, confirmationRequest }) => {
-					// Add response messages (from processCommand, already structured)
-					const newMessages: Message[] = [];
-					newMessages.push({
-						id: 0,
-						sender: 'user' as const,
-						text: submitted,
-					});
-					for (const msg of cmdMessages) {
-						newMessages.push(msg);
-					}
-					if (newMessages.length > 0) {
-						addMessages(newMessages);
-					}
+				.then(
+					({
+						messages: cmdMessages,
+						shouldExit,
+						confirmationRequest,
+						viewKind,
+					}) => {
+						// Add response messages
+						const newMessages: Message[] = [];
+						newMessages.push({
+							id: 0,
+							sender: 'user' as const,
+							text: submitted,
+						});
+						for (const msg of cmdMessages) {
+							newMessages.push(msg);
+						}
+						if (newMessages.length > 0) {
+							addMessages(newMessages);
+						}
 
-					// Handle confirmation request (with redaction applied)
-					if (confirmationRequest) {
-						const redactedRequest = {
-							...confirmationRequest,
-							consequences: confirmationRequest.consequences.map((c) =>
-								redactString(c),
-							),
-							message: redactString(confirmationRequest.message),
-							options: confirmationRequest.options.map((o) => ({
-								...o,
-								consequence: o.consequence
-									? redactString(o.consequence)
-									: undefined,
-								description: o.description
-									? redactString(o.description)
-									: undefined,
-								label: redactString(o.label),
-							})),
-							target: confirmationRequest.target
-								? {
-										...confirmationRequest.target,
-										safeDisplay: confirmationRequest.target.safeDisplay
-											? redactString(confirmationRequest.target.safeDisplay)
-											: undefined,
-									}
-								: undefined,
-							title: redactString(confirmationRequest.title),
-						};
-						setConfirmation((prev) =>
-							setPendingConfirmation(prev, redactedRequest),
-						);
-					}
+						// Update view kind
+						if (viewKind) {
+							setLastViewKind(viewKind);
+						} else {
+							const parsed = parseSlashCommand(submitted);
+							setLastViewKind(commandToViewKind(parsed));
+						}
 
-					if (shouldExit) {
-						exit();
-					}
-					setProcessing(false);
-				})
+						// Handle confirmation request (with redaction applied)
+						if (confirmationRequest) {
+							const redactedRequest = {
+								...confirmationRequest,
+								consequences: confirmationRequest.consequences.map((c) =>
+									redactString(c),
+								),
+								message: redactString(confirmationRequest.message),
+								options: confirmationRequest.options.map((o) => ({
+									...o,
+									consequence: o.consequence
+										? redactString(o.consequence)
+										: undefined,
+									description: o.description
+										? redactString(o.description)
+										: undefined,
+									label: redactString(o.label),
+								})),
+								target: confirmationRequest.target
+									? {
+											...confirmationRequest.target,
+											safeDisplay: confirmationRequest.target.safeDisplay
+												? redactString(confirmationRequest.target.safeDisplay)
+												: undefined,
+										}
+									: undefined,
+								title: redactString(confirmationRequest.title),
+							};
+							setConfirmation((prev) =>
+								setPendingConfirmation(prev, redactedRequest),
+							);
+						}
+
+						if (shouldExit) {
+							exit();
+						}
+						setProcessing(false);
+					},
+				)
 				.catch(() => {
 					setProcessing(false);
 				});
@@ -304,16 +655,14 @@ export function App(): React.JSX.Element {
 	return (
 		<Box flexDirection="column" height="100%">
 			<Box flexDirection="column" flexGrow={1}>
-				{messages.map((msg) => (
-					<Box key={msg.id}>
-						<Text>
-							{msg.sender === 'user' ? '> ' : '  '}
-							{msg.text}
-						</Text>
+				{/* Render workbench lines */}
+				{workbenchLines.map((line) => (
+					<Box key={line}>
+						<Text>{line}</Text>
 					</Box>
 				))}
 
-				{/* Render confirmation prompt when pending */}
+				{/* Render confirmation prompt when pending — on top of workbench */}
 				{confirmation.pending && (
 					<Box flexDirection="column" marginTop={1}>
 						<Box>
@@ -342,18 +691,6 @@ export function App(): React.JSX.Element {
 					</Text>
 				</Box>
 			)}
-
-			<Box>
-				<Text>
-					{ctx.cwd}
-					{' | '}
-					{ctx.config.documentationRoot.rootPath}
-					{' | '}
-					{ctx.config.activeProfileId ?? 'unknown'}
-					{' | '}
-					{formatProviderStatus(ctx.config.providerStatus)}
-				</Text>
-			</Box>
 		</Box>
 	);
 }

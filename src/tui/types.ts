@@ -3,6 +3,7 @@
 import type { StartupBriefing } from '../intake/startup-briefing-types.js';
 import type { ProjectContext } from '../runtime/project-context.js';
 import type { TuiConfirmationRequest } from './confirmation-model.js';
+import type { TuiViewKind } from './workbench-model.js';
 
 export type ParsedInput =
 	| { kind: 'empty' }
@@ -18,6 +19,8 @@ export interface SlashCommandResult {
 	shouldExit: boolean;
 	/** Optional confirmation request when interactive confirmation is needed */
 	confirmationRequest?: TuiConfirmationRequest | undefined;
+	/** Workbench view kind for Phase 5 TUI workbench layout */
+	viewKind?: TuiViewKind | undefined;
 }
 
 export interface RouterContext {

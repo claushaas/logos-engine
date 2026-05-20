@@ -57,6 +57,7 @@ import type {
 	RouterContext,
 	SlashCommandResult,
 } from './types.js';
+import type { TuiViewKind } from './workbench-model.js';
 
 export async function routeSlashCommand(
 	parsed: ParsedInput,
@@ -68,6 +69,7 @@ export async function routeSlashCommand(
 			kind: 'info',
 			messages: [],
 			shouldExit: false,
+			viewKind: 'status' as TuiViewKind,
 		};
 	}
 
@@ -89,6 +91,7 @@ export async function routeSlashCommand(
 				kind: 'success',
 				messages: getHelpMessages(),
 				shouldExit: false,
+				viewKind: 'help' as TuiViewKind,
 			};
 		case 'status':
 			return getStatusResult(context);
@@ -98,6 +101,7 @@ export async function routeSlashCommand(
 				kind: 'success',
 				messages: ['Goodbye.'],
 				shouldExit: true,
+				viewKind: 'status' as TuiViewKind,
 			};
 		case 'init':
 			return getInitResult(args, context);
@@ -126,6 +130,7 @@ export async function routeSlashCommand(
 					'Run /help for available commands.',
 				],
 				shouldExit: false,
+				viewKind: 'recovery' as TuiViewKind,
 			};
 	}
 }

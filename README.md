@@ -116,6 +116,82 @@ instead of requiring `--confirm` to be retyped.
 
 Free-form text input is recognized but not yet implemented for intake routing.
 
+## TUI Workbench Layout
+
+The TUI shell uses a structured workbench layout with these areas:
+
+- **Orientation header:** Shows repository path, workspace status, active profile,
+  documentation root, provider status, and current view. Read-only, dry-run,
+  and mutating states are labeled with text indicators.
+
+- **Primary work area:** Displays the active view's content — startup briefing,
+  status summary, intake results, proposal review, generation reports,
+  validation findings, diagnostics, executive compile results, provider
+  configuration, help, or recovery.
+
+- **Context rail:** Shows current counts for open questions, assumptions,
+  proposals, risks, staleness, and validation blockers. Suppressed in compact
+  terminals; full rail available in standard and wide modes.
+
+- **Action area:** Lists available slash commands and review actions for the
+  current view. Each action is labeled `[read-only]` or `[mutating]`, and
+  confirmation requirements are noted.
+
+- **Feedback area:** Displays command result status with text labels:
+  `[ok]`, `[warning]`, `[failed]`, `[partial]`, `[dry-run]`, etc.
+
+- **Command input:** Accepts slash commands and free-form conversational
+  intake. Disabled when a modal confirmation is active.
+
+### State Labels
+
+State labels are text-visible and do not depend on color alone:
+
+| Label | Meaning |
+| --- | --- |
+| `[proposed]` | AI-derived or user-suggested; not yet confirmed |
+| `[confirmed]` | User-confirmed state |
+| `[assumed]` | Working assumption; requires validation |
+| `[unknown]` | Valid unknown state |
+| `[incomplete]` | Missing required inputs or outputs |
+| `[blocked]` | Blocked by unresolved dependencies |
+| `[stale]` | Source state changed; regeneration needed |
+| `[current]` | Up-to-date |
+| `[canonical]` | Primary human-readable generated output |
+| `[derived]` | Regenerated from canonical source |
+| `[low confidence]` | AI output with low confidence |
+| `[partial]` | Some results succeeded, some did not |
+| `[failed]` | Operation did not complete |
+| `[warning]` | Proceed with awareness |
+| `[ready]` | Ready for next action |
+| `[read-only]` | No filesystem writes |
+| `[dry-run]` | Plan only; no files written |
+| `[provider-disabled]` | AI provider is disabled |
+| `[provider-unconfigured]` | No AI provider configured |
+| `[provider-ready]` | AI provider configured and ready |
+
+### Report Views
+
+Structured reports group findings by severity (critical, error, warning, info)
+and show affected paths, next actions, and canonical/derived classification.
+Reports exist for validation, diagnostics, generation, executive compilation,
+provider configuration, proposal review, decision detail, and recovery.
+
+### Terminal Width Support
+
+- **Compact** (under 80 columns): Essential orientation preserved; context rail
+  summarized.
+- **Standard** (80-119 columns): Full layout with header, work area, actions,
+  and feedback.
+- **Wide** (120+ columns): Full layout with visible context rail.
+
+### Focus Model
+
+The TUI maintains an explicit focus target (`[Focus: command input]`,
+`[Focus: confirmation]`, etc.). Command input is disabled when a modal
+confirmation is active. Focus returns to command input after success,
+cancellation, or recoverable error.
+
 ## Workspace Model
 
 - `.logos/` stores local structured state (workspace.json, config, session data).

@@ -14,6 +14,7 @@ import { readWorkspaceState } from '../state/workspace-state-repository.js';
 import { parseSlashCommand } from './slash-parser.js';
 import { routeSlashCommand } from './slash-router.js';
 import type { RouterContext } from './types.js';
+import { commandToViewKind } from './workbench-model.js';
 
 export interface Message {
 	id: number;
@@ -148,6 +149,8 @@ export interface ProcessCommandResult {
 	confirmationRequest?:
 		| import('./types.js').SlashCommandResult['confirmationRequest']
 		| undefined;
+	/** Workbench view kind for Phase 5 TUI layout */
+	viewKind?: import('./workbench-model.js').TuiViewKind | undefined;
 }
 
 export async function processCommand(
@@ -169,10 +172,14 @@ export async function processCommand(
 			messages.push({ id: messages.length, sender: 'system', text: msg });
 		}
 
+		// Determine view kind from result or fall back to command mapping
+		const viewKind = result.viewKind ?? commandToViewKind(parsed);
+
 		return {
 			confirmationRequest: result.confirmationRequest,
 			messages,
 			shouldExit: result.shouldExit,
+			viewKind,
 		};
 	} catch (err) {
 		// Safe error boundary: catch unknown errors and display safe diagnostics

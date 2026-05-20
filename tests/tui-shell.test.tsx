@@ -30,7 +30,7 @@ describe('App', () => {
 		expect(frame).toContain(process.cwd());
 		expect(frame).toContain('logos/');
 		expect(frame).toContain('standard');
-		expect(frame).toContain('not configured');
+		expect(frame).toContain('[provider-unconfigured]');
 	});
 });
 
