@@ -1,0 +1,16 @@
+document:
+  id: "01-doc"
+  title: "Invalid Document"
+  phase: "01-test"
+  status: "not_started"
+  type: "test"
+  purpose: "Test purpose."
+  centralQuestion: "Test question?"
+  outputs:
+    canonical:
+      format: "markdown"
+  sections:
+    - id: "sec-1"
+      title: "Section 1"
+      questions:
+        - "What?"

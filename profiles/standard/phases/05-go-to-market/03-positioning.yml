@@ -1,0 +1,562 @@
+document:
+  id: "03-positioning"
+  title: "Positioning"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 3
+  type: "positioning"
+  purpose: "Define how the product should be understood, compared, differentiated, trusted, and remembered by the target market without overclaiming product readiness or drifting from validated customer context."
+  centralQuestion: "Why should the target customer understand this product as different, relevant, credible, and preferable compared with their current alternatives?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/05-go-to-market/03-positioning.md"
+      purpose: "Store the canonical positioning document as a Markdown document."
+    artifacts:
+      - id: "gtm.positioning_reference"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/positioning-reference.html"
+        purpose: "Provide a founder-facing positioning reference covering category frame, target customer, primary pain, alternatives, differentiated value, proof, claims, messaging pillars, narrative, anti-positioning, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "positioning summary"
+          - "positioning statement"
+          - "category frame"
+          - "target customer context"
+          - "primary pain"
+          - "current alternatives"
+          - "substitute behaviors"
+          - "differentiated value"
+          - "differentiators"
+          - "reasons to believe"
+          - "proof hierarchy"
+          - "claim boundaries"
+          - "messaging pillars"
+          - "narrative frame"
+          - "anti-positioning"
+          - "positioning risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.positioning_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/positioning-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether positioning is specific, credible, differentiated, evidence-aware, product-aligned, technically honest, and ready to feed messaging, channels, launch, content, sales, partnerships, analytics, and risk documents."
+        agentRole: "reviewer"
+        includes:
+          - "canonical positioning"
+          - "GTM brief dependency"
+          - "market definition dependency"
+          - "validation dependency"
+          - "product dependency"
+          - "technical risk dependency"
+          - "positioning formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/04-research-plan"
+    - "02-validation/08-evidence-log"
+    - "02-validation/05-experiments"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/03-user-journeys"
+    - "03-product/02-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/02-market-definition"
+  feeds:
+    - "05-go-to-market/04-audience-and-segmentation"
+    - "05-go-to-market/05-channel-strategy"
+    - "05-go-to-market/06-launch-plan"
+    - "05-go-to-market/07-pricing-and-packaging"
+    - "05-go-to-market/08-content-strategy"
+    - "05-go-to-market/09-sales-motion"
+    - "05-go-to-market/10-partnerships-and-distribution"
+    - "05-go-to-market/11-growth-experiments"
+    - "05-go-to-market/12-gtm-analytics"
+    - "05-go-to-market/13-gtm-risks"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "go-to-market-brief"
+      type: "context"
+      required: false
+      description: "GTM objective, market-entry thesis, beachhead segment, primary customer, primary use case, positioning thesis, channel thesis, launch strategy, revenue motion, constraints, and risks."
+    - id: "market-definition"
+      type: "context"
+      required: false
+      description: "Category frame, market boundaries, primary market, existing alternatives, substitute behaviors, comparison lens, maturity, timing rationale, constraints, evidence quality, and market risks."
+    - id: "validation-context"
+      type: "context"
+      required: false
+      description: "Customer discovery, competitive analysis, market scan, validation report, customer language, evidence strength, decision records, and unresolved positioning assumptions."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Product brief, value proposition, personas, journeys, scope, functional requirements, acceptance criteria, supported use cases, and product constraints."
+    - id: "technical-risk-context"
+      type: "context"
+      required: false
+      description: "Deployment readiness, technical risks, product limitations, unsupported capabilities, operational constraints, and claims GTM must not make."
+    - id: "positioning-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate positioning statements, desired category, differentiators, proof points, customer phrases, anti-positioning, claims to avoid, narrative ideas, and unresolved positioning questions."
+  completionCriteria:
+    - "The central question is answered through a clear, credible, differentiated, evidence-aware positioning strategy."
+    - "Positioning summary states the target customer, problem, category frame, key alternative, differentiated value, reason to believe, confidence level, and main positioning risk."
+    - "Positioning statement uses a standard structure but may be adapted for clarity; it must identify target customer, problem, product, category, differentiated value, alternative, and reason to believe."
+    - "Category frame explains whether the product enters an existing category, reframes one, creates a wedge, crosses categories, or requires category education, with proof and GTM implications."
+    - "Target customer context is specific enough to drive messaging and includes pains, triggers, values, objections, current workflows, and qualification/disqualification signals."
+    - "Primary pain is described in the customer's language, with urgency, frequency, cost of inaction, emotional/practical consequences, and current coping mechanisms."
+    - "Alternatives include direct competitors, indirect competitors, adjacent tools, manual workflows, spreadsheets, internal processes, consultants/agencies, communities, and doing nothing where relevant."
+    - "Substitute behaviors explain what customers currently do instead, why it persists, where it breaks, switching trigger, switching cost, and positioning implication."
+    - "Differentiated value identifies the single most defensible value claim and separates core differentiator, supporting differentiators, table-stakes capabilities, and non-differentiators."
+    - "Reasons to believe connect each major claim to evidence, product capability, design choice, validation signal, customer proof, technical constraint, or explicit assumption."
+    - "Proof hierarchy distinguishes strong proof, moderate proof, weak proof, assumption, unavailable proof, and claims that must not be used until evidence exists."
+    - "Claim boundaries define allowed claims, provisional claims, prohibited claims, technical-truth constraints, product-readiness constraints, compliance/legal review needs, and reputational risks."
+    - "Messaging pillars define the few durable themes downstream messaging should use, including customer pain, value promise, proof, tone, support points, and claims to avoid."
+    - "Narrative frame explains the before/after worldview, enemy/problem framing, transformation, customer agency, product role, and ethical/brand boundaries."
+    - "Anti-positioning defines what the product must not be perceived as, what categories or claims create false expectations, and what comparisons should be avoided."
+    - "Positioning risks are concrete, source-linked, impact-aware, and routed to downstream GTM or Operations documents."
+    - "Downstream handoff clarifies what Audience/Segmentation, Channel Strategy, Launch, Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks, Support, and Operations must inherit."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid positioning theater: attractive phrasing without target specificity, comparison context, differentiated value, proof, claim boundaries, and downstream implications."
+    - "Avoid positioning by feature list instead of customer pain, alternatives, outcome, category frame, proof, and adoption context."
+    - "Avoid generic differentiation such as easier, better, faster, simpler, AI-powered, modern, intuitive, or all-in-one unless tied to evidence and customer value."
+    - "Avoid claiming a new category without education burden, proof burden, and market-definition support."
+    - "Avoid pretending direct competitors are the only alternatives; include substitute behaviors and doing nothing."
+    - "Avoid using unsupported claims in messaging, launch, sales, pricing, or partnerships."
+    - "Avoid positioning that contradicts Foundation principles, product scope, acceptance criteria, deployment readiness, technical risks, or support capacity."
+    - "Avoid confusing positioning with final copy; this document defines strategic meaning, not finished campaign copy."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent customer evidence, competitor facts, proof points, technical capabilities, market categories, compliance claims, revenue claims, or readiness claims."
+    - "Positioning must preserve validated evidence, product truth, technical truth, market definition, customer language, and GTM focus."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate evidence, assumption, hypothesis, claim, proof, messaging direction, and risk."
+    - "Tie positioning claims to GTM Brief, Market Definition, Validation, Customer Discovery, Competitive Analysis, Product, Acceptance Criteria, Technical Risks, or Decision Record where possible."
+    - "Classify claims as allowed, provisional, prohibited, review-needed, proof-needed, launch-ready, post-launch, or rejected where useful."
+    - "State what downstream messaging may say now versus what must wait for more proof or product readiness."
+    - "Route final copywriting, campaign messaging, channel-specific copy, content calendar, sales scripts, partnership pitch, and analytics implementation to downstream GTM documents."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM Brief, Market Definition, or Decision Record."
+    - "Flag positioning statements without target customer, problem, category, alternative, differentiated value, and reason to believe."
+    - "Flag categories without market-definition support and customer comparison behavior."
+    - "Flag differentiators without evidence, product capability, or customer relevance."
+    - "Flag claims that exceed product readiness, technical truth, legal/compliance certainty, evidence quality, or support capacity."
+    - "Flag proof sections that rely on internal belief instead of validation signal, observable product capability, design choice, or explicit assumption."
+    - "Flag alternatives sections that omit substitute behaviors or do-nothing behavior."
+    - "Flag messaging pillars that are too many, too generic, or not connected to pain/value/proof."
+    - "Verify that downstream GTM documents receive concrete positioning handoff inputs."
+    - "Flag content that belongs better in Audience/Segmentation, Channel Strategy, Launch Plan, Pricing, Content Strategy, Sales Motion, Partnerships, Experiments, Analytics, GTM Risks, or Operations."
+  specializedFormats:
+    positioningStatementFormat:
+      description: "Recommended format for positioning statement variants."
+      fields:
+        - targetCustomer
+        - customerProblem
+        - productName
+        - categoryFrame
+        - uniqueValue
+        - primaryAlternative
+        - reasonToBelieve
+        - confidenceLevel
+        - claimStatus
+    differentiatorFormat:
+      description: "Recommended format for differentiators."
+      fields:
+        - differentiator
+        - differentiatorType
+        - customerValue
+        - alternativeComparedAgainst
+        - evidence
+        - proofStrength
+        - claimBoundary
+        - downstreamUse
+        - status
+    proofFormat:
+      description: "Recommended format for proof points."
+      fields:
+        - claim
+        - proofPoint
+        - proofType
+        - source
+        - strength
+        - limitation
+        - allowedUse
+        - reviewNeeded
+        - status
+    claimBoundaryFormat:
+      description: "Recommended format for claim boundaries."
+      fields:
+        - claim
+        - status
+        - allowedContext
+        - prohibitedContext
+        - evidenceRequired
+        - productReadinessConstraint
+        - technicalConstraint
+        - legalOrComplianceReview
+        - reputationalRisk
+    messagingPillarFormat:
+      description: "Recommended format for messaging pillars."
+      fields:
+        - pillar
+        - customerPain
+        - valuePromise
+        - supportingProof
+        - tone
+        - supportingPoints
+        - claimsToAvoid
+        - channelsWhereUseful
+        - status
+    alternativeComparisonFormat:
+      description: "Recommended format for alternative comparisons."
+      fields:
+        - alternative
+        - alternativeType
+        - customerUsesItFor
+        - whyItWorksEnough
+        - whereItBreaks
+        - switchingFriction
+        - differentiationAngle
+        - claimToAvoid
+        - downstreamUse
+    positioningRiskFormat:
+      description: "Recommended format for positioning risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - downstreamDocument
+        - launchImpact
+  sections:
+    - id: "positioning-summary"
+      title: "Positioning Summary"
+      intent: "Summarize the target customer, problem, category, alternative, differentiated value, proof, confidence, and primary positioning risk."
+      required: true
+      outputGuidance:
+        - "Open with the core positioning in plain language."
+        - "State confidence level and what remains unproven."
+        - "Identify the main positioning risk."
+      qualityChecks:
+        - "Summary is specific enough to guide messaging."
+        - "The positioning can be understood without reading the whole document."
+        - "Confidence and risk are not hidden."
+      questions:
+        - "What is the positioning in one concise paragraph?"
+        - "Who is it for?"
+        - "What pain does it address?"
+        - "What is the category or frame of reference?"
+        - "What alternative is it compared against?"
+        - "What makes it different and credible?"
+        - "What is the main positioning risk?"
+    - id: "positioning-statement"
+      title: "Positioning Statement"
+      intent: "Craft the full positioning statement using a standard formula while preserving truth, evidence, and specificity."
+      required: true
+      outputGuidance:
+        - "Use the positioning statement format where useful."
+        - "Start from the formula: For [target customer], who struggles with [problem], [product] is a [category] that provides [unique value], unlike [alternative], because [reason to believe]."
+        - "Create variants only when they express materially different frames, not superficial copy changes."
+      qualityChecks:
+        - "Statement includes target, problem, category, value, alternative, and proof."
+        - "Statement is not overloaded with multiple audiences or value propositions."
+        - "Statement does not make unsupported claims."
+      questions:
+        - "What is the full positioning statement?"
+        - "What target customer does it address?"
+        - "What specific problem does it name?"
+        - "What category or frame of reference does it claim?"
+        - "What unique value does it promise?"
+        - "What alternative does it contrast with?"
+        - "What reason to believe makes it credible?"
+    - id: "category-frame"
+      title: "Category Frame"
+      intent: "Define the category or frame of reference the product should use and the implications of that choice."
+      required: true
+      outputGuidance:
+        - "Tie category frame to Market Definition."
+        - "State whether the product enters, reframes, wedges into, crosses, or attempts to create a category."
+        - "Identify category risks and education burden."
+      qualityChecks:
+        - "Category frame reflects customer comparison behavior."
+        - "Category education burden is explicit."
+        - "Frame does not create false expectations."
+      questions:
+        - "What category should the product claim?"
+        - "What category will customers naturally compare it to?"
+        - "Is the category existing, emerging, contested, open, crowded, or category-creating?"
+        - "What category expectations must the product meet?"
+        - "What category expectations should the product reject?"
+        - "What education burden does this frame create?"
+    - id: "target-customer-context"
+      title: "Target Customer Context"
+      intent: "Define the positioning audience through behavior, pain, motivation, context, values, objections, and qualification signals."
+      required: true
+      outputGuidance:
+        - "Tie target customer to GTM Brief, Market Definition, Personas, and Customer Discovery."
+        - "Include buyer/user/evaluator roles where relevant."
+        - "Focus on positioning-relevant context, not full segmentation."
+      qualityChecks:
+        - "Customer context is specific and observable."
+        - "Values and objections are included."
+        - "Positioning target does not exceed first GTM focus."
+      questions:
+        - "Who is the positioning for?"
+        - "What customer behavior or situation defines them?"
+        - "What do they value most when evaluating alternatives?"
+        - "What triggers their search or openness to change?"
+        - "What objections are likely?"
+        - "What observable signals qualify or disqualify them?"
+    - id: "primary-pain"
+      title: "Primary Pain"
+      intent: "Describe the acute pain in customer language, including urgency, frequency, consequences, current coping mechanisms, and cost of inaction."
+      required: true
+      outputGuidance:
+        - "Use customer language from validation when available."
+        - "Distinguish acute pain from nice-to-have improvement."
+        - "Include practical and emotional consequences where evidence supports them."
+      qualityChecks:
+        - "Pain is specific and felt by the target customer."
+        - "Urgency and cost of inaction are explicit or marked unproven."
+        - "Current coping mechanisms are included."
+      questions:
+        - "What acute problem does the product solve?"
+        - "How does the customer experience this pain today?"
+        - "How often does it happen?"
+        - "What practical or emotional consequence does it create?"
+        - "What is the cost of doing nothing?"
+        - "How does the customer cope today?"
+    - id: "alternatives-and-substitutes"
+      title: "Alternatives and Substitutes"
+      intent: "Identify what customers compare against and what behaviors the product must replace, improve, or coexist with."
+      required: true
+      outputGuidance:
+        - "Use the alternative comparison format for material alternatives."
+        - "Include direct competitors, indirect competitors, adjacent tools, services, manual workflows, spreadsheets, internal processes, communities, and doing nothing where relevant."
+        - "State why each alternative works enough and where it breaks."
+      qualityChecks:
+        - "Alternatives reflect customer reality, not only company competitor taxonomy."
+        - "Do-nothing and manual substitutes are considered."
+        - "Switching friction and comparison risks are explicit."
+      questions:
+        - "What will customers compare this product to?"
+        - "What direct and indirect alternatives exist?"
+        - "What substitute behaviors exist?"
+        - "Why does each alternative work enough today?"
+        - "Where is each alternative insufficient?"
+        - "What switching friction does each alternative create?"
+        - "What comparison claim should be avoided?"
+    - id: "differentiated-value"
+      title: "Differentiated Value"
+      intent: "Define the single most defensible value proposition and why it matters to the target customer."
+      required: true
+      outputGuidance:
+        - "Name one primary differentiated value."
+        - "Distinguish differentiated value from feature, benefit, outcome, and proof."
+        - "Tie value to customer pain and alternative insufficiency."
+      qualityChecks:
+        - "Value proposition is singular and defensible."
+        - "Value is relevant to the target customer, not merely interesting to the builder."
+        - "Value does not exceed product truth."
+      questions:
+        - "What single value proposition is most defensible?"
+        - "Why does this value matter to the target customer?"
+        - "What alternative weakness does this value exploit?"
+        - "What product capability or design choice creates this value?"
+        - "What proof supports this value?"
+        - "What value claim would be too broad or unsupported?"
+    - id: "differentiators"
+      title: "Differentiators"
+      intent: "Define the core and supporting differentiators, their customer value, proof strength, and downstream use."
+      required: true
+      outputGuidance:
+        - "Use differentiator records for material differentiators."
+        - "Separate core differentiator, supporting differentiators, table-stakes capabilities, and non-differentiators."
+        - "Limit to differentiators that matter to the target customer."
+      qualityChecks:
+        - "Differentiators are not generic."
+        - "Each differentiator identifies the alternative it beats or reframes."
+        - "Proof strength and claim boundary are explicit."
+      questions:
+        - "What are the top differentiators?"
+        - "Which differentiator matters most to the target customer?"
+        - "What alternative does each differentiator compare against?"
+        - "What customer value does each differentiator create?"
+        - "What evidence supports each differentiator?"
+        - "What capabilities are table stakes rather than differentiators?"
+    - id: "reasons-to-believe"
+      title: "Reasons to Believe"
+      intent: "Provide credible proof that supports each positioning claim."
+      required: true
+      outputGuidance:
+        - "Use proof records for material proof points."
+        - "Tie proof to validation evidence, product capability, design choice, technical constraint, customer result, or explicit assumption."
+        - "Mark weak or missing proof clearly."
+      qualityChecks:
+        - "Proof maps to actual claims."
+        - "Evidence strength is explicit."
+        - "Unsupported claims are not promoted as proof."
+      questions:
+        - "What proof makes the positioning credible?"
+        - "What evidence, product capability, design choice, customer signal, technical constraint, or market signal supports each claim?"
+        - "Which proof points are strong?"
+        - "Which proof points are weak or provisional?"
+        - "What proof is missing before stronger claims can be used?"
+    - id: "proof-hierarchy"
+      title: "Proof Hierarchy"
+      intent: "Prioritize proof points by credibility and define how each may be used in messaging, sales, launch, and content."
+      required: true
+      outputGuidance:
+        - "Rank proof from strongest to weakest."
+        - "Separate customer proof, behavioral proof, product proof, technical proof, founder proof, market proof, and assumption."
+        - "State allowed use by downstream GTM context."
+      qualityChecks:
+        - "Proof hierarchy prevents weak evidence from carrying strong claims."
+        - "Proof limitations are explicit."
+        - "Downstream allowed use is clear."
+      questions:
+        - "What is the strongest available proof?"
+        - "What proof is moderate or weak?"
+        - "What proof is only an assumption?"
+        - "What proof can be used publicly now?"
+        - "What proof should be used only internally?"
+        - "What proof must be gathered next?"
+    - id: "claim-boundaries"
+      title: "Claim Boundaries"
+      intent: "Define which claims are allowed, provisional, prohibited, review-needed, or blocked by product, technical, legal, compliance, evidence, or support constraints."
+      required: true
+      outputGuidance:
+        - "Use claim boundary records for material claims."
+        - "Classify every major positioning claim."
+        - "Tie prohibited claims to risk, missing evidence, or unsupported capability."
+      qualityChecks:
+        - "Downstream teams know what may and may not be said."
+        - "Technical truth and product readiness are preserved."
+        - "Compliance/legal uncertainty is marked review-needed, not assumed."
+      questions:
+        - "What claims are allowed now?"
+        - "What claims are provisional or require more proof?"
+        - "What claims are prohibited?"
+        - "What claims require legal, compliance, product, engineering, or support review?"
+        - "What product-readiness or technical constraints limit claims?"
+        - "What claims create reputational risk?"
+    - id: "messaging-pillars"
+      title: "Messaging Pillars"
+      intent: "Define the durable messaging themes that downstream content, channel, launch, and sales work should use."
+      required: true
+      outputGuidance:
+        - "Use messaging pillar records for each pillar."
+        - "Limit pillars to a small set of durable themes."
+        - "Include pain, value, proof, tone, supporting points, and claims to avoid."
+      qualityChecks:
+        - "Pillars are specific and differentiated."
+        - "Pillars connect pain, value, and proof."
+        - "Pillars are not finished copy or generic slogans."
+      questions:
+        - "What messaging pillars should guide downstream GTM work?"
+        - "What customer pain does each pillar address?"
+        - "What value promise does each pillar make?"
+        - "What proof supports each pillar?"
+        - "What tone should each pillar use?"
+        - "What claims should each pillar avoid?"
+    - id: "narrative-frame"
+      title: "Narrative Frame"
+      intent: "Define the broader story that explains the before state, after state, enemy/problem, customer transformation, product role, and ethical/brand boundaries."
+      required: true
+      outputGuidance:
+        - "Frame the narrative around the customer's world, not the product's ego."
+        - "Define the product as an enabler, not the hero, unless the brand strategy explicitly differs."
+        - "Preserve Foundation principles and boundaries."
+      qualityChecks:
+        - "Narrative is strategic, not ornamental."
+        - "The customer remains central."
+        - "The narrative does not create false expectations."
+      questions:
+        - "What before-state does the customer experience?"
+        - "What after-state does the product help create?"
+        - "What enemy, broken assumption, or structural problem does the narrative oppose?"
+        - "What role does the customer play?"
+        - "What role does the product play?"
+        - "What ethical or brand boundaries must the narrative respect?"
+    - id: "anti-positioning"
+      title: "Anti-Positioning"
+      intent: "Define what the product must not be perceived as and what comparisons or claims should be avoided."
+      required: true
+      outputGuidance:
+        - "List categories, frames, claims, tones, and comparisons to avoid."
+        - "Explain the risk created by each prohibited frame."
+        - "Tie anti-positioning to Foundation boundaries and technical/product truth."
+      qualityChecks:
+        - "Anti-positioning prevents false expectations."
+        - "Risk behind each avoided frame is explicit."
+        - "Downstream GTM teams can apply it clearly."
+      questions:
+        - "What must the product not be positioned as?"
+        - "What category would create false expectations?"
+        - "What claims would overpromise?"
+        - "What tone would undermine trust?"
+        - "What comparisons should be avoided?"
+        - "What anti-positioning rules are non-negotiable?"
+    - id: "positioning-risks"
+      title: "Positioning Risks"
+      intent: "Identify risks that positioning is unclear, unbelievable, undifferentiated, too broad, too narrow, unsupported, technically untrue, or misaligned with customer language."
+      required: true
+      outputGuidance:
+        - "Use positioning risk records for material risks."
+        - "Include early signal, mitigation, launch impact, and downstream document."
+        - "Treat unsupported claims and category confusion as first-class risks."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Risks include customer misunderstanding and internal overclaiming."
+        - "Mitigations are actionable or routed downstream."
+      questions:
+        - "What are the biggest positioning risks?"
+        - "Where could customers misunderstand the product?"
+        - "Where could the positioning sound generic or unbelievable?"
+        - "Where could claims exceed product or technical truth?"
+        - "Where could category choice create confusion?"
+        - "What early signals would show positioning is not working?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from Positioning and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route positioning outputs to the correct downstream documents."
+        - "Separate audience, channel, launch, pricing, content, sales, partnerships, experiments, analytics, risks, support, and operations implications."
+        - "Preserve unresolved positioning questions and claim restrictions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing positioning assumptions silently."
+        - "Strategic positioning and downstream tactical copy remain distinct."
+      questions:
+        - "What should Audience and Segmentation inherit?"
+        - "What should Channel Strategy inherit?"
+        - "What should Launch Plan inherit?"
+        - "What should Pricing and Packaging inherit?"
+        - "What should Content Strategy inherit?"
+        - "What should Sales Motion and Partnerships inherit?"
+        - "What should Growth Experiments, GTM Analytics, GTM Risks, Support Model, and Risk Management inherit?"
+        - "What unresolved positioning questions must be carried forward?"

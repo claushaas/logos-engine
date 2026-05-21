@@ -1,0 +1,711 @@
+document:
+  id: "11-observability"
+  title: "Observability"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 11
+  type: "observability"
+  purpose: "Define how the system emits, stores, correlates, protects, visualizes, alerts on, and operationalizes logs, metrics, traces, audit events, errors, health checks, SLOs, dashboards, and privacy-safe telemetry."
+  centralQuestion: "When something fails, degrades, drifts, becomes unsafe, or violates expectations, how will we know what happened, who was affected, what caused it, and what to do next?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/04-engineering/11-observability.md"
+      purpose: "Store the canonical observability plan as a Markdown document."
+    artifacts:
+      - id: "engineering.observability_plan"
+        format: "html"
+        path: "outcomes/html/04-engineering/observability-plan.html"
+        purpose: "Provide a navigable observability plan covering signal strategy, logs, metrics, traces, errors, audit events, health checks, SLOs, alerts, dashboards, privacy-safe telemetry, incident hooks, runbooks, retention, costs, ownership, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "observability objective"
+          - "signal taxonomy"
+          - "instrumentation map"
+          - "logging strategy"
+          - "metrics strategy"
+          - "tracing strategy"
+          - "error reporting"
+          - "audit events"
+          - "health checks"
+          - "SLOs"
+          - "SLIs"
+          - "error budgets"
+          - "alerts"
+          - "dashboards"
+          - "incident hooks"
+          - "runbook hooks"
+          - "privacy-safe telemetry"
+          - "sensitive data rules"
+          - "sampling and cardinality"
+          - "retention and access"
+          - "cost controls"
+          - "observability testing"
+          - "ownership"
+          - "observability risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.observability_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/observability-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether observability is complete, privacy-safe, actionable, cost-aware, incident-ready, testable, and aligned with architecture, security, testing, deployment, and operations."
+        agentRole: "reviewer"
+        includes:
+          - "canonical observability plan"
+          - "system architecture dependency"
+          - "API contracts dependency"
+          - "integration architecture dependency"
+          - "security and privacy dependency"
+          - "sync and state dependency"
+          - "testing strategy dependency"
+          - "observability formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+    - "04-engineering/07-integration-architecture"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/09-sync-and-state"
+    - "04-engineering/10-testing-strategy"
+  feeds:
+    - "04-engineering/12-frontend-architecture"
+    - "04-engineering/13-infrastructure-architecture"
+    - "04-engineering/14-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "System components, layers, runtime units, deployment topology, data flow, failure modes, security/privacy hooks, and observability hooks that must emit signals."
+    - id: "api-contracts"
+      type: "context"
+      required: false
+      description: "Endpoint contracts, error model, auth/authz, rate limits, realtime/webhook behavior, idempotency, versioning, and contract-testing requirements that affect observability."
+    - id: "integration-architecture"
+      type: "context"
+      required: false
+      description: "External services, adapters, webhooks, event streams, rate limits, retries, circuit breakers, degraded modes, provider request IDs, and integration observability requirements."
+    - id: "security-and-privacy"
+      type: "context"
+      required: false
+      description: "Threat model, assets, data classifications, sensitive logging rules, audit events, telemetry privacy, access controls, incident response, and privacy constraints."
+    - id: "sync-and-state"
+      type: "context"
+      required: false
+      description: "State taxonomy, sync flows, mutation queues, conflicts, retries, hydration, stale state, recovery, and sync observability requirements."
+    - id: "testing-strategy"
+      type: "context"
+      required: false
+      description: "Observability tests, CI gates, release gates, failure simulations, privacy checks, and evidence requirements."
+    - id: "observability-notes"
+      type: "manual_note"
+      required: false
+      description: "Known monitoring needs, dashboards, alerts, log conventions, SLO targets, tools, incident needs, cost limits, telemetry restrictions, and unresolved observability questions."
+  completionCriteria:
+    - "The central question is answered through explicit signals, correlation, storage, access, dashboards, alerts, SLOs, incident hooks, runbooks, privacy rules, tests, ownership, and risks."
+    - "Signal taxonomy distinguishes logs, metrics, traces, errors, audit events, security events, product analytics, health checks, synthetic checks, deployment events, support events, and business telemetry."
+    - "Instrumentation map identifies what each component, API, integration, worker, sync flow, frontend surface, security control, and deployment stage must emit."
+    - "Logging strategy defines structured format, levels, context fields, correlation IDs, request IDs, user/account identifiers policy, redaction, sampling, retention, and access rules."
+    - "Metrics strategy defines counters, gauges, histograms, summaries, labels, cardinality rules, SLIs, business metrics, technical metrics, security metrics, integration metrics, sync metrics, and cost metrics."
+    - "Tracing strategy defines trace boundaries, propagation format, span naming, span attributes, sampling, cross-service propagation, frontend/backend correlation, integration correlation, and privacy-safe attributes."
+    - "Error reporting defines capture points, enrichment, grouping, deduplication, severity, ownership, release/version metadata, user impact, retryability, alert linkage, and issue workflow."
+    - "Audit events define security/privacy-relevant actions, actor, target, action, timestamp, source, outcome, reason, metadata, retention, access, immutability expectations, and export/deletion implications."
+    - "Health checks define liveness, readiness, startup, dependency health, synthetic checks, canary checks, degraded health, and deployment gating behavior."
+    - "SLOs and SLIs define user-facing reliability targets, measurement windows, error budget policy, burn-rate alerts, reporting cadence, exclusions, and release implications."
+    - "Alerts define symptoms, thresholds, anomaly rules, burn-rate rules, routing, escalation, deduplication, suppression, severity, expected action, linked dashboard, and linked runbook."
+    - "Dashboards define operational dashboards, product dashboards, executive dashboards, security dashboards, integration dashboards, sync dashboards, release dashboards, cost dashboards, and ownership."
+    - "Incident hooks and runbook hooks define how signals trigger incidents, what context is attached, where responders look, and what first actions are expected."
+    - "Privacy-safe telemetry and sensitive data rules define what may be collected, what must never be collected, redaction/masking, minimization, access controls, retention, export/deletion implications, and review needs."
+    - "Sampling and cardinality controls define how high-volume signals are sampled, aggregated, limited, downsampled, or dropped without losing critical diagnostic value."
+    - "Retention and access rules define storage duration, access roles, auditability, deletion behavior, legal/compliance review needs, and environment separation."
+    - "Cost controls define budgets, high-cardinality risks, ingestion limits, retention trade-offs, sampling strategy, dashboard usage, alert noise cost, and monitoring of observability spend."
+    - "Observability testing defines how logs, metrics, traces, errors, alerts, dashboards, audit events, redaction, correlation, and incident hooks are verified before release."
+    - "Ownership defines who owns each signal, dashboard, alert, SLO, runbook, escalation path, retention policy, and cost review."
+    - "Observability risks identify blind spots, noisy alerts, missing correlation, privacy leaks, cost explosions, untested alerts, dashboard rot, and operational dependency risks."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid observability theater: dashboards and alerts without ownership, actionability, runbooks, thresholds, signal quality, or incident linkage."
+    - "Avoid logging sensitive data, secrets, tokens, credentials, PII, full payloads, or unnecessary user content."
+    - "Avoid high-cardinality labels without explicit justification and cost controls."
+    - "Avoid alerts that are not actionable or do not have a responder, severity, route, and expected action."
+    - "Avoid SLOs without SLIs, measurement windows, error budget policy, and user-facing rationale."
+    - "Avoid traces that lack correlation across frontend, backend, workers, integrations, and async flows where those flows matter."
+    - "Avoid audit events without actor, target, action, outcome, timestamp, source, and retention/access rules."
+    - "Avoid claiming incident readiness unless alerts, dashboards, runbooks, escalation, and tests exist."
+    - "Avoid inventing telemetry capabilities, tool guarantees, compliance status, alert thresholds, SLO targets, or retention obligations."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Observability must preserve Security and Privacy rules, Data Model sensitivity, API error semantics, Integration failure behavior, Sync/State recovery, Testing evidence, and Operations readiness."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate signal, source, purpose, fields, sensitivity, retention, owner, dashboard, alert, runbook, and release impact."
+    - "Tie observability requirements to System Architecture, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, NFRs, Acceptance Criteria, or Decision Record where possible."
+    - "Classify signals as required, recommended, optional, deferred, noisy, sensitive, release-blocking, incident-triggering, support-visible, user-visible, or review-needed where useful."
+    - "State what happens when an observability signal is missing, broken, noisy, or unsafe."
+    - "Keep exact tool configuration and implementation snippets in Infrastructure, Deployment, or Operations documents unless needed as architectural constraints."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with System Architecture, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag signals without source, purpose, owner, fields, sensitivity rule, retention rule, dashboard/alert use, or downstream owner."
+    - "Flag logs, traces, metrics, telemetry, or audit events that may expose sensitive data without redaction and access controls."
+    - "Flag alerts without severity, threshold/anomaly rule, route, responder, expected action, linked dashboard, or linked runbook."
+    - "Flag dashboards without owner, audience, use case, maintenance cadence, or signal source."
+    - "Flag SLOs without SLI definition, measurement window, error budget, alerting policy, and release implication."
+    - "Flag observability gaps around critical APIs, integrations, sync flows, jobs, security events, privacy events, deployments, and incidents."
+    - "Verify observability tests cover redaction, correlation, alert firing, dashboard signal presence, audit event emission, and incident hooks."
+    - "Flag content that belongs better in Infrastructure Architecture, Deployment Plan, Testing Strategy, Security and Privacy, Incident Response, Support Model, Release Management, or Operations."
+  specializedFormats:
+    signalFormat:
+      description: "Recommended format for observable signals."
+      fields:
+        - signal
+        - signalType
+        - source
+        - purpose
+        - fieldsOrLabels
+        - sensitivityClass
+        - cardinalityRisk
+        - retentionRule
+        - owner
+        - dashboard
+        - alertRule
+        - runbook
+        - status
+    logFormat:
+      description: "Recommended format for log conventions."
+      fields:
+        - logType
+        - level
+        - source
+        - requiredFields
+        - optionalFields
+        - forbiddenFields
+        - correlationFields
+        - redactionRules
+        - samplingRule
+        - retentionRule
+        - accessRule
+    metricFormat:
+      description: "Recommended format for metrics."
+      fields:
+        - metric
+        - type
+        - source
+        - purpose
+        - labels
+        - cardinalityRisk
+        - aggregation
+        - unit
+        - sliRelated
+        - alertRelated
+        - dashboard
+        - owner
+    traceFormat:
+      description: "Recommended format for trace conventions."
+      fields:
+        - traceArea
+        - rootSpan
+        - childSpans
+        - propagationFormat
+        - requiredAttributes
+        - forbiddenAttributes
+        - samplingRule
+        - correlationFields
+        - retentionRule
+        - owner
+    auditEventFormat:
+      description: "Recommended format for audit events."
+      fields:
+        - event
+        - category
+        - actor
+        - target
+        - action
+        - outcome
+        - source
+        - reason
+        - metadata
+        - timestamp
+        - retentionRule
+        - accessRule
+        - immutabilityExpectation
+    alertFormat:
+      description: "Recommended format for alerts."
+      fields:
+        - alert
+        - severity
+        - symptom
+        - signalSource
+        - thresholdOrRule
+        - duration
+        - route
+        - escalation
+        - expectedAction
+        - linkedDashboard
+        - linkedRunbook
+        - suppressionRule
+        - owner
+    sloFormat:
+      description: "Recommended format for SLOs."
+      fields:
+        - slo
+        - userOutcome
+        - sli
+        - target
+        - measurementWindow
+        - errorBudget
+        - burnRateAlerts
+        - exclusions
+        - reportingCadence
+        - releaseImpact
+        - owner
+    dashboardFormat:
+      description: "Recommended format for dashboards."
+      fields:
+        - dashboard
+        - audience
+        - purpose
+        - panels
+        - signalSources
+        - linkedAlerts
+        - linkedRunbooks
+        - refreshCadence
+        - owner
+        - maintenanceCadence
+    observabilityTestFormat:
+      description: "Recommended format for observability verification."
+      fields:
+        - testOrCheck
+        - targetSignal
+        - method
+        - trigger
+        - expectedEvidence
+        - failureConsequence
+        - owner
+        - status
+    observabilityRiskFormat:
+      description: "Recommended format for observability risks."
+      fields:
+        - risk
+        - affectedSignalOrArea
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - targetDocument
+        - releaseImpact
+  sections:
+    - id: "observability-objective"
+      title: "Observability Objective"
+      intent: "Define the observability maturity target, protected outcomes, diagnostic goals, incident goals, and what observability must make knowable."
+      required: true
+      outputGuidance:
+        - "Open with what observability must make possible during normal operation, degradation, incidents, and release validation."
+        - "State the maturity target and minimum viable observability for MVP."
+        - "Clarify what observability does not guarantee."
+      qualityChecks:
+        - "Objective is connected to failure diagnosis, user impact, release confidence, and operations."
+        - "Maturity target is realistic for the project stage."
+        - "Critical unknowns are not hidden."
+      questions:
+        - "What should observability make knowable?"
+        - "What is the observability maturity target for MVP and later?"
+        - "What signals are most important to monitor?"
+        - "What incidents must be diagnosable quickly?"
+        - "What user-impact questions must observability answer?"
+        - "What does observability not guarantee?"
+    - id: "signal-taxonomy"
+      title: "Signal Taxonomy"
+      intent: "Classify all observable signals and define when each signal type should be used."
+      required: true
+      outputGuidance:
+        - "Define signal categories before listing concrete signals."
+        - "Distinguish logs, metrics, traces, errors, audit events, security events, product analytics, health checks, synthetic checks, deployment events, support events, and business telemetry."
+        - "State which signals are required, optional, deferred, or prohibited."
+      qualityChecks:
+        - "Signal categories have clear purpose and boundaries."
+        - "Telemetry and audit are not confused."
+        - "Sensitive signal classes are identified early."
+      questions:
+        - "What signal types exist?"
+        - "When should logs, metrics, traces, errors, audit events, health checks, synthetic checks, analytics, and business telemetry be used?"
+        - "Which signal types are required for MVP?"
+        - "Which signal types are deferred, optional, or prohibited?"
+        - "What signals are user-visible, support-visible, operator-visible, or internal-only?"
+    - id: "instrumentation-map"
+      title: "Instrumentation Map"
+      intent: "Map observability requirements to components, APIs, integrations, workers, sync flows, frontend surfaces, deployments, security controls, and operational workflows."
+      required: true
+      outputGuidance:
+        - "Use signal records for material instrumentation points."
+        - "Trace each critical flow to logs, metrics, traces, errors, audit events, dashboards, and alerts where relevant."
+        - "Identify blind spots explicitly."
+      qualityChecks:
+        - "Critical flows have enough signals to diagnose failure."
+        - "Async, background, integration, sync, and deployment flows are not omitted."
+        - "Each instrumentation point has purpose and owner."
+      questions:
+        - "What components and flows need instrumentation?"
+        - "What signals are emitted by APIs, workers, jobs, queues, integrations, sync flows, frontend screens, and deployment steps?"
+        - "What signals are emitted by security and privacy controls?"
+        - "What observability blind spots exist?"
+        - "What instrumentation is release-blocking?"
+    - id: "logging-strategy"
+      title: "Logging Strategy"
+      intent: "Define structured logging, log levels, required fields, forbidden fields, correlation context, redaction, sampling, retention, and access rules."
+      required: true
+      outputGuidance:
+        - "Specify the standard log format and required context fields."
+        - "Define log levels by use case."
+        - "Define what must never be logged."
+      qualityChecks:
+        - "Logs are structured and correlatable."
+        - "Logs are useful without exposing sensitive data."
+        - "Log levels prevent noise and missing critical events."
+      questions:
+        - "What log levels are used and when?"
+        - "What is the standard log format?"
+        - "What context is attached to every log entry?"
+        - "What correlation fields are required: trace ID, request ID, session ID, user/account ID policy, device ID, job ID, sync ID, provider request ID?"
+        - "What data must never appear in logs?"
+        - "How is log redaction or scrubbing enforced?"
+        - "How long are logs retained and who can access them?"
+    - id: "metrics-strategy"
+      title: "Metrics Strategy"
+      intent: "Define metrics collected, types, naming, labels, cardinality, aggregation, SLIs, dashboards, alerts, and business/technical meaning."
+      required: true
+      outputGuidance:
+        - "Use metric records for material metrics."
+        - "Separate technical metrics, product metrics, business metrics, security metrics, integration metrics, sync metrics, and cost metrics."
+        - "Control label cardinality."
+      qualityChecks:
+        - "Metrics have purpose and owner."
+        - "High-cardinality labels are avoided or justified."
+        - "Metrics support dashboards, alerts, SLOs, or decision-making."
+      questions:
+        - "What metrics are collected?"
+        - "What metric types are used: counters, gauges, histograms, summaries?"
+        - "What labels are allowed and prohibited?"
+        - "What are the key business and technical metrics?"
+        - "What metrics support SLIs and SLOs?"
+        - "What metrics support integrations, sync/state, security, privacy, performance, cost, and support?"
+    - id: "tracing-strategy"
+      title: "Tracing Strategy"
+      intent: "Define distributed tracing boundaries, propagation format, span naming, required attributes, sampling, async propagation, frontend/backend correlation, and privacy-safe trace data."
+      required: true
+      outputGuidance:
+        - "Define what flows require traces."
+        - "State propagation format and correlation strategy."
+        - "Define what attributes are forbidden in spans."
+      qualityChecks:
+        - "Traces connect user-facing requests to backend, jobs, queues, integrations, and sync where relevant."
+        - "Trace sampling preserves critical diagnostics."
+        - "Trace attributes do not leak sensitive data."
+      questions:
+        - "How is distributed tracing implemented?"
+        - "What trace propagation format is used?"
+        - "What flows require tracing?"
+        - "How are frontend, backend, worker, queue, integration, webhook, and sync traces correlated?"
+        - "What span naming and attribute rules apply?"
+        - "What sampling policy applies?"
+    - id: "error-reporting"
+      title: "Error Reporting"
+      intent: "Define how errors are captured, enriched, grouped, deduplicated, prioritized, assigned, linked to releases, and routed into issue/incident workflows."
+      required: true
+      outputGuidance:
+        - "Define capture points for frontend, backend, workers, jobs, integrations, sync, agents, and deployment."
+        - "Include severity, retryability, user impact, release version, environment, and correlation context."
+        - "Define deduplication and ownership."
+      qualityChecks:
+        - "Errors are actionable and routed to owners."
+        - "Error grouping avoids both alert floods and hidden unique failures."
+        - "Error reports avoid sensitive payload capture."
+      questions:
+        - "How are errors captured, enriched, and reported?"
+        - "What error aggregation and deduplication is used?"
+        - "What severity and ownership rules apply?"
+        - "How are errors linked to releases, deployments, users affected, traces, logs, and alerts?"
+        - "What errors become incidents?"
+        - "What sensitive data must be excluded from error reports?"
+    - id: "audit-events"
+      title: "Audit Events"
+      intent: "Define security, privacy, data, permission, admin, integration, agent, support, and operational actions that require audit events."
+      required: true
+      outputGuidance:
+        - "Use audit event records for material audit events."
+        - "Include actor, target, action, outcome, source, reason, metadata, timestamp, retention, access, and immutability expectations."
+        - "Tie audit events to Security and Privacy and Data Model."
+      qualityChecks:
+        - "Audit events are complete enough for investigation."
+        - "Audit logs avoid unnecessary sensitive payloads."
+        - "Retention and access are explicit."
+      questions:
+        - "What events are audited for security, privacy, data integrity, permission, admin, support, integration, agent, or operational reasons?"
+        - "What is the audit event schema?"
+        - "What is the retention period and access rule?"
+        - "What audit events are user-visible, admin-visible, support-visible, or internal-only?"
+        - "How are audit events protected from tampering?"
+    - id: "health-checks"
+      title: "Health Checks"
+      intent: "Define liveness, readiness, startup, dependency, synthetic, canary, degraded, and post-deploy health checks and how they affect deployment and alerting."
+      required: true
+      outputGuidance:
+        - "Separate liveness from readiness and dependency health."
+        - "Define what each check proves and what it does not prove."
+        - "State deployment and alerting implications."
+      qualityChecks:
+        - "Health checks do not report healthy when critical dependencies are unusable unless degraded state is explicit."
+        - "Health checks are safe and cheap to run."
+        - "Deployment gates use the right health signal."
+      questions:
+        - "What health check endpoints or checks exist?"
+        - "What liveness, readiness, startup, dependency, synthetic, canary, degraded, and post-deploy checks are required?"
+        - "How are health checks used for deployment and alerting?"
+        - "What does each health check prove?"
+        - "What does each health check not prove?"
+    - id: "slos-slis-and-error-budgets"
+      title: "SLOs, SLIs, and Error Budgets"
+      intent: "Define service level objectives, service level indicators, measurement windows, error budget policy, burn-rate alerts, exclusions, and release impact."
+      required: true
+      outputGuidance:
+        - "Use SLO records for each material SLO."
+        - "Tie SLOs to user outcomes, not only infrastructure uptime."
+        - "Mark provisional SLOs when targets lack evidence."
+      qualityChecks:
+        - "Every SLO has an SLI and measurement window."
+        - "Error budget policy is explicit."
+        - "SLOs are not invented as external commitments unless intended."
+      questions:
+        - "What service level objectives are defined?"
+        - "What service level indicators measure each SLO?"
+        - "What is the measurement window?"
+        - "What is the error budget and how is it consumed?"
+        - "What burn-rate alerts are needed?"
+        - "What happens when error budget is exhausted?"
+        - "Which SLOs are internal targets versus external commitments?"
+    - id: "alerts"
+      title: "Alerts"
+      intent: "Define alert rules, symptoms, thresholds, anomaly detection, burn-rate alerts, routing, escalation, suppression, severity, expected action, dashboards, and runbooks."
+      required: true
+      outputGuidance:
+        - "Use alert records for material alerts."
+        - "Prefer symptom-based alerts over cause-only alerts when user impact matters."
+        - "Define expected action for every alert."
+      qualityChecks:
+        - "Alerts are actionable and owned."
+        - "Alert noise is controlled."
+        - "Critical alerts link to dashboards and runbooks."
+      questions:
+        - "What alert rules are defined?"
+        - "What thresholds, anomaly rules, error rates, burn rates, or synthetic failures trigger alerts?"
+        - "What is the alert severity model?"
+        - "What is the alert routing and escalation process?"
+        - "What alert suppression or deduplication rules apply?"
+        - "What dashboard and runbook is linked to each alert?"
+    - id: "dashboards"
+      title: "Dashboards"
+      intent: "Define required dashboards, audience, purpose, panels, signal sources, linked alerts, linked runbooks, ownership, and maintenance cadence."
+      required: true
+      outputGuidance:
+        - "Use dashboard records for material dashboards."
+        - "Separate operational, product, executive, security, integration, sync, release, cost, and support dashboards."
+        - "State maintenance ownership."
+      qualityChecks:
+        - "Dashboards answer concrete operational or product questions."
+        - "Dashboards are tied to signal sources and alerts."
+        - "Dashboard rot is addressed through ownership."
+      questions:
+        - "What dashboards are required?"
+        - "Who is each dashboard for?"
+        - "What question does each dashboard answer?"
+        - "What panels and signal sources are required?"
+        - "What alerts and runbooks link to each dashboard?"
+        - "Who owns and maintains each dashboard?"
+    - id: "incident-and-runbook-hooks"
+      title: "Incident and Runbook Hooks"
+      intent: "Define how observability signals connect to incident response, support, runbooks, escalation, diagnosis, mitigation, and postmortems."
+      required: true
+      outputGuidance:
+        - "Map major alerts and failure signals to incident severity and runbook entry points."
+        - "Define context that must be included when an incident is opened."
+        - "Route operational procedures to Incident Response and Support Model."
+      qualityChecks:
+        - "Critical alerts have runbook and escalation hooks."
+        - "Incident context reduces time-to-diagnosis."
+        - "Runbook hooks are not vague placeholders."
+      questions:
+        - "Which signals trigger incidents?"
+        - "What context is attached to incidents automatically?"
+        - "What dashboards and logs should responders inspect first?"
+        - "What runbooks are required?"
+        - "How do observability signals support support escalation and postmortems?"
+        - "What should Incident Response inherit?"
+    - id: "privacy-safe-telemetry-and-sensitive-data-rules"
+      title: "Privacy-Safe Telemetry and Sensitive Data Rules"
+      intent: "Define what data may be collected in telemetry, logs, metrics, traces, errors, audit events, analytics, and diagnostics, and what must be minimized, redacted, masked, sampled, or prohibited."
+      required: true
+      outputGuidance:
+        - "Tie rules to Security and Privacy data classification."
+        - "State forbidden fields and payloads."
+        - "Define enforcement and testing expectations."
+      qualityChecks:
+        - "Sensitive data rules are explicit and testable."
+        - "Telemetry collection has purpose and minimization."
+        - "Observability does not undermine privacy posture."
+      questions:
+        - "What data must never appear in logs, metrics, traces, errors, telemetry, analytics, or audit metadata?"
+        - "What data may be collected and why?"
+        - "What must be redacted, masked, hashed, sampled, minimized, or excluded?"
+        - "How is sensitive data scrubbing enforced?"
+        - "How are telemetry privacy rules tested?"
+        - "How do export, deletion, and retention rules apply to observability data?"
+    - id: "sampling-and-cardinality"
+      title: "Sampling and Cardinality"
+      intent: "Define sampling, aggregation, downsampling, label/cardinality controls, high-volume signal handling, and diagnostic-preservation rules."
+      required: true
+      outputGuidance:
+        - "Define cardinality rules for metrics and traces."
+        - "State when sampling is allowed and when signals must be retained."
+        - "Address high-volume logs, traces, and telemetry."
+      qualityChecks:
+        - "Sampling does not remove critical diagnostic or audit signals."
+        - "High-cardinality labels are controlled."
+        - "Cost controls and diagnostic value are balanced."
+      questions:
+        - "What sampling rules apply to logs, traces, errors, and telemetry?"
+        - "What metric labels are prohibited due to cardinality risk?"
+        - "How are high-volume signals aggregated, downsampled, limited, or dropped?"
+        - "What signals must never be sampled away?"
+        - "How is sampling configured differently by environment?"
+    - id: "retention-and-access"
+      title: "Retention and Access"
+      intent: "Define how long observability data is retained, who can access it, how access is audited, how deletion/export applies, and how environments are separated."
+      required: true
+      outputGuidance:
+        - "Separate retention for logs, metrics, traces, errors, audit events, telemetry, analytics, and dashboards."
+        - "Define access by role and environment."
+        - "Mark legal/compliance questions for review."
+      qualityChecks:
+        - "Retention is intentional and not indefinite by accident."
+        - "Access to sensitive observability data is restricted and auditable."
+        - "Environment separation prevents production data leakage into dev/test."
+      questions:
+        - "How long are logs, metrics, traces, errors, audit events, telemetry, and analytics retained?"
+        - "Who can access observability data?"
+        - "How is access audited?"
+        - "How are environments separated?"
+        - "How do data deletion and export rules apply to observability data?"
+        - "What retention or access questions require legal/security review?"
+    - id: "cost-controls"
+      title: "Cost Controls"
+      intent: "Define observability cost drivers, budgets, ingestion controls, retention trade-offs, sampling, cardinality controls, dashboard/query usage, and spend monitoring."
+      required: true
+      outputGuidance:
+        - "Identify major cost drivers."
+        - "Define controls that limit unbounded ingestion, high-cardinality labels, verbose logs, and excessive retention."
+        - "State budget or review triggers if known."
+      qualityChecks:
+        - "Observability cost is actively managed."
+        - "Cost control does not blind critical diagnostics."
+        - "High-cost signals have purpose and owner."
+      questions:
+        - "What are the major observability cost drivers?"
+        - "What ingestion, retention, sampling, and cardinality controls are used?"
+        - "What dashboards or queries could become expensive?"
+        - "What budget, quota, or review triggers apply?"
+        - "How is observability spend monitored?"
+    - id: "observability-testing"
+      title: "Observability Testing"
+      intent: "Define how observability signals, redaction, correlation, alerts, dashboards, audit events, health checks, SLOs, and incident hooks are tested."
+      required: true
+      outputGuidance:
+        - "Use observability test records for material checks."
+        - "Tie tests to Testing Strategy and release gates."
+        - "Include synthetic failure simulation where appropriate."
+      qualityChecks:
+        - "Critical signals are verified before release."
+        - "Redaction and privacy-safe telemetry are tested."
+        - "Alerts and dashboards are not assumed to work untested."
+      questions:
+        - "How are logs, metrics, traces, errors, audit events, health checks, alerts, dashboards, and SLO signals tested?"
+        - "How is trace/log/metric correlation tested?"
+        - "How is sensitive data redaction tested?"
+        - "How are alert routes and runbook links tested?"
+        - "What observability tests block release?"
+    - id: "ownership"
+      title: "Ownership"
+      intent: "Define who owns signals, dashboards, alerts, SLOs, runbooks, incident hooks, retention, access, cost review, and ongoing maintenance."
+      required: true
+      outputGuidance:
+        - "Assign ownership by area, signal, dashboard, alert, and SLO where useful."
+        - "Clarify who reviews noisy alerts, stale dashboards, missing signals, and cost spikes."
+        - "Tie ownership to Operations where relevant."
+      qualityChecks:
+        - "No critical signal, alert, dashboard, or SLO is ownerless."
+        - "Ownership includes maintenance, not only setup."
+        - "Escalation and review cadence are explicit."
+      questions:
+        - "Who owns each observability area?"
+        - "Who owns dashboards and alerts?"
+        - "Who owns SLOs and error budgets?"
+        - "Who reviews noisy alerts, stale dashboards, missing signals, and cost spikes?"
+        - "What is the maintenance and review cadence?"
+    - id: "observability-risks"
+      title: "Observability Risks"
+      intent: "Identify risks of the observability strategy and blind spots in monitoring, logging, tracing, alerting, dashboards, auditability, privacy, costs, and incident readiness."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete observability failure modes."
+        - "Tie risks to signals, components, APIs, integrations, sync flows, security/privacy controls, deployment, operations, or support."
+        - "Include early signal, mitigation, target document, and release impact."
+      qualityChecks:
+        - "Risks are specific enough to mitigate, test, accept, or block release."
+        - "Privacy leakage, missing signals, alert fatigue, dashboard rot, cost spikes, and incident blind spots are considered."
+        - "Accepted blind spots are explicit."
+      questions:
+        - "What are the risks of the observability strategy?"
+        - "What blind spots exist in the current observability design?"
+        - "Where could alerts be noisy, missing, delayed, or unactionable?"
+        - "Where could logs, traces, or telemetry leak sensitive data?"
+        - "Where could observability costs grow unexpectedly?"
+        - "What observability risks block release or require accepted risk?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from Observability and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route observability outputs to the correct downstream documents."
+        - "Separate frontend, infrastructure, deployment, release, support, incident response, risk, and operations implications."
+        - "Preserve unresolved observability questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing observability rules silently."
+        - "Observability design and downstream implementation responsibilities remain distinct."
+      questions:
+        - "What should Frontend Architecture inherit from Observability?"
+        - "What should Infrastructure Architecture inherit?"
+        - "What should Deployment Plan and Release Management inherit?"
+        - "What should Support Model inherit?"
+        - "What should Incident Response and Risk Management inherit?"
+        - "What should Operations inherit?"
+        - "What unresolved observability questions must be carried forward?"

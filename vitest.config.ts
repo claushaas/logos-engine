@@ -8,6 +8,6 @@ export default defineConfig({
 			reportsDirectory: 'coverage',
 		},
 		environment: 'node',
-		include: ['tests/**/*.test.ts'],
+		include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
 	},
 });

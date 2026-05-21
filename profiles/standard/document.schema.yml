@@ -1,0 +1,671 @@
+schema:
+  id: "logos-document-schema"
+  title: "LOGOS Document Schema"
+  version: "0.1.0"
+  status: "draft"
+
+  purpose: >
+    Define the canonical YAML structure used to describe every document in the
+    LOGOS Engine documentation system, including its role, dependencies,
+    generation rules, validation criteria, and derived outputs.
+
+  principles:
+    - "YAML defines structure, intent, constraints, and outputs."
+    - "Markdown remains the canonical human-readable document format."
+    - "HTML artifacts are generated views, not sources of truth."
+    - "Agent packs are execution-oriented derivatives."
+    - "Every document must be explicit enough to be generated, reviewed, validated, and regenerated."
+    - "Documents may share the same schema while keeping individualized sections."
+
+  document:
+    requiredFields:
+      - id
+      - title
+      - phase
+      - type
+      - status
+      - purpose
+      - centralQuestion
+      - outputs
+      - sections
+
+    optionalFields:
+      - order
+      - summary
+      - dependsOn
+      - feeds
+      - inputs
+      - completionCriteria
+      - qualityChecks
+      - antiPatterns
+      - generationRules
+      - reviewRules
+      - metadata
+      - specializedFormats
+
+    fields:
+      id:
+        type: "string"
+        required: true
+        description: >
+          Stable identifier for the document within its phase.
+        example: "01-thesis"
+
+      title:
+        type: "string"
+        required: true
+        description: >
+          Human-readable document title.
+        example: "Founding Thesis"
+
+      phase:
+        type: "string"
+        required: true
+        description: >
+          Phase identifier to which the document belongs.
+        example: "01-foundation"
+
+      order:
+        type: "integer"
+        required: false
+        description: >
+          Reading and generation order within the phase.
+        example: 1
+
+      type:
+        type: "string"
+        required: true
+        description: >
+          Functional type of the document. Used by the engine to apply specialized
+          generation and validation behavior.
+        allowedExamples:
+          - "index"
+          - "brief"
+          - "thesis"
+          - "problem"
+          - "audience"
+          - "principles"
+          - "boundaries"
+          - "success_definition"
+          - "glossary"
+          - "strategy"
+          - "assumptions"
+          - "hypotheses"
+          - "research_plan"
+          - "experiments"
+          - "economic_model"
+          - "business_model"
+          - "evidence_log"
+          - "decision_record"
+          - "report"
+          - "scope"
+          - "user_journeys"
+          - "ux_model"
+          - "information_architecture"
+          - "interaction_model"
+          - "ui_specification"
+          - "design_system"
+          - "product_architecture"
+          - "functional_requirements"
+          - "non_functional_requirements"
+          - "stack"
+          - "acceptance_criteria"
+          - "system_architecture"
+          - "domain_model"
+          - "data_model"
+          - "api_contracts"
+          - "integration_architecture"
+          - "security_privacy"
+          - "sync_state"
+          - "testing_strategy"
+          - "observability"
+          - "deployment_environments"
+          - "standards"
+          - "risk_register"
+          - "go_to_market"
+          - "market_definition"
+          - "positioning"
+          - "messaging"
+          - "customer_segments"
+          - "channel_strategy"
+          - "launch_plan"
+          - "conversion_funnel"
+          - "sales_strategy"
+          - "pricing_packaging"
+          - "marketing_assets"
+          - "growth_metrics"
+          - "operations"
+          - "operating_model"
+          - "team_responsibilities"
+          - "customer_support"
+          - "customer_success"
+          - "business_processes"
+          - "operational_metrics"
+          - "reporting_cadence"
+          - "incident_management"
+          - "risk_compliance"
+          - "financial_operations"
+          - "knowledge_management"
+          - "continuous_improvement"
+
+      status:
+        type: "string"
+        required: true
+        description: >
+          Current lifecycle state of the document.
+        allowedValues:
+          - "not_started"
+          - "drafting"
+          - "drafted"
+          - "needs_review"
+          - "reviewed"
+          - "approved"
+          - "needs_revision"
+          - "deprecated"
+        default: "not_started"
+
+      summary:
+        type: "string"
+        required: false
+        description: >
+          Short description of what the document contains.
+
+      purpose:
+        type: "string"
+        required: true
+        description: >
+          Why this document exists and what role it plays in the documentation system.
+
+      centralQuestion:
+        type: "string"
+        required: true
+        description: >
+          The single most important question the document must answer.
+
+      dependsOn:
+        type: "array<string>"
+        required: false
+        default: []
+        description: >
+          Document IDs that should exist before this document is generated or reviewed.
+        example:
+          - "01-thesis"
+          - "02-problem"
+
+      feeds:
+        type: "array<string>"
+        required: false
+        default: []
+        description: >
+          Document IDs or output artifacts that this document informs downstream.
+        example:
+          - "04-principles"
+          - "06-success-definition"
+          - "03-product/01-product-brief"
+
+      inputs:
+        type: "array<object>"
+        required: false
+        description: >
+          Explicit source inputs that may be used to generate the document.
+        itemSchema:
+          id:
+            type: "string"
+            required: true
+          type:
+            type: "string"
+            required: true
+            allowedExamples:
+              - "document"
+              - "transcript"
+              - "conversation"
+              - "repository"
+              - "research"
+              - "manual_note"
+              - "external_reference"
+          path:
+            type: "string"
+            required: false
+          required:
+            type: "boolean"
+            required: false
+            default: false
+          description:
+            type: "string"
+            required: false
+
+      outputs:
+        type: "object"
+        required: true
+        description: >
+          Canonical and derived outputs produced from this document definition.
+        structure:
+          canonical:
+            type: "object"
+            required: true
+            description: >
+              Primary source-of-truth output generated from this YAML.
+            fields:
+              format:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "markdown"
+                default: "markdown"
+              path:
+                type: "string"
+                required: true
+                example: "docs/01-foundation/01-thesis.md"
+              purpose:
+                type: "string"
+                required: false
+                example: "Store the canonical founding thesis as a Markdown document."
+
+          artifacts:
+            type: "array<object>"
+            required: false
+            default: []
+            description: >
+              Human-facing generated artifacts derived from canonical documents.
+              These are not sources of truth and should be regenerated when the
+              canonical document changes.
+            itemSchema:
+              id:
+                type: "string"
+                required: true
+                example: "foundation.thesis_map"
+              format:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "html"
+                  - "pdf"
+                  - "svg"
+                  - "json"
+                  - "yaml"
+                  - "csv"
+                  - "diagram"
+                  - "slide_deck"
+              path:
+                type: "string"
+                required: true
+                example: "outcomes/html/01-foundation/thesis-map.html"
+              purpose:
+                type: "string"
+                required: true
+              audience:
+                type: "string"
+                required: false
+                allowedExamples:
+                  - "founder"
+                  - "builder"
+                  - "reviewer"
+                  - "stakeholder"
+                  - "investor"
+                  - "customer"
+                  - "public"
+              includes:
+                type: "array<string>"
+                required: false
+                example:
+                  - "core thesis"
+                  - "central tension"
+                  - "downstream implications"
+                  - "open questions"
+              generationMode:
+                type: "string"
+                required: false
+                allowedValues:
+                  - "regenerate_from_canonical"
+                  - "derive_from_multiple_documents"
+                  - "manual_export"
+                default: "regenerate_from_canonical"
+
+          agentPacks:
+            type: "array<object>"
+            required: false
+            default: []
+            description: >
+              Execution-oriented outputs designed to be handed to coding agents,
+              review agents, research agents, or implementation workflows.
+            itemSchema:
+              id:
+                type: "string"
+                required: true
+                example: "foundation.thesis_review_prompt"
+              format:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "markdown"
+                  - "txt"
+                  - "json"
+                  - "yaml"
+              path:
+                type: "string"
+                required: true
+                example: "outcomes/agents/01-foundation/thesis-review-prompt.md"
+              purpose:
+                type: "string"
+                required: true
+              agentRole:
+                type: "string"
+                required: false
+                allowedExamples:
+                  - "writer"
+                  - "reviewer"
+                  - "architect"
+                  - "builder"
+                  - "researcher"
+                  - "critic"
+                  - "implementation_agent"
+              includes:
+                type: "array<string>"
+                required: false
+              constraints:
+                type: "array<string>"
+                required: false
+
+          data:
+            type: "array<object>"
+            required: false
+            default: []
+            description: >
+              Machine-readable outputs derived from the document, useful for dashboards,
+              validation, indexing, graph generation, or automated workflows.
+            itemSchema:
+              id:
+                type: "string"
+                required: true
+              format:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "json"
+                  - "yaml"
+                  - "csv"
+                  - "ndjson"
+              path:
+                type: "string"
+                required: true
+              purpose:
+                type: "string"
+                required: true
+              schemaRef:
+                type: "string"
+                required: false
+
+          executive:
+            type: "array<object>"
+            required: false
+            default: []
+            description: >
+              Executive-axis outputs declared by normative documents for later
+              compilation. These are declarations only in Phase 1; no executive
+              files are generated here.
+            itemSchema:
+              id:
+                type: "string"
+                required: true
+              format:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "json"
+                  - "markdown"
+                  - "html"
+                  - "yaml"
+              path:
+                type: "string"
+                required: true
+              purpose:
+                type: "string"
+                required: true
+              role:
+                type: "string"
+                required: false
+              schemaRef:
+                type: "string"
+                required: false
+
+      completionCriteria:
+        type: "array<string>"
+        required: false
+        description: >
+          Conditions that must be true for the document to be considered complete.
+        example:
+          - "The central question is directly answered."
+          - "All required sections contain substantive content."
+          - "The document can guide downstream decisions."
+
+      qualityChecks:
+        type: "array<string>"
+        required: false
+        description: >
+          Review checks used to judge whether the document is clear, useful, and
+          aligned with its purpose.
+        example:
+          - "Avoid vague claims."
+          - "Prefer decision-useful statements."
+          - "Make assumptions explicit."
+          - "Remove content that belongs to another phase."
+
+      antiPatterns:
+        type: "array<string>"
+        required: false
+        description: >
+          Common failure modes this document must avoid.
+        example:
+          - "Turning the document into a pitch."
+          - "Mixing strategy, product, and implementation details."
+          - "Using generic language that does not constrain decisions."
+
+      generationRules:
+        type: "array<string>"
+        required: false
+        description: >
+          Rules that guide AI generation of the document.
+        example:
+          - "Use concise but complete prose."
+          - "Do not infer facts not present in the inputs."
+          - "Surface unresolved questions explicitly."
+          - "Prefer structured sections over long essays."
+
+      reviewRules:
+        type: "array<string>"
+        required: false
+        description: >
+          Rules that guide human or AI review after generation.
+        example:
+          - "Check whether each section answers its intended question."
+          - "Flag contradictions with upstream documents."
+          - "Identify missing assumptions."
+          - "Identify content that should move to another document."
+
+      sections:
+        type: "array<object>"
+        required: true
+        description: >
+          Ordered sections that define the internal structure of the generated document.
+        itemSchema:
+          id:
+            type: "string"
+            required: true
+            example: "core-thesis"
+          title:
+            type: "string"
+            required: true
+            example: "Core Thesis"
+          intent:
+            type: "string"
+            required: false
+            description: >
+              What this section is supposed to clarify.
+          required:
+            type: "boolean"
+            required: false
+            default: true
+          questions:
+            type: "array<string>"
+            required: true
+            description: >
+              Questions that guide generation of the section.
+          outputGuidance:
+            type: "array<string>"
+            required: false
+            description: >
+              Instructions for how the section should be written.
+          qualityChecks:
+            type: "array<string>"
+            required: false
+            description: >
+              Section-specific review checks.
+          antiPatterns:
+            type: "array<string>"
+            required: false
+            description: >
+              Section-specific failure modes to avoid.
+
+      specializedFormats:
+        type: "object"
+        required: false
+        description: >
+          Optional document-type-specific structural formats.
+
+        supportedFormats:
+          principleFormat:
+            description: "Used by principles documents."
+            fields:
+              - name
+              - meaning
+              - decisionRule
+              - acceptableTradeoffs
+              - violations
+
+          requirementFormat:
+            description: "Used by requirements documents."
+            fields:
+              - id
+              - description
+              - userValue
+              - priority
+              - relatedJourney
+              - relatedModule
+              - acceptanceCriteria
+              - dependencies
+              - notes
+
+          riskFormat:
+            description: "Used by risk register documents."
+            fields:
+              - id
+              - category
+              - description
+              - likelihood
+              - impact
+              - detectionSignal
+              - mitigation
+              - owner
+              - status
+
+          glossaryFormat:
+            description: "Used by glossary documents."
+            fields:
+              - term
+              - definition
+              - usedIn
+              - notToBeConfusedWith
+
+          decisionRecordFormat:
+            description: "Used by decision record documents."
+            fields:
+              - id
+              - decision
+              - context
+              - optionsConsidered
+              - rationale
+              - consequences
+              - status
+              - date
+
+          experimentFormat:
+            description: "Used by experiment documents."
+            fields:
+              - id
+              - hypothesis
+              - method
+              - targetAudience
+              - successCriteria
+              - dataCollected
+              - result
+              - decision
+
+      metadata:
+        type: "object"
+        required: false
+        description: >
+          Optional operational metadata. Keep minimal in early versions.
+        fields:
+          owner:
+            type: "string"
+            required: false
+          createdAt:
+            type: "string"
+            required: false
+            format: "date"
+          updatedAt:
+            type: "string"
+            required: false
+            format: "date"
+          version:
+            type: "string"
+            required: false
+          tags:
+            type: "array<string>"
+            required: false
+
+  outputPolicy:
+    canonical:
+      - "Canonical Markdown is the source of truth for human-readable content."
+      - "Canonical outputs should be committed to version control."
+      - "Canonical outputs should be readable without generated HTML artifacts."
+
+    htmlArtifacts:
+      - "HTML artifacts are generated views."
+      - "HTML artifacts must not be edited as primary source material."
+      - "HTML artifacts should be regenerated from canonical Markdown and YAML."
+      - "HTML artifacts may include navigation, diagrams, dashboards, maps, matrices, and visual summaries."
+      - "HTML artifacts may combine multiple canonical documents when explicitly declared."
+
+    agentPacks:
+      - "Agent packs are task-specific derivatives."
+      - "Agent packs should include enough context for execution without requiring the full documentation tree."
+      - "Agent packs should declare role, task, constraints, inputs, and expected outputs."
+      - "Agent packs should not silently invent missing requirements."
+
+    dataOutputs:
+      - "Machine-readable outputs should be deterministic where possible."
+      - "Data outputs should be used for dashboards, validation, indexing, and dependency graphs."
+      - "Data outputs should reference their originating document IDs."
+
+  validationRules:
+    - "Every document must have exactly one canonical output."
+    - "Every document must have at least one section."
+    - "Every required section must contain at least one guiding question."
+    - "Every artifact must declare purpose and path."
+    - "Every agent pack must declare purpose and path."
+    - "Documents should not depend on downstream documents."
+    - "Documents may feed downstream documents, artifacts, data outputs, or agent packs."
+    - "A document is incomplete if its central question cannot be answered from its sections."
+    - "A document is weak if it can be removed without loss of decision quality."
+    - "A document is misplaced if most of its content belongs to another phase."
+
+  phaseIds:
+    - "01-foundation"
+    - "02-validation"
+    - "03-product"
+    - "04-engineering"
+    - "05-go-to-market"
+    - "06-operations"
+
+  recommendedFileName: "document.schema.yml"

@@ -1,0 +1,95 @@
+schemaVersion: 1
+contentVersion: "1.0.0-custom"
+registryType: "documentation-system"
+project:
+  id: "custom"
+  title: "Custom Profile"
+  purpose: "Test custom profile fixture"
+documentationSystem:
+  id: "custom-docs"
+  title: "Custom Documentation"
+  purpose: "Custom profile for testing"
+axes:
+  - id: "custom-axis"
+    title: "Custom Axis"
+    description: "A custom axis for testing"
+    phases:
+      - "01-foundation"
+phaseDefinitions:
+  "01-foundation":
+    purpose: "Foundation phase"
+phaseRegistry:
+  directory: "phases"
+  files:
+    - id: "01-foundation"
+      path: "01-foundation.yml"
+      required: true
+outputModel:
+  structure:
+    format: "yml"
+    role: "registry"
+    editable: false
+    regenerationRule: "manual"
+  canonical:
+    format: "md"
+    role: "canonical"
+    editable: true
+    regenerationRule: "on-demand"
+  presentation:
+    format: "html"
+    role: "presentation"
+    editable: false
+    regenerationRule: "on-demand"
+  agentPacks:
+    format: "md"
+    role: "agent-pack"
+    editable: false
+    regenerationRule: "on-demand"
+globalRules:
+  questionsLocation: "document-descriptors"
+  yamlRole: "structure"
+  markdownRole: "canonical"
+  htmlRole: "presentation"
+  agentPackRole: "agent-pack"
+  boundaryRule: "local-only"
+  traceabilityRule: "required"
+  assumptionRule: "visible"
+  decisionRule: "confirmed-only"
+  antiDuplicationRule: "strict"
+  regenerationRule: "safe"
+statusWorkflow:
+  allowed:
+    - draft
+    - review
+    - current
+  terminal:
+    - current
+  transitions:
+    draft:
+      - review
+    review:
+      - current
+      - draft
+    current:
+      - draft
+qualityModel:
+  requiredChecks:
+    - presence
+  failurePolicy:
+    presence: "block"
+dependencyPolicy:
+  missingRequiredInput: "block"
+  missingOptionalInput: "warn"
+  circularDependency: "block"
+  staleDependency: "warn"
+  crossPhaseDependency: "warn"
+agentPolicy:
+  defaultMode: "assist"
+  rules:
+    - "no-auto-confirm"
+  requiredAgentOutputs: []
+roadmapIntegration:
+  enabled: false
+  role: "reference"
+  sources: []
+  outputs: []

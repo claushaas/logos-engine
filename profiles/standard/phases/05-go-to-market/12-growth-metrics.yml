@@ -1,0 +1,688 @@
+document:
+  id: "12-growth-metrics"
+  title: "Growth Metrics"
+  phase: "05-go-to-market"
+  status: "not_started"
+  order: 12
+  type: "growth_metrics"
+  purpose: "Define the decision-useful growth measurement system that indicates market response, delivered value, funnel health, channel quality, revenue traction, retention, referral, and operational sustainability without optimizing vanity metrics."
+  centralQuestion: "What growth signals show that the right customers are discovering, activating, converting, retaining, expanding, referring, and receiving durable value from the product?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/05-go-to-market/12-growth-metrics.md"
+      purpose: "Store the canonical growth metrics document as a Markdown document."
+    artifacts:
+      - id: "gtm.growth_metrics_dashboard_spec"
+        format: "html"
+        path: "outcomes/html/05-go-to-market/growth-metrics-dashboard-spec.html"
+        purpose: "Provide a founder-facing growth metrics dashboard specification covering objective, north star, input metrics, funnel metrics, channel metrics, revenue metrics, cohort metrics, guardrails, reporting cadence, ownership, thresholds, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "growth objective"
+          - "growth model"
+          - "north star metric"
+          - "input metrics"
+          - "acquisition metrics"
+          - "activation metrics"
+          - "conversion metrics"
+          - "retention metrics"
+          - "referral metrics"
+          - "expansion metrics"
+          - "revenue metrics"
+          - "channel metrics"
+          - "cohort metrics"
+          - "quality metrics"
+          - "guardrail metrics"
+          - "metric definitions"
+          - "metric thresholds"
+          - "reporting cadence"
+          - "metric ownership"
+          - "metric risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "gtm.growth_metrics_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/05-go-to-market/growth-metrics-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether growth metrics are value-aligned, funnel-aware, segment-aware, channel-aware, revenue-aware, operationally safe, measurable, decision-useful, and not vanity-driven."
+        agentRole: "reviewer"
+        includes:
+          - "canonical growth metrics"
+          - "GTM brief dependency"
+          - "customer segments dependency"
+          - "channel strategy dependency"
+          - "launch plan dependency"
+          - "conversion funnel dependency"
+          - "sales strategy dependency"
+          - "pricing dependency"
+          - "marketing assets dependency"
+          - "growth metric formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/06-success-definition"
+    - "02-validation/10-validation-report"
+    - "03-product/03-user-journeys"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/02-market-definition"
+    - "05-go-to-market/03-positioning"
+    - "05-go-to-market/04-messaging"
+    - "05-go-to-market/05-customer-segments"
+    - "05-go-to-market/06-channel-strategy"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/08-conversion-funnel"
+    - "05-go-to-market/09-sales-strategy"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/11-marketing-assets"
+  feeds:
+    - "05-go-to-market/13-growth-experiments"
+    - "05-go-to-market/14-gtm-analytics"
+    - "05-go-to-market/15-gtm-risks"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-customer-success"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "success-definition"
+      type: "context"
+      required: false
+      description: "Project-level success definition, durable value definition, non-goals, and signals that matter beyond short-term launch performance."
+    - id: "go-to-market-brief"
+      type: "context"
+      required: false
+      description: "GTM objective, market-entry thesis, success criteria, go/no-go criteria, constraints, and risks."
+    - id: "customer-segments"
+      type: "context"
+      required: false
+      description: "ICP, primary segment, qualification/disqualification signals, segment-specific messages/channels, expansion triggers, and segment risks."
+    - id: "channel-strategy"
+      type: "context"
+      required: false
+      description: "Primary and secondary channels, channel experiments, channel metrics, economics, constraints, fallback strategy, and channel risks."
+    - id: "launch-plan"
+      type: "context"
+      required: false
+      description: "Launch objective, cohorts, readiness gates, analytics readiness, go/no-go criteria, success criteria, contingencies, and launch risks."
+    - id: "conversion-funnel"
+      type: "context"
+      required: false
+      description: "Funnel model, stages, events, metrics, cohorts, attribution rules, drop-off risks, experiments, and instrumentation ownership."
+    - id: "sales-strategy"
+      type: "context"
+      required: false
+      description: "Sales motion, qualification, stages, metrics, handoffs, constraints, and sales risks."
+    - id: "pricing-and-packaging"
+      type: "context"
+      required: false
+      description: "Pricing objective, value metric, plans, trial/free strategy, payment flow, pricing experiments, pricing metrics, and pricing risks."
+    - id: "marketing-assets"
+      type: "context"
+      required: false
+      description: "Marketing assets, tracking assets, launch-critical materials, channel assets, asset readiness, and attribution dependencies."
+    - id: "engineering-analytics-context"
+      type: "context"
+      required: false
+      description: "Observability, deployment, technical risks, event tracking readiness, privacy constraints, analytics instrumentation constraints, and data quality risks."
+    - id: "growth-metric-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate north star metrics, dashboard ideas, reporting preferences, metric targets, cohort definitions, growth risks, vanity metrics to avoid, and unresolved measurement questions."
+  completionCriteria:
+    - "The central question is answered through a coherent growth metrics system that measures discovery, activation, conversion, retention, expansion, referral, revenue, quality, and sustainability."
+    - "Growth objective defines which growth decision matters now and what should not be optimized prematurely."
+    - "Growth model explains how growth is expected to happen: content-led, community-led, product-led, sales-led, partner-led, referral-led, marketplace-led, paid-led, open-source-led, or hybrid."
+    - "North star metric captures delivered customer value rather than mere activity and includes formula, source, segment/cohort breakdown, decision implication, owner, limitations, and guardrails."
+    - "Input metrics identify controllable leading indicators that influence the north star without becoming vanity targets."
+    - "Acquisition metrics measure qualified arrival by channel, segment, message, cohort, campaign, source, and quality, not just raw traffic."
+    - "Activation metrics measure first meaningful value and explicitly distinguish activation from signup, page view, install, account creation, or shallow engagement."
+    - "Conversion metrics measure meaningful commitment such as paid conversion, trial start, booked call, qualified opportunity, subscription, purchase, accepted invite, or another GTM-specific conversion."
+    - "Retention metrics measure durable value by cohort, timeframe, behavior, revenue status, recurrence, and churn/abandonment warning signs."
+    - "Referral metrics measure organic growth, invitations, shares, recommendations, reviews, public mentions, partner referrals, contribution, or word-of-mouth where relevant."
+    - "Expansion metrics measure plan upgrades, increased usage, additional seats/accounts, feature adoption, volume growth, account expansion, partner expansion, or segment expansion where relevant."
+    - "Revenue metrics measure MRR/ARR/revenue, ARPU/ARPA, trial-to-paid, churn, expansion, downgrade, refund, failed payment, discount usage, and support-adjusted commercial quality where relevant."
+    - "Channel metrics measure reach, qualified traffic, conversion quality, activation quality, CAC hypothesis, time-to-signal, cost/effort, conversion by channel, and channel-specific failure signals."
+    - "Cohort metrics define launch cohorts, channel cohorts, segment cohorts, message cohorts, pricing cohorts, product cohorts, experiment cohorts, and time-based cohorts with inclusion/exclusion rules."
+    - "Quality metrics measure fit, customer quality, support burden, activation quality, feedback quality, retention quality, revenue quality, and false-positive growth."
+    - "Guardrail metrics protect against misleading growth, over-acquisition, support overload, churn, refund spikes, low-quality users, privacy risk, technical degradation, and reputational damage."
+    - "Metric definitions include name, category, formula, source, owner, cadence, baseline, target, threshold, segmentation, decision implication, caveats, and status."
+    - "Metric thresholds distinguish target, alert threshold, review threshold, go/no-go threshold, experiment threshold, and stop condition where useful."
+    - "Reporting cadence defines daily/weekly/monthly/launch-window reports, audience, owner, format, decisions supported, and escalation conditions."
+    - "Metric ownership defines who owns definition, implementation, QA, dashboard, review, interpretation, and corrective action."
+    - "Metric risks identify vanity metrics, false activation, bad attribution, small-sample error, cohort distortion, instrumentation gaps, privacy risk, metric gaming, and optimization against customer value."
+    - "Downstream handoff clarifies what Growth Experiments, GTM Analytics, GTM Risks, Customer Success, Support, Release, Operating Model, and Risk Management must inherit."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid growth-metric theater: dashboards and metric lists without formula, source, owner, threshold, cadence, segment breakdown, decision implication, and caveats."
+    - "Avoid vanity metrics that measure attention, traffic, signups, opens, impressions, downloads, or followers without quality, fit, activation, conversion, retention, or learning."
+    - "Avoid selecting a north star metric that can grow while customer value, retention, revenue quality, or support sustainability worsens."
+    - "Avoid treating signup, install, page view, email open, or account creation as activation unless explicitly justified by delivered value."
+    - "Avoid targets without baseline, evidence, benchmark, assumption label, and decision use."
+    - "Avoid attribution precision claims when tracking limitations are unresolved."
+    - "Avoid growth metrics that incentivize spam, overpromising, dark patterns, low-quality acquisition, support overload, or privacy-invasive tracking."
+    - "Avoid collecting unnecessary personal data for measurement."
+    - "Avoid optimizing one funnel stage while damaging downstream retention, revenue quality, support, or trust."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent baselines, targets, conversion rates, benchmarks, cohort behavior, retention rates, CAC, LTV, revenue projections, attribution accuracy, or dashboard readiness."
+    - "Growth metrics must preserve segment focus, launch goals, funnel definitions, pricing truth, customer value, privacy constraints, analytics readiness, support capacity, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate metric, formula, source, segment, cohort, baseline, target, threshold, owner, cadence, decision, caveat, and risk."
+    - "Tie metrics to GTM Brief, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, Marketing Assets, Observability, Technical Risks, or Decision Record where possible."
+    - "Classify metrics as north-star, input, output, diagnostic, guardrail, experiment, quality, revenue, support, deferred, blocked, launch-ready, dashboard-ready, privacy-review-needed, or review-needed where useful."
+    - "State what decision each metric supports and what action follows if it crosses a threshold."
+    - "Route detailed dashboard implementation, event instrumentation, experiment design, support reporting, customer success health scoring, and operational reporting downstream."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Success Definition, Product, Acceptance Criteria, Observability, Deployment, Technical Risks, GTM Brief, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, Marketing Assets, or Decision Record."
+    - "Flag metrics without formula, data source, owner, cadence, segmentation/cohort plan, threshold, decision implication, and caveat."
+    - "Flag north star metrics that are not value-based or that can be gamed without improving customer outcomes."
+    - "Flag activation/conversion metrics that confuse shallow actions with meaningful value or business commitment."
+    - "Flag revenue metrics that ignore churn, refunds, failed payments, downgrades, support burden, or revenue quality where relevant."
+    - "Flag channel metrics that optimize raw volume without qualified fit and downstream activation/conversion/retention quality."
+    - "Flag metrics requiring tracking that violates privacy, consent, minimization, or technical readiness constraints."
+    - "Flag reporting cadence without recipient, owner, decision, and escalation rule."
+    - "Verify that downstream Growth Experiments and GTM Analytics receive concrete metric definitions and thresholds."
+    - "Flag content that belongs better in Conversion Funnel, Growth Experiments, GTM Analytics, GTM Risks, Customer Success, Support Model, Operating Model, or Risk Management."
+  specializedFormats:
+    metricFormat:
+      description: "Recommended format for growth metric definitions."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - formula
+        - dataSource
+        - eventOrSourceDependency
+        - baseline
+        - target
+        - threshold
+        - timeframe
+        - segmentOrCohortBreakdown
+        - decisionImplication
+        - caveats
+        - owner
+        - status
+    northStarMetricFormat:
+      description: "Recommended format for the north star metric."
+      fields:
+        - metric
+        - valueDefinition
+        - formula
+        - whyItRepresentsValue
+        - dataSource
+        - inputMetrics
+        - guardrailMetrics
+        - segmentOrCohortBreakdown
+        - decisionImplication
+        - limitations
+        - owner
+        - status
+    inputMetricFormat:
+      description: "Recommended format for controllable input metrics."
+      fields:
+        - inputMetric
+        - influencesMetric
+        - controllableAction
+        - formula
+        - source
+        - cadence
+        - threshold
+        - riskIfOverOptimized
+        - owner
+        - status
+    cohortMetricFormat:
+      description: "Recommended format for cohort metric definitions."
+      fields:
+        - cohort
+        - cohortType
+        - inclusionRule
+        - exclusionRule
+        - startTrigger
+        - metricsTracked
+        - comparisonMethod
+        - decisionUse
+        - caveats
+        - owner
+        - status
+    guardrailMetricFormat:
+      description: "Recommended format for guardrail metrics."
+      fields:
+        - guardrail
+        - protectsAgainst
+        - formula
+        - dataSource
+        - threshold
+        - escalationRule
+        - owner
+        - downstreamAction
+        - status
+    reportingCadenceFormat:
+      description: "Recommended format for growth reporting cadence."
+      fields:
+        - report
+        - cadence
+        - audience
+        - owner
+        - metricsIncluded
+        - decisionsSupported
+        - format
+        - escalationCondition
+        - downstreamDocument
+        - status
+    metricOwnershipFormat:
+      description: "Recommended format for metric ownership."
+      fields:
+        - area
+        - definitionOwner
+        - implementationOwner
+        - QAOwner
+        - dashboardOwner
+        - reviewOwner
+        - actionOwner
+        - privacyReviewer
+        - downstreamDocument
+        - status
+    metricRiskFormat:
+      description: "Recommended format for growth metric risks."
+      fields:
+        - risk
+        - affectedMetric
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - downstreamDocument
+        - decisionImpact
+  sections:
+    - id: "growth-objective"
+      title: "Growth Objective"
+      intent: "Define what growth measurement must help decide now and how it relates to GTM success criteria."
+      required: true
+      outputGuidance:
+        - "State the primary growth measurement objective."
+        - "Tie growth objective to GTM success criteria and launch stage."
+        - "State what growth measurement should not optimize yet."
+      qualityChecks:
+        - "Objective supports a decision."
+        - "Objective aligns with launch, funnel, and revenue motion."
+        - "Premature scale optimization is avoided."
+      questions:
+        - "What is the primary growth measurement objective?"
+        - "How does growth relate to GTM success criteria?"
+        - "What growth decision matters now?"
+        - "What should growth measurement intentionally not optimize yet?"
+    - id: "growth-model"
+      title: "Growth Model"
+      intent: "Define the expected mechanism by which growth happens and how metrics should represent that model."
+      required: true
+      outputGuidance:
+        - "Describe the growth model in practical terms."
+        - "Classify the model as content-led, community-led, product-led, sales-led, partner-led, referral-led, marketplace-led, paid-led, open-source-led, or hybrid."
+        - "State the biggest growth-model assumption."
+      qualityChecks:
+        - "Growth model matches Channel Strategy, Sales Strategy, Pricing, and Conversion Funnel."
+        - "Metrics reflect the model."
+        - "Assumptions are explicit."
+      questions:
+        - "How is growth expected to happen?"
+        - "Is growth content-led, community-led, product-led, sales-led, partner-led, referral-led, marketplace-led, paid-led, open-source-led, or hybrid?"
+        - "What must be true for this growth model to work?"
+        - "What is the biggest growth-model assumption?"
+    - id: "north-star-metric"
+      title: "North Star Metric"
+      intent: "Identify the metric that best captures delivered customer value and aligns growth efforts."
+      required: true
+      outputGuidance:
+        - "Use the north star metric format."
+        - "Explain why it represents delivered value."
+        - "Define guardrails so the north star cannot be optimized destructively."
+      qualityChecks:
+        - "North star metric reflects customer value, not vanity activity."
+        - "Metric can be measured with available or planned instrumentation."
+        - "Guardrails are included."
+      questions:
+        - "What single metric best captures delivered value?"
+        - "Why this metric?"
+        - "What is the formula?"
+        - "What input metrics influence it?"
+        - "What guardrails prevent gaming or harmful optimization?"
+        - "What are its limitations?"
+    - id: "input-metrics"
+      title: "Input Metrics"
+      intent: "Define controllable leading indicators that influence the north star and growth outcomes."
+      required: true
+      outputGuidance:
+        - "Use input metric records."
+        - "Tie each input metric to a controllable action."
+        - "Identify risk if over-optimized."
+      qualityChecks:
+        - "Input metrics are actionable."
+        - "They influence value or funnel progress."
+        - "Over-optimization risk is visible."
+      questions:
+        - "What controllable actions influence growth?"
+        - "What input metrics represent those actions?"
+        - "How does each input metric influence the north star or funnel outcome?"
+        - "What threshold matters?"
+        - "What risk exists if the input metric is over-optimized?"
+    - id: "acquisition-metrics"
+      title: "Acquisition Metrics"
+      intent: "Define metrics tracking qualified new user or customer arrival by channel, segment, message, and cohort."
+      required: true
+      outputGuidance:
+        - "Use metric records for acquisition metrics."
+        - "Distinguish raw reach from qualified acquisition."
+        - "Tie acquisition metrics to Channel Strategy and Conversion Funnel."
+      qualityChecks:
+        - "Acquisition metrics measure quality, not only volume."
+        - "Segment and channel breakdowns are included."
+        - "Metrics lead to channel decisions."
+      questions:
+        - "What metrics track new qualified user or customer arrival?"
+        - "How are visitors, qualified visitors, waitlist conversion, signup conversion, demo requests, installs, or lead captures measured?"
+        - "How are acquisition metrics broken down by channel, segment, message, campaign, source, and cohort?"
+        - "What acquisition signal indicates poor fit?"
+    - id: "activation-metrics"
+      title: "Activation Metrics"
+      intent: "Define metrics tracking first meaningful use and value realization."
+      required: true
+      outputGuidance:
+        - "Use metric records for activation metrics."
+        - "Tie activation to Conversion Funnel and primary use case."
+        - "Exclude false activation."
+      qualityChecks:
+        - "Activation metric is value-based."
+        - "False activation is explicitly considered."
+        - "Activation target is assumption-labeled if unvalidated."
+      questions:
+        - "What metrics track first meaningful use?"
+        - "What event proves the user received value?"
+        - "What is the activation rate target or review threshold?"
+        - "What would count as false activation?"
+        - "How is activation segmented by cohort, channel, segment, and message?"
+    - id: "conversion-metrics"
+      title: "Conversion Metrics"
+      intent: "Define metrics tracking movement to meaningful commitment or revenue."
+      required: true
+      outputGuidance:
+        - "Use metric records for conversion metrics."
+        - "Distinguish acquisition, activation, business conversion, and revenue conversion."
+        - "Tie conversion metrics to Pricing and Sales Strategy."
+      qualityChecks:
+        - "Conversion metric reflects meaningful commitment."
+        - "Trial, paid, sales, and self-serve paths are distinguished where relevant."
+        - "Conversion targets are not invented without labels."
+      questions:
+        - "What metrics track movement to revenue or meaningful commitment?"
+        - "How are trial start rate, trial-to-paid rate, paid conversion rate, booked-call rate, qualified opportunity rate, accepted invite, or purchase/subscription measured?"
+        - "What conversion threshold matters now?"
+        - "How does conversion differ by segment, channel, price/package, and cohort?"
+    - id: "retention-metrics"
+      title: "Retention Metrics"
+      intent: "Define metrics tracking continued use, continued value, retained revenue, and churn risk."
+      required: true
+      outputGuidance:
+        - "Use metric records for retention metrics."
+        - "Define retained behavior and timeframe."
+        - "Include churn or abandonment warning signs."
+      qualityChecks:
+        - "Retention measures recurring value, not account existence."
+        - "Timeframe and cohort basis are explicit."
+        - "Churn risk is visible."
+      questions:
+        - "What metrics track continued use and continued value?"
+        - "What retention timeframe matters first?"
+        - "How are retention rate, churn, reactivation, repeat usage, retained revenue, or cohort retention measured?"
+        - "What warning signals indicate churn or abandonment?"
+    - id: "referral-metrics"
+      title: "Referral Metrics"
+      intent: "Define metrics tracking organic growth and user/customer-driven distribution."
+      required: true
+      outputGuidance:
+        - "Use metric records for referral metrics."
+        - "State whether referral is launch-relevant or deferred."
+        - "Avoid assuming referral before value is proven."
+      qualityChecks:
+        - "Referral metrics reflect actual advocacy behavior."
+        - "Referral tracking limitations are explicit."
+        - "Referral target is not invented prematurely."
+      questions:
+        - "What metrics track organic growth?"
+        - "How are invitations, shares, recommendations, reviews, mentions, partner referrals, contributions, or word-of-mouth tracked?"
+        - "What referral rate target or review threshold applies, if any?"
+        - "Is referral relevant now or deferred?"
+    - id: "expansion-metrics"
+      title: "Expansion Metrics"
+      intent: "Define metrics tracking growth inside existing customers, accounts, use cases, segments, or plans."
+      required: true
+      outputGuidance:
+        - "Use metric records for expansion metrics."
+        - "Include this section even if expansion is deferred."
+        - "Tie expansion to Pricing, Sales, and Product scope."
+      qualityChecks:
+        - "Expansion is not assumed before activation and retention exist."
+        - "Expansion behavior is defined."
+        - "Deferred expansion is explicit."
+      questions:
+        - "What metrics track expansion?"
+        - "How are upgrades, additional seats/accounts, increased usage, feature adoption, account expansion, partner expansion, or segment expansion measured?"
+        - "What expansion metric is launch-relevant versus deferred?"
+        - "What expansion trigger matters?"
+    - id: "revenue-metrics"
+      title: "Revenue Metrics"
+      intent: "Define metrics tracking commercial performance and revenue quality."
+      required: true
+      outputGuidance:
+        - "Use metric records for revenue metrics."
+        - "Include revenue quality and support-adjusted implications where relevant."
+        - "Tie to Pricing and Packaging."
+      qualityChecks:
+        - "Revenue metrics are not isolated from churn, refunds, support load, or discounting."
+        - "Metrics match pricing model."
+        - "Financial assumptions are labeled."
+      questions:
+        - "What metrics track financial performance?"
+        - "How are MRR, ARR, revenue, ARPU, ARPA, trial-to-paid, churn, expansion, downgrade, refund, failed payment, discount usage, and revenue quality measured?"
+        - "What revenue metrics are meaningful at launch?"
+        - "What metrics are premature or deferred?"
+    - id: "channel-metrics"
+      title: "Channel Metrics"
+      intent: "Define per-channel metrics that measure quality, cost, effort, conversion, and repeatability."
+      required: true
+      outputGuidance:
+        - "Use metric records for channel metrics."
+        - "Separate reach, quality, conversion, cost, and learning metrics."
+        - "Tie metrics to Channel Strategy."
+      qualityChecks:
+        - "Channel metrics support channel decisions."
+        - "Metrics do not reward low-quality volume."
+        - "Cost includes budget, effort, and time-to-signal."
+      questions:
+        - "What metrics track per-channel performance?"
+        - "How are qualified reach, qualified traffic, activation by channel, conversion by channel, CAC hypothesis, LTV hypothesis, payback period, effort cost, and revenue per channel measured?"
+        - "What channel metric triggers iteration, scaling, pausing, or fallback?"
+    - id: "cohort-metrics"
+      title: "Cohort Metrics"
+      intent: "Define cohort analyses, cohort definitions, and comparison methods."
+      required: true
+      outputGuidance:
+        - "Use cohort metric records."
+        - "Tie cohorts to Launch Plan and Conversion Funnel."
+        - "Include caveats for small samples."
+      qualityChecks:
+        - "Cohorts are defined with inclusion/exclusion rules."
+        - "Comparison method is explicit."
+        - "Small-sample limitations are visible."
+      questions:
+        - "What cohort analyses are needed?"
+        - "How are cohorts defined and compared?"
+        - "Which launch, channel, segment, message, pricing, product, experiment, and time-based cohorts matter?"
+        - "What decisions does each cohort analysis support?"
+    - id: "quality-metrics"
+      title: "Quality Metrics"
+      intent: "Define metrics that distinguish useful growth from low-quality, misleading, or unsupported growth."
+      required: true
+      outputGuidance:
+        - "Use metric records for quality metrics."
+        - "Measure fit, feedback quality, activation quality, support burden, retention quality, and revenue quality where relevant."
+        - "Tie quality metrics to guardrails."
+      qualityChecks:
+        - "Quality metrics prevent vanity optimization."
+        - "Support and retention quality are included."
+        - "Customer fit is measurable where possible."
+      questions:
+        - "What metrics distinguish high-quality from low-quality growth?"
+        - "How is customer fit measured?"
+        - "How is activation quality measured?"
+        - "How is feedback quality measured?"
+        - "How is support burden measured?"
+        - "How is revenue quality measured?"
+    - id: "guardrail-metrics"
+      title: "Guardrail Metrics"
+      intent: "Define metrics that prevent harmful optimization and protect customer value, trust, privacy, support capacity, and technical reliability."
+      required: true
+      outputGuidance:
+        - "Use guardrail metric records."
+        - "Tie guardrails to support, privacy, technical risk, retention, and reputation."
+        - "Define escalation rule when a guardrail is breached."
+      qualityChecks:
+        - "Guardrails protect against foreseeable harm."
+        - "Thresholds lead to action."
+        - "Guardrails are not afterthoughts."
+      questions:
+        - "What guardrails protect against misleading or harmful growth?"
+        - "What metrics protect support capacity, retention, refunds, churn, privacy, technical reliability, and reputation?"
+        - "What threshold triggers review, pause, escalation, or rollback?"
+        - "Who owns each guardrail?"
+    - id: "metric-definitions"
+      title: "Metric Definitions"
+      intent: "Define every material metric with formula, data source, cadence, owner, threshold, caveats, and status."
+      required: true
+      outputGuidance:
+        - "Use metric records for every material metric."
+        - "Do not leave metrics as names only."
+        - "Mark unknown baselines or targets explicitly."
+      qualityChecks:
+        - "Every metric is computable or marked blocked."
+        - "Data source and caveats are explicit."
+        - "Metric status is visible."
+      questions:
+        - "What is the exact definition of each metric?"
+        - "What is the formula?"
+        - "What data source or event dependency is required?"
+        - "What baseline, target, threshold, and timeframe apply?"
+        - "What caveats or limitations exist?"
+        - "Who owns each metric?"
+    - id: "metric-thresholds"
+      title: "Metric Thresholds"
+      intent: "Define decision thresholds that determine whether to continue, iterate, scale, pause, investigate, or stop."
+      required: true
+      outputGuidance:
+        - "Separate target, alert, review, go/no-go, experiment, and stop thresholds."
+        - "Label assumptions where evidence is missing."
+        - "Tie thresholds to actions."
+      qualityChecks:
+        - "Thresholds lead to decisions."
+        - "Thresholds do not invent precision."
+        - "Different threshold types are not conflated."
+      questions:
+        - "What thresholds matter for each metric?"
+        - "What target indicates success?"
+        - "What threshold triggers investigation?"
+        - "What threshold triggers experiment iteration?"
+        - "What threshold triggers pause or stop?"
+        - "What threshold affects launch go/no-go or cohort expansion?"
+    - id: "reporting-cadence"
+      title: "Reporting Cadence"
+      intent: "Define how often metrics are reviewed, by whom, in what format, and what decisions each report supports."
+      required: true
+      outputGuidance:
+        - "Use reporting cadence records."
+        - "Separate launch-window, weekly, monthly, experiment, support, and revenue reporting where relevant."
+        - "Include escalation conditions."
+      qualityChecks:
+        - "Reports have audience and decision purpose."
+        - "Cadence fits the metric and GTM stage."
+        - "Escalation rules are explicit."
+      questions:
+        - "How often are metrics reviewed?"
+        - "Who receives which reports?"
+        - "What decisions does each report support?"
+        - "What format is used?"
+        - "What condition triggers escalation?"
+    - id: "metric-ownership"
+      title: "Metric Ownership"
+      intent: "Define ownership for metric definition, implementation, QA, dashboarding, review, interpretation, action, and privacy review."
+      required: true
+      outputGuidance:
+        - "Use metric ownership records."
+        - "Separate ownership of definition from implementation and action."
+        - "Include privacy reviewer where tracking touches personal data."
+      qualityChecks:
+        - "No critical metric is ownerless."
+        - "Action ownership is explicit."
+        - "Privacy and QA ownership are included."
+      questions:
+        - "Who defines each metric?"
+        - "Who implements instrumentation?"
+        - "Who performs QA?"
+        - "Who owns dashboards?"
+        - "Who reviews and interprets the metric?"
+        - "Who takes corrective action?"
+        - "Who reviews privacy-sensitive metrics?"
+    - id: "metric-risks"
+      title: "Metric Risks"
+      intent: "Identify what could make metrics misleading, harmful, incomplete, privacy-unsafe, or decision-poor."
+      required: true
+      outputGuidance:
+        - "Use metric risk records."
+        - "Include vanity, false activation, attribution, sample size, cohort distortion, instrumentation, privacy, metric gaming, and over-optimization risks."
+        - "State mitigation and downstream document."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Vanity and gaming risks are explicit."
+        - "Mitigations are actionable."
+      questions:
+        - "What could make metrics misleading?"
+        - "What vanity metrics should be avoided?"
+        - "Where could false activation or false conversion appear?"
+        - "Where could attribution be unreliable?"
+        - "Where could small samples or cohort distortion mislead decisions?"
+        - "Where could metrics create harmful incentives?"
+        - "What privacy or instrumentation risks exist?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream GTM and Operations documents must inherit from Growth Metrics and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route metric outputs to the correct downstream documents."
+        - "Separate experiments, analytics, GTM risk, customer success, support, release, operations, and risk management implications."
+        - "Preserve unresolved metric definitions, blocked instrumentation, weak thresholds, and data limitations."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing metric assumptions silently."
+        - "Growth metrics and analytics implementation remain distinct but connected."
+      questions:
+        - "What should Growth Experiments inherit?"
+        - "What should GTM Analytics inherit?"
+        - "What should GTM Risks inherit?"
+        - "What should Customer Success inherit?"
+        - "What should Support Model inherit?"
+        - "What should Release Management and Operating Model inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved growth metric questions must be carried forward?"

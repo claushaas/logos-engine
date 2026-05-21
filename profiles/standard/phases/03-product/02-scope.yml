@@ -1,0 +1,373 @@
+document:
+  id: "02-scope"
+  title: "Product Scope Definition"
+  phase: "03-product"
+  status: "not_started"
+  order: 2
+  type: "scope"
+  purpose: "Define what belongs in the product, what does not, what is deferred, and why, using validated evidence, inherited constraints, product promise, and explicit scope governance."
+  centralQuestion: "What belongs in the product, what does not, what is deferred, and what governs scope changes?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/03-product/02-scope.md"
+      purpose: "Store the canonical product scope definition as a Markdown document."
+    artifacts:
+      - id: "product.scope_matrix"
+        format: "html"
+        path: "outcomes/html/03-product/scope-matrix.html"
+        purpose: "Provide a navigable matrix of in-scope, out-of-scope, MVP, post-MVP, deferred decisions, non-goals, boundaries, risks, and scope-change rules."
+        audience: "founder"
+        includes:
+          - "scope objective"
+          - "in scope"
+          - "out of scope"
+          - "MVP scope"
+          - "post-MVP scope"
+          - "explicit non-goals"
+          - "scope boundaries"
+          - "deferred decisions"
+          - "scope risks"
+          - "scope governance"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.scope_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/scope-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether scope is evidence-based, bounded, sequenced, and aligned with the product brief and validation constraints."
+        agentRole: "reviewer"
+        includes:
+          - "canonical product scope"
+          - "product brief dependency"
+          - "validation report dependency"
+          - "decision record dependency"
+          - "scope item format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+  feeds:
+    - "03-product/03-user-stories"
+    - "03-product/04-user-journeys"
+    - "03-product/05-information-architecture"
+    - "03-product/06-ux-principles"
+    - "03-product/07-ui-principles"
+    - "03-product/08-interaction-model"
+    - "03-product/09-feature-specification"
+    - "03-product/10-content-model"
+    - "03-product/11-state-model"
+    - "03-product/12-permission-model"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "06-operations/02-operating-model"
+  inputs:
+    - id: "product-brief"
+      type: "context"
+      required: false
+      description: "Product definition, core promise, primary use case, target user, constraints, success criteria, and downstream handoff."
+    - id: "validation-report"
+      type: "context"
+      required: false
+      description: "Validation verdict, supported claims, refuted claims, inconclusive claims, risks, and required changes before Product."
+    - id: "decision-record"
+      type: "context"
+      required: false
+      description: "Proceed, pivot, stop, deferred, reopened, accepted, and refuted decisions that constrain scope."
+    - id: "evidence-log"
+      type: "context"
+      required: false
+      description: "Evidence entries that support or challenge inclusion, exclusion, deferral, MVP boundaries, and non-goals."
+    - id: "scope-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate features, capabilities, integrations, platforms, user types, data types, non-goals, and scope questions."
+  completionCriteria:
+    - "The central question is answered explicitly through in-scope, out-of-scope, MVP, post-MVP, deferred, and non-goal definitions."
+    - "Each major scope item includes classification, rationale, evidence basis, dependency, priority, and downstream implication."
+    - "MVP scope is limited to what is required for the core product promise and primary use case to hold."
+    - "Out-of-scope items distinguish permanent exclusion, deferred scope, not-now, and validation-required items."
+    - "Explicit non-goals are justified by Foundation Boundaries, Product Brief, validation evidence, or product constraints."
+    - "Scope boundaries clarify where product responsibility ends and where user, service, support, external systems, or operations begin."
+    - "Deferred decisions include required evidence, revisit trigger, owner or decision authority, and risk of deferral."
+    - "Scope risks and scope-creep signals are concrete enough to guide review."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid scope creep disguised as optional capability."
+    - "Avoid including features because they are interesting but not necessary to the product promise or validated use case."
+    - "Avoid treating deferred items as committed roadmap."
+    - "Avoid treating out-of-scope as permanent unless explicitly classified as permanent."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent validation evidence, user needs, dependencies, platforms, integrations, or constraints."
+    - "Do not move detailed feature behavior, UX flows, UI decisions, or engineering architecture into this document."
+    - "Scope must preserve inherited Foundation and Validation boundaries."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate in-scope, out-of-scope, deferred, post-MVP, non-goal, and boundary decisions."
+    - "Classify each material scope item as core, MVP, post-MVP, deferred, excluded, non-goal, validation-required, or boundary item where useful."
+    - "Tie scope decisions to Product Brief, Validation Report, Evidence Log, Decision Record, Foundation Boundaries, or Product Constraints where possible."
+    - "State what would cause a scope item to be added, removed, deferred, or reconsidered."
+    - "Keep this document at scope level; detailed behavior belongs in Feature Specification, User Stories, User Journeys, and Acceptance Criteria."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Foundation Boundaries, Validation Report, Decision Record, or Product Brief."
+    - "Flag in-scope items not supported by evidence, promise, primary use case, or explicit assumption."
+    - "Flag out-of-scope or non-goal items that conflict with validated user needs or the core product promise."
+    - "Flag MVP scope that is too broad to execute or too narrow to preserve the product promise."
+    - "Verify that deferred decisions have revisit triggers and evidence requirements."
+    - "Verify that scope boundaries are clear enough to guide Product, Engineering, GTM, and Operations."
+    - "Flag content that belongs better in User Stories, User Journeys, IA, UX, UI, Interaction Model, Feature Specification, Engineering, Go-to-market, or Operations."
+  specializedFormats:
+    scopeItemFormat:
+      description: "Recommended format for material scope items."
+      fields:
+        - id
+        - item
+        - classification
+        - description
+        - rationale
+        - evidenceBasis
+        - priority
+        - dependencies
+        - owner
+        - downstreamImplications
+        - reconsiderTrigger
+        - status
+    scopeBoundaryFormat:
+      description: "Recommended format for scope boundaries."
+      fields:
+        - boundary
+        - productResponsibility
+        - userResponsibility
+        - externalResponsibility
+        - supportResponsibility
+        - ambiguity
+        - decisionRule
+        - escalationPath
+    deferredDecisionFormat:
+      description: "Recommended format for deferred scope decisions."
+      fields:
+        - decision
+        - reasonDeferred
+        - evidenceNeeded
+        - revisitTrigger
+        - riskOfDeferral
+        - blockedWork
+        - allowedWork
+        - owner
+        - status
+    scopeRiskFormat:
+      description: "Recommended format for scope risks."
+      fields:
+        - risk
+        - source
+        - affectedScopeItems
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - decisionTrigger
+  sections:
+    - id: "scope-objective"
+      title: "Scope Objective"
+      intent: "Establish why scope is being defined now, what decisions it governs, and which principle determines inclusion, exclusion, deferral, or reconsideration."
+      required: true
+      outputGuidance:
+        - "State the scope objective as a decision-control mechanism, not a feature wishlist."
+        - "Connect scope governance to the core product promise, primary use case, validation evidence, and constraints."
+        - "Define how scope will be revisited without encouraging uncontrolled expansion."
+      qualityChecks:
+        - "The objective clarifies how scope decisions will be made."
+        - "The section protects the product promise without freezing all future learning."
+        - "Inclusion and exclusion principles are explicit."
+      questions:
+        - "What is the purpose of defining scope at this stage?"
+        - "What decisions does this scope document govern?"
+        - "What guiding principle determines inclusion, exclusion, deferral, or reconsideration?"
+        - "How does scope protect the core product promise and primary use case?"
+        - "How will scope be revisited and adjusted?"
+        - "Who or what authority decides scope changes?"
+    - id: "in-scope"
+      title: "In Scope"
+      intent: "Enumerate capabilities, features, behaviors, users, platforms, integrations, data, and content that are definitely included, with rationale and evidence."
+      required: true
+      outputGuidance:
+        - "List in-scope items as structured scope items, not generic bullets."
+        - "Explain why each item belongs in scope."
+        - "Separate core scope from supporting scope."
+      qualityChecks:
+        - "Each in-scope item supports the product promise, primary use case, validated user need, or required constraint."
+        - "In-scope items are not detailed as feature specs."
+        - "Dependencies and downstream implications are explicit where relevant."
+      questions:
+        - "What capabilities, features, and behaviors are definitely included?"
+        - "What user types are in scope?"
+        - "What platforms and environments are in scope?"
+        - "What integrations are in scope?"
+        - "What data and content are in scope?"
+        - "Why is each major item included?"
+        - "What evidence or decision supports each major inclusion?"
+    - id: "out-of-scope"
+      title: "Out of Scope"
+      intent: "Enumerate what is explicitly excluded and classify exclusions as permanent, not-now, deferred, validation-required, or outside product responsibility."
+      required: true
+      outputGuidance:
+        - "Classify each exclusion instead of treating all exclusions as permanent."
+        - "Explain why each exclusion is outside current scope."
+        - "State what would need to change for reconsideration when relevant."
+      qualityChecks:
+        - "Out-of-scope items are specific and justified."
+        - "The section distinguishes permanent exclusions from temporary deferrals."
+        - "Exclusions do not silently undermine the MVP promise."
+      questions:
+        - "What capabilities are explicitly excluded?"
+        - "What user types are out of scope?"
+        - "What platforms and environments are out of scope?"
+        - "What integrations are out of scope?"
+        - "What data or content is out of scope?"
+        - "Which exclusions are permanent, deferred, validation-required, or outside product responsibility?"
+        - "What would need to change to reconsider each major exclusion?"
+    - id: "mvp-scope"
+      title: "MVP Scope"
+      intent: "Define the absolute minimum first-release scope required for the core product promise and primary use case to hold."
+      required: true
+      outputGuidance:
+        - "Define MVP scope by promise preservation, not by smallest build size alone."
+        - "Separate must-have, should-have, nice-to-have, and explicitly-not-MVP."
+        - "Identify what may be manual, constrained, or intentionally limited in MVP."
+      qualityChecks:
+        - "MVP scope is sufficient for the primary use case."
+        - "MVP scope does not include post-MVP complexity disguised as required."
+        - "MVP constraints and compromises do not break the core promise."
+      questions:
+        - "What is the absolute minimum required for first release?"
+        - "What must be present for the core product promise to hold?"
+        - "What must be present for the primary use case to succeed?"
+        - "What can be manual, constrained, or limited in MVP?"
+        - "What can be added post-MVP without breaking the promise?"
+        - "What is explicitly not part of MVP?"
+        - "What is the MVP scope boundary rationale?"
+    - id: "post-mvp-scope"
+      title: "Post-MVP Scope"
+      intent: "Outline capabilities that may be considered after MVP, with triggers, dependencies, validation requirements, and non-commitment status."
+      required: true
+      outputGuidance:
+        - "Frame post-MVP items as candidates, not commitments."
+        - "State what evidence, usage, feedback, or operational capacity should trigger expansion."
+        - "Separate near-term post-MVP from later candidates."
+      qualityChecks:
+        - "Post-MVP scope does not leak back into MVP."
+        - "Expansion triggers are explicit."
+        - "The section does not become a roadmap."
+      questions:
+        - "What capabilities are candidates for after MVP?"
+        - "What is the priority order for post-MVP candidates?"
+        - "What triggers post-MVP scope expansion?"
+        - "What capabilities depend on MVP market feedback?"
+        - "What capabilities depend on technical, operational, or GTM readiness?"
+        - "Which post-MVP items require further validation before commitment?"
+    - id: "explicit-non-goals"
+      title: "Explicit Non-Goals"
+      intent: "List what is actively chosen not to be built, promised, supported, optimized for, or owned by the product."
+      required: true
+      outputGuidance:
+        - "State non-goals as deliberate choices, not omissions."
+        - "Explain why each non-goal protects focus, safety, usability, viability, or strategic coherence."
+        - "Clarify whether non-goals are permanent or revisitable."
+      qualityChecks:
+        - "Non-goals are grounded in boundaries, validation, constraints, or strategy."
+        - "Non-goals are specific enough to prevent stakeholder misunderstanding."
+        - "The section does not dismiss legitimate future opportunities without classification."
+      questions:
+        - "What are we actively choosing not to build?"
+        - "What will the product not promise, support, or optimize for?"
+        - "Why are these non-goals?"
+        - "Which non-goals are permanent versus revisitable?"
+        - "What would need to change to reconsider a non-goal?"
+        - "How are non-goals communicated to stakeholders?"
+    - id: "scope-boundaries"
+      title: "Scope Boundaries"
+      intent: "Define where product responsibility ends and where external systems, user behavior, service, support, operations, or manual process begin."
+      required: true
+      outputGuidance:
+        - "Describe boundary lines as responsibility boundaries."
+        - "Identify gray areas and provide a decision rule for handling them."
+        - "Clarify what the product may assist with but not own."
+      qualityChecks:
+        - "Boundaries are concrete enough to prevent product and support ambiguity."
+        - "User responsibility and product responsibility are clearly separated."
+        - "Gray areas include escalation or decision rules."
+      questions:
+        - "Where does the product end and external systems begin?"
+        - "Where does the product end and user behavior begin?"
+        - "Where does the product end and service/support begin?"
+        - "Where does the product end and operations or manual process begin?"
+        - "What may the product assist with but not own?"
+        - "What gray-area decisions exist at boundaries?"
+        - "What decision rule governs gray-area scope questions?"
+    - id: "deferred-decisions"
+      title: "Deferred Decisions"
+      intent: "Track scope decisions intentionally deferred with rationale, evidence requirements, revisit triggers, risk, and blocking impact."
+      required: true
+      outputGuidance:
+        - "State why each decision is deferred instead of silently unresolved."
+        - "Define what evidence or condition is needed to decide later."
+        - "Clarify what is blocked and what remains allowed during deferral."
+      qualityChecks:
+        - "Deferred decisions are not treated as commitments."
+        - "Each deferral has a revisit trigger."
+        - "Risk of deferral is explicit."
+      questions:
+        - "What scope decisions are intentionally deferred?"
+        - "Why is each decision deferred?"
+        - "What information or evidence is needed to make each decision?"
+        - "When or under what condition will each deferred decision be revisited?"
+        - "What is the risk of deferring each decision?"
+        - "What downstream work is blocked or allowed while each decision is deferred?"
+    - id: "scope-risks"
+      title: "Scope Risks"
+      intent: "Identify risks created by current scope definition, including under-scoping, over-scoping, missing essentials, unnecessary complexity, and scope creep."
+      required: true
+      outputGuidance:
+        - "Describe scope risks as concrete failure modes."
+        - "Separate risks of too little scope from risks of too much scope."
+        - "Define early signals and mitigation for scope creep."
+      qualityChecks:
+        - "Scope risks are specific enough to monitor during product planning."
+        - "Essential missing items and unnecessary complexity are both considered."
+        - "Mitigations are actionable and tied to review rules."
+      questions:
+        - "What are the risks of the current scope definition?"
+        - "What might be missing that is actually essential?"
+        - "What might be included that creates unnecessary complexity?"
+        - "What scope creep signals should be watched?"
+        - "How will scope creep be detected and managed?"
+        - "What scope decisions could threaten Product, Engineering, GTM, or Operations later?"
+    - id: "scope-governance"
+      title: "Scope Governance"
+      intent: "Define how scope changes are proposed, reviewed, accepted, rejected, deferred, documented, and propagated downstream."
+      required: true
+      outputGuidance:
+        - "Define a lightweight governance process for adding, removing, or changing scope."
+        - "State what evidence or authority is required for scope changes."
+        - "Clarify how accepted scope changes update downstream documents."
+      qualityChecks:
+        - "Governance is strong enough to prevent uncontrolled expansion but light enough not to freeze learning."
+        - "Scope changes require evidence, rationale, or explicit decision authority."
+        - "Downstream propagation is explicit."
+      questions:
+        - "How are new scope items proposed?"
+        - "What evidence or rationale is required to add scope?"
+        - "What evidence or rationale is required to remove scope?"
+        - "Who or what authority accepts, rejects, or defers scope changes?"
+        - "How are scope changes documented?"
+        - "Which downstream documents must be updated after a scope change?"

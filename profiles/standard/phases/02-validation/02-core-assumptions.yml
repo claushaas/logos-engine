@@ -1,0 +1,281 @@
+document:
+  id: "02-core-assumptions"
+  title: "Core Assumptions"
+  phase: "02-validation"
+  status: "not_started"
+  order: 2
+  type: "assumptions"
+  purpose: "Map every assumption the project depends on, classify its risk, evidence level, dependency relationships, and identify which assumptions can kill the project if false."
+  centralQuestion: "What must be true for the project to make sense?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/02-validation/02-core-assumptions.md"
+      purpose: "Store the canonical core assumptions map as a Markdown document."
+    artifacts:
+      - id: "validation.assumptions_risk_map"
+        format: "html"
+        path: "outcomes/html/02-validation/assumptions-risk-map.html"
+        purpose: "Provide a navigable risk map of assumptions by domain, criticality, evidence level, dependency, invalidation risk, and validation priority."
+        audience: "founder"
+        includes:
+          - "assumption map"
+          - "critical assumptions"
+          - "secondary assumptions"
+          - "unknowns"
+          - "dependency map"
+          - "killing assumptions"
+          - "direction-changing assumptions"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.assumptions_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/core-assumptions-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether assumptions are explicit, classified, evidence-aware, and ready to become hypotheses or experiments."
+        agentRole: "reviewer"
+        includes:
+          - "canonical assumptions map"
+          - "validation strategy dependency"
+          - "foundation dependencies"
+          - "assumption format"
+          - "critical assumptions"
+          - "unknowns"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "01-foundation/07-glossary"
+    - "02-validation/01-validation-strategy"
+  feeds:
+    - "02-validation/03-hypotheses"
+    - "02-validation/04-research-plan"
+    - "02-validation/05-experiments"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+  inputs:
+    - id: "foundation-documents"
+      type: "context"
+      required: false
+      description: "Approved or drafted Foundation documents that contain implicit or explicit assumptions."
+    - id: "validation-strategy"
+      type: "context"
+      required: false
+      description: "The validation strategy that defines validation priorities, evidence standards, invalidating conditions, and decision gates."
+    - id: "known-assumptions"
+      type: "manual_note"
+      required: false
+      description: "Assumptions already identified by the founder, team, reviewers, or previous conversations."
+    - id: "available-evidence"
+      type: "context"
+      required: false
+      description: "Existing evidence, observations, interviews, analytics, market notes, or experiments that may support or challenge assumptions."
+  completionCriteria:
+    - "The central question is answered by listing what must be true for the project to make sense."
+    - "Every major assumption is classified by domain, status, evidence level, uncertainty, impact, and criticality."
+    - "Critical assumptions are distinguished from secondary assumptions."
+    - "Killing assumptions are explicitly identified with evidence thresholds and possible mitigations or pivots."
+    - "Unknowns are named and assigned a path to resolution or a reason they can be carried forward."
+    - "Dependencies between assumptions are mapped clearly enough to inform validation order."
+    - "Each high-risk assumption can feed directly into Hypotheses, Research Plan, Experiments, or Evidence Log."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid treating assumptions as facts."
+    - "Avoid hiding uncertainty behind confident language."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent evidence, validation results, market facts, or user behavior."
+    - "Do not overclassify trivial assumptions."
+    - "Do not ignore uncomfortable assumptions because they threaten the project."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate facts, assumptions, hypotheses, evidence, and decisions."
+    - "Classify assumptions by domain: thesis, problem, audience, solution, behavior, market, economics, business model, technical feasibility, operations, ethics, or distribution."
+    - "Classify assumption status as known, unknown, intuited, evidenced, contradicted, provisional, or invalidated where appropriate."
+    - "Tie assumptions back to Foundation documents and Validation Strategy where possible."
+    - "State what evidence would strengthen, weaken, or invalidate each critical assumption."
+    - "Do not convert assumptions into hypotheses prematurely; hypotheses are derived in the next document."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Foundation documents or Validation Strategy."
+    - "Flag assumptions that are too vague to test."
+    - "Flag assumptions incorrectly treated as validated facts."
+    - "Verify that critical assumptions have evidence thresholds or invalidation criteria."
+    - "Verify that dependencies between assumptions are explicit where they affect validation order."
+    - "Flag content that belongs better in Hypotheses, Research Plan, Experiments, Economic Model, Business Model, or Validation Report."
+  specializedFormats:
+    assumptionFormat:
+      description: "Recommended format for each assumption."
+      fields:
+        - id
+        - statement
+        - domain
+        - sourceDocument
+        - status
+        - evidenceLevel
+        - uncertainty
+        - impact
+        - criticality
+        - dependsOn
+        - strengthens
+        - weakenedBy
+        - invalidatingEvidence
+        - validationPath
+        - owner
+        - notes
+    assumptionDependencyFormat:
+      description: "Recommended format for assumption dependency relationships."
+      fields:
+        - sourceAssumption
+        - targetAssumption
+        - relationshipType
+        - explanation
+        - validationImplication
+    killingAssumptionFormat:
+      description: "Recommended format for assumptions that can kill the project if false."
+      fields:
+        - assumption
+        - whyFatal
+        - evidenceThreshold
+        - invalidatingCondition
+        - mitigation
+        - pivotOption
+        - decisionGate
+        - status
+  sections:
+    - id: "assumption-map"
+      title: "Assumption Map"
+      intent: "Catalog all meaningful project assumptions grouped by domain, status, evidence level, uncertainty, impact, and criticality."
+      required: true
+      outputGuidance:
+        - "List assumptions as explicit statements, not vague themes."
+        - "Group assumptions by domain and avoid mixing facts, wishes, and decisions."
+        - "Classify assumptions only when the classification helps validation or decision-making."
+      qualityChecks:
+        - "Each assumption is stated as something that could be true or false."
+        - "Assumptions are grouped in a way that supports validation planning."
+        - "The map does not include ordinary background facts unless they affect project viability."
+      questions:
+        - "What are all meaningful assumptions the project rests on?"
+        - "How are assumptions grouped by domain: thesis, problem, audience, solution, behavior, market, economics, business model, technical feasibility, operations, ethics, or distribution?"
+        - "What is the status of each assumption: known, unknown, intuited, evidenced, contradicted, provisional, or invalidated?"
+        - "What evidence level supports each assumption?"
+        - "What uncertainty and impact does each assumption carry?"
+        - "Which Foundation document or validation concern does each assumption come from?"
+    - id: "critical-assumptions"
+      title: "Critical Assumptions"
+      intent: "Identify the highest-risk assumptions whose uncertainty and impact make them validation priorities."
+      required: true
+      outputGuidance:
+        - "Prioritize assumptions by impact, uncertainty, reversibility, and cost of being wrong."
+        - "Distinguish critical assumptions from assumptions that are merely interesting."
+        - "Explain why each critical assumption matters."
+      qualityChecks:
+        - "Each critical assumption can change project direction if false."
+        - "The section does not confuse high interest with high risk."
+        - "Critical assumptions are ready to feed into Hypotheses or Research Plan."
+      questions:
+        - "Which assumptions are most dangerous?"
+        - "Which assumptions carry both high uncertainty and high impact?"
+        - "Which assumptions, if false, kill or radically reshape the project?"
+        - "Which critical assumptions must be tested before Product, Engineering, or Go-to-market commitments?"
+        - "What evidence would strengthen or weaken each critical assumption?"
+    - id: "secondary-assumptions"
+      title: "Secondary Assumptions"
+      intent: "Identify assumptions that affect positioning, sequencing, design, or tactics but are not existential."
+      required: true
+      outputGuidance:
+        - "Separate secondary assumptions from low-value noise."
+        - "Explain what changes if each secondary assumption is false."
+        - "Clarify which secondary assumptions can safely wait."
+      qualityChecks:
+        - "Secondary assumptions are not mislabeled critical assumptions."
+        - "The section explains the consequence of being wrong."
+        - "Deferred assumptions include a reason for deferral."
+      questions:
+        - "Which assumptions only alter positioning, sequencing, design, or tactics if false?"
+        - "Which assumptions are important but not existential?"
+        - "Which assumptions can be refined later without blocking progress?"
+        - "What would change if each secondary assumption were false?"
+        - "Which secondary assumptions should still be tracked in the Evidence Log?"
+    - id: "unknowns"
+      title: "Unknowns"
+      intent: "Identify unvalidated assumptions and determine whether each should be resolved now, monitored, deferred, or accepted as a known uncertainty."
+      required: true
+      outputGuidance:
+        - "List unknowns explicitly rather than smoothing them into prose."
+        - "Separate dangerous unknowns from acceptable unknowns."
+        - "Assign a resolution path or deferral rationale to each meaningful unknown."
+      qualityChecks:
+        - "Unknowns are not hidden as assumptions."
+        - "Unknowns that can change major decisions are not deferred without justification."
+        - "The plan to resolve unknowns is appropriate to the current Validation phase."
+      questions:
+        - "Which assumptions are currently unknown or unvalidated?"
+        - "Which unknowns are dangerous enough to require immediate validation?"
+        - "What is the plan to move unknowns into knowns?"
+        - "Which unknowns are acceptable to carry forward and why?"
+        - "Which unknowns should become hypotheses, research questions, or experiments?"
+    - id: "dependency-between-assumptions"
+      title: "Dependency Between Assumptions"
+      intent: "Map causal, logical, evidentiary, and sequencing relationships between assumptions."
+      required: true
+      outputGuidance:
+        - "Name assumption dependencies explicitly rather than implying them."
+        - "Distinguish causal dependence from validation sequence dependence."
+        - "Explain how validating or invalidating one assumption affects others."
+      qualityChecks:
+        - "Dependencies affect validation order or interpretation."
+        - "The section avoids over-modeling weak relationships."
+        - "Causal claims are marked as assumptions unless evidenced."
+      questions:
+        - "How do assumptions depend on each other?"
+        - "Which assumptions, if validated, strengthen or weaken others?"
+        - "What is the causal chain connecting assumptions?"
+        - "Which assumptions must be tested before dependent assumptions?"
+        - "Which assumptions can be validated independently?"
+        - "Which assumption dependencies create validation bottlenecks?"
+    - id: "assumptions-that-can-kill-the-project"
+      title: "Assumptions That Can Kill the Project"
+      intent: "Identify assumptions that are fatal if false, define evidence thresholds, and assess mitigations or pivots."
+      required: true
+      outputGuidance:
+        - "State each killing assumption plainly."
+        - "Explain why the project cannot make sense if the assumption is false."
+        - "Define what evidence would be enough to treat the assumption as refuted."
+        - "Name whether mitigation or pivot is possible."
+      qualityChecks:
+        - "Killing assumptions are genuinely existential, not merely inconvenient."
+        - "Each killing assumption includes an invalidating condition or evidence threshold."
+        - "Mitigations do not pretend to save the original thesis if they actually imply a pivot."
+      questions:
+        - "Which assumptions, if false, kill the project?"
+        - "Why is each assumption fatal if false?"
+        - "What is the evidence threshold for each killing assumption?"
+        - "What specific evidence would invalidate each killing assumption?"
+        - "Are there mitigations or pivots available if a killing assumption is refuted?"
+        - "Which decision gate should evaluate each killing assumption?"
+    - id: "assumptions-that-only-change-direction"
+      title: "Assumptions That Only Change Direction"
+      intent: "Identify assumptions that alter positioning, sequencing, market entry, product framing, or tactics rather than viability if false."
+      required: true
+      outputGuidance:
+        - "Explain how direction changes if each assumption is false."
+        - "Distinguish direction changes from pivots that alter the thesis."
+        - "Name which downstream documents would be affected."
+      qualityChecks:
+        - "Direction-changing assumptions do not secretly undermine project viability."
+        - "Each assumption has a plausible adjustment path."
+        - "The section clarifies what would change downstream."
+      questions:
+        - "Which assumptions only alter positioning, sequencing, market entry, product framing, or tactics if proven false?"
+        - "What directional changes would be triggered by each refuted non-critical assumption?"
+        - "Which downstream documents would need revision if each assumption changes?"
+        - "Which assumptions should be monitored but not block progress?"

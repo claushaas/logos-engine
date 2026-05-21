@@ -1,0 +1,232 @@
+phase:
+  id: 06-operations
+  title: Operations
+  order: 6
+  axis: normative
+  status: not_started
+  description: "Defines how the product, business, customers, revenue, support, risks, reporting, knowledge, and continuous improvement are operated after launch."
+  purpose: "Answer how the product or business will be maintained, monitored, supported, governed, financially controlled, and continuously improved once it is in the world."
+
+  centralQuestion: "How will this product or business remain reliable, useful, supported, governed, financially controlled, and capable of learning after launch?"
+
+  responsibilityBoundary:
+    owns:
+      - operations brief
+      - operating model
+      - team and responsibilities
+      - customer support
+      - customer success
+      - business processes
+      - operational metrics
+      - reporting and cadence
+      - incident management
+      - risk and compliance
+      - financial operations
+      - knowledge management
+      - continuous improvement
+      - operational risks
+    doesNotOwn:
+      - foundational thesis
+      - validation strategy
+      - product scope
+      - UX specification
+      - engineering architecture
+      - implementation details
+      - market positioning
+      - launch plan
+      - sales strategy
+      - growth channel strategy
+
+  dependsOn:
+    - 01-foundation
+    - 02-validation
+    - 03-product
+    - 04-engineering
+    - 05-go-to-market
+
+  feedsInto:
+    - roadmap
+    - implementation_plan
+    - changelog
+    - decision_timeline
+
+  readingOrder:
+    - 01-operations-brief
+    - 02-operating-model
+    - 03-team-and-responsibilities
+    - 04-customer-support
+    - 05-customer-success
+    - 06-business-processes
+    - 07-operational-metrics
+    - 08-reporting-and-cadence
+    - 09-incident-management
+    - 10-risk-and-compliance
+    - 11-financial-operations
+    - 12-knowledge-management
+    - 13-continuous-improvement
+    - 14-operational-risks
+
+  completionCriteria:
+    - The operations brief states what must function continuously for the product and business to remain healthy.
+    - Operating model defines operational principles, core functions, manual and automated operations, third-party dependencies, workflows, decision points, escalation paths, constraints, and risks.
+    - Team and responsibilities define ownership, roles, authority, escalation rules, and future responsibility changes, including solo-project assumptions if applicable.
+    - Customer support defines channels, scope, categories, priority levels, response targets, escalation, bug reporting, billing support, unsupported requests, and risks.
+    - Customer success defines activation milestones, onboarding follow-up, health signals, at-risk signals, retention actions, expansion opportunities, feedback loops, satisfaction measurement, churn prevention, and risks.
+    - Business processes define repeatable operations such as onboarding, billing, cancellation, refunds, feature requests, bug triage, release communication, vendor management, data export, deletion, and review.
+    - Operational metrics define health signals for support, reliability, quality, financial operations, customer success, processes, costs, SLA or SLOs, and review rules.
+    - Reporting and cadence define daily, weekly, monthly, and quarterly reviews, dashboards, decision meetings, artifacts, responsibilities, escalation triggers, and risks.
+    - Incident management defines incident definition, severity levels, roles, detection sources, response process, communication rules, mitigation, postmortem, corrective actions, and archive.
+    - Risk and compliance define legal, privacy, data protection, policy, vendor, contractual, audit, governance, review cadence, and compliance risk handling.
+    - Financial operations define billing, subscriptions, payment failures, refunds, revenue notes, costs, margin, vendors, tax or accounting interface, reporting, and risks.
+    - Knowledge management defines documentation sources, runbooks, decision records, support knowledge base, internal notes, customer-facing docs, ownership, review cadence, archival rules, and risks.
+    - Continuous improvement defines feedback sources, improvement backlog, prioritization, process review, automation candidates, quality improvement, cost reduction, churn learning, incident learning, and cadence.
+    - Operational risks are registered with category, impact, likelihood, detection signal, mitigation, owner, and status.
+    - Product, Engineering, and Go-to-market decisions are referenced but not redefined.
+
+  qualityChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - assumptions_explicit
+    - ownership_explicit
+    - cadence_actionable
+    - processes_repeatable
+    - risks_actionable
+    - contradictions_flagged
+
+  generatedOutputs:
+    canonical:
+      directory: docs/06-operations
+      format: markdown
+    structure:
+      directory: phases/06-operations
+      format: yaml
+    presentation:
+      directory: outcomes/html
+      suggestedArtifacts:
+        - operations-dashboard.html
+        - operating-model-map.html
+        - support-success-board.html
+        - incident-risk-board.html
+    agentPacks:
+      directory: outcomes/agents
+      suggestedArtifacts:
+        - operations-context-pack.md
+        - operations-review-prompt.md
+        - incident-response-planning-prompt.md
+        - continuous-improvement-prompt.md
+
+  documents:
+    - id: 01-operations-brief
+      title: Operations Brief
+      file: phases/06-operations/01-operations-brief.yml
+      output: docs/06-operations/01-operations-brief.md
+      purpose: "Define the executive synthesis of the operational axis."
+      centralQuestion: "What needs to function continuously for the project to remain healthy?"
+      required: true
+
+    - id: 02-operating-model
+      title: Operating Model
+      file: phases/06-operations/02-operating-model.yml
+      output: docs/06-operations/02-operating-model.md
+      purpose: "Define how the product or business functions day to day."
+      centralQuestion: "How will the project operate through principles, functions, workflows, automation, dependencies, decisions, escalation, and constraints?"
+      required: true
+
+    - id: 03-team-and-responsibilities
+      title: Team and Responsibilities
+      file: phases/06-operations/03-team-and-responsibilities.yml
+      output: docs/06-operations/03-team-and-responsibilities.md
+      purpose: "Define ownership, roles, responsibilities, authority, and escalation."
+      centralQuestion: "Who is responsible for product, engineering, support, commercial, financial, operational, and decision responsibilities now and as the project grows?"
+      required: true
+
+    - id: 04-customer-support
+      title: Customer Support
+      file: phases/06-operations/04-customer-support.yml
+      output: docs/06-operations/04-customer-support.md
+      purpose: "Define how user problems, questions, complaints, bugs, billing issues, and unsupported requests are handled."
+      centralQuestion: "How will user problems be received, categorized, prioritized, escalated, resolved, and fed back into Product or Engineering?"
+      required: true
+
+    - id: 05-customer-success
+      title: Customer Success
+      file: phases/06-operations/05-customer-success.yml
+      output: docs/06-operations/05-customer-success.md
+      purpose: "Define how users or customers obtain continuous value after acquisition."
+      centralQuestion: "How will the project ensure activation, retention, satisfaction, feedback, expansion, and churn prevention?"
+      required: true
+
+    - id: 06-business-processes
+      title: Business Processes
+      file: phases/06-operations/06-business-processes.yml
+      output: docs/06-operations/06-business-processes.md
+      purpose: "Define repeatable business and operational processes."
+      centralQuestion: "Which recurring operations must happen predictably instead of being handled as special cases?"
+      required: true
+
+    - id: 07-operational-metrics
+      title: Operational Metrics
+      file: phases/06-operations/07-operational-metrics.yml
+      output: docs/06-operations/07-operational-metrics.md
+      purpose: "Define how operational health is measured."
+      centralQuestion: "Which support, reliability, quality, financial, customer success, process, cost, SLA, and SLO metrics show operational health?"
+      required: true
+
+    - id: 08-reporting-and-cadence
+      title: Reporting and Cadence
+      file: phases/06-operations/08-reporting-and-cadence.yml
+      output: docs/06-operations/08-reporting-and-cadence.md
+      purpose: "Define the rhythm of operational review and decision-making."
+      centralQuestion: "When should the project review which information, through which artifacts, with which responsibilities, and with which escalation triggers?"
+      required: true
+
+    - id: 09-incident-management
+      title: Incident Management
+      file: phases/06-operations/09-incident-management.yml
+      output: docs/06-operations/09-incident-management.md
+      purpose: "Define how the operation responds when something breaks."
+      centralQuestion: "What counts as an incident, how severe is it, who responds, how is it communicated, how is it mitigated, and how is recurrence prevented?"
+      required: true
+
+    - id: 10-risk-and-compliance
+      title: Risk and Compliance
+      file: phases/06-operations/10-risk-and-compliance.yml
+      output: docs/06-operations/10-risk-and-compliance.md
+      purpose: "Define how regulatory, legal, contractual, privacy, vendor, audit, and governance risks are handled."
+      centralQuestion: "Which obligations, policies, controls, reviews, vendors, contracts, and governance rules must be operationally managed?"
+      required: true
+
+    - id: 11-financial-operations
+      title: Financial Operations
+      file: phases/06-operations/11-financial-operations.yml
+      output: docs/06-operations/11-financial-operations.md
+      purpose: "Define how billing, subscriptions, payment failures, refunds, costs, margins, vendors, taxes, accounting, and reporting are operated."
+      centralQuestion: "How will money be charged, reconciled, refunded, monitored, reported, and controlled every month?"
+      required: true
+
+    - id: 12-knowledge-management
+      title: Knowledge Management
+      file: phases/06-operations/12-knowledge-management.yml
+      output: docs/06-operations/12-knowledge-management.md
+      purpose: "Define how operational knowledge is preserved, reviewed, and made usable."
+      centralQuestion: "How will runbooks, decisions, support knowledge, internal notes, customer-facing documentation, ownership, review cadence, and archival rules preserve operational memory?"
+      required: true
+
+    - id: 13-continuous-improvement
+      title: Continuous Improvement
+      file: phases/06-operations/13-continuous-improvement.yml
+      output: docs/06-operations/13-continuous-improvement.md
+      purpose: "Define how the system improves without becoming chaotic."
+      centralQuestion: "How will feedback, bugs, metrics, support, churn, incidents, automation opportunities, cost reduction, and process review become deliberate improvements?"
+      required: true
+
+    - id: 14-operational-risks
+      title: Operational Risks
+      file: phases/06-operations/14-operational-risks.yml
+      output: docs/06-operations/14-operational-risks.md
+      purpose: "Maintain the centralized operational risk register."
+      centralQuestion: "What could break support, reliability, finances, compliance, vendors, team, process, customer success, knowledge, or continuity?"
+      required: true

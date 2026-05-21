@@ -1,0 +1,76 @@
+id: github-issues
+version: 1.0.0
+adapter: github-issues
+status: supported
+exportType: file_export
+outputFormat: markdown
+template: executive/templates/github-issue.md
+
+purpose: >
+  Export LOGOS execution items into GitHub Issue-compatible Markdown files,
+  preserving source traceability and acceptance criteria.
+
+maps:
+  item.task: issue
+  item.bug: issue
+  item.risk: issue
+  item.review: issue
+  item.decision: issue
+  item.question: issue
+  item.blocker: issue
+  item.spike: issue
+  item.doc_update: issue
+  item.agent_prompt: markdown_file
+  item.artifact: markdown_file
+  item.follow_up: issue
+
+fields:
+  title: title
+  description: body
+  priority: labels
+  status: labels
+  acceptanceCriteria: body.checklist
+  sourceNormativeDocuments: body.source_docs
+  dependsOn: body.dependencies
+  metadata: body.logos_metadata
+
+labels:
+  byType:
+    task:
+      - task
+    bug:
+      - bug
+    risk:
+      - risk
+    review:
+      - review
+    decision:
+      - decision
+    question:
+      - question
+    blocker:
+      - blocker
+    spike:
+      - spike
+    doc_update:
+      - documentation
+    agent_prompt:
+      - agent
+    follow_up:
+      - follow-up
+  byPriority:
+    low:
+      - priority/low
+    medium:
+      - priority/medium
+    high:
+      - priority/high
+    critical:
+      - priority/critical
+
+metadata:
+  includeLogosMetadataBlock: true
+  preserveUnsupportedFieldsInMetadata: true
+
+unsupported:
+  strategy: preserve_in_body_metadata

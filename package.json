@@ -15,6 +15,7 @@
 		"@types/node": "^25.6.2",
 		"@types/react": "^19.2.14",
 		"@vitest/coverage-v8": "^4.1.5",
+		"ink-testing-library": "^4.0.0",
 		"markdownlint-cli": "^0.48.0",
 		"typescript": "^6.0.3",
 		"vitest": "^4.1.5"
@@ -33,7 +34,10 @@
 		"profiles",
 		"docs",
 		"README.md",
-		"LICENSE"
+		"LICENSE",
+		"SECURITY.md",
+		"CONTRIBUTING.md",
+		"CODE_OF_CONDUCT.md"
 	],
 	"keywords": [
 		"documentation",
@@ -47,11 +51,17 @@
 	"packageManager": "pnpm@10.33.2",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"check": "pnpm lint:biome && pnpm lint:md && pnpm test && pnpm build",
-		"format": "biome check --write .",
-		"lint:biome": "biome check --write --unsafe .",
+		"check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:validation && pnpm build && pnpm smoke:cli && pnpm smoke:package",
+		"check:validation": "vitest run tests/validation-gate.test.ts",
+		"format": "pnpm format:biome",
+		"format:biome": "biome check --write --unsafe .",
+		"lint": "pnpm lint:biome && pnpm lint:md",
+		"lint:biome": "biome check .",
 		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
+		"nfr:evidence": "node scripts/nfr-evidence.js",
+		"security:check": "node scripts/security-check.js",
 		"smoke:cli": "node scripts/smoke-cli.js",
+		"smoke:package": "node scripts/smoke-package.js",
 		"test": "vitest run",
 		"test:coverage": "vitest run --coverage",
 		"test:watch": "vitest",

@@ -1,0 +1,228 @@
+document:
+  id: "04-principles"
+  title: "Design Principles"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 4
+  type: "principles"
+  purpose: "Establish actionable normative rules that govern project decisions when there is conflict."
+  centralQuestion: "What rules govern decisions when there is conflict?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/01-foundation/04-principles.md"
+      purpose: "Store the canonical design principles as a Markdown document."
+    artifacts:
+      - id: "foundation.principles_matrix"
+        format: "html"
+        path: "outcomes/html/01-foundation/principles-matrix.html"
+        purpose: "Provide a navigable decision matrix of principles, meanings, decision rules, accepted trade-offs, violations, tensions, and downstream implications."
+        audience: "founder"
+        includes:
+          - "principle list"
+          - "decision rules"
+          - "accepted trade-offs"
+          - "violations"
+          - "principle tensions"
+          - "downstream implications"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "foundation.principles_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/01-foundation/principles-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether principles are actionable, non-contradictory, and aligned with the thesis, problem, and audience."
+        agentRole: "reviewer"
+        includes:
+          - "canonical principles"
+          - "founding thesis dependency"
+          - "problem definition dependency"
+          - "audience definition dependency"
+          - "principle format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+  feeds:
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+  inputs:
+    - id: "decision-scenarios"
+      type: "manual_note"
+      required: false
+      description: "Examples of real or expected project decisions where principles must guide trade-offs."
+    - id: "known-tensions"
+      type: "manual_note"
+      required: false
+      description: "Known tensions between desirable qualities, such as speed versus clarity, flexibility versus consistency, or automation versus control."
+    - id: "project-context"
+      type: "context"
+      required: false
+      description: "Existing project context, prior decisions, constraints, or philosophical commitments that can inform principle definition."
+  completionCriteria:
+    - "The central question is answered through explicit decision rules."
+    - "Each principle includes a meaning, decision rule, acceptable trade-offs, and violations."
+    - "Each principle is specific enough to choose between two plausible alternatives."
+    - "Each principle identifies at least one concrete violation."
+    - "Known tensions between principles are surfaced rather than hidden."
+    - "The set of principles is aligned with the Founding Thesis, Problem Definition, and Audience Definition."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid values that sound good but do not change decisions."
+    - "Prefer decision-useful statements."
+    - "Each principle must be falsifiable: it must be possible to identify a violation."
+    - "Each principle must be actionable: it must help resolve at least one realistic conflict."
+    - "Do not introduce product features, roadmap items, or implementation details unless required to clarify the principle."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "State each principle in positive, actionable terms."
+    - "Separate principle meaning from implementation examples."
+    - "When a principle creates cost, name the accepted trade-off explicitly."
+    - "Do not invent philosophical justification; derive principles from the thesis, problem, audience, and stated project context."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with the Founding Thesis, Problem Definition, or Audience Definition."
+    - "Verify that no two principles directly contradict each other without an explicit precedence rule."
+    - "Flag principles that are merely slogans, values, or preferences without decision force."
+    - "Flag content that belongs better in Product, Engineering, Go-to-market, or Operations."
+  specializedFormats:
+    principleFormat:
+      description: "Required format for each principle section."
+      fields:
+        - name
+        - meaning
+        - decisionRule
+        - acceptableTradeoffs
+        - violations
+        - downstreamImplications
+        - tensions
+  sections:
+    - id: "principle-local-first"
+      title: "Principle: Local First"
+      intent: "Define the local-first principle as an actionable decision rule with trade-offs, violations, implications, and tensions."
+      required: true
+      outputGuidance:
+        - "Explain what local-first means in this project context before naming technical consequences."
+        - "Clarify whether local-first means local files, local ownership, local execution, local persistence, or local agency."
+        - "Name what the project should favor when local control conflicts with convenience, automation, or hosted workflows."
+      qualityChecks:
+        - "The principle is not reduced to an implementation preference."
+        - "The decision rule clarifies what should happen when local-first conflicts with ease of use or collaboration."
+        - "Violations are concrete enough to be identified during review."
+      questions:
+        - "What does Local First mean in this project?"
+        - "Which decisions should this principle favor?"
+        - "What should be prioritized when local control conflicts with convenience, automation, or hosted workflows?"
+        - "What behaviors should the system have because of this principle?"
+        - "What patterns would violate this principle?"
+        - "What trade-offs are accepted?"
+        - "What downstream implications does this principle create for Product, Engineering, and Operations?"
+        - "What tensions does this principle create with other principles?"
+    - id: "principle-structure-over-presentation"
+      title: "Principle: Structure Over Presentation"
+      intent: "Define the structure-over-presentation principle as an actionable decision rule with trade-offs, violations, implications, and tensions."
+      required: true
+      outputGuidance:
+        - "Explain why durable structure has priority over visual polish or presentational artifacts."
+        - "Clarify when presentation is useful and when it becomes misleading."
+        - "Connect this principle to canonical documents, generated artifacts, and reviewability."
+      qualityChecks:
+        - "The principle does not dismiss presentation entirely."
+        - "The decision rule distinguishes canonical structure from derived presentation."
+        - "Violations include cases where attractive outputs hide weak structure."
+      questions:
+        - "What does Structure Over Presentation mean in this project?"
+        - "Which decisions should this principle favor?"
+        - "What should be prioritized when durable structure conflicts with visual presentation?"
+        - "What behaviors should the system have because of this principle?"
+        - "What patterns would violate this principle?"
+        - "What trade-offs are accepted?"
+        - "What downstream implications does this principle create for Markdown, YAML, HTML artifacts, and agent packs?"
+        - "What tensions does this principle create with usability or presentation quality?"
+    - id: "principle-explicit-over-assumed"
+      title: "Principle: Explicit Over Assumed"
+      intent: "Define the explicit-over-assumed principle as an actionable decision rule with trade-offs, violations, implications, and tensions."
+      required: true
+      outputGuidance:
+        - "Explain what must be made explicit: assumptions, decisions, dependencies, uncertainty, ownership, or constraints."
+        - "Clarify when explicitness helps and when it risks becoming noise."
+        - "Connect the principle to reviewability and agent reliability."
+      qualityChecks:
+        - "The principle does not encourage unnecessary verbosity."
+        - "The decision rule explains how to handle uncertainty or missing context."
+        - "Violations include hidden assumptions and silent inference."
+      questions:
+        - "What does Explicit Over Assumed mean in this project?"
+        - "Which decisions should this principle favor?"
+        - "What should be prioritized when explicitness conflicts with speed or brevity?"
+        - "What behaviors should the system have because of this principle?"
+        - "What patterns would violate this principle?"
+        - "What trade-offs are accepted?"
+        - "What downstream implications does this principle create for generation, review, and execution?"
+        - "What tensions does this principle create with simplicity or readability?"
+    - id: "principle-git-friendly"
+      title: "Principle: Git Friendly"
+      intent: "Define the git-friendly principle as an actionable decision rule with trade-offs, violations, implications, and tensions."
+      required: true
+      outputGuidance:
+        - "Explain what makes a document, artifact, or project state easy to version, diff, review, and revert."
+        - "Clarify the relationship between canonical Markdown/YAML and derived artifacts."
+        - "Name when Git-friendliness should constrain format, structure, or generation decisions."
+      qualityChecks:
+        - "The principle is not reduced to merely using Git."
+        - "The decision rule explains how to handle generated files and derived artifacts."
+        - "Violations include opaque formats, noisy diffs, and manual edits to generated outputs when canonical sources exist."
+      questions:
+        - "What does Git Friendly mean in this project?"
+        - "Which decisions should this principle favor?"
+        - "What should be prioritized when Git-friendliness conflicts with rich presentation or convenience?"
+        - "What behaviors should the system have because of this principle?"
+        - "What patterns would violate this principle?"
+        - "What trade-offs are accepted?"
+        - "What downstream implications does this principle create for file formats, generated outputs, and review workflows?"
+        - "What tensions does this principle create with HTML artifacts or binary assets?"
+    - id: "principle-ai-as-layer"
+      title: "Principle: AI as a Layer"
+      intent: "Define the AI-as-a-layer principle as an actionable decision rule with trade-offs, violations, implications, and tensions."
+      required: true
+      outputGuidance:
+        - "Explain how AI participates in the system without becoming the source of truth."
+        - "Clarify which responsibilities belong to canonical documents, schemas, review rules, and agent outputs."
+        - "Name what the system should do when AI output conflicts with canonical structure or prior decisions."
+      qualityChecks:
+        - "The principle does not treat AI output as inherently authoritative."
+        - "The decision rule protects auditability and user agency."
+        - "Violations include hidden AI assumptions, unreviewed generated changes, and AI-only state."
+      questions:
+        - "What does AI as a Layer mean in this project?"
+        - "Which decisions should this principle favor?"
+        - "What should be prioritized when AI convenience conflicts with auditability, user control, or canonical structure?"
+        - "What behaviors should the system have because of this principle?"
+        - "What patterns would violate this principle?"
+        - "What trade-offs are accepted?"
+        - "What downstream implications does this principle create for outcomes, agent packs, review loops, and execution?"
+        - "What tensions does this principle create with automation or speed?"
+    - id: "principle-safe-by-default"
+      title: "Principle: Safe by Default"
+      intent: "Define the safe-by-default principle as an actionable decision rule with trade-offs, violations, implications, and tensions."
+      required: true
+      outputGuidance:
+        - "Explain what safety means in this project: reversibility, explicit consent, data protection, bounded action, or conservative defaults."
+        - "Clarify how the system should behave under uncertainty, missing context, or conflicting instructions."
+        - "Name the kinds of actions that require confirmation or stronger safeguards."
+      qualityChecks:
+        - "The principle is specific enough to guide behavior under uncertainty."
+        - "The decision rule balances safety with usefulness rather than blocking action by default."
+        - "Violations include irreversible actions without consent, hidden risk, and overconfident output under uncertainty."
+      questions:
+        - "What does Safe by Default mean in this project?"
+        - "Which decisions should this principle favor?"
+        - "What should be prioritized when safety conflicts with speed, autonomy, or convenience?"
+        - "What behaviors should the system have because of this principle?"
+        - "What patterns would violate this principle?"
+        - "What trade-offs are accepted?"
+        - "What downstream implications does this principle create for Product, Engineering, Operations, and agent execution?"
+        - "What tensions does this principle create with automation or proactive behavior?"

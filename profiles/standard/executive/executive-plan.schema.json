@@ -1,0 +1,533 @@
+{
+	"$defs": {
+		"artifact": {
+			"additionalProperties": false,
+			"properties": {
+				"generatedFrom": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"id": {
+					"type": "string"
+				},
+				"path": {
+					"type": "string"
+				},
+				"relatedItemIds": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"status": {
+					"$ref": "#/$defs/status"
+				},
+				"title": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "type", "title"],
+			"type": "object"
+		},
+		"confidence": {
+			"additionalProperties": false,
+			"properties": {
+				"byArea": {
+					"additionalProperties": {
+						"$ref": "#/$defs/confidenceLevel"
+					},
+					"type": "object"
+				},
+				"overall": {
+					"$ref": "#/$defs/confidenceLevel"
+				}
+			},
+			"type": "object"
+		},
+		"confidenceLevel": {
+			"enum": ["low", "medium", "high"],
+			"type": "string"
+		},
+		"decision": {
+			"additionalProperties": false,
+			"properties": {
+				"affectedNormativeDocuments": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"consequences": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"context": {
+					"type": "string"
+				},
+				"decision": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"status": {
+					"$ref": "#/$defs/status"
+				},
+				"title": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "title", "status", "decision"],
+			"type": "object"
+		},
+		"execution": {
+			"additionalProperties": false,
+			"properties": {
+				"artifacts": {
+					"items": {
+						"$ref": "#/$defs/artifact"
+					},
+					"type": "array"
+				},
+				"decisions": {
+					"items": {
+						"$ref": "#/$defs/decision"
+					},
+					"type": "array"
+				},
+				"initiatives": {
+					"items": {
+						"$ref": "#/$defs/initiative"
+					},
+					"type": "array"
+				},
+				"items": {
+					"items": {
+						"$ref": "#/$defs/executionItem"
+					},
+					"type": "array"
+				},
+				"milestones": {
+					"items": {
+						"$ref": "#/$defs/milestone"
+					},
+					"type": "array"
+				},
+				"risks": {
+					"items": {
+						"$ref": "#/$defs/risk"
+					},
+					"type": "array"
+				},
+				"roadmaps": {
+					"items": {
+						"$ref": "#/$defs/roadmap"
+					},
+					"type": "array"
+				},
+				"workstreams": {
+					"items": {
+						"$ref": "#/$defs/workstream"
+					},
+					"type": "array"
+				}
+			},
+			"required": [
+				"roadmaps",
+				"milestones",
+				"workstreams",
+				"initiatives",
+				"items"
+			],
+			"type": "object"
+		},
+		"executionItem": {
+			"additionalProperties": false,
+			"properties": {
+				"acceptanceCriteria": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"dependsOn": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"description": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"initiativeId": {
+					"type": "string"
+				},
+				"metadata": {
+					"additionalProperties": true,
+					"type": "object"
+				},
+				"origin": {
+					"enum": ["derived", "inferred", "manual"],
+					"type": "string"
+				},
+				"priority": {
+					"$ref": "#/$defs/priority"
+				},
+				"requiresReview": {
+					"type": "boolean"
+				},
+				"softDependsOn": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"sourceNormativeDocuments": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"sourceRationale": {
+					"type": "string"
+				},
+				"status": {
+					"$ref": "#/$defs/status"
+				},
+				"suggestedExecutor": {
+					"additionalProperties": false,
+					"properties": {
+						"agentProfile": {
+							"type": "string"
+						},
+						"type": {
+							"enum": ["human", "agent", "hybrid"],
+							"type": "string"
+						}
+					},
+					"type": "object"
+				},
+				"suggestedExports": {
+					"additionalProperties": true,
+					"type": "object"
+				},
+				"title": {
+					"type": "string"
+				},
+				"type": {
+					"$ref": "#/$defs/itemType"
+				},
+				"workstreamId": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "type", "title", "status", "priority"],
+			"type": "object"
+		},
+		"exportConfig": {
+			"additionalProperties": true,
+			"properties": {
+				"enabled": {
+					"type": "boolean"
+				},
+				"mappingProfile": {
+					"type": "string"
+				}
+			},
+			"required": ["enabled", "mappingProfile"],
+			"type": "object"
+		},
+		"initiative": {
+			"additionalProperties": false,
+			"properties": {
+				"deliverables": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"id": {
+					"type": "string"
+				},
+				"itemIds": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"milestoneId": {
+					"type": "string"
+				},
+				"purpose": {
+					"type": "string"
+				},
+				"status": {
+					"$ref": "#/$defs/status"
+				},
+				"title": {
+					"type": "string"
+				},
+				"workstreamId": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "title", "status"],
+			"type": "object"
+		},
+		"itemType": {
+			"enum": [
+				"task",
+				"decision",
+				"question",
+				"blocker",
+				"risk",
+				"experiment",
+				"review",
+				"agent_prompt",
+				"doc_update",
+				"spike",
+				"artifact",
+				"bug",
+				"follow_up"
+			],
+			"type": "string"
+		},
+		"milestone": {
+			"additionalProperties": false,
+			"properties": {
+				"exitCriteria": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"id": {
+					"type": "string"
+				},
+				"initiativeIds": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"objective": {
+					"type": "string"
+				},
+				"status": {
+					"$ref": "#/$defs/status"
+				},
+				"title": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "title", "objective", "status", "exitCriteria"],
+			"type": "object"
+		},
+		"priority": {
+			"enum": ["low", "medium", "high", "critical"],
+			"type": "string"
+		},
+		"project": {
+			"additionalProperties": false,
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "name"],
+			"type": "object"
+		},
+		"risk": {
+			"additionalProperties": false,
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"impact": {
+					"enum": ["low", "medium", "high"],
+					"type": "string"
+				},
+				"likelihood": {
+					"enum": ["low", "medium", "high"],
+					"type": "string"
+				},
+				"mitigation": {
+					"type": "string"
+				},
+				"sourceNormativeDocuments": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"title": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "title", "likelihood", "impact"],
+			"type": "object"
+		},
+		"roadmap": {
+			"additionalProperties": false,
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"horizon": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"milestoneIds": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"status": {
+					"$ref": "#/$defs/status"
+				},
+				"title": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "title", "status", "milestoneIds"],
+			"type": "object"
+		},
+		"source": {
+			"additionalProperties": false,
+			"properties": {
+				"generationPromptId": {
+					"type": ["string", "null"]
+				},
+				"normativeDocuments": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"readinessStatus": {
+					"enum": ["draft", "baseline_ready", "execution_ready"],
+					"type": "string"
+				},
+				"sourceCommit": {
+					"type": ["string", "null"]
+				},
+				"warnings": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				}
+			},
+			"required": ["normativeDocuments"],
+			"type": "object"
+		},
+		"status": {
+			"enum": [
+				"draft",
+				"planned",
+				"ready",
+				"in_progress",
+				"blocked",
+				"reviewing",
+				"done",
+				"cancelled",
+				"superseded"
+			],
+			"type": "string"
+		},
+		"workstream": {
+			"additionalProperties": false,
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"id": {
+					"type": "string"
+				},
+				"relatedNormativeAreas": {
+					"items": {
+						"type": "string"
+					},
+					"type": "array"
+				},
+				"title": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				}
+			},
+			"required": ["id", "title"],
+			"type": "object"
+		}
+	},
+	"$id": "https://logos.engine/schemas/executive-plan.schema.json",
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"additionalProperties": false,
+	"properties": {
+		"confidence": {
+			"$ref": "#/$defs/confidence"
+		},
+		"execution": {
+			"$ref": "#/$defs/execution"
+		},
+		"exports": {
+			"additionalProperties": {
+				"$ref": "#/$defs/exportConfig"
+			},
+			"type": "object"
+		},
+		"generatedAt": {
+			"format": "date-time",
+			"type": "string"
+		},
+		"id": {
+			"type": "string"
+		},
+		"metadata": {
+			"additionalProperties": true,
+			"type": "object"
+		},
+		"project": {
+			"$ref": "#/$defs/project"
+		},
+		"source": {
+			"$ref": "#/$defs/source"
+		},
+		"version": {
+			"type": "string"
+		}
+	},
+	"required": [
+		"id",
+		"version",
+		"project",
+		"generatedAt",
+		"source",
+		"execution"
+	],
+	"title": "LOGOS Executive Plan",
+	"type": "object"
+}

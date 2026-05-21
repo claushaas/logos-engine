@@ -1,0 +1,443 @@
+document:
+  id: "01-engineering-brief"
+  title: "Engineering Brief"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 1
+  type: "brief"
+  purpose: "Translate validated product direction, acceptance criteria, product stack constraints, and operational needs into an executive technical synthesis for engineering delivery."
+  centralQuestion: "What must Engineering deliver, why, under what constraints, in what order, and how will technical success be verified?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/04-engineering/01-engineering-brief.md"
+      purpose: "Store the canonical executive technical synthesis as a Markdown document."
+    artifacts:
+      - id: "engineering.engineering_brief_summary"
+        format: "html"
+        path: "outcomes/html/04-engineering/engineering-brief-summary.html"
+        purpose: "Provide a navigable executive summary of engineering objective, product inputs, technical scope, constraints, core capabilities, architecture direction, implementation strategy, risks, deferred decisions, and success criteria."
+        audience: "founder"
+        includes:
+          - "engineering objective"
+          - "product inputs"
+          - "technical scope"
+          - "architecture direction"
+          - "engineering constraints"
+          - "core technical capabilities"
+          - "cross-cutting concerns"
+          - "initial implementation strategy"
+          - "build order"
+          - "engineering risks"
+          - "deferred technical decisions"
+          - "engineering success criteria"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.engineering_brief_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/engineering-brief-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the engineering brief is complete, feasible, product-aligned, constraint-aware, risk-aware, and ready to feed detailed engineering architecture documents."
+        agentRole: "reviewer"
+        includes:
+          - "canonical engineering brief"
+          - "product dependencies"
+          - "acceptance criteria dependency"
+          - "product stack dependency"
+          - "engineering brief formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/07-ui-specification"
+    - "03-product/08-design-system"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/12-product-stack"
+    - "03-product/13-acceptance-criteria"
+  feeds:
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-data-model"
+    - "04-engineering/04-security-architecture"
+    - "04-engineering/05-api-contracts"
+    - "04-engineering/06-integration-architecture"
+    - "04-engineering/07-frontend-architecture"
+    - "04-engineering/08-infrastructure-architecture"
+    - "04-engineering/09-test-strategy"
+    - "04-engineering/10-design-system"
+    - "04-engineering/11-observability-plan"
+    - "04-engineering/12-deployment-plan"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "product-scope"
+      type: "context"
+      required: false
+      description: "In-scope, out-of-scope, MVP, post-MVP, non-goals, scope boundaries, deferred decisions, and scope governance that constrain engineering delivery."
+    - id: "product-architecture"
+      type: "context"
+      required: false
+      description: "Product modules, capabilities, boundaries, dependencies, sequencing, ownership, and product architecture risks that shape technical design."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "Functional requirements, data requirements, integration requirements, business rules, and traceability that engineering must implement or support."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, i18n, compliance, and operational constraints."
+    - id: "product-stack"
+      type: "context"
+      required: false
+      description: "Product-level technology choices, platform strategy, UX-relevant constraints, integration surface, deferred engineering decisions, and stack risks."
+    - id: "acceptance-criteria"
+      type: "context"
+      required: false
+      description: "Product, feature, UX, UI, functional, non-functional, data, permission, integration, release, sign-off, rollback, and readiness criteria."
+    - id: "engineering-notes"
+      type: "manual_note"
+      required: false
+      description: "Known technical constraints, implementation ideas, architecture preferences, risks, resource limits, delivery constraints, and unresolved technical questions."
+  completionCriteria:
+    - "The central question is answered explicitly through engineering objective, scope, constraints, capabilities, implementation strategy, risks, deferred decisions, and success criteria."
+    - "Product inputs are traced to Product Scope, Product Architecture, Functional Requirements, NFRs, Product Stack, Acceptance Criteria, Validation Report, or Decision Record."
+    - "Technical scope distinguishes systems, clients, services, modules, infrastructure, integrations, data surfaces, tooling, and explicit exclusions."
+    - "Architecture direction gives enough technical framing to guide detailed engineering documents without prematurely replacing them."
+    - "Engineering constraints include technical, product, platform, resource, budget, timeline, regulatory, security, privacy, accessibility, operational, and support constraints where relevant."
+    - "Core technical capabilities include product-critical capabilities, cross-cutting concerns, MVP capabilities, post-MVP capabilities, deferred capabilities, and engineering-review-needed capabilities."
+    - "Initial implementation strategy defines sequencing, dependencies, build slices, validation gates, quality gates, risk-reduction order, and handoff to downstream engineering docs."
+    - "Engineering risks include feasibility, complexity, integration, security, privacy, performance, reliability, data, frontend, infrastructure, testing, observability, operational, and maintenance risks."
+    - "Deferred technical decisions include rationale, needed information, revisit trigger, blocked work, allowed work, risk of deferral, and target engineering document."
+    - "Engineering success criteria are measurable, traceable to Acceptance Criteria/NFRs/Product requirements, and clear enough to feed Test Strategy and Release Management."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid engineering theater: polished technical summary without scope, constraints, risks, sequencing, or verification."
+    - "Avoid prematurely specifying detailed architecture that belongs in System Architecture, Data Model, API Contracts, Security Architecture, Frontend Architecture, Infrastructure, or Test Strategy."
+    - "Avoid ignoring Product constraints, Acceptance Criteria, NFRs, security, privacy, accessibility, observability, support, or release readiness."
+    - "Avoid treating product stack assumptions as final engineering decisions unless explicitly committed."
+    - "Avoid hiding technical debt, unknowns, resource constraints, integration risks, or operational burden."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent implementation details, technology guarantees, compliance status, performance benchmarks, team capacity, budget, timeline, or stakeholder approval."
+    - "Engineering scope must preserve product boundaries, validation caveats, acceptance gates, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate product input, engineering implication, technical decision, assumption, risk, constraint, and downstream handoff."
+    - "Classify engineering items as MVP, post-MVP, deferred, excluded, committed, provisional, blocked, or review-needed where useful."
+    - "Tie technical scope and capabilities to Product Architecture, Functional Requirements, NFRs, Product Stack, Acceptance Criteria, Validation Report, or Decision Record where possible."
+    - "State what detailed engineering document should resolve each downstream technical area."
+    - "Keep this document as executive technical synthesis; detailed design belongs in downstream Engineering documents."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Product Scope, Product Architecture, Functional Requirements, Non-Functional Requirements, Product Stack, Acceptance Criteria, Validation Report, Decision Record, or Foundation Boundaries."
+    - "Flag engineering scope without product source, acceptance implication, or explicit assumption."
+    - "Flag missing technical implications of product-critical requirements, NFRs, integrations, data, permissions, security, privacy, accessibility, observability, and release gates."
+    - "Flag implementation details that belong in downstream technical documents."
+    - "Verify that deferred decisions have revisit triggers and target documents."
+    - "Verify that success criteria are measurable and can feed Test Strategy, Observability Plan, Release Management, and Operations."
+    - "Flag content that belongs better in System Architecture, Data Model, Security Architecture, API Contracts, Frontend Architecture, Infrastructure, Test Strategy, Observability Plan, Deployment Plan, or Operations."
+  specializedFormats:
+    engineeringInputFormat:
+      description: "Recommended format for product-to-engineering input translation."
+      fields:
+        - sourceDocument
+        - sourceItem
+        - productDecisionOrRequirement
+        - engineeringImplication
+        - affectedSystems
+        - affectedCapabilities
+        - riskIfIgnored
+        - downstreamDocument
+        - status
+    technicalCapabilityFormat:
+      description: "Recommended format for engineering capabilities."
+      fields:
+        - id
+        - capability
+        - category
+        - scopeClassification
+        - productSource
+        - technicalResponsibility
+        - dependencies
+        - acceptanceCriteriaRefs
+        - nfrRefs
+        - ownerOrTargetDocument
+        - risks
+        - status
+    engineeringRiskFormat:
+      description: "Recommended format for engineering risks."
+      fields:
+        - risk
+        - category
+        - affectedScope
+        - affectedRequirementOrNFR
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - targetDocument
+        - releaseImpact
+    deferredTechnicalDecisionFormat:
+      description: "Recommended format for deferred technical decisions."
+      fields:
+        - decision
+        - reasonDeferred
+        - informationNeeded
+        - revisitTrigger
+        - riskOfDeferral
+        - blockedWork
+        - allowedWork
+        - targetEngineeringDocument
+        - status
+    engineeringSuccessCriterionFormat:
+      description: "Recommended format for engineering success criteria."
+      fields:
+        - criterion
+        - category
+        - source
+        - verificationMethod
+        - evidenceRequired
+        - releaseImpact
+        - ownerOrReviewer
+        - targetDocument
+        - status
+  sections:
+    - id: "engineering-objective"
+      title: "Engineering Objective"
+      intent: "Clarify the primary engineering outcome, technical definition of success, failure conditions, and release implication for this phase."
+      required: true
+      outputGuidance:
+        - "Open with the primary engineering outcome in concrete terms."
+        - "State how engineering success supports the product promise and acceptance gates."
+        - "Separate engineering success from product-market success."
+      qualityChecks:
+        - "The objective is specific enough to guide engineering scope."
+        - "Success and failure are measurable or reviewable."
+        - "The objective does not overreach into GTM or Operations execution."
+      questions:
+        - "What is the single most important engineering outcome for this phase?"
+        - "What must Engineering deliver for the product promise to hold?"
+        - "What defines engineering success versus failure?"
+        - "What acceptance gates does engineering success need to satisfy?"
+        - "What must not be included in the engineering objective?"
+    - id: "product-inputs"
+      title: "Product Inputs"
+      intent: "Identify which validated product decisions, scope boundaries, requirements, NFRs, product stack decisions, and acceptance criteria directly shape engineering."
+      required: true
+      outputGuidance:
+        - "Translate each major product input into an engineering implication."
+        - "Separate committed inputs from assumptions, deferred decisions, and unresolved product questions."
+        - "Identify product inputs that require technical challenge or clarification."
+      qualityChecks:
+        - "Product inputs are traceable to source documents."
+        - "Engineering implications are explicit."
+        - "No critical Product or Acceptance input is silently ignored."
+      questions:
+        - "Which product decisions and requirements directly shape engineering scope?"
+        - "What user-facing outcomes must the engineering work enable?"
+        - "What product scope boundaries must engineering preserve?"
+        - "What product stack decisions are committed versus provisional?"
+        - "What acceptance criteria are technically consequential?"
+        - "What product inputs require engineering clarification, challenge, or risk review?"
+    - id: "technical-scope"
+      title: "Technical Scope"
+      intent: "Define the systems, clients, services, modules, data surfaces, integrations, infrastructure, tooling, and exclusions in engineering scope."
+      required: true
+      outputGuidance:
+        - "Define scope by technical responsibility area, not implementation detail."
+        - "Separate MVP technical scope, post-MVP technical scope, deferred scope, excluded scope, and review-needed scope."
+        - "Include explicit exclusions to prevent engineering scope creep."
+      qualityChecks:
+        - "Scope maps to Product Scope, Product Architecture, Functional Requirements, NFRs, and Product Stack."
+        - "Exclusions are clear enough to prevent accidental build."
+        - "Technical scope is not broader than product scope without explicit rationale."
+      questions:
+        - "What systems, clients, modules, services, and technical areas are in scope for initial delivery?"
+        - "What data surfaces and integrations are in scope?"
+        - "What infrastructure and tooling are in scope at product-relevant level?"
+        - "What is MVP, post-MVP, deferred, excluded, or engineering-review-needed?"
+        - "What is explicitly out of scope for this phase?"
+        - "What downstream engineering documents must expand each scope area?"
+    - id: "architecture-direction"
+      title: "Architecture Direction"
+      intent: "State the preliminary architectural direction, major architectural boundaries, and decisions that detailed engineering architecture must resolve."
+      required: true
+      outputGuidance:
+        - "Describe architecture direction at synthesis level only."
+        - "Identify major boundaries: client/server, domain/infrastructure, data ownership, integration boundaries, security boundaries, and deployment boundaries where relevant."
+        - "Route detailed decisions to downstream architecture documents."
+      qualityChecks:
+        - "Architecture direction is enough to guide detailed design without replacing it."
+        - "Boundaries are consistent with Product Architecture and Product Stack."
+        - "Detailed implementation decisions are not over-specified."
+      questions:
+        - "What is the preliminary technical architecture direction?"
+        - "What architectural boundaries are already implied by Product and Stack decisions?"
+        - "What client/server, domain, data, integration, security, infrastructure, or deployment boundaries matter most?"
+        - "What architectural decisions are already constrained?"
+        - "What architectural decisions must System Architecture resolve?"
+    - id: "engineering-constraints"
+      title: "Engineering Constraints"
+      intent: "Enumerate technical, product, platform, resource, timeline, budget, regulatory, security, privacy, accessibility, operational, and support constraints."
+      required: true
+      outputGuidance:
+        - "Classify constraints as hard, preferred, provisional, deferred, or review-needed."
+        - "State how each major constraint changes engineering decisions."
+        - "Separate external constraints from self-imposed constraints."
+      qualityChecks:
+        - "Constraints are explicit enough to influence architecture and planning."
+        - "Security, privacy, accessibility, reliability, and support constraints are not omitted."
+        - "Constraints do not contradict product promise without surfacing trade-offs."
+      questions:
+        - "What technical constraints apply?"
+        - "What product, platform, regulatory, security, privacy, accessibility, or operational constraints apply?"
+        - "What budget, time, team, staffing, or resource limits exist?"
+        - "Which constraints are hard versus preferred or provisional?"
+        - "What trade-offs do these constraints create?"
+        - "What constraints require review by Engineering, Security, Legal, Operations, or Product?"
+    - id: "core-technical-capabilities"
+      title: "Core Technical Capabilities"
+      intent: "List the non-negotiable technical capabilities required to implement the product promise, functional requirements, NFRs, and acceptance gates."
+      required: true
+      outputGuidance:
+        - "List capabilities as technical responsibilities, not features."
+        - "Tie each capability to product source, acceptance criteria, and downstream engineering document."
+        - "Separate core capabilities from supporting, cross-cutting, post-MVP, deferred, or review-needed capabilities."
+      qualityChecks:
+        - "Core capabilities are not inflated with convenience work."
+        - "Each capability has a product source and engineering owner or target document."
+        - "Dependencies and risks are explicit where material."
+      questions:
+        - "What are the non-negotiable technical capabilities the system must provide?"
+        - "What capabilities are required for MVP?"
+        - "What capabilities are supporting, cross-cutting, post-MVP, deferred, or review-needed?"
+        - "What dependencies exist among technical capabilities?"
+        - "Which capabilities map to acceptance criteria or NFRs?"
+        - "Which downstream Engineering document should expand each capability?"
+    - id: "cross-cutting-concerns"
+      title: "Cross-Cutting Concerns"
+      intent: "Identify concerns spanning multiple systems or modules, including security, privacy, permissions, observability, testing, accessibility, error handling, resilience, configuration, and supportability."
+      required: true
+      outputGuidance:
+        - "List cross-cutting concerns that must be handled consistently across architecture."
+        - "Assign target document or owner for each concern."
+        - "State the risk of fragmented implementation."
+      qualityChecks:
+        - "Cross-cutting concerns are not buried inside isolated feature work."
+        - "Security, privacy, observability, permissions, testing, accessibility, and supportability are considered."
+        - "Each concern has a downstream target."
+      questions:
+        - "What cross-cutting concerns must be addressed across the system?"
+        - "How should security, privacy, permissions, observability, testing, accessibility, and supportability be handled consistently?"
+        - "What error handling, resilience, configuration, and operational concerns span multiple modules?"
+        - "What happens if each cross-cutting concern is implemented inconsistently?"
+        - "Which downstream documents own each concern?"
+    - id: "initial-implementation-strategy"
+      title: "Initial Implementation Strategy"
+      intent: "Describe how the first technical iteration should be sliced, sequenced, validated, and risk-reduced."
+      required: true
+      outputGuidance:
+        - "Define implementation strategy as build slices or capability increments."
+        - "Sequence work by dependency, risk reduction, product promise, testability, and acceptance gates."
+        - "Separate specification order, build order, integration order, and release order where useful."
+      qualityChecks:
+        - "Implementation strategy reduces risk early instead of postponing hard problems."
+        - "Build order preserves MVP scope and acceptance gates."
+        - "Dependencies and validation gates are explicit."
+      questions:
+        - "How should the first technical iteration be structured?"
+        - "What is the recommended build order for core modules and capabilities?"
+        - "What should be built first to reduce technical and product risk?"
+        - "What can be built in parallel?"
+        - "What must wait for architectural, data, security, API, frontend, infrastructure, or integration decisions?"
+        - "What validation or quality gates should exist between build slices?"
+    - id: "engineering-risks"
+      title: "Engineering Risks"
+      intent: "Identify technical risks that could threaten feasibility, quality, release readiness, supportability, cost, schedule, or product trust."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete engineering failure modes."
+        - "Tie risks to product requirement, NFR, stack choice, integration, architecture area, or acceptance gate."
+        - "Include early signals, mitigation, target document, and release impact."
+      qualityChecks:
+        - "Risks are specific enough to monitor or mitigate."
+        - "Feasibility, complexity, integration, data, security, privacy, performance, reliability, frontend, infrastructure, testing, observability, operations, and maintenance risks are considered."
+        - "Mitigations are actionable or routed downstream."
+      questions:
+        - "What technical risks could threaten engineering delivery?"
+        - "What feasibility, complexity, dependency, or integration risks exist?"
+        - "What security, privacy, performance, reliability, accessibility, data, frontend, infrastructure, testing, observability, or operational risks exist?"
+        - "What risks could block release or acceptance?"
+        - "What early signals should be monitored?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "deferred-technical-decisions"
+      title: "Deferred Technical Decisions"
+      intent: "Identify technical decisions that can be postponed, why they are deferred, what is blocked or allowed, and what triggers review."
+      required: true
+      outputGuidance:
+        - "Track deferred decisions explicitly rather than silently postponing them."
+        - "State information needed and target engineering document for each decision."
+        - "Clarify blocked work and risk of deferral."
+      qualityChecks:
+        - "Deferred decisions have revisit triggers and owners or target documents."
+        - "Deferral does not secretly block MVP."
+        - "Provisional assumptions are not mistaken for final decisions."
+      questions:
+        - "Which architectural or technical decisions can be postponed and why?"
+        - "What information is needed before each decision can be made?"
+        - "What triggers would bring a deferred decision forward?"
+        - "What work is blocked or allowed while each decision is deferred?"
+        - "What is the risk of deferring each decision?"
+        - "Which downstream Engineering document should resolve each deferred decision?"
+    - id: "engineering-success-criteria"
+      title: "Engineering Success Criteria"
+      intent: "Define measurable engineering outcomes, technical definition of done, quality gates, acceptance mapping, and release readiness implications."
+      required: true
+      outputGuidance:
+        - "Tie success criteria to Acceptance Criteria, Functional Requirements, NFRs, and release gates."
+        - "Separate implementation-complete, test-complete, release-ready, and operationally-ready."
+        - "State evidence required for engineering success."
+      qualityChecks:
+        - "Success criteria are measurable, reviewable, and traceable."
+        - "Quality gates include functional and non-functional dimensions."
+        - "Release readiness is not reduced to code completion."
+      questions:
+        - "What measurable outcomes confirm the engineering work is complete?"
+        - "What is the engineering definition of done?"
+        - "What quality gates must be passed?"
+        - "What tests, reviews, observability checks, security checks, accessibility checks, and release checks are required?"
+        - "What evidence is required to prove engineering success?"
+        - "What issues automatically block engineering sign-off or release readiness?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what detailed Engineering, Operations, Release, Support, and GTM documents must inherit from the Engineering Brief and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route engineering brief outputs to the correct downstream documents."
+        - "Separate architecture, data, security, API, integration, frontend, infrastructure, testing, design system, observability, deployment, release, support, and operations implications."
+        - "Preserve unresolved engineering questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing engineering constraints silently."
+        - "Engineering-level and product-level responsibilities remain distinct."
+      questions:
+        - "What should System Architecture inherit from this brief?"
+        - "What should Data Model, Security Architecture, API Contracts, and Integration Architecture inherit?"
+        - "What should Frontend Architecture, Engineering Design System, and Infrastructure Architecture inherit?"
+        - "What should Test Strategy, Observability Plan, and Deployment Plan inherit?"
+        - "What should Release Management, Support Model, Risk Management, and Operations inherit?"
+        - "What should GTM not promise until Engineering acceptance is achieved?"
+        - "What unresolved engineering questions must be carried forward?"

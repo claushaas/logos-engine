@@ -1,7 +1,3 @@
-export const exitCodes = {
-	success: 0,
-	unexpectedError: 1,
-	usageError: 2,
-} as const;
-
-export type ExitCode = (typeof exitCodes)[keyof typeof exitCodes];
+export const EXIT_SUCCESS = 0;
+export const EXIT_USAGE_ERROR = 1;
+export const EXIT_STARTUP_FAILURE = 2;

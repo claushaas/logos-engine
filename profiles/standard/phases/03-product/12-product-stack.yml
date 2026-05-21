@@ -1,0 +1,439 @@
+document:
+  id: "12-product-stack"
+  title: "Product Stack"
+  phase: "03-product"
+  status: "not_started"
+  order: 12
+  type: "product_stack"
+  purpose: "Define technology choices that directly shape product experience, platform strategy, scope, constraints, integrations, quality attributes, and downstream engineering decisions without prematurely specifying full technical architecture."
+  centralQuestion: "What technology choices directly shape the experience, scope, constraints, and product viability?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/03-product/12-product-stack.md"
+      purpose: "Store the canonical product-level technology stack decisions as a Markdown document."
+    artifacts:
+      - id: "product.product_stack_map"
+        format: "html"
+        path: "outcomes/html/03-product/product-stack-map.html"
+        purpose: "Provide a navigable product stack map covering platform strategy, clients, product-level technology choices, UX-relevant constraints, integrations, tooling assumptions, deferred engineering decisions, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "product stack thesis"
+          - "platform strategy"
+          - "primary client"
+          - "secondary clients"
+          - "product-level technology choices"
+          - "UX-relevant technical constraints"
+          - "integration surface"
+          - "tooling assumptions"
+          - "deferred engineering decisions"
+          - "stack risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.product_stack_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/product-stack-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether product-level technology choices are justified, experience-aware, scoped, risk-aware, and correctly handed off to Engineering."
+        agentRole: "reviewer"
+        includes:
+          - "canonical product stack"
+          - "product scope dependency"
+          - "product architecture dependency"
+          - "functional requirements dependency"
+          - "non-functional requirements dependency"
+          - "UI and interaction dependencies"
+          - "stack formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/03-user-journeys"
+    - "03-product/04-ux-model"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/07-ui-specification"
+    - "03-product/08-design-system"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+  feeds:
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-data-model"
+    - "04-engineering/04-security-architecture"
+    - "04-engineering/05-api-contracts"
+    - "04-engineering/06-integration-architecture"
+    - "04-engineering/07-frontend-architecture"
+    - "04-engineering/08-infrastructure-architecture"
+    - "04-engineering/09-test-strategy"
+    - "04-engineering/10-design-system"
+    - "04-engineering/11-observability-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+  inputs:
+    - id: "product-scope"
+      type: "context"
+      required: false
+      description: "In-scope, out-of-scope, MVP, post-MVP, non-goals, scope boundaries, deferred decisions, and scope governance."
+    - id: "product-architecture"
+      type: "context"
+      required: false
+      description: "Product modules, capabilities, dependencies, sequencing, ownership, product dependencies, and product architecture risks."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "User, system, admin, integration, data, and business-rule requirements that may constrain product-level technology choices."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, i18n, compliance, and operational constraints."
+    - id: "ui-and-design-system"
+      type: "context"
+      required: false
+      description: "UI Specification and Design System requirements that constrain client technology, rendering model, component model, accessibility, and responsive behavior."
+    - id: "interaction-model"
+      type: "context"
+      required: false
+      description: "Interaction patterns, commands, confirmations, undo, ambiguity, suggestions, corrections, state transitions, and accessibility interaction rules."
+    - id: "stack-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate technologies, platform preferences, client choices, integration concerns, tooling assumptions, known constraints, and stack questions."
+  completionCriteria:
+    - "The central question is answered through explicit product-level technology decisions and constraints."
+    - "Technology choices are separated into committed product decisions, provisional assumptions, deferred engineering decisions, excluded options, and engineering-review-needed items."
+    - "Platform strategy defines target platforms, primary platform, release order, product rationale, platform constraints, unsupported platforms, and migration or expansion triggers."
+    - "Primary client choice includes rationale, product benefits, limitations, required capabilities, UX implications, accessibility implications, and engineering handoff."
+    - "Secondary clients distinguish shared product behavior from client-specific behavior and state when they are introduced or excluded."
+    - "Product-level technology choices identify data, sync, rendering, communication, AI, local/offline, storage, media, auth, analytics, and content technologies that affect product behavior."
+    - "UX-relevant technical constraints include latency, connectivity, resource limits, offline support, permissions, device constraints, platform limitations, and graceful degradation."
+    - "Integration surface describes external systems, protocols, auth models, data flow direction, failure modes, fallback behavior, ownership, privacy/security concerns, and product impact."
+    - "Tooling assumptions are limited to tooling that affects product scope, quality, release, debugging, observability, or operations; detailed tooling belongs in Engineering."
+    - "Deferred engineering decisions include rationale, needed information, revisit trigger, risk, blocking impact, and target engineering document."
+    - "Stack risks include lock-in, dependency maturity, ecosystem risk, performance risk, accessibility risk, security/privacy risk, integration risk, hiring/maintenance risk, cost risk, and migration risk."
+    - "Downstream handoff states what Engineering, Architecture, Frontend, API, Data Model, Security, Infrastructure, Test Strategy, Observability, and Operations must inherit."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid stack theater: fashionable technology choices without product rationale, constraints, or risk analysis."
+    - "Avoid deciding engineering architecture in the product stack document."
+    - "Avoid selecting technologies only by preference when they materially constrain product experience or scope."
+    - "Avoid hiding platform limitations, offline limitations, accessibility constraints, dependency risks, or integration failure modes."
+    - "Avoid treating provisional technology assumptions as committed engineering decisions."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent product constraints, platform capabilities, library guarantees, compliance guarantees, performance benchmarks, or integration terms."
+    - "Technology choices must preserve product boundaries, UX model, accessibility requirements, privacy/security expectations, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate product-level technology choice from engineering implementation choice."
+    - "Classify each material stack item as committed, provisional, deferred, excluded, post-MVP, or engineering-review-needed where useful."
+    - "Tie stack decisions to Product Scope, Product Architecture, Functional Requirements, Non-Functional Requirements, UI Specification, Design System, Interaction Model, Validation Report, or Decision Record where possible."
+    - "State how each material technology choice affects user experience, scope, constraints, risk, quality attributes, or downstream engineering."
+    - "Keep implementation architecture, package selection, deployment topology, schema, API specifics, and infrastructure design in Engineering documents unless they directly affect product constraints."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Product Scope, Product Architecture, Functional Requirements, Non-Functional Requirements, UI Specification, Design System, Interaction Model, Validation Report, Decision Record, or Foundation Boundaries."
+    - "Flag technology choices without product rationale, risk, or downstream implication."
+    - "Flag engineering-specific content that should move to Engineering System Architecture, Frontend Architecture, API Contracts, Infrastructure Architecture, Security Architecture, or Observability Plan."
+    - "Flag product stack choices that undermine accessibility, performance, privacy, security, reliability, compatibility, or operational constraints."
+    - "Flag deferred decisions that lack revisit trigger, needed information, risk, or downstream target."
+    - "Verify that integrations include failure modes and fallback behavior."
+    - "Verify that downstream handoff is explicit enough for Engineering and Operations."
+  specializedFormats:
+    stackDecisionFormat:
+      description: "Recommended format for product-level technology decisions."
+      fields:
+        - id
+        - decision
+        - category
+        - status
+        - productRationale
+        - alternativesConsidered
+        - userExperienceImpact
+        - scopeImpact
+        - qualityAttributeImpact
+        - constraintsCreated
+        - risks
+        - mitigation
+        - downstreamEngineeringImplications
+        - revisitTrigger
+    platformFormat:
+      description: "Recommended format for platform decisions."
+      fields:
+        - platform
+        - role
+        - status
+        - releaseOrder
+        - rationale
+        - supportedCapabilities
+        - limitations
+        - productConstraints
+        - unsupportedCases
+        - expansionTrigger
+        - downstreamImplications
+    integrationSurfaceFormat:
+      description: "Recommended format for product-level integrations."
+      fields:
+        - integration
+        - purpose
+        - status
+        - dataFlowDirection
+        - protocolOrPattern
+        - authModel
+        - userVisibleImpact
+        - failureModes
+        - fallbackBehavior
+        - privacySecurityConcerns
+        - dependencyCriticality
+        - ownerOrTargetDocument
+    deferredDecisionFormat:
+      description: "Recommended format for deferred engineering decisions."
+      fields:
+        - decision
+        - reasonDeferred
+        - informationNeeded
+        - revisitTrigger
+        - riskOfDeferral
+        - blockedWork
+        - allowedWork
+        - targetEngineeringDocument
+        - status
+    stackRiskFormat:
+      description: "Recommended format for stack risks."
+      fields:
+        - risk
+        - affectedChoice
+        - riskType
+        - userImpact
+        - productImpact
+        - engineeringImpact
+        - earlySignal
+        - mitigation
+        - targetDocument
+  sections:
+    - id: "product-stack-thesis"
+      title: "Product Stack Thesis"
+      intent: "State the product-level technology philosophy and how stack choices should support product promise, UX, scope, quality, and future evolution."
+      required: true
+      outputGuidance:
+        - "Open with the product stack's organizing principle."
+        - "Explain how stack choices protect the product promise, primary journey, quality attributes, and product boundaries."
+        - "State what technology selection must avoid."
+      qualityChecks:
+        - "The thesis is specific enough to guide product-level technology trade-offs."
+        - "The thesis distinguishes product stack from engineering architecture."
+        - "The thesis can reject at least one plausible technology direction."
+      questions:
+        - "What is the product-level technology philosophy?"
+        - "How should technology choices support the product promise and primary use case?"
+        - "How should stack choices protect UX, accessibility, privacy, reliability, and operational sustainability?"
+        - "What trade-offs are acceptable at product level?"
+        - "What technology posture should be avoided?"
+    - id: "platform-strategy"
+      title: "Platform Strategy"
+      intent: "Define targeted platforms, primary platform, release order, unsupported platforms, expansion logic, and platform-driven product constraints."
+      required: true
+      outputGuidance:
+        - "Define platform choices by product strategy and user context, not engineering preference alone."
+        - "Separate MVP platform, post-MVP platforms, deferred platforms, excluded platforms, and unsupported environments."
+        - "State platform constraints that affect scope, UX, UI, interactions, performance, accessibility, integrations, and operations."
+      qualityChecks:
+        - "Platform strategy aligns with target user, journeys, scope, and NFRs."
+        - "Release order has product rationale."
+        - "Unsupported or deferred platforms are explicit."
+      questions:
+        - "What platforms are targeted: web, desktop, mobile, tablet, CLI, API, embedded, browser extension, or another surface?"
+        - "What is the primary platform and why?"
+        - "What is the platform release order and rationale?"
+        - "Which platforms are MVP, post-MVP, deferred, excluded, or unsupported?"
+        - "What platform constraints drive product decisions?"
+        - "What platform assumptions require validation or engineering review?"
+        - "What trigger would justify expanding to another platform?"
+    - id: "primary-client"
+      title: "Primary Client"
+      intent: "Define the primary client technology or client class, rationale, capabilities, limitations, and experience implications."
+      required: true
+      outputGuidance:
+        - "State the primary client choice at the product level."
+        - "Explain the product capabilities this client enables or constrains."
+        - "Include accessibility, performance, offline, local storage, native capability, distribution, and maintenance implications where relevant."
+      qualityChecks:
+        - "Primary client choice supports the primary journey and UI/interaction requirements."
+        - "Limitations and risks are explicit."
+        - "Client technology choice is not over-specified beyond product need."
+      questions:
+        - "What is the primary client technology or client class?"
+        - "Why was this client chosen?"
+        - "What product capabilities does this client enable?"
+        - "What product capabilities does this client constrain?"
+        - "What are the accessibility, performance, offline, local storage, native capability, and distribution implications?"
+        - "What primary-client assumptions require engineering review?"
+    - id: "secondary-clients"
+      title: "Secondary Clients"
+      intent: "Define secondary clients, shared behavior model, client-specific behavior, introduction timing, and constraints."
+      required: true
+      outputGuidance:
+        - "Separate product behavior shared across clients from client-specific adaptation."
+        - "Classify secondary clients as post-MVP, deferred, experimental, excluded, or unsupported where useful."
+        - "State what must remain consistent across clients."
+      qualityChecks:
+        - "Secondary clients do not dilute MVP focus."
+        - "Client-specific differences are product-justified."
+        - "Shared behavior is clear enough to guide future architecture."
+      questions:
+        - "What secondary clients exist or may exist?"
+        - "How do secondary clients differ from the primary client?"
+        - "What behavior must remain shared across all clients?"
+        - "What behavior may be client-specific?"
+        - "When are secondary clients introduced?"
+        - "What secondary clients are explicitly deferred or excluded?"
+    - id: "product-level-technology-choices"
+      title: "Product-Level Technology Choices"
+      intent: "Define technology choices that affect product behavior, user experience, scope, constraints, and quality attributes at a conceptual level."
+      required: true
+      outputGuidance:
+        - "List only technology choices that materially shape product behavior or constraints."
+        - "Separate committed choices from provisional assumptions and deferred engineering decisions."
+        - "Explain alternatives considered and trade-offs where material."
+      qualityChecks:
+        - "Every technology choice has product rationale."
+        - "Choices are not made for novelty alone."
+        - "Engineering-level details are deferred unless they directly constrain product behavior."
+      questions:
+        - "What technology choices affect the product at the conceptual level?"
+        - "What data storage, sync, offline, local-first, or server-first approaches shape the product?"
+        - "What communication, API, event, or real-time patterns shape the product?"
+        - "What rendering, presentation, component, or design-system technologies shape the product?"
+        - "What AI, automation, retrieval, recommendation, or generation technologies shape the product?"
+        - "What authentication, analytics, telemetry, content, media, or notification technologies shape the product?"
+        - "What alternatives were considered and rejected?"
+    - id: "ux-relevant-technical-constraints"
+      title: "UX-Relevant Technical Constraints"
+      intent: "Define technical constraints that directly affect user experience, interface states, latency, feedback, recovery, accessibility, and trust."
+      required: true
+      outputGuidance:
+        - "Describe constraints in terms of user-visible behavior."
+        - "Include latency, bandwidth, connectivity, device resource, local/offline, permission, platform, dependency, AI-confidence, and degradation constraints where relevant."
+        - "Route detailed mitigation to Engineering or Acceptance Criteria where needed."
+      qualityChecks:
+        - "Constraints are concrete enough to influence UX, UI, Interaction, State, and Acceptance Criteria."
+        - "Constraints do not hide technical limitations from product decisions."
+        - "Fallback and degradation behavior are explicit where constraints affect user trust."
+      questions:
+        - "What technical constraints directly impact user experience?"
+        - "What latency, bandwidth, connectivity, or long-running operation constraints apply?"
+        - "What client resource limits affect UX design?"
+        - "What offline, local-first, server-first, sync, or data availability constraints affect UX?"
+        - "What platform permission or device capability constraints apply?"
+        - "What AI, automation, or low-confidence output constraints affect UX?"
+        - "How should UX degrade when constraints are hit?"
+    - id: "integration-surface"
+      title: "Integration Surface"
+      intent: "Define external systems, protocols, auth models, data flows, user-visible impact, failure modes, fallback behavior, and ownership at product level."
+      required: true
+      outputGuidance:
+        - "List integrations as product surfaces and dependencies, not implementation details alone."
+        - "Classify integrations by criticality, data direction, user-visible impact, and fallback behavior."
+        - "Surface privacy, security, policy, cost, rate-limit, and reliability concerns."
+      qualityChecks:
+        - "Integration requirements align with Product Architecture and Functional Requirements."
+        - "Failure modes and fallback behavior are explicit."
+        - "Auth, permission, privacy, and security implications are not hidden."
+      questions:
+        - "What external systems must the product integrate with?"
+        - "What integration protocols or patterns are expected at product level?"
+        - "What authentication and authorization models apply to integrations?"
+        - "What data flows in, out, or both?"
+        - "What is the user-visible impact of each integration?"
+        - "What are the integration failure modes and fallbacks?"
+        - "What integration concerns require Engineering, Security, Legal, or Operations review?"
+    - id: "tooling-assumptions"
+      title: "Tooling Assumptions"
+      intent: "Define development, design, build, test, deployment, observability, debugging, release, and support tooling assumptions that affect product decisions."
+      required: true
+      outputGuidance:
+        - "Include tooling assumptions only when they affect product scope, quality, release, observability, support, or operations."
+        - "Separate product-relevant tooling assumptions from engineering implementation details."
+        - "Classify assumptions as committed, provisional, deferred, or engineering-review-needed."
+      qualityChecks:
+        - "Tooling assumptions have product relevance."
+        - "Tooling choices do not silently constrain UX, accessibility, testing, release, or operations."
+        - "Detailed tooling selection is routed to Engineering where appropriate."
+      questions:
+        - "What development or design tools are assumed because they affect product quality or workflow?"
+        - "What build, test, deployment, release, observability, or debugging tooling affects the product?"
+        - "What tooling enables or constrains design system, accessibility, testing, analytics, support, or operations?"
+        - "What tooling assumptions are provisional?"
+        - "What tooling decisions should be deferred to Engineering?"
+        - "What tooling constraints affect the product?"
+    - id: "deferred-engineering-decisions"
+      title: "Deferred Engineering Decisions"
+      intent: "Track engineering decisions intentionally deferred from Product Stack with rationale, needed information, risk, blocked work, and target document."
+      required: true
+      outputGuidance:
+        - "Do not resolve engineering decisions prematurely when product-level information is insufficient."
+        - "State what information is needed and which engineering document should resolve the decision."
+        - "Clarify what work is blocked or allowed while deferred."
+      qualityChecks:
+        - "Deferred decisions are not treated as resolved assumptions."
+        - "Each deferred decision has a revisit trigger and risk."
+        - "Deferral does not block MVP unknowingly."
+      questions:
+        - "What engineering decisions are intentionally deferred to later phases?"
+        - "Why is each decision deferred?"
+        - "What information is needed to make each decision?"
+        - "When or under what condition will deferred decisions be revisited?"
+        - "What work is blocked or allowed while each decision is deferred?"
+        - "What is the risk of deferring each decision?"
+        - "Which Engineering document should resolve each decision?"
+    - id: "stack-risks"
+      title: "Stack Risks"
+      intent: "Identify highest-risk product-level technology choices, unknowns, dependencies, constraints, and migration risks."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete product or downstream engineering failure modes."
+        - "Tie risks to stack decisions, UX constraints, integrations, NFRs, product architecture, or operations."
+        - "Include early signals, mitigation, and target document."
+      qualityChecks:
+        - "Risks are specific enough to review, validate, or mitigate."
+        - "Lock-in, dependency, ecosystem, performance, accessibility, privacy, security, integration, cost, maintenance, and migration risks are considered."
+        - "Mitigations are actionable or routed downstream."
+      questions:
+        - "What technology choices carry the highest risk?"
+        - "What are the key unknowns in the technology stack?"
+        - "What dependencies have uncertain maturity, future, licensing, support, or ecosystem risk?"
+        - "What performance, accessibility, privacy, security, reliability, compatibility, or operational risks does the stack create?"
+        - "What migration or lock-in risks exist?"
+        - "How will stack risks be monitored and mitigated?"
+        - "Which risks should become acceptance criteria or engineering constraints?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what Engineering and Operations documents must inherit from the product stack and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route product stack outputs to the correct downstream documents."
+        - "Separate architecture, data, API, frontend, security, infrastructure, test, observability, design system, release, and operations implications."
+        - "Preserve deferred decisions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Engineering documents are not allowed to invent missing product constraints silently."
+        - "Product-level and engineering-level decisions are not conflated."
+      questions:
+        - "What should Engineering Brief inherit from the Product Stack?"
+        - "What should System Architecture inherit?"
+        - "What should Data Model, API Contracts, Integration Architecture, and Security Architecture inherit?"
+        - "What should Frontend Architecture and Engineering Design System inherit?"
+        - "What should Infrastructure, Test Strategy, Observability, Release Management, and Operations inherit?"
+        - "What should downstream Engineering not assume yet?"
+        - "What unresolved stack questions must be carried forward?"

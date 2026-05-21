@@ -1,0 +1,556 @@
+document:
+  id: "08-design-system"
+  title: "Design System"
+  phase: "03-product"
+  status: "not_started"
+  order: 8
+  type: "design_system"
+  purpose: "Define the reusable visual, interaction, accessibility, and component standards that keep the product coherent across screens, platforms, states, and future evolution."
+  centralQuestion: "What reusable design rules, tokens, components, states, and governance standards must the product maintain?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/03-product/08-design-system.md"
+      purpose: "Store the canonical design system specification as a Markdown document."
+    artifacts:
+      - id: "product.design_system_reference"
+        format: "html"
+        path: "outcomes/html/03-product/design-system-reference.html"
+        purpose: "Provide a navigable design system reference covering principles, visual language, tokens, typography, color, spacing, grid, shape, iconography, motion, components, states, accessibility, theming, anti-patterns, governance, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "design system thesis"
+          - "design principles"
+          - "visual language"
+          - "design tokens"
+          - "typography"
+          - "color system"
+          - "spacing system"
+          - "layout grid"
+          - "shape and radius"
+          - "iconography"
+          - "motion"
+          - "component principles"
+          - "component inventory"
+          - "component states"
+          - "accessibility rules"
+          - "theming and platform adaptation"
+          - "design anti-patterns"
+          - "governance"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.design_system_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/design-system-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the design system is coherent, reusable, accessible, tokenized, governed, and aligned with UI, UX, IA, and interaction requirements."
+        agentRole: "reviewer"
+        includes:
+          - "canonical design system"
+          - "UI specification dependency"
+          - "UX model dependency"
+          - "information architecture dependency"
+          - "interaction model dependency"
+          - "design system formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/07-glossary"
+    - "02-validation/08-evidence-log"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/04-ux-model"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/07-ui-specification"
+  feeds:
+    - "03-product/11-feature-specification"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/07-frontend-architecture"
+    - "04-engineering/10-design-system"
+  inputs:
+    - id: "ui-specification"
+      type: "context"
+      required: false
+      description: "Screens, layouts, components, states, responsive behavior, accessibility UI rules, microcopy rules, and UI risks that the design system must support."
+    - id: "ux-model"
+      type: "context"
+      required: false
+      description: "UX thesis, cognitive load rules, feedback model, error recovery, proactivity, trust model, and anti-patterns that shape system-level design decisions."
+    - id: "information-architecture"
+      type: "context"
+      required: false
+      description: "Objects, hierarchy, naming, density, search, empty states, and IA risks that influence component and token needs."
+    - id: "interaction-model"
+      type: "context"
+      required: false
+      description: "Actions, confirmations, undo, suggestions, corrections, state transitions, and accessibility interaction rules that influence component behavior."
+    - id: "brand-or-visual-notes"
+      type: "manual_note"
+      required: false
+      description: "Visual references, brand preferences, typography ideas, color preferences, motion notes, platform constraints, and design inspirations."
+  completionCriteria:
+    - "The central question is answered through reusable design rules, token definitions, component standards, state standards, accessibility standards, and governance rules."
+    - "Design principles translate into concrete visual and component decisions, including trade-offs and violations."
+    - "Visual language is specific enough to guide product UI while rejecting incompatible styles."
+    - "Design tokens define typography, color, spacing, radius, border, shadow, motion, opacity, z-index, and semantic roles where relevant."
+    - "Typography, color, spacing, layout, shape, iconography, and motion systems include usage rules, accessibility constraints, platform adaptation, and prohibited patterns."
+    - "Component principles and component inventory define composition, variants, states, accessibility expectations, naming, ownership, and reuse rules."
+    - "Component states cover default, hover, focus, active, pressed, disabled, loading, error, success, warning, selected, empty, pending, low-confidence, and permission-restricted states where relevant."
+    - "Accessibility rules define target standard, contrast, focus, keyboard, screen reader, touch target, reduced motion, and non-color meaning requirements."
+    - "Theming and platform adaptation define what may vary across platform, viewport, density, light/dark mode, brand mode, or user preference."
+    - "Governance defines how tokens, components, variants, exceptions, deprecations, and breaking changes are proposed, reviewed, versioned, and propagated downstream."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid design-system theater: polished style language without reusable tokens, component rules, states, or governance."
+    - "Avoid visual preferences without rationale tied to UX, UI, product promise, accessibility, or implementation constraints."
+    - "Avoid creating components before their screen, journey, state, or product need is established."
+    - "Avoid token names that encode visual values instead of semantic purpose when semantic tokens are needed."
+    - "Avoid relying on color, motion, position, or iconography alone to communicate critical meaning."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent accessibility compliance, platform capabilities, component libraries, visual assets, user evidence, or implementation constraints."
+    - "Do not move detailed frontend implementation, package choice, or code architecture into this document."
+    - "Design system rules must preserve consistency, accessibility, user agency, trust, recovery paths, and terminology consistency."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate visual language, tokens, component standards, state standards, accessibility rules, platform adaptation, and governance."
+    - "Tie design system decisions to UI Specification, UX Model, Information Architecture, Interaction Model, Foundation Principles, Glossary, or validation evidence where possible."
+    - "Prefer semantic tokens for product meaning and primitive tokens for implementation mapping."
+    - "Classify components as core, supporting, feedback, navigation, input, display, overlay, system, experimental, post-MVP, or deprecated where useful."
+    - "State exceptions explicitly rather than allowing ad hoc visual drift."
+    - "Keep this document at design system specification level; implementation details belong in Engineering Design System and Frontend Architecture."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with UI Specification, UX Model, Information Architecture, Interaction Model, Foundation Glossary, or Foundation Boundaries."
+    - "Flag tokens, components, or variants not supported by screens, states, journeys, or explicit assumptions."
+    - "Flag component rules missing states, accessibility expectations, usage constraints, or content rules."
+    - "Flag visual rules that undermine accessibility, state clarity, trust, or user agency."
+    - "Verify that token and component naming is consistent, semantic where needed, and implementation-ready without being implementation-specific."
+    - "Verify that governance prevents uncontrolled variants and visual drift."
+    - "Flag content that belongs better in UI Specification, Feature Specification, Acceptance Criteria, Engineering Design System, or Frontend Architecture."
+  specializedFormats:
+    tokenFormat:
+      description: "Recommended format for design tokens."
+      fields:
+        - name
+        - type
+        - role
+        - value
+        - semanticPurpose
+        - usageRules
+        - accessibilityNotes
+        - platformAdaptation
+        - deprecatedAliases
+        - status
+    componentFormat:
+      description: "Recommended format for reusable design system components."
+      fields:
+        - id
+        - name
+        - category
+        - purpose
+        - usedIn
+        - variants
+        - states
+        - anatomy
+        - usageRules
+        - doNotUseWhen
+        - accessibilityExpectations
+        - contentRules
+        - interactionRules
+        - tokenDependencies
+        - owner
+        - status
+    componentStateFormat:
+      description: "Recommended format for component state definitions."
+      fields:
+        - state
+        - appliesTo
+        - trigger
+        - visualTreatment
+        - contentTreatment
+        - interactionBehavior
+        - accessibilityBehavior
+        - recoveryOrNextAction
+        - tokenDependencies
+        - acceptanceImplications
+    designSystemExceptionFormat:
+      description: "Recommended format for approved exceptions."
+      fields:
+        - exception
+        - affectedTokenOrComponent
+        - rationale
+        - scope
+        - expirationOrReviewDate
+        - risk
+        - approval
+        - downstreamImpact
+  sections:
+    - id: "design-system-thesis"
+      title: "Design System Thesis"
+      intent: "State the system-level design thesis that governs consistency, reuse, sensory character, accessibility, and future evolution."
+      required: true
+      outputGuidance:
+        - "Open with the system-level purpose of the design system."
+        - "Explain what consistency protects: usability, trust, speed, accessibility, maintainability, or brand coherence."
+        - "State what the design system must avoid becoming."
+      qualityChecks:
+        - "The thesis is specific enough to guide token and component decisions."
+        - "The thesis does not duplicate the UI thesis without system-level implications."
+        - "The thesis can reject at least one plausible design system direction."
+      questions:
+        - "What is the purpose of the design system in this product?"
+        - "What kind of consistency must it protect?"
+        - "How does the design system support the product promise and UI thesis?"
+        - "What should remain stable across screens, platforms, and future features?"
+        - "What should the design system avoid becoming?"
+    - id: "design-principles"
+      title: "Design Principles"
+      intent: "Define foundational design principles and translate them into visual, component, token, and state decisions."
+      required: true
+      outputGuidance:
+        - "State principles as decision rules, not mood words."
+        - "Explain how each principle affects tokens, components, states, layout, and accessibility."
+        - "Include trade-offs and violations."
+      qualityChecks:
+        - "Each principle changes at least one concrete design decision."
+        - "Principles align with Foundation Principles, UX Model, and UI Specification."
+        - "Aesthetic and functional trade-offs are explicit."
+      questions:
+        - "What are the foundational design principles for the product?"
+        - "How do principles translate into visual decisions?"
+        - "How do principles translate into token and component decisions?"
+        - "What principles govern trade-offs between aesthetics, accessibility, usability, density, and implementation simplicity?"
+        - "What would violate each design principle?"
+    - id: "visual-language"
+      title: "Visual Language"
+      intent: "Describe the sensory character, mood, tone, personality, references, rejected styles, and rationale of the visual language."
+      required: true
+      outputGuidance:
+        - "Describe the visual language in terms that guide concrete design decisions."
+        - "Separate inspiration from implementation requirement."
+        - "Name rejected styles and why they are rejected."
+      qualityChecks:
+        - "Visual language is not only aesthetic mood; it informs system choices."
+        - "References do not conflict with accessibility or product constraints."
+        - "Rejected styles are rejected for product reasons, not taste alone."
+      questions:
+        - "How would the visual language be described in a few words?"
+        - "What mood, tone, and personality does the visual language convey?"
+        - "What visual references or inspirations inform the language?"
+        - "Which references are philosophical or directional rather than literal?"
+        - "What visual styles are explicitly rejected and why?"
+        - "How does visual language support trust, clarity, and product boundaries?"
+    - id: "design-tokens"
+      title: "Design Tokens"
+      intent: "Define primitive, semantic, component, state, motion, elevation, and platform tokens used to implement consistent design decisions."
+      required: true
+      outputGuidance:
+        - "Separate primitive tokens from semantic tokens and component tokens."
+        - "Define token naming rules and allowed token categories."
+        - "State how tokens adapt across theme, platform, density, and accessibility contexts."
+      qualityChecks:
+        - "Tokens have semantic purpose where semantic use is needed."
+        - "Token names are stable and not tied only to current visual values."
+        - "Token categories are sufficient for UI, state, motion, and accessibility needs."
+      questions:
+        - "What token categories exist: color, typography, spacing, radius, border, shadow, elevation, opacity, z-index, motion, breakpoint, density, or component tokens?"
+        - "Which tokens are primitive versus semantic versus component-specific?"
+        - "What naming convention is used for tokens?"
+        - "How do tokens map to product meaning and UI state?"
+        - "How do tokens adapt across light/dark mode, platform, viewport, density, and accessibility contexts?"
+        - "What tokens are provisional, deprecated, or forbidden?"
+    - id: "typography"
+      title: "Typography"
+      intent: "Define typefaces, type scale, hierarchy rules, line length, reading density, emphasis rules, and platform adaptations."
+      required: true
+      outputGuidance:
+        - "Define typography by role, not only by font choice."
+        - "Include heading, body, label, caption, code, numeric, empty state, error, and system text roles where relevant."
+        - "State accessibility and readability constraints."
+      qualityChecks:
+        - "Typography supports hierarchy, readability, and cognitive load rules."
+        - "Font choices are justified or marked provisional."
+        - "Type scale and line-height do not create inaccessible or cramped states."
+      questions:
+        - "What typefaces are used and for what purposes?"
+        - "What is the type scale: sizes, weights, line heights, letter spacing, and responsive behavior?"
+        - "What are the typographic hierarchy rules?"
+        - "How are labels, body text, headings, captions, errors, code, and numeric values treated?"
+        - "What are maximum readable line lengths or density rules?"
+        - "How does typography adapt across platforms and accessibility settings?"
+    - id: "color-system"
+      title: "Color System"
+      intent: "Define color primitives, semantic roles, state roles, contrast expectations, theming behavior, and prohibited color usage."
+      required: true
+      outputGuidance:
+        - "Separate primitive palette from semantic roles."
+        - "Define colors by purpose: surface, text, border, accent, action, danger, warning, success, info, disabled, focus, selected, pending, low-confidence, and permission-restricted where relevant."
+        - "Explain how color works with non-color indicators."
+      qualityChecks:
+        - "Color does not carry critical meaning alone."
+        - "Contrast expectations are explicit and testable."
+        - "Semantic color roles are consistent across components and states."
+      questions:
+        - "What is the primitive color palette?"
+        - "What are the semantic color roles?"
+        - "How is color used to communicate state, meaning, risk, uncertainty, and hierarchy?"
+        - "What meaning must never be communicated by color alone?"
+        - "What contrast targets apply?"
+        - "How does color adapt across themes, platforms, and accessibility settings?"
+        - "What color usages are prohibited?"
+    - id: "spacing-system"
+      title: "Spacing System"
+      intent: "Define spatial scale, density modes, spacing rules, grouping rules, rhythm, and adaptive behavior."
+      required: true
+      outputGuidance:
+        - "Define base unit, scale, density modes, and exceptions."
+        - "Explain spacing rules between components, within components, between groups, and around critical states."
+        - "Connect spacing to hierarchy and cognitive load."
+      qualityChecks:
+        - "Spacing rules support hierarchy and readability."
+        - "Density modes do not hide critical information or reduce accessibility."
+        - "Exceptions are explicit rather than ad hoc."
+      questions:
+        - "What is the spatial scale: base unit, multipliers, and density modes?"
+        - "What are the spacing rules between and within components?"
+        - "How does spacing communicate grouping, priority, hierarchy, and separation?"
+        - "How does spacing adapt across viewport sizes, content density, and accessibility settings?"
+        - "When are spacing exceptions permitted?"
+    - id: "layout-grid"
+      title: "Layout Grid"
+      intent: "Define grid system, columns, breakpoints, alignment, container widths, responsive composition, and exception rules."
+      required: true
+      outputGuidance:
+        - "Define the grid at the design system level, not as implementation CSS."
+        - "Include viewport classes, containers, gutters, margins, alignment, and composition patterns."
+        - "Explain when grid exceptions are allowed."
+      qualityChecks:
+        - "Grid supports UI Specification responsive behavior."
+        - "Breakpoints are justified or marked provisional."
+        - "Exceptions do not create ungoverned layout drift."
+      questions:
+        - "What grid system is used?"
+        - "What are the column, gutter, margin, container, and breakpoint definitions?"
+        - "How are alignment and distribution rules defined?"
+        - "How does the grid adapt across viewport sizes and platforms?"
+        - "When are grid exceptions permitted?"
+        - "What grid decisions require frontend review?"
+    - id: "shape-and-radius"
+      title: "Shape and Radius"
+      intent: "Define radius scale, shape meaning, borders, dividers, shadows, elevation, focus rings, and visual containment rules."
+      required: true
+      outputGuidance:
+        - "Define shape and elevation semantically, not only aesthetically."
+        - "Clarify when radius, border, shadow, divider, or surface change communicates grouping, actionability, focus, selection, or depth."
+        - "Avoid decorative elevation that creates false hierarchy."
+      qualityChecks:
+        - "Shape rules support component consistency and hierarchy."
+        - "Focus, selection, and interactive states remain visible."
+        - "Elevation and borders do not conflict or multiply unnecessarily."
+      questions:
+        - "What border radius scale is used?"
+        - "How are shapes used to differentiate component types or states?"
+        - "What rules govern shadows, elevation, surfaces, and overlays?"
+        - "What rules govern borders, dividers, focus rings, and containment?"
+        - "What shape or elevation usages are prohibited?"
+    - id: "iconography"
+      title: "Iconography"
+      intent: "Define icon library, icon roles, sizing, stroke/fill rules, label pairing, accessibility, custom icon creation, and maintenance."
+      required: true
+      outputGuidance:
+        - "Define when icons are decorative, assistive, semantic, navigational, status-bearing, or action-bearing."
+        - "State when icons require text labels."
+        - "Define custom icon governance and fallback rules."
+      qualityChecks:
+        - "Icons do not carry critical meaning alone."
+        - "Icon usage is consistent and accessible."
+        - "Custom icons are created only with a documented need."
+      questions:
+        - "What icon system or library is used?"
+        - "What are the icon sizing, stroke, fill, and alignment rules?"
+        - "When are icons used versus text labels?"
+        - "Which icons require labels or accessible names?"
+        - "How are status, action, navigation, and decorative icons distinguished?"
+        - "How are custom icons created, reviewed, named, and maintained?"
+    - id: "motion"
+      title: "Motion"
+      intent: "Define motion purpose, durations, easing, choreography, feedback role, state transitions, interruption rules, and accessibility accommodations."
+      required: true
+      outputGuidance:
+        - "Define motion as functional feedback, orientation, continuity, or emphasis, not decoration alone."
+        - "Specify duration and easing ranges by motion purpose."
+        - "State reduced-motion and performance fallback behavior."
+      qualityChecks:
+        - "Motion clarifies state or orientation rather than distracting."
+        - "Motion does not hide delays, errors, or uncertainty."
+        - "Reduced-motion accommodations are explicit."
+      questions:
+        - "What role does motion play in the product?"
+        - "What are the motion principles?"
+        - "What animation duration and easing ranges are used for different motion types?"
+        - "How does motion communicate feedback, continuity, progress, or hierarchy?"
+        - "When is motion disabled or reduced for accessibility, performance, or user preference?"
+        - "What motion patterns are prohibited?"
+    - id: "component-principles"
+      title: "Component Principles"
+      intent: "Define what makes a good component, how components compose, how variants are governed, and how states are communicated."
+      required: true
+      outputGuidance:
+        - "Define component principles as rules for reuse, composition, variants, state, accessibility, and content."
+        - "Explain how to decide between extending an existing component and creating a new component."
+        - "Define what component drift looks like."
+      qualityChecks:
+        - "Component principles prevent unnecessary variants and one-off components."
+        - "Composability does not hide inconsistent behavior."
+        - "State communication is explicit across component classes."
+      questions:
+        - "What makes a good component in this design system?"
+        - "How are component variants managed?"
+        - "What is the composability model for components?"
+        - "How is component state visually and semantically communicated?"
+        - "When should an existing component be extended versus a new component created?"
+        - "What counts as component drift?"
+    - id: "component-inventory"
+      title: "Component Inventory"
+      intent: "Define the reusable component set, including categories, purpose, variants, states, usage rules, and ownership."
+      required: true
+      outputGuidance:
+        - "List only components supported by UI Specification, Product Scope, journeys, or explicit assumptions."
+        - "Classify components by category and maturity."
+        - "Include usage and do-not-use rules for each core component."
+      qualityChecks:
+        - "Each component has a clear product need."
+        - "Variants and states are documented before implementation."
+        - "Experimental or post-MVP components are not treated as stable core components."
+      questions:
+        - "What components exist in the system?"
+        - "Which components are core, supporting, feedback, navigation, input, display, overlay, system, experimental, post-MVP, or deprecated?"
+        - "What is the purpose of each component?"
+        - "Where is each component used?"
+        - "What variants and states does each component require?"
+        - "When should each component not be used?"
+        - "Who owns or maintains each component definition?"
+    - id: "component-states"
+      title: "Component States"
+      intent: "Define visual, content, interaction, accessibility, and recovery behavior for component states across the system."
+      required: true
+      outputGuidance:
+        - "Define state behavior globally before component-specific exceptions."
+        - "Include default, hover, focus, active, pressed, disabled, loading, error, success, warning, selected, empty, pending, low-confidence, permission-restricted, and offline states where relevant."
+        - "State when component states must be persistent, transient, announced, or reversible."
+      qualityChecks:
+        - "State meanings are consistent across components."
+        - "Disabled, loading, permission, and error states are not visually ambiguous."
+        - "Critical states include accessible meaning and recovery path."
+      questions:
+        - "What global component states exist?"
+        - "How is each state visually communicated?"
+        - "How is each state communicated through content and accessibility semantics?"
+        - "What interaction behavior changes in each state?"
+        - "Which states require recovery, next action, or explanation?"
+        - "What state patterns are prohibited?"
+    - id: "accessibility-rules"
+      title: "Accessibility Rules"
+      intent: "Define targeted accessibility standards, contrast, focus, keyboard, screen reader, touch target, reduced motion, and non-color meaning requirements."
+      required: true
+      outputGuidance:
+        - "State target accessibility standard without claiming compliance before testing."
+        - "Define component-level accessibility rules that can feed Design System implementation."
+        - "Include non-color meaning, focus, labels, motion, touch, and state announcements."
+      qualityChecks:
+        - "Accessibility rules are specific enough to guide implementation and acceptance criteria."
+        - "Claims are testable and not overstated."
+        - "Critical actions and states remain perceivable and operable."
+      questions:
+        - "What accessibility standard is targeted, if any?"
+        - "What are the minimum contrast ratios or contrast targets?"
+        - "What are the keyboard navigation and focus visibility requirements?"
+        - "What are the screen reader support and accessible-name requirements?"
+        - "What are the touch target and pointer interaction requirements?"
+        - "How are motion and animation accommodations handled?"
+        - "What accessibility requirements must become acceptance criteria?"
+    - id: "theming-and-platform-adaptation"
+      title: "Theming and Platform Adaptation"
+      intent: "Define what changes across themes, platforms, device classes, density modes, brand contexts, and user preferences."
+      required: true
+      outputGuidance:
+        - "Separate theming from brand drift."
+        - "Define which tokens and components adapt across light/dark mode, platform, viewport, density, reduced motion, and accessibility settings."
+        - "State what must remain invariant across adaptations."
+      qualityChecks:
+        - "Theme changes preserve semantic meaning and accessibility."
+        - "Platform adaptation does not fragment the product experience."
+        - "Unsupported modes or adaptations are explicit."
+      questions:
+        - "What themes or modes are supported: light, dark, high contrast, density modes, brand modes, or platform modes?"
+        - "What changes across themes and platforms?"
+        - "What must remain invariant across adaptations?"
+        - "How do tokens adapt across modes?"
+        - "What platform conventions should be respected?"
+        - "What themes, platforms, or adaptations are deferred or unsupported?"
+    - id: "design-anti-patterns"
+      title: "Design Anti-Patterns"
+      intent: "Enumerate visual and system patterns explicitly avoided because they harm consistency, accessibility, usability, trust, or product coherence."
+      required: true
+      outputGuidance:
+        - "List anti-patterns as recognizable design system failures."
+        - "Tie each anti-pattern to the principle, accessibility rule, UX risk, UI risk, or product boundary it violates."
+        - "Include component drift, token misuse, inaccessible contrast, ornamental motion, and inconsistent state treatment where relevant."
+      qualityChecks:
+        - "Anti-patterns are specific enough to identify during review."
+        - "The section does not reject visual trends for taste alone."
+        - "Each anti-pattern includes why it is harmful in this product context."
+      questions:
+        - "What visual patterns are explicitly avoided?"
+        - "What common design trends are rejected and why?"
+        - "What token, component, state, motion, or accessibility patterns are prohibited?"
+        - "What patterns create accessibility or usability problems?"
+        - "What patterns create visual drift or undermine trust?"
+        - "What early signals show that a design anti-pattern is entering the product?"
+    - id: "governance"
+      title: "Governance"
+      intent: "Define how design system changes, tokens, components, variants, exceptions, deprecations, reviews, and versioning are managed."
+      required: true
+      outputGuidance:
+        - "Define lightweight governance that prevents drift without blocking legitimate evolution."
+        - "State how new tokens, components, variants, and exceptions are proposed and approved."
+        - "Define deprecation, versioning, and downstream propagation rules."
+      qualityChecks:
+        - "Governance prevents uncontrolled variants and one-off visual decisions."
+        - "Exceptions require rationale, scope, and review."
+        - "Versioning and downstream impact are explicit."
+      questions:
+        - "How are new tokens proposed, reviewed, approved, deprecated, or removed?"
+        - "How are new components or variants proposed, reviewed, approved, deprecated, or removed?"
+        - "When are exceptions allowed?"
+        - "How are exceptions documented and revisited?"
+        - "How is the design system versioned?"
+        - "How are breaking changes communicated downstream?"
+        - "Which documents must be updated after design system changes?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Product and Engineering documents must inherit from the design system and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route design system outputs to the correct downstream documents."
+        - "Separate feature, acceptance, frontend, engineering design system, and implementation implications."
+        - "Preserve unresolved design system questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing design system rules silently."
+        - "Token, component, state, accessibility, theming, and governance implications are included."
+      questions:
+        - "What should Feature Specification inherit from the design system?"
+        - "What should Acceptance Criteria inherit?"
+        - "What should Frontend Architecture inherit?"
+        - "What should Engineering Design System inherit?"
+        - "What token, component, state, accessibility, theming, or governance rules must downstream work preserve?"
+        - "What unresolved design system questions must be carried forward?"

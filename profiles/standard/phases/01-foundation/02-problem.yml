@@ -1,0 +1,198 @@
+document:
+  id: "02-problem"
+  title: "The Real Problem"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 2
+  type: "problem"
+  purpose: "Define the observable pain, friction, confusion, or limitation this project exists to confront before proposing solutions."
+  centralQuestion: "What pain, friction, confusion, or limitation does this project exist to confront?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/01-foundation/02-problem.md"
+      purpose: "Store the canonical problem definition as a Markdown document."
+    artifacts:
+      - id: "foundation.problem_map"
+        format: "html"
+        path: "outcomes/html/01-foundation/problem-map.html"
+        purpose: "Provide a navigable diagnostic map of the problem, symptoms, root causes, alternatives, insufficiencies, scope, and non-problems."
+        audience: "founder"
+        includes:
+          - "problem statement"
+          - "observable symptoms"
+          - "root causes"
+          - "existing alternatives"
+          - "solution insufficiencies"
+          - "problem scope"
+          - "non-problems"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "foundation.problem_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/01-foundation/problem-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the problem definition is observable, bounded, and aligned with the founding thesis."
+        agentRole: "reviewer"
+        includes:
+          - "canonical problem definition"
+          - "founding thesis dependency"
+          - "central question"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+  feeds:
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+  inputs:
+    - id: "user-observations"
+      type: "manual_note"
+      required: false
+      description: "Observed user pains, complaints, workarounds, or recurring frustrations."
+    - id: "existing-alternatives-notes"
+      type: "manual_note"
+      required: false
+      description: "Notes about tools, processes, or behaviors people currently use to cope with the problem."
+    - id: "research-notes"
+      type: "context"
+      required: false
+      description: "Interviews, transcripts, desk research, survey notes, or other evidence that can support or challenge the problem definition."
+  completionCriteria:
+    - "The central question is answered explicitly in the Problem Statement section."
+    - "The problem is described through observable symptoms, not only abstract claims."
+    - "Root causes are clearly distinguished from symptoms."
+    - "Existing alternatives and their insufficiencies are described without straw-manning."
+    - "The problem scope is bounded enough to inform Audience, Principles, Boundaries, and Success Definition."
+    - "Adjacent non-problems are explicitly named."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid solution-first framing."
+    - "Avoid describing features as problems."
+    - "Prefer decision-useful statements."
+    - "Ground problem statements in observable symptoms."
+    - "Separate symptoms, root causes, assumptions, and evidence."
+    - "Do not exaggerate the problem to justify the project."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Prefer concrete examples over abstract descriptions."
+    - "Do not invent evidence, user quotes, market facts, or prevalence claims."
+    - "Label uncertain claims as assumptions or hypotheses."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with the Founding Thesis."
+    - "Verify that root causes are distinguished from symptoms."
+    - "Flag content that belongs better in Audience, Product, Validation, or Engineering."
+  sections:
+    - id: "problem-statement"
+      title: "Problem Statement"
+      intent: "Define the core problem in concrete, observable terms."
+      required: true
+      outputGuidance:
+        - "State the problem before naming any solution."
+        - "Describe the problem in concrete, observable terms."
+        - "Clarify who experiences the problem and under what conditions."
+      qualityChecks:
+        - "The problem is not phrased as the absence of the proposed product."
+        - "The statement is specific enough to guide validation."
+      questions:
+        - "What problem is being solved?"
+        - "How does this problem appear in real life?"
+        - "Who suffers from this problem?"
+        - "What current solutions are insufficient?"
+        - "What happens if this problem is not solved?"
+        - "What part of the problem is within initial scope?"
+    - id: "symptoms"
+      title: "Symptoms"
+      intent: "List the observable signs that the problem exists."
+      required: true
+      outputGuidance:
+        - "List observable signs before interpreting their causes."
+        - "Include concrete examples of what people do, say, avoid, repeat, or struggle to complete."
+      qualityChecks:
+        - "Symptoms are observable rather than speculative."
+        - "The section distinguishes directly observed symptoms from inferred symptoms."
+      questions:
+        - "What observable signs indicate the problem exists?"
+        - "What do people say when they experience the problem?"
+        - "Which symptoms have been directly observed?"
+        - "Which symptoms are inferred but not yet validated?"
+    - id: "root-causes"
+      title: "Root Causes"
+      intent: "Identify the systemic reasons the problem persists."
+      required: true
+      outputGuidance:
+        - "Explain why the symptoms persist."
+        - "Separate systemic causes from individual user behavior."
+        - "Label uncertain causal explanations as hypotheses."
+      qualityChecks:
+        - "Root causes are not asserted as facts unless supported by evidence."
+        - "Each root cause explains why symptoms persist."
+        - "The section does not confuse symptoms with causes."
+      questions:
+        - "Why does the problem exist in the first place?"
+        - "What systemic conditions sustain the problem?"
+        - "Which root causes are evidenced, assumed, or still unknown?"
+    - id: "existing-alternatives"
+      title: "Existing Alternatives"
+      intent: "Survey what people currently do to cope with the problem."
+      required: true
+      outputGuidance:
+        - "Describe alternatives fairly before critiquing them."
+        - "Include tools, processes, habits, manual workarounds, and non-consumption where relevant."
+      qualityChecks:
+        - "Alternatives are described without caricature."
+        - "The section explains why people use them despite their limitations."
+      questions:
+        - "What do people currently do to cope with the problem?"
+        - "What tools or processes are in use today?"
+        - "Why do people continue using these alternatives?"
+        - "Which alternatives are good enough for some users?"
+    - id: "why-current-solutions-are-insufficient"
+      title: "Why Current Solutions Are Insufficient"
+      intent: "Articulate the structural gaps left by current approaches."
+      required: true
+      outputGuidance:
+        - "Explain insufficiencies as structural gaps or trade-offs, not as generic criticism."
+        - "Acknowledge what current solutions solve well before naming their limits."
+      qualityChecks:
+        - "The critique is fair and specific."
+        - "The section identifies for whom current solutions remain acceptable."
+      questions:
+        - "What do current solutions solve well?"
+        - "Where do they fail structurally?"
+        - "What trade-offs do current solutions force?"
+        - "For whom are current solutions still good enough?"
+    - id: "scope-of-the-problem"
+      title: "Scope of the Problem"
+      intent: "Bound the affected context, severity, frequency, and evidence level of the problem."
+      required: true
+      outputGuidance:
+        - "Bound the problem without inventing market size or prevalence."
+        - "Separate known scale, estimated scale, and unknown scale."
+      qualityChecks:
+        - "The scope is specific enough to inform audience and validation."
+        - "The section does not imply false precision."
+      questions:
+        - "Who is clearly affected by this problem?"
+        - "How severe is the pain for the most affected?"
+        - "How frequently does the problem occur?"
+        - "What is known, estimated, or still unknown about the scale of the problem?"
+        - "What evidence level supports the current scope?"
+    - id: "non-problems"
+      title: "Non-Problems"
+      intent: "Identify adjacent problems that the project does not target."
+      required: true
+      outputGuidance:
+        - "Name adjacent problems explicitly."
+        - "Explain why they are excluded from the current problem definition."
+      qualityChecks:
+        - "The exclusions protect focus without denying that adjacent problems may be real."
+        - "The section does not prematurely block future expansion that could be validated later."
+      questions:
+        - "What problems are adjacent but not the target?"
+        - "What should this project not claim to solve?"
+        - "Which exclusions should be expanded later in the Boundaries document?"

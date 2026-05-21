@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HTML Artifact Plan Snapshots > snapshot Standard HTML artifact plan summary 1`] = `
+{
+  "blockedCount": 0,
+  "blockerSummary": [],
+  "declaredCount": 2,
+  "missingSourceCount": 0,
+  "plannedPaths": [
+    "logos/views/thesis.html",
+    "logos/views/thesis-dashboard.html",
+  ],
+  "readyCount": 2,
+  "requiresReviewCount": 0,
+  "skippedCount": 0,
+  "staleCount": 0,
+  "unknownCount": 0,
+  "unsafePathCount": 0,
+}
+`;

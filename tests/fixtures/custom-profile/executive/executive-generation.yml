@@ -1,0 +1,26 @@
+version: "1.0.0-custom"
+readinessGate:
+  requiredStatus: "current"
+  allowDraftGeneration: false
+  allowExportWhenDraft: false
+  minimumCoverage:
+    foundation:
+      required: true
+      requiredDocuments:
+        - "custom-doc"
+exports:
+  targets:
+    markdown:
+      enabled: true
+    html:
+      enabled: true
+    githubIssues:
+      enabled: true
+    agentPack:
+      enabled: true
+    linear:
+      enabled: false
+      planned: true
+    notion:
+      enabled: false
+      planned: true

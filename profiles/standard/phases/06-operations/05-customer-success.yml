@@ -1,0 +1,777 @@
+document:
+  id: "05-customer-success"
+  title: "Customer Success"
+  phase: "06-operations"
+  status: "not_started"
+  order: 5
+  type: "customer_success"
+  purpose: "Define how the project proactively helps customers reach meaningful value, stay healthy, retain, expand when appropriate, provide feedback, and avoid preventable churn without confusing customer success with reactive support."
+  centralQuestion: "How are customers proactively guided from onboarding to activation, continued value, retention, expansion, feedback, satisfaction, and churn prevention?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/06-operations/05-customer-success.md"
+      purpose: "Store the canonical customer success model as a Markdown document."
+    artifacts:
+      - id: "operations.customer_success_playbook"
+        format: "html"
+        path: "outcomes/html/06-operations/customer-success-playbook.html"
+        purpose: "Provide a founder-facing customer success playbook covering onboarding, activation, customer health, retention, expansion, satisfaction, churn prevention, feedback loops, metrics, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "customer success objective"
+          - "customer success principles"
+          - "customer success scope"
+          - "customer lifecycle"
+          - "customer segments and cohorts"
+          - "onboarding model"
+          - "activation milestones"
+          - "onboarding follow-up"
+          - "health signals"
+          - "health scoring"
+          - "at-risk signals"
+          - "retention actions"
+          - "expansion opportunities"
+          - "satisfaction measurement"
+          - "feedback loops"
+          - "churn prevention"
+          - "churn analysis"
+          - "customer success cadences"
+          - "customer success metrics"
+          - "customer success risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.customer_success_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/customer-success-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether customer success is proactive, lifecycle-aware, activation-aware, retention-aware, expansion-aware, measurable, owner-aware, and distinct from reactive customer support."
+        agentRole: "reviewer"
+        includes:
+          - "canonical customer success model"
+          - "operations brief dependency"
+          - "operating model dependency"
+          - "team responsibilities dependency"
+          - "customer support dependency"
+          - "product dependency"
+          - "growth metrics dependency"
+          - "pricing dependency"
+          - "customer success formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "03-product/03-user-journeys"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/11-observability"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/05-customer-segments"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/08-conversion-funnel"
+    - "05-go-to-market/09-sales-strategy"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/12-growth-metrics"
+    - "05-go-to-market/13-go-to-market-risks"
+    - "06-operations/01-operations-brief"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-team-and-responsibilities"
+    - "06-operations/04-customer-support"
+  feeds:
+    - "06-operations/06-maintenance-plan"
+    - "06-operations/07-release-management"
+    - "06-operations/08-incident-response"
+    - "06-operations/09-data-and-privacy-operations"
+    - "06-operations/10-financial-operations"
+    - "06-operations/11-risk-management"
+  inputs:
+    - id: "operations-brief"
+      type: "context"
+      required: false
+      description: "Operations objective, support expectations, service expectations, operational success criteria, cost/capacity constraints, operational risks, and downstream handoffs."
+    - id: "operating-model"
+      type: "context"
+      required: false
+      description: "Operating scope, ownership model, cadences, workflows, manual operations, automated operations, metrics, constraints, escalation paths, and operating risks."
+    - id: "team-and-responsibilities"
+      type: "context"
+      required: false
+      description: "Customer success owner, backup owner, support owner, product owner, GTM owner, decision authority, handoff rules, responsibility gaps, and future hiring needs."
+    - id: "customer-support"
+      type: "context"
+      required: false
+      description: "Support scope, ticket categories, support feedback loop, support metrics, known issues, support risks, and support-to-customer-success handoff rules."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Personas, user journeys, value proposition, product scope, activation moments, supported capabilities, deferred capabilities, acceptance criteria, and product limitations."
+    - id: "gtm-context"
+      type: "context"
+      required: false
+      description: "Customer segments, launch cohorts, conversion funnel, sales strategy, pricing and packaging, growth metrics, GTM risks, retention assumptions, expansion assumptions, and customer promises."
+    - id: "engineering-analytics-context"
+      type: "context"
+      required: false
+      description: "Observability, event tracking, product telemetry, privacy constraints, technical risks, customer health signal availability, and data quality limitations."
+    - id: "customer-success-notes"
+      type: "manual_note"
+      required: false
+      description: "Known onboarding ideas, activation milestones, health signals, retention actions, expansion ideas, satisfaction survey ideas, churn concerns, feedback loops, and unresolved customer success questions."
+  completionCriteria:
+    - "The central question is answered through a proactive customer success model covering lifecycle, onboarding, activation, health, retention, expansion, satisfaction, feedback, churn prevention, metrics, risks, and handoff."
+    - "Customer success objective defines what customer success protects: value realization, activation, retained value, customer trust, product learning, expansion quality, churn prevention, and sustainable growth."
+    - "Customer success principles define how proactive outreach, education, health monitoring, retention work, expansion, and feedback loops should behave without becoming spammy, manipulative, overpromising, or support-overloading."
+    - "Customer success scope distinguishes proactive success from reactive support, sales, product management, account management, financial operations, and incident response."
+    - "Customer lifecycle defines stages from acquisition or signup through onboarding, activation, habit formation, retained value, expansion, advocacy/referral, churn risk, churn, and win-back where relevant."
+    - "Customer segments and cohorts define which customers receive proactive success attention, which are self-serve only, which are high-touch, which are at risk, which are expansion candidates, and which are excluded or unsupported."
+    - "Onboarding model defines path, owner, trigger, customer action, system action, educational asset, success signal, stuck signal, support fallback, and privacy/data constraints."
+    - "Activation milestones define meaningful value milestones, entry criteria, completion event, evidence source, target timeframe, owner, stuck signal, intervention, and false-activation exclusion."
+    - "Onboarding follow-up defines post-signup/customer follow-up, trigger, cadence, channel, message, personalization, CTA, owner, stop condition, escalation, and privacy/opt-out rules."
+    - "Health signals define usage, value, engagement, support, payment, satisfaction, feedback, product outcome, and risk signals, with source, owner, cadence, threshold, and caveats."
+    - "Health scoring defines whether a score is used, how it is calculated, what inputs are included/excluded, confidence level, threshold, review cadence, owner, and risk of false positives."
+    - "At-risk signals define churn/abandonment/low-value indicators, early signal, likely cause, priority, response speed, intervention, owner, and escalation path."
+    - "Retention actions define proactive actions by risk type, customer segment, lifecycle stage, channel, owner, message, success signal, stop condition, and downstream feedback."
+    - "Expansion opportunities define ethical expansion triggers, qualification signals, customer benefit, plan/feature/usage upgrade path, sales/pricing handoff, support impact, and risks."
+    - "Satisfaction measurement defines CSAT/NPS/CES/interview/qualitative methods where useful, cadence, sample, trigger, question set, owner, response handling, privacy constraints, and decision use."
+    - "Feedback loops define how customer success captures, categorizes, routes, prioritizes, and follows up on product feedback, onboarding friction, support patterns, pricing friction, churn reasons, and customer language."
+    - "Churn prevention defines systematic actions before churn, including health monitoring, outreach, education, issue resolution, value reinforcement, expectation correction, and escalation."
+    - "Churn analysis defines how churn is identified, categorized, measured, reviewed, learned from, and routed to product, pricing, support, GTM, risk, or operations."
+    - "Customer success cadences define review rhythms for onboarding, activation, at-risk customers, health scoring, feedback, satisfaction, retention, expansion, churn, and leadership/operations review."
+    - "Customer success metrics define activation, onboarding completion, time-to-value, health, retention, churn, expansion, satisfaction, feedback, intervention success, support handoff, and risk metrics."
+    - "Customer success risks identify low activation, false health signals, spammy outreach, poor retention action, unethical expansion, ignored churn signals, insufficient data, privacy risk, ownership gaps, and support overload."
+    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid customer-success theater: lifecycle stages and health scores without signals, thresholds, owners, cadences, interventions, metrics, risks, and handoffs."
+    - "Avoid confusing customer success with reactive support; customer success is proactive value realization, while support handles reactive issues."
+    - "Avoid treating activity as value; health and activation must reflect meaningful customer outcomes, not only logins, page views, or emails opened."
+    - "Avoid health scoring before enough data exists; mark health score as provisional or deferred when instrumentation is insufficient."
+    - "Avoid proactive outreach that becomes spammy, manipulative, privacy-invasive, or inconsistent with customer consent and channel expectations."
+    - "Avoid expansion motions that push upgrades without demonstrated customer benefit, fit, and pricing clarity."
+    - "Avoid satisfaction surveys without clear purpose, cadence, response handling, and decision use."
+    - "Avoid churn analysis that blames customers instead of identifying product, onboarding, pricing, support, expectation, or segment-fit causes."
+    - "Avoid collecting unnecessary personal, sensitive, behavioral, or telemetry data for success tracking."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent activation rates, churn rates, health scores, satisfaction scores, expansion rates, customer capacity, survey benchmarks, or instrumentation readiness."
+    - "Customer success must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate lifecycle stage, segment, cohort, milestone, signal, score, threshold, intervention, owner, cadence, metric, risk, and handoff."
+    - "Tie customer success rules to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Product Scope, User Journeys, Value Proposition, Conversion Funnel, Pricing, Growth Metrics, GTM Risks, Technical Risks, or Decision Record where possible."
+    - "Classify customer success items as current, required, deferred, self-serve, high-touch, automated, manual, review-needed, launch-critical, post-launch, privacy-sensitive, support-handoff, or sales-handoff where useful."
+    - "State whether interventions are automated, manual, self-serve, support-assisted, sales-assisted, or product-led."
+    - "Route detailed support procedures, release fixes, data/privacy procedures, financial procedures, and risk ownership downstream."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Foundation, Product, Acceptance Criteria, NFRs, Security/Privacy, Observability, Technical Risks, Customer Segments, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag activation milestones that do not represent meaningful value."
+    - "Flag health signals or scores without data source, threshold, owner, cadence, confidence level, and caveats."
+    - "Flag at-risk signals without intervention, response speed, owner, and escalation path."
+    - "Flag retention actions without target segment, trigger, message, success signal, and stop condition."
+    - "Flag expansion opportunities without customer benefit, qualification, pricing/sales handoff, and ethical boundary."
+    - "Flag satisfaction measurement without method, cadence, sample, response handling, and decision use."
+    - "Flag churn prevention or churn analysis without cause taxonomy, owner, review cadence, and downstream feedback loop."
+    - "Flag customer success metrics without formula/source, owner, cadence, threshold, and decision implication."
+    - "Verify that downstream Operations documents receive concrete customer success handoff inputs."
+    - "Flag content that belongs better in Customer Support, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+  specializedFormats:
+    lifecycleStageFormat:
+      description: "Recommended format for customer lifecycle stages."
+      fields:
+        - stage
+        - purpose
+        - entryTrigger
+        - exitTrigger
+        - customerGoal
+        - successSignal
+        - failureSignal
+        - owner
+        - intervention
+        - downstreamDocument
+        - status
+    onboardingStepFormat:
+      description: "Recommended format for onboarding steps."
+      fields:
+        - step
+        - purpose
+        - trigger
+        - customerAction
+        - systemAction
+        - educationalAsset
+        - successSignal
+        - stuckSignal
+        - supportFallback
+        - owner
+        - status
+    activationMilestoneFormat:
+      description: "Recommended format for activation milestones."
+      fields:
+        - milestone
+        - valueMeaning
+        - entryCriteria
+        - completionEvent
+        - evidenceSource
+        - targetTimeframe
+        - falseActivationExclusion
+        - stuckSignal
+        - intervention
+        - owner
+        - status
+    healthSignalFormat:
+      description: "Recommended format for customer health signals."
+      fields:
+        - signal
+        - signalType
+        - valueMeaning
+        - dataSource
+        - threshold
+        - cadence
+        - owner
+        - confidenceLevel
+        - caveat
+        - actionTriggered
+        - status
+    healthScoreFormat:
+      description: "Recommended format for customer health scoring."
+      fields:
+        - score
+        - purpose
+        - inputsIncluded
+        - inputsExcluded
+        - calculationMethod
+        - thresholdGreen
+        - thresholdYellow
+        - thresholdRed
+        - reviewCadence
+        - owner
+        - falsePositiveRisk
+        - status
+    atRiskSignalFormat:
+      description: "Recommended format for at-risk customer signals."
+      fields:
+        - signal
+        - likelyCause
+        - affectedLifecycleStage
+        - priority
+        - responseSpeed
+        - intervention
+        - owner
+        - escalationPath
+        - customerCommunication
+        - downstreamDocument
+        - status
+    retentionActionFormat:
+      description: "Recommended format for retention actions."
+      fields:
+        - action
+        - targetSegmentOrCohort
+        - trigger
+        - channel
+        - message
+        - owner
+        - successSignal
+        - stopCondition
+        - escalationPath
+        - downstreamFeedback
+        - status
+    expansionOpportunityFormat:
+      description: "Recommended format for expansion opportunities."
+      fields:
+        - opportunity
+        - customerBenefit
+        - qualificationSignal
+        - expansionType
+        - planOrFeatureImplication
+        - pricingOrSalesHandoff
+        - supportImpact
+        - ethicalBoundary
+        - owner
+        - status
+    satisfactionMeasurementFormat:
+      description: "Recommended format for satisfaction measurement."
+      fields:
+        - method
+        - purpose
+        - trigger
+        - cadence
+        - sample
+        - questions
+        - responseHandling
+        - owner
+        - privacyConstraint
+        - decisionUse
+        - status
+    feedbackLoopFormat:
+      description: "Recommended format for customer success feedback loops."
+      fields:
+        - feedbackType
+        - source
+        - collectionMethod
+        - categorization
+        - routingTarget
+        - priorityRule
+        - owner
+        - reviewCadence
+        - customerFollowUp
+        - downstreamDocument
+        - status
+    churnReasonFormat:
+      description: "Recommended format for churn reasons and churn analysis."
+      fields:
+        - churnReason
+        - category
+        - evidenceSource
+        - affectedSegmentOrCohort
+        - preventable
+        - rootCauseHypothesis
+        - followUpAction
+        - owner
+        - downstreamDocument
+        - status
+    customerSuccessCadenceFormat:
+      description: "Recommended format for customer success cadences."
+      fields:
+        - cadence
+        - frequency
+        - purpose
+        - participants
+        - inputs
+        - outputs
+        - owner
+        - escalationCondition
+        - downstreamDocument
+        - status
+    customerSuccessMetricFormat:
+      description: "Recommended format for customer success metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - formulaOrMeasurement
+        - source
+        - threshold
+        - cadence
+        - segmentOrCohortBreakdown
+        - owner
+        - decisionImplication
+        - downstreamDocument
+        - status
+    customerSuccessRiskFormat:
+      description: "Recommended format for customer success risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - affectedArea
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - contingency
+        - owner
+        - downstreamDocument
+        - status
+    customerSuccessHandoffFormat:
+      description: "Recommended format for downstream customer success handoffs."
+      fields:
+        - handoffTarget
+        - contextToPreserve
+        - requiredAction
+        - owner
+        - timing
+        - unresolvedQuestion
+        - riskOrConstraint
+        - status
+  sections:
+    - id: "customer-success-objective"
+      title: "Customer Success Objective"
+      intent: "Define the goal of customer success and how it differs from customer support, sales, product, and account management."
+      required: true
+      outputGuidance:
+        - "Open with the customer success purpose in one concise paragraph."
+        - "Define customer success as proactive value realization and retention support."
+        - "State what customer success is not responsible for."
+      qualityChecks:
+        - "Objective distinguishes customer success from reactive support."
+        - "Objective ties to activation, retention, expansion quality, and customer trust."
+        - "Boundary with sales/product/support is explicit."
+      questions:
+        - "What is the goal of the customer success function?"
+        - "How does customer success differ from customer support?"
+        - "How does it differ from sales, product management, and account management?"
+        - "What customer outcomes should customer success protect?"
+    - id: "customer-success-principles"
+      title: "Customer Success Principles"
+      intent: "Define behavioral principles for proactive customer guidance, retention, expansion, feedback, and churn prevention."
+      required: true
+      outputGuidance:
+        - "Define principles for helpfulness, consent, timing, relevance, honesty, privacy, and customer benefit."
+        - "Explicitly prohibit manipulative retention or expansion behavior."
+        - "Tie principles to Foundation and customer trust."
+      qualityChecks:
+        - "Principles are actionable."
+        - "Customer benefit is prioritized over extraction."
+        - "Privacy and consent are included."
+      questions:
+        - "What principles guide proactive customer success actions?"
+        - "How should customer success avoid being spammy or manipulative?"
+        - "How should retention and expansion stay customer-benefit oriented?"
+        - "How are privacy, consent, and trust preserved?"
+    - id: "customer-success-scope"
+      title: "Customer Success Scope"
+      intent: "Define what customer success owns, shares, excludes, escalates, or routes to support, sales, product, finance, data/privacy, or risk management."
+      required: true
+      outputGuidance:
+        - "Separate in-scope, out-of-scope, shared, escalation-required, and downstream-owned areas."
+        - "Clarify relationship with Customer Support."
+        - "State self-serve-only and high-touch boundaries."
+      qualityChecks:
+        - "Scope prevents responsibility drift."
+        - "Shared areas have handoff rules."
+        - "Customer success does not absorb all customer-facing work."
+      questions:
+        - "What is in scope for customer success?"
+        - "What is out of scope?"
+        - "What is shared with support, product, sales, finance, or operations?"
+        - "What must be escalated or routed downstream?"
+    - id: "customer-lifecycle"
+      title: "Customer Lifecycle"
+      intent: "Define the customer lifecycle stages and the success objective, signal, failure mode, and intervention for each stage."
+      required: true
+      outputGuidance:
+        - "Use lifecycle stage records."
+        - "Include onboarding, activation, retained value, expansion, advocacy/referral, at-risk, churn, and win-back where relevant."
+        - "Mark stages as current, deferred, or not applicable."
+      qualityChecks:
+        - "Lifecycle stages are tied to customer value."
+        - "Each stage has success and failure signals."
+        - "Interventions are appropriate to stage."
+      questions:
+        - "What stages define the customer lifecycle?"
+        - "What is the customer's goal at each stage?"
+        - "What signals success or failure at each stage?"
+        - "What customer success intervention applies?"
+    - id: "customer-segments-and-cohorts"
+      title: "Customer Segments and Cohorts"
+      intent: "Define which customer groups receive proactive success attention and how customer success differs by segment, cohort, plan, lifecycle stage, or risk level."
+      required: true
+      outputGuidance:
+        - "Tie customer success coverage to Customer Segments, Launch Plan, Pricing, and Growth Metrics."
+        - "Distinguish self-serve, low-touch, high-touch, at-risk, expansion, and unsupported customers."
+        - "State cohort rules and exclusions."
+      qualityChecks:
+        - "Coverage is realistic for capacity."
+        - "Segment/cohort differences are decision-useful."
+        - "Unsupported or excluded customers are not hidden."
+      questions:
+        - "Which customers receive proactive success attention?"
+        - "Which customers are self-serve only?"
+        - "Which customers are low-touch or high-touch?"
+        - "Which customers are at risk or expansion candidates?"
+        - "How do launch cohorts, pricing plans, segments, and lifecycle stages affect customer success?"
+    - id: "onboarding-model"
+      title: "Onboarding Model"
+      intent: "Define the onboarding path, steps, owner, educational assets, success signals, stuck signals, and fallback."
+      required: true
+      outputGuidance:
+        - "Use onboarding step records."
+        - "Tie onboarding to Product Journeys and Conversion Funnel."
+        - "Distinguish product-led, self-serve, manual, automated, and support-assisted onboarding."
+      qualityChecks:
+        - "Onboarding path leads to activation."
+        - "Stuck signals and support fallback are explicit."
+        - "Educational assets and owner are identified."
+      questions:
+        - "What onboarding path does a new customer follow?"
+        - "What steps must happen before activation?"
+        - "Which steps are product-led, automated, manual, self-serve, or support-assisted?"
+        - "What signals successful onboarding?"
+        - "What signals a customer is stuck?"
+        - "What fallback exists?"
+    - id: "activation-milestones"
+      title: "Activation Milestones"
+      intent: "Define what constitutes a successfully activated customer and how activation progress is tracked."
+      required: true
+      outputGuidance:
+        - "Use activation milestone records."
+        - "Define activation as meaningful value, not shallow activity."
+        - "Include false-activation exclusions."
+      qualityChecks:
+        - "Milestones represent customer value."
+        - "Tracking source and owner are explicit."
+        - "False activation is excluded."
+      questions:
+        - "What milestones define a successfully activated customer?"
+        - "What does each milestone mean in terms of customer value?"
+        - "What event or evidence proves completion?"
+        - "What target timeframe applies?"
+        - "How is progress toward activation tracked?"
+        - "What would count as false activation?"
+    - id: "onboarding-follow-up"
+      title: "Onboarding Follow-up"
+      intent: "Define post-signup follow-up procedures and signals indicating a customer is stuck in onboarding."
+      required: true
+      outputGuidance:
+        - "Define trigger, cadence, channel, message, CTA, owner, stop condition, and escalation."
+        - "Include privacy, consent, and opt-out rules where applicable."
+        - "Tie follow-up to activation milestones."
+      qualityChecks:
+        - "Follow-up is relevant and not spammy."
+        - "Stop conditions are explicit."
+        - "Follow-up has a clear customer-benefit purpose."
+      questions:
+        - "What follow-up occurs after a customer signs up?"
+        - "What channel and cadence are used?"
+        - "What message and CTA are used?"
+        - "What signals indicate a customer is stuck in onboarding?"
+        - "When does follow-up stop?"
+        - "When is escalation appropriate?"
+    - id: "health-signals"
+      title: "Health Signals"
+      intent: "Define signals of a healthy, engaged, value-realizing customer and how signals are reviewed."
+      required: true
+      outputGuidance:
+        - "Use health signal records."
+        - "Include usage, value, engagement, support, payment, satisfaction, feedback, product outcome, and risk signals where relevant."
+        - "State data availability and caveats."
+      qualityChecks:
+        - "Health signals represent value, not just activity."
+        - "Data source, threshold, cadence, owner, confidence, and caveat are included."
+        - "Signals trigger action or review."
+      questions:
+        - "What signals indicate a healthy, engaged customer?"
+        - "What data source produces each signal?"
+        - "What threshold indicates healthy or unhealthy behavior?"
+        - "How often are signals reviewed?"
+        - "What action is triggered by each signal?"
+    - id: "health-scoring"
+      title: "Health Scoring"
+      intent: "Define whether a health score is used and how it is calculated, interpreted, reviewed, and caveated."
+      required: true
+      outputGuidance:
+        - "Use health score records if scoring is useful."
+        - "Mark health scoring as deferred or provisional when data is insufficient."
+        - "Include false-positive and false-negative risks."
+      qualityChecks:
+        - "Health score is not invented without sufficient signal."
+        - "Inputs and exclusions are explicit."
+        - "Score leads to decision or action."
+      questions:
+        - "Is a customer health score useful at this stage?"
+        - "What inputs are included or excluded?"
+        - "How is the score calculated?"
+        - "What thresholds define green/yellow/red?"
+        - "How often is the score reviewed?"
+        - "What false-positive or false-negative risk exists?"
+    - id: "at-risk-user-signals"
+      title: "At-Risk Customer Signals"
+      intent: "Define signals that indicate churn, abandonment, dissatisfaction, failed activation, or low-value risk and the expected response speed."
+      required: true
+      outputGuidance:
+        - "Use at-risk signal records."
+        - "Tie risk signals to likely cause, lifecycle stage, intervention, owner, and escalation path."
+        - "Separate low-value, low-engagement, support-heavy, payment-risk, and dissatisfaction signals."
+      qualityChecks:
+        - "Risk signals are observable."
+        - "Response speed and owner are explicit."
+        - "Interventions match likely cause."
+      questions:
+        - "What signals indicate a customer is at risk of churning or failing to reach value?"
+        - "What likely cause is associated with each signal?"
+        - "How quickly are at-risk signals acted upon?"
+        - "Who acts?"
+        - "What intervention or escalation applies?"
+    - id: "retention-actions"
+      title: "Retention Actions"
+      intent: "Define proactive retention actions and escalation path for at-risk or high-value customers."
+      required: true
+      outputGuidance:
+        - "Use retention action records."
+        - "Tie actions to segment/cohort, risk signal, lifecycle stage, message, success signal, stop condition, and downstream feedback."
+        - "Avoid manipulative retention tactics."
+      qualityChecks:
+        - "Retention actions address likely causes."
+        - "Customer benefit is clear."
+        - "Success signal and stop condition are included."
+      questions:
+        - "What proactive actions are taken to retain customers?"
+        - "What trigger starts each action?"
+        - "What message and channel are used?"
+        - "What is the success signal?"
+        - "What is the escalation path for high-value or high-risk customers?"
+        - "When should retention action stop?"
+    - id: "expansion-opportunities"
+      title: "Expansion Opportunities"
+      intent: "Define how ethical expansion and upgrade opportunities are identified and handed off."
+      required: true
+      outputGuidance:
+        - "Use expansion opportunity records."
+        - "Tie expansion to customer benefit and Pricing and Packaging."
+        - "Route sales/account-management handoff where relevant."
+      qualityChecks:
+        - "Expansion is based on customer benefit and fit."
+        - "Expansion is not pushed before value is proven."
+        - "Pricing/sales/support implications are explicit."
+      questions:
+        - "How are expansion and upgrade opportunities identified?"
+        - "What customer benefit justifies expansion?"
+        - "What qualification signal is required?"
+        - "What plan, feature, or usage implication exists?"
+        - "What is the handoff process to sales, pricing, or account management?"
+        - "What ethical boundary applies?"
+    - id: "satisfaction-measurement"
+      title: "Satisfaction Measurement"
+      intent: "Define how customer satisfaction is measured, including method, cadence, trigger, sample, response handling, privacy, and decision use."
+      required: true
+      outputGuidance:
+        - "Use satisfaction measurement records."
+        - "Choose methods only when useful: CSAT, NPS, CES, interviews, qualitative check-ins, churn interviews, or product feedback prompts."
+        - "State what is deferred if measurement would be premature."
+      qualityChecks:
+        - "Measurement has purpose and action path."
+        - "Survey fatigue is considered."
+        - "Response handling and privacy are explicit."
+      questions:
+        - "How is customer satisfaction measured?"
+        - "Is CSAT, NPS, CES, interview, qualitative check-in, churn interview, or another method useful?"
+        - "What cadence and trigger apply?"
+        - "What questions are asked?"
+        - "How are responses handled?"
+        - "What decision does satisfaction measurement support?"
+    - id: "feedback-loops"
+      title: "Feedback Loops"
+      intent: "Define how customer feedback is collected, categorized, routed, prioritized, acted on, and followed up."
+      required: true
+      outputGuidance:
+        - "Use feedback loop records."
+        - "Include product feedback, onboarding friction, support patterns, pricing friction, churn reasons, customer language, and success stories where relevant."
+        - "State customer follow-up rules."
+      qualityChecks:
+        - "Feedback loops have owner, cadence, priority rule, routing target, and customer follow-up rule."
+        - "Feedback influences product or operations through explicit channels."
+        - "Customer feedback is not treated as a promise to build."
+      questions:
+        - "How is customer feedback collected, categorized, and routed?"
+        - "How does feedback influence product roadmap, support, onboarding, pricing, GTM, and risk management?"
+        - "What priority rules apply?"
+        - "Who owns feedback review?"
+        - "How are customers followed up with?"
+    - id: "churn-prevention"
+      title: "Churn Prevention"
+      intent: "Define systematic churn prevention measures and how churn risk is acted on before cancellation or abandonment."
+      required: true
+      outputGuidance:
+        - "Connect churn prevention to health signals, at-risk signals, retention actions, support, pricing, and product feedback."
+        - "Include expectation correction and value reinforcement where appropriate."
+        - "Avoid hostile cancellation friction."
+      qualityChecks:
+        - "Churn prevention is proactive and customer-benefit oriented."
+        - "Prevention actions target cause, not symptoms only."
+        - "Cancellation remains customer-safe."
+      questions:
+        - "What systematic churn prevention measures are in place?"
+        - "What signals trigger churn prevention?"
+        - "What product, onboarding, pricing, support, or expectation issues can cause churn?"
+        - "How are churn risks acted on before cancellation or abandonment?"
+        - "What churn prevention tactics are explicitly prohibited?"
+    - id: "churn-analysis"
+      title: "Churn Analysis"
+      intent: "Define how churn is identified, categorized, measured, reviewed, learned from, and routed downstream."
+      required: true
+      outputGuidance:
+        - "Use churn reason records."
+        - "Separate voluntary churn, involuntary churn, failed payment, non-activation, low-value, unsupported segment, product issue, pricing issue, support issue, and expectation mismatch where relevant."
+        - "Tie analysis to Product, Pricing, Support, GTM, and Risk."
+      qualityChecks:
+        - "Churn analysis identifies root-cause hypotheses."
+        - "Churn reasons are evidence-based or labeled as assumptions."
+        - "Downstream action is explicit."
+      questions:
+        - "How is churn identified and measured?"
+        - "How are churn reasons categorized?"
+        - "What evidence source supports each churn reason?"
+        - "How is churn reviewed and learned from?"
+        - "What downstream action follows?"
+    - id: "customer-success-cadences"
+      title: "Customer Success Cadences"
+      intent: "Define review rhythms for onboarding, activation, at-risk customers, health, feedback, satisfaction, retention, expansion, churn, and operations review."
+      required: true
+      outputGuidance:
+        - "Use customer success cadence records."
+        - "Define participants, inputs, outputs, owner, and escalation condition."
+        - "Avoid cadences that create process overhead without decisions."
+      qualityChecks:
+        - "Each cadence supports a decision or action."
+        - "Inputs and outputs are explicit."
+        - "Escalation conditions are included."
+      questions:
+        - "What customer success reviews happen daily, weekly, monthly, quarterly, launch-window, or event-triggered?"
+        - "What inputs are reviewed?"
+        - "What outputs or decisions are expected?"
+        - "Who participates and who owns each cadence?"
+        - "What triggers escalation outside cadence?"
+    - id: "customer-success-metrics"
+      title: "Customer Success Metrics"
+      intent: "Define metrics that show whether customers are reaching value, staying healthy, retaining, expanding ethically, and producing useful feedback."
+      required: true
+      outputGuidance:
+        - "Use customer success metric records."
+        - "Include activation, onboarding completion, time-to-value, health, retention, churn, expansion, satisfaction, feedback, intervention success, support handoff, and risk metrics."
+        - "Tie metrics to Growth Metrics where possible."
+      qualityChecks:
+        - "Metrics are value-based and decision-useful."
+        - "Metrics have source, threshold, cadence, owner, and decision implication."
+        - "Metrics include quality, not only volume."
+      questions:
+        - "What metrics show customer success health?"
+        - "How are activation, onboarding completion, time-to-value, health, retention, churn, expansion, satisfaction, feedback, intervention success, and support handoffs measured?"
+        - "What threshold triggers action?"
+        - "Who owns reporting?"
+        - "How are metrics broken down by segment, cohort, plan, or lifecycle stage?"
+    - id: "customer-success-risks"
+      title: "Customer Success Risks"
+      intent: "Identify failure modes of the customer success function and how they are detected, mitigated, escalated, or handed off."
+      required: true
+      outputGuidance:
+        - "Use customer success risk records."
+        - "Include low activation, false health signals, spammy outreach, poor retention action, unethical expansion, ignored churn signals, insufficient data, privacy risk, ownership gaps, and support overload."
+        - "Route risks to Risk Management where needed."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Mitigation and contingency are distinct."
+        - "High-impact risks have owner and downstream handoff."
+      questions:
+        - "What could cause the customer success function to fail?"
+        - "Where could activation, health, retention, expansion, feedback, satisfaction, or churn prevention fail?"
+        - "How are customer success risks detected?"
+        - "What mitigation and contingency apply?"
+        - "What should Risk Management inherit?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Operations documents must inherit from Customer Success and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use customer success handoff records."
+        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
+        - "Preserve unresolved questions, health signals, retention actions, expansion rules, feedback loops, churn reasons, risks, and privacy constraints."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing customer success assumptions silently."
+        - "Customer Success remains proactive value-realization architecture; detailed downstream procedures remain downstream."
+      questions:
+        - "What should Maintenance Plan inherit?"
+        - "What should Release Management inherit?"
+        - "What should Incident Response inherit?"
+        - "What should Data and Privacy Operations inherit?"
+        - "What should Financial Operations inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved customer success questions must be carried forward?"

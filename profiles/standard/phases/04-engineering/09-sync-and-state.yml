@@ -1,0 +1,741 @@
+document:
+  id: "09-sync-and-state"
+  title: "Sync and State"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 9
+  type: "sync_state"
+  purpose: "Define how local state, remote state, cached state, derived state, queued mutations, event streams, hydration, synchronization, conflict resolution, recovery, observability, and testing work across clients, backend, integrations, and agents."
+  centralQuestion: "What state exists, where is its source of truth, how does it move between local and remote contexts, and how are divergence, conflicts, retries, offline behavior, and recovery handled?"
+  note: "Required for mobile, offline-first, sync engines, event sourcing, complex cache, agents, multiple clients, collaboration, financial data, local-first UX, background jobs, and distributed state."
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/04-engineering/09-sync-and-state.md"
+      purpose: "Store the canonical sync and state design as a Markdown document."
+    artifacts:
+      - id: "engineering.sync_state_map"
+        format: "html"
+        path: "outcomes/html/04-engineering/sync-and-state-map.html"
+        purpose: "Provide a navigable sync/state map covering state taxonomy, source of truth, local state, remote state, cache, derived state, hydration, offline behavior, mutation queue, sync protocol, cursors, conflicts, idempotency, recovery, observability, tests, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "state strategy"
+          - "state taxonomy"
+          - "source of truth"
+          - "local state"
+          - "remote state"
+          - "cache strategy"
+          - "derived state"
+          - "hydration"
+          - "offline behavior"
+          - "mutation queue"
+          - "sync protocol"
+          - "cursors and checkpoints"
+          - "conflict detection"
+          - "conflict resolution"
+          - "idempotency"
+          - "ordering and causality"
+          - "background sync"
+          - "multi-client behavior"
+          - "state recovery"
+          - "sync observability"
+          - "sync testing"
+          - "sync risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.sync_state_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/sync-and-state-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether sync/state design is coherent, source-of-truth safe, offline-safe, conflict-aware, idempotent, observable, testable, and aligned with Data Model, API Contracts, Security, Frontend, and Operations."
+        agentRole: "reviewer"
+        includes:
+          - "canonical sync and state design"
+          - "system architecture dependency"
+          - "domain model dependency"
+          - "data model dependency"
+          - "API contracts dependency"
+          - "security and privacy dependency"
+          - "integration architecture dependency"
+          - "sync/state formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/12-product-stack"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+    - "04-engineering/07-integration-architecture"
+    - "04-engineering/08-security-and-privacy"
+  feeds:
+    - "04-engineering/10-frontend-architecture"
+    - "04-engineering/11-infrastructure-architecture"
+    - "04-engineering/12-test-strategy"
+    - "04-engineering/13-observability-plan"
+    - "04-engineering/14-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "System components, layers, dependency rules, runtime architecture, deployment topology, data flow, failure modes, security/privacy hooks, and observability hooks that constrain state and sync."
+    - id: "domain-model"
+      type: "context"
+      required: false
+      description: "Entities, aggregates, commands, events, invariants, state machines, bounded contexts, ordering rules, and domain risks that define valid state transitions."
+    - id: "data-model"
+      type: "context"
+      required: false
+      description: "Local/remote data structures, source-of-truth rules, event envelopes, sync rules, migrations, retention, sensitivity, backup/restore, and data lineage requirements."
+    - id: "api-contracts"
+      type: "context"
+      required: false
+      description: "Endpoint contracts, request/response schemas, error model, idempotency, pagination, realtime, webhooks, async contracts, rate limits, and contract testing rules."
+    - id: "security-and-privacy"
+      type: "context"
+      required: false
+      description: "Data classifications, auth/authz rules, local storage restrictions, encryption, telemetry privacy, secrets, export/deletion, and access boundaries."
+    - id: "integration-architecture"
+      type: "context"
+      required: false
+      description: "External service sync behavior, provider webhooks, event streams, rate limits, retries, idempotency, degraded modes, and integration observability."
+    - id: "sync-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate sync model, local state needs, cache rules, mutation queues, cursors, offline behavior, conflict cases, state recovery needs, and unresolved sync/state questions."
+  completionCriteria:
+    - "The central question is answered through explicit state taxonomy, source-of-truth rules, local/remote/cache/derived state definitions, sync protocol, conflict handling, idempotency, offline behavior, recovery, observability, testing, and risks."
+    - "State taxonomy distinguishes local durable state, local ephemeral UI state, remote canonical state, replicated state, cached state, derived state, queued mutations, pending effects, event state, audit state, telemetry state, and external-provider state."
+    - "Source-of-truth rules define authority for each state category, mutation authority, read authority, conflict authority, fallback authority, and user-visible trust level."
+    - "Local state defines storage engine, persistence class, encryption, migration, invalidation, corruption handling, logout/reset behavior, sensitive-data restrictions, and platform constraints."
+    - "Remote state defines canonical ownership, access method, mutation path, consistency model, read/write guarantees, deletion/archive behavior, backup/restore implications, and degraded behavior."
+    - "Cache strategy defines cache type, population, invalidation, TTL, stale-while-revalidate behavior, stale data labeling, eviction, persistence, poisoning prevention, and cache bypass rules."
+    - "Derived state defines derivation source, recomputation trigger, persistence rule, invalidation rule, correctness rule, and drift detection."
+    - "Hydration defines first launch, returning launch, post-login, post-logout, after reset, after migration, partial hydration, failed hydration, and user-visible readiness states."
+    - "Offline behavior defines available capabilities, disabled capabilities, queued actions, local-only state, stale remote state, conflict risk, user messaging, and recovery when connectivity returns."
+    - "Mutation queue defines enqueue rules, ordering, deduplication, idempotency keys, retry policy, cancellation, compaction, persistence, encryption, failure states, and replay behavior."
+    - "Sync protocol defines trigger, direction, transport, batch size, cursor/checkpoint model, version model, ordering, acknowledgement, retry, backoff, rate-limit handling, and partial sync behavior."
+    - "Conflict detection and resolution define conflict types, detection mechanism, automatic merge, manual merge, precedence rules, domain invariant protection, user notification, and auditability."
+    - "Idempotency defines operation scope, key generation, key retention, replay behavior, duplicate handling, conflict behavior, and API/Data Model implications."
+    - "Ordering and causality define sequence numbers, timestamps, vector/lamport clocks, event ordering, causation/correlation IDs, out-of-order handling, and clock skew assumptions where relevant."
+    - "Background sync defines scheduling, app lifecycle behavior, retry windows, battery/network constraints, OS limitations, cancellation, prioritization, and observability."
+    - "Multi-client behavior defines concurrent sessions, device identity, session state, remote invalidation, cross-client consistency, stale writes, logout propagation, and user-visible divergence."
+    - "State recovery defines corruption recovery, failed sync recovery, rollback/roll-forward, snapshots, backups, rehydration, queue repair, data loss handling, support escalation, and user communication."
+    - "Sync observability defines logs, metrics, traces, sync health, queue depth, lag, conflicts, retries, failures, stale state, hydration failures, recovery events, privacy-safe telemetry, and alerting."
+    - "Sync testing defines unit, integration, E2E, chaos, offline, retry, conflict, idempotency, migration, corruption, multi-client, provider-failure, and contract tests."
+    - "Sync risks identify data loss, permanent divergence, stale decisions, invalid replay, duplicate side effects, cache poisoning, privacy leakage, corruption, migration failure, and operational blind spots."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid sync/state theater: naming local/remote/cache without source-of-truth, conflict, idempotency, queue, recovery, or observability rules."
+    - "Avoid assuming last-write-wins is acceptable without domain and data-loss analysis."
+    - "Avoid treating timestamps as reliable ordering unless clock skew and authority are addressed."
+    - "Avoid offline mutation support without queue semantics, replay rules, conflict handling, and user-visible pending states."
+    - "Avoid caches that can silently masquerade as fresh canonical data."
+    - "Avoid derived state that can drift without invalidation or recomputation rules."
+    - "Avoid sensitive local storage without encryption, minimization, reset, and logout behavior."
+    - "Avoid retries that can duplicate side effects or cause retry storms."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent platform background capabilities, offline guarantees, provider guarantees, clock guarantees, data consistency guarantees, or OS behavior."
+    - "Sync/state design must preserve Domain Model invariants, Data Model constraints, API Contracts, Security/Privacy rules, NFRs, Acceptance Criteria, and operational recoverability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate state category, owner, source of truth, persistence, mutation path, sync path, consistency model, privacy sensitivity, and recovery behavior."
+    - "Tie state and sync rules to Domain Model, Data Model, API Contracts, Security and Privacy, Integration Architecture, System Architecture, Product Stack, NFRs, Acceptance Criteria, or Decision Record where possible."
+    - "Classify sync/state behavior as MVP, post-MVP, deferred, unsupported, local-only, remote-only, replicated, cached, derived, event-sourced, or review-needed where useful."
+    - "State what happens under failure, partial success, retry, logout, app restart, migration, offline mode, stale data, and multi-client divergence."
+    - "Route frontend store implementation to Frontend Architecture and database schema details to Data Model."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Domain Model, Data Model, API Contracts, Security and Privacy, Integration Architecture, System Architecture, Technical Stack, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag state categories without source of truth, owner, persistence class, mutation path, sync rule, sensitivity class, or recovery behavior."
+    - "Flag offline behavior without queueing, idempotency, conflict resolution, replay rules, or user-visible pending/error states."
+    - "Flag sync protocols without cursor/checkpoint, ordering, acknowledgement, retries, partial sync, rate-limit handling, or failure recovery."
+    - "Flag conflict strategies that violate domain invariants or silently lose user data."
+    - "Flag local storage of sensitive data without minimization, encryption, logout/reset, migration, and corruption recovery rules."
+    - "Flag cache strategy that lacks invalidation, TTL, stale labeling, eviction, or poisoning prevention."
+    - "Verify that sync observability and sync testing are sufficient for release and support."
+    - "Flag content that belongs better in Data Model, API Contracts, Security and Privacy, Integration Architecture, Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or Operations."
+  specializedFormats:
+    stateCategoryFormat:
+      description: "Recommended format for state categories."
+      fields:
+        - stateCategory
+        - description
+        - owner
+        - sourceOfTruth
+        - persistenceClass
+        - storageLocation
+        - mutationAuthority
+        - readAuthority
+        - syncBehavior
+        - consistencyModel
+        - sensitivityClass
+        - userVisibleTrustLevel
+        - recoveryBehavior
+        - downstreamImplications
+        - status
+    sourceOfTruthFormat:
+      description: "Recommended format for source-of-truth rules."
+      fields:
+        - dataOrStateType
+        - authoritativeSource
+        - mutationAuthority
+        - readFallback
+        - conflictAuthority
+        - offlineAuthority
+        - staleBehavior
+        - enforcementMechanism
+        - userVisibleImplication
+        - status
+    syncFlowFormat:
+      description: "Recommended format for sync flows."
+      fields:
+        - flow
+        - direction
+        - trigger
+        - source
+        - destination
+        - transport
+        - payload
+        - cursorOrCheckpoint
+        - orderingRule
+        - acknowledgementRule
+        - retryPolicy
+        - idempotencyRule
+        - failureBehavior
+        - observabilityEvents
+        - status
+    mutationQueueFormat:
+      description: "Recommended format for queued mutations."
+      fields:
+        - mutationType
+        - sourceAction
+        - queueName
+        - orderingKey
+        - idempotencyKey
+        - payload
+        - persistence
+        - encryptionRequired
+        - retryPolicy
+        - cancellationRule
+        - compactionRule
+        - replayRule
+        - failureState
+        - userVisibleState
+    conflictFormat:
+      description: "Recommended format for sync conflicts."
+      fields:
+        - conflictType
+        - affectedData
+        - detectionMechanism
+        - automaticResolution
+        - manualResolution
+        - precedenceRule
+        - invariantProtection
+        - userNotification
+        - auditEvent
+        - testImplication
+        - status
+    cacheRuleFormat:
+      description: "Recommended format for cache rules."
+      fields:
+        - cacheName
+        - cachedData
+        - cacheType
+        - populationRule
+        - invalidationRule
+        - ttl
+        - staleWhileRevalidate
+        - evictionRule
+        - persistence
+        - staleLabeling
+        - poisoningPrevention
+        - bypassRule
+    recoveryFormat:
+      description: "Recommended format for state recovery paths."
+      fields:
+        - scenario
+        - detection
+        - affectedState
+        - automaticRecovery
+        - manualRecovery
+        - dataLossRisk
+        - userCommunication
+        - supportEscalation
+        - auditOrTelemetry
+        - releaseImpact
+    syncRiskFormat:
+      description: "Recommended format for sync and state risks."
+      fields:
+        - risk
+        - affectedStateOrFlow
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - targetDocument
+        - releaseImpact
+  sections:
+    - id: "state-strategy"
+      title: "State Strategy"
+      intent: "Define the overall state management strategy and how state is separated into local, remote, cached, derived, queued, event, external, and ephemeral categories."
+      required: true
+      outputGuidance:
+        - "Open with the overall state posture: server-first, local-first, offline-first, cache-first, event-sourced, hybrid, or intentionally minimal local state."
+        - "Explain why the strategy fits Product Stack, System Architecture, NFRs, and Acceptance Criteria."
+        - "State what state complexity is intentionally avoided."
+      qualityChecks:
+        - "Strategy is specific enough to guide implementation decisions."
+        - "Trade-offs between simplicity, offline capability, freshness, reliability, and user trust are explicit."
+        - "State categories are not collapsed into vague local/remote labels."
+      questions:
+        - "What is the overall state management strategy?"
+        - "Is the system server-first, local-first, offline-first, cache-first, event-sourced, hybrid, or another model?"
+        - "How is state separated into local, remote, cached, derived, queued, event, external, and ephemeral categories?"
+        - "What state complexity is intentionally avoided?"
+        - "What trade-offs does the strategy accept?"
+    - id: "state-taxonomy"
+      title: "State Taxonomy"
+      intent: "Define all state categories with owner, source of truth, persistence class, storage location, mutation authority, sync behavior, sensitivity, and recovery behavior."
+      required: true
+      outputGuidance:
+        - "Use state category records for material state categories."
+        - "Classify state by durability, authority, user visibility, privacy sensitivity, and sync behavior."
+        - "Identify state that should never persist."
+      qualityChecks:
+        - "Each state category has ownership and source-of-truth semantics."
+        - "Ephemeral, cached, derived, and canonical state are clearly distinguished."
+        - "Sensitive state handling is explicit."
+      questions:
+        - "What state categories exist?"
+        - "What state is durable versus ephemeral?"
+        - "What state is canonical, replicated, cached, derived, queued, external-provider-owned, audit-only, telemetry-only, or UI-only?"
+        - "Who owns each state category?"
+        - "Where is each state category stored?"
+        - "What state must never be persisted?"
+    - id: "source-of-truth"
+      title: "Source of Truth"
+      intent: "Identify authoritative state sources and how authority is enforced across local, remote, cache, derived, event, external, and multi-client contexts."
+      required: true
+      outputGuidance:
+        - "Use source-of-truth records for material data/state types."
+        - "Define authority for reads, writes, conflict resolution, offline state, stale state, and recovery."
+        - "State user-visible implications of non-authoritative state."
+      qualityChecks:
+        - "Every material state type has an authoritative source or explicit unresolved status."
+        - "Fallback reads do not silently become authority."
+        - "Conflict authority is explicit."
+      questions:
+        - "What system or store is authoritative for each state type?"
+        - "What can mutate each state type?"
+        - "What can read each state type?"
+        - "What happens when local, remote, cache, and external provider state disagree?"
+        - "How is source-of-truth enforced during conflicts?"
+        - "How is stale or non-authoritative state communicated to users?"
+    - id: "local-state"
+      title: "Local State"
+      intent: "Specify what state is stored locally on clients, including storage engine, lifecycle, encryption, migration, reset, invalidation, corruption handling, and security/privacy limits."
+      required: true
+      outputGuidance:
+        - "Separate durable local data, ephemeral UI state, local preferences, drafts, cache, queued mutations, sync metadata, credentials/tokens, and temporary files."
+        - "State storage engine and limits only when known; otherwise mark review-needed."
+        - "Include logout/reset behavior and local corruption recovery."
+      qualityChecks:
+        - "Local state does not violate Security and Privacy rules."
+        - "Local persistence, migration, reset, and corruption behavior are explicit."
+        - "Local state is not treated as canonical unless explicitly designed that way."
+      questions:
+        - "What state is stored locally on the client?"
+        - "What local storage engine is used and what are its limits?"
+        - "What local state is encrypted, minimized, redacted, or forbidden?"
+        - "How is local state migrated across app versions?"
+        - "What happens to local state after logout, account switch, reset, uninstall, or data deletion?"
+        - "How is local state corruption detected and recovered?"
+    - id: "remote-state"
+      title: "Remote State"
+      intent: "Specify remote canonical or replicated state, access/mutation paths, consistency expectations, retention, backup/restore, and degraded behavior."
+      required: true
+      outputGuidance:
+        - "Separate canonical remote state, derived remote state, audit state, telemetry state, provider-owned remote state, and replicated state."
+        - "Tie remote state to Data Model and API Contracts."
+        - "State consistency and failure behavior."
+      qualityChecks:
+        - "Remote state ownership and mutation path are explicit."
+        - "Consistency expectations match NFRs and Data Model."
+        - "Remote degraded behavior is not hidden."
+      questions:
+        - "What state is stored remotely?"
+        - "What remote state is canonical versus derived, replicated, audit-only, telemetry-only, or provider-owned?"
+        - "How is remote state accessed and mutated?"
+        - "What consistency model applies?"
+        - "How does remote state interact with retention, deletion, export, backup, and restore?"
+        - "What happens when remote state is unavailable, partial, stale, or inconsistent?"
+    - id: "cache-strategy"
+      title: "Cache Strategy"
+      intent: "Define caching approach, population, invalidation, TTLs, stale behavior, eviction, persistence, stale labeling, cache poisoning prevention, and bypass rules."
+      required: true
+      outputGuidance:
+        - "Use cache rule records for material caches."
+        - "Separate memory cache, disk cache, query cache, API cache, CDN/cache layer, local replicated cache, derived cache, and provider cache where relevant."
+        - "State when cache may be used and when it must be bypassed."
+      qualityChecks:
+        - "Cache never silently masquerades as authoritative fresh data."
+        - "Invalidation and TTL rules are explicit."
+        - "Sensitive cached data is minimized and protected."
+      questions:
+        - "What is the caching strategy: write-through, write-back, read-through, cache-aside, stale-while-revalidate, optimistic cache, or another pattern?"
+        - "What data is cached?"
+        - "How is cache populated and invalidated?"
+        - "What TTLs and eviction rules apply?"
+        - "How is stale cache labeled or communicated?"
+        - "How is cache poisoning prevented?"
+        - "When must cache be bypassed?"
+    - id: "derived-state"
+      title: "Derived State"
+      intent: "Identify derived/computed state, source dependencies, recomputation triggers, invalidation rules, drift detection, persistence rules, and correctness guarantees."
+      required: true
+      outputGuidance:
+        - "Distinguish derived state from cached state and canonical state."
+        - "State whether derived state is recomputed on read, stored as projection, materialized view, client selector, background job, or generated output."
+        - "Define drift detection and rebuild behavior."
+      qualityChecks:
+        - "Derived state has source dependencies and invalidation rules."
+        - "Persisted derived state has rebuild and drift strategy."
+        - "Derived state does not become hidden source of truth."
+      questions:
+        - "What state is derived or computed rather than stored canonically?"
+        - "What source state does each derived value depend on?"
+        - "When is derived state recomputed or invalidated?"
+        - "Is derived state persisted, cached, projected, or computed on demand?"
+        - "How is derived-state drift detected and corrected?"
+        - "What derived state can be safely discarded and rebuilt?"
+    - id: "hydration"
+      title: "Hydration"
+      intent: "Define how client/application state initializes and rehydrates on first launch, returning launch, login, logout, reset, migration, partial data, and failure."
+      required: true
+      outputGuidance:
+        - "Describe hydration phases and readiness states."
+        - "Define what is available before hydration completes."
+        - "Include partial hydration, failed hydration, retry, cancellation, and user-visible states."
+      qualityChecks:
+        - "Hydration avoids ambiguous ready states."
+        - "Partial and failed hydration are handled."
+        - "Sensitive data is cleared or isolated on logout/account switch."
+      questions:
+        - "How is client state hydrated from local and remote sources?"
+        - "What is the hydration sequence for first launch, returning launch, login, logout, reset, and post-migration?"
+        - "What can the user do before hydration completes?"
+        - "How are partial hydration, failed hydration, retry, and cancellation handled?"
+        - "How are readiness states represented to UI and API consumers?"
+        - "What data must be cleared during logout or account switch?"
+    - id: "offline-behavior"
+      title: "Offline Behavior"
+      intent: "Describe capabilities available offline, unavailable offline, local-only state, stale remote state, queued mutations, pending states, user messaging, and reconnection behavior."
+      required: true
+      outputGuidance:
+        - "Classify each capability as available, read-only, queued, degraded, disabled, or unsupported offline."
+        - "Define user-visible status for pending, queued, stale, failed, and reconciled states."
+        - "State offline boundaries clearly to avoid overpromising."
+      qualityChecks:
+        - "Offline behavior matches Product Stack and NFR commitments."
+        - "User can distinguish saved locally, pending sync, synced, failed, and stale states."
+        - "Offline support does not bypass domain, security, or data integrity rules."
+      questions:
+        - "What capabilities are available when the system is offline?"
+        - "What capabilities are read-only, queued, degraded, disabled, or unsupported offline?"
+        - "How are offline mutations queued, ordered, and replayed?"
+        - "How are local-only, pending, stale, failed, and synced states communicated?"
+        - "What happens when connectivity returns?"
+        - "What offline behavior is explicitly not supported?"
+    - id: "mutation-queue"
+      title: "Mutation Queue"
+      intent: "Define queued mutation semantics, ordering, persistence, encryption, deduplication, cancellation, retry, compaction, replay, failure, and user-visible pending states."
+      required: true
+      outputGuidance:
+        - "Use mutation queue records for material queued operations."
+        - "Define queue ordering and idempotency before replay."
+        - "State what can be cancelled, compacted, merged, or must execute exactly once."
+      qualityChecks:
+        - "Mutation queue prevents duplicate side effects and out-of-order invalid transitions."
+        - "Queued sensitive data is protected."
+        - "Failed queued mutations have recovery behavior."
+      questions:
+        - "What mutations can be queued?"
+        - "Where is the mutation queue stored?"
+        - "How are queued mutations ordered, deduplicated, compacted, cancelled, and replayed?"
+        - "How are idempotency keys assigned to queued mutations?"
+        - "How are queued mutations encrypted or minimized?"
+        - "What happens when a queued mutation fails permanently?"
+        - "How are queued mutations shown to users?"
+    - id: "sync-protocol"
+      title: "Sync Protocol"
+      intent: "Define sync model, direction, trigger, transport, payloads, batches, cursors, checkpoints, acknowledgements, retries, partial sync, and failure behavior."
+      required: true
+      outputGuidance:
+        - "Use sync flow records for material sync flows."
+        - "State whether sync is pull, push, bidirectional, event-based, snapshot-based, delta-based, polling, manual, scheduled, websocket-driven, webhook-driven, or hybrid."
+        - "Define partial success and resume behavior."
+      qualityChecks:
+        - "Sync protocol has cursor/checkpoint and acknowledgement rules where needed."
+        - "Partial sync and interrupted sync are recoverable."
+        - "Sync protocol aligns with API Contracts and Data Model."
+      questions:
+        - "What is the sync model: snapshot, delta, event sourcing, CRDT, operational transform, last-write-wins, manual reconciliation, or hybrid?"
+        - "Is sync pull, push, bidirectional, polling, websocket-driven, webhook-driven, scheduled, manual, or hybrid?"
+        - "What triggers sync?"
+        - "What payloads and batch sizes are used?"
+        - "How are acknowledgements handled?"
+        - "How does interrupted or partial sync resume?"
+        - "What sync behavior is explicitly unsupported?"
+    - id: "cursors-and-checkpoints"
+      title: "Cursors and Checkpoints"
+      intent: "Define cursor/checkpoint semantics, storage, advancement, rollback, invalidation, reset, expiration, replay, and observability."
+      required: true
+      outputGuidance:
+        - "Define cursor/checkpoint per sync stream or state category."
+        - "State whether cursors are server-issued, client-issued, time-based, sequence-based, event-based, opaque, or versioned."
+        - "Include cursor corruption, expiration, and reset behavior."
+      qualityChecks:
+        - "Cursor/checkpoint advancement is safe and atomic enough for the sync model."
+        - "Invalid or stale cursors have recovery paths."
+        - "Cursor state is observable for debugging."
+      questions:
+        - "What cursor or checkpoint mechanism is used?"
+        - "Where are cursors and checkpoints stored?"
+        - "When is a cursor advanced?"
+        - "How are cursor rollback, invalidation, reset, expiration, and replay handled?"
+        - "What happens if a cursor is corrupted or lost?"
+        - "How are cursor/checkpoint issues observed and debugged?"
+    - id: "conflict-detection"
+      title: "Conflict Detection"
+      intent: "Define what counts as conflict, how conflicts are detected, when detection occurs, and what data is needed for detection."
+      required: true
+      outputGuidance:
+        - "Separate write/write conflicts, delete/update conflicts, stale-write conflicts, permission conflicts, invariant conflicts, external-provider conflicts, and semantic conflicts."
+        - "State detection mechanism and timing."
+        - "Identify conflicts that are impossible, accepted, ignored, or review-needed."
+      qualityChecks:
+        - "Conflict detection covers meaningful divergence scenarios."
+        - "Detection happens before domain invariants are violated where possible."
+        - "Required metadata for detection is included in Data Model/API Contracts."
+      questions:
+        - "What counts as a sync conflict?"
+        - "What data can diverge?"
+        - "How are conflicts detected?"
+        - "When are conflicts detected: client-side, server-side, during sync, during command handling, during projection, or during recovery?"
+        - "What metadata is required for conflict detection?"
+        - "What conflicts are impossible, ignored, accepted, or review-needed?"
+    - id: "conflict-resolution"
+      title: "Conflict Resolution"
+      intent: "Define automatic and manual merge strategies, precedence rules, user resolution, domain invariant protection, auditability, and unresolved conflict behavior."
+      required: true
+      outputGuidance:
+        - "Use conflict records for material conflict types."
+        - "Justify last-write-wins only when data loss is acceptable."
+        - "State user-visible resolution behavior for manual conflicts."
+      qualityChecks:
+        - "Resolution strategy does not silently lose important user data."
+        - "Domain invariants are protected."
+        - "Unresolved conflicts do not block unrelated safe work unnecessarily."
+      questions:
+        - "How are conflicts resolved?"
+        - "What conflicts can be merged automatically?"
+        - "What conflicts require manual user or operator resolution?"
+        - "What precedence rules apply?"
+        - "How are domain invariants protected during resolution?"
+        - "How are conflict decisions audited?"
+        - "What happens to unresolved conflicts?"
+    - id: "idempotency"
+      title: "Idempotency"
+      intent: "Specify how idempotency is guaranteed during sync, queued mutations, retries, event ingestion, webhook handling, and replay."
+      required: true
+      outputGuidance:
+        - "Define idempotency key generation, scope, retention, storage, replay, and payload mismatch behavior."
+        - "Tie idempotency to API Contracts and Data Model."
+        - "Separate client-generated and server-generated keys where relevant."
+      qualityChecks:
+        - "Idempotency protects side-effecting operations."
+        - "Duplicate replay behavior is deterministic."
+        - "Idempotency retention is long enough for expected retry windows."
+      questions:
+        - "How is idempotency guaranteed during sync operations?"
+        - "What idempotency keys exist and who generates them?"
+        - "What is the idempotency key scope and retention window?"
+        - "What happens when a sync operation is retried?"
+        - "What happens when the same idempotency key is reused with different payload?"
+        - "How are idempotency records stored, expired, and observed?"
+    - id: "ordering-and-causality"
+      title: "Ordering and Causality"
+      intent: "Define ordering rules, causation/correlation, sequence numbers, timestamps, clock skew assumptions, out-of-order delivery, and causal consistency requirements."
+      required: true
+      outputGuidance:
+        - "Use timestamps only with explicit authority and skew assumptions."
+        - "Define when strict ordering is required and when eventual ordering is acceptable."
+        - "Connect causality to event envelopes, mutation queues, and observability."
+      qualityChecks:
+        - "Ordering assumptions are explicit and testable."
+        - "Clock skew risk is not ignored."
+        - "Out-of-order delivery has handling rules."
+      questions:
+        - "What ordering guarantees are required?"
+        - "What uses sequence numbers, timestamps, event versions, vector clocks, lamport clocks, or provider ordering?"
+        - "What clock skew assumptions exist?"
+        - "How are causation IDs and correlation IDs used?"
+        - "How are out-of-order events or mutations handled?"
+        - "What ordering behavior is explicitly not guaranteed?"
+    - id: "background-sync"
+      title: "Background Sync"
+      intent: "Define background sync scheduling, lifecycle constraints, battery/network constraints, prioritization, cancellation, retries, OS limitations, and user-visible behavior."
+      required: true
+      outputGuidance:
+        - "Separate foreground sync, background sync, app-start sync, scheduled sync, push-triggered sync, and manual sync."
+        - "State platform limitations and assumptions without inventing OS guarantees."
+        - "Define what happens when background sync is unavailable."
+      qualityChecks:
+        - "Background sync assumptions are realistic and platform-aware."
+        - "User-visible freshness expectations match actual sync capability."
+        - "Battery/network constraints and cancellation are considered."
+      questions:
+        - "What sync happens in foreground versus background?"
+        - "How is background sync scheduled or triggered?"
+        - "What OS, battery, network, permission, and lifecycle constraints apply?"
+        - "How are sync jobs prioritized or cancelled?"
+        - "What happens if background sync does not run?"
+        - "How is background sync status communicated and observed?"
+    - id: "multi-client-behavior"
+      title: "Multi-Client Behavior"
+      intent: "Define behavior when the same user or data is accessed from multiple clients, devices, sessions, agents, or integrations."
+      required: true
+      outputGuidance:
+        - "Include this section even if multiple clients are deferred or unsupported."
+        - "Define device identity, session behavior, cross-client invalidation, concurrent writes, stale writes, remote logout, and agent/integration side effects."
+        - "State unsupported cases explicitly."
+      qualityChecks:
+        - "Concurrent client behavior does not depend on luck."
+        - "Stale writes and logout propagation are handled."
+        - "Agents and integrations are considered as state actors where relevant."
+      questions:
+        - "How does the system behave across multiple clients or devices?"
+        - "How are concurrent sessions represented?"
+        - "How are stale writes detected and handled?"
+        - "How are remote logout, account switch, permission changes, and revocation propagated?"
+        - "How do agents or integrations affect state across clients?"
+        - "What multi-client behavior is unsupported or deferred?"
+    - id: "state-recovery"
+      title: "State Recovery"
+      intent: "Describe recovery after corruption, failed sync, interrupted migration, data loss, partial writes, invalid cache, queue failure, cursor loss, or permanent divergence."
+      required: true
+      outputGuidance:
+        - "Use recovery records for material recovery scenarios."
+        - "Separate automatic recovery, manual recovery, support-assisted recovery, rehydration, reset, replay, rollback, roll-forward, backup restore, and accepted data loss."
+        - "State user communication and auditability."
+      qualityChecks:
+        - "Recovery paths are realistic and tied to detection."
+        - "Data loss risk is explicit."
+        - "Support escalation and observability are included for serious cases."
+      questions:
+        - "How is state recovered after corruption, failed sync, interrupted migration, or data loss?"
+        - "What backup, snapshot, replay, rehydration, reset, rollback, or roll-forward mechanisms exist?"
+        - "What failures can be recovered automatically?"
+        - "What failures require support or operator intervention?"
+        - "What data loss risk remains?"
+        - "How is recovery communicated to users and audited?"
+    - id: "sync-observability"
+      title: "Sync Observability"
+      intent: "Define logs, metrics, traces, health checks, alerts, dashboards, audit events, queue health, conflict visibility, stale-state visibility, and privacy-safe telemetry for sync/state."
+      required: true
+      outputGuidance:
+        - "Define observability by sync flow, queue, cache, conflict, hydration, recovery, and failure mode."
+        - "Separate diagnostic logs, metrics, traces, audit events, user-visible status, and support-visible state."
+        - "Respect telemetry privacy and sensitive data rules."
+      qualityChecks:
+        - "Sync failures are diagnosable."
+        - "Observability does not expose sensitive local/remote data unnecessarily."
+        - "Metrics support release, support, and operations."
+      questions:
+        - "What logs, metrics, traces, audit events, and health checks are required for sync and state?"
+        - "How are queue depth, sync lag, hydration failure, retry count, conflict count, stale data, cursor failure, and recovery events observed?"
+        - "What alerts are required?"
+        - "What dashboards are needed?"
+        - "What state is visible to users, support, operators, or only internal diagnostics?"
+        - "What telemetry must be redacted or minimized?"
+    - id: "sync-testing"
+      title: "Sync Testing"
+      intent: "Define test strategy for local/remote state, offline behavior, sync protocol, mutation queue, conflicts, idempotency, ordering, recovery, migrations, and multi-client behavior."
+      required: true
+      outputGuidance:
+        - "Define test categories and release-blocking sync tests."
+        - "Include deterministic fixtures and chaos/failure simulation where relevant."
+        - "Route detailed implementation to Test Strategy."
+      qualityChecks:
+        - "Testing covers failure, not only happy path."
+        - "Conflict, offline, retry, idempotency, migration, and recovery tests are included."
+        - "Tests map to Acceptance Criteria and NFRs."
+      questions:
+        - "How is sync and state behavior tested?"
+        - "What unit, integration, E2E, contract, offline, chaos, migration, conflict, idempotency, ordering, and recovery tests are required?"
+        - "How are provider failures, network failures, retry storms, duplicate messages, stale cache, corrupted local state, and multi-client divergence simulated?"
+        - "What test fixtures and fake clocks are needed?"
+        - "What sync/state test failures block release?"
+        - "What should Test Strategy inherit?"
+    - id: "sync-risks"
+      title: "Sync Risks"
+      intent: "Identify risks of the sync and state strategy, including data loss, divergence, duplicate side effects, stale decisions, cache poisoning, privacy leaks, corruption, migration failures, and observability gaps."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete sync/state failure modes."
+        - "Tie risks to state categories, sync flows, queues, caches, conflicts, idempotency, offline behavior, recovery, observability, tests, or downstream documents."
+        - "Include early signal, mitigation, release impact, and target document."
+      qualityChecks:
+        - "Risks are specific enough to test, monitor, mitigate, accept, or block release."
+        - "Data loss and permanent divergence risks are explicit."
+        - "Accepted limitations are documented rather than hidden."
+      questions:
+        - "What are the risks of the sync strategy?"
+        - "What failure modes could cause data loss or permanent divergence?"
+        - "Where could duplicate side effects, invalid replay, stale decisions, cache poisoning, privacy leaks, local corruption, or migration failure occur?"
+        - "What assumptions could prove wrong?"
+        - "What early signals indicate sync/state failure?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from Sync and State and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route sync/state outputs to the correct downstream documents."
+        - "Separate frontend, infrastructure, testing, observability, deployment, release, support, incident response, risk, and operations implications."
+        - "Preserve unresolved sync/state questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing sync/state rules silently."
+        - "Sync/state architecture and downstream implementation responsibilities remain distinct."
+      questions:
+        - "What should Frontend Architecture inherit from Sync and State?"
+        - "What should Infrastructure Architecture inherit?"
+        - "What should Test Strategy inherit?"
+        - "What should Observability Plan inherit?"
+        - "What should Deployment Plan and Release Management inherit?"
+        - "What should Support Model, Incident Response, Risk Management, and Operations inherit?"
+        - "What unresolved sync/state questions must be carried forward?"

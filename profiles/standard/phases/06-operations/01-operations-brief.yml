@@ -1,0 +1,568 @@
+document:
+  id: "01-operations-brief"
+  title: "Operations Brief"
+  phase: "06-operations"
+  status: "not_started"
+  order: 1
+  type: "operations_brief"
+  purpose: "Synthesize the operational operating context of the project into a single reference document, defining what must function continuously, who owns it, what healthy operation means, what constraints apply, and what downstream Operations documents must inherit."
+  centralQuestion: "What must function continuously for the project to remain healthy, reliable, supportable, maintainable, financially sustainable, and safe to operate?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/06-operations/01-operations-brief.md"
+      purpose: "Store the canonical operations brief as a Markdown document."
+    artifacts:
+      - id: "operations.operations_brief_summary"
+        format: "html"
+        path: "outcomes/html/06-operations/operations-brief-summary.html"
+        purpose: "Provide a founder-facing operational summary covering operating objective, scope, ownership, critical functions, service expectations, support, incidents, release, maintenance, costs, compliance, operational risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "operations objective"
+          - "product and service context"
+          - "business and sustainability context"
+          - "operational scope"
+          - "ownership model"
+          - "critical operational functions"
+          - "service expectations"
+          - "support expectations"
+          - "incident expectations"
+          - "maintenance expectations"
+          - "release expectations"
+          - "data and privacy operations"
+          - "cost and capacity constraints"
+          - "operational constraints"
+          - "operational success criteria"
+          - "operational risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.operations_brief_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/operations-brief-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether Operations is complete, grounded, sustainable, risk-aware, owner-aware, and properly connected to product, engineering, GTM, support, release, maintenance, incidents, customer success, and risk management."
+        agentRole: "reviewer"
+        includes:
+          - "canonical operations brief"
+          - "foundation dependency"
+          - "product dependency"
+          - "engineering dependency"
+          - "GTM dependency"
+          - "operations formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/10-testing-strategy"
+    - "04-engineering/11-observability"
+    - "04-engineering/12-deployment-and-environments"
+    - "04-engineering/13-engineering-standards"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/07-launch-plan"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/12-growth-metrics"
+    - "05-go-to-market/13-go-to-market-risks"
+  feeds:
+    - "06-operations/02-operating-model"
+    - "06-operations/03-customer-success"
+    - "06-operations/04-support-model"
+    - "06-operations/05-maintenance-plan"
+    - "06-operations/06-release-management"
+    - "06-operations/07-incident-response"
+    - "06-operations/08-data-and-privacy-operations"
+    - "06-operations/09-financial-operations"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "foundation-context"
+      type: "context"
+      required: false
+      description: "Vision, principles, boundaries, success definition, non-goals, ethical constraints, and durable operating commitments."
+    - id: "product-context"
+      type: "context"
+      required: false
+      description: "Product brief, scope, functional requirements, NFRs, acceptance criteria, user-facing promises, supportable capabilities, and deferred capabilities."
+    - id: "engineering-context"
+      type: "context"
+      required: false
+      description: "Engineering brief, architecture, security/privacy model, testing strategy, observability, deployment/environments, engineering standards, and technical risks."
+    - id: "gtm-context"
+      type: "context"
+      required: false
+      description: "GTM brief, launch plan, pricing and packaging, growth metrics, GTM risks, customer promises, launch cohorts, support expectations, and operational load created by GTM."
+    - id: "operations-notes"
+      type: "manual_note"
+      required: false
+      description: "Known operational assumptions, team capacity, support preferences, tooling, cost constraints, service expectations, incident concerns, maintenance concerns, release needs, and unresolved operations questions."
+  completionCriteria:
+    - "The central question is answered through a complete operational synthesis covering continuous functions, ownership, expectations, constraints, risks, metrics, and downstream handoff."
+    - "Operations objective defines what the operations function protects: continuity, reliability, supportability, maintainability, safety, privacy, release quality, customer trust, cost control, and sustainability."
+    - "Product and service context identifies what is being operated, which components require ongoing attention, what is user-facing, what is internal, what is automated, and what remains manual."
+    - "Business and sustainability context explains how pricing, revenue, costs, support load, infrastructure, tooling, payment, billing, and operational capacity interact."
+    - "Operational scope defines what is inside Operations, what is outside, what is shared with Product/Engineering/GTM, and what is explicitly deferred."
+    - "Ownership model identifies owners, backup owners, escalation owners, decision rights, unresolved ownership gaps, and handoff expectations."
+    - "Critical operational functions identify functions that must work continuously or predictably, why they matter, blast radius, failure signals, owner, fallback, and downstream document."
+    - "Service expectations define availability, latency, correctness, data integrity, support response, recovery, maintenance windows, release expectations, and customer-facing promises where relevant."
+    - "Support expectations define support scope, channels, response expectations, known issue handling, escalation path, support assets, and support boundaries."
+    - "Incident expectations define what counts as an incident, severity classes, initial response expectation, escalation, communication, rollback/pause trigger, post-incident review, and downstream Incident Response needs."
+    - "Maintenance expectations define routine maintenance, dependency updates, data maintenance, documentation updates, security/privacy upkeep, backups/restore checks, observability review, and ownership."
+    - "Release expectations define release cadence, readiness gates, approval, deployment windows, rollback expectations, smoke checks, communication, monitoring, and release handoff."
+    - "Data and privacy operations define operational handling of sensitive data, access, retention, deletion, export, logging, telemetry, backups, incidents, and review needs."
+    - "Cost and capacity constraints define infrastructure, tooling, support, founder/team time, manual processes, vendor costs, observability cost, billing/payment cost, and capacity limits."
+    - "Operational constraints include budget, headcount, tooling, technical, security, privacy, regulatory/compliance, contractual, platform, vendor, support, and process constraints."
+    - "Operational success criteria define health metrics, operating thresholds, review cadence, alert conditions, customer trust signals, support metrics, release metrics, cost metrics, and risk metrics."
+    - "Operational risks identify failure modes across service reliability, support, incidents, maintenance, release, data/privacy, vendors, tooling, cost, capacity, manual processes, and ownership."
+    - "Downstream handoff clarifies what Operating Model, Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid operations theater: responsibilities and health claims without owner, signal, threshold, fallback, cadence, constraint, and downstream document."
+    - "Avoid defining operations as only infrastructure; include support, release, maintenance, data/privacy, billing/payment, customer trust, cost, and operational load."
+    - "Avoid importing unresolved Product, Engineering, or GTM assumptions as operational facts."
+    - "Avoid customer-facing reliability, support, privacy, refund, uptime, or recovery promises that Product, Engineering, GTM, Support, or Finance cannot sustain."
+    - "Avoid ownerless critical functions, ownerless incidents, ownerless support queues, ownerless metrics, or ownerless maintenance."
+    - "Avoid treating manual processes as free or infinitely scalable."
+    - "Avoid ignoring operational constraints created by pricing, trials, free tiers, discounts, launch cohorts, sales promises, integrations, or technical risks."
+    - "Avoid hiding operational risks that should be handed to Risk Management."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent team capacity, support SLAs, uptime guarantees, legal/compliance status, cost numbers, vendor guarantees, or operational maturity."
+    - "Operations must preserve Foundation boundaries, product truth, technical truth, GTM promises, security/privacy constraints, customer trust, and sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate fact, assumption, decision, operational function, owner, expectation, metric, constraint, risk, and handoff."
+    - "Tie operations claims to Foundation, Product, Engineering, GTM, Technical Risks, GTM Risks, Acceptance Criteria, Deployment, Observability, Pricing, Launch, or Decision Record where possible."
+    - "Classify operational items as current, required, deferred, manual, automated, blocked, review-needed, launch-critical, post-launch, or operations-handoff where useful."
+    - "State whether each critical function is monitored, manually checked, automated, unsupported, or unknown."
+    - "Route detailed procedures to downstream Operations documents rather than overloading the brief."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Foundation, Product, Acceptance Criteria, NFRs, Security/Privacy, Testing, Observability, Deployment, Technical Risks, GTM Brief, Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag operational claims without owner, signal, threshold, cadence, fallback, constraint, or downstream target."
+    - "Flag critical functions without blast radius, failure signal, owner, fallback, or escalation path."
+    - "Flag service expectations that exceed product, engineering, support, cost, or team capacity."
+    - "Flag support or incident expectations that lack escalation, communication, and ownership."
+    - "Flag cost/capacity assumptions that ignore manual work, vendors, tooling, support, observability, billing, and maintenance."
+    - "Flag operational risks that are not handed off to Risk Management."
+    - "Verify that downstream Operations documents receive concrete handoff inputs."
+    - "Flag content that belongs better in Operating Model, Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+  specializedFormats:
+    operationalFunctionFormat:
+      description: "Recommended format for critical operational functions."
+      fields:
+        - function
+        - purpose
+        - userImpact
+        - businessImpact
+        - owner
+        - backupOwner
+        - failureSignal
+        - healthSignal
+        - blastRadius
+        - fallback
+        - escalationPath
+        - downstreamDocument
+        - status
+    ownershipFormat:
+      description: "Recommended format for operational ownership."
+      fields:
+        - area
+        - primaryOwner
+        - backupOwner
+        - decisionRights
+        - escalationOwner
+        - responsibilities
+        - unresolvedGap
+        - downstreamDocument
+        - status
+    serviceExpectationFormat:
+      description: "Recommended format for service expectations."
+      fields:
+        - expectation
+        - category
+        - customerFacingPromise
+        - internalTarget
+        - measurementMethod
+        - threshold
+        - owner
+        - escalationTrigger
+        - caveat
+        - status
+    operationalMetricFormat:
+      description: "Recommended format for operational health metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - formulaOrMeasurement
+        - source
+        - threshold
+        - cadence
+        - owner
+        - decisionImplication
+        - downstreamDocument
+        - status
+    operationalConstraintFormat:
+      description: "Recommended format for operational constraints."
+      fields:
+        - constraint
+        - constraintType
+        - affectedArea
+        - source
+        - operationalImpact
+        - mitigation
+        - owner
+        - downstreamDocument
+        - status
+    operationalRiskFormat:
+      description: "Recommended format for operational risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - affectedArea
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - contingency
+        - owner
+        - downstreamDocument
+        - status
+    operationsHandoffFormat:
+      description: "Recommended format for downstream Operations handoff."
+      fields:
+        - handoffTarget
+        - contextToPreserve
+        - requiredAction
+        - owner
+        - timing
+        - unresolvedQuestion
+        - riskOrConstraint
+        - status
+  sections:
+    - id: "operations-objective"
+      title: "Operations Objective"
+      intent: "Clarify the core purpose of operations and define what healthy operation means for this project."
+      required: true
+      outputGuidance:
+        - "Open with the operational purpose in one concise paragraph."
+        - "Define what operations protects: continuity, reliability, supportability, maintainability, safety, privacy, release quality, customer trust, cost control, and sustainability."
+        - "State what Operations is not responsible for in this brief."
+      qualityChecks:
+        - "Objective is specific enough to guide downstream Operations docs."
+        - "Healthy operation includes customer, technical, support, financial, and risk dimensions."
+        - "Operations is not reduced to infrastructure uptime only."
+      questions:
+        - "What is the core purpose of the operations function for this project?"
+        - "What does healthy day-to-day operation look like?"
+        - "What must operations protect?"
+        - "What is outside the scope of this brief?"
+    - id: "product-and-service-context"
+      title: "Product and Service Context"
+      intent: "Define what product, service, system, workflows, and operational components must be operated."
+      required: true
+      outputGuidance:
+        - "Describe what is being operated."
+        - "Identify user-facing, internal, automated, manual, third-party, and deferred components."
+        - "Tie operational components to Product and Engineering docs where possible."
+      qualityChecks:
+        - "Operationally relevant components are named."
+        - "Manual and third-party components are not hidden."
+        - "Unsupported or deferred components are explicit."
+      questions:
+        - "What product or service is being operated?"
+        - "Which user-facing components require operational attention?"
+        - "Which internal components require operational attention?"
+        - "Which workflows are manual, automated, third-party-dependent, or deferred?"
+        - "What components should not be treated as operationally ready yet?"
+    - id: "business-and-sustainability-context"
+      title: "Business and Sustainability Context"
+      intent: "Explain how the business model, pricing, revenue, costs, support load, and operating capacity intersect with operations."
+      required: true
+      outputGuidance:
+        - "Connect business model and pricing to operational burden."
+        - "Identify revenue-related operations such as billing, payments, refunds, invoices, discounts, and plan changes where relevant."
+        - "State sustainability risks and unknowns."
+      qualityChecks:
+        - "Business model implications are operationally specific."
+        - "Costs and support load are considered."
+        - "Revenue operations are not assumed ready without evidence."
+      questions:
+        - "What is the business model behind the product?"
+        - "How do pricing, revenue, costs, margin, and support load relate to operations?"
+        - "What billing, payment, refund, invoice, discount, or plan-change operations are required?"
+        - "What operating costs or capacity limits affect sustainability?"
+    - id: "operational-scope"
+      title: "Operational Scope"
+      intent: "Delineate what falls inside Operations, what remains owned by Product/Engineering/GTM, what is shared, and what is deferred."
+      required: true
+      outputGuidance:
+        - "Define inside, outside, shared, and deferred operational scope."
+        - "Clarify interfaces with Product, Engineering, GTM, Support, Customer Success, and Finance."
+        - "Route detailed scope to Operating Model."
+      qualityChecks:
+        - "Scope prevents ownership ambiguity."
+        - "Shared areas have handoff expectations."
+        - "Deferred operational areas are explicit."
+      questions:
+        - "What falls inside the operations function?"
+        - "What falls outside operations?"
+        - "What responsibilities are shared with Product, Engineering, GTM, Support, Customer Success, or Finance?"
+        - "What operational areas are deferred?"
+    - id: "ownership-model"
+      title: "Ownership Model"
+      intent: "Identify operational owners, backup owners, escalation owners, decision rights, and ownership gaps."
+      required: true
+      outputGuidance:
+        - "Use ownership records for major operational areas."
+        - "State unknown owners as gaps, not assumptions."
+        - "Include decision rights and escalation owner."
+      qualityChecks:
+        - "No critical area is ownerless without being flagged."
+        - "Backup and escalation ownership are considered."
+        - "Decision rights are explicit."
+      questions:
+        - "Who owns each operational area?"
+        - "Who is backup owner?"
+        - "Who can make decisions during normal operation?"
+        - "Who can make decisions during incidents or release issues?"
+        - "What ownership gaps remain?"
+    - id: "critical-operational-functions"
+      title: "Critical Operational Functions"
+      intent: "Identify functions that must work continuously or predictably, and assess the blast radius, signals, owners, fallbacks, and escalation paths."
+      required: true
+      outputGuidance:
+        - "Use operational function records for critical functions."
+        - "Include product, infrastructure, data, security/privacy, billing/payment, support, release, monitoring, and vendor functions where relevant."
+        - "Classify status and downstream owner."
+      qualityChecks:
+        - "Critical functions include blast radius and failure signal."
+        - "Owner, fallback, and escalation path are explicit."
+        - "Functions are specific to this project."
+      questions:
+        - "Which functions must never fail or must recover predictably for the project to remain viable?"
+        - "What is the purpose of each critical function?"
+        - "What is the user and business impact of failure?"
+        - "What is the blast radius of each function?"
+        - "What signal indicates failure or degradation?"
+        - "What fallback and escalation path exists?"
+    - id: "service-expectations"
+      title: "Service Expectations"
+      intent: "Define availability, latency, correctness, integrity, recovery, maintenance, and customer-facing reliability expectations."
+      required: true
+      outputGuidance:
+        - "Use service expectation records for material expectations."
+        - "Separate customer-facing promises from internal targets."
+        - "Tie expectations to NFRs, Observability, Deployment, Support, and Release Management."
+      qualityChecks:
+        - "Service expectations are measurable or explicitly qualitative."
+        - "Customer-facing promises do not exceed operational capacity."
+        - "Recovery and correctness are included, not only uptime."
+      questions:
+        - "What availability, latency, correctness, data integrity, and recovery expectations exist?"
+        - "What are the user-facing promises about reliability?"
+        - "What internal targets exist?"
+        - "How are expectations measured?"
+        - "What caveats or unresolved targets remain?"
+    - id: "support-expectations"
+      title: "Support Expectations"
+      intent: "Define support scope, channels, response expectations, known issue handling, escalation, support assets, and support boundaries."
+      required: true
+      outputGuidance:
+        - "Summarize support expectations; route details to Support Model."
+        - "Identify support channels, response targets, escalation path, and support assets."
+        - "State what support does not cover."
+      qualityChecks:
+        - "Support expectations are realistic."
+        - "Escalation and known issue handling are explicit."
+        - "Support boundaries prevent overcommitment."
+      questions:
+        - "What support is expected during normal operation?"
+        - "What support channels exist?"
+        - "What response expectations are safe to promise?"
+        - "How are known issues handled?"
+        - "What escalates from support to Product, Engineering, Incident Response, or Risk Management?"
+        - "What support is explicitly out of scope?"
+    - id: "incident-expectations"
+      title: "Incident Expectations"
+      intent: "Define what counts as an incident and what initial response, escalation, communication, rollback/pause, and review expectations exist."
+      required: true
+      outputGuidance:
+        - "Summarize incident expectations; route detailed procedure to Incident Response."
+        - "Define incident classes conceptually."
+        - "Include communication and post-incident review needs."
+      qualityChecks:
+        - "Incident expectations are actionable without becoming the full runbook."
+        - "Severity and escalation are explicit."
+        - "Customer communication and post-incident learning are included."
+      questions:
+        - "What counts as an operational incident?"
+        - "What severity classes are needed?"
+        - "What initial response expectation applies?"
+        - "Who escalates and who decides?"
+        - "When should release rollback, feature pause, GTM pause, or customer communication happen?"
+        - "What post-incident review is expected?"
+    - id: "maintenance-expectations"
+      title: "Maintenance Expectations"
+      intent: "Define recurring upkeep required to keep the system secure, reliable, current, documented, observable, and supportable."
+      required: true
+      outputGuidance:
+        - "Summarize maintenance categories; route detailed schedule to Maintenance Plan."
+        - "Include dependencies, documentation, backups/restore, security/privacy, observability, data, and operational assets."
+        - "State owner and cadence where known."
+      qualityChecks:
+        - "Maintenance is treated as ongoing work."
+        - "Security/privacy and documentation drift are included."
+        - "Cadence and owner are explicit or flagged unresolved."
+      questions:
+        - "What routine maintenance is required?"
+        - "What dependency, security, privacy, data, backup/restore, documentation, observability, and support asset upkeep is required?"
+        - "Who owns maintenance?"
+        - "What cadence applies?"
+        - "What maintenance is launch-critical versus post-launch?"
+    - id: "release-expectations"
+      title: "Release Expectations"
+      intent: "Define how releases should be prepared, approved, deployed, verified, monitored, communicated, and rolled back."
+      required: true
+      outputGuidance:
+        - "Summarize release expectations; route detailed process to Release Management."
+        - "Tie expectations to Deployment, Testing, Observability, Launch Plan, and Support."
+        - "Include readiness gates, smoke checks, monitoring, communication, and rollback."
+      qualityChecks:
+        - "Release expectations include verification and rollback."
+        - "Release promises match technical readiness."
+        - "Support and communication are considered."
+      questions:
+        - "How should releases be prepared and approved?"
+        - "What readiness gates apply?"
+        - "When should releases happen?"
+        - "What smoke checks and monitoring are required?"
+        - "What communication is required?"
+        - "What rollback or pause expectation exists?"
+    - id: "data-and-privacy-operations"
+      title: "Data and Privacy Operations"
+      intent: "Define operational responsibilities for sensitive data, access, retention, deletion, export, logging, telemetry, backups, and privacy incidents."
+      required: true
+      outputGuidance:
+        - "Summarize data/privacy operational needs; route detailed procedure to Data and Privacy Operations."
+        - "Tie to Security and Privacy, Observability, Support, and Incident Response."
+        - "Mark legal/compliance review needs rather than assuming compliance."
+      qualityChecks:
+        - "Data/privacy obligations are not treated as purely technical."
+        - "Access, retention, deletion, export, logs, telemetry, and backups are considered."
+        - "Review-needed areas are explicit."
+      questions:
+        - "What sensitive data requires operational handling?"
+        - "Who can access production/customer data?"
+        - "What retention, deletion, export, and backup expectations exist?"
+        - "What logging or telemetry privacy constraints apply?"
+        - "What privacy incidents require escalation?"
+        - "What legal/compliance review is needed?"
+    - id: "cost-and-capacity-constraints"
+      title: "Cost and Capacity Constraints"
+      intent: "Identify operating costs, vendor costs, tooling costs, support load, manual work, team/founder capacity, and capacity limits."
+      required: true
+      outputGuidance:
+        - "Use operational constraint records where useful."
+        - "Separate budget cost, time cost, support cost, vendor cost, and opportunity cost."
+        - "State what could become unsustainable."
+      qualityChecks:
+        - "Manual work and founder/team time are treated as real constraints."
+        - "Vendor/tooling/observability/billing costs are considered."
+        - "Capacity constraints connect to support, release, maintenance, and GTM promises."
+      questions:
+        - "What operating costs exist?"
+        - "What vendor, infrastructure, tooling, observability, payment, billing, or support costs apply?"
+        - "What manual processes consume time?"
+        - "What team or founder capacity limits exist?"
+        - "What could become operationally unsustainable?"
+    - id: "operational-constraints"
+      title: "Operational Constraints"
+      intent: "Identify constraints that shape or limit operations."
+      required: true
+      outputGuidance:
+        - "Use operational constraint records for material constraints."
+        - "Classify constraints by budget, headcount, tooling, technical, security, privacy, regulatory/compliance, contractual, platform, vendor, support, process, and knowledge."
+        - "State operational impact and mitigation."
+      qualityChecks:
+        - "Constraints are connected to operational decisions."
+        - "Regulatory/compliance constraints are marked review-needed unless verified."
+        - "Constraints are not confused with risks, though they may create risks."
+      questions:
+        - "What budget, headcount, tooling, technical, security, privacy, regulatory, contractual, platform, vendor, support, process, or knowledge constraints apply?"
+        - "How does each constraint affect operations?"
+        - "Which constraints are blockers versus manageable limits?"
+        - "What mitigation or downstream action is required?"
+    - id: "operational-success-criteria"
+      title: "Operational Success Criteria"
+      intent: "Define how operational health is measured, reviewed, and acted upon."
+      required: true
+      outputGuidance:
+        - "Use operational metric records for material health metrics."
+        - "Include reliability, support, incident, release, maintenance, cost, privacy/security, customer trust, and risk metrics where relevant."
+        - "Tie criteria to thresholds and decisions."
+      qualityChecks:
+        - "Success criteria are measurable or decision-useful."
+        - "Health metrics include customer and operational sustainability dimensions."
+        - "Metrics have owner, cadence, and threshold."
+      questions:
+        - "How will the team know operations are healthy?"
+        - "What reliability, support, incident, release, maintenance, cost, privacy/security, customer trust, and risk metrics matter?"
+        - "What thresholds indicate review, escalation, or corrective action?"
+        - "Who owns each metric?"
+        - "How often are metrics reviewed?"
+    - id: "operational-risks"
+      title: "Operational Risks"
+      intent: "Identify operational risks that could threaten continuity, trust, supportability, maintainability, release safety, cost, or sustainability."
+      required: true
+      outputGuidance:
+        - "Use operational risk records for material risks."
+        - "Include service, support, incident, release, maintenance, data/privacy, vendor, tooling, cost, capacity, manual process, and ownership risks."
+        - "Route risks to Risk Management where needed."
+      qualityChecks:
+        - "Risks are specific, monitorable, and owned."
+        - "Mitigation and contingency are distinct."
+        - "High-impact risks are handed off."
+      questions:
+        - "What operational risks exist?"
+        - "What could threaten continuity, reliability, supportability, maintainability, data/privacy, release safety, customer trust, cost, or sustainability?"
+        - "What early signal would reveal each risk?"
+        - "What mitigation and contingency apply?"
+        - "What should Risk Management inherit?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Operations documents must inherit from the Operations Brief and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use operations handoff records for material handoffs."
+        - "Route context to Operating Model, Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
+        - "Preserve unresolved questions, ownership gaps, risks, constraints, critical functions, and service expectations."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing operational assumptions silently."
+        - "Operations Brief remains synthesis; detailed procedures are routed downstream."
+      questions:
+        - "What should Operating Model inherit?"
+        - "What should Customer Success inherit?"
+        - "What should Support Model inherit?"
+        - "What should Maintenance Plan inherit?"
+        - "What should Release Management inherit?"
+        - "What should Incident Response inherit?"
+        - "What should Data and Privacy Operations inherit?"
+        - "What should Financial Operations inherit?"
+        - "What should Risk Management inherit?"
+        - "What unresolved operations questions must be carried forward?"

@@ -1,0 +1,795 @@
+document:
+  id: "07-integration-architecture"
+  title: "Integration Architecture"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 7
+  type: "integration_architecture"
+  purpose: "Define how the system integrates with external services, third-party APIs, platform capabilities, provider adapters, webhooks, event streams, file exchanges, model providers, and operational tools while preserving domain boundaries, reliability, security, privacy, observability, and replaceability."
+  centralQuestion: "How does the system communicate with external services safely, reliably, observably, and without leaking vendor concerns into core logic?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/04-engineering/07-integration-architecture.md"
+      purpose: "Store the canonical integration architecture as a Markdown document."
+    artifacts:
+      - id: "engineering.integration_architecture_map"
+        format: "html"
+        path: "outcomes/html/04-engineering/integration-architecture-map.html"
+        purpose: "Provide a navigable integration architecture map covering external services, boundaries, ports/adapters, contracts, auth, data mapping, webhooks, rate limits, retries, idempotency, circuit breakers, fallbacks, mocks, observability, compliance, lock-in, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "integration overview"
+          - "integration inventory"
+          - "integration classification"
+          - "external services"
+          - "integration boundaries"
+          - "ports and adapters"
+          - "contract mapping"
+          - "data mapping"
+          - "authentication with external services"
+          - "authorization and scopes"
+          - "credential management"
+          - "webhooks"
+          - "event streams"
+          - "file and batch exchange"
+          - "rate limits and quotas"
+          - "retry strategy"
+          - "idempotency"
+          - "timeouts and circuit breakers"
+          - "fallback strategy"
+          - "degraded modes"
+          - "vendor lock-in risks"
+          - "mocking strategy"
+          - "sandbox and test environments"
+          - "observability"
+          - "privacy and compliance"
+          - "integration risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.integration_architecture_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/integration-architecture-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether integrations are bounded, secure, reliable, observable, mockable, contract-safe, privacy-aware, and replaceable."
+        agentRole: "reviewer"
+        includes:
+          - "canonical integration architecture"
+          - "system architecture dependency"
+          - "API contracts dependency"
+          - "data model dependency"
+          - "security architecture dependency"
+          - "technical stack dependency"
+          - "integration formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/12-product-stack"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+  feeds:
+    - "04-engineering/06-security-architecture"
+    - "04-engineering/08-frontend-architecture"
+    - "04-engineering/10-infrastructure-architecture"
+    - "04-engineering/11-test-strategy"
+    - "04-engineering/12-observability-plan"
+    - "04-engineering/13-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "System boundaries, components, layers, module boundaries, dependency rules, runtime architecture, deployment topology, data flow, failure modes, security/privacy hooks, and observability hooks."
+    - id: "api-contracts"
+      type: "context"
+      required: false
+      description: "Public, internal, agent, adapter, webhook, realtime, async, auth, authorization, versioning, error, idempotency, rate-limit, and contract-testing rules."
+    - id: "data-model"
+      type: "context"
+      required: false
+      description: "Data structures, sensitivity classes, retention, event envelopes, auditability, sync rules, backup/restore, and data lineage implications for integrations."
+    - id: "domain-model"
+      type: "context"
+      required: false
+      description: "Domain commands, events, invariants, bounded contexts, anti-corruption needs, and external concepts that must not leak into core domain language."
+    - id: "technical-stack"
+      type: "context"
+      required: false
+      description: "Selected HTTP clients, SDKs, queues, auth libraries, testing tools, monitoring tools, deployment platform, and dependency policies."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "Integration requirements, system requirements, data requirements, admin requirements, and business rules that require external communication."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Performance, privacy, security, reliability, availability, scalability, compatibility, observability, compliance, and operational constraints affecting integrations."
+    - id: "integration-notes"
+      type: "manual_note"
+      required: false
+      description: "Candidate external services, vendor APIs, provider SDKs, webhooks, auth models, rate limits, sandbox accounts, failure modes, mocks, and unresolved integration questions."
+  completionCriteria:
+    - "The central question is answered through explicit integration inventory, boundaries, adapter strategy, contracts, auth, data mapping, reliability controls, observability, testing, privacy/compliance, and risks."
+    - "Integration inventory includes every material external service, third-party API, provider SDK, platform capability, webhook source, webhook target, file exchange, event stream, model provider, operational tool, or vendor dependency."
+    - "Each integration includes purpose, criticality, product capability supported, owner, contract type, data flow direction, auth model, permission scopes, sensitivity class, rate limits, failure modes, fallback behavior, observability, testing approach, and replacement strategy."
+    - "Integration boundaries define what external concepts may enter the system, what must be translated through anti-corruption layers, and where vendor-specific logic is allowed."
+    - "Ports and adapters define domain-facing ports, provider-specific adapters, stable internal interfaces, error mapping, retry semantics, idempotency, timeout behavior, and mock/fake requirements."
+    - "Contract mapping aligns external API schemas with internal API contracts, domain commands/events, data model structures, validation rules, error model, and versioning expectations."
+    - "Data mapping defines field mapping, normalization, transformation, redaction, enrichment, validation, retention, deletion, export/import, audit, and lineage behavior."
+    - "External authentication, authorization, scopes, credential storage, rotation, expiration, revocation, least privilege, and secret handling are specified or routed to Security Architecture."
+    - "Webhook and event-stream handling includes signature verification, replay protection, idempotency, ordering, retries, dead-letter handling, schema versioning, validation, observability, and failure behavior."
+    - "Rate limits, quotas, provider limits, throttling, backoff, retry budget, timeout, circuit breaker, bulkhead, and degradation rules are explicit where relevant."
+    - "Fallback and degraded modes describe user-visible impact, internal behavior, data consistency consequences, support implications, and release-blocking conditions."
+    - "Mocking, sandbox, test fixtures, provider simulators, contract tests, integration tests, and local development strategy are defined for each critical integration."
+    - "Vendor lock-in, provider maturity, API change risk, deprecation risk, pricing/cost risk, data portability, migration path, and replacement triggers are documented."
+    - "Integration observability defines logs, metrics, traces, audit events, health checks, alerts, dashboards, correlation IDs, provider request IDs, privacy-safe telemetry, and operational handoff."
+    - "Privacy and compliance concerns are surfaced without inventing legal conclusions, including data processing, residency, consent, retention, third-party policies, and sensitive data exposure."
+    - "Integration risks are concrete, source-linked, impact-aware, and routed to mitigation or downstream documents."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid integration theater: naming external services without boundaries, contracts, auth, failure behavior, observability, mocks, or replacement strategy."
+    - "Avoid leaking vendor SDKs, provider schemas, provider errors, or external terminology into domain logic without an explicit anti-corruption layer."
+    - "Avoid treating third-party uptime, rate limits, API stability, pricing, compliance, or security posture as guaranteed unless verified."
+    - "Avoid integrations that bypass API Contracts, Security Architecture, Data Model sensitivity rules, or System Architecture dependency rules."
+    - "Avoid hiding webhook replay risk, duplicate delivery, out-of-order delivery, provider retries, signature failures, or stale payloads."
+    - "Avoid retry storms, unbounded retries, silent failures, and indefinite pending states."
+    - "Avoid mocks that diverge from provider contracts or mask integration risk."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent provider guarantees, legal conclusions, pricing terms, API limits, compliance status, sandbox behavior, or SDK capabilities."
+    - "Integration architecture must preserve domain boundaries, data sensitivity, authz rules, NFRs, acceptance gates, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate external service behavior, internal contract, domain concept, data model, adapter implementation, and operational handling."
+    - "Tie integrations to Functional Requirements, Product Stack, System Architecture, Domain Model, Data Model, API Contracts, NFRs, Acceptance Criteria, or Decision Record where possible."
+    - "Classify integrations as critical, important, optional, post-MVP, deferred, experimental, deprecated, replaceable, hard-to-replace, or review-needed where useful."
+    - "Define integration behavior for success, partial success, timeout, unavailable provider, invalid credentials, permission failure, rate limit, malformed response, stale data, duplicate event, and provider schema change."
+    - "State what must be mocked, faked, recorded, simulated, or tested against sandbox."
+    - "Keep detailed endpoint payloads in API Contracts and detailed secret implementation in Security Architecture."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with System Architecture, API Contracts, Data Model, Domain Model, Technical Stack, Functional Requirements, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag integrations without criticality, owner, contract, auth model, data flow, failure behavior, fallback, rate-limit handling, observability, test approach, or replacement strategy."
+    - "Flag provider-specific concepts leaking into domain/application boundaries without translation."
+    - "Flag missing handling for retries, idempotency, timeout, circuit breaker, rate limits, webhook replay, duplicate messages, out-of-order messages, and provider deprecations."
+    - "Flag integrations that expose sensitive data without sensitivity classification, minimization, masking, encryption, or privacy review."
+    - "Verify that mocks, sandboxes, contract tests, and local development strategy are realistic enough to support Test Strategy."
+    - "Verify that observability and support implications are routed to Observability Plan, Support Model, Release Management, and Operations."
+    - "Flag content that belongs better in API Contracts, Security Architecture, Data Model, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, Support Model, or Operations."
+  specializedFormats:
+    integrationFormat:
+      description: "Required format for each material integration."
+      fields:
+        - id
+        - name
+        - provider
+        - integrationType
+        - status
+        - purpose
+        - productCapability
+        - criticality
+        - ownerOrReviewTarget
+        - contractType
+        - dataFlowDirection
+        - authenticationModel
+        - authorizationScopes
+        - credentialsRequired
+        - sensitiveDataInvolved
+        - rateLimits
+        - timeoutPolicy
+        - retryPolicy
+        - idempotencyPolicy
+        - fallbackBehavior
+        - degradedMode
+        - observabilityRequirements
+        - testingStrategy
+        - replacementStrategy
+        - risks
+        - downstreamImplications
+    adapterFormat:
+      description: "Recommended format for ports and adapters."
+      fields:
+        - port
+        - domainFacingPurpose
+        - adapter
+        - providerSpecificConcern
+        - allowedDependencies
+        - forbiddenDependencies
+        - errorMapping
+        - timeoutPolicy
+        - retryPolicy
+        - idempotencyPolicy
+        - mockOrFake
+        - testContract
+        - replacementNotes
+    webhookFormat:
+      description: "Recommended format for consumed or emitted webhooks."
+      fields:
+        - webhook
+        - direction
+        - producer
+        - consumer
+        - eventTypes
+        - endpointOrDestination
+        - authOrSignature
+        - payloadSchema
+        - validationRules
+        - idempotencyKey
+        - orderingRule
+        - retryRule
+        - replayProtection
+        - deadLetterHandling
+        - observabilityEvents
+        - failureBehavior
+    externalContractFormat:
+      description: "Recommended format for mapping external contracts to internal contracts."
+      fields:
+        - providerContract
+        - internalContract
+        - version
+        - mappedFields
+        - transformations
+        - validationRules
+        - errorMapping
+        - unsupportedProviderFields
+        - compatibilityRisk
+        - updateMonitoring
+    integrationReliabilityFormat:
+      description: "Recommended format for reliability controls."
+      fields:
+        - integration
+        - timeout
+        - retryPolicy
+        - backoff
+        - maxAttempts
+        - retryBudget
+        - idempotencyRequirement
+        - circuitBreakerRule
+        - bulkheadRule
+        - fallback
+        - degradedMode
+        - escalation
+    integrationRiskFormat:
+      description: "Recommended format for integration risks."
+      fields:
+        - risk
+        - affectedIntegration
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - replacementOrExitPlan
+        - targetDocument
+        - releaseImpact
+  sections:
+    - id: "integration-overview"
+      title: "Integration Overview"
+      intent: "Describe the overall integration landscape, integration posture, critical path integrations, optional integrations, and highest-risk external dependencies."
+      required: true
+      outputGuidance:
+        - "Open with a concise summary of the integration landscape."
+        - "Identify critical path, important, optional, post-MVP, deferred, and excluded integrations."
+        - "State the integration architecture posture: direct SDK, API client, port/adapter, event-driven, webhook-driven, file/batch, or hybrid."
+      qualityChecks:
+        - "The overview clarifies what the system depends on externally."
+        - "Critical path integrations are explicit."
+        - "The integration posture preserves System Architecture dependency rules."
+      questions:
+        - "What is the overall integration landscape?"
+        - "Which integrations are critical path, important, optional, post-MVP, deferred, or excluded?"
+        - "What integration posture is used?"
+        - "What are the highest-risk external dependencies?"
+        - "What product capabilities depend on integrations?"
+        - "What integration questions remain unresolved?"
+    - id: "integration-inventory"
+      title: "Integration Inventory"
+      intent: "Maintain the complete register of external services, provider APIs, SDKs, platform capabilities, webhooks, event streams, file exchanges, model providers, and operational tools."
+      required: true
+      outputGuidance:
+        - "List integrations as structured records using the integration format."
+        - "Group integrations by capability, provider, criticality, or contract type where useful."
+        - "Separate active, deferred, post-MVP, experimental, deprecated, and review-needed integrations."
+      qualityChecks:
+        - "Every material integration has owner, purpose, criticality, data flow, auth, failure behavior, observability, and test strategy."
+        - "The inventory does not contain speculative integrations without classification."
+        - "Downstream implications are explicit."
+      questions:
+        - "What is the complete inventory of integrations?"
+        - "What provider, API, SDK, platform capability, webhook, event stream, file exchange, model provider, or operational tool does each integration use?"
+        - "What is the purpose and criticality of each integration?"
+        - "What product capability does each integration support?"
+        - "What is the status of each integration?"
+        - "Which downstream documents must inherit each integration?"
+    - id: "integration-classification"
+      title: "Integration Classification"
+      intent: "Classify integrations by type, criticality, trust boundary, data sensitivity, reliability requirement, replacement difficulty, and operational burden."
+      required: true
+      outputGuidance:
+        - "Define classification labels and decision rules."
+        - "Classify each integration consistently."
+        - "Explain how classification changes testing, observability, fallback, security, and release requirements."
+      qualityChecks:
+        - "Classification is not decorative; it affects engineering decisions."
+        - "Criticality and replacement difficulty are not conflated."
+        - "Trust and sensitivity boundaries are explicit."
+      questions:
+        - "How are integrations classified?"
+        - "Which integrations are critical, important, optional, or experimental?"
+        - "Which integrations cross trust boundaries?"
+        - "Which integrations involve sensitive data?"
+        - "Which integrations are easy versus hard to replace?"
+        - "How does classification affect tests, monitoring, fallbacks, and release gates?"
+    - id: "external-services"
+      title: "External Services"
+      intent: "Describe external services the system depends on, including purpose, capabilities used, service limits, provider assumptions, availability assumptions, and ownership."
+      required: true
+      outputGuidance:
+        - "Describe only provider behavior relevant to system architecture."
+        - "State provider assumptions separately from verified provider facts."
+        - "Identify provider terms, limits, policies, and review needs without inventing conclusions."
+      qualityChecks:
+        - "External service assumptions are explicit."
+        - "Provider limits and risks are not hidden."
+        - "Provider capabilities are tied to product and technical requirements."
+      questions:
+        - "What external services does the system depend on?"
+        - "What provider capabilities are used?"
+        - "What service limits, quotas, policy constraints, pricing constraints, or availability assumptions apply?"
+        - "What provider assumptions are verified versus unknown?"
+        - "Who owns each external-service relationship?"
+        - "What provider documentation or review is required?"
+    - id: "integration-boundaries"
+      title: "Integration Boundaries"
+      intent: "Define integration boundaries in the architecture and how external dependencies are isolated from domain, application, data, and UI logic."
+      required: true
+      outputGuidance:
+        - "Describe integration boundaries in terms of System Architecture layers and module boundaries."
+        - "State where vendor-specific code is allowed and forbidden."
+        - "Define anti-corruption layers where external models differ from internal models."
+      qualityChecks:
+        - "External provider concepts do not leak into core domain logic without translation."
+        - "Boundary rules are enforceable by architecture, tests, linting, or review."
+        - "Integration boundaries align with ports/adapters and API Contracts."
+      questions:
+        - "Where are the integration boundaries in the architecture?"
+        - "How are external dependencies isolated from core logic?"
+        - "Where is vendor-specific code allowed?"
+        - "Where is vendor-specific code forbidden?"
+        - "What anti-corruption layers are required?"
+        - "How are boundary violations detected or prevented?"
+    - id: "ports-and-adapters"
+      title: "Ports and Adapters"
+      intent: "Define domain-facing ports, provider-specific adapters, stable internal interfaces, replacement boundaries, mocks, fakes, and test contracts."
+      required: true
+      outputGuidance:
+        - "Define ports by internal need, not provider SDK shape."
+        - "Map each adapter to one or more providers."
+        - "Include error mapping, retries, idempotency, timeouts, and mocks/fakes."
+      qualityChecks:
+        - "Ports are stable enough to protect core logic."
+        - "Adapters encapsulate provider quirks and errors."
+        - "Mocks and fakes are defined for local development and tests."
+      questions:
+        - "What ports abstract external services?"
+        - "What adapters implement each port?"
+        - "What provider-specific behavior is hidden behind adapters?"
+        - "How are provider errors mapped into internal errors?"
+        - "How are timeouts, retries, idempotency, and fallback handled at adapter level?"
+        - "What mocks or fakes are required for each adapter?"
+    - id: "contract-mapping"
+      title: "Contract Mapping"
+      intent: "Map external API contracts to internal API contracts, adapter contracts, domain commands/events, and data model structures."
+      required: true
+      outputGuidance:
+        - "Use mapping records for provider contracts that materially affect internal behavior."
+        - "Define transformations, unsupported fields, validation, error mapping, versioning, and compatibility risk."
+        - "State monitoring for provider API changes."
+      qualityChecks:
+        - "External contracts do not drive internal model shape without review."
+        - "Mapping handles provider versioning and schema changes."
+        - "Unsupported provider fields and assumptions are explicit."
+      questions:
+        - "How do external API contracts map to internal contracts?"
+        - "What provider fields map to internal fields?"
+        - "What transformations or normalizations are required?"
+        - "What provider fields are ignored, unsupported, or dangerous to expose?"
+        - "How are external errors mapped to internal errors?"
+        - "How are provider API version changes monitored and handled?"
+    - id: "data-mapping"
+      title: "Data Mapping"
+      intent: "Define how data is transformed, normalized, validated, redacted, enriched, persisted, synchronized, audited, and deleted across integration boundaries."
+      required: true
+      outputGuidance:
+        - "Tie mapping to Data Model sensitivity, retention, lineage, and auditability rules."
+        - "Separate inbound mapping, outbound mapping, bidirectional sync, and derived data."
+        - "Identify data minimization and redaction requirements."
+      qualityChecks:
+        - "Sensitive fields are minimized and protected."
+        - "Data lineage across integrations is explicit."
+        - "Provider data does not become trusted without validation."
+      questions:
+        - "What data moves across integration boundaries?"
+        - "How is inbound provider data validated, normalized, transformed, and persisted?"
+        - "How is outbound data minimized, redacted, formatted, and transmitted?"
+        - "What data lineage and auditability are required?"
+        - "What data must be deleted, retained, anonymized, or exported across integrations?"
+        - "What data mapping assumptions remain unresolved?"
+    - id: "authentication-with-external-services"
+      title: "Authentication with External Services"
+      intent: "Specify how the system authenticates with external services and how external credentials, tokens, signatures, service accounts, and secrets are created, stored, rotated, revoked, and monitored."
+      required: true
+      outputGuidance:
+        - "Separate provider authentication mechanisms by integration."
+        - "State credential lifecycle and route implementation detail to Security Architecture."
+        - "Identify token expiration, refresh, revocation, rotation, and compromised credential behavior."
+      qualityChecks:
+        - "Auth mechanisms are explicit for every protected provider."
+        - "Credential handling does not rely on ad hoc storage or manual memory."
+        - "Security-sensitive details are routed downstream appropriately."
+      questions:
+        - "How does the system authenticate with each external service?"
+        - "What credentials, tokens, API keys, OAuth grants, signatures, service accounts, certificates, or webhooks secrets are used?"
+        - "How are credentials stored, rotated, revoked, refreshed, and monitored?"
+        - "What happens when credentials expire, are revoked, or are compromised?"
+        - "What should Security Architecture inherit?"
+    - id: "authorization-and-scopes"
+      title: "Authorization and Scopes"
+      intent: "Define provider scopes, least-privilege strategy, delegated permissions, user consent, admin consent, service permissions, and permission failure behavior."
+      required: true
+      outputGuidance:
+        - "Separate authentication from authorization and provider scopes."
+        - "State least-privilege choices and consent requirements."
+        - "Define what happens when provider permissions are missing, revoked, insufficient, or overbroad."
+      qualityChecks:
+        - "External scopes are minimal and justified."
+        - "Permission failure behavior is user-safe and observable."
+        - "User consent and admin consent are handled explicitly where relevant."
+      questions:
+        - "What external provider scopes or permissions are required?"
+        - "Why is each scope required?"
+        - "What is the least-privilege strategy?"
+        - "What consent is required from users, admins, or service owners?"
+        - "What happens when external permissions are missing, revoked, insufficient, or overbroad?"
+        - "How are permission failures surfaced and recovered from?"
+    - id: "credential-management"
+      title: "Credential Management"
+      intent: "Define operational handling of external credentials, including ownership, provisioning, environments, rotation cadence, secret distribution, access control, auditing, and emergency revocation."
+      required: true
+      outputGuidance:
+        - "Define credential lifecycle at architecture level."
+        - "Separate local, preview, staging, production, sandbox, and CI credentials."
+        - "Route storage implementation to Security and Infrastructure documents."
+      qualityChecks:
+        - "Credential ownership and rotation are explicit."
+        - "Environment separation is not ignored."
+        - "Emergency revocation and auditability are considered."
+      questions:
+        - "Who owns external-service credentials?"
+        - "How are credentials provisioned per environment?"
+        - "How are credentials distributed to runtime environments and CI?"
+        - "What rotation cadence applies?"
+        - "What access controls and audits apply to credentials?"
+        - "What is the emergency revocation process?"
+    - id: "webhooks"
+      title: "Webhooks"
+      intent: "Define webhooks the system consumes and emits, including signatures, payload validation, idempotency, ordering, retries, replay protection, dead-lettering, and observability."
+      required: true
+      outputGuidance:
+        - "Use the webhook format for each consumed or emitted webhook."
+        - "Define provider retry behavior separately from internal retry behavior."
+        - "Include duplicate delivery, out-of-order delivery, stale payload, malformed payload, and signature failure handling."
+      qualityChecks:
+        - "Webhook payloads are validated and authenticated."
+        - "Replay, duplicate, ordering, and retry behavior are explicit."
+        - "Webhook failures are observable and recoverable where possible."
+      questions:
+        - "What webhooks does the system consume?"
+        - "What webhooks does the system emit?"
+        - "How are webhook signatures verified?"
+        - "How are webhook payloads validated?"
+        - "How are duplicate, out-of-order, stale, malformed, or replayed webhook events handled?"
+        - "How are webhook retries, dead-lettering, and observability handled?"
+    - id: "event-streams"
+      title: "Event Streams"
+      intent: "Define external or internal integration event streams, message envelopes, delivery guarantees, ordering, replay, acknowledgements, subscriptions, and failure handling."
+      required: true
+      outputGuidance:
+        - "Include this section even if event streams are deferred or unsupported."
+        - "Separate domain events, integration events, provider events, audit events, telemetry events, and queue messages."
+        - "Define delivery guarantees honestly."
+      qualityChecks:
+        - "Event streams include ordering, replay, idempotency, and failure behavior where relevant."
+        - "Event payloads respect sensitivity and retention rules."
+        - "Event streams do not become implicit APIs without contracts."
+      questions:
+        - "Are external or internal event streams used?"
+        - "What message envelope and event types are used?"
+        - "What delivery guarantees are provided?"
+        - "How are ordering, replay, acknowledgements, subscriptions, and dead-letter handling managed?"
+        - "How are event schemas versioned?"
+        - "What events are explicitly unsupported or deferred?"
+    - id: "file-and-batch-exchange"
+      title: "File and Batch Exchange"
+      intent: "Define file imports, file exports, batch jobs, bulk transfers, scheduled syncs, formats, validation, partial failure, retries, and auditability."
+      required: true
+      outputGuidance:
+        - "Include this section even if file/batch exchange is unsupported."
+        - "Define format, encoding, size limits, validation, partial success, error reporting, retries, and retention."
+        - "Route storage/security details downstream."
+      qualityChecks:
+        - "File and batch exchanges have validation and failure behavior."
+        - "Large payloads and partial failures are handled explicitly."
+        - "Sensitive files are protected and retained appropriately."
+      questions:
+        - "Does the system import or export files?"
+        - "What batch or bulk exchanges exist?"
+        - "What file formats, encodings, schemas, size limits, and validation rules apply?"
+        - "How are partial successes and failures reported?"
+        - "How are files retained, deleted, encrypted, audited, or redacted?"
+        - "What file/batch exchanges are deferred or unsupported?"
+    - id: "rate-limits-and-quotas"
+      title: "Rate Limits and Quotas"
+      intent: "Document provider rate limits, quotas, cost ceilings, burst behavior, throttling, internal rate limiting, and client-side/server-side handling."
+      required: true
+      outputGuidance:
+        - "State known provider limits separately from assumptions."
+        - "Define handling for rate-limit responses and proactive throttling."
+        - "Tie limits to retry strategy and fallback behavior."
+      qualityChecks:
+        - "Rate limits are not ignored for critical integrations."
+        - "Unknown limits are marked review-needed."
+        - "Handling prevents retry storms and user-confusing failures."
+      questions:
+        - "What rate limits, quotas, cost ceilings, or burst limits apply to each external service?"
+        - "Which limits are verified and which are assumptions?"
+        - "How is rate limiting handled client-side and server-side?"
+        - "How are rate-limit responses surfaced internally and to users?"
+        - "What proactive throttling or queueing is required?"
+        - "What happens when quotas are exhausted?"
+    - id: "retry-strategy"
+      title: "Retry Strategy"
+      intent: "Define retry policies for failed external calls, including retryable errors, non-retryable errors, backoff algorithm, max attempts, retry budget, jitter, and escalation."
+      required: true
+      outputGuidance:
+        - "Define retry policy by integration class or operation class."
+        - "Separate provider retries, internal retries, webhook retries, user-triggered retries, and job retries."
+        - "Include retry budget and escalation behavior."
+      qualityChecks:
+        - "Retries are bounded and safe."
+        - "Non-idempotent operations are not retried blindly."
+        - "Retry strategy aligns with rate limits and circuit breakers."
+      questions:
+        - "What is the retry strategy for failed external calls?"
+        - "What errors are retryable versus non-retryable?"
+        - "What backoff algorithm, jitter, maximum retry count, and retry budget are used?"
+        - "How are provider retries distinguished from internal retries?"
+        - "What happens after retry exhaustion?"
+        - "What retry behavior is prohibited?"
+    - id: "idempotency"
+      title: "Idempotency"
+      intent: "Define idempotency requirements for external calls, incoming webhooks, outgoing requests, retries, duplicate messages, and side-effecting operations."
+      required: true
+      outputGuidance:
+        - "Identify which integration operations require idempotency."
+        - "Define idempotency key source, scope, retention, conflict behavior, and replay behavior."
+        - "Tie idempotency to Data Model and API Contracts."
+      qualityChecks:
+        - "Duplicate external effects are prevented where material."
+        - "Webhook and retry duplication are handled."
+        - "Idempotency storage and retention implications are explicit."
+      questions:
+        - "Which integration operations require idempotency?"
+        - "How are idempotency keys generated, stored, and scoped?"
+        - "How long are idempotency keys retained?"
+        - "How are duplicate webhooks, duplicate external calls, and repeated retries handled?"
+        - "What happens when an idempotency key is reused with different payload?"
+        - "What Data Model or API Contracts implications exist?"
+    - id: "timeouts-and-circuit-breakers"
+      title: "Timeouts and Circuit Breakers"
+      intent: "Define timeout budgets, cancellation, circuit breaker rules, bulkheads, concurrency limits, provider isolation, and failure containment."
+      required: true
+      outputGuidance:
+        - "Define timeout budgets by provider and operation class."
+        - "State circuit breaker thresholds, reset behavior, and degraded mode trigger at conceptual level."
+        - "Include bulkheads or concurrency isolation where critical providers can degrade the system."
+      qualityChecks:
+        - "Timeouts and circuit breakers prevent cascading failure."
+        - "Long-running calls include user-visible or job-level behavior."
+        - "Provider failures are isolated from core system stability where possible."
+      questions:
+        - "What timeout applies to each integration operation class?"
+        - "How are long-running external operations cancelled or continued in background?"
+        - "When does a circuit breaker open, half-open, and close?"
+        - "What bulkhead or concurrency limits isolate provider failures?"
+        - "What degraded mode is triggered by circuit breakers?"
+        - "How are timeout and circuit breaker events observed?"
+    - id: "fallback-strategy"
+      title: "Fallback Strategy"
+      intent: "Describe what happens when an external service is unavailable, degraded, slow, inconsistent, unauthorized, rate-limited, deprecated, or returns malformed data."
+      required: true
+      outputGuidance:
+        - "Define fallback by integration and failure class."
+        - "Separate fallback, retry, degraded mode, queue-for-later, cached response, manual operation, alternate provider, user notification, and hard failure."
+        - "State data consistency and trust implications."
+      qualityChecks:
+        - "Fallbacks are realistic and do not hide data loss or stale data."
+        - "User-visible behavior is explicit."
+        - "Critical integrations have release-blocking fallback decisions."
+      questions:
+        - "What happens when an external service is unavailable?"
+        - "What happens when an external service is slow, inconsistent, unauthorized, rate-limited, deprecated, or returns malformed data?"
+        - "Are there graceful degradation or fallback paths?"
+        - "Can the system use cached data, queue work, switch providers, or continue manually?"
+        - "What user-visible communication is required?"
+        - "What failures are release-blocking?"
+    - id: "degraded-modes"
+      title: "Degraded Modes"
+      intent: "Define system behavior when one or more integrations are degraded, including available features, disabled actions, stale data markers, support escalation, and recovery."
+      required: true
+      outputGuidance:
+        - "Describe degraded modes as explicit operating states."
+        - "State which features remain available, which are disabled, and which require user communication."
+        - "Tie degraded mode to observability and support."
+      qualityChecks:
+        - "Degraded modes are understandable and recoverable."
+        - "Stale or partial data is not presented as fresh or complete."
+        - "Support and operations implications are explicit."
+      questions:
+        - "What degraded modes exist when integrations fail or slow down?"
+        - "What features remain available in each degraded mode?"
+        - "What actions are disabled or queued?"
+        - "How is stale, partial, or unavailable provider data communicated?"
+        - "How does the system exit degraded mode?"
+        - "What support or operations workflow is triggered?"
+    - id: "vendor-lock-in-risks"
+      title: "Vendor Lock-in Risks"
+      intent: "Identify integrations that create vendor lock-in, migration difficulty, provider-specific data shape, pricing exposure, API dependency, operational dependency, or strategic dependency."
+      required: true
+      outputGuidance:
+        - "Describe lock-in by concrete replacement difficulty, not generic vendor fear."
+        - "Define abstraction, portability, export, alternate provider, migration, or accepted-risk strategy."
+        - "State replacement triggers."
+      qualityChecks:
+        - "Lock-in risk is specific and tied to impact."
+        - "Mitigation strategy is realistic."
+        - "Accepted lock-in is explicit and justified."
+      questions:
+        - "Which integrations pose vendor lock-in risk?"
+        - "What makes each provider hard to replace?"
+        - "What data, API, SDK, workflow, pricing, or operational dependency creates lock-in?"
+        - "What is the mitigation or abstraction strategy?"
+        - "What migration or replacement path exists?"
+        - "What trigger would cause provider replacement?"
+    - id: "mocking-strategy"
+      title: "Mocking Strategy"
+      intent: "Define how external services are mocked, faked, recorded, simulated, virtualized, or stubbed for local development, automated testing, CI, and failure simulation."
+      required: true
+      outputGuidance:
+        - "Define mocking approach by integration criticality and contract stability."
+        - "Separate mocks, fakes, provider sandbox, recorded fixtures, contract tests, service virtualization, and local adapters."
+        - "State how mocks stay synchronized with real provider contracts."
+      qualityChecks:
+        - "Mocks support deterministic tests without hiding provider risk."
+        - "Critical integrations have realistic failure-mode tests."
+        - "Mocks do not become incompatible with real provider behavior."
+      questions:
+        - "How are external services mocked for testing and development?"
+        - "What mocking tools, fakes, sandboxes, recorded fixtures, or service virtualization are used?"
+        - "How are success, failure, rate-limit, timeout, malformed response, auth failure, and provider-change scenarios simulated?"
+        - "How are mocks kept aligned with provider contracts?"
+        - "What mocks are required for CI?"
+        - "What integrations cannot be safely mocked and require sandbox testing?"
+    - id: "sandbox-and-test-environments"
+      title: "Sandbox and Test Environments"
+      intent: "Define provider sandbox usage, test accounts, environment separation, fixture data, test credentials, destructive test limits, and CI integration behavior."
+      required: true
+      outputGuidance:
+        - "State which providers offer sandbox/test environments and how they are used."
+        - "Separate local, CI, preview, staging, production, and provider sandbox behavior."
+        - "Define test data and credential safety."
+      qualityChecks:
+        - "Testing does not depend on production provider data unless explicitly justified."
+        - "Test credentials are isolated and controlled."
+        - "Sandbox limitations are documented."
+      questions:
+        - "What sandbox or test environments exist for each integration?"
+        - "What test accounts, credentials, fixtures, and provider-side configuration are required?"
+        - "How are local, CI, preview, staging, and production integrations separated?"
+        - "What provider sandbox limitations affect testing?"
+        - "What destructive or billable operations are blocked in test environments?"
+        - "What should Test Strategy and Deployment Plan inherit?"
+    - id: "observability"
+      title: "Observability"
+      intent: "Define integration-level logs, metrics, traces, audit events, health checks, alerts, dashboards, correlation IDs, provider request IDs, and privacy-safe telemetry."
+      required: true
+      outputGuidance:
+        - "Define observability by integration and failure mode."
+        - "Separate operational metrics, provider metrics, audit events, diagnostic logs, security events, and product analytics."
+        - "Include privacy-safe telemetry rules."
+      qualityChecks:
+        - "Critical integrations are observable enough to debug and support."
+        - "Sensitive provider data is not logged unnecessarily."
+        - "Alerts are actionable and tied to operational workflows."
+      questions:
+        - "What logs, metrics, traces, and audit events are required for each integration?"
+        - "What provider request IDs, correlation IDs, or trace context must be captured?"
+        - "What health checks and dashboards are needed?"
+        - "What integration failures trigger alerts?"
+        - "What telemetry must be privacy-safe or redacted?"
+        - "What should Observability Plan and Support Model inherit?"
+    - id: "privacy-and-compliance"
+      title: "Privacy and Compliance"
+      intent: "Surface privacy, security, legal, contractual, data processing, data residency, user consent, retention, deletion, and third-party policy concerns for integrations."
+      required: true
+      outputGuidance:
+        - "State known concerns separately from review-needed concerns."
+        - "Tie privacy and compliance concerns to data flows, sensitivity classes, providers, locations, terms, policies, and user consent."
+        - "Do not invent legal conclusions."
+      qualityChecks:
+        - "Sensitive external data flows are reviewed or flagged."
+        - "Provider policy and data processing concerns are not hidden."
+        - "Unknown legal/compliance questions are routed to review."
+      questions:
+        - "What user data or sensitive data is sent to each external provider?"
+        - "What data processing, data residency, retention, deletion, export, or user consent concerns exist?"
+        - "What provider terms, policies, or compliance requirements may apply?"
+        - "What integration data must not be shared with providers?"
+        - "What privacy or compliance questions require review?"
+        - "What should Security Architecture, Data Model, and Operations inherit?"
+    - id: "integration-risks"
+      title: "Integration Risks"
+      intent: "Identify integration risks, including provider outage, API deprecation, provider schema changes, auth failure, rate limits, duplicate events, malformed data, privacy exposure, cost spikes, and operational fragility."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete integration failure modes."
+        - "Tie risks to affected integration, provider, contract, data flow, auth mechanism, rate limit, webhook, observability, support, or downstream document."
+        - "Include early signal, mitigation, replacement/exit plan, release impact, and target document."
+      qualityChecks:
+        - "Risks are specific enough to test, monitor, mitigate, or route downstream."
+        - "Provider outage, API change, security/privacy, rate-limit, webhook, data quality, cost, and operational risks are considered."
+        - "Mitigations and accepted risks are explicit."
+      questions:
+        - "What are the top integration risks?"
+        - "What happens if a critical external service is deprecated or changes its API?"
+        - "What happens if a provider outage, auth failure, rate limit, webhook replay, duplicate delivery, malformed response, or stale data occurs?"
+        - "What privacy, security, cost, vendor, or operational risks exist?"
+        - "What early signals indicate integration failure?"
+        - "What mitigation, replacement, or exit plan exists?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from Integration Architecture and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route integration outputs to the correct downstream documents."
+        - "Separate security, frontend, infrastructure, testing, observability, deployment, release, support, risk, and operations implications."
+        - "Preserve unresolved integration questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing integration rules silently."
+        - "Integration architecture and downstream implementation responsibilities remain distinct."
+      questions:
+        - "What should Security Architecture inherit from Integration Architecture?"
+        - "What should Frontend Architecture inherit?"
+        - "What should Infrastructure Architecture inherit?"
+        - "What should Test Strategy and Observability Plan inherit?"
+        - "What should Deployment Plan and Release Management inherit?"
+        - "What should Support Model, Risk Management, and Operations inherit?"
+        - "What unresolved integration questions must be carried forward?"

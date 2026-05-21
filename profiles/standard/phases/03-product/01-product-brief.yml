@@ -1,0 +1,361 @@
+document:
+  id: "01-product-brief"
+  title: "Product Executive Synthesis"
+  phase: "03-product"
+  status: "not_started"
+  order: 1
+  type: "brief"
+  purpose: "Define the product to be built from validated inputs, inherited constraints, target user evidence, primary use case, product promise, differentiation, and success criteria."
+  centralQuestion: "Given everything validated, what product will be built, for whom, why now, and under what constraints?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/03-product/01-product-brief.md"
+      purpose: "Store the canonical executive synthesis of the product to be built as a Markdown document."
+    artifacts:
+      - id: "product.product_brief_summary"
+        format: "html"
+        path: "outcomes/html/03-product/product-brief-summary.html"
+        purpose: "Provide a navigable executive summary of product definition, validated problem, target user, product promise, thesis, primary use case, differentiation, constraints, success criteria, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "product summary"
+          - "validated problem"
+          - "target user"
+          - "core product promise"
+          - "product thesis"
+          - "primary use case"
+          - "product differentiation"
+          - "product constraints"
+          - "product success criteria"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.product_brief_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/product-brief-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the product brief is evidence-based, scoped, differentiated, constrained, and ready to feed product planning."
+        agentRole: "reviewer"
+        includes:
+          - "canonical product brief"
+          - "foundation dependencies"
+          - "validation report dependency"
+          - "decision record dependency"
+          - "product brief format"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "01-foundation/07-glossary"
+    - "02-validation/03-hypotheses"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+  feeds:
+    - "03-product/02-product-scope"
+    - "03-product/03-user-stories"
+    - "03-product/04-user-journeys"
+    - "03-product/05-information-architecture"
+    - "03-product/06-ux-principles"
+    - "03-product/07-ui-principles"
+    - "03-product/08-interaction-model"
+    - "03-product/09-feature-specification"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "06-operations/02-operating-model"
+  inputs:
+    - id: "validation-report"
+      type: "context"
+      required: false
+      description: "Validation verdict, supported claims, refuted claims, inconclusive claims, remaining risks, required changes before Product, and downstream handoff constraints."
+    - id: "decision-record"
+      type: "context"
+      required: false
+      description: "Proceed, pivot, stop, deferred, reopened, accepted, and refuted decisions that constrain product definition."
+    - id: "evidence-log"
+      type: "context"
+      required: false
+      description: "Evidence supporting the validated problem, target user, differentiation, product promise, and success criteria."
+    - id: "foundation-documents"
+      type: "context"
+      required: false
+      description: "Foundation documents that define the thesis, problem, audience, principles, boundaries, success definition, and glossary."
+    - id: "product-notes"
+      type: "manual_note"
+      required: false
+      description: "Initial product direction, feature ideas, constraints, design thoughts, and known product questions that must be reconciled with validation evidence."
+  completionCriteria:
+    - "The central question is answered explicitly in the Product Summary section."
+    - "The product definition is grounded in validated problem, audience, evidence, and decision records."
+    - "The brief distinguishes validated inputs from assumptions, open questions, inherited constraints, and product hypotheses."
+    - "The core product promise is specific, user-facing, testable, and bounded by what the product can actually deliver."
+    - "The primary use case is concrete enough to inform Product Scope, User Stories, User Journeys, UX, UI, and Acceptance Criteria."
+    - "Product differentiation is described against real alternatives without exaggerating defensibility."
+    - "Product constraints include boundaries inherited from Foundation and Validation."
+    - "Product success criteria are observable, falsifiable, and connected to Foundation Success Definition and Validation Report."
+    - "Downstream handoff states what Product, Engineering, Go-to-market, and Operations may assume and must not assume."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid product theater: a polished product description not backed by validation evidence."
+    - "Avoid feature lists before defining the product promise and primary use case."
+    - "Avoid treating unvalidated ideas as validated product requirements."
+    - "Avoid persona fiction unsupported by Audience Definition or Validation evidence."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent validation evidence, user behavior, market facts, differentiators, metrics, or constraints."
+    - "Do not move roadmap, implementation, detailed UX, detailed UI, or engineering architecture into this brief."
+    - "Do not define the product as merely the absence of current alternatives."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate validated facts, assumptions, product hypotheses, decisions, constraints, and open questions."
+    - "Trace major product claims to Foundation, Validation Report, Evidence Log, or Decision Record where possible."
+    - "Define the product at executive synthesis level; detailed scope, stories, journeys, IA, UX, UI, feature specs, and acceptance criteria belong in downstream Product documents."
+    - "State what the product must not become when relevant."
+    - "Preserve caveats from Validation instead of smoothing them into certainty."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Foundation documents, Evidence Log, Decision Record, or Validation Report."
+    - "Flag product claims not supported by validation evidence or explicitly marked as assumptions."
+    - "Flag content that belongs better in Product Scope, User Stories, User Journeys, UX Principles, UI Principles, Interaction Model, Feature Specification, Engineering, Go-to-market, or Operations."
+    - "Verify that the primary use case is specific enough to drive downstream product work."
+    - "Verify that product success criteria are observable and not vanity metrics."
+    - "Verify that constraints and non-goals inherited from Foundation and Validation are preserved."
+  specializedFormats:
+    productBriefFormat:
+      description: "Recommended format for the product executive synthesis."
+      fields:
+        - productName
+        - productSummary
+        - targetUser
+        - validatedProblem
+        - corePromise
+        - primaryUseCase
+        - differentiation
+        - constraints
+        - successCriteria
+        - evidenceBasis
+        - openQuestions
+    productClaimFormat:
+      description: "Recommended format for important product claims."
+      fields:
+        - claim
+        - status
+        - evidenceBasis
+        - confidence
+        - relatedValidationDecision
+        - downstreamImplication
+        - riskIfWrong
+    handoffItemFormat:
+      description: "Recommended format for downstream handoff items."
+      fields:
+        - targetDocument
+        - item
+        - sourceEvidenceOrDecision
+        - status
+        - requiredAction
+        - riskIfIgnored
+  sections:
+    - id: "product-summary"
+      title: "Product Summary"
+      intent: "Define the product at the highest level in terms of user, validated problem, product promise, primary use case, and non-goals."
+      required: true
+      outputGuidance:
+        - "Open with a direct one-paragraph product definition."
+        - "State who it is for, what problem it solves, and what makes it worth building now."
+        - "Include what the product is not to preserve boundaries."
+      qualityChecks:
+        - "The product can be understood without reading all downstream Product documents."
+        - "The summary is grounded in validated inputs rather than aspiration alone."
+        - "The product is not defined as a generic category label or feature bundle."
+      questions:
+        - "What is the product in one paragraph?"
+        - "Who is the product for?"
+        - "What core problem does it solve?"
+        - "Why is this the right product to build now?"
+        - "What is the product's primary differentiator?"
+        - "What is the product not?"
+        - "What validated inputs support this summary?"
+    - id: "validated-problem"
+      title: "Validated Problem"
+      intent: "Restate the validated problem, evidence basis, severity, current alternatives, unresolved caveats, and downstream product implications."
+      required: true
+      outputGuidance:
+        - "Summarize only the problem evidence relevant to product definition."
+        - "Separate validated problem facts from unvalidated or inconclusive claims."
+        - "Link current alternatives to product implications without jumping into feature detail."
+      qualityChecks:
+        - "The problem is not phrased as absence of this product."
+        - "Severity and urgency are supported by evidence or marked as assumptions."
+        - "The section preserves caveats from Validation."
+      questions:
+        - "What problem has been validated through discovery?"
+        - "What evidence supports the existence, severity, frequency, or urgency of this problem?"
+        - "What happens if this problem remains unsolved?"
+        - "How is this problem currently solved in suboptimal ways?"
+        - "What problem claims remain inconclusive or untested?"
+        - "What does this problem imply for Product Scope?"
+    - id: "target-user"
+      title: "Target User"
+      intent: "Define the primary and secondary users through validated situation, behavior, context, constraints, capabilities, motivations, and risks."
+      required: true
+      outputGuidance:
+        - "Describe users behaviorally and situationally rather than as shallow personas."
+        - "Distinguish primary user, secondary user, buyer, payer, and beneficiary where relevant."
+        - "Name excluded or deferred users that should not drive initial product decisions."
+      qualityChecks:
+        - "The target user is consistent with Audience Definition and Validation evidence."
+        - "The section avoids unsupported persona fiction."
+        - "User constraints and risks are concrete enough to inform UX and product scope."
+      questions:
+        - "Who is the primary target user?"
+        - "What is their context, skill level, environment, and operating constraint?"
+        - "What are their primary goals, frustrations, motivations, and risks?"
+        - "What behaviors or situations identify them?"
+        - "Are there secondary users, buyers, payers, or beneficiaries to consider?"
+        - "Which users are explicitly excluded or deferred?"
+        - "What target-user assumptions remain unvalidated?"
+    - id: "core-product-promise"
+      title: "Core Product Promise"
+      intent: "Articulate the single most important promise the product makes, how it is delivered, what would break it, and what the product must not promise."
+      required: true
+      outputGuidance:
+        - "State the promise in user-facing outcome language."
+        - "Clarify how the product consistently delivers the promise at a conceptual level."
+        - "Name what the product must not promise because it cannot guarantee it or because it violates boundaries."
+      qualityChecks:
+        - "The promise is specific and testable."
+        - "The promise is not inflated beyond validation evidence."
+        - "Failure modes are explicit."
+      questions:
+        - "What is the single most important promise the product makes to users?"
+        - "What outcome does the user get after using the product?"
+        - "How is this promise delivered consistently?"
+        - "What would cause the promise to break?"
+        - "What should the product explicitly not promise?"
+        - "What evidence supports this promise?"
+    - id: "product-thesis"
+      title: "Product Thesis"
+      intent: "State why this product should exist, what product-level assumption it represents, and what would prove the product direction wrong."
+      required: true
+      outputGuidance:
+        - "Connect the product thesis to the Founding Thesis without duplicating it."
+        - "State the product-level bet clearly."
+        - "Define falsification conditions and in-market validation path."
+      qualityChecks:
+        - "The product thesis is falsifiable."
+        - "The thesis is product-specific rather than a restatement of the project thesis."
+        - "The in-market test does not assume success."
+      questions:
+        - "What is the product's reason for existing?"
+        - "What worldview, product bet, or assumption about user behavior does the product represent?"
+        - "How does this product thesis relate to the Founding Thesis and Validation Report?"
+        - "What would prove the product thesis wrong?"
+        - "How will the thesis be tested in-market?"
+        - "What decision should follow if the product thesis is weakened or refuted?"
+    - id: "primary-use-case"
+      title: "Primary Use Case"
+      intent: "Describe the one use case the product must nail, including trigger, user goal, key steps, success state, failure state, and product implications."
+      required: true
+      outputGuidance:
+        - "Pick one primary use case rather than listing many equal priorities."
+        - "Describe the trigger, context, user intent, steps, and success criteria."
+        - "Keep this at synthesis level; detailed journeys and stories belong downstream."
+      qualityChecks:
+        - "The primary use case is specific enough to guide User Stories and User Journeys."
+        - "The use case is grounded in validated problem and target user evidence."
+        - "Success and failure are observable."
+      questions:
+        - "What is the one use case the product must nail?"
+        - "What is the user's trigger for this use case?"
+        - "What is the user's desired outcome?"
+        - "What are the key steps in this use case?"
+        - "What does success look like for this use case?"
+        - "What does failure look like for this use case?"
+        - "What downstream Product documents must expand this use case?"
+    - id: "product-differentiation"
+      title: "Product Differentiation"
+      intent: "Identify how the product differs from alternatives, what is meaningfully defensible, what is easy to copy, and what should not be overclaimed."
+      required: true
+      outputGuidance:
+        - "Compare against current alternatives, substitutes, and likely competitor responses."
+        - "Distinguish differentiation from defensibility."
+        - "Name what competitors can copy easily."
+      qualityChecks:
+        - "Differentiators are meaningful to the target user and problem."
+        - "Defensibility claims are evidence-aware and not slogans."
+        - "The section is fair to alternatives."
+      questions:
+        - "How does this product differ from alternatives?"
+        - "What are the top three competitive differentiators?"
+        - "Which differentiators matter most to the target user?"
+        - "What defensible advantage does the product have?"
+        - "What can competitors easily copy?"
+        - "What differentiation claims remain unvalidated?"
+    - id: "product-constraints"
+      title: "Product Constraints"
+      intent: "Enumerate inherited, external, resource, platform, ethical, UX, business, and scope constraints that shape product definition."
+      required: true
+      outputGuidance:
+        - "Separate hard constraints, negotiable constraints, inherited boundaries, and deferred decisions."
+        - "Preserve constraints from Foundation Boundaries and Validation Report."
+        - "Explain how each major constraint affects product decisions."
+      qualityChecks:
+        - "Constraints are explicit enough to guide Product Scope and Engineering Brief."
+        - "Self-imposed constraints are distinguished from external constraints."
+        - "Constraints do not silently contradict validated needs or principles."
+      questions:
+        - "What are the hard non-negotiable constraints?"
+        - "What constraints are inherited from Foundation and Validation?"
+        - "What platform, ethical, regulatory, business, UX, or resource constraints apply?"
+        - "What time-to-market constraints exist?"
+        - "What constraints are self-imposed versus external?"
+        - "What constraints are negotiable or deferred?"
+        - "Which constraints must Engineering, GTM, or Operations inherit?"
+    - id: "product-success-criteria"
+      title: "Product Success Criteria"
+      intent: "Define observable product-level success and failure criteria that connect to validated user outcomes and Foundation Success Definition."
+      required: true
+      outputGuidance:
+        - "Define success in observable user and product terms, not only internal metrics."
+        - "Separate leading indicators, lagging indicators, qualitative signals, and failure thresholds."
+        - "Avoid inventing numeric targets unless marked as provisional."
+      qualityChecks:
+        - "Success criteria are observable and falsifiable."
+        - "Metrics are not vanity metrics."
+        - "Failure criteria are explicit."
+      questions:
+        - "What metrics or signals define product success?"
+        - "What user outcome indicates the product is working?"
+        - "What is the leading indicator of product-market fit?"
+        - "What is the threshold for MVP success?"
+        - "What would cause the product to be considered a failure?"
+        - "Which targets are validated, provisional, or unknown?"
+        - "What should feed Acceptance Criteria later?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Product, Engineering, Go-to-market, and Operations documents may assume, must expand, and must not assume from this brief."
+      required: true
+      outputGuidance:
+        - "Translate the brief into explicit handoff items for downstream documents."
+        - "Separate permissions, restrictions, unresolved questions, and required expansions."
+        - "Name the target document for each major handoff item."
+      qualityChecks:
+        - "Handoff items are concrete enough to guide downstream generation."
+        - "The handoff preserves validation caveats and constraints."
+        - "Downstream documents are not allowed to assume more than this brief supports."
+      questions:
+        - "What should Product Scope inherit from this brief?"
+        - "What should User Stories and User Journeys expand?"
+        - "What should UX, UI, IA, and Interaction Model inherit?"
+        - "What should Feature Specification and Acceptance Criteria inherit?"
+        - "What should Engineering, GTM, and Operations inherit?"
+        - "What must downstream documents not assume yet?"
+        - "What unresolved questions must be carried forward?"

@@ -1,0 +1,828 @@
+document:
+  id: "12-knowledge-management"
+  title: "Knowledge Management"
+  phase: "06-operations"
+  status: "not_started"
+  order: 12
+  type: "knowledge_management"
+  purpose: "Define how operational knowledge is captured, structured, versioned, validated, searched, reviewed, deprecated, archived, transferred, and protected from loss or staleness across runbooks, decisions, support knowledge, customer-facing documentation, internal notes, incident learnings, process documentation, financial knowledge, privacy/compliance knowledge, and risk knowledge."
+  centralQuestion: "How is operational knowledge preserved, kept current, made discoverable, transferred across owners, protected from loss, and converted into reliable action?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/06-operations/12-knowledge-management.md"
+      purpose: "Store the canonical knowledge management model as a Markdown document."
+    artifacts:
+      - id: "operations.knowledge_management_system"
+        format: "html"
+        path: "outcomes/html/06-operations/knowledge-management-system.html"
+        purpose: "Provide a founder-facing knowledge management system covering knowledge objective, source taxonomy, canonical sources, runbooks, decision records, support knowledge base, internal notes, customer-facing documentation, incident knowledge, process knowledge, financial/privacy/compliance knowledge, ownership, review cadence, freshness, search, archival, transfer, metrics, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "knowledge objective"
+          - "knowledge principles"
+          - "knowledge scope"
+          - "knowledge taxonomy"
+          - "canonical sources"
+          - "documentation sources"
+          - "source of truth rules"
+          - "runbooks"
+          - "decision records"
+          - "support knowledge base"
+          - "internal notes"
+          - "customer-facing documentation"
+          - "incident knowledge"
+          - "process knowledge"
+          - "financial knowledge"
+          - "privacy and compliance knowledge"
+          - "risk knowledge"
+          - "documentation ownership"
+          - "review cadence"
+          - "freshness and staleness rules"
+          - "search and discoverability"
+          - "versioning and change control"
+          - "knowledge transfer"
+          - "archival rules"
+          - "knowledge metrics"
+          - "knowledge risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "operations.knowledge_management_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/06-operations/knowledge-management-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether operational knowledge is canonical, current, owner-assigned, searchable, versioned, reviewable, safely archived, and protected from knowledge loss or documentation rot."
+        agentRole: "reviewer"
+        includes:
+          - "canonical knowledge management model"
+          - "operations brief dependency"
+          - "operating model dependency"
+          - "team responsibilities dependency"
+          - "customer support dependency"
+          - "customer success dependency"
+          - "business processes dependency"
+          - "operational metrics dependency"
+          - "reporting cadence dependency"
+          - "incident management dependency"
+          - "risk and compliance dependency"
+          - "financial operations dependency"
+          - "knowledge management formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "03-product/02-scope"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/11-observability"
+    - "04-engineering/13-engineering-standards"
+    - "04-engineering/14-technical-risks"
+    - "05-go-to-market/04-messaging"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "05-go-to-market/13-go-to-market-risks"
+    - "06-operations/01-operations-brief"
+    - "06-operations/02-operating-model"
+    - "06-operations/03-team-and-responsibilities"
+    - "06-operations/04-customer-support"
+    - "06-operations/05-customer-success"
+    - "06-operations/06-business-processes"
+    - "06-operations/07-operational-metrics"
+    - "06-operations/08-reporting-and-cadence"
+    - "06-operations/09-incident-management"
+    - "06-operations/10-risk-and-compliance"
+    - "06-operations/11-financial-operations"
+  feeds:
+    - "06-operations/13-risk-management"
+  inputs:
+    - id: "operations-context"
+      type: "context"
+      required: false
+      description: "Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk/Compliance, and Financial Operations outputs that define operational knowledge sources and ownership."
+    - id: "product-engineering-context"
+      type: "context"
+      required: false
+      description: "Product scope, requirements, acceptance criteria, security/privacy constraints, observability, engineering standards, technical risks, release notes, runbooks, and engineering documentation expectations."
+    - id: "customer-facing-context"
+      type: "context"
+      required: false
+      description: "Messaging, pricing, support macros, customer-facing help docs, onboarding guides, known issue language, public policies, customer promises, and claim boundaries."
+    - id: "risk-compliance-finance-context"
+      type: "context"
+      required: false
+      description: "Policies, obligations, audit evidence, vendor records, accepted risks, compliance reviews, financial rules, financial evidence, and professional-review constraints."
+    - id: "knowledge-management-notes"
+      type: "manual_note"
+      required: false
+      description: "Known documentation locations, naming conventions, current knowledge gaps, stale docs, runbook ideas, decision log practices, search/discovery issues, ownership assumptions, archival preferences, and unresolved knowledge management questions."
+  completionCriteria:
+    - "The central question is answered through a complete knowledge management model covering capture, source-of-truth, ownership, review, freshness, search, versioning, archival, transfer, metrics, risks, and downstream handoff."
+    - "Knowledge objective defines what knowledge management protects: continuity, onboarding, support accuracy, operational reliability, customer trust, decision memory, incident learning, process repeatability, compliance evidence, financial correctness, and risk reduction."
+    - "Knowledge principles define how knowledge should be canonical, current, searchable, owner-assigned, versioned, concise, actionable, privacy-safe, customer-safe, and free from stale duplicate truth."
+    - "Knowledge scope defines what is inside knowledge management, what belongs to Product/Engineering/GTM/Support/Finance/Compliance/Risk documents, what is customer-facing, what is internal-only, and what is explicitly out of scope."
+    - "Knowledge taxonomy defines categories, sensitivity, audience, canonicality, freshness state, review state, owner state, archival state, customer-facing status, and downstream ownership."
+    - "Canonical sources define where source-of-truth documents live, how conflicts are resolved, who can change them, how changes are reviewed, and how downstream artifacts are regenerated."
+    - "Documentation sources identify repositories, docs folders, runbooks, dashboards, issue trackers, support tools, knowledge bases, decision records, incident archives, policy repositories, finance records, and customer-facing docs."
+    - "Source of truth rules define how duplicate, derived, archived, deprecated, generated, draft, and canonical knowledge are distinguished."
+    - "Runbooks define operational procedures, owner, trigger, audience, steps, prerequisites, validation, last tested date, review cadence, failure mode, and downstream document."
+    - "Decision records define what decisions are recorded, format, owner, decision context, options considered, rationale, consequences, linked documents, supersession rules, and archive rules."
+    - "Support knowledge base defines support-facing articles, macros, known issues, troubleshooting guides, billing/refund guidance, privacy/data request guidance, escalation guidance, owner, review cadence, and customer-safe language boundaries."
+    - "Internal notes define how informal notes are captured, triaged, promoted, linked, expired, archived, or discarded without becoming a competing source of truth."
+    - "Customer-facing documentation defines help center docs, FAQs, guides, onboarding materials, release notes, known issues, policy pages, pricing/refund docs, claim boundaries, review owner, and update triggers."
+    - "Incident knowledge defines how incidents, postmortems, timelines, root causes, contributing factors, corrective actions, known issues, and lessons learned are preserved and reused."
+    - "Process knowledge defines where business process docs, process controls, process metrics, exceptions, and process review learnings are stored and updated."
+    - "Financial knowledge defines where billing rules, refund rules, invoice/receipt guidance, chargeback/dispute guidance, revenue/cost reporting caveats, financial controls, and financial evidence references are documented."
+    - "Privacy and compliance knowledge defines where policies, obligations, vendor records, audit evidence references, professional-review notes, exceptions, and accepted risks are documented and restricted."
+    - "Risk knowledge defines where risks, mitigations, accepted risks, incident learnings, compliance risks, financial risks, operational risks, and risk review outputs are stored and updated."
+    - "Documentation ownership defines owner, backup owner, approver, reviewer, contributor, audience, review cadence, update trigger, and responsibility gap for each major knowledge category."
+    - "Review cadence defines scheduled and event-triggered reviews for runbooks, support knowledge, customer-facing docs, policies, financial docs, incident archives, decision records, and risk knowledge."
+    - "Freshness and staleness rules define freshness status, stale signal, expiry/review trigger, stale-content warning, owner notification, forced review, and removal/deprecation process."
+    - "Search and discoverability define naming, metadata, tags, indexes, backlinks, nav structure, ownership labels, search expectations, and how users find the right source quickly."
+    - "Versioning and change control define how documentation changes are proposed, reviewed, approved, versioned, linked to decisions, released, communicated, and rolled back if misleading."
+    - "Knowledge transfer defines how ownership transfers, how onboarding/offboarding captures tacit knowledge, how critical knowledge is backed up, and how bus factor is reduced."
+    - "Archival rules define when docs are deprecated, archived, superseded, retained, redacted, restricted, or deleted, and how archived knowledge remains discoverable without being mistaken as current."
+    - "Knowledge metrics define documentation freshness, review completion, stale doc count, ownerless docs, search success, runbook test completion, decision record completeness, support KB quality, and knowledge risk signals."
+    - "Knowledge risks identify documentation rot, duplicate truth, owner gaps, bus factor, tribal knowledge, stale customer-facing docs, stale support macros, missing incident learning, bad search, over-documentation, and sensitive knowledge exposure."
+    - "Downstream handoff clarifies what Risk Management must inherit from Knowledge Management."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid knowledge-management theater: documentation categories without owner, source of truth, review cadence, freshness state, update trigger, discoverability rule, archival rule, and risk handling."
+    - "Avoid creating duplicate sources of truth without explicit canonical/derived relationship."
+    - "Avoid informal notes becoming hidden operational truth."
+    - "Avoid customer-facing documentation that contradicts Product, Pricing, Support, Incident Management, Risk/Compliance, or Financial Operations."
+    - "Avoid support macros and KB articles without claim boundaries, owner, review cadence, update trigger, and stale-risk warning."
+    - "Avoid runbooks that are never tested, never reviewed, ownerless, or disconnected from actual operations."
+    - "Avoid decision records that omit context, options considered, rationale, consequences, supersession, and linked documents."
+    - "Avoid archived documentation that remains discoverable as if current."
+    - "Avoid storing sensitive privacy, security, financial, customer, incident, or compliance knowledge without access and redaction rules."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent tooling, repositories, search capability, access controls, automation, review completion, documentation coverage, or ownership certainty."
+    - "Knowledge Management must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate source, artifact, owner, audience, sensitivity, canonicality, freshness, review cadence, update trigger, archival rule, metric, risk, and handoff."
+    - "Tie knowledge rules to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance, Financial Operations, Product, Engineering, GTM, or Decision Record where possible."
+    - "Classify knowledge items as current, draft, canonical, derived, generated, archived, deprecated, superseded, stale, review-needed, ownerless, customer-facing, internal-only, privacy-sensitive, financial-sensitive, security-sensitive, compliance-sensitive, launch-critical, post-launch, blocked, or downstream-owned where useful."
+    - "State whether knowledge is manually maintained, generated from canonical source, automatically synced, dashboard-backed, ticket-system-backed, or unavailable."
+    - "Route enterprise risk governance downstream to Risk Management."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance, Financial Operations, Product Scope, Acceptance Criteria, Security/Privacy, Pricing, GTM Risks, Technical Risks, or Decision Record."
+    - "Flag knowledge sources without canonicality, owner, audience, access rule, review cadence, freshness rule, and archival rule."
+    - "Flag runbooks without trigger, steps, owner, validation/test rule, last-tested expectation, review cadence, and failure mode."
+    - "Flag decision records without context, options, rationale, consequences, supersession rule, and linked documents."
+    - "Flag customer-facing docs without owner, claim boundary, update trigger, approval/review rule, and stale-content risk."
+    - "Flag support KB/macros without support owner, source-of-truth link, review cadence, and escalation/update trigger."
+    - "Flag sensitive knowledge without access, redaction, retention, and downstream ownership rules."
+    - "Flag stale, duplicate, ownerless, or archived docs that could mislead operations."
+    - "Verify that Risk Management receives concrete knowledge-risk handoff inputs."
+  specializedFormats:
+    knowledgeSourceFormat:
+      description: "Recommended format for operational knowledge sources."
+      fields:
+        - source
+        - sourceType
+        - purpose
+        - canonicality
+        - audience
+        - sensitivity
+        - owner
+        - backupOwner
+        - accessRule
+        - updateTrigger
+        - reviewCadence
+        - freshnessStatus
+        - archivalRule
+        - downstreamDocument
+        - status
+    runbookFormat:
+      description: "Recommended format for operational runbooks."
+      fields:
+        - runbook
+        - procedureType
+        - purpose
+        - trigger
+        - audience
+        - owner
+        - backupOwner
+        - prerequisites
+        - stepsReference
+        - validationMethod
+        - lastTestedOrReviewStatus
+        - failureMode
+        - escalationPath
+        - reviewCadence
+        - status
+    decisionRecordFormat:
+      description: "Recommended format for operational decision records."
+      fields:
+        - decision
+        - decisionType
+        - dateOrTrigger
+        - owner
+        - context
+        - optionsConsidered
+        - decisionMade
+        - rationale
+        - consequences
+        - linkedDocuments
+        - supersededBy
+        - archiveRule
+        - status
+    knowledgeArticleFormat:
+      description: "Recommended format for support/customer-facing knowledge articles."
+      fields:
+        - article
+        - articleType
+        - audience
+        - sourceOfTruth
+        - owner
+        - reviewer
+        - claimBoundary
+        - lastReviewed
+        - updateTrigger
+        - staleRisk
+        - customerFacing
+        - accessRule
+        - status
+    documentationOwnershipFormat:
+      description: "Recommended format for documentation ownership."
+      fields:
+        - knowledgeArea
+        - owner
+        - backupOwner
+        - approver
+        - contributors
+        - audience
+        - reviewCadence
+        - updateTrigger
+        - responsibilityGap
+        - downstreamDocument
+        - status
+    freshnessRuleFormat:
+      description: "Recommended format for freshness and staleness rules."
+      fields:
+        - knowledgeType
+        - freshnessRequirement
+        - staleSignal
+        - reviewTrigger
+        - warningLabel
+        - ownerNotification
+        - forcedReviewRule
+        - deprecationRule
+        - status
+    searchDiscoveryFormat:
+      description: "Recommended format for search and discoverability rules."
+      fields:
+        - knowledgeArea
+        - namingConvention
+        - metadataRequired
+        - tagsOrIndex
+        - navigationLocation
+        - backlinkRule
+        - searchExpectation
+        - ownerLabelRequired
+        - failureSignal
+        - status
+    changeControlFormat:
+      description: "Recommended format for documentation change control."
+      fields:
+        - changeType
+        - trigger
+        - proposer
+        - reviewer
+        - approver
+        - versioningRule
+        - linkedDecisionRequired
+        - communicationRequired
+        - rollbackRule
+        - status
+    knowledgeTransferFormat:
+      description: "Recommended format for knowledge transfer."
+      fields:
+        - transferScenario
+        - knowledgeArea
+        - fromOwner
+        - toOwner
+        - trigger
+        - requiredContext
+        - requiredArtifacts
+        - verificationMethod
+        - busFactorRisk
+        - status
+    archivalRuleFormat:
+      description: "Recommended format for archival and deprecation rules."
+      fields:
+        - knowledgeType
+        - archiveTrigger
+        - deprecationTrigger
+        - supersessionRule
+        - storageLocation
+        - discoverabilityRule
+        - currentWarningRequired
+        - accessRule
+        - retentionRule
+        - deletionRule
+        - status
+    knowledgeMetricFormat:
+      description: "Recommended format for knowledge management metrics."
+      fields:
+        - metric
+        - metricType
+        - purpose
+        - formulaOrMeasurement
+        - source
+        - threshold
+        - cadence
+        - owner
+        - decisionImplication
+        - downstreamDocument
+        - status
+    knowledgeRiskFormat:
+      description: "Recommended format for knowledge risks."
+      fields:
+        - risk
+        - riskType
+        - source
+        - affectedKnowledgeArea
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - contingency
+        - owner
+        - downstreamDocument
+        - status
+    knowledgeHandoffFormat:
+      description: "Recommended format for downstream knowledge handoffs."
+      fields:
+        - handoffTarget
+        - knowledgeContext
+        - sourcesToPreserve
+        - risksToPreserve
+        - ownersToPreserve
+        - requiredAction
+        - timing
+        - unresolvedQuestion
+        - status
+  sections:
+    - id: "knowledge-objective"
+      title: "Knowledge Objective"
+      intent: "Define the goal of operational knowledge management and the consequences of knowledge loss, staleness, duplication, or poor discoverability."
+      required: true
+      outputGuidance:
+        - "Open with the knowledge management purpose in one concise paragraph."
+        - "State what knowledge management protects: continuity, onboarding, support accuracy, operational reliability, customer trust, decision memory, incident learning, process repeatability, compliance evidence, financial correctness, and risk reduction."
+        - "Explain consequences of lost, stale, duplicated, or undiscoverable knowledge."
+      qualityChecks:
+        - "Objective connects knowledge to operational action."
+        - "Knowledge loss consequences are concrete."
+        - "Knowledge management is not treated as documentation volume."
+      questions:
+        - "What is the goal of operational knowledge management?"
+        - "What happens if operational knowledge is lost, stale, duplicated, or hard to find?"
+        - "What decisions and workflows depend on reliable knowledge?"
+    - id: "knowledge-principles"
+      title: "Knowledge Principles"
+      intent: "Define the rules that keep knowledge useful, accurate, safe, concise, current, and actionable."
+      required: true
+      outputGuidance:
+        - "Define principles for canonical sources, freshness, ownership, discoverability, sensitivity, review, and actionability."
+        - "State what knowledge management must avoid."
+        - "Tie principles to Foundation and Operations."
+      qualityChecks:
+        - "Principles are actionable."
+        - "Duplicate truth and stale knowledge are explicitly discouraged."
+        - "Sensitive knowledge handling is included."
+      questions:
+        - "What principles guide operational documentation and knowledge?"
+        - "How is duplicate truth avoided?"
+        - "How should knowledge remain current, searchable, and actionable?"
+        - "How is sensitive knowledge protected?"
+    - id: "knowledge-scope"
+      title: "Knowledge Scope"
+      intent: "Define what knowledge management covers and what remains owned by other operational documents or systems."
+      required: true
+      outputGuidance:
+        - "Separate in-scope, out-of-scope, shared, downstream-owned, customer-facing, internal-only, and sensitive areas."
+        - "Clarify relationship with Support, Customer Success, Business Processes, Incident Management, Risk/Compliance, Financial Operations, Product, and Engineering."
+        - "Preserve unresolved scope questions."
+      qualityChecks:
+        - "Scope prevents ownership ambiguity."
+        - "Customer-facing and internal knowledge are distinguished."
+        - "Sensitive knowledge is routed carefully."
+      questions:
+        - "What types of operational knowledge are in scope?"
+        - "What knowledge belongs to Product, Engineering, Support, Finance, Compliance, or Risk instead?"
+        - "What is customer-facing versus internal-only?"
+        - "What knowledge requires restricted access?"
+    - id: "knowledge-taxonomy"
+      title: "Knowledge Taxonomy"
+      intent: "Define categories, statuses, audiences, sensitivities, canonicality, freshness, and archival labels for operational knowledge."
+      required: true
+      outputGuidance:
+        - "Define knowledge categories and statuses."
+        - "Include canonical, derived, generated, draft, current, stale, review-needed, archived, deprecated, superseded, ownerless, and restricted labels."
+        - "Define audience and sensitivity classes."
+      qualityChecks:
+        - "Taxonomy helps search, review, and ownership."
+        - "Canonical and derived knowledge are distinguishable."
+        - "Sensitivity labels are operationally meaningful."
+      questions:
+        - "How is operational knowledge categorized?"
+        - "What statuses indicate current, stale, archived, deprecated, or superseded knowledge?"
+        - "What audience and sensitivity labels are used?"
+    - id: "canonical-sources"
+      title: "Canonical Sources"
+      intent: "Define the authoritative sources of truth and how conflicts between sources are resolved."
+      required: true
+      outputGuidance:
+        - "Use knowledge source records for canonical sources."
+        - "Define conflict resolution rules."
+        - "State how derived artifacts are regenerated from canonical sources."
+      qualityChecks:
+        - "Canonical sources are explicit."
+        - "Conflicts have resolution path."
+        - "Generated/derived artifacts do not become competing truth."
+      questions:
+        - "What are the canonical sources of truth?"
+        - "How are conflicts between documents resolved?"
+        - "Who may change canonical sources?"
+        - "How are derived artifacts regenerated from canonical sources?"
+    - id: "documentation-sources"
+      title: "Documentation Sources"
+      intent: "Identify all operational documentation sources and how they are synchronized, linked, and reviewed."
+      required: true
+      outputGuidance:
+        - "Use knowledge source records."
+        - "Include repositories, docs folders, runbooks, dashboards, issue trackers, support tools, knowledge bases, decision logs, incident archives, policies, financial records, and customer-facing docs."
+        - "Mark current, missing, unknown, or deferred sources."
+      qualityChecks:
+        - "Sources have owner, audience, canonicality, and review rules."
+        - "Synchronization rules are explicit."
+        - "Unknown or missing sources are visible."
+      questions:
+        - "What are the primary sources of operational documentation?"
+        - "Where does each source live?"
+        - "How are documentation sources kept synchronized?"
+        - "Which sources are canonical versus derived?"
+    - id: "source-of-truth-rules"
+      title: "Source of Truth Rules"
+      intent: "Define how duplicate, derived, archived, deprecated, generated, draft, and canonical knowledge are distinguished and reconciled."
+      required: true
+      outputGuidance:
+        - "Define source precedence rules."
+        - "Define how stale or conflicting docs are flagged."
+        - "Define how customer-facing docs inherit from internal canonical sources."
+      qualityChecks:
+        - "Rules prevent duplicate truth."
+        - "Archived/deprecated docs cannot masquerade as current."
+        - "Customer-facing truth aligns with internal canonical docs."
+      questions:
+        - "What makes a source authoritative?"
+        - "How are duplicates and conflicts handled?"
+        - "How are drafts, generated files, archived docs, and canonical docs distinguished?"
+        - "How do customer-facing docs inherit from internal sources?"
+    - id: "runbooks"
+      title: "Runbooks"
+      intent: "Define operational runbooks for common procedures and how they are tested, maintained, improved, and escalated."
+      required: true
+      outputGuidance:
+        - "Use runbook records."
+        - "Include trigger, owner, prerequisites, steps reference, validation, last tested/review status, failure mode, escalation, and review cadence."
+        - "Tie runbooks to Business Processes, Incident Management, Release Management, Data/Privacy, and Financial Operations where relevant."
+      qualityChecks:
+        - "Runbooks are executable."
+        - "Runbooks have owner and validation."
+        - "Untested runbooks are flagged."
+      questions:
+        - "What runbooks exist for common operational procedures?"
+        - "What triggers each runbook?"
+        - "Who owns each runbook?"
+        - "How are runbooks tested, maintained, and improved?"
+        - "What happens if a runbook fails?"
+    - id: "decision-records"
+      title: "Decision Records"
+      intent: "Define how operational decisions are recorded, linked, superseded, archived, and used later."
+      required: true
+      outputGuidance:
+        - "Use decision record records."
+        - "Include context, options, decision, rationale, consequences, linked documents, supersession, and archive rule."
+        - "State which decisions require records."
+      qualityChecks:
+        - "Decision records preserve reasoning and consequences."
+        - "Superseded decisions remain traceable."
+        - "Decision records link to affected docs."
+      questions:
+        - "How are operational decisions recorded and archived?"
+        - "What decisions require decision records?"
+        - "What format is used for decision records?"
+        - "How are decisions superseded or linked to later changes?"
+    - id: "support-knowledge-base"
+      title: "Support Knowledge Base"
+      intent: "Define the internal support knowledge base and how support knowledge stays accurate, safe, current, and linked to canonical sources."
+      required: true
+      outputGuidance:
+        - "Use knowledge article records."
+        - "Include support articles, macros, troubleshooting, known issues, billing/refund guidance, privacy request guidance, escalation guidance, and claim boundaries."
+        - "Tie to Customer Support."
+      qualityChecks:
+        - "Support KB has source-of-truth links."
+        - "Macros and guidance have claim boundaries."
+        - "Stale support knowledge has update triggers."
+      questions:
+        - "What internal knowledge base exists for support staff?"
+        - "What support macros, known issues, troubleshooting guides, and escalation docs exist?"
+        - "How is the knowledge base kept current?"
+        - "How does support knowledge link to canonical product/pricing/privacy/incident sources?"
+    - id: "internal-notes"
+      title: "Internal Notes"
+      intent: "Define how informal operational notes are captured, organized, triaged, promoted, expired, archived, or discarded."
+      required: true
+      outputGuidance:
+        - "Define note capture channels and promotion rules."
+        - "Separate notes from formal docs."
+        - "Define expiry and cleanup behavior."
+      qualityChecks:
+        - "Notes cannot become hidden source of truth."
+        - "Useful notes have promotion path."
+        - "Stale notes are cleaned up or archived."
+      questions:
+        - "How are internal operational notes captured and organized?"
+        - "What distinguishes a note from formal documentation?"
+        - "How are notes promoted into canonical docs?"
+        - "When are notes expired, archived, or discarded?"
+    - id: "customer-facing-documentation"
+      title: "Customer-Facing Documentation"
+      intent: "Define customer-facing documentation and how it is approved, maintained, updated, corrected, and aligned with internal truth."
+      required: true
+      outputGuidance:
+        - "Use knowledge article records."
+        - "Include help center docs, FAQs, guides, onboarding materials, release notes, known issues, policy pages, pricing/refund docs, and customer-safe language boundaries."
+        - "Tie to Messaging, Pricing, Support, Risk/Compliance, and Product truth."
+      qualityChecks:
+        - "Customer-facing docs do not overpromise."
+        - "Claim boundaries and approval are explicit."
+        - "Update triggers are tied to product/pricing/policy/release changes."
+      questions:
+        - "What customer-facing documentation exists?"
+        - "Who owns approval and updates?"
+        - "How is customer-facing documentation maintained and updated?"
+        - "How are claim boundaries and stale content handled?"
+    - id: "incident-knowledge"
+      title: "Incident Knowledge"
+      intent: "Define how incidents, postmortems, corrective actions, known issues, and lessons learned are preserved and reused."
+      required: true
+      outputGuidance:
+        - "Tie to Incident Management."
+        - "Define archive, search, access, redaction, linked actions, and review cadence."
+        - "State how incident lessons update runbooks, support KB, risk records, and process docs."
+      qualityChecks:
+        - "Incident learning is reusable."
+        - "Sensitive incident knowledge is restricted/redacted."
+        - "Corrective action knowledge feeds downstream docs."
+      questions:
+        - "How are incident records and postmortems preserved?"
+        - "How are lessons learned reused?"
+        - "How do incidents update runbooks, support knowledge, risk records, and process docs?"
+        - "How is sensitive incident information protected?"
+    - id: "process-knowledge"
+      title: "Process Knowledge"
+      intent: "Define where process documentation, controls, exceptions, metrics, and improvement learnings are stored and maintained."
+      required: true
+      outputGuidance:
+        - "Tie to Business Processes."
+        - "Define process doc owner, update trigger, review cadence, and relation to runbooks."
+        - "Include process controls and exceptions."
+      qualityChecks:
+        - "Process knowledge remains executable."
+        - "Process changes update docs."
+        - "Exceptions and controls are preserved."
+      questions:
+        - "Where is business process knowledge stored?"
+        - "How are process controls, exceptions, metrics, and process improvements documented?"
+        - "How do process docs relate to runbooks?"
+    - id: "financial-knowledge"
+      title: "Financial Knowledge"
+      intent: "Define how billing, refund, invoice, chargeback, cost, margin, vendor cost, controls, and evidence knowledge is documented and protected."
+      required: true
+      outputGuidance:
+        - "Tie to Financial Operations."
+        - "Define access rules and professional-review boundaries."
+        - "Avoid exposing sensitive financial data unnecessarily."
+      qualityChecks:
+        - "Financial knowledge is accurate and restricted where needed."
+        - "Rules link to canonical financial operations."
+        - "Tax/accounting assumptions are labeled."
+      questions:
+        - "Where is financial operations knowledge stored?"
+        - "How are billing, refund, invoice, chargeback, cost, margin, vendor cost, and financial control rules documented?"
+        - "Who may access sensitive financial knowledge?"
+    - id: "privacy-and-compliance-knowledge"
+      title: "Privacy and Compliance Knowledge"
+      intent: "Define how policy, obligation, vendor, audit, exception, accepted risk, and professional-review knowledge is documented and restricted."
+      required: true
+      outputGuidance:
+        - "Tie to Risk and Compliance."
+        - "Define access, redaction, evidence links, review cadence, and professional-review labels."
+        - "Do not present unreviewed compliance assumptions as facts."
+      qualityChecks:
+        - "Compliance knowledge distinguishes verified from assumed."
+        - "Sensitive knowledge is restricted."
+        - "Evidence and review status are linked."
+      questions:
+        - "Where is privacy and compliance knowledge stored?"
+        - "How are policies, obligations, vendor reviews, audit evidence, exceptions, and accepted risks documented?"
+        - "How are professional-review needs and assumptions labeled?"
+    - id: "risk-knowledge"
+      title: "Risk Knowledge"
+      intent: "Define how risks, mitigations, accepted risks, incident learnings, financial risks, compliance risks, and operational risks are preserved and reviewed."
+      required: true
+      outputGuidance:
+        - "Tie to Risk Management."
+        - "Define risk source linkage, owner, review cadence, update trigger, and archive rule."
+        - "Preserve accepted risks and mitigation status."
+      qualityChecks:
+        - "Risk knowledge is living, not historical-only."
+        - "Accepted risks remain visible."
+        - "Risk knowledge links to incidents, metrics, and decisions."
+      questions:
+        - "Where is risk knowledge stored?"
+        - "How are risk decisions, accepted risks, mitigations, and incident learnings preserved?"
+        - "How are risk records kept current?"
+    - id: "documentation-ownership"
+      title: "Documentation Ownership"
+      intent: "Define who owns each category of operational documentation and how ownership transfers with role changes."
+      required: true
+      outputGuidance:
+        - "Use documentation ownership records."
+        - "Include owner, backup owner, approver, contributors, audience, review cadence, update trigger, responsibility gap, and downstream document."
+        - "Flag ownerless or backup-missing docs."
+      qualityChecks:
+        - "Every critical knowledge area has owner or explicit gap."
+        - "Backup owner is considered."
+        - "Ownership transfer is defined."
+      questions:
+        - "Who owns each category of operational documentation?"
+        - "Who is backup owner?"
+        - "Who approves changes?"
+        - "How is documentation ownership transferred when roles change?"
+        - "What ownership gaps remain?"
+    - id: "review-cadence"
+      title: "Review Cadence"
+      intent: "Define scheduled and event-triggered documentation review for accuracy, freshness, safety, and usefulness."
+      required: true
+      outputGuidance:
+        - "Define cadence by knowledge category."
+        - "Include event triggers such as release, incident, pricing change, policy change, vendor change, process change, support trend, compliance review, or ownership change."
+        - "Tie to Reporting and Cadence."
+      qualityChecks:
+        - "Review cadence is appropriate to volatility and risk."
+        - "Event-triggered review is included."
+        - "Review produces updates or explicit no-change decision."
+      questions:
+        - "How often is operational documentation reviewed for accuracy?"
+        - "Who performs documentation reviews?"
+        - "What events trigger out-of-cycle review?"
+        - "What evidence proves review happened?"
+    - id: "freshness-and-staleness-rules"
+      title: "Freshness and Staleness Rules"
+      intent: "Define how stale knowledge is detected, labeled, reviewed, updated, deprecated, or removed."
+      required: true
+      outputGuidance:
+        - "Use freshness rule records."
+        - "Define stale signals, warning labels, owner notifications, forced review, and deprecation rules."
+        - "Include customer-facing and support knowledge as high-risk stale categories."
+      qualityChecks:
+        - "Stale knowledge is visible."
+        - "High-risk stale content triggers review."
+        - "Deprecation/removal path is clear."
+      questions:
+        - "What makes documentation stale?"
+        - "How is stale documentation detected and labeled?"
+        - "Who is notified?"
+        - "When is forced review required?"
+        - "When is content deprecated or removed?"
+    - id: "search-and-discoverability"
+      title: "Search and Discoverability"
+      intent: "Define how operational knowledge is named, indexed, tagged, linked, navigated, and found quickly."
+      required: true
+      outputGuidance:
+        - "Use search/discovery records."
+        - "Define naming convention, metadata, tags/indexes, navigation, backlinks, owner labels, and search expectations."
+        - "Include failure signals for poor discovery."
+      qualityChecks:
+        - "Knowledge can be found under operational pressure."
+        - "Metadata and navigation are intentional."
+        - "Search failure has mitigation."
+      questions:
+        - "How is operational knowledge named and organized?"
+        - "What metadata, tags, indexes, backlinks, or navigation structures are required?"
+        - "How should users find the right source quickly?"
+        - "What signals indicate poor discoverability?"
+    - id: "versioning-and-change-control"
+      title: "Versioning and Change Control"
+      intent: "Define how documentation changes are proposed, reviewed, approved, versioned, communicated, and rolled back if misleading."
+      required: true
+      outputGuidance:
+        - "Use change control records."
+        - "Define change types, proposer, reviewer, approver, versioning, linked decisions, communication, and rollback rule."
+        - "Tie to canonical sources and customer-facing docs."
+      qualityChecks:
+        - "Documentation changes are controlled without becoming bureaucratic."
+        - "Customer-facing changes are reviewed."
+        - "Misleading docs can be corrected or rolled back."
+      questions:
+        - "How are documentation changes proposed and reviewed?"
+        - "Who approves changes to canonical or customer-facing docs?"
+        - "How are versions tracked?"
+        - "When is communication required after documentation changes?"
+        - "How are misleading changes rolled back or corrected?"
+    - id: "knowledge-transfer"
+      title: "Knowledge Transfer"
+      intent: "Define how knowledge transfers during onboarding, offboarding, ownership change, role change, vacation, vendor change, or incident handoff."
+      required: true
+      outputGuidance:
+        - "Use knowledge transfer records."
+        - "Include required context, artifacts, verification method, and bus factor risk."
+        - "Tie to Team and Responsibilities."
+      qualityChecks:
+        - "Knowledge transfer is not informal-only."
+        - "Critical knowledge has backup."
+        - "Transfer completion is verified."
+      questions:
+        - "How is knowledge transferred when ownership changes?"
+        - "How is tacit knowledge captured during onboarding/offboarding?"
+        - "What artifacts are required for transfer?"
+        - "How is transfer verified?"
+        - "How is bus factor reduced?"
+    - id: "archival-rules"
+      title: "Archival Rules"
+      intent: "Define when documentation is archived, deprecated, superseded, retained, restricted, redacted, or deleted."
+      required: true
+      outputGuidance:
+        - "Use archival rule records."
+        - "Define archive/deprecation/supersession triggers, storage location, discoverability rule, warning, access, retention, and deletion."
+        - "Ensure archived docs cannot be mistaken for current docs."
+      qualityChecks:
+        - "Archival preserves history without misleading operations."
+        - "Sensitive archived docs have access/redaction rules."
+        - "Retention/deletion rules are explicit or review-needed."
+      questions:
+        - "When is operational documentation archived, deprecated, superseded, retained, restricted, redacted, or deleted?"
+        - "How is archived documentation preserved and discoverable?"
+        - "How is archived content prevented from being mistaken as current?"
+    - id: "knowledge-metrics"
+      title: "Knowledge Metrics"
+      intent: "Define metrics that indicate documentation health, freshness, ownership, discoverability, review completion, and knowledge risk."
+      required: true
+      outputGuidance:
+        - "Use knowledge metric records."
+        - "Include documentation freshness, review completion, stale doc count, ownerless docs, search success, runbook test completion, decision record completeness, support KB quality, and knowledge risk signals."
+        - "Tie to Operational Metrics and Reporting Cadence."
+      qualityChecks:
+        - "Metrics are decision-useful."
+        - "Metrics have owner, source, threshold, cadence, and action."
+        - "Metrics do not incentivize documentation volume over usefulness."
+      questions:
+        - "What metrics show knowledge management health?"
+        - "How are freshness, review completion, stale docs, ownerless docs, search success, runbook testing, decision record completeness, and support KB quality measured?"
+        - "What thresholds trigger action?"
+    - id: "knowledge-risks"
+      title: "Knowledge Risks"
+      intent: "Identify risks of knowledge loss, staleness, duplication, poor discovery, sensitive exposure, and documentation rot."
+      required: true
+      outputGuidance:
+        - "Use knowledge risk records."
+        - "Include bus factor, tribal knowledge, stale customer-facing docs, stale support macros, duplicate truth, missing incident learning, bad search, over-documentation, owner gaps, and sensitive knowledge exposure."
+        - "Route risks to Risk Management where needed."
+      qualityChecks:
+        - "Risks are concrete and monitorable."
+        - "Mitigation and contingency are distinct."
+        - "High-impact risks have owner and downstream handoff."
+      questions:
+        - "What could cause operational knowledge to be lost or become stale?"
+        - "How are knowledge risks mitigated?"
+        - "Where are bus factor, documentation rot, duplicate truth, hidden notes, stale support/customer docs, and sensitive exposure risks?"
+        - "What should Risk Management inherit?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Operations documents must inherit from Knowledge Management and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Use knowledge handoff records."
+        - "Route context to Risk Management."
+        - "Preserve knowledge sources, owners, freshness rules, archival rules, sensitive access rules, metrics, risks, and unresolved questions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing knowledge assumptions silently."
+        - "Knowledge Management remains memory architecture; enterprise risk governance remains downstream."
+      questions:
+        - "What should Risk Management inherit?"
+        - "What knowledge sources, owners, freshness rules, archival rules, access rules, metrics, risks, and unresolved questions must be preserved?"

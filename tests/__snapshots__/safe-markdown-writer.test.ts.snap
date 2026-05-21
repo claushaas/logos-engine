@@ -1,0 +1,76 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Snapshot > snapshots collision diagnostic 1`] = `
+{
+  "documentCanonicalId": "test-doc",
+  "manualEditStatus": "metadata_missing",
+  "selectedPolicy": "fail",
+  "suggestedActions": [
+    "skip",
+    "backup_and_write",
+    "overwrite",
+  ],
+  "targetPath": "/fake/project/logos/03-product/test-doc.md",
+}
+`;
+
+exports[`Snapshot > snapshots manual edit detection result 1`] = `
+{
+  "diagnostics": [],
+  "previousChecksum": "14dd7c5982924730b2cdd0fe0827067ea7f6b734184d13c68eee709628918d70",
+  "status": "unchanged_generated",
+  "targetExists": true,
+}
+`;
+
+exports[`Snapshot > snapshots stable write plan 1`] = `
+{
+  "changedPaths": [
+    {
+      "path": "/fake/project/logos/03-product/test-doc.md",
+      "role": "planned",
+    },
+  ],
+  "diagnostics": [],
+  "documentationRoot": "logos",
+  "dryRun": true,
+  "items": [
+    {
+      "backupPath": undefined,
+      "documentCanonicalId": "test-doc",
+      "manualEditStatus": "new_file",
+      "status": "dry_run",
+      "targetPath": "/fake/project/logos/03-product/test-doc.md",
+    },
+  ],
+  "plannedDirectories": [],
+  "policy": "skip",
+  "summary": {
+    "collisions": 0,
+    "created": 0,
+    "dryRun": 1,
+    "failed": 0,
+    "skipped": 0,
+    "total": 1,
+    "updated": 0,
+  },
+}
+`;
+
+exports[`Snapshot > snapshots written Markdown metadata header 1`] = `
+"---
+documentId: test-doc
+phaseId: 03-product
+profileId: standard
+canonicalOutput: docs/03-product/test-doc.md
+generatedBy: logos-engine (canonical-markdown-renderer)
+generatedAt: 2024-01-01T00:00:00.000Z
+generationStatus: generate
+contentChecksum: abc123
+sourceStateSchemaVersion: 3.1.0
+---
+# Test
+
+Simple.
+"
+`;

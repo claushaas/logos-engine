@@ -1,0 +1,227 @@
+phase:
+  id: 04-engineering
+  title: Engineering
+  order: 4
+  axis: normative
+  status: not_started
+  description: "Defines how the product will be implemented, structured, integrated, tested, deployed, observed, secured, and maintained with enough technical rigor to be reliable."
+  purpose: "Answer how the product will be implemented with architecture, data, APIs, infrastructure, testing, security, observability, and technical processes sufficient to be reliable."
+
+  centralQuestion: "How will this product be implemented with architecture, data, APIs, integrations, infrastructure, testing, security, observability, deployment, and technical standards sufficient to be reliable?"
+
+  responsibilityBoundary:
+    owns:
+      - engineering brief
+      - system architecture
+      - technical stack
+      - domain model
+      - data model
+      - API contracts
+      - integration architecture
+      - security and privacy implementation strategy
+      - sync and state strategy
+      - testing strategy
+      - observability design
+      - deployment and environments
+      - engineering standards
+      - technical risks
+    doesNotOwn:
+      - product scope
+      - UX specification
+      - UI specification
+      - market positioning
+      - launch execution
+      - sales strategy
+      - customer support operations
+      - customer success operations
+      - incident response operations
+      - financial operations
+
+  dependsOn:
+    - 01-foundation
+    - 02-validation
+    - 03-product
+
+  feedsInto:
+    - 05-go-to-market
+    - 06-operations
+
+  readingOrder:
+    - 01-engineering-brief
+    - 02-system-architecture
+    - 03-technical-stack
+    - 04-domain-model
+    - 05-data-model
+    - 06-api-contracts
+    - 07-integration-architecture
+    - 08-security-and-privacy
+    - 09-sync-and-state
+    - 10-testing-strategy
+    - 11-observability
+    - 12-deployment-and-environments
+    - 13-engineering-standards
+    - 14-technical-risks
+
+  completionCriteria:
+    - The engineering brief translates Product requirements into technical scope, constraints, capabilities, and success criteria.
+    - System architecture defines style, layers, boundaries, dependency rules, runtime architecture, data flow, and failure modes.
+    - Technical stack decisions are explicit, version-aware, and tied to implementation constraints.
+    - Domain model defines entities, value objects, aggregates, events, commands, invariants, state machines, and domain boundaries.
+    - Data model defines storage, relationships, constraints, indexes, local and remote data, migrations, retention, and data sensitivity.
+    - API contracts define endpoints or schemas, request and response formats, error model, authentication, pagination, idempotency, versioning, and contract testing.
+    - Integration architecture defines external services, boundaries, authentication, webhooks, rate limits, retries, fallbacks, mocking, and vendor risks.
+    - Security and privacy decisions cover threat model, authentication, authorization, data classification, encryption, secrets, logging, backups, export, deletion, abuse prevention, and testing.
+    - Sync and state strategy defines source of truth, local state, remote state, cache, offline behavior, conflict resolution, idempotency, hydration, derived state, and recovery.
+    - Testing strategy defines coverage, test layers, contract tests, domain tests, sync tests, security tests, performance tests, CI requirements, and release gates.
+    - Observability defines logging, metrics, tracing, error reporting, audit events, health checks, dashboards, alerts, SLOs, and sensitive data rules.
+    - Deployment and environments define local, preview, staging, production, secrets, builds, migrations, releases, rollback, and feature flags.
+    - Engineering standards define repository structure, code organization, naming, type safety, error handling, logging, dependency management, migrations, git workflow, PR rules, documentation, and review checklists.
+    - Technical risks are registered with category, impact, likelihood, detection signal, mitigation, owner, and status.
+    - Ongoing business operations are deferred to 06-operations.
+
+  qualityChecks:
+    - completeness
+    - internal_consistency
+    - boundary_integrity
+    - traceability
+    - decision_clarity
+    - assumptions_explicit
+    - architecture_rules_explicit
+    - contracts_testable
+    - risks_actionable
+    - contradictions_flagged
+
+  generatedOutputs:
+    canonical:
+      directory: docs/04-engineering
+      format: markdown
+    structure:
+      directory: phases/04-engineering
+      format: yaml
+    presentation:
+      directory: outcomes/html
+      suggestedArtifacts:
+        - engineering-dashboard.html
+        - system-architecture-map.html
+        - data-api-contract-map.html
+        - technical-risk-board.html
+    agentPacks:
+      directory: outcomes/agents
+      suggestedArtifacts:
+        - engineering-context-pack.md
+        - architecture-review-prompt.md
+        - implementation-planning-prompt.md
+        - technical-risk-review-prompt.md
+
+  documents:
+    - id: 01-engineering-brief
+      title: Engineering Brief
+      file: phases/04-engineering/01-engineering-brief.yml
+      output: docs/04-engineering/01-engineering-brief.md
+      purpose: "Define the executive technical synthesis connecting Product to Engineering."
+      centralQuestion: "What does Engineering need to deliver based on Product inputs, technical constraints, and required capabilities?"
+      required: true
+
+    - id: 02-system-architecture
+      title: System Architecture
+      file: phases/04-engineering/02-system-architecture.yml
+      output: docs/04-engineering/02-system-architecture.md
+      purpose: "Define the macro architecture of the system."
+      centralQuestion: "What are the main technical blocks, layers, boundaries, dependency rules, runtime structure, and data flows of the system?"
+      required: true
+
+    - id: 03-technical-stack
+      title: Technical Stack
+      file: phases/04-engineering/03-technical-stack.yml
+      output: docs/04-engineering/03-technical-stack.md
+      purpose: "Define the actual implementation technology stack."
+      centralQuestion: "Which languages, runtimes, frameworks, databases, tools, deployment platforms, and version constraints will be used?"
+      required: true
+
+    - id: 04-domain-model
+      title: Domain Model
+      file: phases/04-engineering/04-domain-model.yml
+      output: docs/04-engineering/04-domain-model.md
+      purpose: "Define technical domain concepts, entities, invariants, and business rules."
+      centralQuestion: "Which domain entities, value objects, aggregates, events, commands, invariants, business rules, and state machines define the core system?"
+      required: true
+
+    - id: 05-data-model
+      title: Data Model
+      file: phases/04-engineering/05-data-model.yml
+      output: docs/04-engineering/05-data-model.md
+      purpose: "Define persistence, data structure, versioning, and migration strategy."
+      centralQuestion: "How will data be stored, related, constrained, indexed, versioned, migrated, retained, and protected?"
+      required: true
+
+    - id: 06-api-contracts
+      title: API Contracts
+      file: phases/04-engineering/06-api-contracts.yml
+      output: docs/04-engineering/06-api-contracts.md
+      purpose: "Define contracts between system parts."
+      centralQuestion: "How do clients, backends, agents, adapters, and services communicate without ambiguity?"
+      required: true
+
+    - id: 07-integration-architecture
+      title: Integration Architecture
+      file: phases/04-engineering/07-integration-architecture.yml
+      output: docs/04-engineering/07-integration-architecture.md
+      purpose: "Define how the system connects with external services and third parties."
+      centralQuestion: "Which external systems are integrated, how are they authenticated, how do failures behave, and how can vendors be replaced or mocked?"
+      required: true
+
+    - id: 08-security-and-privacy
+      title: Security and Privacy
+      file: phases/04-engineering/08-security-and-privacy.yml
+      output: docs/04-engineering/08-security-and-privacy.md
+      purpose: "Define technical protection of access, data, identity, and privacy."
+      centralQuestion: "How does the system protect authentication, authorization, sensitive data, secrets, logs, backups, exports, deletion, and abuse surfaces?"
+      required: true
+
+    - id: 09-sync-and-state
+      title: Sync and State
+      file: phases/04-engineering/09-sync-and-state.yml
+      output: docs/04-engineering/09-sync-and-state.md
+      purpose: "Define local state, remote state, cache, synchronization, consistency, and recovery."
+      centralQuestion: "What is the source of truth, what works offline, how does sync work, how are conflicts resolved, and how does state recover from failure?"
+      required: true
+
+    - id: 10-testing-strategy
+      title: Testing Strategy
+      file: phases/04-engineering/10-testing-strategy.yml
+      output: docs/04-engineering/10-testing-strategy.md
+      purpose: "Define how the system will be technically verified."
+      centralQuestion: "How will tests prove that the system works, continues working, and does not break silently?"
+      required: true
+
+    - id: 11-observability
+      title: Observability
+      file: phases/04-engineering/11-observability.yml
+      output: docs/04-engineering/11-observability.md
+      purpose: "Define logging, metrics, tracing, error reporting, health checks, alerts, and SLOs."
+      centralQuestion: "When something fails, how will the system reveal what happened without leaking sensitive data?"
+      required: true
+
+    - id: 12-deployment-and-environments
+      title: Deployment and Environments
+      file: phases/04-engineering/12-deployment-and-environments.yml
+      output: docs/04-engineering/12-deployment-and-environments.md
+      purpose: "Define environments, release process, builds, migrations, feature flags, and rollback."
+      centralQuestion: "How will the system run locally, in preview, staging, and production, and how will releases and rollbacks be handled?"
+      required: true
+
+    - id: 13-engineering-standards
+      title: Engineering Standards
+      file: phases/04-engineering/13-engineering-standards.yml
+      output: docs/04-engineering/13-engineering-standards.md
+      purpose: "Define code, repository, and technical collaboration standards."
+      centralQuestion: "How should code, repositories, naming, typing, errors, logs, dependencies, migrations, git workflow, PRs, reviews, and documentation be handled?"
+      required: true
+
+    - id: 14-technical-risks
+      title: Technical Risks
+      file: phases/04-engineering/14-technical-risks.yml
+      output: docs/04-engineering/14-technical-risks.md
+      purpose: "Maintain the centralized technical risk register."
+      centralQuestion: "What could make the system difficult, expensive, insecure, unstable, unscalable, or hard to maintain?"
+      required: true

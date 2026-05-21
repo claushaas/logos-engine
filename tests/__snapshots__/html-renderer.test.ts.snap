@@ -1,0 +1,1850 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`snapshot HTML > snapshot blocked artifact HTML 1`] = `
+"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Dashboard — logos-engine HTML artifact</title>
+<style>
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --header-color: #1f2937;
+  --border-color: #d1d5db;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #3b82f6;
+  --success-color: #16a34a;
+  --link-color: #1d4ed8;
+  --muted-color: #6b7280;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--info-color);
+  color: #fff;
+  padding: 0.5em 1em;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+header {
+  border-bottom: 2px solid var(--border-color);
+  padding: 1.5em 2em;
+  background: #f9fafb;
+}
+header h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 1.5em;
+  color: var(--header-color);
+}
+.artifact-kind {
+  font-size: 0.875em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em 2em 3em 2em;
+}
+section {
+  margin: 1.5em 0;
+}
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25em;
+  margin: 1.5em 0 0.75em 0;
+  color: var(--header-color);
+}
+h3 {
+  font-size: 1.1em;
+  margin: 1em 0 0.5em 0;
+  color: var(--header-color);
+}
+.warning-block {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+}
+.warning-block strong {
+  color: #92400e;
+}
+.warning-block p {
+  margin: 0.25em 0;
+}
+.metadata-block {
+  background: #f3f4f6;
+  border: 1px solid var(--border-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+.metadata-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 1em;
+}
+.metadata-block dt {
+  font-weight: 600;
+  color: var(--muted-color);
+}
+.metadata-block dd {
+  margin: 0;
+}
+.status-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-ready { background: #d1fae5; color: #065f46; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+.status-stale { background: #fef3c7; color: #92400e; }
+.status-missing_source { background: #fee2e2; color: #991b1b; }
+.status-requires_review { background: #fef3c7; color: #92400e; }
+.status-unknown { background: #f3f4f6; color: #6b7280; }
+.status-skipped { background: #f3f4f6; color: #6b7280; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--header-color);
+}
+tr:nth-child(even) td {
+  background: #f9fafb;
+}
+.source-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+.source-list li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9em;
+}
+.source-list li:last-child {
+  border-bottom: none;
+}
+.source-path {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+.diagnostic {
+  padding: 0.5em 0.75em;
+  margin: 0.25em 0;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.diagnostic-error { background: #fee2e2; border-left: 3px solid var(--error-color); }
+.diagnostic-warning { background: #fef3c7; border-left: 3px solid var(--warning-color); }
+.diagnostic-info { background: #dbeafe; border-left: 3px solid var(--info-color); }
+.confidence-explicit { color: var(--success-color); font-weight: 600; }
+.confidence-derived { color: var(--info-color); font-weight: 600; }
+.confidence-inferred { color: var(--warning-color); font-weight: 600; }
+.confidence-unknown { color: var(--muted-color); }
+.review-marker-required { color: var(--warning-color); font-weight: 600; }
+.review-marker-approved { color: var(--success-color); }
+.review-marker-blocked { color: var(--error-color); font-weight: 600; }
+.missing-source-marker { color: var(--error-color); font-weight: 600; }
+.empty-state {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-color);
+  font-style: italic;
+}
+footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1em 2em;
+  font-size: 0.8em;
+  color: var(--muted-color);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75em;
+  margin: 0.75em 0;
+}
+.card {
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+}
+.card-label {
+  font-size: 0.8em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.card-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.15em;
+}
+.severity-fatal { color: var(--error-color); font-weight: 700; text-transform: uppercase; }
+.severity-error { color: var(--error-color); font-weight: 600; }
+.severity-warning { color: var(--warning-color); font-weight: 600; }
+.severity-info { color: var(--info-color); }
+.release-blocker-tag {
+  display: inline-block;
+  background: var(--error-color);
+  color: #fff;
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.phase-document-list {
+  margin: 0.5em 0;
+}
+.phase-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  background: #f9fafb;
+}
+.phase-item h3 {
+  margin: 0 0 0.25em 0;
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+<h1>Test Dashboard</h1>
+<p class="artifact-kind">logos-engine — HTML review artifact</p>
+</header>
+<main id="main-content">
+<section class="warning-block" aria-label="Derived artifact warning">
+<h2>IMPORTANT — Derived Non-Canonical Review Artifact</h2>
+<p><strong>This HTML file is a derived, non-canonical review artifact.</strong></p>
+<p>Canonical project documentation remains in generated Markdown and structured <code>.logos/</code> state.</p>
+<p>Do not treat this HTML artifact as the source of truth.</p>
+<p>This file is for local review only. It is not intended for distribution, hosting, or external use.</p>
+</section>
+<section class="warning-block" aria-label="Status warning"><h2>Status Warning</h2>
+<p><strong>This artifact is BLOCKED and cannot be treated as ready.</strong></p>
+</section>
+<section class="metadata-block">
+<h2>Metadata</h2>
+<dl>
+<dt>Artifact ID</dt><dd>html-blocked-example</dd>
+<dt>Artifact kind</dt><dd>custom</dd>
+<dt>Output boundary</dt><dd><span class="status-badge status-derived">derived</span></dd>
+<dt>Profile</dt><dd>standard (v1.0.0)</dd>
+<dt>Generated at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Rendered at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Status</dt><dd><span class="status-badge status-blocked">blocked</span></dd>
+<dt>Traceability boundary</dt><dd>derived</dd>
+</dl>
+</section>
+<section>
+<h2>Custom</h2>
+<div class="empty-state"><p>Blocked artifact</p></div>
+</section>
+</main>
+<footer>
+<p>Generated by logos-engine HTML renderer. This file is a local-only, static, read-only review artifact.</p>
+</footer>
+</body>
+</html>
+"
+`;
+
+exports[`snapshot HTML > snapshot dashboard HTML 1`] = `
+"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Dashboard — logos-engine HTML artifact</title>
+<style>
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --header-color: #1f2937;
+  --border-color: #d1d5db;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #3b82f6;
+  --success-color: #16a34a;
+  --link-color: #1d4ed8;
+  --muted-color: #6b7280;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--info-color);
+  color: #fff;
+  padding: 0.5em 1em;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+header {
+  border-bottom: 2px solid var(--border-color);
+  padding: 1.5em 2em;
+  background: #f9fafb;
+}
+header h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 1.5em;
+  color: var(--header-color);
+}
+.artifact-kind {
+  font-size: 0.875em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em 2em 3em 2em;
+}
+section {
+  margin: 1.5em 0;
+}
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25em;
+  margin: 1.5em 0 0.75em 0;
+  color: var(--header-color);
+}
+h3 {
+  font-size: 1.1em;
+  margin: 1em 0 0.5em 0;
+  color: var(--header-color);
+}
+.warning-block {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+}
+.warning-block strong {
+  color: #92400e;
+}
+.warning-block p {
+  margin: 0.25em 0;
+}
+.metadata-block {
+  background: #f3f4f6;
+  border: 1px solid var(--border-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+.metadata-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 1em;
+}
+.metadata-block dt {
+  font-weight: 600;
+  color: var(--muted-color);
+}
+.metadata-block dd {
+  margin: 0;
+}
+.status-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-ready { background: #d1fae5; color: #065f46; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+.status-stale { background: #fef3c7; color: #92400e; }
+.status-missing_source { background: #fee2e2; color: #991b1b; }
+.status-requires_review { background: #fef3c7; color: #92400e; }
+.status-unknown { background: #f3f4f6; color: #6b7280; }
+.status-skipped { background: #f3f4f6; color: #6b7280; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--header-color);
+}
+tr:nth-child(even) td {
+  background: #f9fafb;
+}
+.source-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+.source-list li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9em;
+}
+.source-list li:last-child {
+  border-bottom: none;
+}
+.source-path {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+.diagnostic {
+  padding: 0.5em 0.75em;
+  margin: 0.25em 0;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.diagnostic-error { background: #fee2e2; border-left: 3px solid var(--error-color); }
+.diagnostic-warning { background: #fef3c7; border-left: 3px solid var(--warning-color); }
+.diagnostic-info { background: #dbeafe; border-left: 3px solid var(--info-color); }
+.confidence-explicit { color: var(--success-color); font-weight: 600; }
+.confidence-derived { color: var(--info-color); font-weight: 600; }
+.confidence-inferred { color: var(--warning-color); font-weight: 600; }
+.confidence-unknown { color: var(--muted-color); }
+.review-marker-required { color: var(--warning-color); font-weight: 600; }
+.review-marker-approved { color: var(--success-color); }
+.review-marker-blocked { color: var(--error-color); font-weight: 600; }
+.missing-source-marker { color: var(--error-color); font-weight: 600; }
+.empty-state {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-color);
+  font-style: italic;
+}
+footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1em 2em;
+  font-size: 0.8em;
+  color: var(--muted-color);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75em;
+  margin: 0.75em 0;
+}
+.card {
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+}
+.card-label {
+  font-size: 0.8em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.card-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.15em;
+}
+.severity-fatal { color: var(--error-color); font-weight: 700; text-transform: uppercase; }
+.severity-error { color: var(--error-color); font-weight: 600; }
+.severity-warning { color: var(--warning-color); font-weight: 600; }
+.severity-info { color: var(--info-color); }
+.release-blocker-tag {
+  display: inline-block;
+  background: var(--error-color);
+  color: #fff;
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.phase-document-list {
+  margin: 0.5em 0;
+}
+.phase-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  background: #f9fafb;
+}
+.phase-item h3 {
+  margin: 0 0 0.25em 0;
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+<h1>Test Dashboard</h1>
+<p class="artifact-kind">logos-engine — HTML review artifact</p>
+</header>
+<main id="main-content">
+<section class="warning-block" aria-label="Derived artifact warning">
+<h2>IMPORTANT — Derived Non-Canonical Review Artifact</h2>
+<p><strong>This HTML file is a derived, non-canonical review artifact.</strong></p>
+<p>Canonical project documentation remains in generated Markdown and structured <code>.logos/</code> state.</p>
+<p>Do not treat this HTML artifact as the source of truth.</p>
+<p>This file is for local review only. It is not intended for distribution, hosting, or external use.</p>
+</section>
+<section class="metadata-block">
+<h2>Metadata</h2>
+<dl>
+<dt>Artifact ID</dt><dd>html-dashboard-default</dd>
+<dt>Artifact kind</dt><dd>dashboard</dd>
+<dt>Output boundary</dt><dd><span class="status-badge status-derived">derived</span></dd>
+<dt>Profile</dt><dd>standard (v1.0.0)</dd>
+<dt>Generated at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Rendered at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Status</dt><dd><span class="status-badge status-ready">ready</span></dd>
+<dt>Traceability boundary</dt><dd>derived</dd>
+<dt>Traceability summary</dt><dd>3 sources, 2 claims, 1 review-required</dd>
+</dl>
+</section>
+<section>
+<h2>Summary</h2>
+<div class="card-grid">
+<div class="card">
+<div class="card-label">Documents</div>
+<div class="card-value">5</div>
+</div>
+<div class="card">
+<div class="card-label">Ready</div>
+<div class="card-value">3</div>
+</div>
+<div class="card">
+<div class="card-label">Blocked</div>
+<div class="card-value">1</div>
+</div>
+<div class="card">
+<div class="card-label">Stale</div>
+<div class="card-value">1</div>
+</div>
+</div>
+</section>
+<section>
+<h2>Traceability</h2>
+<div class="card-grid">
+<div class="card"><div class="card-label">Sources</div><div class="card-value">3</div></div>
+<div class="card"><div class="card-label">Claims</div><div class="card-value">2</div></div>
+<div class="card"><div class="card-label">Review Required</div><div class="card-value">1</div></div>
+<div class="card"><div class="card-label">Inferred</div><div class="card-value">0</div></div>
+<div class="card"><div class="card-label">Missing Sources</div><div class="card-value">0</div></div>
+</div>
+</section>
+</main>
+<footer>
+<p>Generated by logos-engine HTML renderer. This file is a local-only, static, read-only review artifact.</p>
+</footer>
+</body>
+</html>
+"
+`;
+
+exports[`snapshot HTML > snapshot decision map HTML 1`] = `
+"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Dashboard — logos-engine HTML artifact</title>
+<style>
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --header-color: #1f2937;
+  --border-color: #d1d5db;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #3b82f6;
+  --success-color: #16a34a;
+  --link-color: #1d4ed8;
+  --muted-color: #6b7280;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--info-color);
+  color: #fff;
+  padding: 0.5em 1em;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+header {
+  border-bottom: 2px solid var(--border-color);
+  padding: 1.5em 2em;
+  background: #f9fafb;
+}
+header h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 1.5em;
+  color: var(--header-color);
+}
+.artifact-kind {
+  font-size: 0.875em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em 2em 3em 2em;
+}
+section {
+  margin: 1.5em 0;
+}
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25em;
+  margin: 1.5em 0 0.75em 0;
+  color: var(--header-color);
+}
+h3 {
+  font-size: 1.1em;
+  margin: 1em 0 0.5em 0;
+  color: var(--header-color);
+}
+.warning-block {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+}
+.warning-block strong {
+  color: #92400e;
+}
+.warning-block p {
+  margin: 0.25em 0;
+}
+.metadata-block {
+  background: #f3f4f6;
+  border: 1px solid var(--border-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+.metadata-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 1em;
+}
+.metadata-block dt {
+  font-weight: 600;
+  color: var(--muted-color);
+}
+.metadata-block dd {
+  margin: 0;
+}
+.status-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-ready { background: #d1fae5; color: #065f46; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+.status-stale { background: #fef3c7; color: #92400e; }
+.status-missing_source { background: #fee2e2; color: #991b1b; }
+.status-requires_review { background: #fef3c7; color: #92400e; }
+.status-unknown { background: #f3f4f6; color: #6b7280; }
+.status-skipped { background: #f3f4f6; color: #6b7280; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--header-color);
+}
+tr:nth-child(even) td {
+  background: #f9fafb;
+}
+.source-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+.source-list li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9em;
+}
+.source-list li:last-child {
+  border-bottom: none;
+}
+.source-path {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+.diagnostic {
+  padding: 0.5em 0.75em;
+  margin: 0.25em 0;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.diagnostic-error { background: #fee2e2; border-left: 3px solid var(--error-color); }
+.diagnostic-warning { background: #fef3c7; border-left: 3px solid var(--warning-color); }
+.diagnostic-info { background: #dbeafe; border-left: 3px solid var(--info-color); }
+.confidence-explicit { color: var(--success-color); font-weight: 600; }
+.confidence-derived { color: var(--info-color); font-weight: 600; }
+.confidence-inferred { color: var(--warning-color); font-weight: 600; }
+.confidence-unknown { color: var(--muted-color); }
+.review-marker-required { color: var(--warning-color); font-weight: 600; }
+.review-marker-approved { color: var(--success-color); }
+.review-marker-blocked { color: var(--error-color); font-weight: 600; }
+.missing-source-marker { color: var(--error-color); font-weight: 600; }
+.empty-state {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-color);
+  font-style: italic;
+}
+footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1em 2em;
+  font-size: 0.8em;
+  color: var(--muted-color);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75em;
+  margin: 0.75em 0;
+}
+.card {
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+}
+.card-label {
+  font-size: 0.8em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.card-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.15em;
+}
+.severity-fatal { color: var(--error-color); font-weight: 700; text-transform: uppercase; }
+.severity-error { color: var(--error-color); font-weight: 600; }
+.severity-warning { color: var(--warning-color); font-weight: 600; }
+.severity-info { color: var(--info-color); }
+.release-blocker-tag {
+  display: inline-block;
+  background: var(--error-color);
+  color: #fff;
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.phase-document-list {
+  margin: 0.5em 0;
+}
+.phase-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  background: #f9fafb;
+}
+.phase-item h3 {
+  margin: 0 0 0.25em 0;
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+<h1>Test Dashboard</h1>
+<p class="artifact-kind">logos-engine — HTML review artifact</p>
+</header>
+<main id="main-content">
+<section class="warning-block" aria-label="Derived artifact warning">
+<h2>IMPORTANT — Derived Non-Canonical Review Artifact</h2>
+<p><strong>This HTML file is a derived, non-canonical review artifact.</strong></p>
+<p>Canonical project documentation remains in generated Markdown and structured <code>.logos/</code> state.</p>
+<p>Do not treat this HTML artifact as the source of truth.</p>
+<p>This file is for local review only. It is not intended for distribution, hosting, or external use.</p>
+</section>
+<section class="metadata-block">
+<h2>Metadata</h2>
+<dl>
+<dt>Artifact ID</dt><dd>html-decision-map-default</dd>
+<dt>Artifact kind</dt><dd>decision_map</dd>
+<dt>Output boundary</dt><dd><span class="status-badge status-derived">derived</span></dd>
+<dt>Profile</dt><dd>standard (v1.0.0)</dd>
+<dt>Generated at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Rendered at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Status</dt><dd><span class="status-badge status-ready">ready</span></dd>
+<dt>Traceability boundary</dt><dd>derived</dd>
+</dl>
+</section>
+<section>
+<h2>Decisions</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th><th>Title / Summary</th><th>Status</th><th>Confidence</th><th>Review</th><th>Affected Documents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d1</td>
+<td><strong>Decision 1</strong><br>First decision</td>
+<td><span class="status-badge status-confirmed">confirmed</span></td>
+<td><span class="confidence-explicit">explicit</span></td>
+<td> <span class="review-marker-approved">[APPROVED]</span></td>
+<td>doc-1</td>
+</tr>
+</tbody>
+</table>
+</section>
+</main>
+<footer>
+<p>Generated by logos-engine HTML renderer. This file is a local-only, static, read-only review artifact.</p>
+</footer>
+</body>
+</html>
+"
+`;
+
+exports[`snapshot HTML > snapshot phase map HTML 1`] = `
+"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Dashboard — logos-engine HTML artifact</title>
+<style>
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --header-color: #1f2937;
+  --border-color: #d1d5db;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #3b82f6;
+  --success-color: #16a34a;
+  --link-color: #1d4ed8;
+  --muted-color: #6b7280;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--info-color);
+  color: #fff;
+  padding: 0.5em 1em;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+header {
+  border-bottom: 2px solid var(--border-color);
+  padding: 1.5em 2em;
+  background: #f9fafb;
+}
+header h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 1.5em;
+  color: var(--header-color);
+}
+.artifact-kind {
+  font-size: 0.875em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em 2em 3em 2em;
+}
+section {
+  margin: 1.5em 0;
+}
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25em;
+  margin: 1.5em 0 0.75em 0;
+  color: var(--header-color);
+}
+h3 {
+  font-size: 1.1em;
+  margin: 1em 0 0.5em 0;
+  color: var(--header-color);
+}
+.warning-block {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+}
+.warning-block strong {
+  color: #92400e;
+}
+.warning-block p {
+  margin: 0.25em 0;
+}
+.metadata-block {
+  background: #f3f4f6;
+  border: 1px solid var(--border-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+.metadata-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 1em;
+}
+.metadata-block dt {
+  font-weight: 600;
+  color: var(--muted-color);
+}
+.metadata-block dd {
+  margin: 0;
+}
+.status-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-ready { background: #d1fae5; color: #065f46; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+.status-stale { background: #fef3c7; color: #92400e; }
+.status-missing_source { background: #fee2e2; color: #991b1b; }
+.status-requires_review { background: #fef3c7; color: #92400e; }
+.status-unknown { background: #f3f4f6; color: #6b7280; }
+.status-skipped { background: #f3f4f6; color: #6b7280; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--header-color);
+}
+tr:nth-child(even) td {
+  background: #f9fafb;
+}
+.source-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+.source-list li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9em;
+}
+.source-list li:last-child {
+  border-bottom: none;
+}
+.source-path {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+.diagnostic {
+  padding: 0.5em 0.75em;
+  margin: 0.25em 0;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.diagnostic-error { background: #fee2e2; border-left: 3px solid var(--error-color); }
+.diagnostic-warning { background: #fef3c7; border-left: 3px solid var(--warning-color); }
+.diagnostic-info { background: #dbeafe; border-left: 3px solid var(--info-color); }
+.confidence-explicit { color: var(--success-color); font-weight: 600; }
+.confidence-derived { color: var(--info-color); font-weight: 600; }
+.confidence-inferred { color: var(--warning-color); font-weight: 600; }
+.confidence-unknown { color: var(--muted-color); }
+.review-marker-required { color: var(--warning-color); font-weight: 600; }
+.review-marker-approved { color: var(--success-color); }
+.review-marker-blocked { color: var(--error-color); font-weight: 600; }
+.missing-source-marker { color: var(--error-color); font-weight: 600; }
+.empty-state {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-color);
+  font-style: italic;
+}
+footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1em 2em;
+  font-size: 0.8em;
+  color: var(--muted-color);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75em;
+  margin: 0.75em 0;
+}
+.card {
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+}
+.card-label {
+  font-size: 0.8em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.card-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.15em;
+}
+.severity-fatal { color: var(--error-color); font-weight: 700; text-transform: uppercase; }
+.severity-error { color: var(--error-color); font-weight: 600; }
+.severity-warning { color: var(--warning-color); font-weight: 600; }
+.severity-info { color: var(--info-color); }
+.release-blocker-tag {
+  display: inline-block;
+  background: var(--error-color);
+  color: #fff;
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.phase-document-list {
+  margin: 0.5em 0;
+}
+.phase-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  background: #f9fafb;
+}
+.phase-item h3 {
+  margin: 0 0 0.25em 0;
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+<h1>Test Dashboard</h1>
+<p class="artifact-kind">logos-engine — HTML review artifact</p>
+</header>
+<main id="main-content">
+<section class="warning-block" aria-label="Derived artifact warning">
+<h2>IMPORTANT — Derived Non-Canonical Review Artifact</h2>
+<p><strong>This HTML file is a derived, non-canonical review artifact.</strong></p>
+<p>Canonical project documentation remains in generated Markdown and structured <code>.logos/</code> state.</p>
+<p>Do not treat this HTML artifact as the source of truth.</p>
+<p>This file is for local review only. It is not intended for distribution, hosting, or external use.</p>
+</section>
+<section class="metadata-block">
+<h2>Metadata</h2>
+<dl>
+<dt>Artifact ID</dt><dd>html-phase-map-default</dd>
+<dt>Artifact kind</dt><dd>phase_map</dd>
+<dt>Output boundary</dt><dd><span class="status-badge status-derived">derived</span></dd>
+<dt>Profile</dt><dd>standard (v1.0.0)</dd>
+<dt>Generated at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Rendered at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Status</dt><dd><span class="status-badge status-ready">ready</span></dd>
+<dt>Traceability boundary</dt><dd>derived</dd>
+</dl>
+</section>
+<section>
+<h2>Phases</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th><th>Order</th><th>Documents</th><th>Ready</th><th>Blocked</th><th>Stale</th><th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Phase One</strong><br><small class="status-missing_source">ph-1</small></td>
+<td>0</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td><span class="status-badge status-ready">ready</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</main>
+<footer>
+<p>Generated by logos-engine HTML renderer. This file is a local-only, static, read-only review artifact.</p>
+</footer>
+</body>
+</html>
+"
+`;
+
+exports[`snapshot HTML > snapshot risk map HTML 1`] = `
+"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Dashboard — logos-engine HTML artifact</title>
+<style>
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --header-color: #1f2937;
+  --border-color: #d1d5db;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #3b82f6;
+  --success-color: #16a34a;
+  --link-color: #1d4ed8;
+  --muted-color: #6b7280;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--info-color);
+  color: #fff;
+  padding: 0.5em 1em;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+header {
+  border-bottom: 2px solid var(--border-color);
+  padding: 1.5em 2em;
+  background: #f9fafb;
+}
+header h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 1.5em;
+  color: var(--header-color);
+}
+.artifact-kind {
+  font-size: 0.875em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em 2em 3em 2em;
+}
+section {
+  margin: 1.5em 0;
+}
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25em;
+  margin: 1.5em 0 0.75em 0;
+  color: var(--header-color);
+}
+h3 {
+  font-size: 1.1em;
+  margin: 1em 0 0.5em 0;
+  color: var(--header-color);
+}
+.warning-block {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+}
+.warning-block strong {
+  color: #92400e;
+}
+.warning-block p {
+  margin: 0.25em 0;
+}
+.metadata-block {
+  background: #f3f4f6;
+  border: 1px solid var(--border-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+.metadata-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 1em;
+}
+.metadata-block dt {
+  font-weight: 600;
+  color: var(--muted-color);
+}
+.metadata-block dd {
+  margin: 0;
+}
+.status-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-ready { background: #d1fae5; color: #065f46; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+.status-stale { background: #fef3c7; color: #92400e; }
+.status-missing_source { background: #fee2e2; color: #991b1b; }
+.status-requires_review { background: #fef3c7; color: #92400e; }
+.status-unknown { background: #f3f4f6; color: #6b7280; }
+.status-skipped { background: #f3f4f6; color: #6b7280; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--header-color);
+}
+tr:nth-child(even) td {
+  background: #f9fafb;
+}
+.source-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+.source-list li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9em;
+}
+.source-list li:last-child {
+  border-bottom: none;
+}
+.source-path {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+.diagnostic {
+  padding: 0.5em 0.75em;
+  margin: 0.25em 0;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.diagnostic-error { background: #fee2e2; border-left: 3px solid var(--error-color); }
+.diagnostic-warning { background: #fef3c7; border-left: 3px solid var(--warning-color); }
+.diagnostic-info { background: #dbeafe; border-left: 3px solid var(--info-color); }
+.confidence-explicit { color: var(--success-color); font-weight: 600; }
+.confidence-derived { color: var(--info-color); font-weight: 600; }
+.confidence-inferred { color: var(--warning-color); font-weight: 600; }
+.confidence-unknown { color: var(--muted-color); }
+.review-marker-required { color: var(--warning-color); font-weight: 600; }
+.review-marker-approved { color: var(--success-color); }
+.review-marker-blocked { color: var(--error-color); font-weight: 600; }
+.missing-source-marker { color: var(--error-color); font-weight: 600; }
+.empty-state {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-color);
+  font-style: italic;
+}
+footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1em 2em;
+  font-size: 0.8em;
+  color: var(--muted-color);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75em;
+  margin: 0.75em 0;
+}
+.card {
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+}
+.card-label {
+  font-size: 0.8em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.card-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.15em;
+}
+.severity-fatal { color: var(--error-color); font-weight: 700; text-transform: uppercase; }
+.severity-error { color: var(--error-color); font-weight: 600; }
+.severity-warning { color: var(--warning-color); font-weight: 600; }
+.severity-info { color: var(--info-color); }
+.release-blocker-tag {
+  display: inline-block;
+  background: var(--error-color);
+  color: #fff;
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.phase-document-list {
+  margin: 0.5em 0;
+}
+.phase-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  background: #f9fafb;
+}
+.phase-item h3 {
+  margin: 0 0 0.25em 0;
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+<h1>Test Dashboard</h1>
+<p class="artifact-kind">logos-engine — HTML review artifact</p>
+</header>
+<main id="main-content">
+<section class="warning-block" aria-label="Derived artifact warning">
+<h2>IMPORTANT — Derived Non-Canonical Review Artifact</h2>
+<p><strong>This HTML file is a derived, non-canonical review artifact.</strong></p>
+<p>Canonical project documentation remains in generated Markdown and structured <code>.logos/</code> state.</p>
+<p>Do not treat this HTML artifact as the source of truth.</p>
+<p>This file is for local review only. It is not intended for distribution, hosting, or external use.</p>
+</section>
+<section class="metadata-block">
+<h2>Metadata</h2>
+<dl>
+<dt>Artifact ID</dt><dd>html-risk-map-default</dd>
+<dt>Artifact kind</dt><dd>risk_map</dd>
+<dt>Output boundary</dt><dd><span class="status-badge status-derived">derived</span></dd>
+<dt>Profile</dt><dd>standard (v1.0.0)</dd>
+<dt>Generated at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Rendered at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Status</dt><dd><span class="status-badge status-ready">ready</span></dd>
+<dt>Traceability boundary</dt><dd>derived</dd>
+</dl>
+</section>
+<section>
+<h2>Risks</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th><th>Title / Summary</th><th>Status</th><th>Confidence</th><th>Mitigation</th><th>Affected Documents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r1</td>
+<td><strong>Risk 1</strong><br>First risk</td>
+<td><span class="status-badge status-accepted">accepted</span></td>
+<td><span class="confidence-derived">derived</span></td>
+<td>Mitigation plan</td>
+<td>doc-1</td>
+</tr>
+</tbody>
+</table>
+</section>
+</main>
+<footer>
+<p>Generated by logos-engine HTML renderer. This file is a local-only, static, read-only review artifact.</p>
+</footer>
+</body>
+</html>
+"
+`;
+
+exports[`snapshot HTML > snapshot validation summary HTML 1`] = `
+"<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test Dashboard — logos-engine HTML artifact</title>
+<style>
+:root {
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --header-color: #1f2937;
+  --border-color: #d1d5db;
+  --warning-color: #d97706;
+  --error-color: #dc2626;
+  --info-color: #3b82f6;
+  --success-color: #16a34a;
+  --link-color: #1d4ed8;
+  --muted-color: #6b7280;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--info-color);
+  color: #fff;
+  padding: 0.5em 1em;
+  z-index: 1000;
+}
+.skip-link:focus {
+  top: 0;
+}
+header {
+  border-bottom: 2px solid var(--border-color);
+  padding: 1.5em 2em;
+  background: #f9fafb;
+}
+header h1 {
+  margin: 0 0 0.25em 0;
+  font-size: 1.5em;
+  color: var(--header-color);
+}
+.artifact-kind {
+  font-size: 0.875em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1em 2em 3em 2em;
+}
+section {
+  margin: 1.5em 0;
+}
+h2 {
+  font-size: 1.25em;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25em;
+  margin: 1.5em 0 0.75em 0;
+  color: var(--header-color);
+}
+h3 {
+  font-size: 1.1em;
+  margin: 1em 0 0.5em 0;
+  color: var(--header-color);
+}
+.warning-block {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-left: 4px solid #f59e0b;
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+}
+.warning-block strong {
+  color: #92400e;
+}
+.warning-block p {
+  margin: 0.25em 0;
+}
+.metadata-block {
+  background: #f3f4f6;
+  border: 1px solid var(--border-color);
+  padding: 1em;
+  margin: 1em 0;
+  border-radius: 0.25em;
+  font-size: 0.875em;
+}
+.metadata-block dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25em 1em;
+}
+.metadata-block dt {
+  font-weight: 600;
+  color: var(--muted-color);
+}
+.metadata-block dd {
+  margin: 0;
+}
+.status-badge {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 0.25em;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-ready { background: #d1fae5; color: #065f46; }
+.status-blocked { background: #fee2e2; color: #991b1b; }
+.status-stale { background: #fef3c7; color: #92400e; }
+.status-missing_source { background: #fee2e2; color: #991b1b; }
+.status-requires_review { background: #fef3c7; color: #92400e; }
+.status-unknown { background: #f3f4f6; color: #6b7280; }
+.status-skipped { background: #f3f4f6; color: #6b7280; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.75em 0;
+}
+th, td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border: 1px solid var(--border-color);
+}
+th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: var(--header-color);
+}
+tr:nth-child(even) td {
+  background: #f9fafb;
+}
+.source-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em 0;
+}
+.source-list li {
+  padding: 0.35em 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 0.9em;
+}
+.source-list li:last-child {
+  border-bottom: none;
+}
+.source-path {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85em;
+}
+.diagnostic {
+  padding: 0.5em 0.75em;
+  margin: 0.25em 0;
+  border-radius: 0.2em;
+  font-size: 0.9em;
+}
+.diagnostic-error { background: #fee2e2; border-left: 3px solid var(--error-color); }
+.diagnostic-warning { background: #fef3c7; border-left: 3px solid var(--warning-color); }
+.diagnostic-info { background: #dbeafe; border-left: 3px solid var(--info-color); }
+.confidence-explicit { color: var(--success-color); font-weight: 600; }
+.confidence-derived { color: var(--info-color); font-weight: 600; }
+.confidence-inferred { color: var(--warning-color); font-weight: 600; }
+.confidence-unknown { color: var(--muted-color); }
+.review-marker-required { color: var(--warning-color); font-weight: 600; }
+.review-marker-approved { color: var(--success-color); }
+.review-marker-blocked { color: var(--error-color); font-weight: 600; }
+.missing-source-marker { color: var(--error-color); font-weight: 600; }
+.empty-state {
+  text-align: center;
+  padding: 2em;
+  color: var(--muted-color);
+  font-style: italic;
+}
+footer {
+  border-top: 1px solid var(--border-color);
+  padding: 1em 2em;
+  font-size: 0.8em;
+  color: var(--muted-color);
+  max-width: 960px;
+  margin: 0 auto;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75em;
+  margin: 0.75em 0;
+}
+.card {
+  background: #f9fafb;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+}
+.card-label {
+  font-size: 0.8em;
+  color: var(--muted-color);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.card-value {
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-top: 0.15em;
+}
+.severity-fatal { color: var(--error-color); font-weight: 700; text-transform: uppercase; }
+.severity-error { color: var(--error-color); font-weight: 600; }
+.severity-warning { color: var(--warning-color); font-weight: 600; }
+.severity-info { color: var(--info-color); }
+.release-blocker-tag {
+  display: inline-block;
+  background: var(--error-color);
+  color: #fff;
+  padding: 0.1em 0.4em;
+  border-radius: 0.2em;
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.phase-document-list {
+  margin: 0.5em 0;
+}
+.phase-item {
+  border: 1px solid var(--border-color);
+  border-radius: 0.25em;
+  padding: 0.75em 1em;
+  margin: 0.5em 0;
+  background: #f9fafb;
+}
+.phase-item h3 {
+  margin: 0 0 0.25em 0;
+}
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+<h1>Test Dashboard</h1>
+<p class="artifact-kind">logos-engine — HTML review artifact</p>
+</header>
+<main id="main-content">
+<section class="warning-block" aria-label="Derived artifact warning">
+<h2>IMPORTANT — Derived Non-Canonical Review Artifact</h2>
+<p><strong>This HTML file is a derived, non-canonical review artifact.</strong></p>
+<p>Canonical project documentation remains in generated Markdown and structured <code>.logos/</code> state.</p>
+<p>Do not treat this HTML artifact as the source of truth.</p>
+<p>This file is for local review only. It is not intended for distribution, hosting, or external use.</p>
+</section>
+<section class="metadata-block">
+<h2>Metadata</h2>
+<dl>
+<dt>Artifact ID</dt><dd>html-validation-default</dd>
+<dt>Artifact kind</dt><dd>validation_summary</dd>
+<dt>Output boundary</dt><dd><span class="status-badge status-derived">derived</span></dd>
+<dt>Profile</dt><dd>standard (v1.0.0)</dd>
+<dt>Generated at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Rendered at</dt><dd>2026-01-15T10:30:00.000Z</dd>
+<dt>Status</dt><dd><span class="status-badge status-ready">ready</span></dd>
+<dt>Traceability boundary</dt><dd>derived</dd>
+</dl>
+</section>
+<section>
+<h2>Validation Findings</h2>
+<h3>Blockers & Errors</h3>
+<table>
+<thead>
+<tr>
+<th>Severity</th><th>Code</th><th>Message</th><th>Document / Phase</th><th>Path / Pointer</th><th>Recovery</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="severity-error">ERROR</span> <span class="release-blocker-tag">BLOCKER</span></td>
+<td>E_MISSING</td>
+<td>File missing</td>
+<td>doc-1 / ph-1</td>
+<td class="source-path">logos/doc.md / /outputs</td>
+<td>Create the file</td>
+</tr>
+</tbody>
+</table>
+</section>
+</main>
+<footer>
+<p>Generated by logos-engine HTML renderer. This file is a local-only, static, read-only review artifact.</p>
+</footer>
+</body>
+</html>
+"
+`;

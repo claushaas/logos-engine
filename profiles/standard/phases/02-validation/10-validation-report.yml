@@ -1,0 +1,394 @@
+document:
+  id: "10-validation-report"
+  title: "Validation Report"
+  phase: "02-validation"
+  status: "not_started"
+  order: 10
+  type: "report"
+  purpose: "Synthesize all validation findings, evidence, decisions, risks, and unresolved assumptions into a clear recommendation on whether to proceed, pivot, stop, or continue validation."
+  centralQuestion: "Has the idea been validated enough to advance, under what conditions, and with what remaining risk?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/02-validation/10-validation-report.md"
+      purpose: "Store the canonical validation report as a Markdown document."
+    artifacts:
+      - id: "validation.validation_report_summary"
+        format: "html"
+        path: "outcomes/html/02-validation/validation-report-summary.html"
+        purpose: "Provide a navigable executive summary of validation status, supported claims, refuted claims, inconclusive claims, key evidence, remaining risks, recommendation, and required changes before Product."
+        audience: "founder"
+        includes:
+          - "executive summary"
+          - "validation verdict"
+          - "validation status"
+          - "supported claims"
+          - "refuted claims"
+          - "inconclusive claims"
+          - "key evidence"
+          - "remaining risks"
+          - "recommendation"
+          - "required changes before product"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "validation.validation_report_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/02-validation/validation-report-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the validation report is evidence-based, decision-useful, internally consistent, and ready to guide downstream phases."
+        agentRole: "reviewer"
+        includes:
+          - "canonical validation report"
+          - "validation strategy dependency"
+          - "hypotheses dependency"
+          - "experiments dependency"
+          - "evidence log dependency"
+          - "decision record dependency"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/01-validation-strategy"
+    - "02-validation/02-core-assumptions"
+    - "02-validation/03-hypotheses"
+    - "02-validation/04-research-plan"
+    - "02-validation/05-experiments"
+    - "02-validation/06-economic-model"
+    - "02-validation/07-business-model"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+  feeds:
+    - "03-product/01-product-brief"
+    - "03-product/02-product-scope"
+    - "03-product/03-user-stories"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "05-go-to-market/01-go-to-market-brief"
+    - "05-go-to-market/03-positioning"
+    - "05-go-to-market/10-pricing-and-packaging"
+    - "06-operations/02-operating-model"
+    - "06-operations/11-financial-operations"
+  inputs:
+    - id: "validation-strategy"
+      type: "context"
+      required: false
+      description: "Validation objectives, priorities, evidence standards, invalidating conditions, and decision gates used to evaluate validation completeness."
+    - id: "hypotheses"
+      type: "context"
+      required: false
+      description: "Hypothesis register with tested, supported, refuted, inconclusive, and untested hypotheses."
+    - id: "evidence-log"
+      type: "context"
+      required: false
+      description: "Evidence entries, evidence strength, contradictions, evidence gaps, and evidence quality notes."
+    - id: "decision-record"
+      type: "context"
+      required: false
+      description: "Accepted, refuted, pivot, proceed, stop, deferred, reopened decisions, and open risks."
+    - id: "economic-and-business-models"
+      type: "context"
+      required: false
+      description: "Economic model and business model viability summaries, risks, invalidating conditions, and unresolved gaps."
+  completionCriteria:
+    - "The central question is answered explicitly with a recommendation: proceed, pivot, stop, or continue validation."
+    - "The report distinguishes validation outcome, recommendation, confidence level, conditions, and remaining risk."
+    - "Supported, refuted, inconclusive, and untested claims are clearly separated."
+    - "Key evidence is traceable to Evidence Log, Experiments, Research Plan, Economic Model, Business Model, or Decision Record."
+    - "Remaining risks are classified as acceptable, monitored, blocking, or requiring mitigation before advancing."
+    - "Required changes before Product are explicit and routed to downstream documents."
+    - "The recommendation does not exceed the strength of available evidence."
+    - "The report identifies what has been validated, what has not, and what must not be assumed downstream."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid validation theater: a positive-sounding report without decision-changing evidence."
+    - "Avoid overstating confidence."
+    - "Avoid hiding refuted or contradictory evidence."
+    - "Avoid treating inconclusive claims as supported."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Do not invent evidence, decisions, confidence, approval, metrics, or consensus."
+    - "Do not recommend proceeding if blocking risks or invalidating evidence remain unresolved unless conditions are explicit."
+    - "Do not turn the report into Product, Engineering, Go-to-market, or Operations planning; only define validated handoff constraints."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate evidence, interpretation, confidence, recommendation, conditions, and next steps."
+    - "Classify the final recommendation as proceed, pivot, stop, or continue validation."
+    - "State confidence as high, medium, low, or insufficient, with rationale."
+    - "Trace major claims to evidence entries or decision records where possible."
+    - "Preserve contradictory evidence and unresolved risks in the final synthesis."
+    - "State what downstream teams or documents are allowed to assume and what they are not allowed to assume."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Foundation documents, Validation Strategy, Hypotheses, Experiments, Economic Model, Business Model, Evidence Log, or Decision Record."
+    - "Flag recommendations that exceed the available evidence."
+    - "Flag missing refuted, contradictory, inconclusive, or untested claims."
+    - "Verify that key evidence is traceable and interpreted proportionally."
+    - "Verify that required changes before Product are actionable and routed downstream."
+    - "Verify that open risks are not hidden inside optimistic language."
+    - "Flag content that belongs better in Product, Engineering, Go-to-market, Operations, Evidence Log, or Decision Record."
+  specializedFormats:
+    validationVerdictFormat:
+      description: "Recommended format for the final validation verdict."
+      fields:
+        - verdict
+        - recommendation
+        - confidence
+        - evidenceBasis
+        - conditions
+        - blockingRisks
+        - downstreamPermissions
+        - downstreamRestrictions
+        - revisitTrigger
+    claimAssessmentFormat:
+      description: "Recommended format for supported, refuted, inconclusive, or untested claims."
+      fields:
+        - claim
+        - status
+        - evidenceBasis
+        - evidenceStrength
+        - confidence
+        - limitations
+        - decisionImplication
+        - downstreamImpact
+    handoffItemFormat:
+      description: "Recommended format for downstream handoff items."
+      fields:
+        - targetDocument
+        - item
+        - sourceEvidenceOrDecision
+        - status
+        - requiredAction
+        - riskIfIgnored
+  sections:
+    - id: "executive-summary"
+      title: "Executive Summary"
+      intent: "Summarize the overall validation outcome, recommendation, confidence, most important finding, and most important remaining risk."
+      required: true
+      outputGuidance:
+        - "Open with the validation verdict in plain language."
+        - "State the recommendation and confidence level directly."
+        - "Include both the strongest positive finding and the strongest concern."
+        - "Avoid turning the summary into a pitch."
+      qualityChecks:
+        - "The summary is decision-useful without reading the entire report."
+        - "It does not hide major caveats."
+        - "Recommendation and confidence are proportional to evidence."
+      questions:
+        - "What is the overall validation outcome in one paragraph?"
+        - "What is the recommendation: proceed, pivot, stop, or continue validation?"
+        - "What is the confidence level in this recommendation?"
+        - "What is the single most important finding?"
+        - "What is the single most important remaining risk?"
+    - id: "validation-verdict"
+      title: "Validation Verdict"
+      intent: "State the final validation verdict, its evidence basis, conditions, downstream permissions, and downstream restrictions."
+      required: true
+      outputGuidance:
+        - "Use a clear verdict category: validated, conditionally validated, partially validated, not yet validated, invalidated, or validation incomplete."
+        - "State what may advance and what must remain blocked."
+        - "Connect verdict to validation gates and evidence standards."
+      qualityChecks:
+        - "The verdict follows from the Evidence Log and Decision Record."
+        - "The verdict does not imply full validation if only part of the thesis was validated."
+        - "Downstream permissions and restrictions are explicit."
+      questions:
+        - "What is the final validation verdict?"
+        - "Is the idea validated, conditionally validated, partially validated, not yet validated, invalidated, or validation incomplete?"
+        - "What evidence supports this verdict?"
+        - "What conditions or caveats apply?"
+        - "What downstream work is now permitted?"
+        - "What downstream work remains blocked?"
+        - "What should downstream teams not assume?"
+    - id: "validation-status"
+      title: "Validation Status"
+      intent: "Report the status of each validation track, the completeness of each track, and what remains untested or deferred."
+      required: true
+      outputGuidance:
+        - "Report status by validation track rather than a single misleading percentage alone."
+        - "If using a percentage, explain what it measures and what it does not measure."
+        - "Separate complete, in-progress, deferred, inconclusive, and not-started validation tracks."
+      qualityChecks:
+        - "Status reflects actual evidence, not activity volume."
+        - "Incomplete validation is not hidden by aggregate progress."
+        - "Deferred validation is explicit."
+      questions:
+        - "What is the status of each validation track?"
+        - "Which validations are complete, in progress, deferred, inconclusive, or not started?"
+        - "What is the overall validation completeness, and how is it calculated?"
+        - "Which validation tracks are blocking advancement?"
+        - "Which validation tracks can be safely carried forward?"
+    - id: "supported-claims"
+      title: "Supported Claims"
+      intent: "List claims supported by evidence, with evidence strength, confidence, limitations, and downstream implications."
+      required: true
+      outputGuidance:
+        - "Use 'supported' rather than 'proven' unless proof is appropriate."
+        - "Link each claim to evidence or decision records."
+        - "State limitations and what the evidence does not prove."
+      qualityChecks:
+        - "Supported claims have traceable evidence."
+        - "Confidence is proportional to evidence strength."
+        - "The section does not overgeneralize from narrow evidence."
+      questions:
+        - "Which claims have been supported by evidence?"
+        - "What is the strength of evidence for each supported claim?"
+        - "What is the confidence level for each supported claim?"
+        - "What limitations remain attached to each supported claim?"
+        - "What downstream decisions can each supported claim inform?"
+    - id: "refuted-claims"
+      title: "Refuted Claims"
+      intent: "List claims refuted by evidence, their impact, whether they were addressed, and what must change because of them."
+      required: true
+      outputGuidance:
+        - "State what exactly was refuted and what was not."
+        - "Distinguish refuted claims from inconclusive or insufficiently tested claims."
+        - "Explain whether refutations were addressed through changes, pivots, or scope reduction."
+      qualityChecks:
+        - "Refuted claims have traceable refuting evidence."
+        - "Impact is explicit and not softened."
+        - "The section identifies required downstream changes."
+      questions:
+        - "Which claims have been refuted by evidence?"
+        - "What evidence refuted each claim?"
+        - "What was the impact of each refutation?"
+        - "Have any refutations been addressed through changes to the project?"
+        - "What changes are still required because of refuted claims?"
+    - id: "inconclusive-claims"
+      title: "Inconclusive Claims"
+      intent: "List claims that remain inconclusive, why evidence is insufficient, and what would resolve uncertainty."
+      required: true
+      outputGuidance:
+        - "Separate inconclusive from untested and contradicted claims."
+        - "Explain why the available evidence is insufficient."
+        - "State whether the uncertainty blocks advancement or can be carried forward."
+      qualityChecks:
+        - "Inconclusive claims are not treated as supported."
+        - "Resolution path is clear for important inconclusive claims."
+        - "Blocking impact is explicit."
+      questions:
+        - "Which claims remain inconclusive?"
+        - "Why is the evidence inconclusive for each?"
+        - "What additional evidence would resolve the uncertainty?"
+        - "Which inconclusive claims block advancement?"
+        - "Which inconclusive claims can be carried forward temporarily?"
+    - id: "untested-claims"
+      title: "Untested Claims"
+      intent: "List important claims or assumptions that were not tested and clarify whether they are deferred, accepted as risk, or blocking."
+      required: true
+      outputGuidance:
+        - "Name important untested claims explicitly."
+        - "Explain why each was not tested."
+        - "Classify each as deferred, accepted risk, blocking, or not relevant yet."
+      qualityChecks:
+        - "Untested claims are not omitted from the report."
+        - "The report does not imply untested areas are validated."
+        - "Each important untested claim has a next step or acceptance rationale."
+      questions:
+        - "Which important claims were not tested?"
+        - "Why were they not tested?"
+        - "Are they deferred, accepted as risk, blocking, or not relevant yet?"
+        - "What must happen before they can be treated as validated?"
+    - id: "key-evidence"
+      title: "Key Evidence"
+      intent: "Highlight the most decision-relevant evidence, strongest evidence, most concerning evidence, contradictions, and evidence quality limitations."
+      required: true
+      outputGuidance:
+        - "Select evidence by decision impact, not by convenience or positivity."
+        - "Include supportive and concerning evidence."
+        - "Link each key evidence item to Evidence Log references where possible."
+      qualityChecks:
+        - "Key evidence is traceable."
+        - "Evidence strength and limitations are stated."
+        - "The most concerning evidence is not omitted."
+      questions:
+        - "What are the top 5-10 pieces of evidence that matter most?"
+        - "What is the single strongest piece of evidence?"
+        - "What is the single most concerning piece of evidence?"
+        - "What contradictory evidence matters most?"
+        - "What evidence has the biggest decision impact?"
+        - "What evidence should not be overused?"
+    - id: "remaining-risks"
+      title: "Remaining Risks"
+      intent: "Identify risks that remain after validation, classify them, and define mitigation, monitoring, or blocking implications."
+      required: true
+      outputGuidance:
+        - "Classify risks as accepted, monitored, mitigated, blocking, or deferred."
+        - "Tie risks to evidence gaps, decisions, hypotheses, or downstream phases."
+        - "State the risk of being wrong about the recommendation."
+      qualityChecks:
+        - "Risks are not hidden by optimistic recommendation language."
+        - "Blocking risks are clearly distinguished from acceptable risks."
+        - "Each major risk has a mitigation, monitor, owner, or explicit acceptance rationale."
+      questions:
+        - "What risks remain after validation?"
+        - "Which risks are acceptable to carry forward?"
+        - "Which risks require mitigation before advancing?"
+        - "Which risks block advancement?"
+        - "What is the risk of being wrong about the recommendation?"
+        - "What should be monitored if the project advances?"
+    - id: "recommendation"
+      title: "Recommendation"
+      intent: "State the explicit recommendation with rationale, confidence, conditions, caveats, required approvals, and allowed next phase."
+      required: true
+      outputGuidance:
+        - "Use one primary recommendation: proceed, pivot, stop, or continue validation."
+        - "State rationale using evidence and decision criteria."
+        - "Include conditions, caveats, and required approvals."
+        - "Identify the allowed next phase or blocked next phase."
+      qualityChecks:
+        - "Recommendation follows from evidence and decision record."
+        - "Conditions are concrete enough to execute or verify."
+        - "Approval requirements are explicit if applicable."
+      questions:
+        - "What is the explicit recommendation: proceed, pivot, stop, or continue validation?"
+        - "What is the rationale for this recommendation?"
+        - "What confidence level supports this recommendation?"
+        - "What conditions or caveats apply to this recommendation?"
+        - "Who needs to approve this recommendation?"
+        - "What phase or workstream is allowed to begin next?"
+        - "What must remain blocked?"
+    - id: "required-changes-before-product"
+      title: "Required Changes Before Product"
+      intent: "List changes, revisions, validations, constraints, and handoff items required before product development begins."
+      required: true
+      outputGuidance:
+        - "List required changes as actionable handoff items."
+        - "Route each item to the document or phase that must absorb it."
+        - "Separate must-change from should-change and monitor-later."
+      qualityChecks:
+        - "Required changes are actionable and traceable to validation evidence or decisions."
+        - "The section does not become a full product plan."
+        - "Must-change items are not diluted by optional recommendations."
+      questions:
+        - "What must change before product development begins?"
+        - "What assumptions must be further validated?"
+        - "What scope, audience, solution, pricing, business model, or operational changes are required?"
+        - "What constraints must Product inherit from Validation?"
+        - "What is the minimum viable next step?"
+        - "Which documents must be updated before Product starts?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what Product, Engineering, Go-to-market, and Operations may assume, must revisit, and must not assume based on validation."
+      required: true
+      outputGuidance:
+        - "Translate validation results into constraints and inputs for downstream phases."
+        - "Separate permissions from restrictions."
+        - "Name document-level handoff targets."
+      qualityChecks:
+        - "Downstream assumptions are explicit and evidence-bounded."
+        - "The section prevents downstream teams from treating partial validation as full validation."
+        - "Handoff items point to appropriate target documents."
+      questions:
+        - "What may Product assume based on validation?"
+        - "What must Product not assume yet?"
+        - "What may Engineering assume based on validation?"
+        - "What must Go-to-market inherit from validation?"
+        - "What must Operations prepare for or monitor?"
+        - "Which downstream documents should receive which handoff items?"

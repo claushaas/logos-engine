@@ -1,0 +1,225 @@
+document:
+  id: "06-success-definition"
+  title: "Success Definition"
+  phase: "01-foundation"
+  status: "not_started"
+  order: 6
+  type: "success_definition"
+  purpose: "Define the observable, falsifiable, and bounded criteria by which the project is judged to be working."
+  centralQuestion: "What must be true for us to say this project works?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/01-foundation/06-success-definition.md"
+      purpose: "Store the canonical success definition as a Markdown document."
+    artifacts:
+      - id: "foundation.success_scorecard"
+        format: "html"
+        path: "outcomes/html/01-foundation/success-scorecard.html"
+        purpose: "Provide a navigable scorecard of foundational success, user-level success, system-level success, failure signals, false success, and minimum validation threshold."
+        audience: "founder"
+        includes:
+          - "foundational success"
+          - "user-level success"
+          - "system-level success"
+          - "failure signals"
+          - "false success"
+          - "minimum validation threshold"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "foundation.success_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/01-foundation/success-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether success criteria are observable, falsifiable, bounded, and aligned with the foundation documents."
+        agentRole: "reviewer"
+        includes:
+          - "canonical success definition"
+          - "founding thesis dependency"
+          - "problem definition dependency"
+          - "audience definition dependency"
+          - "principles dependency"
+          - "boundaries dependency"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/01-thesis"
+    - "01-foundation/02-problem"
+    - "01-foundation/03-audience"
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+  feeds:
+    - "01-foundation/07-glossary"
+    - "02-validation/01-validation-strategy"
+    - "02-validation/03-hypotheses"
+    - "02-validation/05-experiments"
+    - "03-product/13-acceptance-criteria"
+  inputs:
+    - id: "expected-outcomes"
+      type: "manual_note"
+      required: false
+      description: "Initial expectations about what should change for users, the system, or the project if the thesis is correct."
+    - id: "failure-concerns"
+      type: "manual_note"
+      required: false
+      description: "Known concerns about what would indicate the project is not working, is misaligned, or is producing harmful incentives."
+    - id: "validation-notes"
+      type: "context"
+      required: false
+      description: "Early validation notes, observations, or evidence that may inform success thresholds without replacing the dedicated Validation phase."
+  completionCriteria:
+    - "The central question is answered explicitly in the Foundational Success section."
+    - "Success signals and failure signals are both defined."
+    - "User-level success is described through observable user outcomes, not internal hopes."
+    - "System-level success is described without becoming Engineering implementation detail."
+    - "False success indicators are distinguishable from true success."
+    - "The minimum validation threshold is concrete, bounded, and testable."
+    - "Each success criterion can be reviewed against the thesis, problem, audience, principles, and boundaries."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid vanity metrics."
+    - "Avoid stakeholder wishes that are not tied to the thesis, problem, or audience."
+    - "Prefer observable outcomes over abstract aspirations."
+    - "Prefer decision-useful statements."
+    - "Success criteria must be falsifiable."
+    - "Success criteria must not reward behavior that violates project boundaries."
+    - "False success indicators must be distinguishable from true success."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Prefer observable outcomes over abstract aspirations."
+    - "Separate leading indicators, lagging indicators, qualitative signals, and quantitative thresholds."
+    - "Do not invent metrics, targets, benchmarks, or validation data."
+    - "Label uncertain thresholds as assumptions or provisional validation targets."
+    - "Keep success definition foundational; detailed experiment design belongs in Validation."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with the Founding Thesis, Problem Definition, Audience Definition, Design Principles, or Project Boundaries."
+    - "Verify that success criteria align with the thesis, not just stakeholder wishes."
+    - "Verify that each criterion can be observed, tested, or reviewed."
+    - "Flag success criteria that create perverse incentives or violate boundaries."
+    - "Flag content that belongs better in Validation, Product, Engineering, Go-to-market, or Operations."
+  specializedFormats:
+    successCriterionFormat:
+      description: "Recommended format for explicit success criteria when a section lists individual criteria."
+      fields:
+        - name
+        - level
+        - description
+        - signalType
+        - evidenceSource
+        - threshold
+        - interpretation
+        - falsePositiveRisk
+        - relatedFoundationDoc
+        - status
+  sections:
+    - id: "foundational-success"
+      title: "Foundational Success"
+      intent: "Define how success is recognized at the thesis level and what minimum result validates the project's reason to exist."
+      required: true
+      outputGuidance:
+        - "Start with the smallest meaningful condition that would make the thesis feel validated."
+        - "Describe success as evidence that the project is solving the right problem for the right audience under the right principles."
+        - "Avoid product, revenue, or engineering metrics unless they directly indicate foundational validity."
+      qualityChecks:
+        - "The section answers the central question directly."
+        - "Foundational success is tied to the thesis rather than generic adoption."
+        - "The definition is narrow enough to be tested and broad enough to guide future phases."
+      questions:
+        - "How will success be recognized?"
+        - "What must become true for the thesis to appear valid?"
+        - "What change should the user experience?"
+        - "What minimum result would validate the thesis?"
+        - "What signals indicate misalignment?"
+        - "What apparent success would be false success?"
+    - id: "user-level-success"
+      title: "User-Level Success"
+      intent: "Define observable outcomes that indicate the user is succeeding because the project works for them."
+      required: true
+      outputGuidance:
+        - "Describe what users do, understand, decide, avoid, complete, or improve when the project works."
+        - "Include both behavioral outcomes and qualitative user signals where relevant."
+        - "Avoid relying only on what users say they like."
+      qualityChecks:
+        - "User success is connected to the problem and audience definitions."
+        - "Outcomes are observable without requiring hidden interpretation."
+        - "The section distinguishes meaningful user success from satisfaction theater."
+      questions:
+        - "What observable outcomes indicate the user is succeeding?"
+        - "What does the user do differently when the project works?"
+        - "What does the user understand, decide, or complete that they previously struggled with?"
+        - "What does the user say when the project works for them?"
+        - "What user outcomes would indicate the project is useful but still not aligned with its thesis?"
+    - id: "system-level-success"
+      title: "System-Level Success"
+      intent: "Define structural, procedural, and system-level indicators that show the project can reliably produce the intended outcomes."
+      required: true
+      outputGuidance:
+        - "Describe system health at the level of reliability, repeatability, auditability, reviewability, and alignment."
+        - "Avoid detailed implementation metrics that belong in Engineering."
+        - "Include structural success indicators for canonical docs, generated artifacts, and agent packs where relevant."
+      qualityChecks:
+        - "System-level success supports user-level and foundational success."
+        - "The section does not become an engineering observability document."
+        - "The criteria are reviewable without needing a full production monitoring stack."
+      questions:
+        - "What technical, structural, or procedural measures indicate health?"
+        - "What must the system reliably produce?"
+        - "What must remain auditable, reviewable, or reproducible?"
+        - "What metrics or signals matter for the system itself?"
+        - "What system behaviors would indicate drift from the founding principles?"
+    - id: "failure-signals"
+      title: "Failure Signals"
+      intent: "Identify early indicators that the project is not working as intended or is drifting from the foundation."
+      required: true
+      outputGuidance:
+        - "Include signals from users, generated documents, agent behavior, product direction, and project decisions."
+        - "Separate early warning signs from confirmed failure conditions."
+        - "Name what should happen when a failure signal appears."
+      qualityChecks:
+        - "Failure signals are specific enough to trigger review."
+        - "The section includes both user-level and system-level failure signals."
+        - "The signals are not merely the inverse of success criteria."
+      questions:
+        - "What early indicators suggest the project is not working?"
+        - "What user behaviors or feedback patterns signal misalignment?"
+        - "What document or agent-output patterns signal weak foundation?"
+        - "What project decisions would indicate drift from the thesis or principles?"
+        - "Which signals require revision, validation, or stopping?"
+    - id: "false-success"
+      title: "False Success"
+      intent: "Identify metrics, adoption patterns, artifacts, or stakeholder reactions that could look positive while masking failure."
+      required: true
+      outputGuidance:
+        - "Name success-looking signals that could mislead decision-making."
+        - "Explain why each false success signal is insufficient or dangerous."
+        - "Identify how to distinguish true success from false positives."
+      qualityChecks:
+        - "The section explicitly names vanity metrics or misleading proxy signals."
+        - "False success is connected to project boundaries and principles."
+        - "The section prevents optimizing for appearance over actual usefulness."
+      questions:
+        - "What metrics could look good while masking failure?"
+        - "What adoption patterns would be vanity metrics?"
+        - "What stakeholder praise could be misleading?"
+        - "What polished artifacts could hide weak structure or weak reasoning?"
+        - "How should true success be distinguished from false positives?"
+    - id: "minimum-validation-threshold"
+      title: "Minimum Validation Threshold"
+      intent: "Define the smallest concrete result that would count as validation of the thesis and justify moving deeper into Validation, Product, or Engineering."
+      required: true
+      outputGuidance:
+        - "State the minimum threshold as a bounded condition, not an aspiration."
+        - "Separate provisional thresholds from evidence-backed thresholds."
+        - "Make clear what is validated and what remains unvalidated if the threshold is met."
+      qualityChecks:
+        - "The threshold is concrete enough to test."
+        - "The threshold does not pretend to validate more than it actually validates."
+        - "The threshold can guide whether to continue, revise, or stop."
+      questions:
+        - "What is the smallest result that would count as validation?"
+        - "What conditions must be met to declare the thesis tested?"
+        - "What evidence source would support this threshold?"
+        - "What remains unvalidated even if the threshold is met?"
+        - "What result would require revising or abandoning the thesis?"

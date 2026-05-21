@@ -1,0 +1,803 @@
+document:
+  id: "10-testing-strategy"
+  title: "Testing Strategy"
+  phase: "04-engineering"
+  status: "not_started"
+  order: 10
+  type: "testing_strategy"
+  purpose: "Define how the system is verified across domain logic, APIs, data, sync, integrations, frontend, security, privacy, performance, accessibility, reliability, observability, CI, release gates, and regression prevention."
+  centralQuestion: "How will Engineering prove the system works, keeps working, satisfies acceptance criteria, and does not break silently?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/04-engineering/10-testing-strategy.md"
+      purpose: "Store the canonical testing strategy as a Markdown document."
+    artifacts:
+      - id: "engineering.testing_strategy_matrix"
+        format: "html"
+        path: "outcomes/html/04-engineering/testing-strategy-matrix.html"
+        purpose: "Provide a navigable testing strategy matrix covering test philosophy, test levels, coverage map, unit, integration, E2E, contract, domain, data, sync, frontend, accessibility, security, privacy, performance, reliability, regression, fixtures, mocks, CI, release gates, flaky tests, risks, and downstream handoff."
+        audience: "founder"
+        includes:
+          - "testing objective"
+          - "quality bar"
+          - "test taxonomy"
+          - "coverage matrix"
+          - "test pyramid"
+          - "unit tests"
+          - "integration tests"
+          - "end-to-end tests"
+          - "contract tests"
+          - "domain tests"
+          - "data model tests"
+          - "sync tests"
+          - "frontend tests"
+          - "accessibility tests"
+          - "security tests"
+          - "privacy tests"
+          - "performance tests"
+          - "reliability and recovery tests"
+          - "observability tests"
+          - "regression strategy"
+          - "fixtures and test data"
+          - "mocking strategy"
+          - "CI requirements"
+          - "release gates"
+          - "flaky test policy"
+          - "test ownership"
+          - "testing risks"
+          - "downstream handoff"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "engineering.testing_strategy_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/04-engineering/testing-strategy-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether the testing strategy is complete, traceable, risk-aware, automation-aware, release-aware, and aligned with architecture, requirements, NFRs, acceptance criteria, and operations."
+        agentRole: "reviewer"
+        includes:
+          - "canonical testing strategy"
+          - "acceptance criteria dependency"
+          - "functional requirements dependency"
+          - "non-functional requirements dependency"
+          - "system architecture dependency"
+          - "domain/data/API/sync/security dependencies"
+          - "testing formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "02-validation/09-decision-record"
+    - "03-product/10-functional-requirements"
+    - "03-product/11-non-functional-requirements"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-technical-stack"
+    - "04-engineering/04-domain-model"
+    - "04-engineering/05-data-model"
+    - "04-engineering/06-api-contracts"
+    - "04-engineering/07-integration-architecture"
+    - "04-engineering/08-security-and-privacy"
+    - "04-engineering/09-sync-and-state"
+  feeds:
+    - "04-engineering/11-frontend-architecture"
+    - "04-engineering/12-infrastructure-architecture"
+    - "04-engineering/13-observability-plan"
+    - "04-engineering/14-deployment-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/06-release-management"
+    - "06-operations/07-support-model"
+    - "06-operations/08-incident-response"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "acceptance-criteria"
+      type: "context"
+      required: false
+      description: "Product, feature, UX, UI, functional, non-functional, data, permission, integration, release, sign-off, rollback, and readiness criteria that tests must verify."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "User actions, system behavior, admin behavior, integration behavior, data behavior, business rules, and traceability requiring test coverage."
+    - id: "non-functional-requirements"
+      type: "context"
+      required: false
+      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, compliance, and operational constraints requiring verification."
+    - id: "system-architecture"
+      type: "context"
+      required: false
+      description: "System components, layers, module boundaries, dependency rules, runtime, deployment topology, data flow, failure modes, security/privacy hooks, and observability hooks."
+    - id: "domain-model"
+      type: "context"
+      required: false
+      description: "Entities, value objects, aggregates, commands, events, invariants, business rules, state machines, and bounded contexts requiring domain tests."
+    - id: "data-model"
+      type: "context"
+      required: false
+      description: "Tables, fields, relationships, constraints, indexes, migrations, local/remote data, retention, sensitivity, backup/restore, and auditability requiring data tests."
+    - id: "api-contracts"
+      type: "context"
+      required: false
+      description: "Endpoint contracts, schemas, auth/authz, error model, pagination, idempotency, versioning, realtime/webhooks, rate limits, and contract-testing rules."
+    - id: "integration-architecture"
+      type: "context"
+      required: false
+      description: "External services, adapters, webhooks, event streams, rate limits, retries, idempotency, circuit breakers, fallbacks, mocks, sandboxes, and integration observability."
+    - id: "security-and-privacy"
+      type: "context"
+      required: false
+      description: "Threat model, assets, controls, access rules, data handling, secrets, logging, privacy rights, abuse prevention, vulnerability management, and incident response requirements."
+    - id: "sync-and-state"
+      type: "context"
+      required: false
+      description: "State taxonomy, source of truth, local/remote state, cache, derived state, hydration, offline behavior, mutation queue, sync protocol, conflict handling, idempotency, recovery, and observability."
+    - id: "testing-notes"
+      type: "manual_note"
+      required: false
+      description: "Known testing preferences, target tools, CI constraints, fixture needs, release gates, hard-to-test areas, quality concerns, and unresolved testing questions."
+  completionCriteria:
+    - "The central question is answered through explicit test philosophy, quality bar, coverage strategy, test levels, test ownership, CI rules, release gates, regression prevention, evidence requirements, and risk handling."
+    - "Testing strategy is traceable to Functional Requirements, NFRs, Acceptance Criteria, System Architecture, Domain Model, Data Model, API Contracts, Integration Architecture, Security/Privacy, Sync/State, and Technical Stack."
+    - "Test taxonomy defines test categories, scope, purpose, automation level, execution frequency, owner, evidence, release impact, and where detailed implementation belongs."
+    - "Coverage matrix maps requirements, NFRs, acceptance criteria, architecture risks, domain invariants, API contracts, integrations, data migrations, sync flows, security controls, and UI states to test types."
+    - "Test pyramid defines intended balance across unit, integration, contract, E2E, manual review, exploratory, security, performance, accessibility, and operational tests with rationale."
+    - "Unit tests define what counts as a unit, isolation boundaries, mocking rules, deterministic behavior, coverage expectations, and prohibited over-mocking."
+    - "Integration tests define tested boundaries, real versus fake dependencies, database usage, external-service handling, sandboxes, containers, fixtures, migrations, and failure cases."
+    - "E2E tests define critical journeys, environments, seed data, user roles, cross-browser/device coverage, flake control, execution cadence, and release impact."
+    - "Contract tests define producer/consumer contracts, schema validation, generated clients, mocks, backward compatibility, breaking-change detection, and CI gates."
+    - "Domain tests verify invariants, aggregates, commands, events, policies, state machines, rule precedence, edge cases, and property-like scenarios where useful."
+    - "Data tests verify constraints, migrations, indexes, retention/deletion, sensitivity handling, backup/restore assumptions, local/remote stores, and data integrity."
+    - "Sync tests verify offline behavior, mutation queues, cursors/checkpoints, idempotency, conflicts, ordering, replay, recovery, stale data, multi-client divergence, and corruption cases."
+    - "Frontend tests verify UI states, accessibility basics, interaction behavior, routing/navigation, forms, errors, loading, responsive behavior, and design-system integration where relevant."
+    - "Security and privacy tests verify authn/authz, object-level permissions, secret scanning, dependency scanning, sensitive logging prevention, data export/deletion, consent, abuse controls, and threat mitigations."
+    - "Performance tests define benchmarks, load/stress/smoke tests, operation classes, test environments, thresholds, regression detection, and release blockers."
+    - "Reliability and recovery tests verify retries, timeouts, circuit breakers, degraded modes, backup/restore, migration failure, rollback/roll-forward, incident triggers, and partial failure."
+    - "Observability tests verify logs, metrics, traces, audit events, alert signals, dashboard signals, correlation IDs, privacy-safe telemetry, and operational visibility."
+    - "Fixtures, mocks, fakes, sandboxes, seeded data, fake clocks, provider simulators, and test credentials are governed and kept aligned with real contracts."
+    - "CI requirements define what runs on local, commit, PR, merge, nightly, pre-release, post-deploy, and incident/regression workflows with time budgets and failure consequences."
+    - "Release gates define mandatory automated/manual checks, evidence required, sign-off, exception process, accepted risk, retest rules, and rollback triggers."
+    - "Flaky test policy defines detection, quarantine, ownership, time-to-fix, release impact, and prevention rules."
+    - "Testing risks are concrete, source-linked, impact-aware, and routed to mitigation or downstream documents."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid testing theater: naming test types without scope, owner, trigger, evidence, release impact, or failure consequence."
+    - "Avoid coverage vanity metrics that do not verify product-critical behavior, invariants, contracts, or NFRs."
+    - "Avoid over-reliance on E2E tests for logic that should be tested closer to the source."
+    - "Avoid over-mocking in ways that hide integration, contract, or data-model risk."
+    - "Avoid treating happy-path tests as sufficient for release."
+    - "Avoid ignoring migrations, rollback, recovery, observability, privacy, permissions, degraded modes, and supportability."
+    - "Avoid accepting flaky tests as normal CI noise."
+    - "Avoid inventing test results, coverage numbers, performance benchmarks, security review, accessibility compliance, or release readiness."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Testing strategy must preserve Acceptance Criteria, NFRs, security/privacy constraints, domain invariants, data integrity, API compatibility, sync safety, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate test type, purpose, scope, tool, fixture, execution trigger, owner, evidence, and release impact."
+    - "Tie each material test area to Acceptance Criteria, Functional Requirements, NFRs, Domain Model, Data Model, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Technical Stack, or Decision Record where possible."
+    - "Classify tests as required, recommended, optional, deferred, manual, automated, CI-blocking, release-blocking, nightly, exploratory, or review-needed where useful."
+    - "State what failure means: block merge, block deploy, block release, quarantine, require retest, accept risk, defer scope, or trigger rollback."
+    - "Keep exact test implementation code and detailed test cases downstream unless needed as examples."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Acceptance Criteria, Functional Requirements, NFRs, System Architecture, Technical Stack, Domain Model, Data Model, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Decision Record, or Foundation Boundaries."
+    - "Flag test areas without purpose, scope, execution trigger, owner, evidence requirement, or release impact."
+    - "Flag critical requirements, NFRs, domain invariants, API contracts, migrations, sync flows, security controls, privacy rights, or release blockers without test coverage."
+    - "Flag tests that are too broad, too brittle, over-mocked, under-specified, or not deterministic."
+    - "Flag CI strategy that is too slow, incomplete, non-blocking for critical failures, or vulnerable to flaky test normalization."
+    - "Verify that release gates map to Acceptance Criteria and NFR thresholds."
+    - "Verify that observability, incident, support, rollback, and operations test implications are routed downstream."
+    - "Flag content that belongs better in Frontend Architecture, Infrastructure Architecture, Observability Plan, Deployment Plan, Release Management, Support Model, Incident Response, or Operations."
+  specializedFormats:
+    testCategoryFormat:
+      description: "Recommended format for test categories."
+      fields:
+        - category
+        - purpose
+        - scope
+        - automationLevel
+        - tools
+        - executionTrigger
+        - owner
+        - evidenceRequired
+        - releaseImpact
+        - downstreamDocuments
+        - status
+    coverageMatrixFormat:
+      description: "Recommended format for traceable test coverage records."
+      fields:
+        - sourceDocument
+        - sourceItem
+        - behaviorOrRisk
+        - testTypes
+        - requiredEvidence
+        - releaseImpact
+        - owner
+        - status
+        - gaps
+    testSuiteFormat:
+      description: "Recommended format for test suites."
+      fields:
+        - suite
+        - testType
+        - scope
+        - target
+        - tools
+        - fixtures
+        - mocksOrFakes
+        - executionTrigger
+        - timeBudget
+        - blockingLevel
+        - owner
+        - status
+    fixtureFormat:
+      description: "Recommended format for fixtures and test data."
+      fields:
+        - fixture
+        - purpose
+        - dataCategory
+        - source
+        - sensitivityClass
+        - generationMethod
+        - resetRule
+        - versioningRule
+        - owner
+        - downstreamImplications
+    mockFormat:
+      description: "Recommended format for mocks, fakes, stubs, simulators, and sandboxes."
+      fields:
+        - mockOrFake
+        - replaces
+        - usedBy
+        - fidelityLevel
+        - contractSource
+        - failureModesCovered
+        - syncRule
+        - driftRisk
+        - owner
+        - status
+    ciGateFormat:
+      description: "Recommended format for CI and release gates."
+      fields:
+        - gate
+        - trigger
+        - requiredSuites
+        - timeBudget
+        - passCriteria
+        - failureConsequence
+        - exceptionRule
+        - evidenceStored
+        - owner
+        - status
+    flakyTestFormat:
+      description: "Recommended format for flaky test handling."
+      fields:
+        - testOrSuite
+        - signal
+        - detectionMethod
+        - quarantineRule
+        - owner
+        - timeToFix
+        - releaseImpact
+        - preventionAction
+        - status
+    testingRiskFormat:
+      description: "Recommended format for testing risks."
+      fields:
+        - risk
+        - affectedArea
+        - riskType
+        - source
+        - likelihood
+        - impact
+        - earlySignal
+        - mitigation
+        - targetDocument
+        - releaseImpact
+  sections:
+    - id: "testing-objective"
+      title: "Testing Objective"
+      intent: "Define the testing philosophy, quality bar, protected outcomes, release confidence target, and acceptable residual risk."
+      required: true
+      outputGuidance:
+        - "Open with what testing must prove, not only what tests will exist."
+        - "State the quality bar in relation to Acceptance Criteria, NFRs, user trust, and operational readiness."
+        - "Define what testing intentionally does not guarantee."
+      qualityChecks:
+        - "Objective is specific enough to reject inadequate test strategies."
+        - "Quality bar is connected to release gates."
+        - "Residual risk is acknowledged rather than hidden."
+      questions:
+        - "What must the testing strategy prove?"
+        - "What is the quality bar before release?"
+        - "What level of confidence is required for MVP?"
+        - "What risks must testing reduce first?"
+        - "What residual risk is acceptable?"
+        - "What does testing not guarantee?"
+    - id: "test-taxonomy"
+      title: "Test Taxonomy"
+      intent: "Define the categories of tests used, what each category verifies, where it runs, who owns it, and what failure means."
+      required: true
+      outputGuidance:
+        - "Define test categories before detailed suites."
+        - "Include automated, manual, exploratory, review-based, CI-blocking, release-blocking, nightly, and post-deploy checks where relevant."
+        - "Clarify how tests differ from reviews, audits, monitors, and acceptance sign-off."
+      qualityChecks:
+        - "Each category has purpose, scope, trigger, owner, evidence, and release impact."
+        - "Categories do not overlap ambiguously."
+        - "Manual and review-based checks are not disguised as automated tests."
+      questions:
+        - "What test categories exist?"
+        - "What does each category verify?"
+        - "Which categories are automated, manual, exploratory, review-based, CI-blocking, release-blocking, nightly, or post-deploy?"
+        - "Who owns each category?"
+        - "What evidence does each category produce?"
+        - "What happens when each category fails?"
+    - id: "coverage-matrix"
+      title: "Coverage Matrix"
+      intent: "Map requirements, NFRs, acceptance criteria, risks, contracts, invariants, migrations, sync flows, controls, and release gates to test coverage."
+      required: true
+      outputGuidance:
+        - "Use coverage matrix records for material source items."
+        - "Identify gaps explicitly instead of pretending full coverage exists."
+        - "Prioritize coverage by release risk and product criticality."
+      qualityChecks:
+        - "Coverage is traceable to source documents."
+        - "Critical behavior has at least one appropriate test or explicit accepted risk."
+        - "Coverage matrix is not reduced to percentage metrics."
+      questions:
+        - "How is test coverage traced to requirements and acceptance criteria?"
+        - "What Functional Requirements and NFRs require test coverage?"
+        - "What domain invariants, API contracts, data migrations, sync flows, integrations, and security controls require coverage?"
+        - "What release blockers require explicit tests or reviews?"
+        - "What coverage gaps exist?"
+        - "What coverage gaps are acceptable, deferred, or release-blocking?"
+    - id: "test-pyramid"
+      title: "Test Pyramid"
+      intent: "Specify expected distribution across test levels and the rationale for speed, confidence, maintainability, and failure localization."
+      required: true
+      outputGuidance:
+        - "Define the intended balance across unit, integration, contract, E2E, manual/review, and specialized tests."
+        - "Explain which logic should be tested closest to source and which requires higher-level tests."
+        - "State exceptions to the pyramid."
+      qualityChecks:
+        - "Distribution is justified by system risk and architecture."
+        - "E2E tests are reserved for critical journeys and integration confidence."
+        - "Specialized areas like security, sync, performance, and accessibility are not forced awkwardly into the pyramid."
+      questions:
+        - "What is the expected distribution across unit, integration, contract, E2E, and manual/review tests?"
+        - "What is the rationale for this distribution?"
+        - "Which behavior should be tested closest to the source?"
+        - "Which behavior requires higher-level tests?"
+        - "What exceptions to the test pyramid are justified?"
+    - id: "unit-tests"
+      title: "Unit Tests"
+      intent: "Define unit test scope, isolation boundaries, mocking conventions, deterministic requirements, coverage expectations, and anti-patterns."
+      required: true
+      outputGuidance:
+        - "Define what counts as a unit in this system."
+        - "State what should be mocked and what should not."
+        - "Prioritize pure logic, domain rules, validation, utilities, transformations, reducers/selectors, and error handling where relevant."
+      qualityChecks:
+        - "Unit tests are fast, deterministic, and focused."
+        - "Mocks do not hide behavior that should be tested through integration or contract tests."
+        - "Coverage expectations are meaningful rather than vanity metrics."
+      questions:
+        - "What is considered a unit: function, module, aggregate, service, adapter, reducer, selector, component, or class?"
+        - "What should unit tests verify?"
+        - "What mocking or stubbing conventions apply?"
+        - "What should not be mocked in unit tests?"
+        - "What code requires unit coverage before merge?"
+        - "What unit test anti-patterns are prohibited?"
+    - id: "integration-tests"
+      title: "Integration Tests"
+      intent: "Specify which boundaries are tested together, how real/fake dependencies are chosen, and how data, migrations, providers, and failure cases are handled."
+      required: true
+      outputGuidance:
+        - "Define integration test scope by boundary: app-data, API-database, adapter-provider, frontend-API, queue-worker, sync-local-remote, etc."
+        - "State when to use real database, test containers, sandboxes, fakes, mocks, or recorded fixtures."
+        - "Include failure cases and negative tests."
+      qualityChecks:
+        - "Integration tests verify meaningful boundaries, not random combinations."
+        - "External dependencies are controlled without hiding provider risk."
+        - "Database migrations and constraints are tested where relevant."
+      questions:
+        - "Which integration boundaries are tested?"
+        - "What real dependencies are used in integration tests?"
+        - "What dependencies are mocked, faked, sandboxed, containerized, or simulated?"
+        - "How are external services handled?"
+        - "How are integration failures, malformed responses, timeouts, permission errors, and rate limits tested?"
+        - "What integration tests block merge or release?"
+    - id: "end-to-end-tests"
+      title: "End-to-End Tests"
+      intent: "Define the critical user workflows tested end-to-end, required environment, fixtures, roles, device/browser coverage, execution cadence, and release impact."
+      required: true
+      outputGuidance:
+        - "Limit E2E tests to flows where full-system confidence matters."
+        - "Tie E2E flows to Acceptance Criteria and User Journeys."
+        - "Define test environment and data reset strategy."
+      qualityChecks:
+        - "E2E suite is small enough to remain reliable and useful."
+        - "Critical journeys are covered."
+        - "Flake risk and environment control are addressed."
+      questions:
+        - "What end-to-end workflows are tested?"
+        - "What user roles, accounts, permissions, and data fixtures are required?"
+        - "What browser, device, OS, viewport, or platform coverage is required?"
+        - "What environment runs E2E tests?"
+        - "How is E2E data seeded, isolated, and reset?"
+        - "What E2E failures block release?"
+    - id: "contract-tests"
+      title: "Contract Tests"
+      intent: "Define producer/consumer contract verification for APIs, adapters, webhooks, realtime streams, generated clients, mocks, and compatibility."
+      required: true
+      outputGuidance:
+        - "Map contract tests to API Contracts and Integration Architecture."
+        - "Include schema validation, generated client checks, negative cases, error envelopes, auth/authz, pagination, idempotency, versioning, and backward compatibility."
+        - "Define breaking-change detection."
+      qualityChecks:
+        - "Contract tests prevent accidental breaking changes."
+        - "Consumer expectations are represented."
+        - "Mocks/fakes stay aligned with contracts."
+      questions:
+        - "How are API contracts tested between producers and consumers?"
+        - "How are adapter and integration contracts tested?"
+        - "How are webhook, realtime, and async contracts tested?"
+        - "What contract testing framework or schema validation approach is used?"
+        - "How are breaking changes detected?"
+        - "What contract failures block merge, deploy, or release?"
+    - id: "domain-tests"
+      title: "Domain Tests"
+      intent: "Specify how domain rules, invariants, aggregates, commands, events, policies, state machines, and business-rule precedence are tested."
+      required: true
+      outputGuidance:
+        - "Tie tests to Domain Model invariants and commands."
+        - "Use example-based tests, property-like tests, table-driven tests, state-machine tests, and edge-case tests where useful."
+        - "Ensure domain tests avoid infrastructure dependence."
+      qualityChecks:
+        - "Domain invariants have direct test coverage."
+        - "Invalid transitions and failure behavior are tested."
+        - "Domain tests remain independent from persistence and UI details unless explicitly integration tests."
+      questions:
+        - "How are domain rules, invariants, and state machines tested?"
+        - "How are aggregates, commands, events, policies, and specifications tested?"
+        - "What business-rule precedence and conflict cases need tests?"
+        - "What invalid states or transitions must be impossible?"
+        - "What property-like or table-driven test patterns are useful?"
+        - "What domain test failures block release?"
+    - id: "data-model-tests"
+      title: "Data Model Tests"
+      intent: "Define tests for data constraints, migrations, indexes, query behavior, retention/deletion, sensitivity handling, local/remote stores, backup/restore assumptions, and data integrity."
+      required: true
+      outputGuidance:
+        - "Tie tests to Data Model constraints and migration strategy."
+        - "Include migration tests, rollback/roll-forward tests, seed/backfill tests, deletion/retention tests, and query/index behavior where relevant."
+        - "Separate database-level tests from domain/application tests."
+      qualityChecks:
+        - "Data integrity and migrations are not left untested."
+        - "Retention/deletion and sensitivity behavior are verified where relevant."
+        - "Index/query tests are justified by performance risk."
+      questions:
+        - "How are data constraints and relationships tested?"
+        - "How are migrations, rollbacks/roll-forwards, backfills, and compatibility windows tested?"
+        - "How are retention, deletion, export, sensitivity, encryption/masking, and auditability verified?"
+        - "How are indexes and critical query patterns tested?"
+        - "How are local and remote stores tested?"
+        - "What data model failures block release?"
+    - id: "sync-tests"
+      title: "Sync Tests"
+      intent: "Define how local/remote state, offline behavior, mutation queues, sync protocol, conflicts, idempotency, ordering, recovery, migrations, and multi-client behavior are tested."
+      required: true
+      outputGuidance:
+        - "Tie sync tests to Sync and State."
+        - "Include deterministic fake clocks, simulated networks, duplicate messages, out-of-order delivery, interrupted sync, corrupted local state, and provider failures where relevant."
+        - "Identify release-blocking sync scenarios."
+      qualityChecks:
+        - "Sync tests include failure and divergence scenarios."
+        - "Offline and conflict behavior are tested, not only happy-path sync."
+        - "Idempotency and ordering tests prevent duplicate side effects."
+      questions:
+        - "How are sync, conflict resolution, and offline behavior tested?"
+        - "How are mutation queues, cursors, checkpoints, idempotency, ordering, replay, and recovery tested?"
+        - "What simulation, replay, fake-clock, provider-failure, or network-failure tools are used?"
+        - "How is multi-client divergence tested?"
+        - "How are local corruption and migration failures tested?"
+        - "What sync test failures block release?"
+    - id: "frontend-tests"
+      title: "Frontend Tests"
+      intent: "Define frontend test coverage for components, screens, routes, state, forms, accessibility basics, visual behavior, responsive behavior, and integration with APIs/sync."
+      required: true
+      outputGuidance:
+        - "Tie tests to UI Specification, Design System, API Contracts, Sync and State, and Acceptance Criteria."
+        - "Separate component tests, screen tests, interaction tests, visual tests, navigation tests, and E2E frontend coverage."
+        - "Define what is tested in isolation versus with backend/API."
+      qualityChecks:
+        - "Frontend tests cover states, not only rendered happy path."
+        - "Loading, empty, error, permission, disabled, offline, and success states are included where relevant."
+        - "Frontend tests do not duplicate all E2E tests unnecessarily."
+      questions:
+        - "What frontend components, screens, routes, and interactions require tests?"
+        - "How are forms, validation, loading, empty, error, permission, disabled, offline, and success states tested?"
+        - "How are responsive behavior and visual regressions tested?"
+        - "How are frontend API, sync, and local state interactions tested?"
+        - "What frontend tests are release-blocking?"
+    - id: "accessibility-tests"
+      title: "Accessibility Tests"
+      intent: "Define automated, manual, and review-based accessibility verification for UI, interaction, keyboard, focus, screen reader, contrast, reduced motion, and state communication."
+      required: true
+      outputGuidance:
+        - "Tie tests to NFRs, UI Specification, Design System, Interaction Model, and Acceptance Criteria."
+        - "Separate automated checks from manual assistive-tech review."
+        - "State what accessibility claims remain unverified without manual testing."
+      qualityChecks:
+        - "Accessibility tests are specific and evidence-based."
+        - "Automated tools are not treated as complete accessibility validation."
+        - "Critical flows include keyboard/focus and state communication checks."
+      questions:
+        - "What automated accessibility tests run?"
+        - "What manual accessibility checks are required?"
+        - "How are keyboard navigation, focus order, screen reader labels, contrast, reduced motion, and touch targets verified?"
+        - "How are error, loading, success, disabled, permission, and offline states verified accessibly?"
+        - "What accessibility issues block release?"
+    - id: "security-tests"
+      title: "Security Tests"
+      intent: "Define automated and manual security verification for authn/authz, secrets, dependencies, APIs, integrations, abuse controls, and threat mitigations."
+      required: true
+      outputGuidance:
+        - "Tie tests to Security and Privacy threat model and controls."
+        - "Include SAST, DAST, dependency scanning, secret scanning, IaC scanning, authz tests, API security tests, integration security tests, and abuse tests where relevant."
+        - "Define release-blocking security failures."
+      qualityChecks:
+        - "Security tests map to threats and controls."
+        - "Authorization and object-level access are tested explicitly."
+        - "Secret and dependency scanning are included where relevant."
+      questions:
+        - "What automated security tests run in CI?"
+        - "What manual security testing is performed and by whom?"
+        - "How are authentication, authorization, object-level permissions, and privileged operations tested?"
+        - "How are dependency vulnerabilities, secrets, API security, integration security, and abuse controls tested?"
+        - "What security test failures block merge, deployment, or release?"
+    - id: "privacy-tests"
+      title: "Privacy Tests"
+      intent: "Define tests and reviews for data minimization, sensitive logging prevention, telemetry privacy, consent, export, deletion, retention, and third-party data sharing."
+      required: true
+      outputGuidance:
+        - "Tie privacy tests to Security and Privacy, Data Model, Integration Architecture, Observability Plan, and Acceptance Criteria."
+        - "Separate automated privacy assertions from manual/privacy review."
+        - "Mark legal/compliance validation as review-needed if applicable."
+      qualityChecks:
+        - "Privacy tests verify concrete handling rules."
+        - "Logs, telemetry, exports, backups, and integrations are included."
+        - "Privacy compliance is not claimed without review."
+      questions:
+        - "How is data minimization tested?"
+        - "How is sensitive logging and telemetry leakage prevented and tested?"
+        - "How are data export, deletion, retention, anonymization, and consent flows tested?"
+        - "How is third-party data sharing tested or reviewed?"
+        - "What privacy failures block release?"
+    - id: "performance-tests"
+      title: "Performance Tests"
+      intent: "Define benchmarks, load/stress/smoke tests, performance budgets, environments, thresholds, regression detection, and release impact."
+      required: true
+      outputGuidance:
+        - "Tie tests to NFR performance targets and critical journeys."
+        - "Separate local benchmarks, CI smoke performance, pre-release load/stress tests, and post-deploy monitoring."
+        - "Avoid false precision when targets are provisional."
+      qualityChecks:
+        - "Performance tests are tied to measurable thresholds or provisional targets."
+        - "Test environment limitations are explicit."
+        - "Regression detection exists for critical operations."
+      questions:
+        - "What performance benchmarks and load tests exist?"
+        - "What operation classes, journeys, endpoints, queries, screens, or sync flows are performance-tested?"
+        - "What are the performance acceptance criteria and thresholds?"
+        - "What environments are used for performance tests?"
+        - "How are performance regressions detected?"
+        - "What performance failures block release?"
+    - id: "reliability-and-recovery-tests"
+      title: "Reliability and Recovery Tests"
+      intent: "Define tests for retries, timeouts, circuit breakers, degraded modes, partial failures, backup/restore, rollback, roll-forward, migration failure, and incident triggers."
+      required: true
+      outputGuidance:
+        - "Tie tests to NFRs, System Architecture failure modes, Integration Architecture, Data Model, Sync and State, and Deployment Plan."
+        - "Include chaos/fault-injection where appropriate and feasible."
+        - "Define release impact for recovery failures."
+      qualityChecks:
+        - "Recovery behavior is tested before release."
+        - "Partial failure and degraded modes are included."
+        - "Backup/restore and rollback assumptions are verified or marked unresolved."
+      questions:
+        - "How are retries, timeouts, circuit breakers, degraded modes, and partial failures tested?"
+        - "How are backup/restore, rollback, roll-forward, and migration failure tested?"
+        - "How are dependency outage, network failure, provider failure, and queue failure tested?"
+        - "What chaos or fault-injection tests are useful?"
+        - "What reliability or recovery failures block release?"
+    - id: "observability-tests"
+      title: "Observability Tests"
+      intent: "Define tests and reviews proving that logs, metrics, traces, audit events, alerts, dashboards, correlation IDs, and privacy-safe telemetry work."
+      required: true
+      outputGuidance:
+        - "Tie tests to Observability Plan, Security and Privacy, System Architecture, Integration Architecture, and Acceptance Criteria."
+        - "Verify both signal emission and operational usefulness."
+        - "Include privacy-safe telemetry checks."
+      qualityChecks:
+        - "Critical failures produce observable signals."
+        - "Alerts are actionable and not pure noise."
+        - "Telemetry does not leak sensitive data."
+      questions:
+        - "How are logs, metrics, traces, audit events, alerts, dashboards, and correlation IDs tested?"
+        - "How are critical failure signals verified?"
+        - "How are alert routes and dashboard signals validated?"
+        - "How is telemetry privacy verified?"
+        - "What observability failures block release or require operational review?"
+    - id: "regression-strategy"
+      title: "Regression Strategy"
+      intent: "Describe how regressions are detected, prevented, triaged, reproduced, fixed, backfilled with tests, and monitored after release."
+      required: true
+      outputGuidance:
+        - "Define a regression workflow from bug report to test addition."
+        - "State what kinds of bugs require regression tests."
+        - "Include production regression signals and post-fix monitoring."
+      qualityChecks:
+        - "Regression tests are added for meaningful defects."
+        - "Bug reproduction and test backfill are explicit."
+        - "Regression strategy includes post-release monitoring."
+      questions:
+        - "How are regressions detected and prevented?"
+        - "What is the process for adding regression tests for bugs?"
+        - "What defects require regression tests before closure?"
+        - "How are regressions reproduced and minimized?"
+        - "How are post-release regressions monitored?"
+        - "How are regression test gaps tracked?"
+    - id: "fixtures-and-test-data"
+      title: "Fixtures and Test Data"
+      intent: "Define fixture strategy, seed data, factories, generated data, anonymized data, sensitive-data restrictions, reset rules, versioning, and ownership."
+      required: true
+      outputGuidance:
+        - "Use fixture records for material fixtures."
+        - "Separate static fixtures, factories, generated data, recorded provider fixtures, anonymized production-like data, seed data, and fake users."
+        - "State sensitivity and privacy rules for test data."
+      qualityChecks:
+        - "Fixtures are realistic enough to catch bugs but safe enough for privacy."
+        - "Test data reset and isolation are explicit."
+        - "Fixtures are versioned with contracts or schemas where relevant."
+      questions:
+        - "What fixtures and test data are required?"
+        - "How are fixtures generated, versioned, reset, and owned?"
+        - "What data can be synthetic, anonymized, recorded, or seeded?"
+        - "What sensitive data is prohibited from test environments?"
+        - "How are fake users, roles, permissions, states, conflicts, migrations, and provider responses represented?"
+    - id: "mocking-strategy"
+      title: "Mocking Strategy"
+      intent: "Define when mocks, fakes, stubs, spies, simulators, sandboxes, recorded fixtures, and real dependencies are used."
+      required: true
+      outputGuidance:
+        - "Use mock records for material mocks/fakes/simulators."
+        - "Define fidelity level and drift prevention."
+        - "State what must not be mocked because real integration behavior is critical."
+      qualityChecks:
+        - "Mocks do not hide important integration or contract risk."
+        - "Provider mocks stay aligned with contracts."
+        - "Mocking rules support deterministic and meaningful tests."
+      questions:
+        - "When should tests use mocks, fakes, stubs, simulators, sandboxes, recorded fixtures, or real dependencies?"
+        - "What must not be mocked?"
+        - "How are mocks kept aligned with API and provider contracts?"
+        - "What failure modes must mocks simulate?"
+        - "How is mock drift detected?"
+    - id: "ci-requirements"
+      title: "CI Requirements"
+      intent: "Specify what tests run locally, on commit, PR, merge, nightly, pre-release, post-deploy, and incident workflows, with time budgets and failure consequences."
+      required: true
+      outputGuidance:
+        - "Use CI gate records for material CI stages."
+        - "Separate fast feedback from deep validation."
+        - "Define caching, parallelization, artifacts, reports, and evidence storage where relevant."
+      qualityChecks:
+        - "CI catches critical failures before merge/release."
+        - "CI is fast enough to be used and deep enough to matter."
+        - "Failure consequences are explicit."
+      questions:
+        - "What tests run locally before commit?"
+        - "What tests run on every PR?"
+        - "What tests run on merge?"
+        - "What tests run nightly or on schedule?"
+        - "What tests run pre-release and post-deploy?"
+        - "What is the CI pipeline structure and time budget?"
+        - "What artifacts and evidence are stored?"
+    - id: "release-gates"
+      title: "Release Gates"
+      intent: "Define which tests and reviews must pass before release, what evidence is required, what exceptions are allowed, and what failures block release."
+      required: true
+      outputGuidance:
+        - "Tie release gates directly to Acceptance Criteria."
+        - "Separate automated gates, manual QA gates, review gates, security/privacy gates, performance gates, operational gates, and sign-off."
+        - "Define exception and accepted-risk process."
+      qualityChecks:
+        - "Release gates are objective and evidence-based."
+        - "Critical gates cannot be bypassed silently."
+        - "Retest requirements are explicit after fixes."
+      questions:
+        - "What tests must pass before a release can proceed?"
+        - "What manual approval steps are required?"
+        - "What evidence is required for each gate?"
+        - "What failures block release?"
+        - "What exceptions are allowed and who approves them?"
+        - "What retesting is required after fixes?"
+    - id: "flaky-test-policy"
+      title: "Flaky Test Policy"
+      intent: "Define how flaky tests are detected, quarantined, owned, fixed, prevented, and treated in CI/release decisions."
+      required: true
+      outputGuidance:
+        - "Treat flakiness as a quality problem, not background noise."
+        - "Define quarantine rules and time-to-fix expectations."
+        - "State release impact of flaky tests in critical suites."
+      qualityChecks:
+        - "Flaky tests cannot normalize red CI."
+        - "Ownership and fix deadlines are explicit."
+        - "Quarantine does not erase coverage without risk review."
+      questions:
+        - "How are flaky tests detected?"
+        - "When is a flaky test quarantined?"
+        - "Who owns fixing flaky tests?"
+        - "How quickly must flaky tests be fixed?"
+        - "What release impact do flaky tests have?"
+        - "How is flaky test recurrence prevented?"
+    - id: "test-ownership"
+      title: "Test Ownership"
+      intent: "Define who owns test suites, fixtures, mocks, CI gates, release evidence, failure triage, and ongoing maintenance."
+      required: true
+      outputGuidance:
+        - "Assign ownership by suite, layer, domain area, or downstream document where useful."
+        - "Clarify who triages failures and who approves accepted risk."
+        - "State maintenance expectations for test assets."
+      qualityChecks:
+        - "No critical test suite is ownerless."
+        - "Ownership includes maintenance, not only initial creation."
+        - "Accepted-risk authority is explicit."
+      questions:
+        - "Who owns each test suite?"
+        - "Who owns fixtures, mocks, CI gates, and release evidence?"
+        - "Who triages failures?"
+        - "Who approves accepted testing risk?"
+        - "How are test assets maintained over time?"
+    - id: "testing-risks"
+      title: "Testing Risks"
+      intent: "Identify risks of the testing strategy, hard-to-test areas, gaps, false confidence, tool limitations, environment drift, flakiness, and coverage blind spots."
+      required: true
+      outputGuidance:
+        - "Describe risks as concrete testing failure modes."
+        - "Tie risks to requirements, NFRs, architecture, data, sync, integrations, frontend, security, operations, or release gates."
+        - "Include mitigation, target document, and release impact."
+      qualityChecks:
+        - "Risks are specific enough to mitigate or accept."
+        - "False confidence and blind spots are explicitly considered."
+        - "Hard-to-test areas have a strategy or accepted-risk path."
+      questions:
+        - "What are the risks of the testing strategy?"
+        - "What areas are hardest to test and may have gaps?"
+        - "Where could tests create false confidence?"
+        - "Where could mocks, fixtures, environments, or flaky tests hide real risk?"
+        - "What testing gaps are release-blocking versus accepted risk?"
+        - "What mitigations or downstream reviews are required?"
+    - id: "downstream-handoff"
+      title: "Downstream Handoff"
+      intent: "Define what downstream Engineering and Operations documents must inherit from Testing Strategy and what they must not assume."
+      required: true
+      outputGuidance:
+        - "Route testing outputs to the correct downstream documents."
+        - "Separate frontend, infrastructure, observability, deployment, release, support, incident response, risk, and operations implications."
+        - "Preserve unresolved testing questions and risky assumptions."
+      qualityChecks:
+        - "Handoff items are concrete and document-targeted."
+        - "Downstream documents are not allowed to invent missing testing gates silently."
+        - "Testing strategy and downstream implementation responsibilities remain distinct."
+      questions:
+        - "What should Frontend Architecture inherit from Testing Strategy?"
+        - "What should Infrastructure Architecture inherit?"
+        - "What should Observability Plan inherit?"
+        - "What should Deployment Plan and Release Management inherit?"
+        - "What should Support Model, Incident Response, Risk Management, and Operations inherit?"
+        - "What unresolved testing questions must be carried forward?"

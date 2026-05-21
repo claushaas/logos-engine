@@ -1,0 +1,597 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Agent Pack snapshots > snapshot coding agent pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: implementation
+templateKind: coding_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Scope
+
+**Strict Scope**
+
+No scope defined. Do not make unrelated changes.
+
+## Source Documents
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+**Universal Constraints:**
+- Do not make unrelated changes.
+- Do not treat this Agent Pack as canonical.
+- Do not modify files outside the declared scope unless explicitly necessary and reported.
+- Do not invent missing project facts.
+- Preserve unresolved questions and review-required items.
+- Do not expose secrets or raw provider context.
+- Do not call external services unless explicitly authorized by the user/environment and relevant to the task.
+- Do not change canonical docs unless the pack explicitly instructs documentation updates.
+
+## Forbidden Unrelated Changes
+
+**Forbidden Unrelated Changes**
+
+Do not make any changes outside the declared scope.
+If you believe a change outside scope is necessary, report it as a finding — do not implement it.
+
+## Acceptance Criteria
+
+- **Test**: All tests must pass.
+
+## Reporting Requirements
+
+- Report changed files with descriptions
+- Report any blockers encountered
+- Report any scope assumptions you had to make
+- Do not claim validation passed unless you ran the commands
+"
+`;
+
+exports[`Agent Pack snapshots > snapshot documentation agent pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: documentation
+templateKind: documentation_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Documentation Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Scope
+
+Update or create documentation as specified.
+
+## Source Docs / Descriptors
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+**Key Instructions:**
+- Do not invent missing facts.
+- Mark unknowns as assumptions or open questions.
+- Use canonical terminology and glossary where available.
+- Preserve existing document structure unless explicitly told otherwise.
+- Cross-reference other canonical documents where relevant.
+
+## Acceptance Criteria
+
+- **Test**: All tests must pass.
+
+## Reporting Requirements
+
+- List documents created or updated
+- List any assumptions made
+- List any open questions that remain
+"
+`;
+
+exports[`Agent Pack snapshots > snapshot executive task pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: executive_task
+templateKind: executive_task_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Executive Task Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Readiness Status
+
+**Readiness Status:** \`ready\`
+
+## Executive Axis Notice
+
+**Executive Axis Compilation**
+
+Executive Axis compilation is NOT performed in this phase.
+This task pack is derived from normative canonical sources only.
+Executive JSON, Markdown, and HTML exports are Phase 11 deliverables.
+
+## Source Normative Documents
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+**Universal Constraints:**
+- Do not make unrelated changes.
+- Do not treat this Agent Pack as canonical.
+- Do not modify files outside the declared scope unless explicitly necessary and reported.
+- Do not invent missing project facts.
+- Preserve unresolved questions and review-required items.
+- Do not expose secrets or raw provider context.
+- Do not call external services unless explicitly authorized by the user/environment and relevant to the task.
+- Do not change canonical docs unless the pack explicitly instructs documentation updates.
+
+## Acceptance Criteria
+
+- **Test**: All tests must pass.
+"
+`;
+
+exports[`Agent Pack snapshots > snapshot follow-up agent pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: follow_up
+templateKind: follow_up_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Follow-Up Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Follow-Up Items
+
+No specific follow-up items have been identified.
+
+## Affected Documents
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+- Do not confirm state without explicit review.
+- Mark all findings with source references.
+- Distinguish between resolved and unresolved items.
+- Do not mutate canonical documents without explicit permission.
+"
+`;
+
+exports[`Agent Pack snapshots > snapshot research agent pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: research
+templateKind: research_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Research Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Research Boundary
+
+**Research Boundary**
+
+**IMPORTANT: External research must be performed by the downstream agent**
+only if the user or execution environment explicitly allows it.
+LOGOS has not performed any external research.
+This pack only identifies what needs to be researched.
+
+## Source Documents
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Research Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+- Do not claim LOGOS performed any external research.
+- Do not fabricate data or sources.
+- Distinguish between LOGOS-sourced facts and external research findings.
+
+## Evidence Requirements
+
+**Evidence Requirements**
+
+- Cite all sources clearly.
+- Distinguish facts from assumptions.
+- Mark confidence levels where possible.
+- Do not claim research has already been performed by LOGOS.
+
+## Reporting Requirements
+
+- Report research findings with citations.
+- Report unresolved questions that remain.
+- Distinguish LOGOS-sourced information from externally researched information.
+"
+`;
+
+exports[`Agent Pack snapshots > snapshot review agent pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: review
+templateKind: review_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Review Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Review Scope
+
+**Review focus areas:**
+- Verify claims against canonical source documents.
+- Inspect validation and consistency findings.
+- Assess risks and open questions for impact.
+- Check that acceptance criteria are satisfied.
+
+## Source Documents
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Review Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+**Instructions:**
+- Do not mutate files unless explicitly allowed.
+- Report findings with source references.
+- Distinguish between confirmed facts and assumptions.
+- Mark unresolved items clearly.
+
+## Review Criteria
+
+- **Test**: All tests must pass.
+
+## Reporting Requirements
+
+**Required Output Format:**
+- Summary of findings (pass / warning / fail per criteria)
+- Source references for each finding
+- List of unresolved or review-required items
+- Recommendations for any corrective action
+"
+`;
+
+exports[`Agent Pack snapshots > snapshot task agent pack 1`] = `
+"## Metadata
+
+\`\`\`yaml
+artifactType: agent_pack
+canonical: false
+derived: true
+executionAid: true
+packId: pack-test-001
+packKind: task
+templateKind: task_agent
+sourceBundleId: bundle-test-001
+profileId: standard
+profileVersion: 1.0.0
+generatedAt: 2026-05-18T00:00:00.000Z
+sourceDocumentIds: [04-engineering-02-system-architecture]
+sourceCanonicalPaths: [logos/04-engineering/02-system-architecture.md]
+logosItemId: pack-test-001
+readinessStatus: ready
+\`\`\`
+
+## Derived Artifact Warning
+
+> **WARNING: Derived, Non-Canonical Execution Aid**
+>
+> This Agent Pack is a derived, non-canonical execution aid generated
+> from structured project state. It is NOT a source of truth.
+>
+> Canonical project documentation remains in generated Markdown files
+> and structured \`.logos/\` workspace state.
+>
+> Do not treat this pack as authoritative.
+> Do not make unrelated changes outside the pack scope.
+> Do not invent missing project facts.
+> Do not treat this pack as canonical documentation.
+> Always verify claims against canonical sources before acting.
+
+## Task Objective
+
+- **Objective**: Implement the system architecture as described.
+
+## Scope
+
+**Bounded Source Context**
+
+No scope defined.
+
+## Source Context
+
+## Source Canonical Documents
+
+**Document IDs:**
+- \`04-engineering-02-system-architecture\`
+
+**Canonical Paths:**
+- \`logos/04-engineering/02-system-architecture.md\`
+
+- **Canonical Doc**: 04-engineering-02-system-architecture
+
+
+## Constraints
+
+- **Scope Constraint**: Only modify files in src/ directory.
+
+**Universal Constraints:**
+- Do not make unrelated changes.
+- Do not treat this Agent Pack as canonical.
+- Do not modify files outside the declared scope unless explicitly necessary and reported.
+- Do not invent missing project facts.
+- Preserve unresolved questions and review-required items.
+- Do not expose secrets or raw provider context.
+- Do not call external services unless explicitly authorized by the user/environment and relevant to the task.
+- Do not change canonical docs unless the pack explicitly instructs documentation updates.
+
+## Unrelated Change Prohibition
+
+**Unrelated Change Prohibition**
+
+Do not make changes outside the declared task scope.
+
+## Acceptance Criteria
+
+- **Test**: All tests must pass.
+
+## Reporting Format
+
+- Report the format: what was done, what was found, what remains.
+- List files changed or created.
+- Report any blockers.
+"
+`;

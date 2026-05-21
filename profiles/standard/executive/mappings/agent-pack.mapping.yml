@@ -1,0 +1,54 @@
+id: agent-pack
+version: 1.0.0
+adapter: agent-pack
+status: supported
+exportType: file_export
+outputFormat: markdown
+template: executive/templates/agent-task.md
+
+purpose: >
+  Generate task-specific prompts for coding, review, documentation,
+  and implementation agents.
+
+targets:
+  opencode:
+    outputPath: outcomes/executive/exports/agent-packs/opencode/
+    supportedItemTypes:
+      - task
+      - bug
+      - spike
+      - doc_update
+      - review
+      - agent_prompt
+  codex:
+    outputPath: outcomes/executive/exports/agent-packs/codex/
+    supportedItemTypes:
+      - task
+      - bug
+      - spike
+      - review
+      - agent_prompt
+  review:
+    outputPath: outcomes/executive/exports/agent-packs/review/
+    supportedItemTypes:
+      - review
+      - decision
+      - risk
+      - blocker
+
+promptRules:
+  includeObjective: true
+  includeSourceNormativeDocuments: true
+  includeRequiredChanges: true
+  includeAcceptanceCriteria: true
+  includeConstraints: true
+  includeExpectedOutputs: true
+  includeNonGoals: true
+  forbidUnrelatedChanges: true
+  requireSummaryOfChanges: true
+
+metadata:
+  includeLogosItemId: true
+  includeInitiativeId: true
+  includeWorkstreamId: true
+  includeGenerationTimestamp: true

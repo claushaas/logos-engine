@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Snapshot tests > snapshot blocked readiness result 1`] = `"blocked"`;
+
+exports[`Snapshot tests > snapshot blocked readiness result 2`] = `"blocked"`;
+
+exports[`Snapshot tests > snapshot blocked readiness result 3`] = `"missing_canonical_document"`;
+
+exports[`Snapshot tests > snapshot executive profile invalid blockers 1`] = `"executive_profile_invalid"`;
+
+exports[`Snapshot tests > snapshot missing canonical document blockers 1`] = `
+{
+  "blockedDocuments": 1,
+  "blockedPhases": 1,
+  "blockerCount": 1,
+  "blockingOpenQuestionCount": 0,
+  "executiveCompilationGateStatus": "blocked",
+  "readinessStatus": "blocked",
+  "satisfiedDocuments": 0,
+  "satisfiedPhases": 3,
+  "staleNormativeDocCount": 1,
+  "totalDocuments": 2,
+  "totalPhases": 4,
+  "unknownDocuments": 1,
+  "unknownPhases": 0,
+  "warningCount": 0,
+  "warningDocuments": 0,
+  "warningPhases": 0,
+}
+`;
+
+exports[`Snapshot tests > snapshot ready readiness result 1`] = `"ready"`;
+
+exports[`Snapshot tests > snapshot ready readiness result 2`] = `"allowed"`;
+
+exports[`Snapshot tests > snapshot ready readiness result 3`] = `
+{
+  "blockedDocuments": 0,
+  "blockedPhases": 0,
+  "blockerCount": 0,
+  "blockingOpenQuestionCount": 0,
+  "executiveCompilationGateStatus": "allowed",
+  "readinessStatus": "ready",
+  "satisfiedDocuments": 2,
+  "satisfiedPhases": 4,
+  "staleNormativeDocCount": 0,
+  "totalDocuments": 2,
+  "totalPhases": 4,
+  "unknownDocuments": 0,
+  "unknownPhases": 0,
+  "warningCount": 0,
+  "warningDocuments": 0,
+  "warningPhases": 0,
+}
+`;

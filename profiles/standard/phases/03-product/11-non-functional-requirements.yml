@@ -1,0 +1,520 @@
+document:
+  id: "11-non-functional-requirements"
+  title: "Non-Functional Requirements"
+  phase: "03-product"
+  status: "not_started"
+  order: 11
+  type: "non_functional_requirements"
+  purpose: "Define the quality attributes, operating constraints, service expectations, risk thresholds, and verification methods the product must satisfy beyond functional behavior."
+  centralQuestion: "What quality attributes must the product satisfy, under what conditions, and how will each be measured or verified?"
+  outputs:
+    canonical:
+      format: "markdown"
+      path: "docs/03-product/11-non-functional-requirements.md"
+      purpose: "Store the canonical non-functional requirements register as a Markdown document."
+    artifacts:
+      - id: "product.non_functional_requirements_matrix"
+        format: "html"
+        path: "outcomes/html/03-product/non-functional-requirements-matrix.html"
+        purpose: "Provide a navigable matrix of quality attributes by category, target, threshold, priority, risk, verification method, owner, and downstream engineering implication."
+        audience: "founder"
+        includes:
+          - "NFR taxonomy"
+          - "NFR register"
+          - "performance"
+          - "accessibility"
+          - "privacy"
+          - "security"
+          - "reliability"
+          - "availability"
+          - "scalability"
+          - "compatibility"
+          - "observability"
+          - "internationalization"
+          - "compliance"
+          - "operational constraints"
+          - "NFR traceability"
+          - "change governance"
+        generationMode: "regenerate_from_canonical"
+    agentPacks:
+      - id: "product.non_functional_requirements_review_prompt"
+        format: "markdown"
+        path: "outcomes/agents/03-product/non-functional-requirements-review-prompt.md"
+        purpose: "Provide compact context for agents reviewing whether non-functional requirements are measurable, risk-aware, scoped, testable, and ready to feed engineering and operations."
+        agentRole: "reviewer"
+        includes:
+          - "canonical non-functional requirements"
+          - "product scope dependency"
+          - "functional requirements dependency"
+          - "UI specification dependency"
+          - "interaction model dependency"
+          - "product architecture dependency"
+          - "NFR formats"
+          - "completion criteria"
+          - "quality checks"
+          - "review rules"
+  dependsOn:
+    - "01-foundation/04-principles"
+    - "01-foundation/05-boundaries"
+    - "01-foundation/06-success-definition"
+    - "02-validation/08-evidence-log"
+    - "02-validation/09-decision-record"
+    - "02-validation/10-validation-report"
+    - "03-product/01-product-brief"
+    - "03-product/02-scope"
+    - "03-product/03-user-journeys"
+    - "03-product/04-ux-model"
+    - "03-product/05-information-architecture"
+    - "03-product/06-interaction-model"
+    - "03-product/07-ui-specification"
+    - "03-product/09-product-architecture"
+    - "03-product/10-functional-requirements"
+  feeds:
+    - "03-product/12-feature-specification"
+    - "03-product/13-acceptance-criteria"
+    - "04-engineering/01-engineering-brief"
+    - "04-engineering/02-system-architecture"
+    - "04-engineering/03-data-model"
+    - "04-engineering/04-security-architecture"
+    - "04-engineering/05-api-contracts"
+    - "04-engineering/07-frontend-architecture"
+    - "04-engineering/08-infrastructure-architecture"
+    - "04-engineering/09-test-strategy"
+    - "04-engineering/11-observability-plan"
+    - "06-operations/02-operating-model"
+    - "06-operations/07-support-model"
+    - "06-operations/10-risk-management"
+  inputs:
+    - id: "product-scope"
+      type: "context"
+      required: false
+      description: "In-scope, out-of-scope, MVP, post-MVP, non-goals, scope boundaries, deferred decisions, and scope governance."
+    - id: "functional-requirements"
+      type: "context"
+      required: false
+      description: "Functional requirements, user actions, system behavior, data requirements, integrations, business rules, and requirement traceability."
+    - id: "product-architecture"
+      type: "context"
+      required: false
+      description: "Modules, capabilities, dependencies, ownership, fallback behavior, architecture risks, and downstream engineering implications."
+    - id: "ui-specification"
+      type: "context"
+      required: false
+      description: "Screens, components, interface states, responsive behavior, accessibility UI rules, microcopy rules, and UI risks."
+    - id: "interaction-model"
+      type: "context"
+      required: false
+      description: "Actions, confirmations, undo, ambiguity handling, system suggestions, state transitions, accessibility interaction rules, and interaction risks."
+    - id: "constraints-notes"
+      type: "manual_note"
+      required: false
+      description: "Known constraints, performance targets, privacy/security concerns, compliance concerns, device/platform constraints, operational limits, and support expectations."
+  completionCriteria:
+    - "The central question is answered through measurable or explicitly provisional quality requirements."
+    - "Each NFR includes category, statement, target, threshold, priority, scope, source, risk if unmet, verification method, owner or review target, and downstream implications."
+    - "Targets distinguish required targets, desired targets, minimum acceptable thresholds, provisional assumptions, and unknowns requiring engineering review."
+    - "Performance requirements include response time, perceived performance, startup, throughput, resource usage, long-running operations, and degradation behavior where relevant."
+    - "Accessibility requirements include target standard, keyboard, focus, screen reader, contrast, text scaling, reduced motion, touch target, state communication, and testing expectations."
+    - "Privacy requirements include data collection purpose, minimization, consent, retention, deletion, export, portability, sensitive data handling, and user rights where relevant."
+    - "Security requirements include authentication, authorization, encryption, audit logging, session management, secrets, vulnerability handling, abuse prevention, and secure defaults where relevant."
+    - "Reliability and availability requirements include uptime assumptions, RPO, RTO, fault tolerance, partial failure behavior, degraded modes, maintenance windows, and offline/disconnected behavior where relevant."
+    - "Scalability requirements include expected user scale, data scale, usage scale, growth assumptions, rate limits, bottlenecks, and behavior at limits."
+    - "Compatibility and internationalization requirements include supported platforms, devices, browsers, OS versions, screen classes, locales, languages, formatting, and unsupported cases."
+    - "Observability requirements include logs, metrics, traces, alerts, dashboards, audit events, debugging data, privacy-safe telemetry, and operational handoff."
+    - "Compliance and operational constraints surface legal/regulatory/industry concerns without inventing legal conclusions."
+    - "NFR traceability connects requirements to product risks, functional requirements, user journeys, product architecture, validation decisions, and downstream engineering documents."
+  qualityChecks:
+    - "Avoid vague claims."
+    - "Avoid false precision."
+    - "Avoid NFR theater: quality attributes listed without measurable targets, verification method, or consequence if unmet."
+    - "Avoid inventing benchmarks, SLAs, compliance obligations, accessibility compliance, security guarantees, or platform constraints."
+    - "Avoid treating unknowns as commitments."
+    - "Avoid moving detailed engineering architecture, infrastructure design, security implementation, or test plans into this document."
+    - "Prefer decision-useful statements."
+    - "Make assumptions explicit."
+    - "Use provisional ranges when exact targets would create false precision."
+    - "NFRs must be testable, measurable, reviewable, or explicitly marked as needing refinement."
+    - "NFRs must preserve product boundaries, user trust, privacy, accessibility, reliability, and operational sustainability."
+  generationRules:
+    - "Use concise but complete prose."
+    - "Surface unresolved questions explicitly."
+    - "Separate quality attribute, target, threshold, risk, verification method, owner, and downstream implication."
+    - "Classify each material NFR as required, desired, provisional, unknown, deferred, post-MVP, excluded, or engineering-review-needed where useful."
+    - "Tie NFRs to Product Scope, Functional Requirements, User Journeys, UX Model, UI Specification, Product Architecture, Validation Report, or Decision Record where possible."
+    - "State what happens when a target cannot be met: block release, degrade gracefully, monitor, accept risk, defer, or revise scope."
+    - "Keep detailed implementation choices in Engineering documents and detailed test design in Test Strategy."
+  reviewRules:
+    - "Check whether each section answers its intended question."
+    - "Flag contradictions with Product Scope, Functional Requirements, User Journeys, UX Model, UI Specification, Interaction Model, Product Architecture, Validation Report, Decision Record, or Foundation Boundaries."
+    - "Flag NFRs without measurable target, threshold, verification method, or explicit reason they cannot yet be measured."
+    - "Flag unsupported precision, invented obligations, or unverified compliance claims."
+    - "Flag quality attributes that should be release-blocking but are not classified."
+    - "Verify that security, privacy, accessibility, reliability, and observability implications are routed to Engineering and Operations."
+    - "Verify that NFRs can feed Acceptance Criteria, Engineering Brief, Security Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, and Operations."
+    - "Flag content that belongs better in Functional Requirements, Feature Specification, Acceptance Criteria, Engineering Architecture, Security Architecture, Infrastructure, Test Strategy, Legal, or Operations."
+  specializedFormats:
+    nfrFormat:
+      description: "Required format for each non-functional requirement."
+      fields:
+        - id
+        - title
+        - category
+        - statement
+        - scope
+        - priority
+        - source
+        - target
+        - minimumThreshold
+        - measurementMethod
+        - verificationMethod
+        - releaseImpact
+        - riskIfUnmet
+        - affectedJourneys
+        - affectedFeatures
+        - affectedModules
+        - affectedPlatforms
+        - ownerOrReviewTarget
+        - downstreamImplications
+        - status
+        - notes
+    qualityAttributeFormat:
+      description: "Recommended format for defining quality attribute categories."
+      fields:
+        - category
+        - definition
+        - whyItMatters
+        - measurementApproach
+        - commonRisks
+        - downstreamDocuments
+    riskThresholdFormat:
+      description: "Recommended format for release-impacting thresholds."
+      fields:
+        - threshold
+        - category
+        - condition
+        - releaseImpact
+        - mitigation
+        - escalationTarget
+        - revisitTrigger
+    nfrTraceFormat:
+      description: "Recommended format for NFR traceability records."
+      fields:
+        - nfrId
+        - sourceDocument
+        - sourceItem
+        - linkedFunctionalRequirement
+        - linkedJourney
+        - linkedModule
+        - linkedRisk
+        - linkedAcceptanceCriteria
+        - downstreamDocuments
+        - changeImpact
+  sections:
+    - id: "nfr-taxonomy"
+      title: "NFR Taxonomy"
+      intent: "Define quality attribute categories, priority labels, threshold semantics, verification expectations, release impact, and traceability rules."
+      required: true
+      outputGuidance:
+        - "Define the standard NFR record format before listing NFRs."
+        - "Clarify how targets, minimum thresholds, provisional targets, and unknowns differ."
+        - "Explain how NFRs differ from functional requirements, acceptance criteria, test cases, and engineering tasks."
+      qualityChecks:
+        - "The taxonomy prevents vague or inconsistent NFR writing."
+        - "Priority and threshold labels have decision rules."
+        - "Release-blocking implications are explicit."
+      questions:
+        - "How are non-functional requirements structured?"
+        - "What quality attribute categories exist?"
+        - "How are required, desired, provisional, unknown, deferred, post-MVP, excluded, and engineering-review-needed NFRs distinguished?"
+        - "How are target, threshold, minimum acceptable, and release-blocking conditions defined?"
+        - "What verification methods are valid for NFRs?"
+        - "How does an NFR differ from a functional requirement, acceptance criterion, test case, or engineering task?"
+    - id: "nfr-register"
+      title: "NFR Register"
+      intent: "Maintain the master inventory of non-functional requirements with category, target, threshold, verification, release impact, risk, and traceability."
+      required: true
+      outputGuidance:
+        - "List NFRs as structured records using the NFR format."
+        - "Separate active, provisional, deferred, post-MVP, excluded, and engineering-review-needed NFRs."
+        - "Keep implementation detail out of the register."
+      qualityChecks:
+        - "Every material NFR is traceable to a source, risk, journey, module, or requirement."
+        - "Every active NFR has verification method and release impact."
+        - "Speculative NFRs are classified instead of treated as commitments."
+      questions:
+        - "What is the complete inventory of non-functional requirements?"
+        - "What category, priority, target, threshold, status, and verification method does each NFR have?"
+        - "Which NFRs are active, provisional, deferred, post-MVP, excluded, or engineering-review-needed?"
+        - "What source or risk supports each NFR?"
+        - "What happens if each NFR is not met?"
+        - "What downstream documents must inherit each NFR?"
+    - id: "performance"
+      title: "Performance"
+      intent: "Define response time, throughput, startup, perceived performance, long-running operation, and resource usage targets."
+      required: true
+      outputGuidance:
+        - "Separate real performance from perceived performance."
+        - "Define targets by operation class, journey, screen, or feature where useful."
+        - "Mark p50/p95/p99, throughput, and resource targets as provisional when not evidence-backed."
+      qualityChecks:
+        - "Performance targets are measurable or explicitly marked as provisional."
+        - "Targets do not create false precision."
+        - "Long-running operations include feedback, timeout, retry, or background behavior expectations."
+      questions:
+        - "What are the response time targets by operation class or critical journey?"
+        - "What p50, p95, or p99 targets are needed, if any?"
+        - "What throughput requirements exist?"
+        - "What are startup, initialization, hydration, or first-interaction targets?"
+        - "What are the resource usage constraints: CPU, memory, storage, bandwidth, battery, or API usage?"
+        - "What is the perceived performance target?"
+        - "What happens when performance targets cannot be met?"
+    - id: "accessibility"
+      title: "Accessibility"
+      intent: "Define accessibility target standard, input alternatives, assistive technology expectations, focus, contrast, text, motion, state communication, and verification."
+      required: true
+      outputGuidance:
+        - "State target standard without claiming compliance before testing."
+        - "Tie accessibility requirements to UI Specification, Interaction Model, and Design System where applicable."
+        - "Include testing expectations and unresolved accessibility questions."
+      qualityChecks:
+        - "Accessibility requirements are testable or marked for review."
+        - "Critical interactions do not rely on one fragile input mode."
+        - "Critical meaning is not conveyed only through color, motion, position, or iconography."
+      questions:
+        - "What accessibility standard is targeted, if any?"
+        - "What assistive technologies must be supported or reviewed?"
+        - "What keyboard-only navigation and focus requirements apply?"
+        - "What screen reader compatibility requirements apply?"
+        - "What color contrast, text sizing, reduced motion, and touch target requirements apply?"
+        - "How are error, loading, success, disabled, low-confidence, and permission states communicated accessibly?"
+        - "How will accessibility requirements be verified?"
+    - id: "privacy"
+      title: "Privacy"
+      intent: "Define product-level privacy requirements for data collection, purpose limitation, consent, minimization, retention, deletion, export, portability, and sensitive data handling."
+      required: true
+      outputGuidance:
+        - "Separate known privacy requirements from legal/compliance questions requiring review."
+        - "Tie privacy requirements to data objects, permissions, user rights, integrations, and telemetry."
+        - "Avoid inventing regulatory obligations; mark uncertain obligations for legal review."
+      qualityChecks:
+        - "Privacy requirements are specific enough to guide Data Model, Security Architecture, and Operations."
+        - "Data collection purpose and minimization are explicit."
+        - "Consent, deletion, export, and retention requirements are not hidden."
+      questions:
+        - "What user data is collected and for what purpose?"
+        - "What data minimization principles apply?"
+        - "How is user consent obtained, changed, revoked, and recorded?"
+        - "What data retention, deletion, export, and portability requirements apply?"
+        - "What sensitive data handling requirements apply?"
+        - "How are telemetry, analytics, logs, and debugging data made privacy-safe?"
+        - "What privacy regulations or legal questions require review?"
+    - id: "security"
+      title: "Security"
+      intent: "Define authentication, authorization, encryption, session, audit, abuse prevention, secrets, vulnerability management, and secure default requirements."
+      required: true
+      outputGuidance:
+        - "Define product-level security requirements without specifying final architecture."
+        - "Tie security requirements to actors, permissions, data sensitivity, integrations, and admin capabilities."
+        - "Classify unresolved security requirements for engineering/security review."
+      qualityChecks:
+        - "Security requirements include authn/authz, auditability, data protection, and abuse risks where relevant."
+        - "Security claims are not guarantees without review."
+        - "Admin and privileged actions receive stronger requirements."
+      questions:
+        - "What authentication mechanisms or authentication requirements are needed?"
+        - "What authorization model or permission boundaries are required?"
+        - "What encryption requirements apply in transit and at rest?"
+        - "What session management, token, secrets, or credential handling requirements apply?"
+        - "What audit logging and monitoring is required for sensitive or privileged actions?"
+        - "What abuse prevention or rate limiting requirements exist?"
+        - "What vulnerability management practices or review gates apply?"
+    - id: "reliability"
+      title: "Reliability"
+      intent: "Define data integrity, consistency, RPO, RTO, fault tolerance, retry, idempotency, partial failure, recovery, and graceful degradation expectations."
+      required: true
+      outputGuidance:
+        - "Define reliability by user-impacting failure scenarios."
+        - "Separate data reliability, service reliability, integration reliability, and UI state reliability."
+        - "State degradation behavior and release impact for critical failures."
+      qualityChecks:
+        - "Reliability targets include failure and recovery behavior."
+        - "Data loss and corruption scenarios are not ignored."
+        - "Partial failures preserve user trust and state clarity."
+      questions:
+        - "What is the acceptable data loss window, if any?"
+        - "What is the acceptable recovery time after critical failure?"
+        - "What fault tolerance, retry, idempotency, or consistency expectations exist?"
+        - "How are partial failures handled gracefully?"
+        - "What data integrity guarantees or limitations must be explicit?"
+        - "What failures block release or require operational escalation?"
+    - id: "availability"
+      title: "Availability"
+      intent: "Define availability targets, SLA assumptions, planned maintenance, dependency outage behavior, offline/disconnected capability, and degraded modes."
+      required: true
+      outputGuidance:
+        - "Separate SLA commitments from internal targets and provisional assumptions."
+        - "Define availability by critical user journey or product capability where useful."
+        - "State what remains usable when dependencies fail."
+      qualityChecks:
+        - "Availability targets are not stated as external commitments unless intended."
+        - "Dependency failure and planned maintenance behavior are explicit."
+        - "Offline/disconnected behavior is classified as supported, partial, deferred, or unsupported."
+      questions:
+        - "What availability target applies to the product or critical capabilities?"
+        - "Is there an external SLA, internal SLO, or provisional target?"
+        - "What planned maintenance windows or maintenance communication expectations exist?"
+        - "What is the degradation model when dependent services fail?"
+        - "What offline or disconnected operation is supported, partial, deferred, or unsupported?"
+        - "What user communication is required during downtime or degraded availability?"
+    - id: "scalability"
+      title: "Scalability"
+      intent: "Define expected user scale, data scale, usage scale, growth assumptions, bottlenecks, rate limits, quotas, and behavior at scale limits."
+      required: true
+      outputGuidance:
+        - "Use ranges and assumptions where exact scale targets are not validated."
+        - "Separate launch scale, 12-month scale, stress target, and non-goals."
+        - "Identify scaling bottlenecks and review needs."
+      qualityChecks:
+        - "Scale targets are plausible or clearly provisional."
+        - "Behavior at limits is defined."
+        - "Scaling model does not become engineering implementation detail."
+      questions:
+        - "What is the expected user scale at launch, near-term, and 12 months?"
+        - "What is the expected data scale by object type or usage pattern?"
+        - "What is the expected usage scale: requests, events, jobs, uploads, generated outputs, or sync operations?"
+        - "What rate limits, quotas, or scale ceilings are needed?"
+        - "What happens when limits are reached?"
+        - "Which scale assumptions require validation or engineering review?"
+    - id: "compatibility"
+      title: "Compatibility"
+      intent: "Define supported browsers, OS versions, devices, screen sizes, platform capabilities, backwards compatibility, migrations, and unsupported cases."
+      required: true
+      outputGuidance:
+        - "Separate supported, best-effort, deferred, and unsupported platforms."
+        - "Tie compatibility requirements to Product Scope and UI responsive behavior."
+        - "State backwards compatibility and migration expectations where relevant."
+      qualityChecks:
+        - "Supported platforms are explicit."
+        - "Unsupported cases are not hidden."
+        - "Compatibility requirements do not imply unplanned platform support."
+      questions:
+        - "What browsers and versions must be supported?"
+        - "What operating systems and versions must be supported?"
+        - "What device types, screen sizes, input modes, and platform capabilities must be supported?"
+        - "What platforms are best-effort, deferred, or unsupported?"
+        - "What backward compatibility or migration support is required?"
+        - "What compatibility assumptions require engineering review?"
+    - id: "observability"
+      title: "Observability"
+      intent: "Define product-level logging, metrics, tracing, alerting, dashboards, audit events, debugging, telemetry privacy, and operational visibility requirements."
+      required: true
+      outputGuidance:
+        - "Define observability by product risk, user-impacting failure, and operational need."
+        - "Separate audit logs, diagnostic logs, product analytics, operational metrics, and security events."
+        - "Protect privacy and sensitive data in observability requirements."
+      qualityChecks:
+        - "Observability requirements support debugging, support, security, and operations."
+        - "Logs and telemetry avoid unnecessary personal or sensitive data."
+        - "Alerts are tied to actionable conditions, not noise."
+      questions:
+        - "What logging is required and at what conceptual levels?"
+        - "What product, operational, security, and business metrics must be collected?"
+        - "What tracing or debugging capabilities are needed?"
+        - "What alerting and monitoring is required?"
+        - "What audit events must be recorded?"
+        - "How are telemetry, logs, and debugging data made privacy-safe?"
+        - "What observability requirements should feed Engineering Observability Plan and Operations?"
+    - id: "internationalization"
+      title: "Internationalization"
+      intent: "Define language support, locale formatting, translation readiness, RTL, content expansion, timezone handling, currency, numbers, dates, and unsupported locales."
+      required: true
+      outputGuidance:
+        - "Separate current-language support from future translation readiness."
+        - "Define locale formatting requirements even if translation is deferred."
+        - "Mark i18n architecture details for Engineering when needed."
+      qualityChecks:
+        - "Language and locale requirements match Product Scope and target market."
+        - "Deferred i18n is explicit, not accidentally impossible."
+        - "Formatting requirements consider dates, times, numbers, currency, and pluralization where relevant."
+      questions:
+        - "What languages must be supported at MVP and later?"
+        - "What locale-specific formatting is required for dates, times, numbers, currency, addresses, names, and pluralization?"
+        - "What timezone handling is required?"
+        - "What right-to-left support is required, deferred, or unsupported?"
+        - "What translation readiness or content expansion requirements exist?"
+        - "What internationalization architecture questions should Engineering review?"
+    - id: "compliance"
+      title: "Compliance"
+      intent: "Surface regulatory, industry, certification, audit, data residency, data sovereignty, retention, accessibility, privacy, and security compliance concerns."
+      required: true
+      outputGuidance:
+        - "State compliance concerns without inventing legal conclusions."
+        - "Classify items as known requirement, likely requirement, possible requirement, legal-review-needed, not applicable, or unknown."
+        - "Tie compliance concerns to data, geography, user type, market, integrations, or business model."
+      qualityChecks:
+        - "Compliance claims are sourced or marked for review."
+        - "Uncertain obligations are not presented as facts."
+        - "Compliance risks are routed to Engineering, Operations, Legal, or Security as appropriate."
+      questions:
+        - "What regulatory compliance requirements are known or likely to apply?"
+        - "What privacy, security, accessibility, industry, certification, or audit requirements may apply?"
+        - "What data residency or sovereignty requirements may apply?"
+        - "What retention, deletion, export, or audit requirements may be legally relevant?"
+        - "Which compliance questions require legal, security, or operations review?"
+        - "What compliance assumptions should not be made yet?"
+    - id: "operational-constraints"
+      title: "Operational Constraints"
+      intent: "Define deployment, hosting, build, release, support, maintenance, staffing, cost, tooling, environment, and lifecycle constraints that affect product quality."
+      required: true
+      outputGuidance:
+        - "Separate product-level operational constraints from implementation details."
+        - "Tie constraints to release, support, maintenance, cost, capacity, and operational sustainability."
+        - "Classify constraints as hard, preferred, provisional, deferred, or review-needed."
+      qualityChecks:
+        - "Operational constraints are explicit enough to feed Engineering and Operations."
+        - "Support and maintenance burden are not hidden."
+        - "Constraints do not conflict with product promise or reliability requirements without surfacing trade-offs."
+      questions:
+        - "What deployment environment constraints exist?"
+        - "What hosting, infrastructure, platform, or tooling constraints exist?"
+        - "What build, release, rollback, and maintenance constraints exist?"
+        - "What support, staffing, monitoring, and operational capacity constraints exist?"
+        - "What cost constraints affect product quality or architecture?"
+        - "What operational constraints should feed Engineering and Operations?"
+    - id: "nfr-traceability"
+      title: "NFR Traceability"
+      intent: "Define how non-functional requirements trace to sources, risks, functional requirements, journeys, modules, acceptance criteria, engineering documents, and operations."
+      required: true
+      outputGuidance:
+        - "Trace NFRs backward to product risk or source and forward to downstream documents."
+        - "Identify orphan NFRs and missing quality requirements implied by product behavior."
+        - "Define completeness checks and change propagation rules."
+      qualityChecks:
+        - "Each material NFR has backward and forward traceability."
+        - "No critical product risk lacks a corresponding NFR or explicit acceptance rationale."
+        - "Traceability is useful for review, not bureaucratic decoration."
+      questions:
+        - "How is each NFR traced to a source document, risk, requirement, journey, module, or decision?"
+        - "How is each NFR traced forward to acceptance criteria, test strategy, engineering, or operations?"
+        - "What orphan NFRs exist?"
+        - "What missing NFRs are implied by functional requirements, architecture risks, privacy risks, security risks, or operational constraints?"
+        - "How are NFR changes tracked and propagated?"
+    - id: "change-governance"
+      title: "Change Governance"
+      intent: "Define how non-functional requirements are proposed, revised, accepted, rejected, deferred, versioned, deprecated, and propagated downstream."
+      required: true
+      outputGuidance:
+        - "Define lightweight governance that prevents unrealistic quality commitments and undocumented downstream drift."
+        - "State what evidence, risk, source, or authority is required for NFR changes."
+        - "Clarify downstream update obligations after NFR changes."
+      qualityChecks:
+        - "NFR changes require rationale, source, threshold impact, and release impact review."
+        - "Governance prevents unsupported SLA, compliance, performance, accessibility, or security claims."
+        - "Deferred and deprecated NFRs remain traceable."
+      questions:
+        - "How are new non-functional requirements proposed?"
+        - "What evidence, risk, source, or authority is required to add, remove, or modify an NFR?"
+        - "How are NFR changes reviewed and approved?"
+        - "How are rejected, deferred, deprecated, or superseded NFRs tracked?"
+        - "How are NFR versions managed?"
+        - "Which downstream documents must be updated after an NFR change?"
