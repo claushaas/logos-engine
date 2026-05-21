@@ -93,9 +93,20 @@ instead of requiring `--confirm` to be retyped.
 | `/init --profile <id>` | Select profile (default: `standard`) | Depends on mode | No |
 | `/continue` | Show the next intake question cluster (read-only, deterministic) | No | Yes |
 | `/generate` | Preflight canonical Markdown generation; interactive TUI shows keyboard confirmation (Accept/Cancel) with output paths | No | Yes |
+| `/generate --canonical-only` | Generate canonical Markdown plus derived HTML + Agent Packs (default if no exclude flags) | Depends | Yes |
+| `/generate --skip-derived` | Generate canonical Markdown only, skip derived artifacts | Depends | Yes |
+| `/generate --html-only` | Generate HTML artifacts only | Depends | Yes |
+| `/generate --agent-pack-only` | Generate Agent Packs only | Depends | Yes |
 | `/generate --confirm` | Execute canonical Markdown generation (non-interactive confirmation) | Yes | Yes |
 | `/generate --dry-run` | Dry-run generation report | No | Yes |
 | `/generate --policy <name> --confirm` | Use specific write policy (skip, fail, backup_and_write, overwrite) | Yes | Yes |
+| `/outputs` | Browse generated outputs — canonical Markdown, HTML artifacts, Agent Packs, reports, Executive outputs | No | Yes |
+| `/outputs list --type <type>` | Filter by type (canonical, html, agent-pack, report, executive) | No | Yes |
+| `/outputs list --derived\|--canonical` | Filter by canonicality | No | Yes |
+| `/outputs list --status stale\|current` | Filter by status | No | Yes |
+| `/outputs show <id>` | Show artifact detail (type, canonicality, status, path, sources, diagnostics, next actions) | No | Yes |
+| `/outputs sources <id>` | Show artifact source references | No | Yes |
+| `/outputs stale` | List stale, blocked, and missing outputs | No | Yes |
 | `/validate` | Run deterministic validation and write a local report | Yes (report) | Yes |
 | `/validate --dry-run` | Run validation without writes | No | Yes |
 | `/validate --scope <scope>` | Scope validation (contracts, state, artifacts, outputs, all) | Depends | Depends |
@@ -219,6 +230,10 @@ cancellation, or recoverable error.
 All generated artifacts include source metadata, timestamps, and derived/non-canonical
 classification where applicable. Manual edits to generated files are detected and
 protected from silent overwrite.
+
+Use `/outputs` to browse generated outputs by type, canonicality, and status.
+Derived artifacts are always labeled `[derived]` and never shown as canonical.
+Stale outputs are reported with regeneration guidance.
 
 ## Validation and Diagnostics
 

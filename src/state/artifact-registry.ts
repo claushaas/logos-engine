@@ -209,3 +209,89 @@ export function summarizeArtifacts(state: WorkspaceState): ArtifactSummary {
 		totalArtifacts: artifacts.length,
 	};
 }
+
+// ---------------------------------------------------------------------------
+// Phase 7: Derived artifact metadata helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Ensure an artifact type is always marked as non-canonical.
+ * Returns the correct isCanonical value for the given artifact type.
+ */
+export function enforceDerivedCanonicality(
+	artifactType: ArtifactType,
+	providedIsCanonical?: boolean,
+): boolean {
+	if (NON_CANONICAL_TYPES.has(artifactType)) {
+		return false;
+	}
+	return providedIsCanonical ?? isArtifactCanonical(artifactType);
+}
+
+/**
+ * Mark a list of artifacts as stale in the state.
+ * Returns updated state and the count of affected artifacts.
+ */
+export function markArtifactsStale(
+	state: WorkspaceState,
+	artifactIdFilter: string[],
+): { state: WorkspaceState; markedCount: number } {
+	let markedCount = 0;
+	const updatedArtifacts = state.artifacts.map((a) => {
+		if (artifactIdFilter.includes(a.artifactId) && a.status === 'generated') {
+			markedCount++;
+			return { ...a, status: 'stale' as const };
+		}
+		return a;
+	});
+
+	return {
+		markedCount,
+		state: { ...state, artifacts: updatedArtifacts },
+	};
+}
+
+/**
+ * Find all artifacts that were generated from a specific source document.
+ */
+export function findArtifactsBySourceDocument(
+	state: WorkspaceState,
+	documentId: string,
+): WorkspaceArtifact[] {
+	return state.artifacts.filter((a) =>
+		a.sourceDocumentIds.includes(documentId),
+	);
+}
+
+/**
+ * Find all derived artifacts that depend on a list of canonical document IDs.
+ */
+export function findDerivedArtifactsByCanonicalSources(
+	state: WorkspaceState,
+	canonicalDocumentIds: string[],
+): WorkspaceArtifact[] {
+	return state.artifacts.filter(
+		(a) =>
+			!a.isCanonical &&
+			a.sourceDocumentIds.some((id) => canonicalDocumentIds.includes(id)),
+	);
+}
+
+/**
+ * Create derived artifact metadata entries for consistent registry records.
+ */
+export function createDerivedArtifactMetadata(params: {
+	profileId: string;
+	profileVersion?: string | undefined;
+	documentationRoot: string;
+	canonicality?: 'derived' | undefined;
+	additional?: Record<string, unknown> | undefined;
+}): Record<string, unknown> {
+	return {
+		canonicality: params.canonicality ?? 'derived',
+		documentationRoot: params.documentationRoot,
+		profileId: params.profileId,
+		profileVersion: params.profileVersion,
+		...(params.additional ?? {}),
+	};
+}

@@ -19,12 +19,26 @@ import {
 	testAiProvider,
 } from '../ai/index.js';
 import {
+	getOutput,
+	getOutputSources,
+	listOutputs,
+	listStaleOutputs,
+} from '../artifacts/output-browser.js';
+import { OUTPUT_DISPLAY_KIND_LABELS } from '../artifacts/output-browser-model.js';
+import {
 	buildDocumentDependencyGraph,
 	createInspectableGraphOutput,
 } from '../dependency-graph/index.js';
 import { executiveCompileWorkflow } from '../executive/index.js';
 import { generateCanonicalDocs } from '../generation/generate-canonical-docs.js';
 import type { GenerateCanonicalDocsWritePolicy } from '../generation/generate-types.js';
+import { unifiedGeneration } from '../generation/unified-generation.js';
+import type {
+	UnifiedGenerationDryRunResult,
+	UnifiedGenerationOptions,
+	UnifiedGenerationPreflight,
+	UnifiedGenerationReport,
+} from '../generation/unified-generation-types.js';
 import { initWorkspace, preflightInit } from '../init/index.js';
 import {
 	getProposal,
@@ -128,6 +142,8 @@ export async function routeSlashCommand(
 			return getProposalsResult(args, context);
 		case 'decisions':
 			return getDecisionsResult(args, context);
+		case 'outputs':
+			return getOutputsResult(args, context);
 		case 'root':
 			return getRootResult(args, context);
 		default:
@@ -163,6 +179,11 @@ function getHelpMessages(): string[] {
 		'  /init --dry-run — Plan workspace without creating files',
 		'  /continue    — Continue intake with the next question cluster',
 		'  /generate    — Generate canonical Markdown documentation',
+		'  /generate --canonical-only — Generate canonical Markdown only (default when no flags)',
+		'  /generate --canonical-only --confirm — Include derived HTML + Agent Packs',
+		'  /generate --skip-derived — Generate canonical only, skip derived',
+		'  /generate --html-only — Generate HTML artifacts only',
+		'  /generate --agent-pack-only — Generate Agent Packs only',
 		'  /generate --confirm — Confirm and execute generation',
 		'  /generate --dry-run — Plan generation without writes',
 		'  /generate --policy <name> --confirm — Use specific write policy',
@@ -184,6 +205,13 @@ function getHelpMessages(): string[] {
 		'  /exit        — Exit the shell',
 		'',
 		'Documentation root:',
+		'  /outputs    — Browse generated outputs (list, show, sources, stale)',
+		'  /outputs list --type <type> — Filter by type (canonical, html, agent-pack, report, executive)',
+		'  /outputs list --derived|--canonical — Filter by canonicality',
+		'  /outputs list --status stale|current — Filter by status',
+		'  /outputs show <id>  — Show output detail',
+		'  /outputs sources <id> — Show output source references',
+		'  /outputs stale       — List stale/blocked/missing outputs',
 		'  /root                     — Show documentation root configuration',
 		'  /root status              — Show current root status',
 		'  /root preview <path>      — Preview a root change (read-only)',
@@ -550,6 +578,281 @@ async function getInitResult(
 	};
 }
 
+// ---------------------------------------------------------------------------
+// Phase 7: Unified generation handler (canonical + derived)
+// ---------------------------------------------------------------------------
+
+async function handleUnifiedGeneration(
+	_args: string[],
+	context: RouterContext,
+	scope: {
+		isCanonicalOnly: boolean;
+		isSkipDerived: boolean;
+		isHtmlOnly: boolean;
+		isAgentPackOnly: boolean;
+		isConfirm: boolean;
+		isDryRun: boolean;
+		writePolicy: GenerateCanonicalDocsWritePolicy | undefined;
+	},
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'generate',
+			kind: 'error',
+			messages: [
+				'Cannot generate documentation because no project root was detected.',
+			],
+			shouldExit: false,
+		};
+	}
+
+	const unifiedScope = {
+		agentPack:
+			scope.isAgentPackOnly ||
+			(!scope.isCanonicalOnly && !scope.isHtmlOnly && !scope.isSkipDerived),
+		canonical:
+			!scope.isHtmlOnly && !scope.isAgentPackOnly && !scope.isSkipDerived,
+		canonicalOnly: scope.isCanonicalOnly,
+		html:
+			scope.isHtmlOnly ||
+			(!scope.isCanonicalOnly &&
+				!scope.isAgentPackOnly &&
+				!scope.isSkipDerived),
+		skipDerived: scope.isSkipDerived,
+	};
+
+	const mode = scope.isDryRun
+		? 'dry_run'
+		: scope.isConfirm
+			? 'execute'
+			: 'preflight';
+
+	try {
+		const result = await unifiedGeneration({
+			mode: mode as UnifiedGenerationOptions['mode'],
+			projectRoot,
+			scope: unifiedScope,
+			writePolicy: scope.writePolicy,
+		});
+
+		// Type narrowing: preflight
+		if (result.mode === 'preflight') {
+			const preflight = result as UnifiedGenerationPreflight;
+			const lines: string[] = [
+				'Unified Generation Preflight',
+				'',
+				`Profile:            ${preflight.profileId}`,
+				`Documentation root: ${preflight.documentationRoot}`,
+				'',
+				'Canonical Markdown:',
+				`  Generate:   ${preflight.canonicalDocumentCounts.generate}`,
+				`  Update:     ${preflight.canonicalDocumentCounts.update}`,
+				`  Skip:       ${preflight.canonicalDocumentCounts.skip}`,
+				`  Incomplete: ${preflight.canonicalDocumentCounts.incomplete}`,
+				`  Blocked:    ${preflight.canonicalDocumentCounts.blocked}`,
+				`  Failed:     ${preflight.canonicalDocumentCounts.failed}`,
+				`  Stale:      ${preflight.canonicalDocumentCounts.stale}`,
+				'',
+				'Derived artifacts:',
+				`  HTML artifacts:   ${preflight.htmlArtifactCount} declared`,
+				`  Agent Packs:      ${preflight.agentPackCount} declared`,
+				`  Ready:            ${preflight.derivedReadyCount}`,
+				`  Blocked:          ${preflight.derivedBlockedCount}`,
+			];
+
+			if (preflight.collisionPaths.length > 0) {
+				lines.push('');
+				lines.push('Manual edits detected:');
+				for (const p of preflight.collisionPaths.slice(0, 5)) {
+					lines.push(`  ${p}`);
+				}
+			}
+
+			// Keyboard confirmation
+			if (shouldUseKeyboardConfirmation(context) && preflight.canonicalReady) {
+				const sourceCmd = ['/generate', '--canonical-only'];
+				if (scope.writePolicy) sourceCmd.push('--policy', scope.writePolicy);
+
+				const confirmationRequest = createTuiConfirmationRequest({
+					actionKind: 'canonical_generation',
+					alternatives: [
+						'Run /generate --dry-run first.',
+						'Use --canonical-only for canonical only.',
+					],
+					consequences: [
+						`Profile: ${preflight.profileId}`,
+						`Documentation root: ${preflight.documentationRoot}`,
+						`Canonical documents: ${preflight.canonicalDocumentCounts.generate} generate, ${preflight.canonicalDocumentCounts.update} update`,
+						`HTML artifacts: ${preflight.htmlArtifactCount}`,
+						`Agent Packs: ${preflight.agentPackCount}`,
+					],
+					destructive: false,
+					message:
+						'Markdown documents and derived artifacts will be written under the documentation root.',
+					options: yesNoOptions(),
+					sensitive: false,
+					sourceCommand: sourceCmd.join(' '),
+					target: {
+						kind: 'documentation_root',
+						path: preflight.documentationRoot,
+					},
+					title: 'Generate Canonical And Derived Outputs',
+				});
+
+				lines.push('Use the keyboard to accept or cancel below.');
+
+				return {
+					command: 'generate',
+					confirmationRequest,
+					kind: 'info',
+					messages: lines,
+					shouldExit: false,
+				};
+			}
+
+			lines.push('');
+			lines.push('No files have been written.');
+			lines.push('Run /generate --confirm to execute generation.');
+
+			return {
+				command: 'generate',
+				kind: preflight.canonicalReady ? 'info' : 'warning',
+				messages: lines,
+				shouldExit: false,
+			};
+		}
+
+		// Type narrowing: dry_run
+		if (result.mode === 'dry_run') {
+			const dryRunResult = result as UnifiedGenerationDryRunResult;
+			const lines: string[] = [
+				'Unified Generation Dry-Run',
+				'',
+				`Profile:            ${dryRunResult.profileId}`,
+				`Documentation root: ${dryRunResult.documentationRoot}`,
+				`Write policy:       ${dryRunResult.writePolicy}`,
+				'',
+				'Canonical Markdown:',
+				`  Generate:   ${dryRunResult.canonicalDocumentCounts.generate}`,
+				`  Update:     ${dryRunResult.canonicalDocumentCounts.update}`,
+				`  Skip:       ${dryRunResult.canonicalDocumentCounts.skip}`,
+				`  Blocked:    ${dryRunResult.canonicalDocumentCounts.blocked}`,
+				`  Failed:     ${dryRunResult.canonicalDocumentCounts.failed}`,
+				'',
+				'Derived artifacts:',
+				`  HTML:   ${dryRunResult.htmlArtifactCount} (${dryRunResult.derivedReadyCount} ready, ${dryRunResult.derivedBlockedCount} blocked)`,
+				`  Packs:  ${dryRunResult.agentPackCount}`,
+				'',
+				'(dry-run: no files were written)',
+				'Run /generate --confirm to execute.',
+			];
+
+			return {
+				command: 'generate',
+				kind: 'info',
+				messages: lines,
+				shouldExit: false,
+			};
+		}
+
+		// Type narrowing: execute
+		if (result.mode === 'execute') {
+			const execResult = result as UnifiedGenerationReport;
+			const lines: string[] = [
+				'Generation Complete',
+				'',
+				'Canonical Markdown:',
+				`  Created:    ${execResult.canonical.counts.created}`,
+				`  Updated:    ${execResult.canonical.counts.updated}`,
+				`  Skipped:    ${execResult.canonical.counts.skipped}`,
+				`  Blocked:    ${execResult.canonical.counts.blocked}`,
+				`  Failed:     ${execResult.canonical.counts.failed}`,
+				`  Stale:      ${execResult.canonical.counts.stale}`,
+				'',
+				'HTML Artifacts:',
+				`  Created:    ${execResult.htmlArtifacts.counts.created}`,
+				`  Updated:    ${execResult.htmlArtifacts.counts.updated}`,
+				`  Skipped:    ${execResult.htmlArtifacts.counts.skipped}`,
+				`  Blocked:    ${execResult.htmlArtifacts.counts.blocked}`,
+				`  Failed:     ${execResult.htmlArtifacts.counts.failed}`,
+				'',
+				'Agent Packs:',
+				`  Created:    ${execResult.agentPacks.counts.created}`,
+				`  Updated:    ${execResult.agentPacks.counts.updated}`,
+				`  Skipped:    ${execResult.agentPacks.counts.skipped}`,
+				`  Blocked:    ${execResult.agentPacks.counts.blocked}`,
+				`  Failed:     ${execResult.agentPacks.counts.failed}`,
+				'',
+				`Documentation root: ${execResult.documentationRoot}`,
+			];
+
+			if (execResult.runId) {
+				lines.push(`Run ID:             ${execResult.runId}`);
+			}
+
+			if (execResult.registryUpdates.created.length > 0) {
+				lines.push('');
+				lines.push(
+					`Registry: ${execResult.registryUpdates.created.length} artifacts registered`,
+				);
+			}
+
+			if (execResult.registryUpdates.failed.length > 0) {
+				lines.push(
+					`  Failed registrations: ${execResult.registryUpdates.failed.length}`,
+				);
+			}
+
+			if (execResult.staleOrphaned.count > 0) {
+				lines.push(`Stale/orphaned outputs: ${execResult.staleOrphaned.count}`);
+			}
+
+			if (execResult.changedPaths.length > 0) {
+				lines.push('');
+				lines.push('Changed paths:');
+				for (const p of execResult.changedPaths.slice(0, 10)) {
+					lines.push(`  ${p}`);
+				}
+			}
+
+			lines.push('');
+			for (const action of execResult.nextActions.slice(0, 5)) {
+				lines.push(action);
+			}
+
+			const hasErrors =
+				execResult.overallStatus === 'failed' ||
+				execResult.overallStatus === 'blocked';
+			const hasWarnings =
+				execResult.overallStatus === 'ok_with_warnings' ||
+				execResult.overallStatus === 'partial';
+
+			return {
+				command: 'generate',
+				kind: hasErrors ? 'error' : hasWarnings ? 'warning' : 'success',
+				messages: lines,
+				shouldExit: false,
+			};
+		}
+
+		return {
+			command: 'generate',
+			kind: 'error',
+			messages: ['Unexpected result mode from unified generation.'],
+			shouldExit: false,
+		};
+	} catch (error) {
+		const message = error instanceof Error ? error.message : String(error);
+		return {
+			command: 'generate',
+			kind: 'error',
+			messages: ['Unified generation failed:', message],
+			shouldExit: false,
+		};
+	}
+}
+
 async function getGenerateResult(
 	args: string[],
 	context: RouterContext,
@@ -583,6 +886,14 @@ async function getGenerateResult(
 	const isConfirm = args.includes('--confirm');
 	const isDryRun = args.includes('--dry-run');
 
+	// Phase 7: Derived artifact scope flags
+	const isCanonicalOnly = args.includes('--canonical-only');
+	const isSkipDerived = args.includes('--skip-derived');
+	const isHtmlOnly = args.includes('--html-only');
+	const isAgentPackOnly = args.includes('--agent-pack-only');
+	const useUnified =
+		isCanonicalOnly || isSkipDerived || isHtmlOnly || isAgentPackOnly;
+
 	let writePolicy: GenerateCanonicalDocsWritePolicy | undefined;
 	const policyIdx = args.indexOf('--policy');
 	if (policyIdx !== -1 && policyIdx + 1 < args.length) {
@@ -611,6 +922,19 @@ async function getGenerateResult(
 				};
 			}
 		}
+	}
+
+	// Phase 7: Route to unified generation when derived scope flags are specified
+	if (useUnified) {
+		return handleUnifiedGeneration(args, context, {
+			isAgentPackOnly,
+			isCanonicalOnly,
+			isConfirm,
+			isDryRun,
+			isHtmlOnly,
+			isSkipDerived,
+			writePolicy,
+		});
 	}
 
 	if (isDryRun) {
@@ -4486,5 +4810,396 @@ async function getConfigAiResult(
 			'Valid subcommands: status, mode, provider, providers, model, endpoint, token-env, timeout, disclosure, test, disable, reset',
 		],
 		shouldExit: false,
+	};
+}
+
+// ---------------------------------------------------------------------------
+// /outputs command — Phase 7: Derived Artifact Generation And Browsing
+// ---------------------------------------------------------------------------
+
+async function getOutputsResult(
+	args: string[],
+	context: RouterContext,
+): Promise<SlashCommandResult> {
+	const projectRoot = context.projectContext.root.rootPath ?? undefined;
+	if (!projectRoot) {
+		return {
+			command: 'outputs',
+			kind: 'error',
+			messages: [
+				'Cannot browse outputs because no project root was detected.',
+				'Run logos from a project repository or initialize a workspace first.',
+			],
+			shouldExit: false,
+			viewKind: 'output_browser' as TuiViewKind,
+		};
+	}
+
+	const subcommand = args[0];
+
+	// /outputs show <artifactId>
+	if (subcommand === 'show') {
+		const artifactId = args[1];
+		if (!artifactId) {
+			return {
+				command: 'outputs show',
+				kind: 'error',
+				messages: ['Usage: /outputs show <artifact-id>'],
+				shouldExit: false,
+				viewKind: 'output_browser' as TuiViewKind,
+			};
+		}
+
+		const result = await getOutput(projectRoot, artifactId);
+		if ('error' in result) {
+			return {
+				command: 'outputs show',
+				kind: 'error',
+				messages: [result.error],
+				shouldExit: false,
+				viewKind: 'output_browser' as TuiViewKind,
+			};
+		}
+
+		const lines: string[] = [
+			'Output Detail',
+			'',
+			`Artifact ID:     ${result.artifactId}`,
+			`Type:            ${result.artifactType}`,
+			`Display Kind:    ${result.displayKind} (${OUTPUT_DISPLAY_KIND_LABELS[result.displayKind]})`,
+			`Canonicality:    ${result.canonicality}`,
+			`Status:          ${result.status}`,
+			`Path:            ${result.path}`,
+			`Generated:       ${result.generatedAt ?? '(unknown)'}`,
+			`Run ID:          ${result.runId ?? '(none)'}`,
+		];
+
+		if (result.profileId) {
+			lines.push(
+				`Profile:         ${result.profileId}${result.profileVersion ? ` v${result.profileVersion}` : ''}`,
+			);
+		}
+		if (result.documentationRoot) {
+			lines.push(`Doc Root:        ${result.documentationRoot}`);
+		}
+
+		lines.push('');
+		lines.push(
+			`Source Document IDs: ${result.sourceDocumentIds.length > 0 ? result.sourceDocumentIds.join(', ') : '(none)'}`,
+		);
+		lines.push(
+			`Source Artifact IDs: ${result.sourceArtifactIds.length > 0 ? result.sourceArtifactIds.join(', ') : '(none)'}`,
+		);
+
+		if (result.checksum) {
+			lines.push(`Checksum:        ${result.checksum.slice(0, 16)}...`);
+		}
+
+		if (result.diagnostics.length > 0) {
+			lines.push('');
+			lines.push('Diagnostics:');
+			for (const d of result.diagnostics.slice(0, 10)) {
+				lines.push(`  [${d.severity.toUpperCase()}] ${d.message}`);
+				if (d.recoveryHint) lines.push(`    Recovery: ${d.recoveryHint}`);
+			}
+		}
+
+		lines.push('');
+		lines.push('Next actions:');
+		for (const action of result.nextActions) {
+			lines.push(`  ${action}`);
+		}
+
+		return {
+			command: 'outputs show',
+			kind: 'info',
+			messages: lines,
+			shouldExit: false,
+			viewKind: 'output_browser' as TuiViewKind,
+		};
+	}
+
+	// /outputs sources <artifactId>
+	if (subcommand === 'sources') {
+		const artifactId = args[1];
+		if (!artifactId) {
+			return {
+				command: 'outputs sources',
+				kind: 'error',
+				messages: ['Usage: /outputs sources <artifact-id>'],
+				shouldExit: false,
+				viewKind: 'output_browser' as TuiViewKind,
+			};
+		}
+
+		const result = await getOutputSources(projectRoot, artifactId);
+		if ('error' in result) {
+			return {
+				command: 'outputs sources',
+				kind: 'error',
+				messages: [result.error],
+				shouldExit: false,
+				viewKind: 'output_browser' as TuiViewKind,
+			};
+		}
+
+		const lines: string[] = [
+			'Output Sources',
+			'',
+			`Artifact ID:         ${result.artifactId}`,
+			'',
+			`Source Documents:    ${result.sourceDocumentIds.length > 0 ? result.sourceDocumentIds.join(', ') : '(none)'}`,
+			`Source Artifacts:    ${result.sourceArtifactIds.length > 0 ? result.sourceArtifactIds.join(', ') : '(none)'}`,
+		];
+
+		if (result.sourcePaths.length > 0) {
+			lines.push('');
+			lines.push('Source paths:');
+			for (const p of result.sourcePaths) {
+				lines.push(`  ${p}`);
+			}
+		}
+
+		if (result.sourceChecksums.length > 0) {
+			lines.push('');
+			lines.push('Source checksums:');
+			for (const sc of result.sourceChecksums.slice(0, 10)) {
+				lines.push(
+					`  ${sc.artifactId}: ${sc.checksum?.slice(0, 16) ?? '(none)'}`,
+				);
+			}
+		}
+
+		return {
+			command: 'outputs sources',
+			kind: 'info',
+			messages: lines,
+			shouldExit: false,
+			viewKind: 'output_browser' as TuiViewKind,
+		};
+	}
+
+	// /outputs stale
+	if (subcommand === 'stale') {
+		const result = await listStaleOutputs(projectRoot);
+		if ('error' in result) {
+			return {
+				command: 'outputs stale',
+				kind: 'error',
+				messages: [result.error],
+				shouldExit: false,
+				viewKind: 'output_browser' as TuiViewKind,
+			};
+		}
+
+		const lines: string[] = [
+			'Stale Outputs',
+			'',
+			`Stale:    ${result.staleCount}`,
+			`Orphaned: ${result.orphanedCount}`,
+			`Missing:  ${result.missingCount}`,
+			`Blocked:  ${result.blockedCount}`,
+		];
+
+		if (result.items.length > 0) {
+			lines.push('');
+			lines.push('Stale / blocked / missing outputs:');
+			for (const item of result.items.slice(0, 20)) {
+				lines.push(
+					`  [${item.status}] [${item.displayKind}] ${item.artifactId}`,
+				);
+				lines.push(`    Path: ${item.path}`);
+			}
+			if (result.items.length > 20) {
+				lines.push(`  ... and ${result.items.length - 20} more`);
+			}
+		}
+
+		lines.push('');
+		lines.push('Next actions:');
+		for (const action of result.nextActions) {
+			lines.push(`  ${action}`);
+		}
+
+		return {
+			command: 'outputs stale',
+			kind: result.staleCount > 0 ? 'warning' : 'info',
+			messages: lines,
+			shouldExit: false,
+			viewKind: 'output_browser' as TuiViewKind,
+		};
+	}
+
+	// Parse filter flags for /outputs and /outputs list
+	const isListSubcommand = subcommand === 'list' || subcommand === undefined;
+	if (isListSubcommand) {
+		const argsForFilter = subcommand === 'list' ? args.slice(1) : args;
+
+		let filterType: string | undefined;
+		let filterCanonicality: 'canonical' | 'derived' | undefined;
+		let filterStatus: string | undefined;
+
+		let i = 0;
+		while (i < argsForFilter.length) {
+			const arg = argsForFilter[i];
+			if (arg === '--type' && i + 1 < argsForFilter.length) {
+				filterType = argsForFilter[i + 1];
+				i += 2;
+			} else if (arg === '--derived') {
+				filterCanonicality = 'derived';
+				i++;
+			} else if (arg === '--canonical') {
+				filterCanonicality = 'canonical';
+				i++;
+			} else if (arg === '--status' && i + 1 < argsForFilter.length) {
+				filterStatus = argsForFilter[i + 1];
+				i += 2;
+			} else {
+				i++;
+			}
+		}
+
+		const filter: Record<string, unknown> = {};
+		if (filterType) {
+			switch (filterType) {
+				case 'canonical':
+					filter.artifactType = 'canonical_markdown';
+					break;
+				case 'html':
+					filter.artifactType = 'html';
+					break;
+				case 'agent-pack':
+					filter.artifactType = 'agent_pack';
+					break;
+				case 'report':
+					filter.artifactType = 'report';
+					break;
+				case 'executive':
+					filter.displayKind = 'executive_output';
+					break;
+				default:
+					return {
+						command: 'outputs',
+						kind: 'error',
+						messages: [
+							`Unknown --type value: ${filterType}`,
+							'Valid types: canonical, html, agent-pack, report, executive',
+						],
+						shouldExit: false,
+						viewKind: 'output_browser' as TuiViewKind,
+					};
+			}
+		}
+		if (filterCanonicality) {
+			filter.canonicality = filterCanonicality;
+		}
+		if (filterStatus) {
+			if (
+				filterStatus !== 'stale' &&
+				filterStatus !== 'current' &&
+				filterStatus !== 'generated' &&
+				filterStatus !== 'failed' &&
+				filterStatus !== 'blocked' &&
+				filterStatus !== 'missing'
+			) {
+				return {
+					command: 'outputs',
+					kind: 'error',
+					messages: [
+						`Unknown --status value: ${filterStatus}`,
+						'Valid statuses: stale, current, generated, failed, blocked, missing',
+					],
+					shouldExit: false,
+					viewKind: 'output_browser' as TuiViewKind,
+				};
+			}
+			// Map 'current' to 'generated' for the registry
+			filter.status = filterStatus === 'current' ? 'generated' : filterStatus;
+		}
+
+		// Use output browser service with filter
+		const result = await listOutputs({
+			filter:
+				Object.keys(filter).length > 0
+					? (filter as Parameters<typeof listOutputs>[0]['filter'])
+					: undefined,
+			projectRoot,
+		});
+
+		if ('error' in result) {
+			return {
+				command: 'outputs',
+				kind: 'error',
+				messages: [result.error],
+				shouldExit: false,
+				viewKind: 'output_browser' as TuiViewKind,
+			};
+		}
+
+		const lines: string[] = [
+			'Output Browser',
+			'',
+			`Total artifacts:  ${result.summary.totalArtifacts}`,
+			`Canonical:        ${result.summary.canonicalCount}`,
+			`Derived:          ${result.summary.derivedCount}`,
+			`Current:          ${result.summary.currentCount}`,
+			`Stale:            ${result.summary.staleCount}`,
+			`Failed:           ${result.summary.failedCount}`,
+			`Blocked:          ${result.summary.blockedCount}`,
+		];
+
+		if (result.filteredCount !== result.totalCount) {
+			lines.push('');
+			lines.push(`Filtered: ${result.filteredCount} of ${result.totalCount}`);
+			if (filterType) lines.push(`  Type: ${filterType}`);
+			if (filterCanonicality)
+				lines.push(`  Canonicality: ${filterCanonicality}`);
+			if (filterStatus) lines.push(`  Status: ${filterStatus}`);
+		}
+
+		if (result.items.length > 0) {
+			lines.push('');
+			lines.push('Outputs:');
+			for (const item of result.items.slice(0, 25)) {
+				lines.push(
+					`  [${item.status}] [${item.canonicality}] [${item.displayKind}] ${item.artifactId}`,
+				);
+				lines.push(`    Path: ${item.path}`);
+				if (item.generatedAt) {
+					lines.push(`    Generated: ${item.generatedAt}`);
+				}
+			}
+			if (result.items.length > 25) {
+				lines.push(`  ... and ${result.items.length - 25} more`);
+			}
+		}
+
+		lines.push('');
+		lines.push(
+			'Commands: /outputs show <id>, /outputs sources <id>, /outputs stale',
+		);
+
+		return {
+			command: 'outputs',
+			kind:
+				result.summary.staleCount > 0 || result.summary.failedCount > 0
+					? 'warning'
+					: 'info',
+			messages: lines,
+			shouldExit: false,
+			viewKind: 'output_browser' as TuiViewKind,
+		};
+	}
+
+	// Unknown subcommand
+	return {
+		command: 'outputs',
+		kind: 'error',
+		messages: [
+			`Unknown /outputs subcommand: ${subcommand}`,
+			'Valid subcommands: list, show <id>, sources <id>, stale',
+		],
+		shouldExit: false,
+		viewKind: 'output_browser' as TuiViewKind,
 	};
 }

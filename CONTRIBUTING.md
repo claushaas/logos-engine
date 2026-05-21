@@ -137,6 +137,9 @@ Anonymized sample workspaces demonstrating real use are especially valuable.
 - No real provider payloads — use synthetic provider output fixtures.
 - No real user data — all fixture data is synthetic.
 - Documentation root test fixtures use temp directories only; never mutate real project paths.
+- Derived artifact tests (HTML artifacts, Agent Packs) use temp workspaces with
+  synthetic registry entries only. Tests must assert derived artifacts are registered
+  as non-canonical and must not treat derived outputs as canonical sources.
 
 ## Pull Request Checklist
 

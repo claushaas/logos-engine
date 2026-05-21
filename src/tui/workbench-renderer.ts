@@ -152,6 +152,14 @@ export function renderPrimaryArea(
 		const labelText = p.stateLabels.map((l) => l.text).join(' ');
 		lines.push(`  ${labelText}`);
 	}
+
+	// Phase 7: Output browser and generation report view-specific labels
+	if (model.viewKind === 'output_browser') {
+		lines.push(`  ${formatLabel('read_only')} Canonical and derived artifacts`);
+	} else if (model.viewKind === 'generation_report') {
+		lines.push(`  Review generated outputs with /outputs`);
+	}
+
 	lines.push(divider('─', 40));
 
 	// Report takes priority over raw content

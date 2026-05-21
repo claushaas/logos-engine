@@ -71,6 +71,7 @@ pnpm security:check
   - Agent Packs must include derived/non-canonical warnings and must not contain instructions to exfiltrate secrets, override constraints, or claim canonical authority.
   - Executive exports must be marked as derived snapshots, not live task managers.
 - **Derived artifact boundary**: Ensures HTML, Agent Packs, Executive exports, reports, scanner outputs, and consistency reports are marked as non-canonical.
+- **Output browser safety**: The `/outputs` command is read-only and does not open files, execute programs, or send data over the network. All artifact data is sourced from the local artifact registry in `.logos/workspace.json`.
 - **Package contents safety**: Verifies package excludes `.env`, `.logos`, backups, coverage, `.git`, `node_modules`, and private artifacts.
 - **Script safety**: Detects network/external tools (`curl`, `wget`, `npm publish`, etc.) in default check scripts. Flags telemetry, analytics, remote logging, crash upload, cloud backup, and external sync patterns.
 - **Dependency surface**: Flags unexpected dependencies that suggest telemetry, analytics, cloud services, or external sync.

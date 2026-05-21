@@ -109,3 +109,36 @@ export type {
 	GenerateCanonicalDocsResult,
 	GenerateCanonicalDocsWritePolicy,
 } from './generate-types.js';
+
+// ---------------------------------------------------------------------------
+// Phase 7 — Unified Generation (canonical + derived HTML + Agent Packs)
+// ---------------------------------------------------------------------------
+
+export {
+	executeUnifiedGeneration,
+	planUnifiedDryRun,
+	planUnifiedGeneration,
+	unifiedGeneration,
+} from './unified-generation.js';
+
+export type {
+	ArtifactCanonicality,
+	DerivedArtifactResult,
+	DerivedArtifactType,
+	DerivedPlanItem,
+	UnifiedDiagnostic,
+	UnifiedGenerationDryRunResult,
+	UnifiedGenerationOptions,
+	UnifiedGenerationOverallStatus,
+	UnifiedGenerationPreflight,
+	UnifiedGenerationReport,
+	UnifiedGenerationReportCounts,
+	UnifiedGenerationReportCountsByType,
+	UnifiedGenerationScope,
+} from './unified-generation-types.js';
+export {
+	createUnifiedDiagnostic,
+	derivedPlanStatusToWriteStatus,
+	UNIFIED_GENERATION_DIAGNOSTIC_CODES,
+	zeroUnifiedCounts,
+} from './unified-generation-types.js';
