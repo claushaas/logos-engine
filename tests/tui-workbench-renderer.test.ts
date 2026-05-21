@@ -28,6 +28,7 @@ import {
 	renderHelpContent,
 	renderLoadingArea,
 	renderOrientationHeader,
+	renderPrimaryArea,
 	renderRecoveryContent,
 	renderWorkbench,
 } from '../src/tui/workbench-renderer.js';
@@ -223,6 +224,32 @@ describe('primary area', () => {
 		const lines = renderWorkbench(vm);
 		const text = lines.join('\n');
 		expect(text).toContain('Summary text');
+	});
+
+	it('renders a scroll window for long primary content', () => {
+		const vm = createWorkbenchViewModel({
+			activeProfileId: 'standard',
+			content: ['Line 1', 'Line 2', 'Line 3', 'Line 4', 'Line 5'],
+			documentationRoot: 'logos/',
+			projectRoot: '/test/project',
+			providerStatusText: 'not configured',
+			title: 'Long Output',
+			viewKind: 'status',
+			width: 100,
+			workspaceStatus: 'initialized',
+		});
+
+		const lines = renderPrimaryArea(vm, {
+			maxPrimaryLines: 2,
+			primaryContentOffset: 2,
+		});
+		const text = lines.join('\n');
+
+		expect(text).toContain('Line 3');
+		expect(text).toContain('Line 4');
+		expect(text).not.toContain('Line 1');
+		expect(text).toContain('Lines 3-4 of 5');
+		expect(text).not.toContain('... and');
 	});
 });
 

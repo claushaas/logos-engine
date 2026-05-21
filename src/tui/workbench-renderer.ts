@@ -35,6 +35,10 @@ export interface WorkbenchRenderOptions {
 	mode?: 'compact' | 'standard' | 'wide' | undefined;
 	/** Maximum items to show in any list (default 10) */
 	maxItems?: number | undefined;
+	/** Maximum primary content lines to show before scroll/pagination (default maxItems) */
+	maxPrimaryLines?: number | undefined;
+	/** Zero-based offset into primary content for scrollable views */
+	primaryContentOffset?: number | undefined;
 	/** Render width override (for tests) */
 	width?: number | undefined;
 }
@@ -144,7 +148,7 @@ export function renderPrimaryArea(
 ): string[] {
 	const p = model.primary;
 	const lines: string[] = [];
-	const maxItems = options?.maxItems ?? 10;
+	const maxItems = options?.maxPrimaryLines ?? options?.maxItems ?? 10;
 
 	// Title
 	lines.push(p.title);
@@ -169,13 +173,22 @@ export function renderPrimaryArea(
 			lines.push(line);
 		}
 	} else if (p.content.length > 0) {
-		// Show content, truncate at maxItems
-		const shown = p.content.slice(0, maxItems);
+		// Show content through a scrollable window.
+		const maxOffset = Math.max(0, p.content.length - maxItems);
+		const offset = Math.min(
+			Math.max(0, options?.primaryContentOffset ?? 0),
+			maxOffset,
+		);
+		const shown = p.content.slice(offset, offset + maxItems);
 		for (const line of shown) {
 			lines.push(line);
 		}
 		if (p.content.length > maxItems) {
-			lines.push(`... and ${p.content.length - maxItems} more lines`);
+			const start = offset + 1;
+			const end = offset + shown.length;
+			lines.push(
+				`Lines ${start}-${end} of ${p.content.length}. Scroll: ↑/↓ line, PageUp/PageDown page.`,
+			);
 		}
 	} else {
 		// Summary fallback

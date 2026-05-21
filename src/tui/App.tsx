@@ -58,6 +58,22 @@ import { renderWorkbench } from './workbench-renderer.js';
 // Helpers
 // ---------------------------------------------------------------------------
 
+function getPrimaryWindowLineCount(rows?: number): number {
+	const availableRows = (rows ?? 24) - 20;
+	return Math.max(8, Math.min(40, availableRows));
+}
+
+function createWorkbenchLineItems(
+	lines: string[],
+): Array<{ key: string; text: string }> {
+	const seen = new Map<string, number>();
+	return lines.map((text) => {
+		const occurrence = seen.get(text) ?? 0;
+		seen.set(text, occurrence + 1);
+		return { key: `${text}\x1f${occurrence}`, text };
+	});
+}
+
 /**
  * Build initial view model from project context and startup data.
  */
@@ -264,6 +280,7 @@ export function App(): React.JSX.Element {
 	const [lastViewKind, setLastViewKind] = useState<TuiViewKind | undefined>(
 		undefined,
 	);
+	const [primaryContentOffset, setPrimaryContentOffset] = useState(0);
 
 	// Confirmation state
 	const [confirmation, setConfirmation] = useState<ConfirmationState>(
@@ -392,11 +409,28 @@ export function App(): React.JSX.Element {
 	]);
 
 	// Render workbench lines
+	const primaryWindowLineCount = getPrimaryWindowLineCount(process.stdout.rows);
+	const primaryContentLength = currentViewModel.primary.content.length;
+	const primaryMaxOffset = Math.max(
+		0,
+		primaryContentLength - primaryWindowLineCount,
+	);
+
+	useEffect(() => {
+		setPrimaryContentOffset((prev) => Math.min(prev, primaryMaxOffset));
+	}, [primaryMaxOffset]);
+
 	const workbenchLines = useMemo(() => {
 		return renderWorkbench(currentViewModel, {
+			maxPrimaryLines: primaryWindowLineCount,
+			primaryContentOffset,
 			width: process.stdout.columns,
 		});
-	}, [currentViewModel]);
+	}, [currentViewModel, primaryContentOffset, primaryWindowLineCount]);
+	const workbenchLineItems = useMemo(
+		() => createWorkbenchLineItems(workbenchLines),
+		[workbenchLines],
+	);
 
 	// Generate and show startup briefing on mount
 	useEffect(() => {
@@ -569,6 +603,7 @@ export function App(): React.JSX.Element {
 		if (key.return) {
 			if (processing) return;
 			const submitted = input;
+			setPrimaryContentOffset(0);
 			setProcessing(true);
 
 			processCommand(submitted, context)
@@ -647,6 +682,18 @@ export function App(): React.JSX.Element {
 			setInput('');
 		} else if (key.backspace || key.delete) {
 			setInput((prev) => prev.slice(0, -1));
+		} else if (key.upArrow && primaryMaxOffset > 0) {
+			setPrimaryContentOffset((prev) => Math.max(0, prev - 1));
+		} else if (key.downArrow && primaryMaxOffset > 0) {
+			setPrimaryContentOffset((prev) => Math.min(primaryMaxOffset, prev + 1));
+		} else if ('pageUp' in key && key.pageUp && primaryMaxOffset > 0) {
+			setPrimaryContentOffset((prev) =>
+				Math.max(0, prev - primaryWindowLineCount),
+			);
+		} else if ('pageDown' in key && key.pageDown && primaryMaxOffset > 0) {
+			setPrimaryContentOffset((prev) =>
+				Math.min(primaryMaxOffset, prev + primaryWindowLineCount),
+			);
 		} else if (!key.ctrl && !key.meta && inputChar.length === 1) {
 			setInput((prev) => prev + inputChar);
 		}
@@ -656,9 +703,9 @@ export function App(): React.JSX.Element {
 		<Box flexDirection="column" height="100%">
 			<Box flexDirection="column" flexGrow={1}>
 				{/* Render workbench lines */}
-				{workbenchLines.map((line) => (
-					<Box key={line}>
-						<Text>{line}</Text>
+				{workbenchLineItems.map((line) => (
+					<Box key={line.key}>
+						<Text>{line.text}</Text>
 					</Box>
 				))}
 
