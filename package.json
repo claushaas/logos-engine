@@ -58,6 +58,7 @@
 		"lint": "pnpm lint:biome && pnpm lint:md",
 		"lint:biome": "biome check .",
 		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
+		"nfr:evidence": "node scripts/nfr-evidence.js",
 		"security:check": "node scripts/security-check.js",
 		"smoke:cli": "node scripts/smoke-cli.js",
 		"smoke:package": "node scripts/smoke-package.js",

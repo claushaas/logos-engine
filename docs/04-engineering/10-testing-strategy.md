@@ -379,7 +379,7 @@ Do not mock domain invariants, schema validation, decision transition rules, roo
 | Optional live provider check | Manual/pre-release only. | Provider connectivity against sandbox/user-owned tokens. | Bounded by provider timeout. | Does not mutate state; redacted output. | Does not block local-only release unless provider feature is release scope. | Never default; requires explicit credentials. | Redacted notes only. | Engineering/product. | Optional |
 | Nightly/deep check | Future. | Coverage, performance smoke, broader compatibility. | Longer. | Trends reviewed. | Investigate; not immediate release blocker unless critical. | N/A. | Reports. | Engineering. | Deferred |
 
-Current repo scripts include `pnpm check`, `pnpm test`, `pnpm test:coverage`, `pnpm lint:biome`, `pnpm lint:md`, `pnpm build`, `pnpm typecheck`, `pnpm smoke:cli`, `pnpm security:check`, and `pnpm smoke:package`. The `pnpm check` script already includes `typecheck` and `smoke:cli`. The separate `pnpm security:check` and `pnpm smoke:package` scripts are release candidate gates.
+Current repo scripts include `pnpm check`, `pnpm test`, `pnpm test:coverage`, `pnpm lint:biome`, `pnpm lint:md`, `pnpm build`, `pnpm typecheck`, `pnpm smoke:cli`, `pnpm security:check`, `pnpm smoke:package`, and `pnpm nfr:evidence`. The `pnpm check` script already includes `typecheck` and `smoke:cli`. The separate `pnpm security:check` and `pnpm smoke:package` scripts are release candidate gates. `pnpm nfr:evidence` produces a structured NFR evidence report for release hardening (see `docs/06-operations/nfr-evidence.md`).
 
 ## Release Gates
 
@@ -389,6 +389,7 @@ Release gates map to Acceptance Criteria:
 | --- | --- | --- | --- |
 | Default suite passes | `pnpm check` passes without live AI/network. | Block release. | Only accepted by product/engineering owner with written risk. |
 | Security/privacy checks pass | `pnpm security:check` passes with no errors or fatal findings. | Block release. | No silent exception. |
+| NFR evidence passes | `pnpm nfr:evidence` produces no `fail` or `blocked` items. | Block release. | Accepted warnings and manual items are not blockers. |
 | Package smoke passes | `pnpm smoke:package` passes. | Block release. | No silent exception. |
 | No raw token storage | Secret/redaction tests and inspection of state/outputs/fixtures. | Block release. | No silent exception. |
 | No default telemetry | Static review and network/no-live-provider evidence. | Block release. | No silent exception. |

@@ -54,8 +54,27 @@ workspace state.
 |---|---|---|
 | `pnpm security:check` | Deterministic security/privacy release check | No |
 | `pnpm smoke:package` | Release candidate package smoke | No |
+| `pnpm nfr:evidence` | NFR evidence checks (provider-free, network-free) | No |
 | `pnpm test:coverage` | Test coverage report | No |
 | `pnpm test:watch` | Watch mode for development | No |
+
+### NFR Evidence
+
+Run NFR evidence checks to validate non-functional requirements before release:
+
+```bash
+pnpm nfr:evidence            # Full evidence report
+pnpm nfr:evidence --json     # JSON output
+```
+
+Evidence is deterministic, local-only, and never requires network access or
+provider credentials. See `docs/06-operations/nfr-evidence.md` for the complete
+evidence model, coverage matrix, and manual checklist.
+
+Performance evidence uses broad thresholds to catch severe regressions. Fixtures
+and injectable durations allow deterministic testing. Manual checklist items
+(macOS, Windows WSL, TUI accessibility review) must be completed by a human
+reviewer before release.
 
 Pre-existing documentation in `docs/02-validation/`, `docs/06-operations/`, and
 select profile templates are excluded from markdownlint via `.markdownlintignore`

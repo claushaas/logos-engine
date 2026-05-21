@@ -102,6 +102,7 @@ The checker produces one of four statuses:
 | Command | Purpose | Requires Build | Requires Workspace |
 |---|---|---|---|
 | `pnpm security:check` | Deterministic security/privacy release check | Yes | No |
+| `pnpm nfr:evidence` | NFR evidence report (includes privacy/security evidence) | Yes | No |
 | `pnpm smoke:package` | Release candidate package smoke (includes security check) | Yes | No |
 | `pnpm smoke:cli` | CLI smoke test (help, version, doctor) | Yes | No |
 | `logos doctor` | Local diagnostics (includes provider config redaction) | Yes | No |
