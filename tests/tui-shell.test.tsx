@@ -19,18 +19,20 @@ import {
 } from '../src/tui/shell-logic.js';
 
 describe('App', () => {
-	it('renders initial shell with status line and input prompt', () => {
+	it('renders initial shell with prompt and no workbench chrome', () => {
 		const { lastFrame } = render(
 			<React.StrictMode>
 				<App />
 			</React.StrictMode>,
 		);
 		const frame = lastFrame() ?? '';
-		expect(frame).toContain('>');
-		expect(frame).toContain(process.cwd());
-		expect(frame).toContain('logos/');
-		expect(frame).toContain('standard');
-		expect(frame).toContain('[provider-unconfigured]');
+		// Chat-style prompt
+		expect(frame).toContain('〉');
+		// No workbench chrome
+		expect(frame).not.toContain('Actions:');
+		expect(frame).not.toContain('Context:');
+		expect(frame).not.toContain('[Focus:');
+		expect(frame).not.toContain('Repo:');
 	});
 });
 
