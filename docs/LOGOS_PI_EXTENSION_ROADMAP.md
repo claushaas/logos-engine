@@ -17,10 +17,12 @@ The roadmap is governed by:
 
 ## Audited Repository Facts
 
-- [Fact] `src/` exists but currently contains no source files.
+- [Fact] `src/` exists as an empty directory; it contains zero tracked or untracked files.
 - [Fact] `tests/` does not currently exist.
 - [Fact] `.pi/extensions/` does not currently exist.
+- [Fact] `scripts/` does not currently exist.
 - [Fact] `profiles/standard/` exists and contains the bundled Standard profile contracts, phase descriptors, document schemas, and Executive mapping/template files.
+- [Fact] `git status --short` reports zero untracked or modified files.
 - [Fact] `docs/LOGOS_PI_EXTENSION_SPEC.md`, `docs/LOGOS_PI_EXTENSION_ARCHITECTURE.md`, and `docs/LOGOS_PI_EXTENSION_IMPLEMENTATION_PLAN.md` exist and consistently define the Pi-extension-first direction.
 - [Fact] `package.json` still exposes a `logos` binary at `./dist/cli.js`, depends on `commander`, `ink`, `react`, `yaml`, and `zod`, and contains quality scripts for linting, tests, validation, build, smoke checks, security, and NFR evidence.
 - [Fact] `tsconfig.json` includes only `src/**/*.ts` and `src/**/*.tsx` and uses strict `NodeNext` TypeScript settings.
@@ -135,6 +137,22 @@ Produce a written audit of actual files and directories before creating implemen
 ##### Notes / Risks
 
 - [Risk] Restoring source from history may change later paths. Until then, treat implementation files as likely new.
+
+##### Audit Result
+
+- [Fact] `src/` exists as an empty directory; `find src -maxdepth 4 -type f` returns zero files.
+- [Fact] `tests/` is absent; `find tests` fails with `No such file or directory`.
+- [Fact] `.pi/extensions/` is absent; `find .pi/extensions` fails with `No such file or directory`.
+- [Fact] `scripts/` is absent; `find scripts` fails with `No such file or directory`.
+- [Fact] `profiles/standard/` exists and contains `docs.yml`, `document.schema.yml`, `README.md`, six phase descriptor files under `phases/`, document descriptors under `phases/<phase-id>/`, and Executive contracts under `executive/` (mappings, templates, schema, and generation config).
+- [Fact] `git status --short` reports no untracked or modified files.
+- [Fact] `git ls-files src/ tests/ scripts/ .pi/extensions/` returns zero tracked files for those paths.
+- [Blocker] `tests/` is absent while `vitest.config.ts` expects tests under `tests/**/*.test.ts` and `tests/**/*.test.tsx`; no tests can run until the directory is created or the config is changed.
+- [Blocker] `src/` is empty while `tsconfig.json` includes `src/**/*.ts` and `src/**/*.tsx`; `pnpm typecheck` and `pnpm build` will compile nothing and may fail if exports depend on missing modules.
+- [Risk] `package.json` script `check:validation` references `tests/validation-gate.test.ts`, but `tests/` does not exist.
+- [Risk] `package.json` scripts `smoke:cli`, `smoke:package`, `security:check`, and `nfr:evidence` reference `scripts/smoke-cli.js`, `scripts/smoke-package.js`, `scripts/security-check.js`, and `scripts/nfr-evidence.js`, but `scripts/` does not exist.
+- [Risk] `package.json` bin entry `logos` points to `./dist/cli.js`, but no source exists to produce that artifact.
+- [Assumption] Because `src/`, `tests/`, `.pi/extensions/`, and `scripts/` are all empty or absent, most implementation files in later phases are new files rather than modifications.
 
 #### Step 0.2 — Inspect Legacy CLI/TUI Claims
 
