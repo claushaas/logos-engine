@@ -8,11 +8,14 @@
 
 import type { CoreResult } from '../../core/index.js';
 import type { LogosPiExtensionDependencies } from '../extension-dependencies.js';
-import type { LogosPiCommandContext } from '../pi-types.js';
+import type {
+	LogosPiCommandContext,
+	LogosPiEventContext,
+} from '../pi-types.js';
 
 export type RenderCoreResultInput = {
 	deps: LogosPiExtensionDependencies;
-	ctx: LogosPiCommandContext;
+	ctx: LogosPiCommandContext | LogosPiEventContext;
 	result: CoreResult<unknown>;
 };
 
@@ -43,7 +46,7 @@ function notifyTypeForResult(result: CoreResult<unknown>): NotifyType {
 }
 
 function getNotify(
-	ctx: LogosPiCommandContext,
+	ctx: LogosPiCommandContext | LogosPiEventContext,
 ): MinimalUiNotify['notify'] | undefined {
 	const maybeCtx = ctx as unknown as { ui?: Partial<MinimalUiNotify> };
 	return typeof maybeCtx.ui?.notify === 'function'

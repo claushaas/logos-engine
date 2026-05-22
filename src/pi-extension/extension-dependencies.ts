@@ -10,7 +10,11 @@
  */
 
 import type { CoreResult, LogosCore } from '../core/index.js';
-import type { LogosPiCommandContext, LogosPiExtensionApi } from './pi-types.js';
+import type {
+	LogosPiCommandContext,
+	LogosPiEventContext,
+	LogosPiExtensionApi,
+} from './pi-types.js';
 
 // ---------------------------------------------------------------------------
 // Dependency injection contract
@@ -41,7 +45,7 @@ export type LogosPiExtensionDependencies = {
 	renderCoreResult?:
 		| ((
 				result: CoreResult<unknown>,
-				ctx: LogosPiCommandContext,
+				ctx: LogosPiCommandContext | LogosPiEventContext,
 		  ) => Promise<void> | void)
 		| undefined;
 

@@ -1,20 +1,47 @@
 /**
- * LOGOS Pi Extension — Input routing registration boundary (Step 7.2).
+ * LOGOS Pi Extension — Input routing registration boundary (Step 8.1).
  *
- * Placeholder.  When implemented in later Phase 7/8 steps, this function
- * will register a `pi.on("input", ...)` handler that routes active-intake
- * user messages to LOGOS Core.
- *
- * Current behaviour: no-op.  Input is not intercepted while this remains
- * a placeholder.
+ * Registers the Pi `input` event handler that delegates active-intake natural
+ * user messages to the adapter-only router.  Registration does not call Core.
  */
 
 import type { LogosPiExtensionDependencies } from '../extension-dependencies.js';
+import type {
+	LogosPiEventContext,
+	LogosPiInputEvent,
+	LogosPiInputHandlerResult,
+} from '../pi-types.js';
+import { routePiInput, toPiInputResult } from './input-router.js';
+
+type InputOnRegistrar = {
+	on?: (
+		event: 'input',
+		handler: (
+			event: LogosPiInputEvent,
+			ctx: LogosPiEventContext,
+		) => Promise<LogosPiInputHandlerResult> | LogosPiInputHandlerResult,
+	) => void;
+};
+
+const registeredInputRoutingApis = new WeakSet<object>();
 
 export function registerLogosInputRouting(
-	_deps: LogosPiExtensionDependencies,
+	deps: LogosPiExtensionDependencies,
 ): void {
-	// Input routing is implemented in later Phase 7/8 steps.
-	// Prevent unused-parameter lint errors.
-	void _deps;
+	const maybePi = deps.pi as InputOnRegistrar;
+
+	if (typeof maybePi.on !== 'function') {
+		return;
+	}
+
+	if (registeredInputRoutingApis.has(deps.pi)) {
+		return;
+	}
+
+	maybePi.on('input', async (event, ctx) => {
+		const result = await routePiInput({ ctx, deps, event });
+		return toPiInputResult(result);
+	});
+
+	registeredInputRoutingApis.add(deps.pi);
 }
