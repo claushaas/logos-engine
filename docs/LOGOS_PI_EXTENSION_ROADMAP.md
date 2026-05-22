@@ -191,6 +191,22 @@ Determine whether any CLI/TUI implementation exists and whether README claims ma
 
 - [Risk] Package scripts and README may lag the Pi-extension-first direction.
 
+##### Audit Result
+
+- [Fact] `README.md` describes LOGOS Engine as a "local-first CLI/TUI engine" with an external CLI (`logos doctor`, `logos --help`, `logos --version`) and an interactive Ink-based TUI shell with slash commands (`/help`, `/status`, `/init`, `/continue`, `/generate`, `/validate`, `/diagnose`, `/graph`, `/config`, `/root`, `/executive`, `/outputs`).
+- [Fact] `README.md` claims `src/cli/`, `src/tui/`, `src/commands/`, `src/agent-packs/`, `src/ai/`, `src/consistency/`, `src/dependency-graph/`, `src/executive/`, `src/fs/`, `src/generation/`, `src/html/`, `src/import/`, `src/init/`, `src/intake/`, `src/performance/`, `src/profiles/`, `src/provenance/`, `src/regeneration/`, `src/registers/`, `src/release/`, `src/runtime/`, `src/scanner/`, `src/security/`, `src/staleness/`, `src/state/`, `src/traceability/`, and `src/validation/` exist with implementation files.
+- [Fact] `find src -maxdepth 5 -type f` returns zero files; `src/` is an empty directory with no subdirectories. No `src/cli/`, `src/tui/`, or `src/commands/` path exists.
+- [Fact] `package.json` contains CLI/TUI-related dependencies: `commander` (`^14.0.3`), `ink` (`^7.0.2`), `react` (`^19.2.6`), plus devDependencies `@types/react` (`^19.2.14`) and `ink-testing-library` (`^4.0.0`).
+- [Fact] `package.json` exposes a `logos` binary pointing to `./dist/cli.js`.
+- [Fact] No source file exists to produce `./dist/cli.js`; `tsconfig.json` rootDir is `src/` and `src/` is empty.
+- [Fact] `README.md` claims "120+ test files, ~3270 tests", but `tests/` does not exist in the current checkout.
+- [Fact] `README.md` claims "All quality gates, security checks, smoke tests, and package validation pass deterministically", but `scripts/` and `tests/` are absent and those scripts cannot run.
+- [Decision] README-described CLI/TUI behavior, source paths, and command inventory are classified as **stale/legacy claims** for this roadmap. They are not treated as current implementation truth.
+- [Decision] `commander`, `ink`, and `react` dependencies are present in `package.json` but have no corresponding source in the current checkout. Their presence is recorded as a legacy artifact, not as a signal to continue TUI-first development.
+- [Decision] The Pi-extension-first docs (`AGENTS.md`, `docs/LOGOS_PI_EXTENSION_SPEC.md`, `docs/LOGOS_PI_EXTENSION_ARCHITECTURE.md`) override README/TUI claims when there is conflict.
+- [Risk] If legacy CLI/TUI source is restored from history, every module must be classified before reuse. Any command-first flow (`/continue`, `/generate --confirm`, `/init --confirm`) is incompatible with the Pi extension MVP and must be reconciled or deprecated.
+- [Risk] The `logos` binary entry in `package.json` points to a non-buildable artifact. A future spike must decide whether to preserve, remove, or replace the binary.
+
 #### Step 0.3 — Inspect Command, Intake, Generation, Validation, And State Paths
 
 ##### Goal
@@ -228,6 +244,39 @@ Identify any current implementation for commands, intake, generation, validation
 ##### Notes / Risks
 
 - [Risk] If old source reappears, it may encode `/continue`, `/generate --confirm`, or other command-first flows incompatible with the Pi extension MVP.
+
+##### Audit Result
+
+- [Fact] `src/` exists as an empty directory; `find src -maxdepth 6 -type f` returns zero files and `find src -maxdepth 6 -type d` returns only `src` itself.
+- [Fact] `src/` contains no command handlers, no Pi extension command handlers, no Pi input routing code, no CLI command handlers, no TUI/Ink components, no intake implementation, no generation implementation, no validation implementation, no profile loading implementation, no state persistence implementation, no filesystem writer/path safety implementation, and no provider/AI adapter implementation.
+- [Fact] `tests/` does not exist; no tests exist for any subsystem.
+- [Fact] `profiles/standard/` contains profile contract data only (YAML and Markdown files defining phases, documents, sections, questions, schemas, mappings, and templates). It contains zero implementation source code.
+- [Fact] `profiles/standard/docs.yml` defines the root documentation registry with phase registry, output model, global rules, quality model, dependency policy, and agent policy.
+- [Fact] `profiles/standard/document.schema.yml` defines the canonical document contract with required fields, validation rules, output policies, and supported formats.
+- [Fact] `profiles/standard/phases/` contains six phase descriptor YAML files and per-phase document descriptor YAML files; each document descriptor includes `centralQuestion`, `sections`, `outputs` (canonical, artifacts, agentPacks), `completionCriteria`, `qualityChecks`, and `dependsOn`.
+- [Fact] `profiles/standard/executive/` contains Executive generation config, a JSON schema, mapping YAML files, and Markdown/HTML template files.
+- [Decision] All inspected implementation subsystems (command handlers, Pi extension commands, Pi input routing, CLI commands, TUI/Ink components, intake flow, generation, validation, profile loading, state persistence, filesystem/path safety, provider/AI adapters) are classified as **Absent — new implementation required**.
+- [Decision] `profiles/standard/**` is classified as **Present as contract data only**; no code implementation exists to load, validate, or act on these contracts.
+- [Decision] If legacy source is restored from history, every module must be classified against the Pi-extension-first contract before reuse. Any command-first flow (`/continue`, `/generate --confirm`) or TUI-specific component is incompatible with the Pi extension MVP.
+
+##### Subsystem Classification Matrix
+
+| Subsystem | Current Finding | Classification | Migration Direction |
+| --- | --- | --- | --- |
+| Command handlers | `src/` is empty | Absent — new implementation required | Create Core command-interruption API and Pi command adapters in later phases |
+| Pi extension commands | No `.pi/extensions/` or `src/pi-extension/` files | Absent — new implementation required | Add project-local extension entrypoint in Phase 7 |
+| Pi input routing | No source files | Absent — new implementation required | Implement input interception and intent routing in Phase 4 and Phase 7 |
+| CLI commands | No `src/cli/` files; `logos` binary points to non-buildable artifact | Absent — new implementation required | Do not extend CLI-first behavior; decide binary fate in a future spike |
+| TUI/Ink components | No `src/tui/` files; `ink` and `react` are unused dependencies | Absent — new implementation required | Do not create Ink components; Pi renders through `ctx.ui` |
+| Intake flow | No `src/intake/` files | Absent — new implementation required | Implement durable intake state, question registry, and prompt selector in Phases 3–4 |
+| Generation | No `src/generation/` files | Absent — new implementation required | Implement preflight, write-plan, and safe generation boundary in Phase 6 |
+| Validation | No `src/validation/` files | Absent — new implementation required | Implement deterministic validation against profile contracts in Phase 2+ |
+| Profile loading | No `src/profiles/` source files | Absent — new implementation required | Implement generic profile resolver and contract loaders in Phase 2 |
+| State persistence | No `src/state/` files | Absent — new implementation required | Implement filesystem state repository and intake/generation state schemas in Phase 1–3 |
+| Filesystem writing/path safety | No `src/fs/` files | Absent — new implementation required | Implement path-containment validation and safe writer ports in Phase 1 |
+| Provider/AI adapters | No `src/ai/` files | Absent — new implementation required | Implement evaluator port and fake provider in Phase 4; reserve live provider integration |
+| Tests | `tests/` does not exist | Absent — new implementation required | Create Vitest unit, integration, and contract tests starting in Phase 1 |
+| Standard profile contracts | `profiles/standard/` contains full YAML contract data | Present as contract data only | Core profile loader must consume generically through `profiles/<profile-id>/` |
 
 #### Step 0.4 — Produce Migration Classification Table
 
