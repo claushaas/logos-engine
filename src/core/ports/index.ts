@@ -6,3 +6,6 @@
  */
 
 export type CorePortsModule = 'core.ports';
+
+export * from './filesystem.js';
+export * from './state-repository.js';
