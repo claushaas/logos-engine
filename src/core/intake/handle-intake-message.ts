@@ -17,6 +17,11 @@
  */
 
 import { loadLogosConfig } from '../config/load-config.js';
+import type {
+	AnswerEvaluator,
+	EvaluateAnswerResult,
+} from '../evaluation/answer-evaluator-port.js';
+import { createDeterministicAnswerEvaluator } from '../evaluation/deterministic-evaluator.js';
 import type { AssistantMessage } from '../messages.js';
 import type { LogosFilesystem } from '../ports/filesystem.js';
 import type { LoadedProfileContracts } from '../profiles/profile-contracts.js';
@@ -50,6 +55,13 @@ export type HandleIntakeMessageTransitionInput = {
 	dryRun: boolean;
 	/** The raw user message text. */
 	message: string;
+	/**
+	 * Optional answer evaluator.  When provided, it is called for
+	 * `evaluate_answer` routes.  When omitted, the deterministic
+	 * baseline evaluator {@link createDeterministicAnswerEvaluator}
+	 * is used as a fallback.
+	 */
+	evaluator?: AnswerEvaluator | undefined;
 };
 
 export type HandleIntakeMessageTransitionResult = {
@@ -60,6 +72,14 @@ export type HandleIntakeMessageTransitionResult = {
 	warnings: string[];
 	activeQuestionId?: string | undefined;
 	stateChanged: boolean;
+	/**
+	 * Present when the route action is `evaluate_answer` and the
+	 * evaluator was successfully called.  Contains the structured
+	 * evaluation result (validated {@link AnswerEvaluation} or error).
+	 *
+	 * The evaluation has **not** been applied to intake state.
+	 */
+	evaluationResult?: EvaluateAnswerResult | undefined;
 };
 
 // ---------------------------------------------------------------------------
@@ -171,7 +191,7 @@ function buildOutOfScopeMessage(): string {
 export async function handleIntakeMessageTransition(
 	input: HandleIntakeMessageTransitionInput,
 ): Promise<HandleIntakeMessageTransitionResult> {
-	const { projectRoot, filesystem, now, message } = input;
+	const { projectRoot, filesystem, now, message, evaluator } = input;
 	const warnings: string[] = [];
 
 	// ---- 1. Load project config ----
@@ -396,18 +416,47 @@ export async function handleIntakeMessageTransition(
 
 		// ---- Evaluate answer ----
 		case 'evaluate_answer': {
+			// Look up the question from the registry.
+			const question = registry?.byId[action.questionId];
+			if (question === undefined) {
+				return {
+					action,
+					activeQuestionId: action.questionId,
+					messageKind: 'error',
+					messageText: `Cannot evaluate answer: question "${action.questionId}" not found in the active profile registry.`,
+					stateChanged: false,
+					status: 'blocked',
+					warnings,
+				};
+			}
+
+			// Resolve the evaluator (fallback to deterministic baseline).
+			const resolvedEvaluator =
+				evaluator ?? createDeterministicAnswerEvaluator();
+
+			const evalResult = await resolvedEvaluator.evaluateAnswer({
+				activePrompt,
+				answer: action.message,
+				intakeState,
+				now,
+				question,
+			});
+
+			const evalWarnings = evalResult.ok
+				? [...warnings, ...evalResult.warnings]
+				: [...warnings, ...evalResult.warnings];
+
 			return {
 				action,
 				activeQuestionId: action.questionId,
-				messageKind: 'status',
-				messageText:
-					'Answer evaluation is not implemented yet. Your answer was routed correctly, but evaluation execution will be added in a future step.',
+				evaluationResult: evalResult,
+				messageKind: evalResult.ok ? 'status' : 'warning',
+				messageText: evalResult.ok
+					? `Answer evaluated as "${evalResult.evaluation.status}" (completeness: ${evalResult.evaluation.completenessScore}).`
+					: `Answer evaluation failed: ${evalResult.errors.join('; ')}`,
 				stateChanged: false,
 				status: 'routed',
-				warnings: [
-					...warnings,
-					'Answer evaluation execution not implemented (Step 4.3+).',
-				],
+				warnings: evalWarnings,
 			};
 		}
 

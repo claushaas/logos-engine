@@ -13,6 +13,10 @@ import {
 } from './config/config-schema.js';
 import { loadLogosConfig } from './config/load-config.js';
 import { saveLogosConfig } from './config/save-config.js';
+import type {
+	AnswerEvaluator,
+	EvaluateAnswerResult,
+} from './evaluation/index.js';
 import type { LogosLifecycleCommand } from './intake/detect-lifecycle-command.js';
 import {
 	handleIntakeMessageTransition,
@@ -108,6 +112,11 @@ export type StartIntakeResult = CoreResult<StartIntakeData>;
 export type HandleIntakeMessageInput = ProjectRootInput &
 	CoreApiOptions & {
 		message: string;
+		/**
+		 * Optional answer evaluator.  When omitted, the deterministic
+		 * baseline evaluator is used as a fallback.
+		 */
+		evaluator?: AnswerEvaluator | undefined;
 	};
 
 export type HandleIntakeMessageData = {
@@ -115,6 +124,11 @@ export type HandleIntakeMessageData = {
 	intent?: IntakeUserIntent | undefined;
 	activeQuestionId?: string | undefined;
 	stateChanged: boolean;
+	/**
+	 * Present when the router dispatched to answer evaluation.
+	 * Contains the validated evaluation result (not yet applied to state).
+	 */
+	evaluationResult?: EvaluateAnswerResult | undefined;
 };
 
 export type HandleIntakeMessageResult = CoreResult<HandleIntakeMessageData>;
@@ -461,6 +475,7 @@ export async function handleIntakeMessage(
 
 	const transitionResult = await handleIntakeMessageTransition({
 		dryRun,
+		evaluator: input.evaluator,
 		filesystem,
 		message: input.message,
 		now: new Date().toISOString(),
@@ -471,6 +486,7 @@ export async function handleIntakeMessage(
 		return createCoreResult({
 			data: {
 				activeQuestionId: transitionResult.activeQuestionId,
+				evaluationResult: transitionResult.evaluationResult,
 				mode: 'idle',
 				stateChanged: transitionResult.stateChanged,
 			},
@@ -492,6 +508,7 @@ export async function handleIntakeMessage(
 		return createCoreResult({
 			data: {
 				activeQuestionId: transitionResult.activeQuestionId,
+				evaluationResult: transitionResult.evaluationResult,
 				mode: 'idle',
 				stateChanged: false,
 			},
@@ -513,6 +530,7 @@ export async function handleIntakeMessage(
 	return createCoreResult({
 		data: {
 			activeQuestionId: transitionResult.activeQuestionId,
+			evaluationResult: transitionResult.evaluationResult,
 			mode: 'intake_active',
 			stateChanged: transitionResult.stateChanged,
 		},
