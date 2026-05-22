@@ -320,17 +320,23 @@ Classify current repository assets before implementation begins.
 
 | Path / Asset | Current Finding | Classification | Migration Direction |
 |---|---|---|---|
-| `profiles/standard/**` | Present and structured | Keep as bundled profile contract | Core profile loader must consume generically through `profiles/<profile-id>/` |
-| `docs/LOGOS_PI_EXTENSION_SPEC.md` | Present | Keep as product contract | Governs interaction model and acceptance tests |
-| `docs/LOGOS_PI_EXTENSION_ARCHITECTURE.md` | Present | Keep as architecture contract | Governs Core/Pi boundaries and runtime flow |
-| `docs/LOGOS_PI_EXTENSION_IMPLEMENTATION_PLAN.md` | Present | Keep as implementation-policy input | Use for profile resolution and command interruption details |
-| `src/**` | Directory exists but no files | Unknown / new implementation required | Create Core and Pi extension structure unless source is restored |
-| `tests/**` | Directory absent | New test suite required | Create Vitest unit, integration, and contract tests |
-| `.pi/extensions/**` | Directory absent | New Pi adapter required | Add project-local extension entrypoint when Pi shell phase begins |
-| README-described CLI/TUI | Described but source absent | Stale / legacy target if source reappears | Do not treat as current truth; contain or deprecate incompatible flows |
-| `package.json` bin `logos` | Points to `dist/cli.js` but no source | Unknown / needs spike | Decide whether to preserve CLI shim, remove later, or keep non-primary |
-| `package.json` scripts referencing `scripts/**` | Scripts absent | Unknown / needs spike | Restore or rewrite smoke/security/NFR scripts before release hardening |
-| `docs/old-only-for-history/**` | Present historical docs | Keep as historical only | Do not drive implementation from these files |
+| `AGENTS.md` | Present; defines agent operating contract, product direction, and source precedence | Keep as agent operating contract | Must be read before any non-trivial implementation session |
+| `docs/LOGOS_PI_EXTENSION_SPEC.md` | Present; defines product contract, interaction model, lifecycle commands, and acceptance criteria | Keep as product contract | Governs behavior, interaction model, and acceptance tests |
+| `docs/LOGOS_PI_EXTENSION_ARCHITECTURE.md` | Present; defines Core/Pi boundaries, runtime flow, persistence contracts, and testing strategy | Keep as architecture contract | Governs Core/Pi boundaries, runtime flow, and architecture risks |
+| `docs/LOGOS_PI_EXTENSION_IMPLEMENTATION_PLAN.md` | Present; defines workstreams, tasks, contracts, tests, and exit criteria | Keep as implementation planning contract | Informs roadmap steps and workstreams |
+| `docs/LOGOS_PI_EXTENSION_ROADMAP.md` | Present; defines sequential implementation plan updated by Phase 0 audit | Keep as current roadmap | Governs sequential implementation until superseded |
+| `profiles/standard/**` | Present and structured; contains YAML contracts, phase descriptors, document schemas, Executive mappings/templates | Keep as bundled profile contract | Core profile loader must consume generically through `profiles/<profile-id>/` |
+| `src/**` | Directory exists but contains zero files | Absent — new implementation required | Create `src/core/**` and `src/pi-extension/**` in later phases unless source is restored and reclassified |
+| `tests/**` | Directory does not exist | Absent — new test suite required | Create Vitest unit, integration, contract, and extension tests starting in Phase 1 |
+| `.pi/extensions/**` | Directory does not exist | Absent — new Pi adapter required | Add project-local extension entrypoint during Pi shell phase (Phase 7) |
+| `scripts/**` | Directory does not exist; `package.json` scripts reference missing files | Absent — restore or rewrite required | Restore or rewrite smoke, package, security, and NFR scripts before release hardening |
+| `README.md` CLI/TUI claims | Describes mature CLI/TUI source and tests absent from current checkout | Stale / legacy claim | Do not treat as implementation truth; reconcile after Pi extension MVP baseline exists |
+| `package.json` bin `logos` | Points to `./dist/cli.js` but no source exists to produce it | Legacy artifact / needs spike | Decide later whether to preserve CLI shim, remove, or replace |
+| `package.json` scripts referencing `scripts/**` | Reference `scripts/smoke-cli.js`, `scripts/smoke-package.js`, `scripts/security-check.js`, `scripts/nfr-evidence.js` which are absent | Legacy artifact / needs spike | Restore or rewrite before release hardening |
+| `package.json` CLI/TUI dependencies | `commander`, `ink`, `react`, `@types/react`, `ink-testing-library` present but no corresponding source | Legacy artifact / needs spike | Keep only if needed for Pi extension or future TUI; otherwise remove or reclassify later |
+| `tsconfig.json` | Present; strict `NodeNext` settings with `rootDir: src`, `outDir: dist` | Current config — keep and reconcile | Ensure `src/core/**` and `src/pi-extension/**` compile under these settings |
+| `vitest.config.ts` | Present; expects `tests/**/*.test.ts` and `tests/**/*.test.tsx` | Current config — keep and reconcile | Works once `tests/` is created; no config change required for Phase 1+ |
+| `docs/old-only-for-history/**` | Present; 74 historical markdown files | Historical only | May be read for context; must not drive implementation |
 
 ### Phase Acceptance Criteria
 
