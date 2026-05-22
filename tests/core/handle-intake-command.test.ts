@@ -137,7 +137,7 @@ describe('resolveIntakeCommandDisposition (pure)', () => {
 			expect(result.disposition).toBe('confirm_required');
 		});
 
-		it('logos-init with confirmed: true resolves to pause_and_execute', () => {
+		it('logos-init with confirmed: true still resolves to confirm_required (MVP safety)', () => {
 			const result = resolveIntakeCommandDisposition(
 				makeResolveInput({
 					command: 'logos-init',
@@ -145,7 +145,7 @@ describe('resolveIntakeCommandDisposition (pure)', () => {
 					mode: 'intake_active',
 				}),
 			);
-			expect(result.disposition).toBe('pause_and_execute');
+			expect(result.disposition).toBe('confirm_required');
 		});
 	});
 

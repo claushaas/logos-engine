@@ -111,7 +111,7 @@ export type ResolveIntakeCommandDispositionResult = {
 export function resolveIntakeCommandDisposition(
 	input: ResolveIntakeCommandDispositionInput,
 ): ResolveIntakeCommandDispositionResult {
-	const { command, mode, hasActivePrompt, confirmed } = input;
+	const { command, mode, hasActivePrompt } = input;
 
 	// ------------------------------------------------------------------
 	// Intake is NOT active — command can execute normally.
@@ -164,15 +164,8 @@ export function resolveIntakeCommandDisposition(
 			};
 
 		case 'logos-init': {
-			// MVP behaviour: always require confirmation during active intake.
-			// The confirmed path is reserved for a future implementation step.
-			if (confirmed === true) {
-				return {
-					disposition: 'pause_and_execute',
-					reason:
-						'User confirmed re-initialization — pausing intake before destructive reset.',
-				};
-			}
+			// MVP: always require confirmation during active intake.
+			// Destructive reset is outside the MVP scope.
 			return {
 				disposition: 'confirm_required',
 				reason:
@@ -444,7 +437,7 @@ function buildMessageForDisposition(
 					{ id: 'confirm_init', kind: 'confirm', label: 'Confirm' },
 					{ id: 'cancel_init', kind: 'cancel', label: 'Cancel' },
 				],
-				body: `Active intake exists. Initializing or re-initializing will discard the current intake state. Do you want to proceed? (${reason})`,
+				body: 'Initialization cannot run silently while LOGOS intake is active. Pause intake first or confirm an explicit reset flow.',
 				kind: 'confirmation_request',
 			};
 
@@ -764,6 +757,100 @@ export async function handleIntakeCommand(
 			message,
 			status: 'ok',
 			warnings: [],
+		};
+	}
+
+	// ---- For confirm_required (logos-init during active intake), validate and preserve ----
+	if (
+		resolution.disposition === 'confirm_required' &&
+		command === 'logos-init' &&
+		loadedState !== undefined
+	) {
+		// Try to load profile for validation.
+		let registry:
+			| import('../questions/question-registry.js').LogosQuestionRegistry
+			| undefined;
+		const profileResult = await ensureProfileReady({
+			activeProfileId: configResult.config.activeProfileId,
+			filesystem,
+			projectRoot,
+		});
+
+		if (profileResult.ok) {
+			registry = profileResult.contracts.questionRegistry;
+		}
+
+		// Validate active prompt can be preserved.
+		const validation = canPreserveActivePrompt(loadedState, registry);
+		if (!validation.ok) {
+			return {
+				blockers: [
+					{
+						code: 'active_intake_state_inconsistent',
+						message: validation.reason,
+						severity: 'blocker' as const,
+					},
+				],
+				data: {
+					activeQuestionId: loadedState.activeQuestionId,
+					command,
+					disposition: 'block',
+					mode: loadedState.mode,
+					persisted: false,
+					preservedQuestionId: loadedState.activeQuestionId,
+					stateChanged: false,
+				},
+				dryRun: dry,
+				errors: [],
+				message: {
+					body: `Active intake state is inconsistent; initialization is blocked to avoid data loss. ${validation.reason}`,
+					kind: 'warning',
+				},
+				status: 'blocked',
+				warnings: [],
+			};
+		}
+
+		// Build confirm_required result with preserved state and full metadata.
+		const promptState = loadedState.activePrompt;
+		const confirmMessage: AssistantMessage = {
+			body: 'Initialization cannot run silently while LOGOS intake is active. Pause intake first or confirm an explicit reset flow.',
+			kind: 'confirmation_request',
+			metadata: {
+				activePromptKind: promptState?.kind,
+				activeQuestionId: loadedState.activeQuestionId,
+				command,
+				contradictionId: promptState?.contradictionId,
+				disposition: resolution.disposition,
+				followUpId: promptState?.followUpId,
+				preservedQuestionId: loadedState.activeQuestionId,
+			},
+		};
+
+		return {
+			blockers: [],
+			data: {
+				activePrompt,
+				activeQuestionId: loadedState.activeQuestionId,
+				command,
+				disposition: 'confirm_required',
+				mode: loadedState.mode,
+				persisted: false,
+				preservedQuestionId: loadedState.activeQuestionId,
+				stateChanged: false,
+			},
+			dryRun: dry,
+			errors: [],
+			message: confirmMessage,
+			status: 'confirmation_required',
+			warnings: [
+				{
+					code: 'init_during_active_intake',
+					message:
+						'Initialization during active intake requires explicit confirmation to avoid state loss.',
+					severity: 'warning' as const,
+				},
+			],
 		};
 	}
 
