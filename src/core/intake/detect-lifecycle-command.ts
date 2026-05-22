@@ -5,28 +5,26 @@
  * user messages.  The detection is pure-string matching: no AI, no regex
  * beyond simple prefix/anchor checks.
  *
+ * The canonical lifecycle command list is defined in
+ * {@link ./lifecycle-command.js}.
+ *
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
-// ---------------------------------------------------------------------------
-// Allowed lifecycle commands
-// ---------------------------------------------------------------------------
+import {
+	LOGOS_LIFECYCLE_COMMANDS,
+	type LogosLifecycleCommand,
+} from './lifecycle-command.js';
+
+// Re-export for callers that imported from detect-lifecycle-command
+// before the canonical source was extracted.
+export type { LogosLifecycleCommand } from './lifecycle-command.js';
 
 /**
- * The canonical list of allowed LOGOS lifecycle commands (without leading
- * slash).  This is the authoritative source consumed by command detection,
- * command-interruption handling, and the Pi extension surface.
+ * @deprecated Use {@link LOGOS_LIFECYCLE_COMMANDS} from
+ * {@link ./lifecycle-command.js} instead.  Kept for backward compatibility.
  */
-export const ALLOWED_LIFECYCLE_COMMANDS = [
-	'logos-init',
-	'logos-start',
-	'logos-stop',
-	'logos-status',
-	'logos-generate',
-] as const;
-
-/** Union type of every allowed LOGOS lifecycle command. */
-export type LogosLifecycleCommand = (typeof ALLOWED_LIFECYCLE_COMMANDS)[number];
+export const ALLOWED_LIFECYCLE_COMMANDS = LOGOS_LIFECYCLE_COMMANDS;
 
 // ---------------------------------------------------------------------------
 // Detection result

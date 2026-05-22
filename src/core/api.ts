@@ -17,13 +17,15 @@ import type {
 	AnswerEvaluator,
 	EvaluateAnswerResult,
 } from './evaluation/index.js';
-import type { LogosLifecycleCommand } from './intake/detect-lifecycle-command.js';
+import { handleIntakeCommand as handleIntakeCommandCore } from './intake/handle-intake-command.js';
+import type { MessageTransition } from './intake/handle-intake-message.js';
 import {
 	handleIntakeMessageTransition,
 	startIntakeTransition,
 	stopIntakeTransition,
 } from './intake/index.js';
 import type { IntakeUserIntent } from './intake/intake-user-intent.js';
+import type { LogosLifecycleCommand } from './intake/lifecycle-command.js';
 import type { ActivePrompt } from './intake/prompt-selection-types.js';
 import type { AssistantMessage } from './messages.js';
 import type { LogosFilesystem } from './ports/filesystem.js';
@@ -54,11 +56,11 @@ export type { LogosLifecycleCommand } from './intake/detect-lifecycle-command.js
 export type { IntakeUserIntent } from './intake/intake-user-intent.js';
 
 export type IntakeCommandDisposition =
-	| 'execute'
+	| 'reaffirm'
 	| 'pause_and_execute'
-	| 'reemit_active_prompt'
-	| 'confirmation_required'
-	| 'blocked';
+	| 'confirm_required'
+	| 'block'
+	| 'execute';
 
 export type GenerationMode = 'final' | 'partial_draft' | 'dry_run';
 
@@ -123,12 +125,23 @@ export type HandleIntakeMessageData = {
 	mode: IntakeMode;
 	intent?: IntakeUserIntent | undefined;
 	activeQuestionId?: string | undefined;
+	activePrompt?: ActivePrompt | undefined;
 	stateChanged: boolean;
 	/**
 	 * Present when the router dispatched to answer evaluation.
-	 * Contains the validated evaluation result (not yet applied to state).
+	 * Contains the validated evaluation result.
 	 */
 	evaluationResult?: EvaluateAnswerResult | undefined;
+	/**
+	 * The semantic transition that occurred.
+	 * Set when state changed or a control intent was routed.
+	 */
+	transition: MessageTransition;
+	/**
+	 * The assistant message to present to the user.
+	 * Present for most non-blocked paths.
+	 */
+	assistantMessage?: AssistantMessage | undefined;
 };
 
 export type HandleIntakeMessageResult = CoreResult<HandleIntakeMessageData>;
@@ -141,14 +154,20 @@ export type HandleIntakeCommandInput = ProjectRootInput &
 	CoreApiOptions & {
 		command: LogosLifecycleCommand;
 		confirmed?: boolean;
+		now?: string;
 	};
 
 export type HandleIntakeCommandData = {
+	command: LogosLifecycleCommand;
 	disposition: IntakeCommandDisposition;
 	mode: IntakeMode;
 	activeQuestionId?: string | undefined;
 	preservedQuestionId?: string | undefined;
+	activePrompt?:
+		| import('./intake/prompt-selection-types.js').ActivePrompt
+		| undefined;
 	stateChanged: boolean;
+	persisted: boolean;
 };
 
 export type HandleIntakeCommandResult = CoreResult<HandleIntakeCommandData>;
@@ -463,6 +482,7 @@ export async function handleIntakeMessage(
 			data: {
 				mode: 'idle',
 				stateChanged: false,
+				transition: 'blocked' as const,
 			},
 			dryRun,
 			message: {
@@ -489,6 +509,7 @@ export async function handleIntakeMessage(
 				evaluationResult: transitionResult.evaluationResult,
 				mode: 'idle',
 				stateChanged: transitionResult.stateChanged,
+				transition: transitionResult.transition ?? 'blocked',
 			},
 			dryRun,
 			message: {
@@ -511,6 +532,7 @@ export async function handleIntakeMessage(
 				evaluationResult: transitionResult.evaluationResult,
 				mode: 'idle',
 				stateChanged: false,
+				transition: transitionResult.transition ?? 'blocked',
 			},
 			dryRun,
 			message: {
@@ -526,13 +548,22 @@ export async function handleIntakeMessage(
 		});
 	}
 
-	// routed
+	// routed or complete
 	return createCoreResult({
 		data: {
 			activeQuestionId: transitionResult.activeQuestionId,
+			assistantMessage: {
+				body: transitionResult.messageText,
+				kind: transitionResult.messageKind,
+				...(transitionResult.activeQuestionId !== undefined
+					? { questionId: transitionResult.activeQuestionId }
+					: {}),
+			},
 			evaluationResult: transitionResult.evaluationResult,
-			mode: 'intake_active',
+			mode:
+				transitionResult.status === 'complete' ? 'complete' : 'intake_active',
 			stateChanged: transitionResult.stateChanged,
+			transition: transitionResult.transition ?? 'blocked',
 		},
 		dryRun,
 		message: {
@@ -555,18 +586,42 @@ export async function handleIntakeMessage(
 export async function handleIntakeCommand(
 	input: HandleIntakeCommandInput,
 ): Promise<HandleIntakeCommandResult> {
-	return createCoreResult({
-		data: {
-			disposition: 'blocked',
-			mode: 'idle',
-			stateChanged: false,
-		},
-		dryRun: input.dryRun ?? false,
-		message: stubMessage(
-			'LOGOS intake command interruption is not implemented yet.',
-		),
-		status: 'blocked',
+	const coreResult = await handleIntakeCommandCore({
+		command: input.command,
+		confirmed: input.confirmed,
+		dryRun: input.dryRun,
+		filesystem: input.filesystem,
+		now: input.now,
+		projectRoot: input.projectRoot,
 	});
+
+	const result: HandleIntakeCommandResult = {
+		blockers: coreResult.blockers.map((b) =>
+			createLogosBlocker({
+				code: b.code,
+				message: b.message,
+			}),
+		),
+		changedPaths: [],
+		dryRun: coreResult.dryRun,
+		errors: coreResult.errors.map((e) => ({
+			code: e.code as import('./errors.js').LogosErrorCode,
+			message: e.message,
+		})),
+		message: coreResult.message,
+		status: coreResult.status,
+		warnings: coreResult.warnings.map((w) => ({
+			code: w.code as import('./errors.js').LogosErrorCode,
+			message: w.message,
+			severity: 'warning' as const,
+		})),
+	};
+
+	if (coreResult.data !== undefined) {
+		result.data = coreResult.data;
+	}
+
+	return result;
 }
 
 // ---------------------------------------------------------------------------

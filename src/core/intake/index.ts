@@ -18,16 +18,29 @@ export {
 	createFollowUpPrompt,
 	createQuestionPrompt,
 } from './active-prompt.js';
+export type {
+	ApplyAnswerEvaluationInput,
+	ApplyAnswerEvaluationResult,
+	EvaluationTransition,
+} from './apply-evaluation.js';
+export { applyAnswerEvaluation } from './apply-evaluation.js';
 export { createAssistantMessageFromPrompt } from './assistant-message-from-prompt.js';
+export type {
+	BuildContradictionResolutionInput,
+	BuildContradictionResolutionResult,
+	CreateContradictionRecordInput,
+} from './contradiction-resolution.js';
+export {
+	buildContradictionResolution,
+	createContradictionId,
+	createContradictionRecord,
+} from './contradiction-resolution.js';
 export type {
 	CheckDependencyStatusInput,
 	DependencyStatus,
 } from './dependency-status.js';
 export { checkDependencyStatus } from './dependency-status.js';
-export type {
-	DetectedLifecycleCommand,
-	LogosLifecycleCommand,
-} from './detect-lifecycle-command.js';
+export type { DetectedLifecycleCommand } from './detect-lifecycle-command.js';
 export {
 	ALLOWED_LIFECYCLE_COMMANDS,
 	detectLifecycleCommand,
@@ -38,6 +51,11 @@ export type {
 	RouteIntakeMessageResult,
 } from './deterministic-intent-router.js';
 export { routeIntakeMessage } from './deterministic-intent-router.js';
+export type {
+	ResolveIntakeCommandDispositionInput,
+	ResolveIntakeCommandDispositionResult,
+} from './handle-intake-command.js';
+export { resolveIntakeCommandDisposition } from './handle-intake-command.js';
 export type {
 	HandleIntakeMessageTransitionInput,
 	HandleIntakeMessageTransitionResult,
@@ -53,6 +71,16 @@ export {
 	intakeIntentClassificationSchema,
 	validateIntakeIntentClassification,
 } from './intake-user-intent.js';
+export type {
+	ForbiddenLogosCommand,
+	LogosLifecycleCommand,
+} from './lifecycle-command.js';
+export {
+	FORBIDDEN_LOGOS_COMMANDS,
+	isForbiddenLogosCommand,
+	isLogosLifecycleCommand,
+	LOGOS_LIFECYCLE_COMMANDS,
+} from './lifecycle-command.js';
 export { selectNextPrompt } from './next-prompt-selector.js';
 export type {
 	ActivePrompt,

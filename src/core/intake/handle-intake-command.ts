@@ -1,0 +1,519 @@
+/**
+ * LOGOS Core — Handle intake command (Step 5.1).
+ *
+ * Core-owned command interruption logic for all allowed LOGOS lifecycle
+ * commands that arrive while intake mode is active.
+ *
+ * This module:
+ * 1. Defines the {@link IntakeCommandDisposition} union.
+ * 2. Exposes a pure {@link resolveIntakeCommandDisposition} helper that
+ *    determines how a given lifecycle command should be handled based on
+ *    the current intake mode and active-prompt state.
+ * 3. Provides {@link handleIntakeCommand} — the main Core function that
+ *    loads state, resolves the disposition, and returns a structured
+ *    {@link HandleIntakeCommandResult}.
+ *
+ * Full pause/persist behavior is implemented in later Phase 5 steps.
+ * Step 5.1 returns disposition results with `stateChanged: false` and
+ * `persisted: false`.
+ *
+ * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
+ */
+
+import { loadLogosConfig } from '../config/load-config.js';
+import type { AssistantMessage } from '../messages.js';
+import type { LogosFilesystem } from '../ports/filesystem.js';
+import { loadIntakeState } from '../state/intake-state-persistence.js';
+import type {
+	ActivePromptState,
+	IntakeMode,
+	LogosIntakeState,
+} from '../state/intake-state-types.js';
+import { createAssistantMessageFromPrompt } from './assistant-message-from-prompt.js';
+import type { LogosLifecycleCommand } from './lifecycle-command.js';
+import type { ActivePrompt } from './prompt-selection-types.js';
+
+// ---------------------------------------------------------------------------
+// Disposition
+// ---------------------------------------------------------------------------
+
+/**
+ * The action Core prescribes when a lifecycle command is received.
+ *
+ * | Value              | Meaning |
+ * |--------------------|---------|
+ * | `reaffirm`         | Re-emit the active prompt without pausing or advancing. Used for `logos-start` during active intake. |
+ * | `pause_and_execute`| Preserve the active prompt, pause intake, then allow command-specific behaviour. Used for `logos-stop`, `logos-status`, `logos-generate` during active intake. |
+ * | `confirm_required` | Block until the user explicitly confirms a potentially destructive action. Used for `logos-init` during active intake. |
+ * | `block`            | The command cannot be handled safely (invalid command, missing state, or unsafe case). |
+ * | `execute`          | Intake is not active; the command may run normally. |
+ */
+export type IntakeCommandDisposition =
+	| 'reaffirm'
+	| 'pause_and_execute'
+	| 'confirm_required'
+	| 'block'
+	| 'execute';
+
+// ---------------------------------------------------------------------------
+// Pure disposition resolver
+// ---------------------------------------------------------------------------
+
+/**
+ * Input for the pure {@link resolveIntakeCommandDisposition} helper.
+ */
+export type ResolveIntakeCommandDispositionInput = {
+	/** The lifecycle command being handled. */
+	command: LogosLifecycleCommand;
+	/** Current intake mode from the loaded state. */
+	mode: IntakeMode;
+	/** Whether the loaded state contains an active prompt record. */
+	hasActivePrompt: boolean;
+	/** Whether the user has explicitly confirmed a destructive action. */
+	confirmed?: boolean | undefined;
+};
+
+/**
+ * Result of the pure {@link resolveIntakeCommandDisposition} helper.
+ */
+export type ResolveIntakeCommandDispositionResult = {
+	/** The resolved disposition. */
+	disposition: IntakeCommandDisposition;
+	/** Human-readable explanation for logging and diagnostics. */
+	reason: string;
+};
+
+/**
+ * Pure helper that determines how a lifecycle command should be handled
+ * based on the current intake mode and whether an active prompt exists.
+ *
+ * This function is deterministic, side-effect-free, and never throws.
+ * It does not load state, persist files, or call external services.
+ *
+ * Rules:
+ *
+ * When `mode !== "intake_active"`:
+ * - All allowed commands → `execute`.
+ *
+ * When `mode === "intake_active"`:
+ * - `logos-start` → `reaffirm` (re-emit active prompt without advancing).
+ * - `logos-stop` → `pause_and_execute` (preserve, then pause).
+ * - `logos-status` → `pause_and_execute` (preserve, persist, then report).
+ * - `logos-generate` → `pause_and_execute` (preserve, persist, then preflight).
+ * - `logos-init` → `confirm_required` (warn about state loss before re-init).
+ */
+export function resolveIntakeCommandDisposition(
+	input: ResolveIntakeCommandDispositionInput,
+): ResolveIntakeCommandDispositionResult {
+	const { command, mode, hasActivePrompt, confirmed } = input;
+
+	// ------------------------------------------------------------------
+	// Intake is NOT active — command can execute normally.
+	// ------------------------------------------------------------------
+	if (mode !== 'intake_active') {
+		return {
+			disposition: 'execute',
+			reason: `Intake mode is "${mode}" — command "${command}" can execute normally.`,
+		};
+	}
+
+	// ------------------------------------------------------------------
+	// Intake IS active — resolve per-command disposition.
+	// ------------------------------------------------------------------
+
+	switch (command) {
+		case 'logos-start':
+			if (!hasActivePrompt) {
+				return {
+					disposition: 'block',
+					reason:
+						'Intake is active but no active prompt exists — cannot reaffirm.',
+				};
+			}
+			return {
+				disposition: 'reaffirm',
+				reason:
+					'Intake is already active — re-emitting active prompt without advancing.',
+			};
+
+		case 'logos-stop':
+			return {
+				disposition: 'pause_and_execute',
+				reason:
+					'Pausing intake before executing logos-stop to preserve active state.',
+			};
+
+		case 'logos-status':
+			return {
+				disposition: 'pause_and_execute',
+				reason:
+					'Pausing intake before executing logos-status to preserve active state.',
+			};
+
+		case 'logos-generate':
+			return {
+				disposition: 'pause_and_execute',
+				reason:
+					'Pausing intake before executing logos-generate to preserve active state.',
+			};
+
+		case 'logos-init': {
+			// MVP behaviour: always require confirmation during active intake.
+			// The confirmed path is reserved for a future implementation step.
+			if (confirmed === true) {
+				return {
+					disposition: 'pause_and_execute',
+					reason:
+						'User confirmed re-initialization — pausing intake before destructive reset.',
+				};
+			}
+			return {
+				disposition: 'confirm_required',
+				reason:
+					'Intake is active — re-initialization would discard state and requires explicit confirmation.',
+			};
+		}
+
+		default: {
+			// Exhaustiveness: this path cannot be reached with the current
+			// LogosLifecycleCommand union, but TypeScript requires a default.
+			const _exhaustive: never = command;
+			return {
+				disposition: 'block',
+				reason: `Unknown lifecycle command: ${String(_exhaustive)}`,
+			};
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Public handleIntakeCommand input / output types
+// ---------------------------------------------------------------------------
+
+/**
+ * Input for the public {@link handleIntakeCommand} function.
+ *
+ * Mirrors the public API type defined in `api.ts` but is self-contained
+ * so the intake module does not need to import from the API layer.
+ */
+export type HandleIntakeCommandInput = {
+	projectRoot: string;
+	command: LogosLifecycleCommand;
+	/** Whether the user has explicitly confirmed a destructive action. */
+	confirmed?: boolean | undefined;
+	/** ISO-8601 timestamp for deterministic state updates. */
+	now?: string | undefined;
+	/** When `true`, state is not persisted. */
+	dryRun?: boolean | undefined;
+	/** Optional filesystem port. When absent, only pure disposition is returned. */
+	filesystem?: LogosFilesystem | undefined;
+};
+
+/**
+ * Data payload inside a {@link HandleIntakeCommandResult}.
+ */
+export type HandleIntakeCommandData = {
+	/** The lifecycle command that was handled. */
+	command: LogosLifecycleCommand;
+	/** Resolved disposition. */
+	disposition: IntakeCommandDisposition;
+	/** Current intake mode after disposition resolution. */
+	mode: IntakeMode;
+	/** The active question id at the time of the command, if one exists. */
+	activeQuestionId?: string | undefined;
+	/**
+	 * The question id that must be preserved across the command execution.
+	 * Present when an active prompt existed at the time of the command and
+	 * the disposition requires preservation.
+	 */
+	preservedQuestionId?: string | undefined;
+	/**
+	 * The active prompt at the time of the command, if available and safe
+	 * to expose as Core data.
+	 */
+	activePrompt?: ActivePrompt | undefined;
+	/** Whether intake state was changed by this call. */
+	stateChanged: boolean;
+	/** Whether state was persisted in this call. */
+	persisted: boolean;
+};
+
+/**
+ * Public result type for the {@link handleIntakeCommand} function.
+ */
+export type HandleIntakeCommandResult = {
+	status: 'ok' | 'blocked' | 'confirmation_required' | 'failed';
+	message: AssistantMessage;
+	data?: HandleIntakeCommandData | undefined;
+	warnings: Array<{ code: string; message: string; severity: 'warning' }>;
+	blockers: Array<{ code: string; message: string; severity: 'blocker' }>;
+	errors: Array<{ code: string; message: string }>;
+	dryRun: boolean;
+};
+
+// ---------------------------------------------------------------------------
+// Pure disposition → status mapping
+// ---------------------------------------------------------------------------
+
+function dispositionToStatus(
+	disposition: IntakeCommandDisposition,
+): HandleIntakeCommandResult['status'] {
+	switch (disposition) {
+		case 'execute':
+		case 'reaffirm':
+		case 'pause_and_execute':
+			return 'ok';
+		case 'confirm_required':
+			return 'confirmation_required';
+		case 'block':
+			return 'blocked';
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Message builders
+// ---------------------------------------------------------------------------
+
+function buildMessageForDisposition(
+	disposition: IntakeCommandDisposition,
+	reason: string,
+	activePrompt?: ActivePrompt,
+): AssistantMessage {
+	switch (disposition) {
+		case 'execute':
+			return {
+				body: `Command can execute normally because intake is not active. (${reason})`,
+				kind: 'status',
+			};
+
+		case 'reaffirm': {
+			// Re-emit active prompt when available.
+			if (activePrompt !== undefined) {
+				return createAssistantMessageFromPrompt(activePrompt);
+			}
+			return {
+				body: 'Intake is already active. The current question is no longer available.',
+				kind: 'warning',
+			};
+		}
+
+		case 'pause_and_execute':
+			return {
+				body: `Intake must be paused safely before executing this command. (${reason})`,
+				kind: 'status',
+			};
+
+		case 'confirm_required':
+			return {
+				actions: [
+					{ id: 'confirm_init', kind: 'confirm', label: 'Confirm' },
+					{ id: 'cancel_init', kind: 'cancel', label: 'Cancel' },
+				],
+				body: `Active intake exists. Initializing or re-initializing will discard the current intake state. Do you want to proceed? (${reason})`,
+				kind: 'confirmation_request',
+			};
+
+		case 'block':
+			return {
+				body: `Command cannot be handled safely. (${reason})`,
+				kind: 'error',
+			};
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Rebuild ActivePrompt from state (reused from start-intake.ts pattern)
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a lightweight renderable prompt from persisted state.
+ *
+ * This is a simplified version that does not require a profile registry.
+ * It carries the question id and a basic description, but does not
+ * resolve the full question text or context.
+ */
+function buildActivePromptFromState(
+	promptState: ActivePromptState,
+): ActivePrompt {
+	return {
+		context: `Persisted prompt for question "${promptState.questionId}".`,
+		documentId: '',
+		kind: promptState.kind,
+		phaseId: '',
+		priority: 'important',
+		questionId: promptState.questionId,
+		required: false,
+		sectionId: '',
+		text: `Active intake question: ${promptState.questionId}`,
+	};
+}
+
+// ---------------------------------------------------------------------------
+// Main implementation
+// ---------------------------------------------------------------------------
+
+/**
+ * Handle a lifecycle command that may arrive while intake mode is active.
+ *
+ * For Step 5.1:
+ * 1. If a filesystem port is provided, loads config and intake state to
+ *    determine the current mode and active prompt.
+ * 2. Resolves the disposition via {@link resolveIntakeCommandDisposition}.
+ * 3. Returns a structured result with disposition, mode, preserved question
+ *    id, and (when available) the active prompt.
+ *
+ * State is NOT mutated by Step 5.1 — `stateChanged` and `persisted` are
+ * always `false`. Full pause/persist behaviour is implemented in Step 5.3.
+ */
+export async function handleIntakeCommand(
+	input: HandleIntakeCommandInput,
+): Promise<HandleIntakeCommandResult> {
+	const { projectRoot, command, confirmed, now, dryRun, filesystem } = input;
+	const dry = dryRun ?? false;
+
+	// ---- No filesystem → pure disposition with default mode ----
+	if (filesystem === undefined) {
+		const resolution = resolveIntakeCommandDisposition({
+			command,
+			confirmed,
+			hasActivePrompt: false,
+			mode: 'idle',
+		});
+
+		const status = dispositionToStatus(resolution.disposition);
+		const message = buildMessageForDisposition(
+			resolution.disposition,
+			resolution.reason,
+		);
+
+		return {
+			blockers:
+				status === 'blocked'
+					? [
+							{
+								code: 'filesystem_unavailable',
+								message: 'No filesystem port provided.',
+								severity: 'blocker' as const,
+							},
+						]
+					: [],
+			data: {
+				command,
+				disposition: resolution.disposition,
+				mode: 'idle',
+				persisted: false,
+				stateChanged: false,
+			},
+			dryRun: dry,
+			errors: [],
+			message,
+			status,
+			warnings: [],
+		};
+	}
+
+	// ---- Load project config ----
+	const configResult = await loadLogosConfig({
+		filesystem,
+		now: now ?? new Date().toISOString(),
+		projectRoot,
+	});
+
+	if (!configResult.ok) {
+		return {
+			blockers: [
+				{
+					code: 'project_not_initialized',
+					message: 'Project is not initialized. Run /logos-init first.',
+					severity: 'blocker' as const,
+				},
+			],
+			data: {
+				command,
+				disposition: 'block',
+				mode: 'idle',
+				persisted: false,
+				stateChanged: false,
+			},
+			dryRun: dry,
+			errors: [],
+			message: {
+				body: 'Project is not initialized. Run /logos-init first.',
+				kind: 'error',
+			},
+			status: 'blocked',
+			warnings: [],
+		};
+	}
+
+	// ---- Load intake state ----
+	const intakeLoadResult = await loadIntakeState({
+		filesystem,
+		now: now ?? new Date().toISOString(),
+		projectRoot,
+	});
+
+	let mode: IntakeMode = 'idle';
+	let activeQuestionId: string | undefined;
+	let preservedQuestionId: string | undefined;
+	let activePrompt: ActivePrompt | undefined;
+
+	if (intakeLoadResult.ok) {
+		const state: LogosIntakeState = intakeLoadResult.state;
+		mode = state.mode;
+		activeQuestionId = state.activeQuestionId;
+		const promptState = state.activePrompt;
+
+		if (promptState !== undefined) {
+			preservedQuestionId = promptState.questionId;
+			activePrompt = buildActivePromptFromState(promptState);
+		}
+	}
+
+	const hasActivePrompt = preservedQuestionId !== undefined;
+
+	// ---- Resolve disposition ----
+	const resolution = resolveIntakeCommandDisposition({
+		command,
+		confirmed,
+		hasActivePrompt,
+		mode,
+	});
+
+	// ---- Build result ----
+	const status = dispositionToStatus(resolution.disposition);
+	const message = buildMessageForDisposition(
+		resolution.disposition,
+		resolution.reason,
+		activePrompt,
+	);
+
+	return {
+		blockers:
+			status === 'blocked'
+				? [
+						{
+							code: 'intake_command_blocked',
+							message: resolution.reason,
+							severity: 'blocker' as const,
+						},
+					]
+				: [],
+		data: {
+			activePrompt:
+				resolution.disposition === 'reaffirm' ? activePrompt : undefined,
+			activeQuestionId,
+			command,
+			disposition: resolution.disposition,
+			mode,
+			persisted: false,
+			preservedQuestionId,
+			stateChanged: false,
+		},
+		dryRun: dry,
+		errors: [],
+		message,
+		status,
+		warnings: [],
+	};
+}
