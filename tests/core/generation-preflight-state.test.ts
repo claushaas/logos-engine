@@ -116,7 +116,7 @@ describe('generation preflight state persistence', () => {
 		expect(snapshot?.ready).toBe(false);
 		expect(snapshot?.completenessScore).toBe(0);
 		expect(snapshot?.blockerCodes).toContain('missing_critical_questions');
-		expect(snapshot?.warningCodes).toContain('write_plan_not_built');
+		expect(snapshot?.warningCodes).not.toContain('write_plan_not_built');
 	});
 
 	// --- 4. Preflight does not mutate intake state ---

@@ -364,28 +364,11 @@ export async function runGenerationPreflight(
 		);
 	}
 
-	// ---- 6c. Output path / write-plan limitation warnings ----
-	// Full write plan is Step 6.3; in this step we add placeholder warnings.
-	preflight.warnings.push(
-		issue(
-			'write_plan_not_built',
-			'Write plan validation is not yet implemented.  Output path readiness has not been fully validated.',
-		),
-	);
-
-	preflight.warnings.push(
-		issue(
-			'output_paths_not_fully_validated',
-			'Output paths have not been fully validated because write-plan generation is not yet implemented.',
-		),
-	);
-
-	preflight.warnings.push(
-		issue(
-			'manual_edit_detection_not_available',
-			'Manual edit risk detection is not yet available.',
-		),
-	);
+	// ---- 6c. Output path / write-plan warnings ----
+	// Write plan validation is now implemented in Step 6.3.
+	// Preflight no longer emits placeholder warnings; actual path
+	// safety, overwrite, and manual-edit checks run during
+	// buildGenerationWritePlan().
 
 	// ---- 6d. Derive status and ready ----
 

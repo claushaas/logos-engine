@@ -226,8 +226,12 @@ describe('runGenerationPreflight', () => {
 		expect(parsed.blockers).toHaveLength(result.preflight.blockers.length);
 	});
 
-	// --- 8. Write-plan-not-built warning exists ---
-	it('includes write_plan_not_built warning', async () => {
+	// --- 8. Write-plan warnings are no longer emitted by preflight ---
+	// In Step 6.2, preflight emitted placeholder write_plan_not_built
+	// warnings. In Step 6.3, actual write plan building handles path
+	// safety, overwrite, and manual-edit checks.  Preflight no longer
+	// emits these placeholders.
+	it('no longer emits step 6.2 placeholder write-plan warnings', async () => {
 		const fs = createPreflightTestFilesystem();
 		fs.addStandardProfile();
 		fs.addLogosConfig();
@@ -248,23 +252,15 @@ describe('runGenerationPreflight', () => {
 		});
 
 		expect(result.ok).toBe(true);
+		// Preflight is ready — the write plan placeholder warnings are gone.
+		expect(result.preflight.status).toBe('ready');
 		expect(
 			result.preflight.warnings.some((w) => w.code === 'write_plan_not_built'),
-		).toBe(true);
-		expect(
-			result.preflight.warnings.some(
-				(w) => w.code === 'output_paths_not_fully_validated',
-			),
-		).toBe(true);
-		expect(
-			result.preflight.warnings.some(
-				(w) => w.code === 'manual_edit_detection_not_available',
-			),
-		).toBe(true);
+		).toBe(false);
 	});
 
-	// --- 9. generate() with dry_run calls preflight ---
-	it('generate() with dry_run calls preflight', async () => {
+	// --- 9. generate() with dry_run builds write plan ---
+	it('generate() with dry_run builds write plan and returns blocked', async () => {
 		const fs = createPreflightTestFilesystem();
 		fs.addStandardProfile();
 		fs.addLogosConfig();
@@ -284,14 +280,18 @@ describe('runGenerationPreflight', () => {
 			projectRoot: '/project',
 		});
 
-		// Preflight passed, but generation write not implemented → blocked.
+		// Preflight passes and write plan is built.
+		// The fixture document has no outputs block, so the write plan
+		// produces a blocked canonical_markdown operation (empty path).
+		// Status is blocked because write plan has blockers.
 		expect(result.status).toBe('blocked');
-		expect(result.message.body).toContain('not implemented');
 		expect(result.data?.generatedPaths).toEqual([]);
+		expect(result.data?.preflight).toBeDefined();
+		expect(result.data?.writePlan).toBeDefined();
 	});
 
-	// --- 10. generate() with final mode calls preflight ---
-	it('generate() with final mode calls preflight', async () => {
+	// --- 10. generate() with final mode builds write plan ---
+	it('generate() with final mode builds write plan', async () => {
 		const fs = createPreflightTestFilesystem();
 		fs.addStandardProfile();
 		fs.addLogosConfig();
@@ -311,8 +311,11 @@ describe('runGenerationPreflight', () => {
 			projectRoot: '/project',
 		});
 
-		// Preflight passed → blocked because write isn't implemented.
+		// Preflight passes and write plan is built.
+		// The fixture document has no outputs block, so write plan
+		// produces a blocked canonical_markdown operation.
 		expect(result.status).toBe('blocked');
-		expect(result.message.body).toContain('not implemented');
+		expect(result.data?.preflight).toBeDefined();
+		expect(result.data?.writePlan).toBeDefined();
 	});
 });

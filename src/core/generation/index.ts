@@ -31,6 +31,17 @@ export {
 	saveGenerationState,
 	stringifyGenerationState,
 } from './generation-state.js';
+export type { ManualEditRisk } from './manual-edit-risk.js';
+export { detectManualEditRisk } from './manual-edit-risk.js';
+export type { PlannedOutput } from './output-contracts.js';
+export { deriveOutputOperations } from './output-contracts.js';
+export type {
+	ResolvedOutputPath,
+	ResolveOutputPathInput,
+} from './output-paths.js';
+export { resolveSafeOutputPath } from './output-paths.js';
+export type { OverwriteRiskResult } from './overwrite-risk.js';
+export { detectOverwriteRisk } from './overwrite-risk.js';
 export type {
 	RunGenerationPreflightInput,
 	RunGenerationPreflightResult,
@@ -44,3 +55,15 @@ export type {
 	GenerationPreflightWarningCode,
 	GenerationReadinessStatus,
 } from './preflight-result.js';
+export type {
+	BuildGenerationWritePlanInput,
+	BuildGenerationWritePlanResult,
+	GenerationOutputAuthority,
+	GenerationOutputKind,
+	GenerationWriteOperationKind,
+	GenerationWritePlan,
+	WritePlanOperation,
+	WritePlanRisk,
+	WriteRiskCode,
+} from './write-plan.js';
+export { buildGenerationWritePlan } from './write-plan.js';

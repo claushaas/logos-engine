@@ -19,7 +19,12 @@ import type {
 } from './evaluation/index.js';
 import type { RunGenerationPreflightInput } from './generation/preflight.js';
 import { runGenerationPreflight } from './generation/preflight.js';
-import type { GenerationPreflightMode } from './generation/preflight-result.js';
+import type {
+	GenerationPreflightMode,
+	GenerationPreflightResult,
+} from './generation/preflight-result.js';
+import type { GenerationWritePlan } from './generation/write-plan.js';
+import { buildGenerationWritePlan } from './generation/write-plan.js';
 import { handleIntakeCommand as handleIntakeCommandCore } from './intake/handle-intake-command.js';
 import type { MessageTransition } from './intake/handle-intake-message.js';
 import {
@@ -227,6 +232,8 @@ export type GenerateInput = ProjectRootInput &
 export type GenerateData = {
 	generationMode: GenerationMode;
 	generatedPaths: string[];
+	preflight?: GenerationPreflightResult;
+	writePlan?: GenerationWritePlan;
 };
 
 export type GenerateResult = CoreResult<GenerateData>;
@@ -894,18 +901,165 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		});
 	}
 
-	// ---- preflight is ready but write execution is not implemented ----
+	// ---- preflight is ready (or partial draft / dry run) — build write plan ----
+	// Load config to get activeProfileId.
+	const configLoadResult = await loadLogosConfig({
+		filesystem,
+		now,
+		projectRoot: input.projectRoot,
+	});
+
+	if (!configLoadResult.ok) {
+		return createCoreResult({
+			data: {
+				generatedPaths: [],
+				generationMode: input.mode ?? 'final',
+				preflight,
+			},
+			dryRun: input.dryRun ?? false,
+			message: {
+				body: 'Failed to load project config for write planning.',
+				kind: 'error',
+			},
+			status: 'blocked',
+		});
+	}
+
+	// Resolve profile contracts.
+	const gateResult = await ensureProfileReady({
+		activeProfileId: configLoadResult.config.activeProfileId,
+		filesystem,
+		projectRoot: input.projectRoot,
+	});
+
+	if (!gateResult.ok) {
+		const coreBlockers = gateResult.blockers;
+		return createCoreResult({
+			blockers: coreBlockers,
+			data: {
+				generatedPaths: [],
+				generationMode: input.mode ?? 'final',
+				preflight,
+			},
+			dryRun: input.dryRun ?? false,
+			message: {
+				body:
+					gateResult.blockers[0]?.message ??
+					'Profile resolution failed during write planning.',
+				kind: 'error',
+			},
+			status: 'blocked',
+		});
+	}
+
+	const writePlanResult = await buildGenerationWritePlan({
+		filesystem,
+		mode: input.mode ?? 'final',
+		now,
+		preflight,
+		profileContracts: gateResult.contracts,
+		projectRoot: input.projectRoot,
+	});
+
+	if (!writePlanResult.ok) {
+		const errData: GenerateData = {
+			generatedPaths: [],
+			generationMode: input.mode ?? 'final',
+			preflight,
+		};
+		if (writePlanResult.writePlan !== undefined) {
+			errData.writePlan = writePlanResult.writePlan;
+		}
+		return createCoreResult({
+			data: errData,
+			dryRun: input.dryRun ?? false,
+			errors: writePlanResult.errors.map((e) =>
+				createLogosError({
+					code: 'generation_failed',
+					message: e,
+				}),
+			),
+			message: {
+				body: 'Write plan building failed.',
+				kind: 'error',
+			},
+			status: 'blocked',
+		});
+	}
+
+	const writePlan = writePlanResult.writePlan;
+
+	// ---- write plan has blockers — return blocked with plan for inspection ----
+	if (!writePlan.readyToWrite) {
+		const planBlockers = writePlan.blockers.map((b) =>
+			createLogosBlocker({
+				code: b.code,
+				message: b.message,
+				...(b.path !== undefined ? { path: b.path } : {}),
+			}),
+		);
+
+		const planWarnings = writePlan.warnings.map((w) =>
+			createLogosWarning({
+				code: w.code,
+				message: w.message,
+				...(w.path !== undefined ? { path: w.path } : {}),
+			}),
+		);
+
+		// Mark planned paths as skipped in changedPaths.
+		const plannedPaths = writePlan.operations
+			.filter((op) => op.kind !== 'blocked')
+			.map((op) => ({
+				kind: 'skipped' as const,
+				path: op.relativePath,
+				reason: 'planned_not_written',
+			}));
+
+		return createCoreResult({
+			blockers: planBlockers,
+			changedPaths: plannedPaths,
+			data: {
+				generatedPaths: [],
+				generationMode: input.mode ?? 'final',
+				preflight,
+				writePlan,
+			},
+			dryRun: input.dryRun ?? false,
+			message: {
+				body:
+					writePlan.blockers[0]?.message ??
+					'Write plan is blocked.  Resolve the reported issues before writing.',
+				kind: 'error',
+			},
+			status: 'blocked',
+			warnings: planWarnings,
+		});
+	}
+
+	// ---- write plan is ready but write execution is intentionally not implemented ----
+	// Mark all planned paths as skipped with reason planned_not_written.
+	const allPlannedPaths = writePlan.operations.map((op) => ({
+		kind: 'skipped' as const,
+		path: op.relativePath,
+		reason: 'planned_not_written',
+	}));
+
 	return createCoreResult({
+		changedPaths: allPlannedPaths,
 		data: {
 			generatedPaths: [],
 			generationMode: input.mode ?? 'final',
+			preflight,
+			writePlan,
 		},
 		dryRun: input.dryRun ?? false,
-		message: stubMessage(
-			'Generation preflight passed, but generation write execution is not implemented yet.',
-		),
-		status: 'blocked',
-		warnings: preflight.warnings.map((w) => ({
+		message: {
+			body: 'Generation preflight and write plan succeeded, but write execution is not yet implemented.',
+			kind: 'status',
+		},
+		status: 'noop',
+		warnings: writePlan.warnings.map((w) => ({
 			code: w.code,
 			message: w.message,
 			severity: 'warning' as const,
