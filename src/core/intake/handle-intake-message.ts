@@ -473,12 +473,40 @@ export async function handleIntakeMessageTransition(
 		// Pause intake
 		// ============================================================
 		case 'pause_intake': {
+			// Actually pause the intake state (set mode to 'paused',
+			// preserve active prompt and question, and persist).
+			const pausedState: LogosIntakeState = {
+				...intakeState,
+				mode: 'paused' as const,
+				updatedAt: now,
+			};
+			// Do not clear activePrompt or activeQuestionId — preserve
+			// so /logos-start can resume at the same question.
+
+			await persistIfDryRun(pausedState, input);
+
+			const progressParts: string[] = [];
+			const pr = pausedState.progress;
+			if (pr.sufficient > 0) {
+				progressParts.push(`${pr.sufficient} sufficient`);
+			}
+			if (pr.partial > 0) {
+				progressParts.push(`${pr.partial} partial`);
+			}
+			if (pr.missing > 0) {
+				progressParts.push(`${pr.missing} missing`);
+			}
+			const progressText =
+				progressParts.length > 0
+					? `Progress: ${progressParts.join(', ')} (${pr.sufficient}/${pr.total} complete).`
+					: 'No questions answered yet.';
+
 			return {
 				action,
 				activeQuestionId: activePrompt?.questionId,
 				messageKind: 'status',
-				messageText: 'Pausing intake as requested.',
-				stateChanged: false,
+				messageText: `Intake paused. ${progressText}`,
+				stateChanged: true,
 				status: 'routed',
 				transition: 'pause_requested',
 				warnings,
