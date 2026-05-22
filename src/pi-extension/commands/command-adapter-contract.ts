@@ -26,7 +26,8 @@ import type {
 	IntakeCommandDisposition,
 	LogosCore,
 } from '../../core/api.js';
-import type { LogosLifecycleCommand } from '../../core/intake/lifecycle-command.js';
+import type { LogosLifecycleCommand } from '../../core/index.js';
+import { LOGOS_LIFECYCLE_COMMANDS } from '../../core/index.js';
 
 // ---------------------------------------------------------------------------
 // Dependency contract
@@ -200,15 +201,7 @@ export function registerLogosLifecycleCommands(input: {
 	pi: PiCommandRegistrationSurface;
 	deps: LogosCommandAdapterDependencies;
 }): void {
-	const allowedCommands: LogosLifecycleCommand[] = [
-		'logos-init',
-		'logos-start',
-		'logos-stop',
-		'logos-status',
-		'logos-generate',
-	];
-
-	for (const command of allowedCommands) {
+	for (const command of LOGOS_LIFECYCLE_COMMANDS) {
 		input.pi.registerCommand(command, makeCommandHandler(input.deps, command));
 	}
 }

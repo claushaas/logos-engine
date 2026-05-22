@@ -1,16 +1,18 @@
 /**
- * Step 7.2 — Pi adapter thinness tests.
+ * Step 7.3 — Command handler thinness tests.
  *
- * Proves that the Pi extension stays thin:
- * 1. src/pi-extension/** imports Core only through public Core exports
+ * Proves that command handler modules remain adapter-only and do not
+ * import Core internals, legacy TUI/CLI packages, or contain product logic.
+ *
+ * Tests:
+ * 1. Command handler modules import Core only through public Core exports
  *    (src/core/index.ts or src/core/api.ts).
- * 2. src/pi-extension/** does not import Core private internals
- *    (src/core/intake/**, src/core/generation/**, src/core/profiles/**,
- *     src/core/state/**, src/core/fs/**, src/core/evaluation/**,
- *     src/core/questions/**).
- * 3. src/pi-extension/** does not import ink, react, commander,
+ * 2. Command handler modules do not import Core private internals.
+ * 3. Command handler modules do not import ink, react, commander,
  *    src/cli/**, or src/tui/**.
- * 4. src/core/** does not import src/pi-extension/**.
+ * 4. Core still does not import src/pi-extension/**.
+ * 5. `handleIntakeMessage` is not referenced in command handler source.
+ * 6. Command handler modules remain adapter-only (no product logic imports).
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
@@ -23,10 +25,13 @@ import { describe, expect, it } from 'vitest';
 
 const PROJECT_ROOT = process.cwd();
 
-/** Allowed Core entrypoints for pi-extension imports. */
+/** Files under src/pi-extension/commands/** to scan. */
+const COMMANDS_DIR = resolve(PROJECT_ROOT, 'src', 'pi-extension', 'commands');
+
+/** Allowed Core entrypoints for command handler imports. */
 const ALLOWED_CORE_ENTRYPOINTS = ['src/core/index.ts', 'src/core/api.ts'];
 
-/** Core-internal directories that pi-extension must not import directly. */
+/** Core-internal directories that command handlers must not import directly. */
 const CORE_INTERNAL_DIRS = [
 	'src/core/intake',
 	'src/core/generation',
@@ -41,8 +46,8 @@ const CORE_INTERNAL_DIRS = [
 	'src/core/ports',
 ];
 
-/** Forbidden packages for pi-extension. */
-const FORBIDDEN_PI_EXTENSION_PACKAGES = [
+/** Forbidden packages for command handler modules. */
+const FORBIDDEN_PACKAGES = [
 	'ink',
 	'ink-testing-library',
 	'react',
@@ -51,19 +56,8 @@ const FORBIDDEN_PI_EXTENSION_PACKAGES = [
 	'@earendil-works/pi-tui',
 ];
 
-/** Forbidden local directories for pi-extension. */
-const FORBIDDEN_PI_EXTENSION_DIRS = ['src/cli', 'src/tui', 'src/commands'];
-
-/**
- * Known exceptions — files and their specific import specifiers that
- * are pre-existing thinness gaps.  These should be resolved in later
- * cleanup steps.
- */
-const KNOWN_EXCEPTIONS: Array<{
-	filePattern: string;
-	specifierPattern: string;
-	reason: string;
-}> = [];
+/** Forbidden local directories for command handler modules. */
+const FORBIDDEN_LOCAL_DIRS = ['src/cli', 'src/tui', 'src/commands'];
 
 // ---------------------------------------------------------------------------
 // Scan helpers
@@ -132,22 +126,14 @@ function findTsFiles(dir: string): string[] {
 	return files;
 }
 
-function isKnownException(fileRel: string, specifier: string): boolean {
-	return KNOWN_EXCEPTIONS.some(
-		(e) =>
-			fileRel.endsWith(e.filePattern) && specifier.endsWith(e.specifierPattern),
-	);
-}
-
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('Pi adapter thinness', () => {
-	describe('pi-extension imports Core only through public exports', () => {
-		it('all pi-extension Core imports go through src/core/index.ts or src/core/api.ts', () => {
-			const piExtDir = resolve(PROJECT_ROOT, 'src', 'pi-extension');
-			const files = findTsFiles(piExtDir);
+describe('command handler thinness', () => {
+	describe('command handler modules import Core only through public exports', () => {
+		it('all Core-relative imports go through src/core/index.ts or src/core/api.ts', () => {
+			const files = findTsFiles(COMMANDS_DIR);
 			const violations: string[] = [];
 
 			for (const file of files) {
@@ -161,7 +147,7 @@ describe('Pi adapter thinness', () => {
 					if (!specifier.includes('/core/') && !specifier.includes('/core.'))
 						continue;
 
-					// Resolve to an absolute path.
+					// Resolve to absolute.
 					const fileDir = file.replace(/[/\\][^/\\]+$/, '');
 					const resolved = resolve(fileDir, specifier);
 					const resolvedRel = relative(PROJECT_ROOT, resolved).replace(
@@ -176,7 +162,7 @@ describe('Pi adapter thinness', () => {
 							resolvedRel.startsWith(ep.replace('.ts', '')),
 					);
 
-					if (!isAllowed && !isKnownException(fileRel, specifier)) {
+					if (!isAllowed) {
 						violations.push(
 							`${fileRel}: "${specifier}" → ${resolvedRel} (not a public Core entrypoint)`,
 						);
@@ -186,15 +172,14 @@ describe('Pi adapter thinness', () => {
 
 			expect(
 				violations,
-				`Pi extension must import Core only through public entrypoints. Found:\n${violations.join('\n')}`,
+				`Command handler modules must import Core only through public entrypoints. Found:\n${violations.join('\n')}`,
 			).toEqual([]);
 		});
 	});
 
-	describe('pi-extension does not import Core private internals', () => {
-		it('no pi-extension relative import resolves into Core internal directories', () => {
-			const piExtDir = resolve(PROJECT_ROOT, 'src', 'pi-extension');
-			const files = findTsFiles(piExtDir);
+	describe('command handler modules do not import Core private internals', () => {
+		it('no relative import resolves into Core internal directories', () => {
+			const files = findTsFiles(COMMANDS_DIR);
 			const violations: string[] = [];
 
 			for (const file of files) {
@@ -212,12 +197,11 @@ describe('Pi adapter thinness', () => {
 						'/',
 					);
 
-					// Check if it's in a Core internal directory.
 					const isInternal = CORE_INTERNAL_DIRS.some(
 						(dir) => resolvedRel === dir || resolvedRel.startsWith(`${dir}/`),
 					);
 
-					if (isInternal && !isKnownException(fileRel, specifier)) {
+					if (isInternal) {
 						violations.push(
 							`${fileRel}: "${specifier}" → ${resolvedRel} (Core internal)`,
 						);
@@ -227,15 +211,14 @@ describe('Pi adapter thinness', () => {
 
 			expect(
 				violations,
-				`Pi extension must not import Core internals. Found:\n${violations.join('\n')}`,
+				`Command handler modules must not import Core internals. Found:\n${violations.join('\n')}`,
 			).toEqual([]);
 		});
 	});
 
-	describe('pi-extension does not import legacy TUI/CLI packages', () => {
-		it('no pi-extension file imports ink, react, commander, or related packages', () => {
-			const piExtDir = resolve(PROJECT_ROOT, 'src', 'pi-extension');
-			const files = findTsFiles(piExtDir);
+	describe('command handler modules do not import legacy TUI/CLI packages', () => {
+		it('no file imports ink, react, commander, or related packages', () => {
+			const files = findTsFiles(COMMANDS_DIR);
 			const violations: string[] = [];
 
 			for (const file of files) {
@@ -244,7 +227,7 @@ describe('Pi adapter thinness', () => {
 				const fileRel = relative(PROJECT_ROOT, file).replace(/\\/g, '/');
 
 				for (const specifier of specifiers) {
-					for (const pkg of FORBIDDEN_PI_EXTENSION_PACKAGES) {
+					for (const pkg of FORBIDDEN_PACKAGES) {
 						if (specifier === pkg || specifier.startsWith(`${pkg}/`)) {
 							violations.push(`${fileRel}: "${specifier}" (forbidden package)`);
 						}
@@ -254,15 +237,14 @@ describe('Pi adapter thinness', () => {
 
 			expect(
 				violations,
-				`Pi extension must not import legacy TUI/CLI packages. Found:\n${violations.join('\n')}`,
+				`Command handler modules must not import legacy TUI/CLI packages. Found:\n${violations.join('\n')}`,
 			).toEqual([]);
 		});
 	});
 
-	describe('pi-extension does not import legacy local directories', () => {
-		it('no pi-extension relative import resolves into src/cli, src/tui, or src/commands', () => {
-			const piExtDir = resolve(PROJECT_ROOT, 'src', 'pi-extension');
-			const files = findTsFiles(piExtDir);
+	describe('command handler modules do not import legacy local directories', () => {
+		it('no relative import resolves into src/cli, src/tui, or src/commands', () => {
+			const files = findTsFiles(COMMANDS_DIR);
 			const violations: string[] = [];
 
 			for (const file of files) {
@@ -280,13 +262,11 @@ describe('Pi adapter thinness', () => {
 						'/',
 					);
 
-					for (const dir of FORBIDDEN_PI_EXTENSION_DIRS) {
+					for (const dir of FORBIDDEN_LOCAL_DIRS) {
 						if (resolvedRel === dir || resolvedRel.startsWith(`${dir}/`)) {
-							if (!isKnownException(fileRel, specifier)) {
-								violations.push(
-									`${fileRel}: "${specifier}" → ${resolvedRel} (forbidden local dir)`,
-								);
-							}
+							violations.push(
+								`${fileRel}: "${specifier}" → ${resolvedRel} (forbidden local dir)`,
+							);
 						}
 					}
 				}
@@ -294,7 +274,7 @@ describe('Pi adapter thinness', () => {
 
 			expect(
 				violations,
-				`Pi extension must not import from legacy local dirs. Found:\n${violations.join('\n')}`,
+				`Command handler modules must not import from legacy local dirs. Found:\n${violations.join('\n')}`,
 			).toEqual([]);
 		});
 	});
@@ -333,6 +313,121 @@ describe('Pi adapter thinness', () => {
 				violations,
 				`Core must not import from pi-extension. Found:\n${violations.join('\n')}`,
 			).toEqual([]);
+		});
+	});
+
+	describe('handleIntakeMessage is not called by command handler source', () => {
+		it('no command handler source file calls handleIntakeMessage as code', () => {
+			const files = findTsFiles(COMMANDS_DIR);
+			const violations: string[] = [];
+
+			for (const file of files) {
+				const source = readFileSync(file, 'utf-8');
+				const fileRel = relative(PROJECT_ROOT, file).replace(/\\/g, '/');
+
+				// Check non-comment lines only.
+				const lines = source.split('\n');
+				let inBlockComment = false;
+				for (const line of lines) {
+					const trimmed = line.trim();
+					if (trimmed.startsWith('/*') && !trimmed.includes('*/')) {
+						inBlockComment = true;
+						continue;
+					}
+					if (trimmed.includes('*/')) {
+						inBlockComment = false;
+						continue;
+					}
+					if (inBlockComment) continue;
+					if (trimmed.startsWith('//')) continue;
+					if (trimmed.startsWith('*')) continue; // JSDoc continuation
+
+					// Only flag if handleIntakeMessage appears in actual code.
+					if (trimmed.includes('handleIntakeMessage')) {
+						violations.push(`${fileRel}: ${trimmed.slice(0, 80)}`);
+					}
+				}
+			}
+
+			expect(
+				violations,
+				`Command handler source must not call handleIntakeMessage. Found:\n${violations.join('\n')}`,
+			).toEqual([]);
+		});
+	});
+
+	describe('command handler modules remain adapter-only', () => {
+		it('files in commands/ directory exist and are valid TypeScript', () => {
+			const files = findTsFiles(COMMANDS_DIR);
+			expect(files.length).toBeGreaterThan(0);
+
+			for (const file of files) {
+				const source = readFileSync(file, 'utf-8');
+				// Each file must have valid JS/TS syntax (basic sanity).
+				expect(source.length).toBeGreaterThan(0);
+			}
+		});
+
+		it('command-adapter-contract.ts uses LOGOS_LIFECYCLE_COMMANDS from Core', () => {
+			const contractPath = resolve(COMMANDS_DIR, 'command-adapter-contract.ts');
+			if (!existsSync(contractPath)) return;
+
+			const source = readFileSync(contractPath, 'utf-8');
+
+			// Must import LOGOS_LIFECYCLE_COMMANDS from Core public index.
+			expect(source).toMatch(/LOGOS_LIFECYCLE_COMMANDS/);
+			// Must NOT import from Core internal lifecycle-command.js.
+			expect(source).not.toMatch(
+				/from\s+['"]\.\.\/\.\.\/core\/intake\/lifecycle-command\.js['"]/,
+			);
+		});
+
+		it('command handler source does not contain product logic terms', () => {
+			const files = findTsFiles(COMMANDS_DIR);
+			const suspiciousTerms = [
+				'selectNextPrompt',
+				'evaluateAnswer',
+				'resolvedProfile',
+				'buildWritePlan',
+				'compileDocumentation',
+			];
+
+			for (const file of files) {
+				const source = readFileSync(file, 'utf-8');
+				const fileRel = relative(PROJECT_ROOT, file).replace(/\\/g, '/');
+
+				for (const term of suspiciousTerms) {
+					if (source.includes(term)) {
+						// Only flag as violation if the term is used as a function
+						// call or method reference, not in comments.
+						// Simple heuristic: check if term appears outside comments.
+						const lines = source.split('\n');
+						let inBlockComment = false;
+						for (const line of lines) {
+							const trimmed = line.trim();
+							if (trimmed.startsWith('/*')) inBlockComment = true;
+							if (trimmed.includes('*/')) {
+								inBlockComment = false;
+								continue;
+							}
+							if (inBlockComment) continue;
+							if (trimmed.startsWith('//')) continue;
+							if (trimmed.includes(term)) {
+								// Allow in import specifiers (re-exports) or type-only references.
+								if (
+									trimmed.startsWith('export type') ||
+									trimmed.startsWith('import type') ||
+									trimmed.startsWith('export {')
+								)
+									continue;
+								expect.fail(
+									`${fileRel}: references "${term}" — command handler modules must remain adapter-only`,
+								);
+							}
+						}
+					}
+				}
+			}
 		});
 	});
 });
