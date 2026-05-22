@@ -16,6 +16,7 @@ LOGOS Pi Extension
 LOGOS Core
   ↓
 Project-local state, profiles, generated documentation, and artifacts
+```
 
 The extension is the first product surface.
 
@@ -684,3 +685,15 @@ When finishing work:
 * mention unresolved contract conflicts;
 * do not overclaim implemented features from planned roadmap text;
 * keep final summaries concise and grounded in evidence.
+
+## CodeGraph usage 
+
+This repository has CodeGraph enabled. Prefer CodeGraph tools for code exploration.
+
+Default workflow:
+- Use `codegraph_files` before `ls`, `find`, or broad directory scans.
+- Use `codegraph_search` before `grep`/manual search when looking for functions, classes, methods, constants, routes, or symbols.
+- Use `codegraph_context` before reading multiple files manually to understand architecture, feature flow, or subsystem behavior.
+- Use `read` only after CodeGraph identifies candidate files, or when the exact file path is already known.
+- After editing source files, use `codegraph_affected` to identify focused tests.
+- If skipping CodeGraph while it is available, briefly explain why.

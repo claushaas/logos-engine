@@ -5,9 +5,13 @@
  * All functions in this file are stubs for Step 1.3; real behavior is added in later phases.
  */
 
+import {
+	DEFAULT_PROFILE_ID,
+	validateProfileId,
+} from './config/config-schema.js';
 import type { AssistantMessage } from './messages.js';
 import type { CoreResult } from './result.js';
-import { createCoreResult } from './result.js';
+import { createCoreResult, createLogosBlocker } from './result.js';
 import type { IntakeMode, IntakeProgress } from './state/index.js';
 
 export type { IntakeMode, IntakeProgress } from './state/index.js';
@@ -217,17 +221,52 @@ const emptyProgress: IntakeProgress = {
 export async function initProject(
 	input: InitProjectInput,
 ): Promise<InitProjectResult> {
+	// ---- validate selectedProfileId syntax ----
+	if (input.selectedProfileId !== undefined) {
+		const validationResult = validateProfileId(input.selectedProfileId);
+		if (!validationResult.valid) {
+			return createCoreResult({
+				blockers: [
+					createLogosBlocker({
+						code: 'profile_invalid',
+						details:
+							'Profile ID must consist of lowercase letters, digits, and hyphens (max 80 chars).',
+						message: `Invalid profile ID "${input.selectedProfileId}": ${validationResult.reason}.`,
+					}),
+				],
+				data: {
+					createdPaths: [],
+					existingPaths: [],
+					initialized: false,
+				},
+				dryRun: input.dryRun ?? false,
+				message: {
+					body: `Cannot initialize with invalid profile ID "${input.selectedProfileId}".`,
+					kind: 'error',
+				},
+				status: 'blocked',
+			});
+		}
+	}
+
+	const activeProfileId = input.selectedProfileId ?? DEFAULT_PROFILE_ID;
+
+	// TODO (Step 2.2): validate that profiles/<activeProfileId>/ exists
+	// before completing initialization.
+
 	return createCoreResult({
 		data: {
+			activeProfileId,
 			createdPaths: [],
 			existingPaths: [],
-			initialized: false,
+			initialized: true,
 		},
 		dryRun: input.dryRun ?? false,
-		message: stubMessage(
-			'LOGOS project initialization is not implemented yet.',
-		),
-		status: 'blocked',
+		message: {
+			body: `LOGOS project initialized with activeProfileId: "${activeProfileId}".`,
+			kind: 'status',
+		},
+		status: 'ok',
 	});
 }
 

@@ -2,24 +2,26 @@
  * LOGOS Core — Config state types.
  *
  * Defines the shape of project-local LOGOS configuration.
+ * Re-exports the canonical config types and constants from
+ * {@link ../config/config-schema.js}.
  */
 
-export type LogosConfig = {
-	version: 1;
-	activeProfileId: string;
-	createdAt: string;
-	updatedAt: string;
-	metadata?: Record<string, unknown>;
-};
+import type { LogosConfig } from '../config/config-schema.js';
+import { DEFAULT_PROFILE_ID } from '../config/config-schema.js';
+
+export type {
+	LogosConfig,
+	LogosConfigVersion,
+} from '../config/config-schema.js';
+export { DEFAULT_PROFILE_ID };
 
 export function createDefaultLogosConfig(input: {
 	now: string;
 	activeProfileId?: string;
 }): LogosConfig {
 	return {
-		activeProfileId: input.activeProfileId ?? 'standard',
+		activeProfileId: input.activeProfileId ?? DEFAULT_PROFILE_ID,
 		createdAt: input.now,
-		metadata: {},
 		updatedAt: input.now,
 		version: 1,
 	};

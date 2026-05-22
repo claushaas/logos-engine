@@ -5,4 +5,6 @@
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
-export type CoreProfilesModule = 'core.profiles';
+export * from './profile-contracts.js';
+export * from './profile-errors.js';
+export * from './profile-resolver.js';
