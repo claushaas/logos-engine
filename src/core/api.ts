@@ -17,6 +17,9 @@ import type {
 	AnswerEvaluator,
 	EvaluateAnswerResult,
 } from './evaluation/index.js';
+import type { RunGenerationPreflightInput } from './generation/preflight.js';
+import { runGenerationPreflight } from './generation/preflight.js';
+import type { GenerationPreflightMode } from './generation/preflight-result.js';
 import { handleIntakeCommand as handleIntakeCommandCore } from './intake/handle-intake-command.js';
 import type { MessageTransition } from './intake/handle-intake-message.js';
 import {
@@ -31,7 +34,12 @@ import type { AssistantMessage } from './messages.js';
 import type { LogosFilesystem } from './ports/filesystem.js';
 import { ensureProfileReady } from './profiles/profile-gate.js';
 import type { CoreResult } from './result.js';
-import { createCoreResult, createLogosBlocker } from './result.js';
+import {
+	createCoreResult,
+	createLogosBlocker,
+	createLogosError,
+	createLogosWarning,
+} from './result.js';
 import { createDefaultLogosConfig } from './state/config-types.js';
 import type { IntakeMode, IntakeProgress } from './state/index.js';
 import type { ActivePromptState } from './state/intake-state-types.js';
@@ -62,7 +70,7 @@ export type IntakeCommandDisposition =
 	| 'block'
 	| 'execute';
 
-export type GenerationMode = 'final' | 'partial_draft' | 'dry_run';
+export type GenerationMode = GenerationPreflightMode;
 
 export type GenerationReadinessSummary = {
 	ready: boolean;
@@ -813,62 +821,95 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		});
 	}
 
-	// ---- load project config ----
-	const configResult = await loadLogosConfig({
+	// ---- run generation preflight ----
+	const now = new Date().toISOString();
+	const preflightArgs: RunGenerationPreflightInput = {
 		filesystem,
-		now: new Date().toISOString(),
+		now,
 		projectRoot: input.projectRoot,
-	});
+	};
+	if (input.mode !== undefined) {
+		preflightArgs.mode = input.mode;
+	}
+	const preflightResult = await runGenerationPreflight(preflightArgs);
 
-	if (!configResult.ok) {
+	// Preflight error (unexpected failure) — propagate.
+	if (!preflightResult.ok) {
 		return createCoreResult({
-			blockers: [
-				createLogosBlocker({
-					code: 'project_not_initialized',
-					message: 'Project is not initialized. Run /logos-init first.',
-				}),
-			],
 			data: {
 				generatedPaths: [],
 				generationMode: input.mode ?? 'final',
 			},
 			dryRun: input.dryRun ?? false,
+			errors: preflightResult.errors.map((e) =>
+				createLogosError({
+					code: 'preflight_blocked',
+					message: e,
+				}),
+			),
 			message: {
-				body: 'Project is not initialized. Run /logos-init first.',
+				body: 'Generation preflight encountered an unexpected error.',
 				kind: 'error',
 			},
 			status: 'blocked',
 		});
 	}
 
-	// ---- resolve active profile ----
-	const gateResult = await ensureProfileReady({
-		activeProfileId: configResult.config.activeProfileId,
-		filesystem,
-		projectRoot: input.projectRoot,
-	});
+	const preflight = preflightResult.preflight;
 
-	if (!gateResult.ok) {
-		return makeProfileBlockedResult({
-			blockers: gateResult.blockers,
+	// ---- preflight blocked: return blockers without writing ----
+	if (!preflight.ready) {
+		const coreBlockers = preflight.blockers.map((b) =>
+			createLogosBlocker({
+				code: b.code,
+				message: b.message,
+				...(b.questionIds !== undefined
+					? { metadata: { questionIds: b.questionIds } }
+					: {}),
+			}),
+		);
+
+		const coreWarnings = preflight.warnings.map((w) =>
+			createLogosWarning({
+				code: w.code,
+				message: w.message,
+			}),
+		);
+
+		return createCoreResult({
+			blockers: coreBlockers,
 			data: {
 				generatedPaths: [],
 				generationMode: input.mode ?? 'final',
 			},
 			dryRun: input.dryRun ?? false,
-			message: gateResult.blockers[0]?.message ?? 'Profile resolution failed.',
+			message: {
+				body:
+					preflight.blockers[0]?.message ??
+					'Generation is blocked.  Resolve the reported blockers before generating.',
+				kind: 'error',
+			},
+			status: 'blocked',
+			warnings: coreWarnings,
 		});
 	}
 
-	// Profile valid — keep existing stub behavior.
+	// ---- preflight is ready but write execution is not implemented ----
 	return createCoreResult({
 		data: {
 			generatedPaths: [],
 			generationMode: input.mode ?? 'final',
 		},
 		dryRun: input.dryRun ?? false,
-		message: stubMessage('LOGOS generation is not implemented yet.'),
+		message: stubMessage(
+			'Generation preflight passed, but generation write execution is not implemented yet.',
+		),
 		status: 'blocked',
+		warnings: preflight.warnings.map((w) => ({
+			code: w.code,
+			message: w.message,
+			severity: 'warning' as const,
+		})),
 	});
 }
 

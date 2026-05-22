@@ -15,3 +15,32 @@ export type {
 	QuestionCompletenessStatus,
 } from './completeness.js';
 export { calculateIntakeCompleteness } from './completeness.js';
+export type {
+	LoadGenerationStateInput,
+	LoadGenerationStateResult,
+	ParseGenerationStateJsonInput,
+	ParseGenerationStateJsonResult,
+	SaveGenerationStateInput,
+} from './generation-state.js';
+export {
+	createDefaultGenerationState,
+	getLogosGenerationStatePath,
+	LOGOS_GENERATION_STATE_FILE_NAME,
+	loadGenerationState,
+	parseGenerationStateJson,
+	saveGenerationState,
+	stringifyGenerationState,
+} from './generation-state.js';
+export type {
+	RunGenerationPreflightInput,
+	RunGenerationPreflightResult,
+} from './preflight.js';
+export { runGenerationPreflight } from './preflight.js';
+export type {
+	GenerationPreflightBlockerCode,
+	GenerationPreflightIssue,
+	GenerationPreflightMode,
+	GenerationPreflightResult,
+	GenerationPreflightWarningCode,
+	GenerationReadinessStatus,
+} from './preflight-result.js';
