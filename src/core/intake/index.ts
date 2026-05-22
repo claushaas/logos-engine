@@ -1,7 +1,9 @@
 /**
  * LOGOS Core — Intake module.
  *
- * Owns intake state transitions, prompt selection, and intake session logic.
+ * Owns intake state transitions, prompt selection, intake session logic,
+ * user intent classification contracts, lifecycle command detection,
+ * deterministic intent routing, and intake message handling.
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
@@ -22,6 +24,35 @@ export type {
 	DependencyStatus,
 } from './dependency-status.js';
 export { checkDependencyStatus } from './dependency-status.js';
+export type {
+	DetectedLifecycleCommand,
+	LogosLifecycleCommand,
+} from './detect-lifecycle-command.js';
+export {
+	ALLOWED_LIFECYCLE_COMMANDS,
+	detectLifecycleCommand,
+} from './detect-lifecycle-command.js';
+export type {
+	IntakeRouteAction,
+	RouteIntakeMessageInput,
+	RouteIntakeMessageResult,
+} from './deterministic-intent-router.js';
+export { routeIntakeMessage } from './deterministic-intent-router.js';
+export type {
+	HandleIntakeMessageTransitionInput,
+	HandleIntakeMessageTransitionResult,
+} from './handle-intake-message.js';
+export { handleIntakeMessageTransition } from './handle-intake-message.js';
+export type {
+	IntakeIntentClassification,
+	IntakeIntentValidationResult,
+	IntakeUserIntent,
+} from './intake-user-intent.js';
+export {
+	INTAKE_USER_INTENT_VALUES,
+	intakeIntentClassificationSchema,
+	validateIntakeIntentClassification,
+} from './intake-user-intent.js';
 export { selectNextPrompt } from './next-prompt-selector.js';
 export type {
 	ActivePrompt,

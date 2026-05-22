@@ -13,7 +13,13 @@ import {
 } from './config/config-schema.js';
 import { loadLogosConfig } from './config/load-config.js';
 import { saveLogosConfig } from './config/save-config.js';
-import { startIntakeTransition, stopIntakeTransition } from './intake/index.js';
+import type { LogosLifecycleCommand } from './intake/detect-lifecycle-command.js';
+import {
+	handleIntakeMessageTransition,
+	startIntakeTransition,
+	stopIntakeTransition,
+} from './intake/index.js';
+import type { IntakeUserIntent } from './intake/intake-user-intent.js';
 import type { ActivePrompt } from './intake/prompt-selection-types.js';
 import type { AssistantMessage } from './messages.js';
 import type { LogosFilesystem } from './ports/filesystem.js';
@@ -40,22 +46,8 @@ export type ProjectRootInput = {
 	projectRoot: string;
 };
 
-export type IntakeUserIntent =
-	| 'answer_current_question'
-	| 'ask_question_about_current_question'
-	| 'revise_previous_answer'
-	| 'pause_intake'
-	| 'skip_current_question'
-	| 'request_status'
-	| 'request_generation'
-	| 'out_of_scope';
-
-export type LogosLifecycleCommand =
-	| 'logos-init'
-	| 'logos-start'
-	| 'logos-stop'
-	| 'logos-status'
-	| 'logos-generate';
+export type { LogosLifecycleCommand } from './intake/detect-lifecycle-command.js';
+export type { IntakeUserIntent } from './intake/intake-user-intent.js';
 
 export type IntakeCommandDisposition =
 	| 'execute'
@@ -449,16 +441,92 @@ export async function startIntake(
 export async function handleIntakeMessage(
 	input: HandleIntakeMessageInput,
 ): Promise<HandleIntakeMessageResult> {
+	const filesystem = input.filesystem;
+	const dryRun = input.dryRun ?? false;
+
+	if (filesystem === undefined) {
+		return createCoreResult({
+			data: {
+				mode: 'idle',
+				stateChanged: false,
+			},
+			dryRun,
+			message: {
+				body: 'Filesystem port is required for intake operations.',
+				kind: 'error',
+			},
+			status: 'blocked',
+		});
+	}
+
+	const transitionResult = await handleIntakeMessageTransition({
+		dryRun,
+		filesystem,
+		message: input.message,
+		now: new Date().toISOString(),
+		projectRoot: input.projectRoot,
+	});
+
+	if (transitionResult.status === 'blocked') {
+		return createCoreResult({
+			data: {
+				activeQuestionId: transitionResult.activeQuestionId,
+				mode: 'idle',
+				stateChanged: transitionResult.stateChanged,
+			},
+			dryRun,
+			message: {
+				body: transitionResult.messageText,
+				kind: transitionResult.messageKind,
+			},
+			status: 'blocked',
+			warnings: transitionResult.warnings.map((w) => ({
+				code: 'unknown_error',
+				message: w,
+				severity: 'warning' as const,
+			})),
+		});
+	}
+
+	if (transitionResult.status === 'not_active') {
+		return createCoreResult({
+			data: {
+				activeQuestionId: transitionResult.activeQuestionId,
+				mode: 'idle',
+				stateChanged: false,
+			},
+			dryRun,
+			message: {
+				body: transitionResult.messageText,
+				kind: transitionResult.messageKind,
+			},
+			status: 'blocked',
+			warnings: transitionResult.warnings.map((w) => ({
+				code: 'unknown_error',
+				message: w,
+				severity: 'warning' as const,
+			})),
+		});
+	}
+
+	// routed
 	return createCoreResult({
 		data: {
-			mode: 'idle',
-			stateChanged: false,
+			activeQuestionId: transitionResult.activeQuestionId,
+			mode: 'intake_active',
+			stateChanged: transitionResult.stateChanged,
 		},
-		dryRun: input.dryRun ?? false,
-		message: stubMessage(
-			'LOGOS intake message handling is not implemented yet.',
-		),
-		status: 'blocked',
+		dryRun,
+		message: {
+			body: transitionResult.messageText,
+			kind: transitionResult.messageKind,
+		},
+		status: 'ok',
+		warnings: transitionResult.warnings.map((w) => ({
+			code: 'unknown_error',
+			message: w,
+			severity: 'warning' as const,
+		})),
 	});
 }
 
