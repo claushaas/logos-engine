@@ -28,14 +28,10 @@ import type {
 	ActivePromptState,
 	LogosIntakeState,
 } from '../state/intake-state-types.js';
-import {
-	createContradictionPrompt,
-	createFollowUpPrompt,
-	createQuestionPrompt,
-} from './active-prompt.js';
 import { createAssistantMessageFromPrompt } from './assistant-message-from-prompt.js';
 import { selectNextPrompt } from './next-prompt-selector.js';
 import type { ActivePrompt } from './prompt-selection-types.js';
+import { rebuildActivePrompt } from './rebuild-active-prompt.js';
 
 // ---------------------------------------------------------------------------
 // Input / Output types
@@ -76,73 +72,6 @@ export type StartIntakeTransitionResult =
 			messageKind: string;
 			warnings: string[];
 	  };
-
-// ---------------------------------------------------------------------------
-// ActivePromptState → ActivePrompt rebuild
-// ---------------------------------------------------------------------------
-
-/**
- * Rebuild a renderable {@link ActivePrompt} from a persisted
- * {@link ActivePromptState} and the question registry.
- *
- * Returns `undefined` when the referenced question (or contradiction)
- * no longer exists in the registry.
- */
-function rebuildActivePrompt(
-	promptState: ActivePromptState,
-	registry: LogosQuestionRegistry,
-	intakeState: LogosIntakeState,
-): ActivePrompt | undefined {
-	const question = registry.byId[promptState.questionId];
-	if (question === undefined) {
-		return undefined;
-	}
-
-	switch (promptState.kind) {
-		case 'question': {
-			const p = createQuestionPrompt(question);
-			return p;
-		}
-		case 'follow_up': {
-			const partialRecord =
-				intakeState.partialQuestions[promptState.questionId];
-			const answerRecord =
-				intakeState.answeredQuestions[promptState.questionId];
-			const missingAspects = partialRecord?.missingAspects ?? [];
-			const reason = partialRecord?.reason ?? answerRecord?.status;
-
-			const p = createFollowUpPrompt({
-				missingAspects,
-				question,
-				...(reason !== undefined ? { reason } : {}),
-			});
-			if (promptState.followUpId !== undefined) {
-				p.followUpId = promptState.followUpId;
-			}
-			return p;
-		}
-		case 'contradiction_resolution': {
-			const contradictionId =
-				promptState.contradictionId ??
-				Object.keys(intakeState.contradictions).find(
-					(cid) => intakeState.contradictions[cid]?.questionId === question.id,
-				);
-
-			const contradiction =
-				contradictionId !== undefined
-					? intakeState.contradictions[contradictionId]
-					: undefined;
-
-			// If we can't find the specific contradiction record, return a
-			// question-prompt fallback — the selector will re-derive on next call.
-			if (contradiction === undefined) {
-				return undefined;
-			}
-
-			return createContradictionPrompt({ contradiction, question });
-		}
-	}
-}
 
 // ---------------------------------------------------------------------------
 // ActivePrompt → ActivePromptState persistence helper

@@ -23,6 +23,7 @@
 import { loadLogosConfig } from '../config/load-config.js';
 import type { AssistantMessage } from '../messages.js';
 import type { LogosFilesystem } from '../ports/filesystem.js';
+import { ensureProfileReady } from '../profiles/profile-gate.js';
 import { loadIntakeState } from '../state/intake-state-persistence.js';
 import type {
 	ActivePromptState,
@@ -32,6 +33,7 @@ import type {
 import { createAssistantMessageFromPrompt } from './assistant-message-from-prompt.js';
 import type { LogosLifecycleCommand } from './lifecycle-command.js';
 import type { ActivePrompt } from './prompt-selection-types.js';
+import { rebuildActivePrompt } from './rebuild-active-prompt.js';
 
 // ---------------------------------------------------------------------------
 // Disposition
@@ -457,12 +459,13 @@ export async function handleIntakeCommand(
 	let activeQuestionId: string | undefined;
 	let preservedQuestionId: string | undefined;
 	let activePrompt: ActivePrompt | undefined;
+	let loadedState: LogosIntakeState | undefined;
 
 	if (intakeLoadResult.ok) {
-		const state: LogosIntakeState = intakeLoadResult.state;
-		mode = state.mode;
-		activeQuestionId = state.activeQuestionId;
-		const promptState = state.activePrompt;
+		loadedState = intakeLoadResult.state;
+		mode = loadedState.mode;
+		activeQuestionId = loadedState.activeQuestionId;
+		const promptState = loadedState.activePrompt;
 
 		if (promptState !== undefined) {
 			preservedQuestionId = promptState.questionId;
@@ -473,12 +476,48 @@ export async function handleIntakeCommand(
 	const hasActivePrompt = preservedQuestionId !== undefined;
 
 	// ---- Resolve disposition ----
-	const resolution = resolveIntakeCommandDisposition({
+	let resolution = resolveIntakeCommandDisposition({
 		command,
 		confirmed,
 		hasActivePrompt,
 		mode,
 	});
+
+	// ---- For reaffirm, rebuild full prompt from registry ----
+	if (
+		resolution.disposition === 'reaffirm' &&
+		loadedState !== undefined &&
+		loadedState.activePrompt !== undefined
+	) {
+		const profileResult = await ensureProfileReady({
+			activeProfileId: configResult.config.activeProfileId,
+			filesystem,
+			projectRoot,
+		});
+
+		if (profileResult.ok) {
+			const rebuilt = rebuildActivePrompt(
+				loadedState.activePrompt,
+				profileResult.contracts.questionRegistry,
+				loadedState,
+			);
+
+			if (rebuilt !== undefined) {
+				activePrompt = rebuilt;
+			} else {
+				resolution = {
+					disposition: 'block',
+					reason: `Active prompt references missing question "${loadedState.activePrompt.questionId}" or missing contradiction record.`,
+				};
+			}
+		} else {
+			resolution = {
+				disposition: 'block',
+				reason:
+					'Cannot re-emit active prompt because the active profile could not be resolved.',
+			};
+		}
+	}
 
 	// ---- Build result ----
 	const status = dispositionToStatus(resolution.disposition);
@@ -488,12 +527,17 @@ export async function handleIntakeCommand(
 		activePrompt,
 	);
 
+	const blockerCode =
+		command === 'logos-start' && status === 'blocked'
+			? 'active_prompt_invalid'
+			: 'intake_command_blocked';
+
 	return {
 		blockers:
 			status === 'blocked'
 				? [
 						{
-							code: 'intake_command_blocked',
+							code: blockerCode,
 							message: resolution.reason,
 							severity: 'blocker' as const,
 						},

@@ -6,6 +6,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { createLogosCore } from '../../src/core/api.js';
 import {
 	handleIntakeCommand,
 	type IntakeCommandDisposition,
@@ -336,5 +337,164 @@ describe('handleIntakeCommand (with filesystem)', () => {
 			);
 			expect(result.data?.persisted, `persisted for ${command}`).toBe(false);
 		}
+	});
+});
+
+// ---------------------------------------------------------------------------
+// Step 5.2 — Active intake reaffirm tests
+// ---------------------------------------------------------------------------
+
+describe('handleIntakeCommand (active intake reaffirm)', () => {
+	const PROJECT_ROOT = '/project';
+	const NOW = '2026-05-22T00:00:00Z';
+
+	it('logos-start during active intake returns reaffirm with full prompt', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: PROJECT_ROOT });
+		const startResult = await core.startIntake({
+			now: NOW,
+			projectRoot: PROJECT_ROOT,
+		});
+		expect(startResult.status).toBe('ok');
+		const q1Id = startResult.data?.activeQuestionId;
+		const q1Text = startResult.data?.activePrompt?.text;
+
+		const result = await handleIntakeCommand({
+			command: 'logos-start',
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+		});
+
+		expect(result.status).toBe('ok');
+		expect(result.data?.disposition).toBe('reaffirm');
+		expect(result.data?.mode).toBe('intake_active');
+		expect(result.data?.activeQuestionId).toBe(q1Id);
+		expect(result.data?.preservedQuestionId).toBe(q1Id);
+		expect(result.data?.stateChanged).toBe(false);
+		expect(result.data?.persisted).toBe(false);
+		expect(result.message.kind).toBe('question');
+		expect(result.message.body).toBe(q1Text);
+		expect(result.data?.activePrompt?.text).toBe(q1Text);
+	});
+
+	it('logos-start during active intake blocks when active prompt is missing', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: PROJECT_ROOT });
+
+		const { createDefaultIntakeState } = await import(
+			'../../src/core/state/intake-state-defaults.js'
+		);
+		const { saveIntakeState } = await import(
+			'../../src/core/state/intake-state-persistence.js'
+		);
+
+		const state = createDefaultIntakeState({
+			now: NOW,
+			projectRoot: PROJECT_ROOT,
+		});
+		state.mode = 'intake_active';
+		state.activeQuestionId = undefined;
+		state.activePrompt = undefined;
+
+		await saveIntakeState({
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+			state,
+		});
+
+		const result = await handleIntakeCommand({
+			command: 'logos-start',
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+		});
+
+		expect(result.status).toBe('blocked');
+		expect(result.data?.disposition).toBe('block');
+		expect(
+			result.blockers.some((b) => b.code === 'active_prompt_invalid'),
+		).toBe(true);
+	});
+
+	it('logos-stop during active intake returns pause_and_execute', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: PROJECT_ROOT });
+		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+
+		const result = await handleIntakeCommand({
+			command: 'logos-stop',
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+		});
+
+		expect(result.status).toBe('ok');
+		expect(result.data?.disposition).toBe('pause_and_execute');
+		expect(result.data?.mode).toBe('intake_active');
+		expect(result.data?.preservedQuestionId).toBeDefined();
+	});
+
+	it('logos-status during active intake returns pause_and_execute', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: PROJECT_ROOT });
+		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+
+		const result = await handleIntakeCommand({
+			command: 'logos-status',
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+		});
+
+		expect(result.status).toBe('ok');
+		expect(result.data?.disposition).toBe('pause_and_execute');
+		expect(result.data?.mode).toBe('intake_active');
+	});
+
+	it('logos-generate during active intake returns pause_and_execute', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: PROJECT_ROOT });
+		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+
+		const result = await handleIntakeCommand({
+			command: 'logos-generate',
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+		});
+
+		expect(result.status).toBe('ok');
+		expect(result.data?.disposition).toBe('pause_and_execute');
+		expect(result.data?.mode).toBe('intake_active');
+	});
+
+	it('logos-init during active intake returns confirm_required', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: PROJECT_ROOT });
+		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+
+		const result = await handleIntakeCommand({
+			command: 'logos-init',
+			filesystem: fs,
+			projectRoot: PROJECT_ROOT,
+		});
+
+		expect(result.status).toBe('confirmation_required');
+		expect(result.data?.disposition).toBe('confirm_required');
+		expect(result.data?.mode).toBe('intake_active');
 	});
 });
