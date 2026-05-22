@@ -62,3 +62,16 @@ export type { LogosPiExtensionDependencies } from './extension-dependencies.js';
 export * from './pi-types.js';
 export type { ProjectRootContext } from './project-root.js';
 export { getProjectRootFromContext } from './project-root.js';
+export type {
+	LogosRenderedMessage,
+	LogosRenderedMessageKind,
+	RenderAssistantMessageInput,
+	RenderCoreResultInput,
+} from './rendering/index.js';
+// Rendering exports (Step 9.1).
+export {
+	extractRenderedMessage,
+	registerLogosRenderers,
+	renderAssistantMessage,
+	renderCoreResult,
+} from './rendering/index.js';

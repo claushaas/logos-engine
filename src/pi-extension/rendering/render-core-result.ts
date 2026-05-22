@@ -29,6 +29,24 @@ export type RenderCoreResultInput = {
 // ---------------------------------------------------------------------------
 
 /**
+ * Known LOGOS rendered message kinds.
+ *
+ * Mirrors the Core {@link AssistantMessageKind} set from a presentation
+ * perspective.  Unknown future kinds are represented by plain `string`.
+ */
+export type LogosRenderedMessageKind =
+	| 'question'
+	| 'follow_up'
+	| 'clarification'
+	| 'contradiction'
+	| 'status'
+	| 'warning'
+	| 'error'
+	| 'generation_result'
+	| 'confirmation_request'
+	| 'completion';
+
+/**
  * Adapter-level presentation payload extracted from a Core result.
  *
  * This type is Pi adapter presentation data only:
@@ -39,7 +57,7 @@ export type RenderCoreResultInput = {
  */
 export type LogosRenderedMessage = {
 	type: 'logos';
-	kind: string;
+	kind: LogosRenderedMessageKind | string;
 	body: string;
 	title?: string | undefined;
 	questionId?: string | undefined;
@@ -51,7 +69,7 @@ export type LogosRenderedMessage = {
 	metadata?: Record<string, unknown>;
 	blockers?: unknown[];
 	warnings?: unknown[];
-	rawResult: CoreResult<unknown>;
+	rawResult?: CoreResult<unknown> | undefined;
 };
 
 type NotifyType = 'info' | 'warning' | 'error';
@@ -180,6 +198,12 @@ export function extractRenderedMessage(
 // Render boundary
 // ---------------------------------------------------------------------------
 
+function fallbackBlockerBody(result: CoreResult<unknown>): string | undefined {
+	if (result.message.body.length > 0) return undefined;
+	if (result.blockers.length === 0) return undefined;
+	return 'LOGOS could not continue because blockers were returned by Core.';
+}
+
 export async function renderCoreResult(
 	input: RenderCoreResultInput,
 ): Promise<void> {
@@ -189,6 +213,12 @@ export async function renderCoreResult(
 	}
 
 	const rendered = extractRenderedMessage(input.result);
+
+	// Fallback body when blockers exist but the message body is empty.
+	const fallbackBody = fallbackBlockerBody(input.result);
+	if (fallbackBody !== undefined) {
+		rendered.body = fallbackBody;
+	}
 
 	if (typeof input.deps.pi.sendMessage === 'function') {
 		input.deps.pi.sendMessage({
