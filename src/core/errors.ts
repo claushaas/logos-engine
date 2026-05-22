@@ -11,6 +11,8 @@ export type LogosErrorCode =
 	| 'invalid_project_root'
 	| 'profile_not_found'
 	| 'profile_invalid'
+	| 'profile_path_unsafe'
+	| 'profile_id_invalid'
 	| 'intake_not_started'
 	| 'intake_already_complete'
 	| 'active_question_missing'

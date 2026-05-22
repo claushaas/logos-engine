@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { createLogosCore, initProject } from '../../src/core/api.js';
-import { DEFAULT_PROFILE_ID } from '../../src/core/config/config-schema.js';
+import { createLogosCore } from '../../src/core/api.js';
+import { getLogosConfigPath } from '../../src/core/config/config-paths.js';
 import type {
 	DirectoryEntry,
 	DirectoryListInput,
@@ -14,14 +14,13 @@ import type {
 import { PROFILES_DIR_NAME } from '../../src/core/profiles/profile-resolver.js';
 
 // ---------------------------------------------------------------------------
-// Fake filesystem with minimal profile support
+// Fake filesystem
 // ---------------------------------------------------------------------------
 
 function createFakeFilesystem(): LogosFilesystem & {
 	addDirectory(dir: string): void;
 	addFile(filePath: string, content: string): void;
 	addStandardProfile(): void;
-	addProfile(id: string): void;
 } {
 	const files = new Map<string, string>();
 	const dirs = new Set<string>();
@@ -64,11 +63,7 @@ function createFakeFilesystem(): LogosFilesystem & {
 	];
 
 	function addStandardProfile(): void {
-		addProfile('standard');
-	}
-
-	function addProfile(id: string): void {
-		const root = `/test/project/${PROFILES_DIR_NAME}/${id}`;
+		const root = `/project/${PROFILES_DIR_NAME}/standard`;
 		addDirectory(root);
 		for (const d of STANDARD_REQUIRED_DIRS) {
 			addDirectory(path.join(root, d));
@@ -144,112 +139,143 @@ function createFakeFilesystem(): LogosFilesystem & {
 		},
 	};
 
-	return { ...fs, addDirectory, addFile, addProfile, addStandardProfile };
+	return { ...fs, addDirectory, addFile, addStandardProfile };
 }
 
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
-describe('initProject — profile config (Step 2.1)', () => {
-	it('uses "standard" as active profile id when no profile is selected', async () => {
+describe('getStatus reports profile blockers (Step 2.4)', () => {
+	it('returns structured result when activeProfileId points to missing profile', async () => {
 		const fs = createFakeFilesystem();
 		fs.addStandardProfile();
 		const core = createLogosCore({ filesystem: fs });
 
-		const result = await core.initProject({ projectRoot: '/test/project' });
+		await core.initProject({ projectRoot: '/project' });
 
-		expect(result.status).toBe('ok');
-		expect(result.data?.initialized).toBe(true);
-		expect(result.data?.activeProfileId).toBe(DEFAULT_PROFILE_ID);
-		expect(result.data?.activeProfileId).toBe('standard');
-	});
-
-	it('uses the provided selectedProfileId', async () => {
-		const fs = createFakeFilesystem();
-		fs.addProfile('custom-profile');
-		const core = createLogosCore({ filesystem: fs });
-
-		const result = await core.initProject({
-			projectRoot: '/test/project',
-			selectedProfileId: 'custom-profile',
+		const configPath = getLogosConfigPath('/project');
+		await fs.writeTextFile({
+			content: 'version: 1\nactiveProfileId: missing-profile\n',
+			overwrite: true,
+			path: configPath,
 		});
 
+		const result = await core.getStatus({ projectRoot: '/project' });
+
 		expect(result.status).toBe('ok');
-		expect(result.data?.initialized).toBe(true);
-		expect(result.data?.activeProfileId).toBe('custom-profile');
+		expect(result.blockers.length).toBeGreaterThan(0);
+		expect(result.blockers.some((b) => b.code === 'profile_not_found')).toBe(
+			true,
+		);
 	});
 
-	it('returns a blocker for an invalid selectedProfileId', async () => {
+	it('sets generation readiness to blocked when profile is missing', async () => {
 		const fs = createFakeFilesystem();
 		fs.addStandardProfile();
 		const core = createLogosCore({ filesystem: fs });
 
-		const result = await core.initProject({
-			projectRoot: '/test/project',
-			selectedProfileId: 'INVALID',
+		await core.initProject({ projectRoot: '/project' });
+
+		const configPath = getLogosConfigPath('/project');
+		await fs.writeTextFile({
+			content: 'version: 1\nactiveProfileId: missing-profile\n',
+			overwrite: true,
+			path: configPath,
 		});
 
-		expect(result.status).toBe('blocked');
+		const result = await core.getStatus({ projectRoot: '/project' });
+
+		expect(result.data?.generationReadiness.ready).toBe(false);
+		expect(result.data?.generationReadiness.blockers.length).toBeGreaterThan(0);
+	});
+
+	it('reports initialized: true when config exists but profile is missing', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: '/project' });
+
+		const configPath = getLogosConfigPath('/project');
+		await fs.writeTextFile({
+			content: 'version: 1\nactiveProfileId: missing-profile\n',
+			overwrite: true,
+			path: configPath,
+		});
+
+		const result = await core.getStatus({ projectRoot: '/project' });
+
+		expect(result.data?.initialized).toBe(true);
+	});
+
+	it('does not throw when profile is missing', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: '/project' });
+
+		const configPath = getLogosConfigPath('/project');
+		await fs.writeTextFile({
+			content: 'version: 1\nactiveProfileId: missing-profile\n',
+			overwrite: true,
+			path: configPath,
+		});
+
+		await expect(
+			core.getStatus({ projectRoot: '/project' }),
+		).resolves.toBeDefined();
+	});
+
+	it('does not mutate state when reporting missing profile', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		await core.initProject({ projectRoot: '/project' });
+
+		const configPath = getLogosConfigPath('/project');
+		await fs.writeTextFile({
+			content: 'version: 1\nactiveProfileId: missing-profile\n',
+			overwrite: true,
+			path: configPath,
+		});
+
+		// Read config before status.
+		const before = await fs.readTextFile(configPath);
+
+		await core.getStatus({ projectRoot: '/project' });
+
+		// Read config after status.
+		const after = await fs.readTextFile(configPath);
+
+		expect(after.content).toBe(before.content);
+	});
+
+	it('reports initialized: false when config does not exist', async () => {
+		const fs = createFakeFilesystem();
+		fs.addStandardProfile();
+		const core = createLogosCore({ filesystem: fs });
+
+		const result = await core.getStatus({ projectRoot: '/project' });
+
 		expect(result.data?.initialized).toBe(false);
-		expect(result.blockers.length).toBeGreaterThan(0);
-		expect(result.blockers[0]?.severity).toBe('blocker');
+		expect(result.status).toBe('ok');
 	});
 
-	it('returns a blocker for empty selectedProfileId', async () => {
+	it('keeps stub blocked behavior when profile is valid', async () => {
 		const fs = createFakeFilesystem();
 		fs.addStandardProfile();
 		const core = createLogosCore({ filesystem: fs });
 
-		const result = await core.initProject({
-			projectRoot: '/test/project',
-			selectedProfileId: '',
-		});
+		await core.initProject({ projectRoot: '/project' });
+
+		const result = await core.getStatus({ projectRoot: '/project' });
 
 		expect(result.status).toBe('blocked');
-		expect(result.blockers.length).toBeGreaterThan(0);
-	});
-
-	it('returns a blocker for selectedProfileId with slash', async () => {
-		const fs = createFakeFilesystem();
-		fs.addStandardProfile();
-		const core = createLogosCore({ filesystem: fs });
-
-		const result = await core.initProject({
-			projectRoot: '/test/project',
-			selectedProfileId: '../escape',
-		});
-
-		expect(result.status).toBe('blocked');
-	});
-
-	it('does not require Pi, Ink, React, or TUI dependencies', () => {
-		expect(typeof initProject).toBe('function');
-	});
-
-	it('preserves dryRun flag', async () => {
-		const fs = createFakeFilesystem();
-		fs.addStandardProfile();
-		const core = createLogosCore({ filesystem: fs });
-
-		const result = await core.initProject({
-			dryRun: true,
-			projectRoot: '/test/project',
-		});
-
-		expect(result.dryRun).toBe(true);
-		expect(result.data?.activeProfileId).toBe(DEFAULT_PROFILE_ID);
-	});
-
-	it('produces plain serializable result (JSON-safe)', async () => {
-		const fs = createFakeFilesystem();
-		fs.addStandardProfile();
-		const core = createLogosCore({ filesystem: fs });
-
-		const result = await core.initProject({ projectRoot: '/test/project' });
-
-		const serialized = JSON.parse(JSON.stringify(result));
-		expect(serialized.status).toBe('ok');
-		expect(serialized.data.activeProfileId).toBe('standard');
+		expect(result.blockers.some((b) => b.code === 'profile_not_found')).toBe(
+			false,
+		);
 	});
 });
