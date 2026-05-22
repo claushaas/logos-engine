@@ -9,6 +9,7 @@
  */
 
 import type { LogosFilesystem } from '../ports/filesystem.js';
+import type { LogosQuestionRegistry } from '../questions/question-registry.js';
 import type { LogosQuestion } from '../questions/question-types.js';
 import { createProfileResolutionError } from './profile-errors.js';
 import type { ProfileResolutionError } from './profile-resolver.js';
@@ -162,7 +163,9 @@ export type LoadedProfileContracts = {
 	documentSchema: ProfileDocumentSchema;
 	phases: ProfilePhaseContract[];
 	documents: ProfileDocumentContract[];
+	/** @deprecated Use questionRegistry.questions for the array of questions. */
 	questions: LogosQuestion[];
+	questionRegistry: LogosQuestionRegistry;
 	validation: ProfileValidationContracts;
 	generation: ProfileGenerationContracts;
 	artifacts: ProfileArtifactContracts;

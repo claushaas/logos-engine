@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { createDefaultLogosConfig } from '../../src/core/state/config-types.js';
 import type { GenerationState } from '../../src/core/state/generation-state-types.js';
 import { createInMemoryStateRepository } from '../../src/core/state/in-memory-state-repository.js';
+import { createDefaultIntakeState } from '../../src/core/state/intake-state-defaults.js';
 import type { LogosIntakeState } from '../../src/core/state/intake-state-types.js';
+
+const now = '2026-05-21T00:00:00Z';
 
 describe('in-memory state repository', () => {
 	it('can be created as a LogosStateRepository fake', () => {
@@ -20,6 +23,14 @@ describe('in-memory state repository', () => {
 		await expect(repo.loadConfig('/unknown')).rejects.toThrow(
 			'Config not found',
 		);
+	});
+
+	it('returns default intake state when none has been saved', async () => {
+		const repo = createInMemoryStateRepository(undefined, { now });
+		const loaded = await repo.loadIntakeState('/unknown');
+		const expected = createDefaultIntakeState({ now, projectRoot: '/unknown' });
+		expect(loaded).toEqual(expected);
+		expect(loaded.mode).toBe('idle');
 	});
 
 	it('can save and load config', async () => {
@@ -40,18 +51,24 @@ describe('in-memory state repository', () => {
 		const repo = createInMemoryStateRepository();
 		const state: LogosIntakeState = {
 			activeQuestionId: 'q-1',
+			answeredQuestions: {},
+			contradictions: {},
 			initializedAt: '2026-05-21T00:00:00Z',
 			mode: 'intake_active',
+			partialQuestions: {},
 			progress: {
 				byPhase: {},
 				contradictory: 0,
 				missing: 1,
 				partial: 0,
+				skipped: 0,
 				sufficient: 2,
 				total: 3,
 			},
 			projectRoot: '/project',
+			skippedQuestions: {},
 			updatedAt: '2026-05-21T00:00:00Z',
+			version: 1,
 		};
 
 		await repo.saveIntakeState('/project', state);
@@ -100,18 +117,24 @@ describe('in-memory state repository', () => {
 	it('does not share intake state by reference', async () => {
 		const repo = createInMemoryStateRepository();
 		const state: LogosIntakeState = {
+			answeredQuestions: {},
+			contradictions: {},
 			initializedAt: '2026-05-21T00:00:00Z',
 			mode: 'paused',
+			partialQuestions: {},
 			progress: {
 				byPhase: {},
 				contradictory: 0,
 				missing: 0,
 				partial: 0,
+				skipped: 0,
 				sufficient: 0,
 				total: 0,
 			},
 			projectRoot: '/project',
+			skippedQuestions: {},
 			updatedAt: '2026-05-21T00:00:00Z',
+			version: 1,
 		};
 
 		await repo.saveIntakeState('/project', state);
@@ -149,18 +172,24 @@ describe('in-memory state repository', () => {
 
 	it('can be initialized with seed data for intake and generation state', async () => {
 		const intakeState: LogosIntakeState = {
+			answeredQuestions: {},
+			contradictions: {},
 			initializedAt: '2026-05-21T00:00:00Z',
 			mode: 'idle',
+			partialQuestions: {},
 			progress: {
 				byPhase: {},
 				contradictory: 0,
 				missing: 0,
 				partial: 0,
+				skipped: 0,
 				sufficient: 0,
 				total: 0,
 			},
 			projectRoot: '/project',
+			skippedQuestions: {},
 			updatedAt: '2026-05-21T00:00:00Z',
+			version: 1,
 		};
 		const generationState: GenerationState = {
 			generatedPaths: [],

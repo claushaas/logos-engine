@@ -218,6 +218,7 @@ const emptyProgress: IntakeProgress = {
 	contradictory: 0,
 	missing: 0,
 	partial: 0,
+	skipped: 0,
 	sufficient: 0,
 	total: 0,
 };

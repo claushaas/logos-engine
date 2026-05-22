@@ -37,12 +37,6 @@ export type CreateQuestionIdInput = {
 	sectionId: string;
 	/** Zero-based index of the question within its section. */
 	questionIndex: number;
-	/**
-	 * Original question text used as a fallback when none of the
-	 * structured ids produce a usable slug. This should rarely be
-	 * needed if phase/document/section ids are well-formed.
-	 */
-	question: string;
 };
 
 // ---------------------------------------------------------------------------

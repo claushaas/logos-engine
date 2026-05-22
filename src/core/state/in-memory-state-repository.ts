@@ -8,6 +8,7 @@
 import type { LogosStateRepository } from '../ports/state-repository.js';
 import type { LogosConfig } from './config-types.js';
 import type { GenerationState } from './generation-state-types.js';
+import { createDefaultIntakeState } from './intake-state-defaults.js';
 import type { LogosIntakeState } from './intake-state-types.js';
 
 export function createInMemoryStateRepository(
@@ -17,6 +18,9 @@ export function createInMemoryStateRepository(
 		intakeState: LogosIntakeState;
 		generationState: GenerationState;
 	}>,
+	options?: {
+		now?: string;
+	},
 ): LogosStateRepository {
 	const configStore: Map<string, LogosConfig> = new Map();
 	const intakeStore: Map<string, LogosIntakeState> = new Map();
@@ -67,9 +71,10 @@ export function createInMemoryStateRepository(
 		async loadIntakeState(projectRoot: string): Promise<LogosIntakeState> {
 			const value = intakeStore.get(projectRoot);
 			if (value === undefined) {
-				throw new Error(
-					`Intake state not found for projectRoot: ${projectRoot}`,
-				);
+				return createDefaultIntakeState({
+					now: options?.now ?? new Date().toISOString(),
+					projectRoot,
+				});
 			}
 			return structuredClone(value);
 		},

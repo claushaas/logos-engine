@@ -14,12 +14,7 @@ import path from 'node:path';
 import { parse as yamlParse } from 'yaml';
 
 import type { LogosFilesystem } from '../ports/filesystem.js';
-import { createQuestionId } from '../questions/question-id.js';
-import type {
-	LogosQuestion,
-	QuestionPriority,
-} from '../questions/question-types.js';
-import { DEFAULT_FOLLOW_UP_POLICY } from '../questions/question-types.js';
+import { buildQuestionRegistry } from '../questions/question-registry.js';
 import type {
 	LoadedProfileContracts,
 	ProfileArtifactContracts,
@@ -468,111 +463,6 @@ function readQuestionArray(secObj: Record<string, unknown>): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// Question derivation
-// ---------------------------------------------------------------------------
-
-function deriveQuestions(
-	documents: ProfileDocumentContract[],
-): LogosQuestion[] {
-	const questions: LogosQuestion[] = [];
-
-	for (const doc of documents) {
-		const priority = derivePriority(doc);
-
-		for (const section of doc.sections) {
-			const purpose = derivePurpose(doc, section);
-
-			for (let idx = 0; idx < section.questions.length; idx++) {
-				const questionText = section.questions[idx];
-				if (questionText === undefined || questionText.trim().length === 0) {
-					continue;
-				}
-
-				const id = createQuestionId({
-					documentId: doc.id,
-					phaseId: doc.phaseId,
-					question: questionText,
-					questionIndex: idx,
-					sectionId: section.id,
-				});
-
-				const q: LogosQuestion = {
-					acceptanceCriteria: deriveAcceptanceCriteria(doc),
-					completionSignals: deriveCompletionSignals(doc),
-					documentId: doc.id,
-					followUpPolicy: DEFAULT_FOLLOW_UP_POLICY,
-					id,
-					insufficiencySignals: [],
-					phaseId: doc.phaseId,
-					priority,
-					purpose,
-					question: questionText,
-					required: section.required,
-					sectionId: section.id,
-					sourcePath: doc.path,
-				};
-
-				const deps = deriveDependencies(doc);
-				if (deps !== undefined) q.dependsOn = deps;
-
-				questions.push(q);
-			}
-		}
-	}
-
-	return questions;
-}
-
-function derivePriority(doc: ProfileDocumentContract): QuestionPriority {
-	if (doc.phaseId === '01-foundation' || doc.phaseId.startsWith('01-')) {
-		return 'critical';
-	}
-	return 'important';
-}
-
-function derivePurpose(
-	doc: ProfileDocumentContract,
-	section: ProfileDocumentSection,
-): string {
-	if (doc.centralQuestion !== undefined && doc.centralQuestion.length > 0) {
-		return doc.centralQuestion;
-	}
-	if (section.title !== undefined && section.title.length > 0) {
-		return section.title;
-	}
-	if (doc.title !== undefined && doc.title.length > 0) {
-		return doc.title;
-	}
-	return 'No purpose available.';
-}
-
-function deriveAcceptanceCriteria(doc: ProfileDocumentContract): string[] {
-	if (
-		doc.completionCriteria !== undefined &&
-		doc.completionCriteria.length > 0
-	) {
-		return doc.completionCriteria;
-	}
-	return [];
-}
-
-function deriveCompletionSignals(doc: ProfileDocumentContract): string[] {
-	if (doc.qualityChecks !== undefined && doc.qualityChecks.length > 0) {
-		return doc.qualityChecks;
-	}
-	return [];
-}
-
-function deriveDependencies(
-	doc: ProfileDocumentContract,
-): string[] | undefined {
-	if (doc.dependsOn !== undefined && doc.dependsOn.length > 0) {
-		return doc.dependsOn;
-	}
-	return undefined;
-}
-
-// ---------------------------------------------------------------------------
 // Validation contracts
 // ---------------------------------------------------------------------------
 
@@ -846,8 +736,22 @@ export async function loadProfileContracts(
 		loadedPaths.push(d.path);
 	}
 
-	// ---- 6. Derive questions ----
-	const questions = deriveQuestions(documents);
+	// ---- 6. Derive question registry ----
+	const registryResult = buildQuestionRegistry({
+		documents,
+		profileId: activeProfileId,
+	});
+	if (!registryResult.ok) {
+		return {
+			errors: registryResult.errors.map((message) =>
+				profileInvalid(message, undefined, undefined),
+			),
+			ok: false,
+			warnings: [...warnings, ...registryResult.warnings],
+		};
+	}
+	const questionRegistry = registryResult.registry;
+	const questions = questionRegistry.questions;
 
 	// ---- 7. Derive validation ----
 	const validation = deriveValidationContracts(
@@ -891,6 +795,7 @@ export async function loadProfileContracts(
 		phases,
 		profileId: activeProfileId,
 		profileRoot: profile.profileRoot,
+		questionRegistry,
 		questions,
 		rootRegistry,
 		validation,

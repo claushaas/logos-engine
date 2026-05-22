@@ -6,4 +6,5 @@
  */
 
 export * from './question-id.js';
+export * from './question-registry.js';
 export * from './question-types.js';
