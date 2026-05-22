@@ -5,4 +5,4 @@
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
-export type CoreGenerationModule = 'core.generation';
+export type { ProfileGenerationContracts } from '../profiles/profile-contracts.js';

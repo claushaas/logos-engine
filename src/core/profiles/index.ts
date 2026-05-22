@@ -5,6 +5,7 @@
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
+export * from './load-profile-contracts.js';
 export * from './profile-contracts.js';
 export * from './profile-errors.js';
 export * from './profile-resolver.js';

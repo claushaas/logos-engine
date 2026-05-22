@@ -9,8 +9,167 @@
  */
 
 import type { LogosFilesystem } from '../ports/filesystem.js';
+import type { LogosQuestion } from '../questions/question-types.js';
 import { createProfileResolutionError } from './profile-errors.js';
 import type { ProfileResolutionError } from './profile-resolver.js';
+
+// ---------------------------------------------------------------------------
+// Loaded profile contract types (Step 2.3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Parsed root registry from profiles/<profileId>/docs.yml.
+ * Preserves known fields as typed properties and all unknown fields under `raw`.
+ */
+export type ProfileRootRegistry = {
+	schemaVersion?: number;
+	contentVersion?: string;
+	registryType?: string;
+	project?: Record<string, unknown>;
+	documentationSystem?: Record<string, unknown>;
+	axes?: unknown[];
+	phaseDefinitions?: Record<string, unknown>;
+	phaseRegistry?: Record<string, unknown>;
+	outputModel?: Record<string, unknown>;
+	globalRules?: Record<string, unknown>;
+	qualityModel?: Record<string, unknown>;
+	dependencyPolicy?: Record<string, unknown>;
+	agentPolicy?: Record<string, unknown>;
+	statusWorkflow?: Record<string, unknown>;
+	roadmapIntegration?: Record<string, unknown>;
+	raw: Record<string, unknown>;
+};
+
+/**
+ * Parsed document schema from profiles/<profileId>/document.schema.yml.
+ * For initial loading, only the raw parsed object is preserved.
+ */
+export type ProfileDocumentSchema = {
+	raw: Record<string, unknown>;
+};
+
+/**
+ * A single phase descriptor loaded from profiles/<profileId>/phases/<phase-id>.yml.
+ */
+export type ProfilePhaseContract = {
+	id: string;
+	title?: string;
+	path: string;
+	/** Document ids listed in the phase descriptor's documents array. */
+	documentIds: string[];
+	raw: Record<string, unknown>;
+};
+
+/**
+ * A single document section inside a document descriptor.
+ */
+export type ProfileDocumentSection = {
+	id: string;
+	title?: string;
+	questions: string[];
+	required: boolean;
+	raw: Record<string, unknown>;
+};
+
+/**
+ * A single document descriptor loaded from
+ * profiles/<profileId>/phases/<phase-id>/<doc-id>.yml.
+ */
+export type ProfileDocumentContract = {
+	id: string;
+	title?: string;
+	phaseId: string;
+	path: string;
+	centralQuestion?: string;
+	sections: ProfileDocumentSection[];
+	outputs?: Record<string, unknown>;
+	completionCriteria?: string[];
+	qualityChecks?: string[];
+	dependsOn?: string[];
+	raw: Record<string, unknown>;
+};
+
+/**
+ * Validation-related contracts derived from the active profile.
+ * Does not implement validation execution.
+ */
+export type ProfileValidationContracts = {
+	documentSchemaPath: string;
+	completionCriteria: Array<{
+		documentId: string;
+		phaseId: string;
+		raw: unknown;
+	}>;
+	qualityChecks: Array<{
+		documentId: string;
+		phaseId: string;
+		raw: unknown;
+	}>;
+};
+
+/**
+ * Generation-related contracts derived from document descriptor outputs.
+ * Does not implement generation execution.
+ */
+export type ProfileGenerationContracts = {
+	documentOutputPaths: Array<{
+		documentId: string;
+		phaseId: string;
+		path?: string;
+		rawOutputs?: unknown;
+	}>;
+};
+
+/**
+ * Artifact-related contracts derived from document descriptor outputs.
+ * Does not implement artifact generation.
+ */
+export type ProfileArtifactContracts = {
+	artifacts: Array<{
+		documentId: string;
+		phaseId: string;
+		rawOutputs?: unknown;
+	}>;
+};
+
+/**
+ * Executive-related contracts loaded from the active profile's executive/ directory.
+ */
+export type ProfileExecutiveContracts = {
+	generationConfigPath: string;
+	planSchemaPath: string;
+	mappingPaths: string[];
+	templatePaths: string[];
+	generationConfig?: Record<string, unknown>;
+	mappingConfigs: Array<{
+		path: string;
+		raw: Record<string, unknown>;
+	}>;
+};
+
+/**
+ * Normalized result of loading all contracts from a resolved active profile.
+ *
+ * This is the output of {@link loadProfileContracts} and becomes the source
+ * for future intake question registry, document contracts, phase contracts,
+ * validation rules, generation outputs, artifacts, agent packs, and Executive
+ * output rules.
+ */
+export type LoadedProfileContracts = {
+	profileId: string;
+	profileRoot: string;
+	rootRegistry: ProfileRootRegistry;
+	documentSchema: ProfileDocumentSchema;
+	phases: ProfilePhaseContract[];
+	documents: ProfileDocumentContract[];
+	questions: LogosQuestion[];
+	validation: ProfileValidationContracts;
+	generation: ProfileGenerationContracts;
+	artifacts: ProfileArtifactContracts;
+	executive: ProfileExecutiveContracts;
+	loadedPaths: string[];
+	warnings: string[];
+};
 
 // ---------------------------------------------------------------------------
 // Required path types

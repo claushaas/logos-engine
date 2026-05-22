@@ -5,4 +5,4 @@
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
-export type CoreValidationModule = 'core.validation';
+export type { ProfileValidationContracts } from '../profiles/profile-contracts.js';

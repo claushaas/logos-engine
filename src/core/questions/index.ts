@@ -5,4 +5,5 @@
  * Boundary: must not import Pi, Ink, React, TUI, or CLI modules.
  */
 
-export type CoreQuestionsModule = 'core.questions';
+export * from './question-id.js';
+export * from './question-types.js';
