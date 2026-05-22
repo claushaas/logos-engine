@@ -283,8 +283,8 @@ describe('runGenerationPreflight', () => {
 		// Preflight passes and write plan is built.
 		// The fixture document has no outputs block, so the write plan
 		// produces a blocked canonical_markdown operation (empty path).
-		// Status is blocked because write plan has blockers.
-		expect(result.status).toBe('blocked');
+		// Dry-run returns ok even with blockers because it's a preview.
+		expect(result.status).toBe('ok');
 		expect(result.data?.generatedPaths).toEqual([]);
 		expect(result.data?.preflight).toBeDefined();
 		expect(result.data?.writePlan).toBeDefined();

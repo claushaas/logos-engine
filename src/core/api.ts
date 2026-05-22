@@ -17,6 +17,7 @@ import type {
 	AnswerEvaluator,
 	EvaluateAnswerResult,
 } from './evaluation/index.js';
+import { executePartialDraftWritePlan } from './generation/partial-draft.js';
 import type { RunGenerationPreflightInput } from './generation/preflight.js';
 import { runGenerationPreflight } from './generation/preflight.js';
 import type {
@@ -227,6 +228,7 @@ export type GenerateInput = ProjectRootInput &
 	CoreApiOptions & {
 		mode?: GenerationMode;
 		confirmedPartialGeneration?: boolean;
+		now?: string;
 	};
 
 export type GenerateData = {
@@ -234,6 +236,13 @@ export type GenerateData = {
 	generatedPaths: string[];
 	preflight?: GenerationPreflightResult;
 	writePlan?: GenerationWritePlan;
+	partialDraft: boolean;
+	incomplete: boolean;
+	requiresExplicitConfirmation: boolean;
+	confirmationProvided: boolean;
+	wroteFiles: boolean;
+	skippedReason?: string;
+	metadata?: Record<string, unknown>;
 };
 
 export type GenerateResult = CoreResult<GenerateData>;
@@ -810,15 +819,27 @@ export async function getStatus(
 // generate
 // ---------------------------------------------------------------------------
 
+/**
+ * Build a minimal GenerateData with all required fields initialized.
+ */
+function emptyGenerateData(mode: GenerationMode): GenerateData {
+	return {
+		confirmationProvided: false,
+		generatedPaths: [],
+		generationMode: mode,
+		incomplete: false,
+		partialDraft: false,
+		requiresExplicitConfirmation: false,
+		wroteFiles: false,
+	};
+}
+
 export async function generate(input: GenerateInput): Promise<GenerateResult> {
 	const filesystem = input.filesystem;
 
 	if (filesystem === undefined) {
 		return createCoreResult({
-			data: {
-				generatedPaths: [],
-				generationMode: input.mode ?? 'final',
-			},
+			data: emptyGenerateData(input.mode ?? 'final'),
 			dryRun: input.dryRun ?? false,
 			message: {
 				body: 'Filesystem port is required for generation.',
@@ -828,26 +849,30 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		});
 	}
 
+	// ---- resolve effective mode ----
+	const effectiveMode: GenerationMode = input.dryRun
+		? 'dry_run'
+		: (input.mode ?? 'final');
+	const now = input.now ?? new Date().toISOString();
+	const confirmedPartial = input.confirmedPartialGeneration === true;
+	const isPartialDraft = effectiveMode === 'partial_draft';
+	const isDryRun = effectiveMode === 'dry_run';
+	const isFinal = effectiveMode === 'final';
+
 	// ---- run generation preflight ----
-	const now = new Date().toISOString();
 	const preflightArgs: RunGenerationPreflightInput = {
 		filesystem,
+		mode: effectiveMode,
 		now,
 		projectRoot: input.projectRoot,
 	};
-	if (input.mode !== undefined) {
-		preflightArgs.mode = input.mode;
-	}
 	const preflightResult = await runGenerationPreflight(preflightArgs);
 
 	// Preflight error (unexpected failure) — propagate.
 	if (!preflightResult.ok) {
 		return createCoreResult({
-			data: {
-				generatedPaths: [],
-				generationMode: input.mode ?? 'final',
-			},
-			dryRun: input.dryRun ?? false,
+			data: emptyGenerateData(effectiveMode),
+			dryRun: isDryRun,
 			errors: preflightResult.errors.map((e) =>
 				createLogosError({
 					code: 'preflight_blocked',
@@ -864,8 +889,8 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 
 	const preflight = preflightResult.preflight;
 
-	// ---- preflight blocked: return blockers without writing ----
-	if (!preflight.ready) {
+	// ---- final mode with blockers → blocked, no writes ----
+	if (isFinal && !preflight.ready) {
 		const coreBlockers = preflight.blockers.map((b) =>
 			createLogosBlocker({
 				code: b.code,
@@ -886,14 +911,15 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		return createCoreResult({
 			blockers: coreBlockers,
 			data: {
-				generatedPaths: [],
-				generationMode: input.mode ?? 'final',
+				...emptyGenerateData(effectiveMode),
+				preflight,
+				requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
 			},
-			dryRun: input.dryRun ?? false,
+			dryRun: isDryRun,
 			message: {
 				body:
 					preflight.blockers[0]?.message ??
-					'Generation is blocked.  Resolve the reported blockers before generating.',
+					'Final generation is blocked.  Resolve the reported blockers before generating.',
 				kind: 'error',
 			},
 			status: 'blocked',
@@ -901,7 +927,105 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		});
 	}
 
-	// ---- preflight is ready (or partial draft / dry run) — build write plan ----
+	// ---- partial_draft without confirmation → confirmation_required ----
+	if (isPartialDraft && !confirmedPartial) {
+		// Check if partial draft can even be generated.
+		if (!preflight.canGeneratePartialDraft) {
+			const coreBlockers = preflight.blockers.map((b) =>
+				createLogosBlocker({
+					code: b.code,
+					message: b.message,
+					...(b.questionIds !== undefined
+						? { metadata: { questionIds: b.questionIds } }
+						: {}),
+				}),
+			);
+
+			return createCoreResult({
+				blockers: coreBlockers,
+				data: {
+					...emptyGenerateData(effectiveMode),
+					partialDraft: true,
+					preflight,
+					requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
+				},
+				dryRun: isDryRun,
+				message: {
+					body:
+						preflight.blockers[0]?.message ??
+						'Partial draft generation is not possible.  Resolve the reported blockers.',
+					kind: 'error',
+				},
+				status: 'blocked',
+			});
+		}
+
+		// Partial draft is possible but confirmation is required.
+		const coreWarnings = preflight.warnings.map((w) =>
+			createLogosWarning({
+				code: w.code,
+				message: w.message,
+			}),
+		);
+
+		return createCoreResult({
+			data: {
+				...emptyGenerateData(effectiveMode),
+				incomplete: true,
+				partialDraft: true,
+				preflight,
+				requiresExplicitConfirmation: true,
+			},
+			dryRun: isDryRun,
+			message: {
+				body: 'Partial draft generation requires explicit confirmation.  Set confirmedPartialGeneration to true to proceed.',
+				kind: 'confirmation_request',
+			},
+			status: 'confirmation_required',
+			warnings: coreWarnings,
+		});
+	}
+
+	// ---- partial_draft with confirmation but can't generate → blocked ----
+	if (
+		isPartialDraft &&
+		confirmedPartial &&
+		!preflight.canGeneratePartialDraft
+	) {
+		const coreBlockers = preflight.blockers.map((b) =>
+			createLogosBlocker({
+				code: b.code,
+				message: b.message,
+				...(b.questionIds !== undefined
+					? { metadata: { questionIds: b.questionIds } }
+					: {}),
+			}),
+		);
+
+		return createCoreResult({
+			blockers: coreBlockers,
+			data: {
+				...emptyGenerateData(effectiveMode),
+				confirmationProvided: true,
+				incomplete: true,
+				partialDraft: true,
+				preflight,
+				requiresExplicitConfirmation: true,
+			},
+			dryRun: isDryRun,
+			message: {
+				body:
+					preflight.blockers[0]?.message ??
+					'Partial draft generation is not possible despite confirmation.  Resolve the reported blockers.',
+				kind: 'error',
+			},
+			status: 'blocked',
+		});
+	}
+
+	// ---- at this point we can proceed with write planning ----
+	// (final ready, partial_draft confirmed & allowed, or dry_run preview)
+
 	// Load config to get activeProfileId.
 	const configLoadResult = await loadLogosConfig({
 		filesystem,
@@ -912,11 +1036,14 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 	if (!configLoadResult.ok) {
 		return createCoreResult({
 			data: {
-				generatedPaths: [],
-				generationMode: input.mode ?? 'final',
+				...emptyGenerateData(effectiveMode),
+				confirmationProvided: confirmedPartial,
+				incomplete: isPartialDraft,
+				partialDraft: isPartialDraft,
 				preflight,
+				requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
 			},
-			dryRun: input.dryRun ?? false,
+			dryRun: isDryRun,
 			message: {
 				body: 'Failed to load project config for write planning.',
 				kind: 'error',
@@ -937,11 +1064,14 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		return createCoreResult({
 			blockers: coreBlockers,
 			data: {
-				generatedPaths: [],
-				generationMode: input.mode ?? 'final',
+				...emptyGenerateData(effectiveMode),
+				confirmationProvided: confirmedPartial,
+				incomplete: isPartialDraft,
+				partialDraft: isPartialDraft,
 				preflight,
+				requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
 			},
-			dryRun: input.dryRun ?? false,
+			dryRun: isDryRun,
 			message: {
 				body:
 					gateResult.blockers[0]?.message ??
@@ -954,7 +1084,7 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 
 	const writePlanResult = await buildGenerationWritePlan({
 		filesystem,
-		mode: input.mode ?? 'final',
+		mode: effectiveMode,
 		now,
 		preflight,
 		profileContracts: gateResult.contracts,
@@ -963,16 +1093,19 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 
 	if (!writePlanResult.ok) {
 		const errData: GenerateData = {
-			generatedPaths: [],
-			generationMode: input.mode ?? 'final',
+			...emptyGenerateData(effectiveMode),
+			confirmationProvided: confirmedPartial,
+			incomplete: isPartialDraft,
+			partialDraft: isPartialDraft,
 			preflight,
+			requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
 		};
 		if (writePlanResult.writePlan !== undefined) {
 			errData.writePlan = writePlanResult.writePlan;
 		}
 		return createCoreResult({
 			data: errData,
-			dryRun: input.dryRun ?? false,
+			dryRun: isDryRun,
 			errors: writePlanResult.errors.map((e) =>
 				createLogosError({
 					code: 'generation_failed',
@@ -988,6 +1121,42 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 	}
 
 	const writePlan = writePlanResult.writePlan;
+
+	// ---- dry_run: return preflight + write plan, never write files ----
+	// Must come before write-plan blocker check so dry-run always returns a
+	// preview even when the write plan has blockers.
+	if (isDryRun) {
+		const allPlannedPaths = writePlan.operations.map((op) => ({
+			kind: 'skipped' as const,
+			path: op.relativePath,
+			reason: 'dry_run_no_write',
+		}));
+
+		return createCoreResult({
+			changedPaths: allPlannedPaths,
+			data: {
+				...emptyGenerateData(effectiveMode),
+				confirmationProvided: false,
+				incomplete: false,
+				partialDraft: false,
+				preflight,
+				requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
+				skippedReason: 'Dry run — no files were written.',
+				writePlan,
+			},
+			dryRun: true,
+			message: {
+				body: 'Dry run complete.  Preflight and write plan are included.  No files were written.',
+				kind: 'status',
+			},
+			status: 'ok',
+			warnings: writePlan.warnings.map((w) => ({
+				code: w.code,
+				message: w.message,
+				severity: 'warning' as const,
+			})),
+		});
+	}
 
 	// ---- write plan has blockers — return blocked with plan for inspection ----
 	if (!writePlan.readyToWrite) {
@@ -1020,12 +1189,15 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 			blockers: planBlockers,
 			changedPaths: plannedPaths,
 			data: {
-				generatedPaths: [],
-				generationMode: input.mode ?? 'final',
+				...emptyGenerateData(effectiveMode),
+				confirmationProvided: confirmedPartial,
+				incomplete: isPartialDraft,
+				partialDraft: isPartialDraft,
 				preflight,
+				requiresExplicitConfirmation: preflight.requiresExplicitConfirmation,
 				writePlan,
 			},
-			dryRun: input.dryRun ?? false,
+			dryRun: isDryRun,
 			message: {
 				body:
 					writePlan.blockers[0]?.message ??
@@ -1037,8 +1209,60 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 		});
 	}
 
-	// ---- write plan is ready but write execution is intentionally not implemented ----
-	// Mark all planned paths as skipped with reason planned_not_written.
+	// ---- confirmed partial_draft: write incomplete placeholder files ----
+	if (isPartialDraft && confirmedPartial) {
+		const executeResult = await executePartialDraftWritePlan({
+			filesystem,
+			now,
+			preflight: {
+				blockers: preflight.blockers,
+				checkedAt: preflight.checkedAt,
+				completenessScore: preflight.completenessScore,
+				warnings: preflight.warnings,
+			},
+			writePlan,
+		});
+
+		const generatedPaths = executeResult.writtenPaths.map((p) => p);
+
+		const changedPaths = generatedPaths.map((p) => ({
+			kind: 'created' as const,
+			path: p,
+			reason: 'partial_draft_placeholder',
+		}));
+
+		const wroteFiles = generatedPaths.length > 0;
+
+		return createCoreResult({
+			changedPaths,
+			data: {
+				...emptyGenerateData(effectiveMode),
+				confirmationProvided: true,
+				generatedPaths,
+				incomplete: true,
+				partialDraft: true,
+				preflight,
+				requiresExplicitConfirmation: true,
+				writePlan,
+				wroteFiles,
+			},
+			dryRun: false,
+			message: {
+				body: wroteFiles
+					? `Partial draft generated with ${generatedPaths.length} incomplete placeholder file(s).`
+					: 'Partial draft write plan is ready but no files were written.',
+				kind: 'generation_result',
+			},
+			status: 'ok',
+			warnings: writePlan.warnings.map((w) => ({
+				code: w.code,
+				message: w.message,
+				severity: 'warning' as const,
+			})),
+		});
+	}
+
+	// ---- final mode ready: write execution not yet implemented → noop ----
 	const allPlannedPaths = writePlan.operations.map((op) => ({
 		kind: 'skipped' as const,
 		path: op.relativePath,
@@ -1048,12 +1272,17 @@ export async function generate(input: GenerateInput): Promise<GenerateResult> {
 	return createCoreResult({
 		changedPaths: allPlannedPaths,
 		data: {
-			generatedPaths: [],
-			generationMode: input.mode ?? 'final',
+			...emptyGenerateData(effectiveMode),
+			confirmationProvided: false,
+			incomplete: false,
+			partialDraft: false,
 			preflight,
+			requiresExplicitConfirmation: false,
+			skippedReason:
+				'Generation preflight and write plan succeeded, but final write execution is not yet implemented.',
 			writePlan,
 		},
-		dryRun: input.dryRun ?? false,
+		dryRun: false,
 		message: {
 			body: 'Generation preflight and write plan succeeded, but write execution is not yet implemented.',
 			kind: 'status',
@@ -1077,8 +1306,14 @@ export function createLogosCore(options?: {
 	const defaultFilesystem = options?.filesystem;
 
 	return {
-		generate: (input) =>
-			generate({ ...input, filesystem: input.filesystem ?? defaultFilesystem }),
+		generate: (input) => {
+			const { filesystem: inputFs, now, ...rest } = input;
+			return generate({
+				...rest,
+				filesystem: inputFs ?? defaultFilesystem,
+				...(now !== undefined ? { now } : {}),
+			});
+		},
 		getStatus: (input) =>
 			getStatus({
 				...input,

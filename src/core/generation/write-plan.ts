@@ -15,7 +15,10 @@ import { detectManualEditRisk } from './manual-edit-risk.js';
 import { deriveOutputOperations } from './output-contracts.js';
 import { resolveSafeOutputPath } from './output-paths.js';
 import { detectOverwriteRisk } from './overwrite-risk.js';
-import type { GenerationPreflightResult } from './preflight-result.js';
+import type {
+	GenerationPreflightMode,
+	GenerationPreflightResult,
+} from './preflight-result.js';
 
 // ---------------------------------------------------------------------------
 // Write plan types (Step 6.3 canonical model)
@@ -116,7 +119,7 @@ export type WritePlanOperation = {
  */
 export type GenerationWritePlan = {
 	projectRoot: string;
-	mode: 'final' | 'partial_draft' | 'dry_run';
+	mode: GenerationPreflightMode;
 	dryRun: boolean;
 	readyToWrite: boolean;
 	operations: WritePlanOperation[];
@@ -132,7 +135,7 @@ export type GenerationWritePlan = {
 
 export type BuildGenerationWritePlanInput = {
 	projectRoot: string;
-	mode?: 'final' | 'partial_draft' | 'dry_run';
+	mode?: GenerationPreflightMode;
 	filesystem: LogosFilesystem;
 	preflight: GenerationPreflightResult;
 	profileContracts: LoadedProfileContracts;
@@ -177,7 +180,7 @@ function makeRisk(
 
 function emptyWritePlan(
 	projectRoot: string,
-	mode: 'final' | 'partial_draft' | 'dry_run',
+	mode: GenerationPreflightMode,
 	dryRun: boolean,
 	now: string,
 ): GenerationWritePlan {

@@ -43,6 +43,14 @@ export { resolveSafeOutputPath } from './output-paths.js';
 export type { OverwriteRiskResult } from './overwrite-risk.js';
 export { detectOverwriteRisk } from './overwrite-risk.js';
 export type {
+	ExecutePartialDraftWritePlanInput,
+	IncompleteDraftMarkerInput,
+} from './partial-draft.js';
+export {
+	createIncompleteDraftHeader,
+	executePartialDraftWritePlan,
+} from './partial-draft.js';
+export type {
 	RunGenerationPreflightInput,
 	RunGenerationPreflightResult,
 } from './preflight.js';
@@ -55,6 +63,8 @@ export type {
 	GenerationPreflightWarningCode,
 	GenerationReadinessStatus,
 } from './preflight-result.js';
+export type { RenderPartialDraftPlaceholderInput } from './render-output-placeholder.js';
+export { renderPartialDraftPlaceholder } from './render-output-placeholder.js';
 export type {
 	BuildGenerationWritePlanInput,
 	BuildGenerationWritePlanResult,
