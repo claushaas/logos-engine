@@ -16,14 +16,13 @@ export {
 	createFollowUpPrompt,
 	createQuestionPrompt,
 } from './active-prompt.js';
+export { createAssistantMessageFromPrompt } from './assistant-message-from-prompt.js';
 export type {
 	CheckDependencyStatusInput,
 	DependencyStatus,
 } from './dependency-status.js';
 export { checkDependencyStatus } from './dependency-status.js';
-
 export { selectNextPrompt } from './next-prompt-selector.js';
-
 export type {
 	ActivePrompt,
 	NextPromptSelection,
@@ -36,3 +35,15 @@ export type {
 	QuestionSelectionStatus,
 } from './question-status.js';
 export { getQuestionSelectionStatus } from './question-status.js';
+export type {
+	StartIntakeTransitionData,
+	StartIntakeTransitionInput,
+	StartIntakeTransitionResult,
+} from './start-intake.js';
+export { startIntakeTransition } from './start-intake.js';
+export type {
+	StopIntakeTransitionData,
+	StopIntakeTransitionInput,
+	StopIntakeTransitionResult,
+} from './stop-intake.js';
+export { stopIntakeTransition } from './stop-intake.js';

@@ -13,6 +13,8 @@ import {
 } from './config/config-schema.js';
 import { loadLogosConfig } from './config/load-config.js';
 import { saveLogosConfig } from './config/save-config.js';
+import { startIntakeTransition, stopIntakeTransition } from './intake/index.js';
+import type { ActivePrompt } from './intake/prompt-selection-types.js';
 import type { AssistantMessage } from './messages.js';
 import type { LogosFilesystem } from './ports/filesystem.js';
 import { ensureProfileReady } from './profiles/profile-gate.js';
@@ -20,6 +22,7 @@ import type { CoreResult } from './result.js';
 import { createCoreResult, createLogosBlocker } from './result.js';
 import { createDefaultLogosConfig } from './state/config-types.js';
 import type { IntakeMode, IntakeProgress } from './state/index.js';
+import type { ActivePromptState } from './state/intake-state-types.js';
 
 export type { IntakeMode, IntakeProgress } from './state/index.js';
 
@@ -93,11 +96,15 @@ export type InitProjectResult = CoreResult<InitProjectData>;
 // Start Intake
 // ---------------------------------------------------------------------------
 
-export type StartIntakeInput = ProjectRootInput & CoreApiOptions;
+export type StartIntakeInput = ProjectRootInput &
+	CoreApiOptions & {
+		now?: string;
+	};
 
 export type StartIntakeData = {
 	mode: IntakeMode;
 	activeQuestionId?: string | undefined;
+	activePrompt?: ActivePrompt | undefined;
 };
 
 export type StartIntakeResult = CoreResult<StartIntakeData>;
@@ -144,11 +151,15 @@ export type HandleIntakeCommandResult = CoreResult<HandleIntakeCommandData>;
 // Stop Intake
 // ---------------------------------------------------------------------------
 
-export type StopIntakeInput = ProjectRootInput & CoreApiOptions;
+export type StopIntakeInput = ProjectRootInput &
+	CoreApiOptions & {
+		now?: string;
+	};
 
 export type StopIntakeData = {
 	mode: IntakeMode;
 	activeQuestionId?: string | undefined;
+	activePrompt?: ActivePromptState | undefined;
 	progress: IntakeProgress;
 };
 
@@ -365,6 +376,8 @@ export async function startIntake(
 	input: StartIntakeInput,
 ): Promise<StartIntakeResult> {
 	const filesystem = input.filesystem;
+	const now = input.now ?? new Date().toISOString();
+	const dryRun = input.dryRun ?? false;
 
 	if (filesystem === undefined) {
 		return createCoreResult({
@@ -372,7 +385,7 @@ export async function startIntake(
 				activeQuestionId: undefined,
 				mode: 'idle',
 			},
-			dryRun: input.dryRun ?? false,
+			dryRun,
 			message: {
 				body: 'Filesystem port is required for intake operations.',
 				kind: 'error',
@@ -381,62 +394,51 @@ export async function startIntake(
 		});
 	}
 
-	// ---- load project config ----
-	const configResult = await loadLogosConfig({
+	const transitionResult = await startIntakeTransition({
+		dryRun,
 		filesystem,
-		now: new Date().toISOString(),
+		now,
 		projectRoot: input.projectRoot,
 	});
 
-	if (!configResult.ok) {
+	if (transitionResult.status === 'blocked') {
 		return createCoreResult({
-			blockers: [
+			blockers: transitionResult.blockers.map((b) =>
 				createLogosBlocker({
-					code: 'project_not_initialized',
-					message: 'Project is not initialized. Run /logos-init first.',
+					code: b.code,
+					message: b.message,
+					...(b.details !== undefined ? { details: b.details } : {}),
 				}),
-			],
-			data: {
-				activeQuestionId: undefined,
-				mode: 'idle',
-			},
-			dryRun: input.dryRun ?? false,
+			),
+			data: transitionResult.data,
+			dryRun,
 			message: {
-				body: 'Project is not initialized. Run /logos-init first.',
-				kind: 'error',
+				body: transitionResult.messageText,
+				kind: transitionResult.messageKind as AssistantMessage['kind'],
 			},
 			status: 'blocked',
+			warnings: transitionResult.warnings.map((w) => ({
+				code: 'unknown_error',
+				message: w,
+				severity: 'warning' as const,
+			})),
 		});
 	}
 
-	// ---- resolve active profile ----
-	const gateResult = await ensureProfileReady({
-		activeProfileId: configResult.config.activeProfileId,
-		filesystem,
-		projectRoot: input.projectRoot,
-	});
-
-	if (!gateResult.ok) {
-		return makeProfileBlockedResult({
-			blockers: gateResult.blockers,
-			data: {
-				activeQuestionId: undefined,
-				mode: 'idle',
-			},
-			dryRun: input.dryRun ?? false,
-			message: gateResult.blockers[0]?.message ?? 'Profile resolution failed.',
-		});
-	}
-
-	// Profile valid — keep existing stub behavior.
+	// selected | reemitted | complete
 	return createCoreResult({
-		data: {
-			activeQuestionId: undefined,
-			mode: 'idle',
+		data: transitionResult.data,
+		dryRun,
+		message: {
+			body: transitionResult.messageText,
+			kind: transitionResult.messageKind as AssistantMessage['kind'],
 		},
-		dryRun: input.dryRun ?? false,
-		message: stubMessage('LOGOS intake start is not implemented yet.'),
-		status: 'blocked',
+		status: 'ok',
+		warnings: transitionResult.warnings.map((w) => ({
+			code: 'unknown_error',
+			message: w,
+			severity: 'warning' as const,
+		})),
 	});
 }
 
@@ -488,16 +490,46 @@ export async function handleIntakeCommand(
 export async function stopIntake(
 	input: StopIntakeInput,
 ): Promise<StopIntakeResult> {
-	// stopIntake must remain callable even when the active profile is missing.
+	const filesystem = input.filesystem;
+	const now = input.now ?? new Date().toISOString();
+	const dryRun = input.dryRun ?? false;
+
+	if (filesystem === undefined) {
+		return createCoreResult({
+			data: {
+				activeQuestionId: undefined,
+				mode: 'idle',
+				progress: emptyProgress,
+			},
+			dryRun,
+			message: {
+				body: 'Filesystem port is required for intake operations.',
+				kind: 'error',
+			},
+			status: 'blocked',
+		});
+	}
+
+	const transitionResult = await stopIntakeTransition({
+		dryRun,
+		filesystem,
+		now,
+		projectRoot: input.projectRoot,
+	});
+
 	return createCoreResult({
-		data: {
-			activeQuestionId: undefined,
-			mode: 'idle',
-			progress: emptyProgress,
+		data: transitionResult.data,
+		dryRun,
+		message: {
+			body: transitionResult.messageText,
+			kind: transitionResult.messageKind as AssistantMessage['kind'],
 		},
-		dryRun: input.dryRun ?? false,
-		message: stubMessage('LOGOS intake stop is not implemented yet.'),
-		status: 'blocked',
+		status: 'ok',
+		warnings: transitionResult.warnings.map((w) => ({
+			code: 'unknown_error',
+			message: w,
+			severity: 'warning' as const,
+		})),
 	});
 }
 
