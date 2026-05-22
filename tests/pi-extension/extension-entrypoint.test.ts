@@ -24,26 +24,29 @@ import logosExtension from '../../src/pi-extension/index.js';
 type FakePiEntry = {
 	commands: Map<
 		string,
-		(ctx: { cwd: string }, args?: string[]) => Promise<void> | void
+		(args: string, ctx: { cwd: string }) => Promise<void> | void
 	>;
 	registerCommand: (
 		name: string,
-		handler: (ctx: { cwd: string }, args?: string[]) => Promise<void> | void,
+		options: {
+			handler: (args: string, ctx: { cwd: string }) => Promise<void> | void;
+			description?: string;
+		},
 	) => void;
 };
 
 function createFakePi(): FakePiEntry {
 	const commands = new Map<
 		string,
-		(ctx: { cwd: string }, args?: string[]) => Promise<void> | void
+		(args: string, ctx: { cwd: string }) => Promise<void> | void
 	>();
 	return {
 		commands,
-		registerCommand(name, handler) {
+		registerCommand(name, options) {
 			if (commands.has(name)) {
 				throw new Error(`Command "${name}" is already registered.`);
 			}
-			commands.set(name, handler);
+			commands.set(name, options.handler);
 		},
 	};
 }

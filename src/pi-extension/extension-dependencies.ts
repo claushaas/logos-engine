@@ -9,8 +9,8 @@
  * legacy CLI/TUI/Ink/React modules.
  */
 
-import type { LogosCore } from '../core/index.js';
-import type { LogosPiExtensionApi } from './pi-types.js';
+import type { CoreResult, LogosCore } from '../core/index.js';
+import type { LogosPiCommandContext, LogosPiExtensionApi } from './pi-types.js';
 
 // ---------------------------------------------------------------------------
 // Dependency injection contract
@@ -36,4 +36,15 @@ export type LogosPiExtensionDependencies = {
 	 * when omitted.  Tests may inject a deterministic alternative.
 	 */
 	getProjectRoot?: ((ctx: { cwd?: string }) => string) | undefined;
+
+	/** Optional renderer seam for tests and future richer rendering. */
+	renderCoreResult?:
+		| ((
+				result: CoreResult<unknown>,
+				ctx: LogosPiCommandContext,
+		  ) => Promise<void> | void)
+		| undefined;
+
+	/** Optional deterministic clock for command adapter tests. */
+	now?: (() => string) | undefined;
 };

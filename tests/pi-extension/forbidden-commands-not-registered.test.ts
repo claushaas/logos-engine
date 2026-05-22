@@ -32,18 +32,21 @@ type RegisteredHandler = (
 
 type FakePi = {
 	commands: Map<string, RegisteredHandler>;
-	registerCommand: (name: string, handler: RegisteredHandler) => void;
+	registerCommand: (
+		name: string,
+		options: { handler: RegisteredHandler; description?: string },
+	) => void;
 };
 
 function createFakePi(): FakePi {
 	const commands = new Map<string, RegisteredHandler>();
 	return {
 		commands,
-		registerCommand(name, handler) {
+		registerCommand(name, options) {
 			if (commands.has(name)) {
 				throw new Error(`Command "${name}" is already registered.`);
 			}
-			commands.set(name, handler);
+			commands.set(name, options.handler);
 		},
 	};
 }
