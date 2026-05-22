@@ -24,10 +24,14 @@ import { loadLogosConfig } from '../config/load-config.js';
 import type { AssistantMessage } from '../messages.js';
 import type { LogosFilesystem } from '../ports/filesystem.js';
 import { ensureProfileReady } from '../profiles/profile-gate.js';
-import { loadIntakeState } from '../state/intake-state-persistence.js';
+import {
+	loadIntakeState,
+	saveIntakeState,
+} from '../state/intake-state-persistence.js';
 import type {
 	ActivePromptState,
 	IntakeMode,
+	IntakeProgress,
 	LogosIntakeState,
 } from '../state/intake-state-types.js';
 import { createAssistantMessageFromPrompt } from './assistant-message-from-prompt.js';
@@ -273,6 +277,135 @@ function dispositionToStatus(
 }
 
 // ---------------------------------------------------------------------------
+// Pause command whitelist (Step 5.3)
+// ---------------------------------------------------------------------------
+
+const PAUSE_COMMANDS: LogosLifecycleCommand[] = [
+	'logos-stop',
+	'logos-status',
+	'logos-generate',
+];
+
+// ---------------------------------------------------------------------------
+// Validation helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Validate that the active prompt in `state` can be safely preserved.
+ *
+ * Performs structural validation (existence, kind, consistency) and,
+ * when `registry` is provided, verifies the referenced question exists.
+ *
+ * Returns `{ ok: true }` when safe to preserve, or `{ ok: false, reason }`
+ * with a human-readable explanation.
+ */
+function canPreserveActivePrompt(
+	state: LogosIntakeState,
+	registry?: import('../questions/question-registry.js').LogosQuestionRegistry,
+): { ok: true } | { ok: false; reason: string } {
+	if (state.activePrompt === undefined) {
+		return { ok: false, reason: 'Active prompt is missing.' };
+	}
+	if (state.activeQuestionId === undefined) {
+		return { ok: false, reason: 'Active question id is missing.' };
+	}
+	if (state.activeQuestionId !== state.activePrompt.questionId) {
+		return {
+			ok: false,
+			reason: 'Active question id does not match active prompt question id.',
+		};
+	}
+
+	if (
+		state.activePrompt.kind !== 'question' &&
+		state.activePrompt.kind !== 'follow_up' &&
+		state.activePrompt.kind !== 'contradiction_resolution'
+	) {
+		return {
+			ok: false,
+			reason: `Invalid active prompt kind: ${state.activePrompt.kind}`,
+		};
+	}
+
+	if (state.activePrompt.kind === 'contradiction_resolution') {
+		const contradictionId = state.activePrompt.contradictionId;
+		if (contradictionId === undefined) {
+			return {
+				ok: false,
+				reason: 'Contradiction prompt is missing contradictionId.',
+			};
+		}
+		if (state.contradictions[contradictionId] === undefined) {
+			return {
+				ok: false,
+				reason: `Contradiction record "${contradictionId}" not found.`,
+			};
+		}
+	}
+
+	if (registry !== undefined) {
+		const question = registry.byId[state.activeQuestionId];
+		if (question === undefined) {
+			return {
+				ok: false,
+				reason: `Active prompt references missing question "${state.activeQuestionId}".`,
+			};
+		}
+	}
+
+	return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// Progress summary helper
+// ---------------------------------------------------------------------------
+
+function formatProgressSummary(progress: IntakeProgress): string {
+	const parts: string[] = [];
+	if (progress.sufficient > 0) {
+		parts.push(`${progress.sufficient} sufficient`);
+	}
+	if (progress.partial > 0) {
+		parts.push(`${progress.partial} partial`);
+	}
+	if (progress.missing > 0) {
+		parts.push(`${progress.missing} missing`);
+	}
+	if (progress.contradictory > 0) {
+		parts.push(`${progress.contradictory} contradictory`);
+	}
+	if (parts.length === 0) {
+		return 'No questions answered yet.';
+	}
+	return `Progress: ${parts.join(', ')} (${progress.sufficient}/${progress.total} complete).`;
+}
+
+// ---------------------------------------------------------------------------
+// Pause message builder
+// ---------------------------------------------------------------------------
+
+function buildPauseMessage(
+	command: LogosLifecycleCommand,
+	progress: IntakeProgress,
+): string {
+	switch (command) {
+		case 'logos-stop': {
+			return `Intake paused. ${formatProgressSummary(progress)}`;
+		}
+		case 'logos-status': {
+			const progressText = formatProgressSummary(progress);
+			return `Intake paused before status. The current prompt was preserved. ${progressText}`;
+		}
+		case 'logos-generate': {
+			return 'Intake paused before generation/preflight. The current prompt was preserved.';
+		}
+		default: {
+			return 'Intake paused safely before executing this command.';
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
 // Message builders
 // ---------------------------------------------------------------------------
 
@@ -357,15 +490,15 @@ function buildActivePromptFromState(
 /**
  * Handle a lifecycle command that may arrive while intake mode is active.
  *
- * For Step 5.1:
+ * Step 5.3 implementation:
  * 1. If a filesystem port is provided, loads config and intake state to
  *    determine the current mode and active prompt.
  * 2. Resolves the disposition via {@link resolveIntakeCommandDisposition}.
- * 3. Returns a structured result with disposition, mode, preserved question
+ * 3. For `pause_and_execute` dispositions (logos-stop, logos-status,
+ *    logos-generate), validates the active prompt, transitions mode to
+ *    `paused`, persists state, and returns the preserved prompt metadata.
+ * 4. Returns a structured result with disposition, mode, preserved question
  *    id, and (when available) the active prompt.
- *
- * State is NOT mutated by Step 5.1 — `stateChanged` and `persisted` are
- * always `false`. Full pause/persist behaviour is implemented in Step 5.3.
  */
 export async function handleIntakeCommand(
 	input: HandleIntakeCommandInput,
@@ -517,6 +650,121 @@ export async function handleIntakeCommand(
 					'Cannot re-emit active prompt because the active profile could not be resolved.',
 			};
 		}
+	}
+
+	// ---- For pause_and_execute, validate, rebuild, pause, persist ----
+	if (
+		resolution.disposition === 'pause_and_execute' &&
+		PAUSE_COMMANDS.includes(command) &&
+		loadedState !== undefined
+	) {
+		// Try to load profile for validation and prompt rebuild.
+		let registry:
+			| import('../questions/question-registry.js').LogosQuestionRegistry
+			| undefined;
+		const profileResult = await ensureProfileReady({
+			activeProfileId: configResult.config.activeProfileId,
+			filesystem,
+			projectRoot,
+		});
+
+		if (profileResult.ok) {
+			registry = profileResult.contracts.questionRegistry;
+			if (loadedState.activePrompt !== undefined) {
+				const rebuilt = rebuildActivePrompt(
+					loadedState.activePrompt,
+					registry,
+					loadedState,
+				);
+				if (rebuilt !== undefined) {
+					activePrompt = rebuilt;
+				}
+			}
+		}
+
+		// Validate active prompt can be preserved.
+		const validation = canPreserveActivePrompt(loadedState, registry);
+		if (!validation.ok) {
+			return {
+				blockers: [
+					{
+						code: 'active_prompt_invalid',
+						message: validation.reason,
+						severity: 'blocker' as const,
+					},
+				],
+				data: {
+					activeQuestionId,
+					command,
+					disposition: 'block',
+					mode: loadedState.mode,
+					persisted: false,
+					preservedQuestionId,
+					stateChanged: false,
+				},
+				dryRun: dry,
+				errors: [],
+				message: {
+					body: `Active prompt could not be preserved safely. ${validation.reason}`,
+					kind: 'error',
+				},
+				status: 'blocked',
+				warnings: [],
+			};
+		}
+
+		// Pause: transition mode to paused, preserve everything else.
+		const pausedState: LogosIntakeState = {
+			...loadedState,
+			mode: 'paused',
+			updatedAt: now ?? new Date().toISOString(),
+		};
+
+		if (!dryRun) {
+			await saveIntakeState({
+				filesystem,
+				projectRoot,
+				state: pausedState,
+			});
+		}
+
+		// Build command-specific message.
+		const messageBody = buildPauseMessage(command, pausedState.progress);
+		const messageKind: AssistantMessage['kind'] =
+			command === 'logos-generate' ? 'warning' : 'status';
+
+		const message: AssistantMessage = {
+			body: messageBody,
+			kind: messageKind,
+			metadata: {
+				activePromptKind: pausedState.activePrompt?.kind,
+				activeQuestionId: pausedState.activeQuestionId,
+				command,
+				contradictionId: pausedState.activePrompt?.contradictionId,
+				disposition: resolution.disposition,
+				followUpId: pausedState.activePrompt?.followUpId,
+				preservedQuestionId,
+			},
+		};
+
+		return {
+			blockers: [],
+			data: {
+				activePrompt,
+				activeQuestionId: pausedState.activeQuestionId,
+				command,
+				disposition: resolution.disposition,
+				mode: 'paused',
+				persisted: !dryRun,
+				preservedQuestionId,
+				stateChanged: true,
+			},
+			dryRun: dry,
+			errors: [],
+			message,
+			status: 'ok',
+			warnings: [],
+		};
 	}
 
 	// ---- Build result ----

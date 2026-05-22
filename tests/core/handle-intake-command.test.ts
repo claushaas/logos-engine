@@ -427,7 +427,11 @@ describe('handleIntakeCommand (active intake reaffirm)', () => {
 		const core = createLogosCore({ filesystem: fs });
 
 		await core.initProject({ projectRoot: PROJECT_ROOT });
-		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+		const startResult = await core.startIntake({
+			now: NOW,
+			projectRoot: PROJECT_ROOT,
+		});
+		const q1Id = startResult.data?.activeQuestionId;
 
 		const result = await handleIntakeCommand({
 			command: 'logos-stop',
@@ -437,8 +441,12 @@ describe('handleIntakeCommand (active intake reaffirm)', () => {
 
 		expect(result.status).toBe('ok');
 		expect(result.data?.disposition).toBe('pause_and_execute');
-		expect(result.data?.mode).toBe('intake_active');
-		expect(result.data?.preservedQuestionId).toBeDefined();
+		expect(result.data?.mode).toBe('paused');
+		expect(result.data?.activeQuestionId).toBe(q1Id);
+		expect(result.data?.preservedQuestionId).toBe(q1Id);
+		expect(result.data?.stateChanged).toBe(true);
+		expect(result.data?.persisted).toBe(true);
+		expect(result.data?.activePrompt).toBeDefined();
 	});
 
 	it('logos-status during active intake returns pause_and_execute', async () => {
@@ -447,7 +455,11 @@ describe('handleIntakeCommand (active intake reaffirm)', () => {
 		const core = createLogosCore({ filesystem: fs });
 
 		await core.initProject({ projectRoot: PROJECT_ROOT });
-		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+		const startResult = await core.startIntake({
+			now: NOW,
+			projectRoot: PROJECT_ROOT,
+		});
+		const q1Id = startResult.data?.activeQuestionId;
 
 		const result = await handleIntakeCommand({
 			command: 'logos-status',
@@ -457,7 +469,12 @@ describe('handleIntakeCommand (active intake reaffirm)', () => {
 
 		expect(result.status).toBe('ok');
 		expect(result.data?.disposition).toBe('pause_and_execute');
-		expect(result.data?.mode).toBe('intake_active');
+		expect(result.data?.mode).toBe('paused');
+		expect(result.data?.activeQuestionId).toBe(q1Id);
+		expect(result.data?.preservedQuestionId).toBe(q1Id);
+		expect(result.data?.stateChanged).toBe(true);
+		expect(result.data?.persisted).toBe(true);
+		expect(result.data?.activePrompt).toBeDefined();
 	});
 
 	it('logos-generate during active intake returns pause_and_execute', async () => {
@@ -466,7 +483,11 @@ describe('handleIntakeCommand (active intake reaffirm)', () => {
 		const core = createLogosCore({ filesystem: fs });
 
 		await core.initProject({ projectRoot: PROJECT_ROOT });
-		await core.startIntake({ now: NOW, projectRoot: PROJECT_ROOT });
+		const startResult = await core.startIntake({
+			now: NOW,
+			projectRoot: PROJECT_ROOT,
+		});
+		const q1Id = startResult.data?.activeQuestionId;
 
 		const result = await handleIntakeCommand({
 			command: 'logos-generate',
@@ -476,7 +497,12 @@ describe('handleIntakeCommand (active intake reaffirm)', () => {
 
 		expect(result.status).toBe('ok');
 		expect(result.data?.disposition).toBe('pause_and_execute');
-		expect(result.data?.mode).toBe('intake_active');
+		expect(result.data?.mode).toBe('paused');
+		expect(result.data?.activeQuestionId).toBe(q1Id);
+		expect(result.data?.preservedQuestionId).toBe(q1Id);
+		expect(result.data?.stateChanged).toBe(true);
+		expect(result.data?.persisted).toBe(true);
+		expect(result.data?.activePrompt).toBeDefined();
 	});
 
 	it('logos-init during active intake returns confirm_required', async () => {
