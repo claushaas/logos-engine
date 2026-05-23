@@ -7,6 +7,9 @@
 
 export type { RenderGenerationBlockersInput } from './generation-blocker-renderer.js';
 export { renderGenerationBlockers } from './generation-blocker-renderer.js';
+// ---- Step 9.4 generation result renderer ----
+export type { RenderGenerationResultInput } from './generation-result-renderer.js';
+export { renderGenerationResult } from './generation-result-renderer.js';
 export type { PhaseProgress, ProgressSummary } from './progress-formatter.js';
 export {
 	formatPhaseProgress,

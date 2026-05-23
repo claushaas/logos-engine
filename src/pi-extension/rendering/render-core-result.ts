@@ -21,6 +21,7 @@ import type {
 	LogosPiEventContext,
 } from '../pi-types.js';
 import { renderGenerationBlockers } from './generation-blocker-renderer.js';
+import { renderGenerationResult } from './generation-result-renderer.js';
 import { renderStatus } from './status-renderer.js';
 
 export type RenderCoreResultInput = {
@@ -210,6 +211,45 @@ function fallbackBlockerBody(result: CoreResult<unknown>): string | undefined {
 }
 
 /**
+ * Detect whether Core result data carries generation result content
+ * (i.e. generation has already run and produced output/path data).
+ *
+ * Distinct from preflight-only data: requires actual write-plan
+ * operations, non-empty generated paths, or confirmed writes.
+ */
+function hasGenerationResultData(data: unknown): boolean {
+	if (data === null || data === undefined) return false;
+	if (typeof data !== 'object') return false;
+	const d = data as Record<string, unknown>;
+
+	// Strong signal: files were actually written.
+	if (d.wroteFiles === true) return true;
+
+	// Strong signal: non-empty generated paths.
+	if (Array.isArray(d.generatedPaths) && d.generatedPaths.length > 0) {
+		return true;
+	}
+
+	// Write plan with actual operations (post-preflight).
+	if (
+		'writePlan' in d &&
+		d.writePlan !== null &&
+		typeof d.writePlan === 'object'
+	) {
+		const wp = d.writePlan as Record<string, unknown>;
+		if (
+			'operations' in wp &&
+			Array.isArray(wp.operations) &&
+			wp.operations.length > 0
+		) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Detect whether Core result data carries generation preflight content.
  */
 function hasGenerationData(data: unknown): boolean {
@@ -250,7 +290,18 @@ function routeToSpecializedRenderer(
 ): LogosRenderedMessage | undefined {
 	const data = result.data as Record<string, unknown> | undefined;
 
-	// Generation / preflight data → use generation blocker renderer.
+	// ---- Generation result data (post-generation paths, write plan with ops) --
+	if (data !== undefined && hasGenerationResultData(data)) {
+		return renderGenerationResult({
+			blockers: result.blockers,
+			changedPaths: result.changedPaths,
+			data,
+			message: result.message,
+			warnings: result.warnings,
+		});
+	}
+
+	// ---- Generation / preflight data → use generation blocker renderer ---
 	if (data !== undefined && hasGenerationData(data)) {
 		const preflight = data.preflight;
 		return renderGenerationBlockers({
