@@ -2440,6 +2440,15 @@ Prove the product behavior without Pi runtime.
 
 - [Dependency] Use fake evaluator to avoid live AI.
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] The Core E2E scenario was created at `tests/core/core-e2e-scenario.test.ts` with 12 tests covering: init (profile resolution, config persistence), start intake (assistant speaks first, mode `intake_active`), natural-language answer advancement (sufficient → next question without slash commands), partial answer (follow-up without advancement), multiple-answer progression loop, status/completeness reporting, generation dry-run (preflight + write plan, no writes), stop/resume intake (preserves active question), final generation blocked on incomplete intake, no Pi/CLI/TUI dependency, and profile-driven question loading.
+- [Decision] The test uses existing helpers: `createFakeFilesystem` from `tests/core/helpers/fake-filesystem.ts` (strategy B: minimal test profile at `profiles/standard/`), `createFakeAnswerEvaluator` from `src/core/evaluation/fake-answer-evaluator.ts`, `createLogosCore` from `src/core/api.ts`, and persistence verification via `loadIntakeState` and `loadLogosConfig`.
+- [Decision] No new filesystem/state/evaluator helpers were created — all existing test infrastructure was sufficient.
+- [Decision] Generation is tested via `mode: 'dry_run'` which safely returns preflight + write plan without writing files. Final mode with incomplete intake is tested as blocked.
+- [Decision] No Pi extension behavior, CLI/TUI behavior, live provider integration, or broad new product behavior was implemented.
+- [Decision] This step is complete when all 12 E2E tests pass alongside the existing 1829 tests (1841 total).
+
 #### Step 11.2 — Add Pi Extension End-To-End Harness
 
 ##### Goal
