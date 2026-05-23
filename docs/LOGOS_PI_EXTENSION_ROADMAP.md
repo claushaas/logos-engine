@@ -2250,6 +2250,28 @@ Ensure legacy TUI code does not couple into Core or Pi extension behavior.
 
 #### Step 10.3 — Remove Or Deprecate Forbidden Intake Commands
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] Forbidden command-first intake flows remain unsupported across Core, Pi extension, CLI, TUI, scripts, and package metadata.
+- [Decision] Intake progression is conversational only: `/logos-start` asks first, and natural user answers drive Core-selected next prompts.
+- [Decision] `/logos-next`, `/logos-answer`, `/logos-continue`, `/logos-question`, `/logos-phase`, `/logos-doc`, `/logos-set-answer`, `/logos-skip`, and `/logos-followup` must not be registered or implemented in any product surface.
+- [Decision] The `FORBIDDEN_LOGOS_COMMANDS` constant in `src/core/intake/lifecycle-command.ts` is the canonical source of truth for the nine forbidden patterns. It is exported through the public Core API (`src/core/index.ts`).
+- [Decision] `detectLifecycleCommand` correctly marks all forbidden slash commands as unknown (`detected: false, isSlashCommand: true`), ensuring they are never evaluated as answers.
+- [Decision] Pi extension input routing (`routePiInput`) short-circuits on all slash commands before status lookup or `handleIntakeMessage`, preventing any slash command from being treated as an intake answer.
+- [Decision] Pi extension command registration via `registerLogosCommands` only registers the five allowed lifecycle commands (`logos-init`, `logos-start`, `logos-stop`, `logos-status`, `logos-generate`).
+- [Decision] Test files enforcing this contract:
+  - `tests/core/forbidden-lifecycle-commands.test.ts` — Core guard rejection for all nine forbidden commands.
+  - `tests/core/lifecycle-command-contract.test.ts` — Allowed/forbidden list contract and overlap check.
+  - `tests/core/command-text-not-answer.test.ts` — Slash commands never routed to answer evaluation.
+  - `tests/pi-extension/forbidden-commands-not-registered.test.ts` — None of the nine forbidden commands are registered.
+  - `tests/pi-extension/input-routing-slash-command.test.ts` — All forbidden slash commands (plus unknown) return `{ action: "continue" }` and never call Core.
+  - `tests/pi-extension/command-registration.test.ts` — Only five allowed commands registered.
+  - `tests/cli/forbidden-cli-commands.test.ts` — CLI absent (deferred strategy); scan confirms no forbidden command usage in runtime source.
+  - `tests/tui/forbidden-tui-commands.test.ts` — TUI absent (deferred strategy); scan confirms no forbidden command registration in any source.
+  - `tests/package/forbidden-command-surface.test.ts` — Package scripts, bin, and metadata do not expose forbidden commands.
+- [Decision] No `src/cli/`, `src/tui/`, or `scripts/` directories exist. CLI and TUI strategies remain deferred (Strategy A from Steps 10.1 and 10.2).
+- [Decision] No new commands, CLI/TUI behavior, generation/preflight behavior, or live provider integration was implemented in this step.
+
 ##### Goal
 
 Eliminate command-first progression from active product surfaces.

@@ -334,6 +334,16 @@ Those belong in their respective workstreams.
 - [Decision] The `"tui"` keyword in `package.json` is a legacy artifact retained temporarily. Package description correctly reflects the Pi-extension-first MVP direction.
 - [Constraint] If TUI source is added later, it must be an isolated legacy/future adapter that imports only public Core exports and does not implement command-first intake progression or forbidden LOGOS commands.
 
+## 8.5. Forbidden Intake Commands Enforcement (Step 10.3)
+
+- [Decision] The nine forbidden command-first patterns (`logos-next`, `logos-answer`, `logos-continue`, `logos-question`, `logos-phase`, `logos-doc`, `logos-set-answer`, `logos-skip`, `logos-followup`) are explicitly blocked across all product surfaces per the canonical `FORBIDDEN_LOGOS_COMMANDS` constant in `src/core/intake/lifecycle-command.ts`.
+- [Decision] Pi extension registers only the five allowed lifecycle commands (`logos-init`, `logos-start`, `logos-stop`, `logos-status`, `logos-generate`). No forbidden command is registered.
+- [Decision] Pi input routing rejects all slash commands (including forbidden ones) before any Core processing, returning `{ action: "continue" }` and never calling `handleIntakeMessage`.
+- [Decision] Core's `detectLifecycleCommand` correctly marks forbidden slash commands as unknown (`detected: false, isSlashCommand: true`), preventing answer evaluation.
+- [Decision] CLI and TUI directories are absent (Strategy A deferred), so no forbidden commands can be exposed through those surfaces.
+- [Decision] Package metadata (scripts, bin, keywords, description) contains no forbidden command references.
+- [Decision] Tests enforcing this contract are distributed across `tests/core/`, `tests/pi-extension/`, `tests/cli/`, `tests/tui/`, and `tests/package/` as documented in the roadmap Step 10.3 implementation decision.
+
 ## 9. Plan Validation
 
 Before marking any workstream complete, validate:
