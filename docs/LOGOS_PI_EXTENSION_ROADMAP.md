@@ -2585,6 +2585,16 @@ Validate code, tests, package scripts, and live extension loading.
 
 - [Risk] Current checkout is expected to fail broad gates until missing implementation and scripts exist.
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] Automated quality validation uses package scripts and fake harnesses; real Pi execution remains a manual smoke checklist.
+- [Decision] Manual Pi smoke is documented in `docs/PI_EXTENSION_MANUAL_SMOKE.md`.
+- [Decision] The manual smoke path validates `/logos-init`, `/logos-start`, natural answer routing, `/logos-status`, `/logos-generate`, partial confirmation safety, and forbidden command absence.
+- [Decision] Quality gate contract tests were added at `tests/package/quality-gates-contract.test.ts` and `tests/package/manual-smoke-doc-contract.test.ts`.
+- [Decision] A local extension entrypoint test was added at `tests/pi-extension/local-extension-entrypoint.test.ts`; no `.pi/extensions/logos/` directory was created because the manual smoke doc documents alternative load paths (`pi -e` flag and project-local symlink).
+- [Decision] All existing quality gate scripts (`smoke-package.js`, `security-check.js`, `nfr-evidence.js`) are confirmed present and referenced correctly by `package.json`.
+- [Decision] No product behavior, CLI/TUI behavior, real Pi runtime automation, or live provider integration was implemented.
+
 ### Phase Acceptance Criteria
 
 - End-to-end Core and Pi extension flows pass.
