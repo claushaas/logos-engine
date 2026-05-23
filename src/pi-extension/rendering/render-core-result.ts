@@ -1,5 +1,5 @@
 /**
- * LOGOS Pi Extension — Core result rendering boundary (Step 8.3 enhanced).
+ * LOGOS Pi Extension — Core result rendering boundary (Steps 8.3, 9.2).
  *
  * Handles rendering of conversational advancement results returned by
  * `core.handleIntakeMessage(...)`.  Supports all Core assistant message kinds
@@ -9,6 +9,9 @@
  * Step 7.4 kept rendering intentionally minimal; Step 8.3 adds structured
  * metadata extraction for conversational advancement while keeping product
  * decisions in Core.
+ *
+ * Step 9.2 adds routing to specialized status and generation blocker
+ * renderers when Core result data contains progress or preflight shapes.
  */
 
 import type { CoreResult } from '../../core/index.js';
@@ -17,6 +20,8 @@ import type {
 	LogosPiCommandContext,
 	LogosPiEventContext,
 } from '../pi-types.js';
+import { renderGenerationBlockers } from './generation-blocker-renderer.js';
+import { renderStatus } from './status-renderer.js';
 
 export type RenderCoreResultInput = {
 	deps: LogosPiExtensionDependencies;
@@ -204,6 +209,108 @@ function fallbackBlockerBody(result: CoreResult<unknown>): string | undefined {
 	return 'LOGOS could not continue because blockers were returned by Core.';
 }
 
+/**
+ * Detect whether Core result data carries generation preflight content.
+ */
+function hasGenerationData(data: unknown): boolean {
+	if (data === null || data === undefined) return false;
+	if (typeof data !== 'object') return false;
+	const d = data as Record<string, unknown>;
+	// Check for preflight sub-object or top-level preflight-like shape.
+	if (d.preflight !== undefined) return true;
+	// Check for generation-specific fields.
+	if ('generationMode' in d) return true;
+	if ('writePlan' in d) return true;
+	return false;
+}
+
+/**
+ * Detect whether Core result data carries status/progress content.
+ */
+function hasStatusData(data: unknown): boolean {
+	if (data === null || data === undefined) return false;
+	if (typeof data !== 'object') return false;
+	const d = data as Record<string, unknown>;
+	// Check for progress sub-object.
+	if (d.progress !== undefined && typeof d.progress === 'object') return true;
+	// Check for generationReadiness which is status-specific.
+	if (d.generationReadiness !== undefined) return true;
+	// Check for mode + initialized combo (status result).
+	if ('initialized' in d && 'mode' in d) return true;
+	return false;
+}
+
+/**
+ * Route a Core result through the appropriate specialized renderer when
+ * recognizable data shapes are present, then produce a
+ * {@link LogosRenderedMessage}.
+ */
+function routeToSpecializedRenderer(
+	result: CoreResult<unknown>,
+): LogosRenderedMessage | undefined {
+	const data = result.data as Record<string, unknown> | undefined;
+
+	// Generation / preflight data → use generation blocker renderer.
+	if (data !== undefined && hasGenerationData(data)) {
+		const preflight = data.preflight;
+		return renderGenerationBlockers({
+			blockers: result.blockers,
+			generation: data,
+			message: result.message,
+			preflight,
+			warnings: result.warnings,
+		});
+	}
+
+	// Status / progress data → use status renderer.
+	if (data !== undefined && hasStatusData(data)) {
+		return renderStatus({
+			blockers: result.blockers,
+			data,
+			message: result.message,
+			warnings: result.warnings,
+		});
+	}
+
+	// Error or warning with blockers that look generation-related.
+	if (
+		(result.message.kind === 'error' || result.message.kind === 'warning') &&
+		result.blockers.length > 0
+	) {
+		// Check if any blocker code matches known generation blocker codes.
+		const generationCodes = [
+			'project_not_initialized',
+			'profile_not_found',
+			'profile_invalid',
+			'intake_state_missing',
+			'question_registry_empty',
+			'missing_critical_questions',
+			'partial_critical_questions',
+			'unresolved_contradictions',
+			'required_questions_skipped',
+			'unsafe_output_path',
+			'overwrite_risk',
+			'manual_edit_risk',
+		];
+		const hasGenBlocker = result.blockers.some(
+			(b) =>
+				b !== null &&
+				typeof b === 'object' &&
+				typeof (b as Record<string, unknown>).code === 'string' &&
+				generationCodes.includes((b as Record<string, unknown>).code as string),
+		);
+		if (hasGenBlocker) {
+			return renderGenerationBlockers({
+				blockers: result.blockers,
+				message: result.message,
+				warnings: result.warnings,
+			});
+		}
+	}
+
+	return undefined;
+}
+
 export async function renderCoreResult(
 	input: RenderCoreResultInput,
 ): Promise<void> {
@@ -212,7 +319,11 @@ export async function renderCoreResult(
 		return;
 	}
 
-	const rendered = extractRenderedMessage(input.result);
+	// Try specialized renderer first (status, generation blockers).
+	const specialized = routeToSpecializedRenderer(input.result);
+
+	// Fall back to generic extractRenderedMessage when no specialized match.
+	const rendered = specialized ?? extractRenderedMessage(input.result);
 
 	// Fallback body when blockers exist but the message body is empty.
 	const fallbackBody = fallbackBlockerBody(input.result);
