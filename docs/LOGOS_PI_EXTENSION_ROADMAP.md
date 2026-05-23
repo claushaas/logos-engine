@@ -2534,6 +2534,17 @@ Ensure every spec-required behavior has a named regression test.
 
 - [Decision] Missing contract tests block release.
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] MVP-critical behavior is now represented by a required contract test matrix under `tests/contracts/**`.
+- [Decision] The matrix verifies the existence and coverage of Core, Pi extension, rendering, generation, legacy containment, package gate, and E2E contract tests.
+- [Decision] The manifest at `tests/contracts/required-contracts.ts` defines 48 required contracts across 9 areas, with each contract referencing existing test files that prove the behavioral guarantee.
+- [Decision] Two validation tests were created:
+  - `required-contract-matrix.test.ts`: validates manifest structure, file existence, no skipped-only tests, and minimum contract count.
+  - `contract-matrix-coverage.test.ts`: validates every area is covered, critical MVP contract ids are present, and generation/rendering/forbidden-command coverage spans both Core and Pi extension areas.
+- [Decision] The validation gate at `tests/validation-gate.test.ts` now includes contract matrix integration assertions (manifest exists, matrix tests exist, minimum contract/area counts).
+- [Decision] No new product behavior, CLI/TUI behavior, or live provider integration was implemented.
+
 #### Step 11.4 — Run Quality Gates And Manual Pi Smoke
 
 ##### Goal

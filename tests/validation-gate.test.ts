@@ -19,6 +19,28 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+// ---------------------------------------------------------------------------
+// Step 11.3 — contract matrix integration (lazy import to keep gate fast)
+// ---------------------------------------------------------------------------
+
+/** Reflect whether the contract manifest module is importable. */
+let contractManifestLoaded = false;
+let manifestContractsCount = 0;
+let manifestAreasCount = 0;
+
+async function ensureContractManifest(): Promise<void> {
+	if (contractManifestLoaded) return;
+	try {
+		const mod = await import('./contracts/required-contracts.js');
+		manifestContractsCount = (mod.REQUIRED_CONTRACTS as readonly unknown[])
+			.length;
+		manifestAreasCount = (mod.REQUIRED_AREAS as readonly unknown[]).length;
+		contractManifestLoaded = true;
+	} catch {
+		contractManifestLoaded = true; // will fail the assertion below
+	}
+}
+
 const PROJECT_ROOT = process.cwd();
 
 // ---------------------------------------------------------------------------
@@ -220,6 +242,34 @@ describe('validation gate (Step 10.4)', () => {
 				expect(exists(doc), `${doc} is missing`).toBe(true);
 			});
 		}
+	});
+
+	describe('contract matrix integration (Step 11.3)', () => {
+		it('contract manifest exists', () => {
+			expect(exists('tests/contracts/required-contracts.ts')).toBe(true);
+		});
+
+		it('contract matrix test exists', () => {
+			expect(exists('tests/contracts/required-contract-matrix.test.ts')).toBe(
+				true,
+			);
+		});
+
+		it('contract coverage test exists', () => {
+			expect(exists('tests/contracts/contract-matrix-coverage.test.ts')).toBe(
+				true,
+			);
+		});
+
+		it('contract manifest has >= 40 contracts', async () => {
+			await ensureContractManifest();
+			expect(manifestContractsCount).toBeGreaterThanOrEqual(40);
+		});
+
+		it('contract manifest declares 9 areas', async () => {
+			await ensureContractManifest();
+			expect(manifestAreasCount).toBe(9);
+		});
 	});
 
 	describe('package metadata', () => {
