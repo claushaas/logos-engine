@@ -2487,6 +2487,17 @@ Prove Pi command and input adapters satisfy the interaction contract.
 
 - [Risk] This is a harness test, not a substitute for manual Pi smoke testing.
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] The Pi extension E2E harness uses a fake Pi host and fake Core to validate adapter wiring without real Pi runtime, network, CLI, TUI, Ink, or React.
+- [Decision] Three E2E test files were created: `pi-extension-e2e-harness.test.ts` (15 tests — load & registration), `pi-extension-e2e-conversation.test.ts` (16 tests — init, start, natural input advancement, follow-up, slash safety, status), and `pi-extension-e2e-generation.test.ts` (11 tests — generation blocker, confirmation required, decline/confirm paths).
+- [Decision] Shared fixtures are in `tests/pi-extension/pi-extension-e2e-fixtures.ts` providing `FakePiHost`, `FakeCoreScenario`, deterministic result builders (`okResult`, `blockedResult`, `confirmationRequiredResult`), scenario presets (`createInitStartQ1Scenario`, `makeFollowUpResult`, `makeQ2Result`, etc.), and context helpers (`createFakeCommandContext`).
+- [Decision] The fake Pi host (`createFakePiHost`) tracks command registrations, input handlers, sent messages, sent user messages (for negative assertions), registered renderers, and supports `invokeCommand` and `emitInput` for deterministic test flows.
+- [Decision] The fake Core scenario engine (`createFakeCoreScenario` + `buildCoreFromScenario`) sequences deterministic Core results by method name, enabling E2E flows without reimplementing Core algorithms.
+- [Decision] No new product behavior, CLI/TUI behavior, live provider integration, or Core product changes were implemented.
+- [Decision] The harness uses Scenario B (partial generation confirmation) since Step 9.3 is already implemented, but also tests Scenario A (disposition block).
+- [Decision] All 42 new E2E tests pass alongside the existing 1841 tests (1883 total).
+
 #### Step 11.3 — Add Required Contract Test Matrix
 
 ##### Goal
