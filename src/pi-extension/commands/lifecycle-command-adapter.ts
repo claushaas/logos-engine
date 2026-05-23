@@ -14,6 +14,11 @@ import type {
 	LogosLifecycleCommand,
 } from '../../core/index.js';
 import { createCoreResult, createLogosError } from '../../core/index.js';
+import {
+	createNoUiBlockedResult,
+	createPartialGenerationCancelledResult,
+	getPartialGenerationConfirmationRequirement,
+} from '../confirmations/partial-generation-confirmation.js';
 import type { LogosPiExtensionDependencies } from '../extension-dependencies.js';
 import type { LogosPiCommandContext } from '../pi-types.js';
 import { getProjectRootFromContext } from '../project-root.js';
@@ -135,6 +140,157 @@ export async function runLifecycleCommandAdapter(
 				ctx: input.ctx,
 				deps: input.deps,
 				result: commandResult,
+			});
+		} catch {
+			await renderCoreResult({
+				ctx: input.ctx,
+				deps: input.deps,
+				result: safeCoreErrorResult(
+					'LOGOS command execution failed unexpectedly.',
+				),
+			});
+		}
+	} catch {
+		await renderCoreResult({
+			ctx: input.ctx,
+			deps: input.deps,
+			result: safeCoreErrorResult(
+				'LOGOS command interruption handling failed unexpectedly.',
+			),
+		});
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Generate-specific command adapter (Step 9.3)
+// ---------------------------------------------------------------------------
+
+/**
+ * Input type for the generate-specific command adapter.
+ */
+export type RunGenerateCommandAdapterInput = {
+	deps: LogosPiExtensionDependencies;
+	ctx: LogosPiCommandContext;
+	args?: string[] | undefined;
+};
+
+/**
+ * Generate-specific command adapter that adds partial generation
+ * confirmation UI after the initial Core generate result.
+ *
+ * Flow:
+ * 1. Handle intake command interruption (same as shared adapter).
+ * 2. Render interruption result.
+ * 3. Call core.generate(...) with default mode.
+ * 4. Render initial generation result (shows blockers/readiness).
+ * 5. If Core result requires explicit confirmation AND UI is available:
+ *    a. Ask ctx.ui.confirm(...) for user approval.
+ *    b. If confirmed: call core.generate(...) with partial_draft
+ *       mode and confirmation flag, then render result.
+ *    c. If declined: render cancellation, write nothing.
+ * 6. If Core result requires confirmation but UI is unavailable:
+ *    a. Render no-UI blocked result, write nothing.
+ *
+ * Rules:
+ * - Never treats confirmation as a final-generation bypass.
+ * - Never retries generate in "final" mode after confirmation.
+ * - Pi does not write files directly.
+ * - Pi does not call handleIntakeMessage.
+ */
+export async function runGenerateCommandAdapter(
+	input: RunGenerateCommandAdapterInput,
+): Promise<void> {
+	const projectRoot = resolveProjectRoot(input.deps, input.ctx);
+	const now = input.deps.now?.();
+	const generateArgs = now !== undefined ? { now } : {};
+
+	try {
+		// Step 1: Handle interruption.
+		const interruptionResult = await input.deps.core.handleIntakeCommand({
+			command: 'logos-generate',
+			projectRoot,
+			...generateArgs,
+		});
+
+		await renderCoreResult({
+			ctx: input.ctx,
+			deps: input.deps,
+			result: interruptionResult,
+		});
+
+		const disposition = getDisposition(interruptionResult.data);
+		if (!isExecutableDisposition(disposition)) {
+			return;
+		}
+
+		try {
+			// Step 2: Initial generate call (default mode, no confirmation).
+			const initialResult = await runCommandSpecificCoreAction({
+				args: input.args,
+				command: 'logos-generate',
+				deps: input.deps,
+				projectRoot,
+				...generateArgs,
+			});
+
+			// Step 3: Render initial result (shows blockers / readiness).
+			await renderCoreResult({
+				ctx: input.ctx,
+				deps: input.deps,
+				result: initialResult,
+			});
+
+			// Step 4: Check if confirmation is required.
+			const confirmationReq =
+				getPartialGenerationConfirmationRequirement(initialResult);
+
+			if (!confirmationReq.required) {
+				return;
+			}
+
+			// Step 5: Check UI availability.
+			const hasUi =
+				input.ctx.hasUI !== false &&
+				typeof input.ctx.ui?.confirm === 'function';
+
+			if (!hasUi) {
+				await renderCoreResult({
+					ctx: input.ctx,
+					deps: input.deps,
+					result: createNoUiBlockedResult(),
+				});
+				return;
+			}
+
+			// Step 6: Ask for user confirmation.
+			const confirmed = await input.ctx.ui.confirm(
+				'Partial Draft Generation',
+				'Generation is blocked for final documentation, but LOGOS can create an incomplete partial draft. This may write files marked as INCOMPLETE DRAFT. Continue?',
+			);
+
+			if (!confirmed) {
+				await renderCoreResult({
+					ctx: input.ctx,
+					deps: input.deps,
+					result: createPartialGenerationCancelledResult(),
+				});
+				return;
+			}
+
+			// Step 7: Call Core generate with confirmation flag.
+			// Never retry final mode — always use partial_draft.
+			const confirmedResult = await input.deps.core.generate({
+				confirmedPartialGeneration: true,
+				mode: 'partial_draft',
+				projectRoot,
+				...generateArgs,
+			});
+
+			// Step 8: Render confirmed generation result.
+			await renderCoreResult({
+				ctx: input.ctx,
+				deps: input.deps,
+				result: confirmedResult,
 			});
 		} catch {
 			await renderCoreResult({

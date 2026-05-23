@@ -1,14 +1,13 @@
 import type { LogosPiExtensionDependencies } from '../extension-dependencies.js';
 import { argsToAdapterArgs, type PiCommandHandler } from './command-handler.js';
-import { runLifecycleCommandAdapter } from './lifecycle-command-adapter.js';
+import { runGenerateCommandAdapter } from './lifecycle-command-adapter.js';
 
 export function createGenerateCommandHandler(
 	deps: LogosPiExtensionDependencies,
 ): PiCommandHandler {
 	return async (args, ctx) => {
-		await runLifecycleCommandAdapter({
+		await runGenerateCommandAdapter({
 			args: argsToAdapterArgs(args),
-			command: 'logos-generate',
 			ctx,
 			deps,
 		});
