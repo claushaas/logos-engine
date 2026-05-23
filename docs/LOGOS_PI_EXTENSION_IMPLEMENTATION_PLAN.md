@@ -323,7 +323,18 @@ Those belong in their respective workstreams.
 - [Decision] `tests/package/cli-binary-strategy.test.ts`, `tests/cli/cli-boundary.test.ts`, and `tests/cli/forbidden-cli-commands.test.ts` enforce the deferred strategy.
 - [Constraint] If a CLI binary is reintroduced later, it must be an adapter-only shim that does not own intake, profile resolution, generation, or evaluation logic.
 
-## 8. Plan Validation
+## 8. TUI/Ink Isolation Decision (Step 10.2)
+
+- [Decision] **Strategy A — Defer TUI.** No `src/tui/` source exists in the current checkout. No source files import `ink`, `react`, `commander`, or `ink-testing-library`. The TUI is deferred and not part of the Pi-extension-first MVP.
+- [Decision] Ink/TUI paths are isolated from the Pi-extension-first MVP. No `src/tui/**` runtime is part of the current product surface.
+- [Decision] Legacy TUI/CLI dependencies (`ink`, `react`, `commander` in dependencies; `@types/react`, `ink-testing-library` in devDependencies) remain in `package.json` as known legacy artifacts. No current source imports any of these packages.
+- [Decision] `commander` has been added to the Core forbidden packages list in `tests/core/core-boundary.test.ts`.
+- [Decision] Tests enforcing the TUI isolation strategy: `tests/tui/tui-isolation.test.ts`, `tests/tui/forbidden-tui-commands.test.ts`, `tests/package/tui-dependency-strategy.test.ts`. The existing `tests/core/core-boundary.test.ts` and `tests/pi-extension/pi-adapter-thinness.test.ts` also enforce TUI/Ink/React/commander import boundaries.
+- [Decision] Package scripts `smoke:cli` and `smoke:package` reference missing script files — these are known release-hardening gaps for Phase 12.
+- [Decision] The `"tui"` keyword in `package.json` is a legacy artifact retained temporarily. Package description correctly reflects the Pi-extension-first MVP direction.
+- [Constraint] If TUI source is added later, it must be an isolated legacy/future adapter that imports only public Core exports and does not implement command-first intake progression or forbidden LOGOS commands.
+
+## 9. Plan Validation
 
 Before marking any workstream complete, validate:
 

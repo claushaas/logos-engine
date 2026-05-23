@@ -11,6 +11,7 @@ const FORBIDDEN_PACKAGES = [
 	'ink-testing-library',
 	'react',
 	'@types/react',
+	'commander',
 ];
 
 const FORBIDDEN_LOCAL_DIRS = [
@@ -250,6 +251,11 @@ const x = 'import { baz } from "string-pkg"';
 
 		it('detects @types/react as forbidden', () => {
 			const reason = getForbiddenPackageReason('@types/react');
+			expect(reason).not.toBeNull();
+		});
+
+		it('detects commander as forbidden', () => {
+			const reason = getForbiddenPackageReason('commander');
 			expect(reason).not.toBeNull();
 		});
 

@@ -2218,18 +2218,35 @@ Ensure legacy TUI code does not couple into Core or Pi extension behavior.
 
 ##### Tests To Add Or Update
 
+- `tests/tui/tui-isolation.test.ts`
+- `tests/tui/forbidden-tui-commands.test.ts`
+- `tests/package/tui-dependency-strategy.test.ts`
 - `tests/core/core-boundary.test.ts`
-- `tests/legacy/tui-containment.test.ts` if TUI retained
+- `tests/pi-extension/pi-adapter-thinness.test.ts`
 
 ##### Acceptance Criteria
 
 - Core does not import TUI modules.
-- Pi extension does not depend on legacy TUI flows.
-- Legacy UI cannot enforce `/continue`-style intake progression.
+- Pi extension does not import TUI, Ink, React, or commander.
+- No TUI source directory exists (Strategy A).
+- Forbidden command-first flows are absent from any current implementation.
+- Package metadata does not imply a working TUI without source/tests.
+- Boundary tests prevent regression.
 
 ##### Notes / Risks
 
 - [Decision] Extract reusable pure logic into Core; do not deepen UI coupling.
+
+##### Implementation Decision (2026-05-22)
+
+- [Decision] **Strategy A — Defer TUI.** No `src/tui/` source exists in the current checkout. No `src/cli/` source exists. No source files import `ink`, `react`, `commander`, or `ink-testing-library`. The TUI is deferred and not part of the Pi-extension-first MVP.
+- [Decision] Ink/TUI paths are isolated from the Pi-extension-first MVP. No `src/tui/**` runtime is part of the current product surface.
+- [Decision] Legacy TUI/CLI dependencies (`ink`, `react`, `commander` in dependencies; `@types/react`, `ink-testing-library` in devDependencies) remain in `package.json` as known legacy artifacts. No current source imports any of these packages. They are retained temporarily to avoid breaking potential future restoration, but the import boundary tests (`tests/core/core-boundary.test.ts`, `tests/pi-extension/pi-adapter-thinness.test.ts`, `tests/tui/tui-isolation.test.ts`) prove Core and Pi extension cannot import them.
+- [Decision] `commander` has been added to the Core forbidden packages list in `tests/core/core-boundary.test.ts`.
+- [Decision] Tests added in this step: `tests/tui/tui-isolation.test.ts`, `tests/tui/forbidden-tui-commands.test.ts`, `tests/package/tui-dependency-strategy.test.ts`. The existing `tests/core/core-boundary.test.ts` was updated to also forbid `commander`.
+- [Decision] Package scripts `smoke:cli` and `smoke:package` reference missing script files — these are known release-hardening gaps for Phase 12, not TUI implementation signals.
+- [Decision] The `"tui"` keyword in `package.json` is a legacy artifact. Package description already correctly reflects the Pi-extension-first MVP direction.
+- [Decision] No `src/tui/README.md` is created because the directory does not exist. Classification is documented here and in the implementation plan.
 
 #### Step 10.3 — Remove Or Deprecate Forbidden Intake Commands
 
