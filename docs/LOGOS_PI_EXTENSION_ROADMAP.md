@@ -2184,6 +2184,14 @@ Decide whether `logos` remains, becomes a compatibility shim, or is deferred.
 
 - [Risk] Existing package scripts expect CLI smoke tests but scripts are absent.
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] **Strategy A — Defer CLI binary.** No `src/cli/` source exists, no `src/tui/` source exists, and no buildable source produces `dist/cli.js`. The stale `bin.logos` entry pointing to `./dist/cli.js` has been removed from `package.json`.
+- [Decision] The `logos` binary is deferred for the Pi-extension-first MVP because no safe/buildable CLI source currently exists. A minimal non-primary compatibility shim may be added later as a separate implementation task (Phase 12+), but must not implement command-first intake progression.
+- [Decision] Legacy CLI/TUI dependencies (`commander`, `ink`, `react`) remain in `package.json` as known legacy artifacts; dependency cleanup belongs to a later containment task (Step 10.2).
+- [Decision] Missing `scripts/smoke-cli.js`, `scripts/smoke-package.js`, `scripts/security-check.js`, and `scripts/nfr-evidence.js` are recorded as known release-hardening gaps for Phase 12.
+- [Decision] Tests added in this step prove the deferred strategy: `tests/package/cli-binary-strategy.test.ts`, `tests/cli/cli-boundary.test.ts`, `tests/cli/forbidden-cli-commands.test.ts`.
+
 #### Step 10.2 — Isolate Or Remove Ink/TUI Paths
 
 ##### Goal

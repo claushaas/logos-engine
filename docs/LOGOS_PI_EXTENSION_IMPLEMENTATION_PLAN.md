@@ -315,7 +315,15 @@ The following items must be present in any future roadmap phase that includes th
 
 Those belong in their respective workstreams.
 
-## 7. Plan Validation
+## 7. CLI Binary Strategy Decision (Step 10.1)
+
+- [Decision] **Strategy A — Defer CLI binary.** No `src/cli/` or `src/tui/` source exists in the current repository. The `logos` binary entry was removed from `package.json` because no buildable source produces `dist/cli.js`.
+- [Decision] The `logos` CLI binary is deferred for the Pi-extension-first MVP. A minimal non-primary compatibility shim may be considered in a future release-hardening phase (Phase 12), but must not implement command-first intake progression, forbidden commands, TUI rendering, or Core bypass.
+- [Decision] Legacy CLI/TUI dependencies (`commander`, `ink`, `react`) remain as known legacy artifacts pending dependency cleanup (Step 10.2).
+- [Decision] `tests/package/cli-binary-strategy.test.ts`, `tests/cli/cli-boundary.test.ts`, and `tests/cli/forbidden-cli-commands.test.ts` enforce the deferred strategy.
+- [Constraint] If a CLI binary is reintroduced later, it must be an adapter-only shim that does not own intake, profile resolution, generation, or evaluation logic.
+
+## 8. Plan Validation
 
 Before marking any workstream complete, validate:
 
