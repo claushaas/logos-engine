@@ -49,7 +49,7 @@
 	"packageManager": "pnpm@10.33.2",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
-		"check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:validation && pnpm build && pnpm smoke:cli && pnpm smoke:package",
+		"check": "pnpm lint && pnpm typecheck && pnpm test && pnpm check:validation && pnpm build && pnpm smoke:package",
 		"check:validation": "vitest run tests/validation-gate.test.ts",
 		"format": "pnpm format:biome",
 		"format:biome": "biome check --write --unsafe .",
@@ -58,7 +58,6 @@
 		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
 		"nfr:evidence": "node scripts/nfr-evidence.js",
 		"security:check": "node scripts/security-check.js",
-		"smoke:cli": "node scripts/smoke-cli.js",
 		"smoke:package": "node scripts/smoke-package.js",
 		"test": "vitest run",
 		"test:coverage": "vitest run --coverage",

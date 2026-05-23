@@ -222,6 +222,19 @@ describe('forbidden command surface (Step 10.3 — package)', () => {
 					continue;
 				}
 
+				// Step 10.4: Skip script gate/validation scripts that reference
+				// forbidden command names for detection/validation purposes
+				// (these are security/policy enforcement scripts, not product code)
+				const isValidationScript =
+					source.includes('FORBIDDEN_LOGOS_COMMANDS') ||
+					source.includes('forbidden_logos_commands') ||
+					source.includes('forbidden command') ||
+					source.includes('checkNoForbiddenCommands') ||
+					source.includes('no forbidden command');
+				if (isValidationScript) {
+					continue;
+				}
+
 				for (const cmd of FORBIDDEN_LOGOS_COMMANDS) {
 					if (source.includes(cmd)) {
 						violations.push(

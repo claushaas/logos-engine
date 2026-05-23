@@ -96,20 +96,24 @@ describe('TUI dependency strategy (Step 10.2)', () => {
 	});
 
 	describe('no TUI smoke test claims without source/scripts', () => {
-		it('smoke:cli script exists in package.json but the file is absent (known gap)', () => {
+		it('smoke:cli is absent from package.json (CLI deferred — Step 10.4)', () => {
 			const pkg = loadPackageJson();
 			const scripts = (pkg.scripts ?? {}) as Record<string, unknown>;
 
-			expect(scripts['smoke:cli']).toBeDefined();
+			// smoke:cli removed in Step 10.4 — CLI is deferred
+			expect(
+				scripts['smoke:cli'],
+				'smoke:cli must be absent (CLI deferred — Strategy A)',
+			).toBeUndefined();
 
 			const smokeCliFile = join(PROJECT_ROOT, 'scripts', 'smoke-cli.js');
 			expect(
 				existsSync(smokeCliFile),
-				'smoke:cli script exists but scripts/smoke-cli.js is absent (known gap for Phase 12)',
+				'smoke-cli.js must not exist (CLI deferred)',
 			).toBe(false);
 		});
 
-		it('smoke:package script exists in package.json but the file is absent (known gap)', () => {
+		it('smoke:package script exists and target file is present (Step 10.4)', () => {
 			const pkg = loadPackageJson();
 			const scripts = (pkg.scripts ?? {}) as Record<string, unknown>;
 
@@ -118,8 +122,8 @@ describe('TUI dependency strategy (Step 10.2)', () => {
 			const smokePkgFile = join(PROJECT_ROOT, 'scripts', 'smoke-package.js');
 			expect(
 				existsSync(smokePkgFile),
-				'smoke:package script exists but scripts/smoke-package.js is absent (known gap for Phase 12)',
-			).toBe(false);
+				'smoke-package.js must exist (Step 10.4)',
+			).toBe(true);
 		});
 
 		it('no package script claims a working TUI', () => {

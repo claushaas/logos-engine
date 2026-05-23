@@ -344,6 +344,20 @@ Those belong in their respective workstreams.
 - [Decision] Package metadata (scripts, bin, keywords, description) contains no forbidden command references.
 - [Decision] Tests enforcing this contract are distributed across `tests/core/`, `tests/pi-extension/`, `tests/cli/`, `tests/tui/`, and `tests/package/` as documented in the roadmap Step 10.3 implementation decision.
 
+## 8.6. Script Gate Restoration (Step 10.4)
+
+- [Decision] **Strategy A — Rewrite gates for Pi-extension-first MVP.** Missing script gates are rewritten as deterministic local checks aligned with the current Core + Pi extension product surface.
+- [Decision] `smoke:cli` is removed from `package.json` and from the `check` composite script because CLI is deferred (Strategy A from Step 10.1). No `scripts/smoke-cli.js` is created.
+- [Decision] Script gates are implemented as plain Node.js ESM scripts with zero external dependencies. They perform deterministic file-level checks only — no network calls, no credentials, no live AI providers, no Pi runtime imports, no Core/Pi extension product imports, no generated writes.
+- [Decision] Created/replaced script gates:
+  - `scripts/smoke-package.js` — validates package metadata, required entrypoint existence, script file references, absent `bin.logos`, absent `smoke:cli`, and no forbidden command references. Supports `--root <path>` for testability.
+  - `scripts/security-check.js` — scans for likely committed secrets, checks Core and Pi extension import boundaries, and verifies scripts contain no network call patterns. Pattern definitions constructed to avoid self-scan false positives.
+  - `scripts/nfr-evidence.js` — prints JSON to stdout with repo metadata, entrypoint presence, test/source file counts, CLI/TUI strategy status, and required doc existence. No artifact files written.
+- [Decision] Created `tests/validation-gate.test.ts` as a high-level structural gate that verifies script references, entrypoints, boundary tests, CLI/TUI strategy, forbidden commands, and required docs.
+- [Decision] Created package test files: `tests/package/script-gates-exist.test.ts`, `tests/package/script-gates-contract.test.ts`, `tests/package/no-stale-script-references.test.ts`, `tests/package/package-smoke-contract.test.ts`.
+- [Decision] Existing Phase 10 tests (`tests/package/cli-binary-strategy.test.ts`, `tests/package/tui-dependency-strategy.test.ts`) were updated to reflect that smoke:package, security:check, and nfr:evidence now exist while smoke:cli remains absent.
+- [Decision] No CLI/TUI behavior, Pi extension product behavior, Core product behavior, generation/preflight behavior, or live provider integration was implemented in this step.
+
 ## 9. Plan Validation
 
 Before marking any workstream complete, validate:

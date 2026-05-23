@@ -131,29 +131,42 @@ describe('CLI binary strategy (Step 10.1)', () => {
 		});
 	});
 
-	describe('missing script files are recorded as known gaps', () => {
-		it('smoke:cli script is missing (known gap for Phase 12)', () => {
+	describe('script gate status (Step 10.4)', () => {
+		it('smoke:cli script and file are absent (CLI deferred)', () => {
+			// smoke:cli removed from package.json in Step 10.4
 			expect(existsSync(join(PROJECT_ROOT, 'scripts', 'smoke-cli.js'))).toBe(
 				false,
 			);
+			const pkg = loadPackageJson();
+			const scripts = (pkg.scripts ?? {}) as Record<string, unknown>;
+			expect(scripts['smoke:cli']).toBeUndefined();
 		});
 
-		it('smoke:package script is missing (known gap for Phase 12)', () => {
+		it('smoke:package script exists and target file is present (Step 10.4)', () => {
 			expect(
 				existsSync(join(PROJECT_ROOT, 'scripts', 'smoke-package.js')),
-			).toBe(false);
+			).toBe(true);
+			const pkg = loadPackageJson();
+			const scripts = (pkg.scripts ?? {}) as Record<string, unknown>;
+			expect(scripts['smoke:package']).toBeDefined();
 		});
 
-		it('security:check script is missing (known gap for Phase 12)', () => {
+		it('security:check script exists and target file is present (Step 10.4)', () => {
 			expect(
 				existsSync(join(PROJECT_ROOT, 'scripts', 'security-check.js')),
-			).toBe(false);
+			).toBe(true);
+			const pkg = loadPackageJson();
+			const scripts = (pkg.scripts ?? {}) as Record<string, unknown>;
+			expect(scripts['security:check']).toBeDefined();
 		});
 
-		it('nfr:evidence script is missing (known gap for Phase 12)', () => {
+		it('nfr:evidence script exists and target file is present (Step 10.4)', () => {
 			expect(existsSync(join(PROJECT_ROOT, 'scripts', 'nfr-evidence.js'))).toBe(
-				false,
+				true,
 			);
+			const pkg = loadPackageJson();
+			const scripts = (pkg.scripts ?? {}) as Record<string, unknown>;
+			expect(scripts['nfr:evidence']).toBeDefined();
 		});
 	});
 

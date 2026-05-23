@@ -2350,6 +2350,26 @@ Make package quality scripts truthful before release hardening.
 
 - [Risk] `pnpm check` cannot be trusted until script targets exist.
 
+##### Implementation Decision (2026-05-22)
+
+- [Decision] **Strategy A — Rewrite gates for Pi-extension-first MVP.** Missing script gates are rewritten as deterministic local checks aligned with the current Core + Pi extension product surface.
+- [Decision] `smoke:cli` is removed from `package.json` and from the `check` composite script because CLI is deferred (Strategy A from Step 10.1). No `scripts/smoke-cli.js` is created.
+- [Decision] Script gates are implemented as plain Node.js ESM scripts with zero external dependencies. They perform deterministic file-level checks only — no network calls, no credentials, no live AI providers, no Pi runtime imports, no Core/Pi extension product imports, no generated writes.
+- [Decision] Created/replaced script gates:
+  - `scripts/smoke-package.js` — validates package metadata, required entrypoint existence (`src/core/index.ts`, `src/pi-extension/index.ts`), script file references, absent `bin.logos`, absent `smoke:cli`, and no forbidden command references.
+  - `scripts/security-check.js` — scans for likely committed secrets, checks Core and Pi extension import boundaries (no Pi/TUI/CLI/Ink/React/Commander imports), and verifies scripts contain no network call patterns.
+  - `scripts/nfr-evidence.js` — prints JSON to stdout with repo metadata, entrypoint presence, test/source file counts, CLI/TUI strategy status, and required doc existence.
+- [Decision] Created `tests/validation-gate.test.ts` as a high-level structural gate that verifies script references, entrypoints, boundary tests, CLI/TUI strategy, forbidden commands, and required docs.
+- [Decision] Created package test files:
+  - `tests/package/script-gates-exist.test.ts` — verifies all active package script targets resolve to existing files.
+  - `tests/package/script-gates-contract.test.ts` — verifies scripts do not import Core/Pi/CLI/TUI, do not require credentials, and contain no network call patterns.
+  - `tests/package/no-stale-script-references.test.ts` — verifies no stale CLI/TUI smoke references and no forbidden command workflows in scripts.
+  - `tests/package/package-smoke-contract.test.ts` — verifies smoke-package.js exits 0 on the current repo, exits non-zero on missing files, and does not mutate the repo.
+- [Decision] Existing Phase 10 tests (`tests/package/cli-binary-strategy.test.ts`, `tests/package/tui-dependency-strategy.test.ts`) were updated to reflect that smoke:package, security:check, and nfr:evidence now exist while smoke:cli remains absent.
+- [Decision] Security and NFR gates must not require network, credentials, live providers, or generated writes. NFR evidence writes only to stdout (no artifact files).
+- [Decision] Scripts use `--root <path>` CLI flag for testability via child process fixtures.
+- [Decision] No CLI/TUI behavior, Pi extension product behavior, Core product behavior, generation/preflight behavior, or live provider integration was implemented in this step.
+
 ### Phase Acceptance Criteria
 
 - Legacy CLI/TUI behavior is classified, isolated, removed, or explicitly retained as non-primary.
