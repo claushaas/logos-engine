@@ -18,6 +18,7 @@
  */
 
 import { createLogosCore } from '../core/index.js';
+import { createNodeFilesystemAdapter } from './adapters/node-filesystem.js';
 import { createLogosPiExtension } from './create-extension.js';
 import type { LogosPiExtensionApi } from './pi-types.js';
 import { getProjectRootFromContext } from './project-root.js';
@@ -42,8 +43,9 @@ import { getProjectRootFromContext } from './project-root.js';
  * - Import CLI/TUI/Ink/React.
  */
 export default function logosExtension(pi: LogosPiExtensionApi): void {
+	const filesystem = createNodeFilesystemAdapter();
 	createLogosPiExtension({
-		core: createLogosCore(),
+		core: createLogosCore({ filesystem }),
 		getProjectRoot: getProjectRootFromContext,
 		pi,
 	});
