@@ -41,6 +41,15 @@ export type LogosPiExtensionDependencies = {
 	 */
 	getProjectRoot?: ((ctx: { cwd?: string }) => string) | undefined;
 
+	/**
+	 * Absolute path to the directory containing bundled profile
+	 * directories (e.g. `<logos-package>/profiles/`).
+	 *
+	 * Passed through to Core's `initProject` so the Standard profile
+	 * can be scaffolded into fresh projects.
+	 */
+	profileSourcePath?: string | undefined;
+
 	/** Optional renderer seam for tests and future richer rendering. */
 	renderCoreResult?:
 		| ((

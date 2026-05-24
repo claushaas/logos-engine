@@ -17,11 +17,29 @@
  * Boundary: only this directory (`src/pi-extension/**`) may import Pi types.
  */
 
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { createLogosCore } from '../core/index.js';
 import { createNodeFilesystemAdapter } from './adapters/node-filesystem.js';
 import { createLogosPiExtension } from './create-extension.js';
 import type { LogosPiExtensionApi } from './pi-types.js';
 import { getProjectRootFromContext } from './project-root.js';
+
+// ---------------------------------------------------------------------------
+// Resolve the bundled profiles directory
+// ---------------------------------------------------------------------------
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+/**
+ * Absolute path to the `profiles/` directory bundled with the LOGOS package.
+ *
+ * The extension source lives at `<package>/src/pi-extension/index.ts`.
+ * Going up two levels (`../../`) from `__dirname` yields the package root,
+ * so `<package>/profiles/` is the bundled profiles directory.
+ */
+const BUNDLED_PROFILES_PATH = path.resolve(__dirname, '../../profiles');
 
 // ---------------------------------------------------------------------------
 // Default export — Pi extension factory
@@ -48,6 +66,7 @@ export default function logosExtension(pi: LogosPiExtensionApi): void {
 		core: createLogosCore({ filesystem }),
 		getProjectRoot: getProjectRootFromContext,
 		pi,
+		profileSourcePath: BUNDLED_PROFILES_PATH,
 	});
 }
 

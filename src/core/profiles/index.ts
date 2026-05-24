@@ -10,3 +10,4 @@ export * from './profile-contracts.js';
 export * from './profile-errors.js';
 export * from './profile-gate.js';
 export * from './profile-resolver.js';
+export * from './scaffold-profile.js';

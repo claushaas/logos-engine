@@ -39,6 +39,8 @@ import type { ActivePrompt } from './intake/prompt-selection-types.js';
 import type { AssistantMessage } from './messages.js';
 import type { LogosFilesystem } from './ports/filesystem.js';
 import { ensureProfileReady } from './profiles/profile-gate.js';
+import { getProfileRoot } from './profiles/profile-resolver.js';
+import { scaffoldProfileFromSource } from './profiles/scaffold-profile.js';
 import type { CoreResult } from './result.js';
 import {
 	createCoreResult,
@@ -93,6 +95,13 @@ export type InitProjectInput = ProjectRootInput &
 	CoreApiOptions & {
 		force?: boolean;
 		selectedProfileId?: string;
+		/**
+		 * Absolute path to the directory containing bundled profile
+		 * directories (e.g. `profiles/` in the LOGOS package).
+		 * When provided and the active profile does not yet exist
+		 * in the project, the profile is copied from this source.
+		 */
+		profileSourcePath?: string | undefined;
 	};
 
 export type InitProjectData = {
@@ -365,6 +374,31 @@ export async function initProject(
 			},
 			status: 'blocked',
 		});
+	}
+
+	// ---- scaffold profile from source when missing and source provided ----
+	const profileTargetDir = getProfileRoot({
+		profileId: activeProfileId,
+		projectRoot: input.projectRoot,
+	});
+
+	let profileDirExists = false;
+	try {
+		await filesystem.listDirectory({ path: profileTargetDir });
+		profileDirExists = true;
+	} catch {
+		// Directory does not exist — may try scaffolding below.
+	}
+
+	if (!profileDirExists && input.profileSourcePath) {
+		if (!input.dryRun) {
+			const sourceDir = `${input.profileSourcePath}/${activeProfileId}`;
+			await scaffoldProfileFromSource({
+				filesystem,
+				sourceProfileDir: sourceDir,
+				targetProfileDir: profileTargetDir,
+			});
+		}
 	}
 
 	// ---- resolve and validate profile before writing state ----

@@ -82,7 +82,10 @@ export async function runCommandSpecificCoreAction(
 
 	switch (input.command) {
 		case 'logos-init':
-			return input.deps.core.initProject({ projectRoot: input.projectRoot });
+			return input.deps.core.initProject({
+				profileSourcePath: input.deps.profileSourcePath,
+				projectRoot: input.projectRoot,
+			});
 		case 'logos-start':
 			return input.deps.core.startIntake({
 				projectRoot: input.projectRoot,
