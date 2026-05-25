@@ -1,15 +1,7 @@
-export * from './api.js';
-export * from './artifacts/index.js';
-export * from './config/index.js';
-export * from './errors.js';
-export * from './evaluation/index.js';
-export * from './fs/index.js';
-export * from './generation/index.js';
-export * from './intake/index.js';
-export * from './messages.js';
-export * from './ports/index.js';
-export * from './profiles/index.js';
-export * from './questions/index.js';
-export * from './result.js';
-export * from './state/index.js';
-export * from './validation/index.js';
+// Purpose: Core public API.
+// What it should do: Re-export deterministic core functions and types.
+// Why it exists: Creates an internal boundary for future package extraction.
+
+export const index = {
+  // TODO: implement core public api.
+};
