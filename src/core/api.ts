@@ -50,6 +50,7 @@ import {
 } from './result.js';
 import { createDefaultLogosConfig } from './state/config-types.js';
 import type { IntakeMode, IntakeProgress } from './state/index.js';
+import { loadIntakeState } from './state/intake-state-persistence.js';
 import type { ActivePromptState } from './state/intake-state-types.js';
 
 export type { IntakeMode, IntakeProgress } from './state/index.js';
@@ -826,26 +827,138 @@ export async function getStatus(
 		});
 	}
 
-	// Profile valid — keep existing stub behavior.
-	// When the project is not yet initialized, return ok so status remains
-	// observational. When initialized, the legacy stub returns blocked.
+	// ---- load intake state for real mode and progress ----
+	const now = new Date().toISOString();
+	const intakeResult = await loadIntakeState({
+		filesystem,
+		now,
+		projectRoot: input.projectRoot,
+	});
+
+	let mode: IntakeMode = 'idle';
+	let progress: IntakeProgress = emptyProgress;
+	let activeQuestionId: string | undefined;
+	let sufficientCount = 0;
+	let partialCount = 0;
+	let missingCount = 0;
+	let totalCount = 0;
+
+	if (intakeResult.ok) {
+		const state = intakeResult.state;
+		mode = state.mode;
+		activeQuestionId = state.activeQuestionId;
+
+		// Compute real progress from answered questions.
+		const answered = state.answeredQuestions;
+		const partials = state.partialQuestions;
+		const skipped = state.skippedQuestions;
+		const rawByPhase: Record<
+			string,
+			{
+				sufficient: number;
+				partial: number;
+				missing: number;
+				contradictory: number;
+				skipped: number;
+				total: number;
+			}
+		> = {};
+		let contradictory = 0;
+		let skippedCount = 0;
+
+		// Use the profile contracts to enumerate all questions.
+		const registry = gateResult.contracts.questionRegistry;
+		for (const q of registry.questions) {
+			const phase = q.phaseId;
+			let pb = rawByPhase[phase];
+			if (pb === undefined) {
+				pb = {
+					contradictory: 0,
+					missing: 0,
+					partial: 0,
+					skipped: 0,
+					sufficient: 0,
+					total: 0,
+				};
+				rawByPhase[phase] = pb;
+			}
+			pb.total++;
+			totalCount++;
+
+			const ans = answered[q.id];
+			if (ans !== undefined) {
+				if (ans.status === 'sufficient') {
+					sufficientCount++;
+					pb.sufficient++;
+				} else if (ans.status === 'partial') {
+					partialCount++;
+					pb.partial++;
+				} else if (ans.status === 'contradictory') {
+					contradictory++;
+					pb.contradictory++;
+				}
+			} else if (partials[q.id] !== undefined) {
+				partialCount++;
+				pb.partial++;
+			} else if (skipped[q.id] !== undefined) {
+				skippedCount++;
+				pb.skipped++;
+			} else {
+				missingCount++;
+				pb.missing++;
+			}
+		}
+
+		// Build byPhase with required phaseId field.
+		const byPhase: IntakeProgress['byPhase'] = {};
+		for (const [phaseId, pb] of Object.entries(rawByPhase)) {
+			byPhase[phaseId] = { ...pb, phaseId };
+		}
+
+		progress = {
+			byPhase,
+			contradictory,
+			missing: missingCount,
+			partial: partialCount,
+			skipped: skippedCount,
+			sufficient: sufficientCount,
+			total: totalCount,
+		};
+	}
+
+	// ---- compute generation readiness ----
+	const readinessScore =
+		totalCount > 0 ? Math.round((sufficientCount / totalCount) * 100) : 0;
+	const readinessBlockers: string[] = [];
+	if (mode !== 'complete' && totalCount > 0 && sufficientCount < totalCount) {
+		readinessBlockers.push(
+			`${missingCount} critical/required questions unanswered, ${partialCount} partial.`,
+		);
+	}
+
 	return createCoreResult({
 		data: {
+			activeQuestionId,
 			generationReadiness: {
-				blockers: [],
-				completenessScore: 0,
-				ready: false,
+				blockers: readinessBlockers,
+				completenessScore: readinessScore,
+				ready:
+					mode === 'complete' ||
+					(totalCount > 0 && missingCount === 0 && partialCount === 0),
 				warnings: [],
 			},
 			initialized,
-			mode: 'idle',
-			progress: emptyProgress,
+			mode,
+			progress,
 		},
 		dryRun: input.dryRun ?? false,
 		message: initialized
-			? stubMessage('LOGOS status retrieval is not implemented yet.')
+			? {
+					body: `LOGOS intake is ${mode}. ${progress.sufficient}/${progress.total} sufficient, ${progress.partial} partial, ${progress.missing} missing.`,
+					kind: 'status',
+				}
 			: { body: 'Project is not initialized.', kind: 'status' },
-		status: initialized ? 'blocked' : 'ok',
+		status: 'ok',
 	});
 }
 

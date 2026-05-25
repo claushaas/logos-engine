@@ -44,9 +44,13 @@ function mapKind(activePrompt: ActivePrompt): AssistantMessage['kind'] {
 /**
  * Convert an {@link ActivePrompt} to a Core {@link AssistantMessage}.
  *
- * The message body is the prompt text. Metadata carries question id,
- * phase id, document id, section id, priority, required flag, and
- * optional follow-up / contradiction identifiers.
+ * The message body includes contextual framing (phase id, document id,
+ * priority) and the prompt's `context` (purpose) when available, so the
+ * user sees more than a bare question.
+ *
+ * Metadata carries question id, phase id, document id, section id,
+ * priority, required flag, and optional follow-up / contradiction
+ * identifiers.
  *
  * The result is a plain serializable message intended for rendering
  * by the Pi Extension. No Pi-specific formatting is applied here.
@@ -78,10 +82,63 @@ export function createAssistantMessageFromPrompt(
 		metadata.promptMetadata = prompt.metadata;
 	}
 
+	// ---- Build a contextualized body -------
+	const title = buildPromptTitle(prompt);
+	const body = title !== undefined ? `${title}\n\n${prompt.text}` : prompt.text;
+
 	return {
-		body: prompt.text,
+		body,
 		kind: mapKind(prompt),
 		metadata,
 		questionId: prompt.questionId,
 	};
+}
+
+// ---------------------------------------------------------------------------
+// Contextual title builder
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a human-readable header line that frames the question for the user.
+ *
+ * Includes the phase id, document id, optional section id, priority, and
+ * the `context` (purpose) when available.
+ *
+ * Example output:
+ * ```
+ * Phase 01-foundation · Document 01-thesis · critical
+ * Core Thesis — Establish the central tension that drives the project.
+ * ```
+ */
+function buildPromptTitle(prompt: ActivePrompt): string | undefined {
+	const parts: string[] = [];
+
+	// Location breadcrumb
+	if (prompt.phaseId.length > 0) {
+		parts.push(`Phase ${prompt.phaseId}`);
+	}
+	if (prompt.documentId.length > 0) {
+		parts.push(`Document ${prompt.documentId}`);
+	}
+	if (prompt.sectionId.length > 0) {
+		parts.push(`Section ${prompt.sectionId}`);
+	}
+
+	if (parts.length === 0) {
+		return prompt.context;
+	}
+
+	// Append priority when available
+	if (prompt.priority.length > 0) {
+		parts.push(prompt.priority);
+	}
+
+	let header = parts.join(' · ');
+
+	// Append context / purpose as a subtitle
+	if (prompt.context !== undefined && prompt.context.length > 0) {
+		header = `${header}\n${prompt.context}`;
+	}
+
+	return header;
 }

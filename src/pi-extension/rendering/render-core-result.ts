@@ -385,7 +385,7 @@ export async function renderCoreResult(
 	if (typeof input.deps.pi.sendMessage === 'function') {
 		input.deps.pi.sendMessage({
 			content: rendered.body,
-			customType: 'logos-core-result',
+			customType: 'logos',
 			details: rendered,
 			display: true,
 		});

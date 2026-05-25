@@ -338,7 +338,7 @@ export async function startIntakeTransition(
 			},
 			messageKind: 'completion',
 			messageText:
-				'All intake questions have been answered. Run /logos-generate to produce documentation.',
+				'All critical intake questions have been answered. Run /logos-generate to produce documentation, or continue with detailed questions if you want more depth.',
 			status: 'complete',
 			warnings,
 		};

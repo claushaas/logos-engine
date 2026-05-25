@@ -96,6 +96,8 @@ function statusWeight(status: QuestionSelectionStatus): number {
 type Candidate = {
 	question: LogosQuestion;
 	status: QuestionSelectionStatus;
+	/** Position in the registry array — preserves YAML section order. */
+	_registryIndex: number;
 };
 
 // ---------------------------------------------------------------------------
@@ -270,7 +272,8 @@ export function selectNextPrompt(input: {
 	const dependencyBlockedIds: string[] = [];
 	const unmetDeps: string[] = [];
 
-	for (const question of allQuestions) {
+	for (let i = 0; i < allQuestions.length; i++) {
+		const question = allQuestions[i] as LogosQuestion;
 		const qStatus = getQuestionSelectionStatus({ intakeState, question });
 
 		if (qStatus === 'sufficient' || qStatus === 'skipped') {
@@ -301,7 +304,7 @@ export function selectNextPrompt(input: {
 			continue;
 		}
 
-		candidates.push({ question, status: qStatus });
+		candidates.push({ question, status: qStatus, _registryIndex: i });
 	}
 
 	// ------------------------------------------------------------------
@@ -363,13 +366,12 @@ type PriorityBucket = {
 };
 
 function orderedBuckets(): PriorityBucket[] {
+	// Only ask critical questions by default.  Important and optional
+	// questions can be answered later via explicit commands or when
+	// the user requests more detail.
 	return [
 		{ priority: 'critical', status: 'unanswered' },
 		{ priority: 'critical', status: 'partial' },
-		{ priority: 'important', status: 'unanswered' },
-		{ priority: 'important', status: 'partial' },
-		{ priority: 'optional', status: 'unanswered' },
-		{ priority: 'optional', status: 'partial' },
 	];
 }
 
@@ -415,20 +417,11 @@ function compareCandidates(a: Candidate, b: Candidate): number {
 	const sw = statusWeight(a.status) - statusWeight(b.status);
 	if (sw !== 0) return sw;
 
-	// Deterministic tie-breaking: phase → document → section → question id.
-	const qa = a.question;
-	const qb = b.question;
-
-	let cmp = qa.phaseId.localeCompare(qb.phaseId);
-	if (cmp !== 0) return cmp;
-
-	cmp = qa.documentId.localeCompare(qb.documentId);
-	if (cmp !== 0) return cmp;
-
-	cmp = qa.sectionId.localeCompare(qb.sectionId);
-	if (cmp !== 0) return cmp;
-
-	return qa.id.localeCompare(qb.id);
+	// Deterministic tie-breaking: use the question's position in the
+	// registry to preserve the original YAML section order.  The
+	// registry array is built by iterating documents and sections in
+	// profile order.
+	return a._registryIndex - b._registryIndex;
 }
 
 // ---------------------------------------------------------------------------

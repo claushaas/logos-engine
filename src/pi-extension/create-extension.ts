@@ -15,6 +15,7 @@
 
 import { registerLogosCommands } from './commands/register-commands.js';
 import { registerLogosConfirmations } from './confirmations/register-confirmations.js';
+import { registerIntakeModelBridge } from './intake-model-bridge.js';
 import type { LogosPiExtensionDependencies } from './extension-dependencies.js';
 import { registerLogosInputRouting } from './input/register-input-routing.js';
 import { getProjectRootFromContext } from './project-root.js';
@@ -63,4 +64,5 @@ export function createLogosPiExtension(
 	registerLogosInputRouting(deps);
 	registerLogosRenderers(deps);
 	registerLogosConfirmations(deps);
+	registerIntakeModelBridge(deps.pi);
 }

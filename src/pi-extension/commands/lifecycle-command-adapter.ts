@@ -86,11 +86,23 @@ export async function runCommandSpecificCoreAction(
 				profileSourcePath: input.deps.profileSourcePath,
 				projectRoot: input.projectRoot,
 			});
-		case 'logos-start':
-			return input.deps.core.startIntake({
+		case 'logos-start': {
+			const result = await input.deps.core.startIntake({
 				projectRoot: input.projectRoot,
 				...(input.now !== undefined ? { now: input.now } : {}),
 			});
+			if (result.status === 'ok') {
+				const data = result.data as Record<string, unknown> | undefined;
+				const prompt = data?.activePrompt;
+				if (prompt !== undefined) {
+					sendIntakeInstruction(
+						input.deps.pi,
+						prompt as import('../../core/index.js').ActivePrompt,
+					);
+				}
+			}
+			return result;
+		}
 		case 'logos-stop':
 			return input.deps.core.stopIntake({
 				projectRoot: input.projectRoot,
@@ -119,13 +131,16 @@ export async function runLifecycleCommandAdapter(
 			...(now !== undefined ? { now } : {}),
 		});
 
-		await renderCoreResult({
-			ctx: input.ctx,
-			deps: input.deps,
-			result: interruptionResult,
-		});
-
 		const disposition = getDisposition(interruptionResult.data);
+
+		// Skip rendering for execute — internal diagnostics, not user-facing.
+		if (disposition !== 'execute' || interruptionResult.status !== 'ok') {
+			await renderCoreResult({
+				ctx: input.ctx,
+				deps: input.deps,
+				result: interruptionResult,
+			});
+		}
 		if (!isExecutableDisposition(disposition)) {
 			return;
 		}
@@ -139,11 +154,14 @@ export async function runLifecycleCommandAdapter(
 				...(now !== undefined ? { now } : {}),
 			});
 
-			await renderCoreResult({
-				ctx: input.ctx,
-				deps: input.deps,
-				result: commandResult,
-			});
+			// logos-start sends question via sendUserMessage; skip renderCoreResult.
+			if (input.command !== 'logos-start' || commandResult.status !== 'ok') {
+				await renderCoreResult({
+					ctx: input.ctx,
+					deps: input.deps,
+					result: commandResult,
+				});
+			}
 		} catch {
 			await renderCoreResult({
 				ctx: input.ctx,
@@ -165,8 +183,47 @@ export async function runLifecycleCommandAdapter(
 }
 
 // ---------------------------------------------------------------------------
-// Generate-specific command adapter (Step 9.3)
+// Generate-specific command adapter
+
+function sendIntakeInstruction(
+	pi: import('../pi-types.js').LogosPiExtensionApi,
+	prompt: import('../../core/index.js').ActivePrompt,
+): void {
+	const loc: string[] = [];
+	if (prompt.phaseId) loc.push(prompt.phaseId);
+	if (prompt.documentId) loc.push(prompt.documentId);
+	if (prompt.sectionId) loc.push(prompt.sectionId);
+	const locStr =
+		loc.length > 0
+			? ' (' +
+				loc.join(' / ') +
+				(prompt.priority ? ' ' + prompt.priority : '') +
+				')'
+			: '';
+	const context =
+		prompt.context && prompt.context.length > 0
+			? '\nContext: ' + prompt.context
+			: '';
+	const msg =
+		'LOGOS intake' +
+		locStr +
+		context +
+		'\nAsk the user conversationally, in their language:\n' +
+		prompt.text;
+
+	const piAny = pi as unknown as Record<string, unknown>;
+	const fn = piAny['sendUserMessage'];
+	if (typeof fn === 'function') {
+		try {
+			(fn as (m: string) => void)(msg);
+		} catch {
+			/* */
+		}
+	}
+}
+
 // ---------------------------------------------------------------------------
+// Generate-specific command adapter (Step 9.3)
 
 /**
  * Input type for the generate-specific command adapter.
@@ -215,13 +272,16 @@ export async function runGenerateCommandAdapter(
 			...generateArgs,
 		});
 
-		await renderCoreResult({
-			ctx: input.ctx,
-			deps: input.deps,
-			result: interruptionResult,
-		});
-
 		const disposition = getDisposition(interruptionResult.data);
+
+		// Skip rendering for execute — internal diagnostics, not user-facing.
+		if (disposition !== 'execute' || interruptionResult.status !== 'ok') {
+			await renderCoreResult({
+				ctx: input.ctx,
+				deps: input.deps,
+				result: interruptionResult,
+			});
+		}
 		if (!isExecutableDisposition(disposition)) {
 			return;
 		}

@@ -253,7 +253,22 @@ export function applyAnswerEvaluation(
 	const state = copyState(intakeState, now);
 
 	// ---- 2. Always record the answer ----
-	const answerRecord = makeAnswerRecord(question, answer, evaluation, now);
+	// When this is a follow-up response, preserve the original answer
+	// text so the user's earlier, more complete answer is not lost.
+	const existingAnswer = intakeState.answeredQuestions[question.id];
+	const preservedAnswer =
+		activePrompt.kind === 'follow_up' && existingAnswer !== undefined
+			? existingAnswer.answer
+			: answer;
+	const answerRecord = makeAnswerRecord(
+		question,
+		preservedAnswer,
+		evaluation,
+		now,
+	);
+	if (existingAnswer !== undefined) {
+		answerRecord.revisedAt = now;
+	}
 	state.answeredQuestions[question.id] = answerRecord;
 
 	// ---- 3. Dispatch by status ----

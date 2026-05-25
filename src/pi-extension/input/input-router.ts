@@ -9,13 +9,13 @@
 import type { CoreResult, IntakeMode } from '../../core/index.js';
 import { createCoreResult, createLogosError } from '../../core/index.js';
 import type { LogosPiExtensionDependencies } from '../extension-dependencies.js';
+import { setPendingIntakePrompt } from '../intake-model-bridge.js';
 import type {
 	LogosPiEventContext,
 	LogosPiInputEvent,
 	LogosPiInputHandlerResult,
 } from '../pi-types.js';
 import { getProjectRootFromContext } from '../project-root.js';
-import { renderCoreResult } from '../rendering/render-core-result.js';
 
 export type PiInputRouteResult = { action: 'continue' } | { action: 'handled' };
 
@@ -54,9 +54,6 @@ function readObject(value: unknown): StatusDataWithMode | null {
 
 /**
  * Read active intake mode from public Core status data only.
- *
- * Fail closed: if the shape is unknown, return null so Pi normal behavior
- * continues instead of LOGOS intercepting uncertain input.
  */
 export function getIntakeModeFromStatusResult(
 	result: CoreResult<unknown>,
@@ -94,22 +91,6 @@ function resolveProjectRoot(
 	return getProjectRoot(ctx);
 }
 
-function safeInputHandlingErrorResult(): CoreResult<unknown> {
-	return createCoreResult({
-		errors: [
-			createLogosError({
-				code: 'pi_extension_api_unavailable',
-				message: 'LOGOS intake message handling failed unexpectedly.',
-			}),
-		],
-		message: {
-			body: 'LOGOS intake message handling failed unexpectedly.',
-			kind: 'error',
-		},
-		status: 'failed',
-	});
-}
-
 function isSlashCommand(text: string): boolean {
 	return text.trim().startsWith('/');
 }
@@ -137,8 +118,7 @@ export async function routePiInput(
 	// 4. Project root resolution.
 	const projectRoot = resolveProjectRoot(deps, ctx);
 
-	// 5. Status / active-state lookup.  Fail open to normal Pi behavior when
-	// status is unavailable or ambiguous.
+	// 5. Status / active-state lookup.
 	let statusResult: CoreResult<unknown>;
 	try {
 		statusResult = await deps.core.getStatus({ projectRoot });
@@ -151,23 +131,28 @@ export async function routePiInput(
 		return { action: 'continue' };
 	}
 
-	// 6. Active intake natural message: Core owns all product behavior.
+	// 6. Evaluate answer and store next question as pending.
+	// The agent_end handler will send it after the agent finishes responding.
 	try {
 		const result = await deps.core.handleIntakeMessage({
 			message: event.text,
 			projectRoot,
 		});
 
-		await renderCoreResult({ ctx, deps, result });
+		if (result.status === 'ok') {
+			const data = result.data as Record<string, unknown> | undefined;
+			const prompt = data?.activePrompt;
+			if (prompt !== undefined) {
+				setPendingIntakePrompt(
+					prompt as import('../../core/index.js').ActivePrompt,
+				);
+			}
+		}
 	} catch {
-		await renderCoreResult({
-			ctx,
-			deps,
-			result: safeInputHandlingErrorResult(),
-		});
+		// Silently ignore.
 	}
 
-	return { action: 'handled' };
+	return { action: 'continue' };
 }
 
 export function toPiInputResult(

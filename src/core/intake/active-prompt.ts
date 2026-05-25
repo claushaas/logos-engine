@@ -19,11 +19,14 @@ import type { ActivePrompt } from './prompt-selection-types.js';
  * Build an `ActivePrompt` for a normal unanswered question.
  *
  * The prompt text is the question's `question` field verbatim.
+ * The question's `purpose` is carried as `context` so the assistant
+ * message renderer can provide helpful framing for the user.
  * All metadata (phase, document, section, source, priority) is carried
  * through from the source {@link LogosQuestion}.
  */
 export function createQuestionPrompt(question: LogosQuestion): ActivePrompt {
-	return {
+	const prompt: ActivePrompt = {
+		context: question.purpose,
 		documentId: question.documentId,
 		kind: 'question',
 		phaseId: question.phaseId,
@@ -34,6 +37,12 @@ export function createQuestionPrompt(question: LogosQuestion): ActivePrompt {
 		sourcePath: question.sourcePath,
 		text: question.question,
 	};
+
+	if (question.metadata !== undefined) {
+		prompt.metadata = question.metadata;
+	}
+
+	return prompt;
 }
 
 // ---------------------------------------------------------------------------

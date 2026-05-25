@@ -296,7 +296,22 @@ function canPreserveActivePrompt(
 	state: LogosIntakeState,
 	registry?: import('../questions/question-registry.js').LogosQuestionRegistry,
 ): { ok: true } | { ok: false; reason: string } {
+	// Recovery: if activePrompt is missing but activeQuestionId exists
+	// and we have a registry, rebuild a minimal prompt.
 	if (state.activePrompt === undefined) {
+		if (state.activeQuestionId !== undefined && registry !== undefined) {
+			const question = registry.byId[state.activeQuestionId];
+			if (question !== undefined) {
+				// Rebuild a minimal prompt from the question record.
+				state.activePrompt = {
+					kind: 'question',
+					questionId: question.id,
+					startedAt: state.updatedAt,
+					updatedAt: state.updatedAt,
+				};
+				return { ok: true };
+			}
+		}
 		return { ok: false, reason: 'Active prompt is missing.' };
 	}
 	if (state.activeQuestionId === undefined) {
