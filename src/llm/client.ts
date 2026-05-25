@@ -2,7 +2,13 @@
 // What it should do: Define provider-agnostic generateText and generateJson methods.
 // Why it exists: Keeps LOGOS independent from any single model provider.
 
+import { loadLlmConfig } from './config.js';
 import { generateJson } from './generate-json.js';
+import {
+	generateStructuredOutput,
+	generateStructuredOutputSafe,
+	type StructuredOutputInput,
+} from './generate-structured-output.js';
 import { generateText } from './generate-text.js';
 import type { RetryConfig } from './retry-policy.js';
 
@@ -56,6 +62,10 @@ export interface GenerateJsonInput<T = unknown> {
 export interface LlmClient {
 	generateText(input: GenerateTextInput): Promise<GenerateTextOutput>;
 	generateJson<T>(input: GenerateJsonInput<T>): Promise<T>;
+	generateStructuredOutput<T>(input: StructuredOutputInput<T>): Promise<T>;
+	generateStructuredOutputSafe<T>(
+		input: StructuredOutputInput<T>,
+	): Promise<import('./response-validation.js').ValidationOutcome<T>>;
 }
 
 // ─── Factory ────────────────────────────────────────────────────────────────
@@ -64,18 +74,15 @@ export interface LlmClient {
 export function createLlmClient(
 	options?: Partial<LlmClientOptions>,
 ): LlmClient {
-	const resolved: LlmClientOptions = {
-		apiKey: options?.apiKey ?? process.env.LOGOS_LLM_API_KEY ?? '',
-		baseUrl:
-			options?.baseUrl ??
-			process.env.LOGOS_LLM_BASE_URL ??
-			'https://api.openai.com/v1',
-		model: options?.model ?? process.env.LOGOS_LLM_MODEL ?? 'gpt-4.1-mini',
-	};
+	const resolved = loadLlmConfig(options);
 
 	return {
 		generateJson: <T>(input: GenerateJsonInput<T>) =>
 			generateJson(resolved, input),
+		generateStructuredOutput: <T>(input: StructuredOutputInput<T>) =>
+			generateStructuredOutput(resolved, input),
+		generateStructuredOutputSafe: <T>(input: StructuredOutputInput<T>) =>
+			generateStructuredOutputSafe(resolved, input),
 		generateText: (input) => generateText(resolved, input),
 	};
 }

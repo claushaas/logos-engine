@@ -1,143 +1,143 @@
-# LOGOS Agent Lifecycle and Answer Traceability Spec
+# Especificação de Ciclo de Vida do Agente LOGOS e Rastreabilidade de Respostas
 
-**Status:** Draft 1  
-**Scope:** LOGOS Engine / Agent Lifecycle / Interview State Machine / Answer Persistence  
-**Audience:** product, engineering, agent-runtime implementation, documentation compiler  
-**Canonical purpose:** define how the LOGOS agent conducts documentation interviews, evaluates answers, persists conversation history, synthesizes final answers, and preserves traceability from user input to generated documentation.
-
----
-
-## 1. Purpose
-
-This specification defines the expected lifecycle of the LOGOS agent during structured documentation interviews.
-
-It covers:
-
-- how the agent initializes a conversation;
-- how it prepares the first documentation question;
-- how it receives and records user messages;
-- how it evaluates whether a response is sufficient;
-- how it requests complements when necessary;
-- how it advances through the question queue;
-- how it reacts when all questions are exhausted;
-- how it offers document generation;
-- how every message and answer must be persisted;
-- how generated documentation must remain traceable to original user input.
-
-The LOGOS agent must not behave as a free-form chat assistant. It must behave as a structured interviewer, semantic evaluator, conflict reconciler, and documentation compiler.
+**Status:** Rascunho 1
+**Escopo:** LOGOS Engine / Ciclo de Vida do Agente / Máquina de Estados da Entrevista / Persistência de Respostas
+**Público:** produto, engenharia, implementação do agent-runtime, compilador de documentação
+**Propósito canônico:** definir como o agente LOGOS conduz entrevistas de documentação, avalia respostas, persiste o histórico da conversa, sintetiza respostas finais e preserva a rastreabilidade desde a entrada do usuário até a documentação gerada.
 
 ---
 
-## 2. Core Principle
+## 1. Propósito
 
-The LOGOS agent operates over documentation questions. Each question exists to gather enough semantic material to produce a specific part of a canonical document.
+Esta especificação define o ciclo de vida esperado do agente LOGOS durante entrevistas de documentação estruturada.
 
-The central lifecycle is:
+Ela cobre:
+
+- como o agente inicializa uma conversa;
+- como prepara a primeira pergunta de documentação;
+- como recebe e registra mensagens do usuário;
+- como avalia se uma resposta é suficiente;
+- como solicita complementos quando necessário;
+- como avança pela fila de perguntas;
+- como reage quando todas as perguntas são esgotadas;
+- como oferece a geração de documentos;
+- como cada mensagem e resposta deve ser persistida;
+- como a documentação gerada deve permanecer rastreável até a entrada original do usuário.
+
+O agente LOGOS não deve se comportar como um assistente de chat livre. Deve se comportar como um entrevistador estruturado, avaliador semântico, reconciliador de conflitos e compilador de documentação.
+
+---
+
+## 2. Princípio Central
+
+O agente LOGOS opera sobre perguntas de documentação. Cada pergunta existe para coletar material semântico suficiente para produzir uma parte específica de um documento canônico.
+
+O ciclo de vida central é:
 
 ```txt
-ask
-→ receive
-→ persist verbatim
-→ assess
-→ complement or advance
-→ synthesize final answer
-→ record canonical answer
-→ repeat
-→ summarize
-→ offer generation
-→ generate
-→ validate
-→ review
-→ save
+perguntar
+→ receber
+→ persistir literalmente
+→ avaliar
+→ complementar ou avançar
+→ sintetizar resposta final
+→ registrar resposta canônica
+→ repetir
+→ resumir
+→ oferecer geração
+→ gerar
+→ validar
+→ revisar
+→ salvar
 ```
 
-The agent must never generate canonical documentation directly from unstructured conversation without an intermediate canonical answer layer.
+O agente nunca deve gerar documentação canônica diretamente de uma conversa não estruturada sem uma camada intermediária de resposta canônica.
 
-Correct flow:
+Fluxo correto:
 
 ```txt
-verbatim transcript
+transcrição literal
   ↓
-canonical answer records
+registros de resposta canônica
   ↓
-generated document draft
+rascunho de documento gerado
   ↓
-validated canonical document
+documento canônico validado
 ```
 
-Incorrect flow:
+Fluxo incorreto:
 
 ```txt
-raw chat
+chat bruto
   ↓
-final documentation
+documentação final
 ```
 
 ---
 
-## 3. Primary Data Layers
+## 3. Camadas de Dados Primárias
 
-The system must persist two distinct interview data layers.
+O sistema deve persistir duas camadas distintas de dados da entrevista.
 
-### 3.1 Verbatim Transcript Log
+### 3.1 Log de Transcrição Literal
 
-The verbatim transcript log is the complete and faithful record of all messages exchanged during the interview.
+O log de transcrição literal é o registro completo e fiel de todas as mensagens trocadas durante a entrevista.
 
-It includes:
+Inclui:
 
-- all user messages;
-- all agent messages;
-- agent questions;
-- follow-up questions;
-- reformulations;
-- summaries;
-- assessment explanations;
-- conflict resolution prompts;
-- generation offers;
-- user approvals;
-- user rejections;
-- relevant system events;
-- relevant tool calls and tool results, when they affect documentation decisions.
+- todas as mensagens do usuário;
+- todas as mensagens do agente;
+- perguntas do agente;
+- perguntas de acompanhamento;
+- reformulações;
+- resumos;
+- explicações de avaliação;
+- prompts de resolução de conflitos;
+- ofertas de geração;
+- aprovações do usuário;
+- rejeições do usuário;
+- eventos relevantes do sistema;
+- chamadas de ferramentas e resultados relevantes, quando afetam decisões de documentação.
 
-The transcript exists to preserve the origin of every documentation decision.
+A transcrição existe para preservar a origem de cada decisão de documentação.
 
-Requirements:
+Requisitos:
 
-- every message must be persisted before semantic assessment occurs;
-- messages must be saved verbatim;
-- the transcript must be append-only;
-- no previous transcript message may be rewritten or deleted during normal operation;
-- later corrections must create new transcript entries and answer revisions.
+- cada mensagem deve ser persistida antes que a avaliação semântica ocorra;
+- as mensagens devem ser salvas literalmente;
+- a transcrição deve ser somente de acréscimo (append-only);
+- nenhuma mensagem anterior da transcrição pode ser reescrita ou excluída durante a operação normal;
+- correções posteriores devem criar novas entradas de transcrição e revisões de resposta.
 
-### 3.2 Canonical Answer Records
+### 3.2 Registros de Resposta Canônica
 
-Canonical Answer Records are final, consolidated answers to documentation questions.
+Registros de Resposta Canônica são respostas finais e consolidadas para perguntas de documentação.
 
-A canonical answer is not necessarily a single user message. It may be synthesized from:
+Uma resposta canônica não é necessariamente uma única mensagem do usuário. Pode ser sintetizada a partir de:
 
-- the user’s initial response;
-- follow-up clarifications;
-- corrections;
-- conflict resolutions;
-- agent refinements;
-- explicit user approvals;
-- implicit acceptance under configured policy.
+- a resposta inicial do usuário;
+- esclarecimentos de acompanhamento;
+- correções;
+- resoluções de conflitos;
+- refinamentos do agente;
+- aprovações explícitas do usuário;
+- aceitação implícita sob política configurada.
 
-Canonical answers are the direct source material for generated documents.
+Respostas canônicas são o material de origem direto para documentos gerados.
 
-Requirements:
+Requisitos:
 
-- every documentation question must have zero or one active canonical answer version;
-- canonical answers must reference source transcript message IDs;
-- canonical answers must be versioned;
-- revisions must preserve previous versions;
-- a canonical answer may be final, provisional, hypothesis, skipped, not applicable, or conflicted.
+- cada pergunta de documentação deve ter zero ou uma versão ativa de resposta canônica;
+- respostas canônicas devem referenciar IDs de mensagens de transcrição de origem;
+- respostas canônicas devem ser versionadas;
+- revisões devem preservar versões anteriores;
+- uma resposta canônica pode ser final, provisória, hipótese, pulada, não aplicável ou conflitante.
 
 ---
 
-## 4. State Machine Overview
+## 4. Visão Geral da Máquina de Estados
 
-The agent lifecycle should be implemented as an explicit state machine.
+O ciclo de vida do agente deve ser implementado como uma máquina de estados explícita.
 
 ```txt
 SESSION_INITIALIZING
@@ -153,38 +153,38 @@ WAITING_FOR_ANSWER
 TRANSCRIBING_MESSAGE
   ↓
 ASSESSING_ANSWER
-  ├─ needs complement → ASKING_FOLLOW_UP → WAITING_FOR_ANSWER
-  ├─ insufficient     → REFORMULATING_QUESTION → WAITING_FOR_ANSWER
-  ├─ conflict         → RECONCILING_CONFLICT → WAITING_FOR_ANSWER
-  ├─ user override    → HANDLING_USER_OVERRIDE
-  └─ sufficient       → SYNTHESIZING_FINAL_ANSWER
-                           ↓
-                     FINALIZING_ANSWER
-                           ↓
-                RECORDING_CANONICAL_ANSWER
-                           ↓
-                     ADVANCING_QUEUE
-                           ↓
-          ASKING_QUESTION | INTERVIEW_COMPLETE
-                           ↓
-                    OFFER_GENERATION
-                           ↓
-        GENERATING_DOCUMENTS | REVIEWING_ANSWERS | WAITING_USER_DECISION
-                           ↓
-                   GENERATION_COMPLETE
+  ├─ precisa de complemento → ASKING_FOLLOW_UP → WAITING_FOR_ANSWER
+  ├─ insuficiente           → REFORMULATING_QUESTION → WAITING_FOR_ANSWER
+  ├─ conflito               → RECONCILING_CONFLICT → WAITING_FOR_ANSWER
+  ├─ sobreposição do usuário → HANDLING_USER_OVERRIDE
+  └─ suficiente             → SYNTHESIZING_FINAL_ANSWER
+                                 ↓
+                           FINALIZING_ANSWER
+                                 ↓
+                      RECORDING_CANONICAL_ANSWER
+                                 ↓
+                           ADVANCING_QUEUE
+                                 ↓
+                ASKING_QUESTION | INTERVIEW_COMPLETE
+                                 ↓
+                          OFFER_GENERATION
+                                 ↓
+              GENERATING_DOCUMENTS | REVIEWING_ANSWERS | WAITING_USER_DECISION
+                                 ↓
+                         GENERATION_COMPLETE
 ```
 
-The LLM may assist with semantic assessment and answer synthesis, but the LOGOS Core must govern state transitions.
+O LLM pode auxiliar na avaliação semântica e síntese de respostas, mas o LOGOS Core deve governar as transições de estado.
 
 ---
 
-## 5. Lifecycle States
+## 5. Estados do Ciclo de Vida
 
 ### 5.1 `SESSION_INITIALIZING`
 
-Occurs when the user starts or resumes a LOGOS interview.
+Ocorre quando o usuário inicia ou retoma uma entrevista LOGOS.
 
-Possible entry commands:
+Possíveis comandos de entrada:
 
 ```bash
 logos
@@ -194,16 +194,16 @@ logos generate --doc 01-thesis
 logos resume
 ```
 
-Responsibilities:
+Responsabilidades:
 
-- identify project root;
-- identify target phase, document, or project scope;
-- detect whether this is a new or resumed interview;
-- load local configuration;
-- initialize session metadata;
-- prepare runtime services.
+- identificar a raiz do projeto;
+- identificar a fase alvo, documento ou escopo do projeto;
+- detectar se é uma entrevista nova ou retomada;
+- carregar configuração local;
+- inicializar metadados da sessão;
+- preparar serviços de runtime.
 
-Output:
+Saída:
 
 ```ts
 type SessionContext = {
@@ -220,23 +220,23 @@ type SessionContext = {
 
 ### 5.2 `CONTEXT_LOADING`
 
-Occurs after session initialization.
+Ocorre após a inicialização da sessão.
 
-Responsibilities:
+Responsabilidades:
 
-- load `logos.yml`;
-- load `docs.yml`;
-- load `phases/*.yml`;
-- load existing canonical documents;
-- load existing interview state;
-- load previous canonical answers;
-- load previous transcript entries;
-- detect pending questions;
-- detect skipped questions;
-- detect unresolved conflicts;
-- build the interview queue.
+- carregar `logos.yml`;
+- carregar `docs.yml`;
+- carregar `phases/*.yml`;
+- carregar documentos canônicos existentes;
+- carregar estado da entrevista existente;
+- carregar respostas canônicas anteriores;
+- carregar entradas de transcrição anteriores;
+- detectar perguntas pendentes;
+- detectar perguntas puladas;
+- detectar conflitos não resolvidos;
+- construir a fila da entrevista.
 
-Output:
+Saída:
 
 ```ts
 type InterviewPlan = {
@@ -253,22 +253,22 @@ type InterviewPlan = {
 
 ### 5.3 `INTERVIEW_READY`
 
-Occurs after context is loaded.
+Ocorre após o contexto ser carregado.
 
-Responsibilities:
+Responsabilidades:
 
-- determine whether to start, resume, review, or offer generation;
-- prepare the first or current active question;
-- briefly explain the flow to the user;
-- ask exactly one question.
+- determinar se deve iniciar, retomar, revisar ou oferecer geração;
+- preparar a primeira pergunta ou a pergunta ativa atual;
+- explicar brevemente o fluxo ao usuário;
+- fazer exatamente uma pergunta.
 
-If the interview is new, the agent should explain:
+Se a entrevista for nova, o agente deve explicar:
 
 ```txt
 Vou fazer uma pergunta por vez. Depois de cada resposta, vou avaliar se ela é suficiente para o documento ou se preciso pedir um complemento específico.
 ```
 
-If the interview is resumed, the agent should indicate where it stopped:
+Se a entrevista for retomada, o agente deve indicar onde parou:
 
 ```txt
 Retomando a entrevista em 01-foundation / 01-thesis.md.
@@ -279,18 +279,18 @@ A próxima pergunta pendente é a pergunta 3/5.
 
 ### 5.4 `ASKING_QUESTION`
 
-Occurs whenever the agent presents an active documentation question.
+Ocorre sempre que o agente apresenta uma pergunta de documentação ativa.
 
-Question message must include:
+A mensagem da pergunta deve incluir:
 
-- phase or document context;
-- current question number;
-- total question count;
-- question text;
-- short orientation;
-- optional example or response expectation.
+- contexto da fase ou documento;
+- número da pergunta atual;
+- total de perguntas;
+- texto da pergunta;
+- orientação curta;
+- exemplo opcional ou expectativa de resposta.
 
-Recommended format:
+Formato recomendado:
 
 ```txt
 Pergunta 2/7 — Problema
@@ -300,82 +300,82 @@ Que dor, fricção ou limitação este projeto existe para enfrentar?
 Responda em termos concretos: como isso aparece na vida real, para quem aparece e por que as alternativas atuais são insuficientes.
 ```
 
-Rules:
+Regras:
 
-- ask one active question at a time;
-- do not bundle unrelated questions;
-- do not generate final documentation during the question loop;
-- keep the question focused on the current document or section.
+- faça uma pergunta ativa por vez;
+- não agrupe perguntas não relacionadas;
+- não gere documentação final durante o loop de perguntas;
+- mantenha a pergunta focada no documento ou seção atual.
 
 ---
 
 ### 5.5 `WAITING_FOR_ANSWER`
 
-Occurs after a question has been asked.
+Ocorre após uma pergunta ter sido feita.
 
-Possible user inputs:
+Possíveis entradas do usuário:
 
-- direct answer;
-- partial answer;
-- vague answer;
-- very long answer;
-- contradiction;
-- request to skip;
-- request to pause;
-- request to go back;
-- request to generate now;
-- meta-question;
-- scope change.
+- resposta direta;
+- resposta parcial;
+- resposta vaga;
+- resposta muito longa;
+- contradição;
+- solicitação para pular;
+- solicitação para pausar;
+- solicitação para voltar;
+- solicitação para gerar agora;
+- meta-pergunta;
+- mudança de escopo.
 
-The system must not assess the user message before persisting it verbatim.
+O sistema não deve avaliar a mensagem do usuário antes de persistí-la literalmente.
 
 ---
 
 ### 5.6 `TRANSCRIBING_MESSAGE`
 
-Occurs immediately after receiving user input.
+Ocorre imediatamente após receber a entrada do usuário.
 
-Responsibilities:
+Responsabilidades:
 
-- persist the user message verbatim;
-- assign message ID;
-- associate message with current interview, phase, document, and question;
-- record state before assessment.
+- persistir a mensagem do usuário literalmente;
+- atribuir ID de mensagem;
+- associar a mensagem com a entrevista, fase, documento e pergunta atuais;
+- registrar o estado antes da avaliação.
 
-This state is mandatory.
+Este estado é obrigatório.
 
-Correct order:
+Ordem correta:
 
 ```txt
-receive user message
-→ append to transcript
-→ assess message
+receber mensagem do usuário
+→ anexar à transcrição
+→ avaliar mensagem
 ```
 
-Incorrect order:
+Ordem incorreta:
 
 ```txt
-receive user message
-→ assess message
-→ save summary only
+receber mensagem do usuário
+→ avaliar mensagem
+→ salvar apenas resumo
 ```
 
 ---
 
 ### 5.7 `ASSESSING_ANSWER`
 
-Occurs after the user message has been persisted.
+Ocorre após a mensagem do usuário ter sido persistida.
 
-Responsibilities:
+Responsabilidades:
 
-- evaluate whether the answer satisfies the active question;
-- extract facts, decisions, assumptions, hypotheses, constraints, and open questions;
-- detect missing required signals;
-- detect conflicts with previous answers;
-- classify answer confidence;
-- decide whether to advance, complement, reformulate, reconcile, or handle override.
+- avaliar se a resposta satisfaz a pergunta ativa;
+- extrair fatos, decisões, suposições, hipóteses, restrições e perguntas em aberto;
+- detectar sinais obrigatórios ausentes;
+- detectar conflitos com respostas anteriores;
+- classificar a confiança da resposta;
+- decidir se deve avançar, complementar, reformular, reconciliar ou tratar sobreposição do usuário.
 
-Assessment result:
+Resultado da avaliação:
 
 ```ts
 type AnswerAssessment =
@@ -420,11 +420,11 @@ type AnswerAssessment =
 
 ### 5.8 `ASKING_FOLLOW_UP`
 
-Occurs when the answer is useful but incomplete.
+Ocorre quando a resposta é útil mas incompleta.
 
-The follow-up must be specific and limited to missing signals.
+O acompanhamento deve ser específico e limitado aos sinais ausentes.
 
-Example:
+Exemplo:
 
 ```txt
 Isso já define a direção, mas ainda falta a tensão central.
@@ -433,20 +433,20 @@ Complemento:
 O que hoje impede essas pessoas de transformar ideias em documentação clara: excesso de informação, falta de método, dificuldade de decisão, dispersão, medo de executar, ou outra coisa?
 ```
 
-Rules:
+Regras:
 
-- do not repeat the original question unless needed;
-- ask only for missing information;
-- combine the original answer and complement during reassessment;
-- limit follow-up attempts per question.
+- não repita a pergunta original a menos que necessário;
+- pergunte apenas pelas informações ausentes;
+- combine a resposta original e o complemento durante a reavaliação;
+- limite as tentativas de acompanhamento por pergunta.
 
-Recommended limit:
+Limite recomendado:
 
 ```txt
 maxFollowUps = 2
 ```
 
-After the limit is reached, offer options:
+Após o limite ser atingido, ofereça opções:
 
 ```txt
 Ainda não temos material suficiente para fechar esta resposta.
@@ -462,9 +462,9 @@ Escolha uma opção:
 
 ### 5.9 `REFORMULATING_QUESTION`
 
-Occurs when the user answer is off-topic or unusable.
+Ocorre quando a resposta do usuário está fora do tópico ou é inutilizável.
 
-Example:
+Exemplo:
 
 ```txt
 Isso descreve uma qualidade desejada do produto, mas ainda não descreve o problema que ele resolve.
@@ -473,20 +473,20 @@ Vou reformular:
 Que situação concreta faz alguém precisar deste projeto antes de existir qualquer solução visual ou técnica?
 ```
 
-Rules:
+Regras:
 
-- explain briefly why the answer does not satisfy the question;
-- reformulate with more concrete guidance;
-- preserve the original transcript entry;
-- do not mark the question as answered.
+- explique brevemente por que a resposta não satisfaz a pergunta;
+- reformule com orientação mais concreta;
+- preserve a entrada original da transcrição;
+- não marque a pergunta como respondida.
 
 ---
 
 ### 5.10 `RECONCILING_CONFLICT`
 
-Occurs when a new answer contradicts a previous answer or decision.
+Ocorre quando uma nova resposta contradiz uma resposta ou decisão anterior.
 
-Example:
+Exemplo:
 
 ```txt
 Há uma tensão com uma resposta anterior.
@@ -501,43 +501,43 @@ Qual das interpretações está correta?
 4. Ainda é uma decisão em aberto.
 ```
 
-Rules:
+Regras:
 
-- do not hide contradictions;
-- do not resolve critical contradictions without user confirmation;
-- conflict resolution must be persisted as a documentation decision;
-- affected answers must be revised or marked as open.
+- não esconda contradições;
+- não resolva contradições críticas sem confirmação do usuário;
+- a resolução de conflito deve ser persistida como decisão de documentação;
+- respostas afetadas devem ser revisadas ou marcadas como em aberto.
 
 ---
 
 ### 5.11 `SYNTHESIZING_FINAL_ANSWER`
 
-Occurs when the answer is sufficient or sufficient after complement/reconciliation.
+Ocorre quando a resposta é suficiente ou suficiente após complemento/reconciliação.
 
-Responsibilities:
+Responsabilidades:
 
-- synthesize a clear final answer to the documentation question;
-- combine the relevant user messages and clarifications;
-- preserve fidelity to user intent;
-- distinguish fact, decision, hypothesis, assumption, and inference;
-- record the source message IDs used;
-- produce a canonical answer draft.
+- sintetizar uma resposta final clara para a pergunta de documentação;
+- combinar as mensagens relevantes do usuário e esclarecimentos;
+- preservar fidelidade à intenção do usuário;
+- distinguir fato, decisão, hipótese, suposição e inferência;
+- registrar os IDs das mensagens de origem utilizadas;
+- produzir um rascunho de resposta canônica.
 
-Example:
+Exemplo:
 
-Original user answer:
+Resposta original do usuário:
 
 ```txt
 Quero criar um sistema que ajude pessoas a tirar ideias da cabeça.
 ```
 
-Complement:
+Complemento:
 
 ```txt
 O problema é que muita gente trava porque tem tudo misturado mentalmente e não consegue transformar isso em plano claro.
 ```
 
-Canonical synthesized answer:
+Resposta canônica sintetizada:
 
 ```txt
 O projeto existe para ajudar pessoas a transformar ideias difusas, acumuladas mentalmente, em documentação clara, estruturada e acionável. A convicção central é que muitos projetos não falham por falta de ideias, mas por falta de um processo que externalize, organize e converta essas ideias em decisões e próximos passos confiáveis.
@@ -547,41 +547,41 @@ O projeto existe para ajudar pessoas a transformar ideias difusas, acumuladas me
 
 ### 5.12 `FINALIZING_ANSWER`
 
-Occurs after a canonical answer draft is synthesized.
+Ocorre após um rascunho de resposta canônica ser sintetizado.
 
-Responsibilities:
+Responsabilidades:
 
-- decide whether the answer can be saved automatically;
-- decide whether explicit user approval is required;
-- mark low-confidence answers as hypotheses when appropriate;
-- require approval for critical decisions;
-- prepare the answer for canonical persistence.
+- decidir se a resposta pode ser salva automaticamente;
+- decidir se a aprovação explícita do usuário é necessária;
+- marcar respostas de baixa confiança como hipóteses quando apropriado;
+- exigir aprovação para decisões críticas;
+- preparar a resposta para persistência canônica.
 
-Recommended policy:
+Política recomendada:
 
 ```txt
-If confidence = high:
-  save final answer and advance.
+Se confidence = high:
+  salvar resposta final e avançar.
 
-If confidence = medium:
-  save final answer with agentRefinement.applied = true.
+Se confidence = medium:
+  salvar resposta final com agentRefinement.applied = true.
 
-If confidence = low:
-  ask whether to register as hypothesis.
+Se confidence = low:
+  perguntar se deve registrar como hipótese.
 
-If conflict was involved:
-  require explicit user approval.
+Se houve conflito:
+  exigir aprovação explícita do usuário.
 
-If document is foundational or decision-critical:
-  optionally require explicit confirmation before advancing.
+Se o documento for fundacional ou crítico para decisões:
+  opcionalmente exigir confirmação explícita antes de avançar.
 ```
 
-Possible confirmation message:
+Possível mensagem de confirmação:
 
 ```txt
 Vou registrar esta resposta final para a pergunta:
 
-“O projeto existe para ajudar pessoas a transformar ideias difusas... ”
+"O projeto existe para ajudar pessoas a transformar ideias difusas..."
 
 Está correto?
 1. Sim, avançar
@@ -593,48 +593,48 @@ Está correto?
 
 ### 5.13 `RECORDING_CANONICAL_ANSWER`
 
-Occurs after the final answer has been accepted under the configured policy.
+Ocorre após a resposta final ter sido aceita sob a política configurada.
 
-Responsibilities:
+Responsabilidades:
 
-- persist canonical answer record;
-- link source transcript messages;
-- store extracted semantic fields;
-- store confidence;
-- store revision version;
-- mark active question as answered;
-- record documentation decision.
+- persistir registro de resposta canônica;
+- vincular mensagens de transcrição de origem;
+- armazenar campos semânticos extraídos;
+- armazenar confiança;
+- armazenar versão da revisão;
+- marcar pergunta ativa como respondida;
+- registrar decisão de documentação.
 
 ---
 
 ### 5.14 `ADVANCING_QUEUE`
 
-Occurs after a canonical answer is recorded or a question is explicitly skipped.
+Ocorre após uma resposta canônica ser registrada ou uma pergunta ser explicitamente pulada.
 
-Responsibilities:
+Responsabilidades:
 
-- update question state;
-- recalculate document completeness;
-- identify next question;
-- detect whether required questions remain;
-- transition to `ASKING_QUESTION` or `INTERVIEW_COMPLETE`.
+- atualizar estado da pergunta;
+- recalcular completude do documento;
+- identificar próxima pergunta;
+- detectar se ainda há perguntas obrigatórias;
+- transitar para `ASKING_QUESTION` ou `INTERVIEW_COMPLETE`.
 
 ---
 
 ### 5.15 `INTERVIEW_COMPLETE`
 
-Occurs when all required questions in the active scope have been answered, skipped as not applicable, or accepted as provisional.
+Ocorre quando todas as perguntas obrigatórias no escopo ativo foram respondidas, puladas como não aplicáveis ou aceitas como provisórias.
 
-Responsibilities:
+Responsabilidades:
 
-- summarize captured answers;
-- list weak points;
-- list unresolved questions;
-- list skipped required questions, if any;
-- calculate generation readiness;
-- offer next action.
+- resumir respostas capturadas;
+- listar pontos fracos;
+- listar perguntas não resolvidas;
+- listar perguntas obrigatórias puladas, se houver;
+- calcular prontidão para geração;
+- oferecer próxima ação.
 
-Example:
+Exemplo:
 
 ```txt
 Concluímos as perguntas necessárias para este documento.
@@ -655,69 +655,69 @@ Posso agora:
 4. salvar como rascunho e parar.
 ```
 
-The agent must offer generation. It must not generate automatically unless the active mode explicitly allows auto-generation.
+O agente deve oferecer geração. Não deve gerar automaticamente a menos que o modo ativo permita explicitamente a geração automática.
 
 ---
 
 ### 5.16 `OFFER_GENERATION`
 
-Occurs after interview completion or when the user asks to generate early.
+Ocorre após a conclusão da entrevista ou quando o usuário solicita gerar antecipadamente.
 
-Responsibilities:
+Responsabilidades:
 
-- show generation readiness;
-- explain blocking gaps;
-- offer generation modes;
-- ask for user decision.
+- mostrar prontidão para geração;
+- explicar lacunas bloqueadoras;
+- oferecer modos de geração;
+- solicitar decisão do usuário.
 
-Generation modes:
+Modos de geração:
 
 ```txt
 strict_generation
-  generate only if minimum required answers are sufficient.
+  gerar apenas se as respostas mínimas obrigatórias forem suficientes.
 
 partial_generation
-  generate with explicit gaps.
+  gerar com lacunas explícitas.
 
 hypothesis_generation
-  generate while marking unresolved assumptions and hypotheses.
+  gerar marcando suposições e hipóteses não resolvidas.
 
 skeleton_generation
-  generate structure with placeholders.
+  gerar estrutura com placeholders.
 ```
 
 ---
 
 ### 5.17 `GENERATING_DOCUMENTS`
 
-Occurs after the user requests generation.
+Ocorre após o usuário solicitar geração.
 
-Responsibilities:
+Responsabilidades:
 
-- load canonical answers;
-- load document template;
-- load document schema;
-- generate draft;
-- preserve traceability;
-- validate draft;
-- produce preview or diff;
-- request acceptance before saving canonical document.
+- carregar respostas canônicas;
+- carregar template do documento;
+- carregar schema do documento;
+- gerar rascunho;
+- preservar rastreabilidade;
+- validar rascunho;
+- produzir pré-visualização ou diff;
+- solicitar aceitação antes de salvar documento canônico.
 
-Generated document draft must reference:
+O rascunho do documento gerado deve referenciar:
 
-- canonical answer IDs;
-- source transcript message IDs;
-- assumptions used;
-- unresolved questions;
-- agent inferences.
+- IDs de respostas canônicas;
+- IDs de mensagens de transcrição de origem;
+- suposições utilizadas;
+- perguntas não resolvidas;
+- inferências do agente.
 
 ---
 
-## 6. User Override Flows
+## 6. Fluxos de Sobreposição do Usuário
 
-### 6.1 Skip Question
+### 6.1 Pular Pergunta
 
-User input examples:
+Exemplos de entrada do usuário:
 
 ```txt
 pula essa
@@ -725,13 +725,13 @@ não sei ainda
 vamos deixar para depois
 ```
 
-Behavior:
+Comportamento:
 
-- mark question as skipped;
-- do not fabricate answer;
-- classify skipped reason;
-- continue if allowed;
-- surface skipped required questions before generation.
+- marcar pergunta como pulada;
+- não fabricar resposta;
+- classificar motivo de pular;
+- continuar se permitido;
+- expor perguntas obrigatórias puladas antes da geração.
 
 ```ts
 type QuestionState = {
@@ -742,9 +742,9 @@ type QuestionState = {
 
 ---
 
-### 6.2 Go Back
+### 6.2 Voltar
 
-User input examples:
+Exemplos de entrada do usuário:
 
 ```txt
 volta na anterior
@@ -752,14 +752,14 @@ quero mudar a resposta da tese
 a resposta anterior ficou errada
 ```
 
-Behavior:
+Comportamento:
 
-- locate target question;
-- show current canonical answer;
-- collect revised answer;
-- persist revision;
-- preserve previous version;
-- recalculate dependencies.
+- localizar pergunta alvo;
+- mostrar resposta canônica atual;
+- coletar resposta revisada;
+- persistir revisão;
+- preservar versão anterior;
+- recalcular dependências.
 
 ```ts
 type AnswerRevision = {
@@ -773,9 +773,9 @@ type AnswerRevision = {
 
 ---
 
-### 6.3 Pause Interview
+### 6.3 Pausar Entrevista
 
-User input examples:
+Exemplos de entrada do usuário:
 
 ```txt
 pausar
@@ -783,36 +783,36 @@ continuamos depois
 salva e sai
 ```
 
-Behavior:
+Comportamento:
 
-- persist state;
-- mark interview as paused;
-- keep current question pending;
-- allow later resume.
+- persistir estado;
+- marcar entrevista como pausada;
+- manter pergunta atual pendente;
+- permitir retomada posterior.
 
 ---
 
-### 6.4 Cancel Interview
+### 6.4 Cancelar Entrevista
 
-User input examples:
+Exemplos de entrada do usuário:
 
 ```txt
 cancelar
 abandona essa entrevista
 ```
 
-Behavior:
+Comportamento:
 
-- ask whether to save partial answers;
-- persist or discard according to user choice;
-- never delete transcript silently;
-- return to overview.
+- perguntar se deseja salvar respostas parciais;
+- persistir ou descartar conforme escolha do usuário;
+- nunca excluir transcrição silenciosamente;
+- retornar à visão geral.
 
 ---
 
-### 6.5 Generate Early
+### 6.5 Gerar Antecipadamente
 
-User input examples:
+Exemplos de entrada do usuário:
 
 ```txt
 gera agora
@@ -820,18 +820,18 @@ gera com o que temos
 vamos fazer a documentação já
 ```
 
-Behavior:
+Comportamento:
 
-- calculate generation readiness;
-- explain missing required answers;
-- offer partial or strict generation;
-- require confirmation before generating.
+- calcular prontidão para geração;
+- explicar respostas obrigatórias ausentes;
+- oferecer geração parcial ou estrita;
+- exigir confirmação antes de gerar.
 
 ---
 
-### 6.6 Scope Change
+### 6.6 Mudança de Escopo
 
-User input examples:
+Exemplos de entrada do usuário:
 
 ```txt
 na verdade não é mais para negócios, é para projetos pessoais
@@ -839,13 +839,13 @@ quero mudar de app mobile para CLI
 decidi que não será open source
 ```
 
-Behavior:
+Comportamento:
 
-- detect impact scope;
-- classify affected questions and documents;
-- ask user how to apply the change;
-- revise previous answers when needed;
-- record scope change as documentation decision.
+- detectar escopo do impacto;
+- classificar perguntas e documentos afetados;
+- perguntar ao usuário como aplicar a mudança;
+- revisar respostas anteriores quando necessário;
+- registrar mudança de escopo como decisão de documentação.
 
 ```ts
 type ScopeChange = {
@@ -858,9 +858,9 @@ type ScopeChange = {
 
 ---
 
-## 7. Data Models
+## 7. Modelos de Dados
 
-### 7.1 Transcript Message
+### 7.1 Mensagem de Transcrição
 
 ```ts
 type TranscriptMessage = {
@@ -909,7 +909,7 @@ type TranscriptMessage = {
 
 ---
 
-### 7.2 Canonical Answer Record
+### 7.2 Registro de Resposta Canônica
 
 ```ts
 type CanonicalAnswerRecord = {
@@ -981,7 +981,7 @@ type CanonicalAnswerRecord = {
 
 ---
 
-### 7.3 Interview Question
+### 7.3 Pergunta da Entrevista
 
 ```ts
 type InterviewQuestion = {
@@ -1018,7 +1018,7 @@ type InterviewQuestion = {
 
 ---
 
-### 7.4 Interview Queue
+### 7.4 Fila da Entrevista
 
 ```ts
 type InterviewQueue = {
@@ -1035,7 +1035,7 @@ type InterviewQueue = {
 
 ---
 
-### 7.5 Interview Run State
+### 7.5 Estado da Execução da Entrevista
 
 ```ts
 type InterviewRunState = {
@@ -1063,7 +1063,7 @@ type InterviewRunState = {
 
 ---
 
-### 7.6 Documentation Decision
+### 7.6 Decisão de Documentação
 
 ```ts
 type DocumentationDecision = {
@@ -1102,7 +1102,7 @@ type DocumentationDecision = {
 
 ---
 
-### 7.7 Generated Document Draft
+### 7.7 Rascunho de Documento Gerado
 
 ```ts
 type GeneratedDocumentSectionTrace = {
@@ -1134,9 +1134,9 @@ type GeneratedDocumentDraft = {
 
 ---
 
-## 8. Persistence Layout
+## 8. Layout de Persistência
 
-Recommended local structure:
+Estrutura local recomendada:
 
 ```txt
 .logos/
@@ -1157,196 +1157,196 @@ Recommended local structure:
 
 ### 8.1 `transcript.jsonl`
 
-The append-only structured source of truth for conversation history.
+A fonte de verdade estruturada e somente de acréscimo para o histórico da conversa.
 
 ### 8.2 `transcript.md`
 
-Human-readable export of the transcript.
+Exportação legível por humanos da transcrição.
 
 ### 8.3 `canonical-answers.json`
 
-The structured list of final answers per documentation question.
+A lista estruturada de respostas finais por pergunta de documentação.
 
 ### 8.4 `decisions.json`
 
-A structured log of documentation decisions and their source message IDs.
+Um log estruturado de decisões de documentação e seus IDs de mensagens de origem.
 
 ### 8.5 `generated-drafts/*.trace.json`
 
-Trace metadata connecting generated document sections to canonical answers and verbatim source messages.
+Metadados de rastreamento conectando seções do documento gerado a respostas canônicas e mensagens de origem literais.
 
 ---
 
-## 9. Sufficiency Policy
+## 9. Política de Suficiência
 
-A response is sufficient only when all of the following are true:
+Uma resposta é suficiente apenas quando todas as condições abaixo são verdadeiras:
 
 ```txt
-- it contains the minimum required semantic signals;
-- it can be synthesized into a final answer;
-- it has identifiable verbatim source messages;
-- it has no unresolved conflicts;
-- it can be classified with confidence;
-- it can be stored as a canonical answer record.
+- contém os sinais semânticos mínimos obrigatórios;
+- pode ser sintetizada em uma resposta final;
+- possui mensagens de origem literais identificáveis;
+- não possui conflitos não resolvidos;
+- pode ser classificada com confiança;
+- pode ser armazenada como registro de resposta canônica.
 ```
 
-Sufficiency statuses:
+Status de suficiência:
 
 ```txt
 sufficient
-  The response contains the minimum required signals.
+  A resposta contém os sinais mínimos obrigatórios.
 
 needs_complement
-  The response is useful but lacks one or more required signals.
+  A resposta é útil mas carece de um ou mais sinais obrigatórios.
 
 insufficient
-  The response does not answer the question in a usable way.
+  A resposta não atende à pergunta de forma utilizável.
 
 conflict
-  The response contradicts previous material.
+  A resposta contradiz material anterior.
 
 defer
-  The user explicitly does not want to answer now.
+  O usuário explicitamente não quer responder agora.
 
 not_applicable
-  The question does not apply to the project.
+  A pergunta não se aplica ao projeto.
 ```
 
-Confidence levels:
+Níveis de confiança:
 
 ```txt
 high
-  clear, specific, and directly usable.
+  clara, específica e diretamente utilizável.
 
 medium
-  usable but requires agent refinement.
+  utilizável mas requer refinamento do agente.
 
 low
-  weak, vague, or provisional; should be marked as hypothesis or require confirmation.
+  fraca, vaga ou provisória; deve ser marcada como hipótese ou exigir confirmação.
 ```
 
 ---
 
-## 10. Traceability Requirements
+## 10. Requisitos de Rastreabilidade
 
-### 10.1 Canonical Answer Traceability
+### 10.1 Rastreabilidade de Resposta Canônica
 
-Every canonical answer must reference:
+Toda resposta canônica deve referenciar:
 
-- source user messages;
-- source agent messages when relevant;
-- complement messages;
-- conflict resolution messages;
-- approval messages when explicit approval occurs.
+- mensagens de origem do usuário;
+- mensagens de origem do agente quando relevantes;
+- mensagens de complemento;
+- mensagens de resolução de conflito;
+- mensagens de aprovação quando houver aprovação explícita.
 
-### 10.2 Documentation Traceability
+### 10.2 Rastreabilidade de Documentação
 
-Every generated document must reference:
+Todo documento gerado deve referenciar:
 
-- canonical answer IDs;
-- transcript message IDs;
-- unresolved questions;
-- assumptions;
-- agent inferences;
-- validation result.
+- IDs de respostas canônicas;
+- IDs de mensagens de transcrição;
+- perguntas não resolvidas;
+- suposições;
+- inferências do agente;
+- resultado da validação.
 
-### 10.3 Section-Level Traceability
+### 10.3 Rastreabilidade em Nível de Seção
 
-Every generated section should reference the canonical answers used to produce it.
+Toda seção gerada deve referenciar as respostas canônicas usadas para produzi-la.
 
-If a section is generated without sufficient source material, it must be marked as:
+Se uma seção for gerada sem material de origem suficiente, deve ser marcada como:
 
 ```txt
 agent_inference
 ```
 
-or:
+ou:
 
 ```txt
 missing_source
 ```
 
-In strict mode, `missing_source` blocks canonical saving.
+No modo estrito, `missing_source` bloqueia o salvamento canônico.
 
 ---
 
-## 11. Agent Behavior Rules
+## 11. Regras de Comportamento do Agente
 
-The agent must:
+O agente deve:
 
-- ask one question at a time;
-- persist every message before assessment;
-- evaluate whether the answer is sufficient;
-- ask for specific complements when needed;
-- explicitly surface contradictions;
-- synthesize final answers per question;
-- distinguish user-provided content from agent inference;
-- preserve traceability;
-- offer generation only after readiness evaluation;
-- generate documents from canonical answers, not raw chat;
-- request approval before critical decisions.
+- fazer uma pergunta por vez;
+- persistir cada mensagem antes da avaliação;
+- avaliar se a resposta é suficiente;
+- solicitar complementos específicos quando necessário;
+- expor contradições explicitamente;
+- sintetizar respostas finais por pergunta;
+- distinguir conteúdo fornecido pelo usuário de inferência do agente;
+- preservar rastreabilidade;
+- oferecer geração apenas após avaliação de prontidão;
+- gerar documentos a partir de respostas canônicas, não do chat bruto;
+- solicitar aprovação antes de decisões críticas.
 
-The agent must not:
+O agente não deve:
 
-- silently skip missing signals;
-- accept vague answers as complete;
-- generate documentation before enough material exists unless partial generation is explicitly chosen;
-- overwrite canonical answers without revision records;
-- edit transcript entries;
-- hide unresolved assumptions inside polished prose;
-- treat its own inference as user decision.
+- pular sinais ausentes silenciosamente;
+- aceitar respostas vagas como completas;
+- gerar documentação antes que exista material suficiente, a menos que a geração parcial seja explicitamente escolhida;
+- sobrescrever respostas canônicas sem registros de revisão;
+- editar entradas da transcrição;
+- esconder suposições não resolvidas dentro de prosa polida;
+- tratar sua própria inferência como decisão do usuário.
 
 ---
 
-## 12. LOGOS Core vs Agent Responsibilities
+## 12. Responsabilidades do LOGOS Core vs Agente
 
-### 12.1 LOGOS Core Responsibilities
+### 12.1 Responsabilidades do LOGOS Core
 
-The LOGOS Core governs:
+O LOGOS Core governa:
 
-- interview state;
-- question queue;
-- persistence;
-- schema validation;
-- completeness calculation;
-- transition rules;
-- generation readiness;
-- traceability checks;
-- canonical answer versioning.
+- estado da entrevista;
+- fila de perguntas;
+- persistência;
+- validação de schema;
+- cálculo de completude;
+- regras de transição;
+- prontidão para geração;
+- verificações de rastreabilidade;
+- versionamento de respostas canônicas.
 
-### 12.2 Agent Runtime Responsibilities
+### 12.2 Responsabilidades do Agent Runtime
 
-The agent assists with:
+O agente auxilia com:
 
-- semantic assessment;
-- answer synthesis;
-- follow-up question generation;
-- conflict detection;
-- draft generation;
-- document review;
-- patch proposals.
+- avaliação semântica;
+- síntese de respostas;
+- geração de perguntas de acompanhamento;
+- detecção de conflitos;
+- geração de rascunhos;
+- revisão de documentos;
+- propostas de correção.
 
-### 12.3 Critical Rule
+### 12.3 Regra Crítica
 
-The agent may recommend transitions, but LOGOS Core applies them.
+O agente pode recomendar transições, mas o LOGOS Core as aplica.
 
 ```txt
-Agent says: sufficient
-Core validates: criteria and traceability are satisfied
-Then: advance
+Agente diz: sufficient
+Core valida: criteria e traceability estão satisfeitos
+Então: advance
 ```
 
 ---
 
-## 13. Required Package
+## 13. Pacote Necessário
 
-The architecture should include a dedicated package:
+A arquitetura deve incluir um pacote dedicado:
 
 ```txt
 packages/logos-interview/
 ```
 
-Recommended structure:
+Estrutura recomendada:
 
 ```txt
 packages/logos-interview/
@@ -1391,23 +1391,23 @@ packages/logos-interview/
 
 ---
 
-## 14. TUI Requirements
+## 14. Requisitos da TUI
 
-The TUI must expose interview state clearly.
+A TUI deve expor o estado da entrevista com clareza.
 
-It should show:
+Deve mostrar:
 
-- current phase;
-- current document;
-- current question;
-- question progress;
-- answer status;
-- missing signals;
-- detected conflicts;
-- generation readiness;
-- current canonical answer draft when applicable.
+- fase atual;
+- documento atual;
+- pergunta atual;
+- progresso das perguntas;
+- status da resposta;
+- sinais ausentes;
+- conflitos detectados;
+- prontidão para geração;
+- rascunho da resposta canônica atual quando aplicável.
 
-### 14.1 Active Question Mockup
+### 14.1 Mockup de Pergunta Ativa
 
 ```txt
 ╭─ LOGOS Interview ─────────────────────────────────────────────╮
@@ -1427,7 +1427,7 @@ It should show:
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
-### 14.2 Partial Answer Mockup
+### 14.2 Mockup de Resposta Parcial
 
 ```txt
 ╭─ Answer Assessment ───────────────────────────────────────────╮
@@ -1441,7 +1441,7 @@ It should show:
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
-### 14.3 Final Answer Confirmation Mockup
+### 14.3 Mockup de Confirmação de Resposta Final
 
 ```txt
 ╭─ Canonical Answer Draft ──────────────────────────────────────╮
@@ -1459,7 +1459,7 @@ It should show:
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
-### 14.4 Interview Complete Mockup
+### 14.4 Mockup de Entrevista Concluída
 
 ```txt
 ╭─ Interview Complete ──────────────────────────────────────────╮
@@ -1482,100 +1482,100 @@ It should show:
 
 ---
 
-## 15. Integrity Rules
+## 15. Regras de Integridade
 
-### Rule 1 — Verbatim First
+### Regra 1 — Literal Primeiro
 
-Every user message must be persisted verbatim before any semantic assessment.
+Cada mensagem do usuário deve ser persistida literalmente antes de qualquer avaliação semântica.
 
-### Rule 2 — Transcript Is Append-Only
+### Regra 2 — Transcrição é Somente de Acréscimo
 
-Transcript entries must not be edited or deleted during normal operation.
+Entradas da transcrição não devem ser editadas ou excluídas durante a operação normal.
 
-### Rule 3 — Answers Are Versioned
+### Regra 3 — Respostas São Versionadas
 
-Canonical answer revisions create new records and preserve previous versions.
+Revisões de respostas canônicas criam novos registros e preservam versões anteriores.
 
-### Rule 4 — Documents Derive From Canonical Answers
+### Regra 4 — Documentos Derivam de Respostas Canônicas
 
-Documents must be generated from canonical answers, not directly from raw chat.
+Documentos devem ser gerados a partir de respostas canônicas, não diretamente do chat bruto.
 
-### Rule 5 — Every Documentation Decision Must Be Traceable
+### Regra 5 — Toda Decisão de Documentação Deve Ser Rastreável
 
-Every relevant decision must reference transcript message IDs and/or canonical answer IDs.
+Toda decisão relevante deve referenciar IDs de mensagens de transcrição e/ou IDs de respostas canônicas.
 
-### Rule 6 — Critical Decisions Require Confirmation
+### Regra 6 — Decisões Críticas Exigem Confirmação
 
-Critical decisions include:
+Decisões críticas incluem:
 
-- scope changes;
-- conflict resolutions;
-- target audience definition;
-- business model definition;
-- anti-scope boundaries;
-- generation acceptance;
-- canonical document acceptance.
+- mudanças de escopo;
+- resoluções de conflitos;
+- definição de público-alvo;
+- definição de modelo de negócio;
+- limites de anti-escopo;
+- aceitação de geração;
+- aceitação de documento canônico.
 
-### Rule 7 — Agent Inference Must Be Labeled
+### Regra 7 — Inferência do Agente Deve Ser Rotulada
 
-Agent-generated interpretation must not be presented as user-provided fact.
+Interpretação gerada pelo agente não deve ser apresentada como fato fornecido pelo usuário.
 
-### Rule 8 — Gaps Must Survive
+### Regra 8 — Lacunas Devem Sobreviver
 
-Unresolved gaps must appear in:
+Lacunas não resolvidas devem aparecer em:
 
-- diagnostics;
-- generation readiness;
-- generated draft trace;
-- review panel.
-
----
-
-## 16. Minimal MVP Acceptance Criteria
-
-The first implementation of this lifecycle is acceptable only if it can:
-
-1. start a document interview;
-2. ask one question at a time;
-3. persist all user and agent messages verbatim;
-4. assess answer sufficiency;
-5. request complement when needed;
-6. synthesize final answer per question;
-7. persist canonical answer records with source message IDs;
-8. advance through the question queue;
-9. detect interview completion;
-10. offer document generation;
-11. generate a draft from canonical answers;
-12. validate traceability before saving;
-13. preserve transcript and answer revisions across resume.
+- diagnósticos;
+- prontidão para geração;
+- rastreamento do rascunho gerado;
+- painel de revisão.
 
 ---
 
-## 17. Summary
+## 16. Critérios Mínimos de Aceitação do MVP
 
-The LOGOS agent lifecycle must be treated as a deterministic interview system supported by an LLM, not as a free-form chat.
+A primeira implementação deste ciclo de vida é aceitável apenas se puder:
 
-The key architectural distinction is:
+1. iniciar uma entrevista de documento;
+2. fazer uma pergunta por vez;
+3. persistir todas as mensagens do usuário e do agente literalmente;
+4. avaliar suficiência da resposta;
+5. solicitar complemento quando necessário;
+6. sintetizar resposta final por pergunta;
+7. persistir registros de resposta canônica com IDs de mensagens de origem;
+8. avançar pela fila de perguntas;
+9. detectar conclusão da entrevista;
+10. oferecer geração de documento;
+11. gerar um rascunho a partir de respostas canônicas;
+12. validar rastreabilidade antes de salvar;
+13. preservar transcrição e revisões de respostas ao retomar.
+
+---
+
+## 17. Resumo
+
+O ciclo de vida do agente LOGOS deve ser tratado como um sistema de entrevista determinística apoiado por um LLM, não como um chat livre.
+
+A distinção arquitetural chave é:
 
 ```txt
-Transcript Log
-  complete verbatim origin
+Log de Transcrição
+  origem literal completa
 
-Canonical Answer Records
-  refined final answers per question
+Registros de Resposta Canônica
+  respostas finais refinadas por pergunta
 
-Generated Documentation
-  artifact derived from canonical answers
+Documentação Gerada
+  artefato derivado de respostas canônicas
 ```
 
-This gives LOGOS a semantic chain of custody:
+Isso confere ao LOGOS uma cadeia de custódia semântica:
 
 ```txt
-message
-→ answer
-→ decision
-→ document
-→ executive output
+mensagem
+→ resposta
+→ decisão
+→ documento
+→ saída executiva
 ```
 
-Without this chain, generated documentation may look coherent but cannot be audited. With this chain, every documentation decision can be traced back to the exact user and agent messages that produced it.
+Sem essa cadeia, a documentação gerada pode parecer coerente mas não pode ser auditada. Com essa cadeia, cada decisão de documentação pode ser rastreada até as mensagens exatas do usuário e do agente que a produziram.
