@@ -3,7 +3,6 @@
 // Why it exists: Keeps LOGOS independent from any single model provider.
 
 import { loadLlmConfig } from './config.js';
-import { generateJson } from './generate-json.js';
 import {
 	generateStructuredOutput,
 	generateStructuredOutputSafe,
@@ -49,19 +48,10 @@ export interface GenerateTextOutput {
 	usage?: LlmUsage;
 }
 
-export interface GenerateJsonInput<T = unknown> {
-	messages: LlmMessage[];
-	/** Optional validator (e.g. a Zod schema). Parsed JSON is passed through `schema.parse()`. */
-	schema?: { parse(input: unknown): T };
-	temperature?: number;
-	maxTokens?: number;
-}
-
 // ─── Interface ──────────────────────────────────────────────────────────────
 
 export interface LlmClient {
 	generateText(input: GenerateTextInput): Promise<GenerateTextOutput>;
-	generateJson<T>(input: GenerateJsonInput<T>): Promise<T>;
 	generateStructuredOutput<T>(input: StructuredOutputInput<T>): Promise<T>;
 	generateStructuredOutputSafe<T>(
 		input: StructuredOutputInput<T>,
@@ -77,8 +67,6 @@ export function createLlmClient(
 	const resolved = loadLlmConfig(options);
 
 	return {
-		generateJson: <T>(input: GenerateJsonInput<T>) =>
-			generateJson(resolved, input),
 		generateStructuredOutput: <T>(input: StructuredOutputInput<T>) =>
 			generateStructuredOutput(resolved, input),
 		generateStructuredOutputSafe: <T>(input: StructuredOutputInput<T>) =>
