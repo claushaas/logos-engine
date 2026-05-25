@@ -16,10 +16,10 @@ function buildMessages(
 	jsonInstruction: string,
 	messages: LlmMessage[],
 ): LlmMessage[] {
-	if (messages.length > 0 && messages[0]!.role === 'system') {
+	if (messages.length > 0 && messages[0]?.role === 'system') {
 		return [
 			{
-				content: `${jsonInstruction}\n\n${messages[0]!.content}`,
+				content: `${jsonInstruction}\n\n${messages[0]?.content}`,
 				role: 'system',
 			},
 			...messages.slice(1),

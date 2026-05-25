@@ -8,6 +8,7 @@ import type {
 	LlmClientOptions,
 	LlmUsage,
 } from './client.js';
+import { withRetry } from './retry-policy.js';
 
 // ─── Internal helpers ───────────────────────────────────────────────────────
 
@@ -104,12 +105,14 @@ export async function generateText(
 		requestBody.stop = input.stop;
 	}
 
-	const response = await makeRequest(
-		config.baseUrl,
-		config.apiKey,
-		requestBody,
-	);
-	const data = (await response.json()) as Record<string, unknown>;
+	const data = await withRetry(async () => {
+		const response = await makeRequest(
+			config.baseUrl,
+			config.apiKey,
+			requestBody,
+		);
+		return (await response.json()) as Record<string, unknown>;
+	}, config.retry);
 
 	const choice = extractChoice(data);
 	const message = extractMessage(choice);

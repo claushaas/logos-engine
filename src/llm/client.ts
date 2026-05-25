@@ -2,8 +2,9 @@
 // What it should do: Define provider-agnostic generateText and generateJson methods.
 // Why it exists: Keeps LOGOS independent from any single model provider.
 
-import { generateText } from './generate-text.js';
 import { generateJson } from './generate-json.js';
+import { generateText } from './generate-text.js';
+import type { RetryConfig } from './retry-policy.js';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -16,6 +17,8 @@ export interface LlmClientOptions {
 	baseUrl: string;
 	apiKey: string;
 	model: string;
+	/** Optional retry configuration for transient provider errors. */
+	retry?: Partial<RetryConfig>;
 }
 
 export interface LlmUsage {
@@ -69,9 +72,9 @@ export function createLlmClient(
 	};
 
 	return {
-		generateText: (input) => generateText(resolved, input),
 		generateJson: <T>(input: GenerateJsonInput<T>) =>
 			generateJson(resolved, input),
+		generateText: (input) => generateText(resolved, input),
 	};
 }
 

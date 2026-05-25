@@ -3,5 +3,5 @@
 // Why it exists: Keeps credentials and provider assumptions explicit.
 
 export const LlmConfig = {
-  // TODO: implement llm configuration model.
+	// TODO: implement llm configuration model.
 };
