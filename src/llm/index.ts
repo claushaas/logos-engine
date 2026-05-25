@@ -13,8 +13,18 @@ export {
 	type LlmUsage,
 } from './client.js';
 
-export { LlmConfig } from './config.js';
+export {
+	LlmConfig,
+	type LlmConfigData,
+	loadLlmConfig,
+	validateLlmConfig,
+} from './config.js';
 export { generateJson } from './generate-json.js';
+export {
+	generateStructuredOutput,
+	generateStructuredOutputSafe,
+	type StructuredOutputInput,
+} from './generate-structured-output.js';
 export { generateText } from './generate-text.js';
 export {
 	extractIssues,

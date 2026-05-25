@@ -33,6 +33,8 @@ export interface GenerateTextInput {
 	maxTokens?: number;
 	topP?: number;
 	stop?: string[];
+	/** OpenAI-compatible `response_format` parameter (e.g. `{ type: "json_schema", json_schema: { … } }`). */
+	responseFormat?: Record<string, unknown>;
 }
 
 export interface GenerateTextOutput {

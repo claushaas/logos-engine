@@ -104,6 +104,9 @@ export async function generateText(
 	if (input.stop !== undefined) {
 		requestBody.stop = input.stop;
 	}
+	if (input.responseFormat !== undefined) {
+		requestBody.response_format = input.responseFormat;
+	}
 
 	const data = await withRetry(async () => {
 		const response = await makeRequest(
