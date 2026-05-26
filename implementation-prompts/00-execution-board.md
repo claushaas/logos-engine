@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 0.1 — Establish project structure and tooling baseline
+Step 0.3 — Establish development gates and CI baseline
 
 ## Status Legend
 
@@ -38,7 +38,7 @@ Step 0.1 — Establish project structure and tooling baseline
 | Phase | Step | Title | Status | Prompt File | Branch Suggestion | Commit Suggestion | Required Gates | Codegraph Required | Advisor Required | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|
 | Phase 0 | 0.1 | Establish project structure and tooling baseline | ✅ | `phase-00/step-0.1-establish-project-structure-and-tooling-baseline.md` | `chore/step-0-1-project-structure-tooling` | `chore(project): establish structure and tooling baseline` | `pnpm typecheck`, `pnpm lint`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | First step. Aggressive migration: delete old placeholder dirs, keep `src/llm/`, audit & migrate `src/shared/`, build roadmap structure from scratch |
-| Phase 0 | 0.2 | Define shared primitives and utility types | ⏳ | `phase-00/step-0.2-define-shared-primitives-and-utility-types.md` | `chore/step-0-2-shared-primitives` | `chore(shared): define primitives and utility types` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Audit existing `src/shared/` code; fill gaps |
+| Phase 0 | 0.2 | Define shared primitives and utility types | ✅ | `phase-00/step-0.2-define-shared-primitives-and-utility-types.md` | `chore/step-0-2-shared-primitives` | `chore(shared): define primitives and utility types` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Audit existing `src/shared/` code; fill gaps |
 | Phase 0 | 0.3 | Establish development gates and CI baseline | ⏳ | `phase-00/step-0.3-establish-development-gates-and-ci-baseline.md` | `chore/step-0-3-dev-gates-ci` | `chore(ci): establish development gates and CI baseline` | `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm check` | yes | yes — `@juicesharp/rpiv-advisor` | Checkpoint: Phase 0 complete |
 | Phase 1 | 1.1 | Define LogosProfile and node definition types | ⏳ | `phase-01/step-1.1-define-logosprofile-and-node-definition-types.md` | `feat/step-1-1-profile-node-types` | `feat(contracts): define LogosProfile and node definition types` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Foundation types for all modules |
 | Phase 1 | 1.2 | Define LogosRuntimeState and NodeRuntimeState types | ⏳ | `phase-01/step-1.2-define-logosruntimestate-and-noderuntimestate-types.md` | `feat/step-1-2-runtime-state-types` | `feat(contracts): define runtime state types` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Most referenced types in the system |
