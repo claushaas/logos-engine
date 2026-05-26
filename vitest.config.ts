@@ -22,9 +22,17 @@ export default defineConfig({
 	},
 	test: {
 		coverage: {
+			exclude: ['src/llm/**', 'src/index.ts'],
+			include: ['src/**/*.ts', 'src/**/*.tsx'],
 			provider: 'v8',
 			reporter: ['text', 'html'],
 			reportsDirectory: 'coverage',
+			thresholds: {
+				branches: 60,
+				functions: 60,
+				lines: 60,
+				statements: 60,
+			},
 		},
 		environment: 'node',
 		include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],

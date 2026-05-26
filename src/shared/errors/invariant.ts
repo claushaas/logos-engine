@@ -20,8 +20,8 @@ export function invariant(
 			'invalid_state',
 			`Invariant violation: ${message}`,
 			{
-				recoverable: false,
 				details: { condition: String(condition), message },
+				recoverable: false,
 			},
 		);
 	}

@@ -15,15 +15,19 @@ export function ok<T>(value: T): Result<T, never> {
 
 /** Create a failed result. */
 export function err<E>(error: E): Result<never, E> {
-	return { ok: false as const, error };
+	return { error, ok: false as const };
 }
 
 /** Type guard: narrows to the success variant. */
-export function isOk<T, E>(result: Result<T, E>): result is { readonly ok: true; readonly value: T } {
+export function isOk<T, E>(
+	result: Result<T, E>,
+): result is { readonly ok: true; readonly value: T } {
 	return result.ok === true;
 }
 
 /** Type guard: narrows to the failure variant. */
-export function isErr<T, E>(result: Result<T, E>): result is { readonly ok: false; readonly error: E } {
+export function isErr<T, E>(
+	result: Result<T, E>,
+): result is { readonly ok: false; readonly error: E } {
 	return result.ok === false;
 }

@@ -16,7 +16,6 @@ describe('Result', () => {
 			const obj = { name: 'test' };
 			const result = ok(obj);
 			expect(result.ok).toBe(true);
-			// biome-ignore lint/style/noNonNullAssertion: type narrowing via isOk
 			expect((result as { value: typeof obj }).value).toBe(obj);
 		});
 	});
@@ -31,8 +30,9 @@ describe('Result', () => {
 		it('wraps any error type', () => {
 			const result = err({ code: 404, message: 'Not Found' });
 			expect(result.ok).toBe(false);
-			// biome-ignore lint/style/noNonNullAssertion: type narrowing via isErr
-			expect((result as { error: { code: number; message: string } }).error.code).toBe(404);
+			expect(
+				(result as { error: { code: number; message: string } }).error.code,
+			).toBe(404);
 		});
 	});
 

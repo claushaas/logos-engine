@@ -26,13 +26,18 @@ pnpm build
 Run these before opening a PR:
 
 ```bash
-pnpm check              # Full non-mutating quality gate
+pnpm check              # Full non-mutating quality gate (local development)
+pnpm check:ci           # Stricter gate for CI (includes boundaries + coverage)
 ```
 
-`pnpm check` runs (in order): `pnpm lint` → `pnpm typecheck` → `pnpm test` →
-`pnpm check:validation` → `pnpm build` → `pnpm smoke:cli`. It must not mutate
+`pnpm check` runs `pnpm typecheck && pnpm lint && pnpm test`. It must not mutate
 files, require provider credentials, require network access, or depend on user
 workspace state.
+
+`pnpm check:ci` runs `pnpm check && pnpm lint:boundaries && pnpm test:coverage`.
+It adds module boundary enforcement and coverage threshold validation (≥60% lines,
+branches, functions, statements on all modules except `src/llm/` which will be
+covered in a later phase).
 
 ### Individual Quality Commands
 
@@ -41,11 +46,12 @@ workspace state.
 | `pnpm lint` | Non-mutating lint (Biome + markdownlint) | No |
 | `pnpm lint:biome` | Code/style lint only | No |
 | `pnpm lint:md` | Markdown lint only | No |
+| `pnpm lint:boundaries` | Enforce module boundary rules (dependency-cruiser) | No |
 | `pnpm typecheck` | Type-check `src/` without emit | No |
 | `pnpm test` | Run Vitest baseline | No |
-| `pnpm check:validation` | Validate bundled Standard profile contracts | No |
+| `pnpm test:coverage` | Test + coverage report with thresholds | No |
+| `pnpm test:watch` | Watch mode for development | No |
 | `pnpm build` | Build `src/` to `dist/` | No (generates build output) |
-| `pnpm smoke:cli` | Verify built CLI starts | No |
 | `pnpm format` | Mutating format with Biome | Yes |
 
 ### Release Candidate Quality Commands
@@ -55,8 +61,6 @@ workspace state.
 | `pnpm security:check` | Deterministic security/privacy release check | No |
 | `pnpm smoke:package` | Release candidate package smoke | No |
 | `pnpm nfr:evidence` | NFR evidence checks (provider-free, network-free) | No |
-| `pnpm test:coverage` | Test coverage report | No |
-| `pnpm test:watch` | Watch mode for development | No |
 
 ### NFR Evidence
 
@@ -165,7 +169,9 @@ Anonymized sample workspaces demonstrating real use are especially valuable.
 Before submitting a PR:
 
 - [ ] `pnpm check` passes (non-mutating).
+- [ ] `pnpm lint:boundaries` passes (no module boundary violations).
 - [ ] `pnpm typecheck` passes.
+- [ ] `pnpm test:coverage` meets thresholds (≥60% lines, branches, functions, statements).
 - [ ] New behavior has tests at the appropriate layer (unit, integration, snapshot).
 - [ ] No generated artifacts unintentionally committed.
 - [ ] No secrets, tokens, or credentials in source, fixtures, or snapshots.
@@ -173,11 +179,15 @@ Before submitting a PR:
 - [ ] Package contents remain safe (`pnpm smoke:package` passes).
 - [ ] Security/privacy checks pass (`pnpm security:check` passes).
 
+CI (`.github/workflows/ci.yml`) runs `pnpm check:ci` on every push and PR to
+`main`. It enforces type safety, lint rules, module boundaries, and coverage
+thresholds in a single check.
+
 ## Release Candidate Checklist
 
 Before declaring a release candidate:
 
-- [ ] `pnpm check`, `pnpm typecheck`, and `pnpm smoke:cli` pass.
+- [ ] `pnpm check` and `pnpm check:ci` pass.
 - [ ] `pnpm security:check` passes with no errors or fatal findings.
 - [ ] `pnpm smoke:package` passes (non-mutating, no network, no credentials).
 - [ ] Bundled Standard profile is valid and loadable.

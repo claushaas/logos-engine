@@ -2,8 +2,8 @@
  * Tests for `LogosError` base class.
  */
 import { describe, expect, it } from 'vitest';
-import { LogosError } from '../../src/shared/index.js';
 import type { ErrorCategory } from '../../src/shared/index.js';
+import { LogosError } from '../../src/shared/index.js';
 
 describe('LogosError', () => {
 	it('is an instance of Error', () => {
