@@ -13,7 +13,20 @@ export type {
 	PromptId,
 	SessionId,
 } from '../shared/index.js';
-
+// Step 1.2 — Runtime state, node state, canonical answer, and completeness types.
+export type {
+	CanonicalAnswer,
+	CanonicalAnswerDraft,
+} from './canonical-answer.js';
+export type { CompletenessState, ExtractedNodeData } from './completeness.js';
+export type {
+	NodeAction,
+	NodeConversationEntry,
+	NodeDependencyState,
+	NodeLifecycle,
+	NodeRuntimeState,
+	PromptState,
+} from './node-state.js';
 // Step 1.1 — Profile and node definition types.
 export type {
 	DocumentDefinition,
@@ -25,18 +38,6 @@ export type {
 	NodePromptRefs,
 	PhaseDefinition,
 } from './profile.js';
-
-// Step 1.2 — Runtime state, node state, canonical answer, and completeness types.
-export type { CanonicalAnswer, CanonicalAnswerDraft } from './canonical-answer.js';
-export type { CompletenessState, ExtractedNodeData } from './completeness.js';
-export type {
-	NodeAction,
-	NodeConversationEntry,
-	NodeDependencyState,
-	NodeLifecycle,
-	NodeRuntimeState,
-	PromptState,
-} from './node-state.js';
 export type {
 	GlobalContext,
 	LogosRuntimeState,

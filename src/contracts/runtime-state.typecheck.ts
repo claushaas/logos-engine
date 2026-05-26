@@ -14,6 +14,8 @@
  *  6. `PromptState` has 9 members.
  *  7. Every lifecycle maps to a defined set of `NodeAction[]` values.
  */
+
+import type { DocumentId, NodeId, SessionId } from '../shared/index.js';
 import type {
 	CanonicalAnswer,
 	CompletenessState,
@@ -28,7 +30,6 @@ import type {
 	RuntimeDocumentState,
 	SessionMode,
 } from './index.js';
-import type { DocumentId, NodeId, ProfileId, SessionId } from '../shared/index.js';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -40,19 +41,19 @@ type ExpectFalse<T extends false> = T;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _minimalRuntimeState: LogosRuntimeState = {
-	sessionId: 'sess_000000000000001' as SessionId,
-	selectedProfileId: null,
 	activeNodeId: null,
-	mode: 'idle',
-	nodeStates: {} as Record<NodeId, NodeRuntimeState>,
 	documentStates: {} as Record<DocumentId, RuntimeDocumentState>,
 	exportState: {} as Record<string, unknown>,
 	globalContext: {
+		preferences: {},
 		projectName: null,
 		summary: null,
-		preferences: {},
 	} satisfies GlobalContext,
 	lastActiveNodeId: null,
+	mode: 'idle',
+	nodeStates: {} as Record<NodeId, NodeRuntimeState>,
+	selectedProfileId: null,
+	sessionId: 'sess_000000000000001' as SessionId,
 	updatedAt: '2026-01-01T00:00:00.000Z',
 };
 
@@ -181,16 +182,16 @@ type _promptNoExtras = Expect<
  * Runtime action computation is implemented in Step 3.5.
  */
 const _lifecycleActions = {
-	not_started: ['answer', 'skip', 'ask_for_example'],
+	accepted: ['continue_next', 'reopen', 'open_document_preview'],
 	active: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
 	answered: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+	blocked: ['open_prerequisite', 'defer'],
+	deferred: ['resume', 'continue_next'],
 	needs_clarification: ['answer', 'defer', 'open_prerequisite'],
 	needs_refinement: ['answer', 'defer', 'ask_for_example'],
+	not_started: ['answer', 'skip', 'ask_for_example'],
 	ready_for_synthesis: [],
 	synthesized: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
-	accepted: ['continue_next', 'reopen', 'open_document_preview'],
-	deferred: ['resume', 'continue_next'],
-	blocked: ['open_prerequisite', 'defer'],
 } as const satisfies Record<NodeLifecycle, readonly NodeAction[]>;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -200,12 +201,12 @@ _lifecycleActions;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _canonicalAnswer: CanonicalAnswer = {
+	accepted: true,
+	confidence: 'high',
 	content: 'The central thesis is X.',
 	format: 'markdown',
 	generatedAt: '2026-01-01T00:00:00.000Z',
 	generatedFromMessageIds: ['msg_000000000000001'],
-	confidence: 'high',
-	accepted: true,
 	stale: false,
 };
 
@@ -225,28 +226,28 @@ type _draftHasNoAccepted = ExpectFalse<
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _completenessState: CompletenessState = {
+	blockingIssues: [],
 	complete: true,
 	coverage: { 'central conviction': 'sufficient' },
 	missing: [],
 	weak: [],
-	blockingIssues: [],
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _extractedNodeData: ExtractedNodeData = {
-	facts: [],
 	assumptions: [],
 	decisions: [],
-	risks: [],
+	facts: [],
 	openQuestions: [],
+	risks: [],
 };
 
 // ─── 10. NodeDependencyState structural check ───────────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _dependencyState: NodeDependencyState = {
-	requiredNodeIds: [],
 	blockedBy: [],
+	requiredNodeIds: [],
 	unlocks: [],
 };
 
