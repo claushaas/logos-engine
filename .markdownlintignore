@@ -1,9 +1,4 @@
-# Pre-existing documentation and templates with known markdown issues.
-# These will be cleaned up in a future documentation-hardening pass.
-# See CONTRIBUTING.md for the current quality gate scope.
-
-docs/02-validation/06-economic-model.md
-docs/02-validation/07-business-model.md
-docs/06-operations/
-profiles/standard/executive/templates/
-profiles/standard/phases/*/README.md
+IMPLEMENTATION_ROADMAP.md
+docs/13-prototypes.md
+implementation-prompts/**
+profiles/**

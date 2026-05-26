@@ -4,7 +4,6 @@
 
 export {
 	createLlmClient,
-	type GenerateJsonInput,
 	type GenerateTextInput,
 	type GenerateTextOutput,
 	LlmClient,
@@ -19,7 +18,7 @@ export {
 	loadLlmConfig,
 	validateLlmConfig,
 } from './config.js';
-export { generateJson } from './generate-json.js';
+
 export {
 	generateStructuredOutput,
 	generateStructuredOutputSafe,
