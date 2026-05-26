@@ -1,291 +1,255 @@
-# LOGOS Engine — Arquitetura TUI-first + Pi SDK
+# LOGOS Engine — Arquitetura TUI-first MVP
 
 ## 1. Decisão central
 
-O LOGOS Engine deve nascer como uma ferramenta **local-first, Git-native, TUI-first**, usando o Pi como runtime agentic por trás.
+O LOGOS Engine é uma ferramenta **local-first, Git-native, TUI-first**, implementada como **single package modular** com TypeScript. O agente LOGOS é um workflow determinístico de documentação apoiado por LLM — não um agent runtime genérico.
 
 ```txt
-LOGOS TUI
+LOGOS TUI (Ink + React)
   ↓
-LOGOS Application Layer
+LOGOS Application Layer (use cases + interview state machine)
   ↓
-LOGOS Core + LOGOS Agent Runtime
+LOGOS Core (schemas, graph, validators, completeness, phases)
   ↓
-Pi SDK
+LOGOS LLM (transport + structured output + retry + validation)
   ↓
-LLM + tools + skills + session runtime
+OpenAI-compatible provider
 ```
 
-A UI inicial não deve ser uma extensão do Pi. Deve ser uma **TUI própria**, porque o produto precisa operar sobre documentos, fases, validações, artefatos e execução derivada.
+O LLM **não governa o fluxo**. Ele retorna estruturas validadas. O Core aplica transições.
 
-O Pi entra como motor. O LOGOS entra como sistema.
+A UI é uma TUI própria (Ink), operando sobre documentos, fases, validações, artefatos e execução derivada.
 
 ---
 
 ## 2. Visão macro
 
 ```txt
-┌────────────────────────────────────────────────────────────┐
-│                        apps/tui                            │
-│  LOGOS TUI: navegação, comandos, status, revisão, diffs     │
-└──────────────────────────────┬─────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                        src/tui                               │
+│  LOGOS TUI: navegação, comandos, status, revisão, diffs       │
+│  (Ink screens + components + tui-store)                       │
+└──────────────────────────────┬───────────────────────────────┘
                                │
-┌──────────────────────────────▼─────────────────────────────┐
-│                    packages/logos-app                      │
-│  Casos de uso: init, status, generate, review, validate     │
-└───────────────┬──────────────────────────┬─────────────────┘
+┌──────────────────────────────▼───────────────────────────────┐
+│                     src/interview                            │
+│  State machine: perguntar → transcrever → avaliar →         │
+│  sintetizar → canonical answer → avançar                     │
+│  (governed by Core, assisted by LLM)                          │
+└───────────────┬──────────────────────────┬───────────────────┘
                 │                          │
-┌───────────────▼──────────────┐ ┌─────────▼─────────────────┐
-│      packages/logos-core     │ │ packages/logos-agent       │
-│  schemas, loaders, graph,    │ │ Pi SDK integration,        │
-│  validators, compilers       │ │ sessions, prompts, tools   │
-└───────────────┬──────────────┘ └─────────┬─────────────────┘
+┌───────────────▼──────────────┐ ┌─────────▼───────────────────┐
+│        src/core              │ │       src/llm                │
+│  schemas, loaders, graph,    │ │  generateStructuredOutput()  │
+│  validators, completeness,   │ │  generateText()              │
+│  phases, documents           │ │  retry, validation, config   │
+└───────────────┬──────────────┘ └─────────┬───────────────────┘
                 │                          │
-┌───────────────▼──────────────┐ ┌─────────▼─────────────────┐
-│ packages/logos-renderers     │ │ packages/logos-tools       │
-│ markdown, html, agent packs  │ │ tool contracts exposed     │
-└───────────────┬──────────────┘ │ to Pi agent                │
-                │                └───────────────────────────┘
+┌───────────────▼──────────────┐ ┌─────────▼───────────────────┐
+│    src/renderers              │ │    src/prompts               │
+│  markdown, html, agent packs  │ │  assessAnswer,              │
+│                               │ │  synthesizeCanonicalAnswer,  │
+│                               │ │  detectConflict,             │
+│                               │ │  generateDocumentDraft       │
+└───────────────┬──────────────┘ └─────────────────────────────┘
+                │
 ┌───────────────▼──────────────┐
-│ packages/logos-executive     │
-│ Executive JSON + adapters    │
+│     src/executive            │
+│  Executive compiler +        │
+│  adapters (GitHub, Notion,   │
+│  Markdown, HTML, Agent Pack) │
 └──────────────────────────────┘
+
+Infraestrutura transversal:
+┌──────────────────────────────────────────────────────────────┐
+│  src/fs          src/shared        src/cli                    │
+│  atomic write,   Result<T>,        Commander commands,        │
+│  safe path,      Brand<ID>,        command registry           │
+│  YAML/JSONL      LogosError                                 │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-Essa arquitetura preserva a regra estrutural do LOGOS:
+Regra estrutural do LOGOS:
 
 ```txt
 YAML / Markdown = fonte canônica
-JSON = modelo executivo portável
-HTML = camada de entendimento
-Agent Packs = execução por agentes
+CanonicalAnswerRecord = material de origem para geração
+JSON = modelo executivo portável (Executive Plan)
+HTML = camada de entendimento humano
+Agent Packs = prompts de execução para agentes externos
 ```
 
 ---
 
 ## 3. Estrutura de pastas do repositório LOGOS Engine
 
+Reflete o estado real do MVP single package modular:
+
 ```txt
 logos-engine/
-├── apps/
-│   └── tui/
-│       ├── src/
-│       │   ├── main.tsx
-│       │   ├── app/
-│       │   │   ├── LogosTuiApp.tsx
-│       │   │   ├── keymap.ts
-│       │   │   ├── routes.ts
-│       │   │   └── tui-store.ts
-│       │   ├── screens/
-│       │   │   ├── OverviewScreen.tsx
-│       │   │   ├── PhaseScreen.tsx
-│       │   │   ├── DocumentScreen.tsx
-│       │   │   ├── AgentScreen.tsx
-│       │   │   ├── ExecutiveScreen.tsx
-│       │   │   ├── ArtifactScreen.tsx
-│       │   │   └── SettingsScreen.tsx
-│       │   ├── components/
-│       │   │   ├── AppFrame.tsx
-│       │   │   ├── PhaseNavigator.tsx
-│       │   │   ├── DocumentList.tsx
-│       │   │   ├── DocumentOutline.tsx
-│       │   │   ├── StatusPanel.tsx
-│       │   │   ├── AgentConsole.tsx
-│       │   │   ├── ActivityLog.tsx
-│       │   │   ├── DiffPreview.tsx
-│       │   │   ├── ValidationPanel.tsx
-│       │   │   ├── ArtifactList.tsx
-│       │   │   └── CommandPalette.tsx
-│       │   └── adapters/
-│       │       ├── terminal-size.ts
-│       │       ├── clipboard.ts
-│       │       └── open-file.ts
-│       ├── package.json
-│       └── tsconfig.json
-│
-├── packages/
-│   ├── logos-app/
-│   │   ├── src/
-│   │   │   ├── use-cases/
-│   │   │   │   ├── initProject.ts
-│   │   │   │   ├── getProjectStatus.ts
-│   │   │   │   ├── generatePhase.ts
-│   │   │   │   ├── generateDocument.ts
-│   │   │   │   ├── reviewDocument.ts
-│   │   │   │   ├── validateProject.ts
-│   │   │   │   ├── compileExecutivePlan.ts
-│   │   │   │   ├── renderArtifact.ts
-│   │   │   │   └── createAgentPack.ts
-│   │   │   ├── services/
-│   │   │   │   ├── ProjectService.ts
-│   │   │   │   ├── DocumentService.ts
-│   │   │   │   ├── AgentWorkflowService.ts
-│   │   │   │   └── ArtifactService.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+├── src/
+│   ├── cli/
+│   │   ├── main.ts                  # entrypoint CLI
+│   │   ├── command-registry.ts
+│   │   └── commands/
+│   │       ├── init.ts
+│   │       ├── status.ts
+│   │       ├── validate.ts
+│   │       ├── interview.ts
+│   │       ├── generate.ts
+│   │       └── compile.ts
 │   │
-│   ├── logos-core/
-│   │   ├── src/
-│   │   │   ├── project/
-│   │   │   │   ├── loadProject.ts
-│   │   │   │   ├── projectManifest.ts
-│   │   │   │   ├── projectGraph.ts
-│   │   │   │   └── projectStatus.ts
-│   │   │   ├── schema/
-│   │   │   │   ├── docs.schema.ts
-│   │   │   │   ├── phase.schema.ts
-│   │   │   │   ├── document.schema.ts
-│   │   │   │   ├── executive.schema.ts
-│   │   │   │   └── validateSchema.ts
-│   │   │   ├── documents/
-│   │   │   │   ├── parseMarkdown.ts
-│   │   │   │   ├── extractSections.ts
-│   │   │   │   ├── validateDocument.ts
-│   │   │   │   ├── documentCompleteness.ts
-│   │   │   │   └── documentPatch.ts
-│   │   │   ├── phases/
-│   │   │   │   ├── phaseRegistry.ts
-│   │   │   │   ├── phaseCompleteness.ts
-│   │   │   │   └── phaseDependencies.ts
-│   │   │   ├── diagnostics/
-│   │   │   │   ├── Diagnostic.ts
-│   │   │   │   ├── severity.ts
-│   │   │   │   └── formatDiagnostics.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+│   ├── tui/
+│   │   ├── state/
+│   │   │   ├── tui-state.ts
+│   │   │   └── tui-actions.ts
+│   │   └── (screens + components)
 │   │
-│   ├── logos-agent/
-│   │   ├── src/
-│   │   │   ├── runtime/
-│   │   │   │   ├── createLogosAgentRuntime.ts
-│   │   │   │   ├── LogosAgentSession.ts
-│   │   │   │   ├── sessionEvents.ts
-│   │   │   │   └── modelSelection.ts
-│   │   │   ├── prompts/
-│   │   │   │   ├── buildSystemPrompt.ts
-│   │   │   │   ├── buildPhasePrompt.ts
-│   │   │   │   ├── buildDocumentPrompt.ts
-│   │   │   │   ├── buildReviewPrompt.ts
-│   │   │   │   └── buildExecutivePrompt.ts
-│   │   │   ├── skills/
-│   │   │   │   ├── foundation.skill.md
-│   │   │   │   ├── validation.skill.md
-│   │   │   │   ├── product.skill.md
-│   │   │   │   ├── engineering.skill.md
-│   │   │   │   ├── go-to-market.skill.md
-│   │   │   │   ├── operations.skill.md
-│   │   │   │   └── executive.skill.md
-│   │   │   ├── events/
-│   │   │   │   ├── normalizePiEvent.ts
-│   │   │   │   ├── AgentActivityEvent.ts
-│   │   │   │   └── eventStore.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+│   ├── core/
+│   │   ├── project/
+│   │   │   ├── load-project.ts
+│   │   │   ├── project-manifest.ts
+│   │   │   ├── project-graph.ts
+│   │   │   └── project-status.ts
+│   │   ├── schema/
+│   │   │   ├── docs.schema.ts
+│   │   │   ├── phase.schema.ts
+│   │   │   ├── document.schema.ts
+│   │   │   ├── executive.schema.ts
+│   │   │   └── validate-schema.ts
+│   │   ├── documents/
+│   │   │   ├── parse-markdown.ts
+│   │   │   ├── extract-sections.ts
+│   │   │   ├── validate-document.ts
+│   │   │   ├── document-completeness.ts
+│   │   │   └── document-patch.ts
+│   │   ├── phases/
+│   │   │   ├── phase-registry.ts
+│   │   │   ├── phase-completeness.ts
+│   │   │   └── phase-dependencies.ts
+│   │   ├── diagnostics/
+│   │   │   ├── Diagnostic.ts
+│   │   │   ├── severity.ts
+│   │   │   └── format-diagnostics.ts
+│   │   └── index.ts
 │   │
-│   ├── logos-tools/
-│   │   ├── src/
-│   │   │   ├── registry.ts
-│   │   │   ├── definitions/
-│   │   │   │   ├── readProjectManifest.tool.ts
-│   │   │   │   ├── listPhaseDocuments.tool.ts
-│   │   │   │   ├── readCanonicalDocument.tool.ts
-│   │   │   │   ├── proposeDocumentPatch.tool.ts
-│   │   │   │   ├── writeGeneratedDocument.tool.ts
-│   │   │   │   ├── validateDocument.tool.ts
-│   │   │   │   ├── validatePhase.tool.ts
-│   │   │   │   ├── compileExecutivePlan.tool.ts
-│   │   │   │   ├── renderHtmlArtifact.tool.ts
-│   │   │   │   └── createAgentPack.tool.ts
-│   │   │   ├── policy/
-│   │   │   │   ├── fileAccessPolicy.ts
-│   │   │   │   ├── writePolicy.ts
-│   │   │   │   └── confirmationPolicy.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+│   ├── interview/
+│   │   ├── transcript/
+│   │   │   ├── TranscriptMessage.ts
+│   │   │   ├── TranscriptStore.ts
+│   │   │   ├── append-transcript-message.ts
+│   │   │   └── export-transcript-markdown.ts
+│   │   ├── questions/
+│   │   │   ├── interview-question.ts
+│   │   │   ├── load-questions.ts
+│   │   │   └── question-queue.ts
+│   │   ├── answers/
+│   │   │   ├── CanonicalAnswerRecord.ts
+│   │   │   ├── assess-answer.ts
+│   │   │   ├── AnswerAssessment.ts
+│   │   │   ├── synthesize-final-answer.ts
+│   │   │   ├── finalize-answer.ts
+│   │   │   └── revise-answer.ts
+│   │   ├── decisions/
+│   │   │   ├── DocumentationDecision.ts
+│   │   │   ├── record-decision.ts
+│   │   │   └── trace-decision-sources.ts
+│   │   ├── state-machine/
+│   │   │   ├── interview-state.ts
+│   │   │   ├── interview-events.ts
+│   │   │   ├── transition-interview-state.ts
+│   │   │   └── guards.ts
+│   │   ├── trace/
+│   │   │   ├── build-answer-trace.ts
+│   │   │   ├── build-document-trace.ts
+│   │   │   └── verify-trace-completeness.ts
+│   │   ├── generation-readiness/
+│   │   │   └── get-generation-readiness.ts
+│   │   └── index.ts
 │   │
-│   ├── logos-renderers/
-│   │   ├── src/
-│   │   │   ├── markdown/
-│   │   │   │   ├── renderDocument.ts
-│   │   │   │   ├── renderValidationReport.ts
-│   │   │   │   └── renderImplementationPlan.ts
-│   │   │   ├── html/
-│   │   │   │   ├── renderProjectDashboard.ts
-│   │   │   │   ├── renderPhaseMap.ts
-│   │   │   │   ├── renderExecutiveOverview.ts
-│   │   │   │   └── htmlShell.ts
-│   │   │   ├── agent-pack/
-│   │   │   │   ├── renderImplementationPrompt.ts
-│   │   │   │   ├── renderReviewPrompt.ts
-│   │   │   │   └── renderAgentPackIndex.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+│   ├── llm/
+│   │   ├── client.ts                    # LlmClient interface + createLlmClient factory
+│   │   ├── config.ts                    # loadLlmConfig, validateLlmConfig, .env loading
+│   │   ├── types.ts                     # shared LLM types (placeholder)
+│   │   ├── generate-text.ts             # raw text completion (exceção, não regra)
+│   │   ├── generate-json.ts             # prompt-based JSON (legado)
+│   │   ├── generate-structured-output.ts # ★ PRIMITIVO CENTRAL para LLM estruturado
+│   │   ├── retry-policy.ts              # withRetry, isRetryable, backoff
+│   │   ├── response-validation.ts       # ValidationOutcome, validateAgainstSchema
+│   │   └── index.ts                     # barrel público
 │   │
-│   ├── logos-executive/
-│   │   ├── src/
-│   │   │   ├── compiler/
-│   │   │   │   ├── compileExecutivePlan.ts
-│   │   │   │   ├── deriveMilestones.ts
-│   │   │   │   ├── deriveInitiatives.ts
-│   │   │   │   ├── deriveExecutionItems.ts
-│   │   │   │   └── traceSources.ts
-│   │   │   ├── adapters/
-│   │   │   │   ├── githubIssuesAdapter.ts
-│   │   │   │   ├── notionAdapter.ts
-│   │   │   │   ├── markdownAdapter.ts
-│   │   │   │   ├── htmlAdapter.ts
-│   │   │   │   └── agentPackAdapter.ts
-│   │   │   ├── mappings/
-│   │   │   │   ├── github-issues.mapping.ts
-│   │   │   │   ├── notion.mapping.ts
-│   │   │   │   └── agent-pack.mapping.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+│   ├── prompts/
+│   │   ├── assess-answer.prompt.ts
+│   │   ├── synthesize-canonical-answer.prompt.ts
+│   │   ├── detect-conflict.prompt.ts
+│   │   ├── resolve-conflict.prompt.ts
+│   │   ├── generate-document.prompt.ts
+│   │   ├── review-document.prompt.ts
+│   │   ├── compile-executive.prompt.ts
+│   │   └── index.ts
 │   │
-│   ├── logos-fs/
-│   │   ├── src/
-│   │   │   ├── ProjectFileSystem.ts
-│   │   │   ├── LocalProjectFileSystem.ts
-│   │   │   ├── safePath.ts
-│   │   │   ├── atomicWrite.ts
-│   │   │   ├── readYaml.ts
-│   │   │   ├── writeYaml.ts
-│   │   │   └── index.ts
-│   │   └── package.json
+│   ├── renderers/
+│   │   ├── markdown/
+│   │   │   ├── render-document.ts
+│   │   │   ├── render-implementation-plan.ts
+│   │   │   └── render-validation-report.ts
+│   │   ├── html/
+│   │   │   ├── html-shell.ts
+│   │   │   ├── render-project-dashboard.ts
+│   │   │   ├── render-phase-map.ts
+│   │   │   └── render-executive-overview.ts
+│   │   ├── agent-pack/
+│   │   │   ├── render-agent-pack-index.ts
+│   │   │   ├── render-implementation-prompt.ts
+│   │   │   └── render-review-prompt.ts
+│   │   └── index.ts
 │   │
-│   └── logos-testing/
-│       ├── src/
-│       │   ├── fixtures.ts
-│       │   ├── mockAgentRuntime.ts
-│       │   ├── mockProjectFs.ts
-│       │   └── snapshotUtils.ts
-│       └── package.json
-│
-├── templates/
-│   ├── documents/
-│   │   ├── foundation/
-│   │   ├── validation/
-│   │   ├── product/
-│   │   ├── engineering/
-│   │   ├── go-to-market/
-│   │   └── operations/
 │   ├── executive/
-│   └── artifacts/
+│   │   ├── compiler/
+│   │   │   ├── compile-executive-plan.ts
+│   │   │   ├── derive-milestones.ts
+│   │   │   ├── derive-initiatives.ts
+│   │   │   ├── derive-execution-items.ts
+│   │   │   └── trace-sources.ts
+│   │   ├── adapters/
+│   │   │   ├── github-issues-adapter.ts
+│   │   │   ├── notion-adapter.ts
+│   │   │   ├── markdown-adapter.ts
+│   │   │   ├── html-adapter.ts
+│   │   │   └── agent-pack-adapter.ts
+│   │   ├── schema/
+│   │   │   └── executive-plan.schema.ts
+│   │   └── index.ts
+│   │
+│   ├── fs/
+│   │   ├── project-fs.ts
+│   │   ├── safe-path.ts
+│   │   ├── atomic-write.ts
+│   │   ├── read-yaml.ts
+│   │   └── write-jsonl.ts
+│   │
+│   └── shared/
+│       ├── errors/
+│       │   ├── LogosError.ts
+│       │   └── invariant.ts
+│       ├── types/
+│       │   ├── Brand.ts
+│       │   └── Result.ts
+│       ├── utils/
+│       │   ├── id.ts
+│       │   ├── date.ts
+│       │   └── json.ts
+│       └── index.ts
 │
-├── examples/
-│   ├── empty-project/
-│   ├── nomos-like-project/
-│   └── full-cycle-project/
-│
-├── docs/
-│   ├── architecture/
-│   ├── decisions/
-│   └── development/
-│
-├── package.json
-├── pnpm-workspace.yaml
-├── tsconfig.base.json
+├── templates/          # templates de documentos e fases
+├── profiles/           # perfis de projeto
+├── examples/           # projetos de exemplo
+├── docs/               # documentação da engine
+├── tests/              # testes unitários e de integração
+├── package.json        # single package (sem workspaces)
+├── tsconfig.json
 ├── vitest.config.ts
+├── biome.json
 └── README.md
 ```
 
@@ -299,7 +263,7 @@ Quando o usuário roda:
 logos init
 ```
 
-O projeto alvo deve receber:
+O projeto alvo recebe:
 
 ```txt
 my-project/
@@ -326,10 +290,6 @@ my-project/
 ├── executive/
 │   ├── executive-plan.json
 │   ├── executive-plan.schema.json
-│   ├── mappings/
-│   │   ├── github-issues.mapping.json
-│   │   ├── notion.mapping.json
-│   │   └── agent-pack.mapping.json
 │   └── exports/
 │       ├── markdown/
 │       ├── html/
@@ -341,6 +301,19 @@ my-project/
 │   ├── reports/
 │   └── snapshots/
 └── .logos/
+    ├── interviews/
+    │   └── interview_YYYY-MM-DD_HHMMSS/
+    │       ├── state.json
+    │       ├── transcript.jsonl
+    │       ├── transcript.md
+    │       ├── canonical-answers.json
+    │       ├── answer-revisions.json
+    │       ├── conflicts.json
+    │       ├── decisions.json
+    │       ├── generation-readiness.json
+    │       └── generated-drafts/
+    │           ├── 01-thesis.draft-001.md
+    │           └── 01-thesis.draft-001.trace.json
     ├── sessions/
     ├── cache/
     ├── runs/
@@ -350,7 +323,7 @@ my-project/
 
 ### Regra
 
-O `executive-plan.json` é o modelo executivo portável. O LOGOS não deve virar um task manager. Ele deve compilar execução e exportar para ferramentas externas.
+O `executive-plan.json` é o modelo executivo portável. O LOGOS não é um task manager — ele compila execução e exporta para ferramentas externas.
 
 ---
 
@@ -391,49 +364,47 @@ O `executive-plan.json` é o modelo executivo portável. O LOGOS não deve virar
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
-Essa tela responde:
-
-```txt
-Onde estou?
-O que existe?
-O que falta?
-Qual é o próximo passo estrutural?
-```
-
 ---
 
-### 5.2 Phase Workspace
+### 5.2 Interview — Active Question
 
 ```txt
-╭─ LOGOS Engine ─ Project: nomos ─ Phase: 03 Product ───────────╮
-│ Purpose: define what will be built and how it is experienced. │
-├───────────────────────┬───────────────────────────────────────┤
-│ Documents             │ Phase Diagnostics                     │
-│                       │                                       │
-│ ✓ 01-product-brief    │ Completeness: 5 / 13                  │
-│ ✓ 02-scope            │ Blocking gaps: 3                      │
-│ ✓ 03-user-journeys    │                                       │
-│ → 04-ux-model         │ Missing required documents:           │
-│ · 05-info-architecture│ - 05-information-architecture.md      │
-│ · 06-interaction-model│ - 06-interaction-model.md             │
-│ · 07-ui-specification │ - 07-ui-specification.md              │
-│ · 08-design-system    │                                       │
-│ · 09-product-arch     │ Current recommendation:               │
-│ · 10-functional-reqs  │ Generate IA + interaction model next. │
-│ · 11-non-functional   │                                       │
-│ · 12-product-stack    │                                       │
-│ · 13-acceptance       │                                       │
-├───────────────────────┴───────────────────────────────────────┤
-│ Agent Console                                                 │
-│ > generate missing interaction model using existing journeys   │
+╭─ LOGOS Interview ─────────────────────────────────────────────╮
+│ Phase: 01 Foundation       Document: 01 Thesis                │
+│ Question: 2 / 5            Status: awaiting answer            │
 ├───────────────────────────────────────────────────────────────┤
-│ [enter] open  [space] select  [a] agent  [d] diff  [esc] back  │
+│ Pergunta                                                      │
+│ Que tensão principal este projeto tenta resolver?             │
+│                                                               │
+│ Orientação                                                    │
+│ Descreva o conflito real que faz este projeto ser necessário. │
+├───────────────────────────────────────────────────────────────┤
+│ Resposta atual                                                │
+│ _                                                             │
+├───────────────────────────────────────────────────────────────┤
+│ [enter] send  [skip] skip  [back] previous  [pause] pause     │
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
----
+### 5.3 Interview — Canonical Answer Confirmation
 
-### 5.3 Document Review
+```txt
+╭─ Canonical Answer Draft ──────────────────────────────────────╮
+│ Question: 2 / 5                                               │
+│ Confidence: medium                                            │
+├───────────────────────────────────────────────────────────────┤
+│ Resposta final proposta                                       │
+│                                                               │
+│ O projeto existe para ajudar pessoas a transformar ideias      │
+│ difusas em documentação clara, estruturada e acionável.        │
+│                                                               │
+│ Source messages: msg_002, msg_004                             │
+├───────────────────────────────────────────────────────────────┤
+│ [a] accept  [e] edit  [r] answer again  [d] show transcript    │
+╰───────────────────────────────────────────────────────────────╯
+```
+
+### 5.4 Document Review com Diff
 
 ```txt
 ╭─ Document: docs/03-product/04-ux-model.md ────────────────────╮
@@ -463,53 +434,7 @@ Qual é o próximo passo estrutural?
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
-Fluxo desejado:
-
-```txt
-Agent proposes patch
-  ↓
-LOGOS validates patch
-  ↓
-TUI shows diff
-  ↓
-User accepts/rejects
-  ↓
-Canonical markdown is updated atomically
-```
-
----
-
-### 5.4 Agent Console
-
-```txt
-╭─ Agent Console ────────────────────────────────────────────────╮
-│ Context: 03-product / 04-ux-model.md                           │
-│ Mode: review                                                   │
-├───────────────────────────────────────────────────────────────┤
-│ User                                                          │
-│   Review this document and propose only minimal structural     │
-│   improvements. Do not rewrite good sections.                  │
-│                                                               │
-│ Agent                                                         │
-│   I found 3 actionable issues:                                │
-│   1. Trust Model lacks state distinction.                     │
-│   2. UX Anti-Patterns is missing.                             │
-│   3. Feedback Model has no failure state.                     │
-│                                                               │
-│ Tool activity                                                 │
-│   ✓ read_canonical_document                                   │
-│   ✓ validate_document                                         │
-│   → propose_document_patch                                    │
-├───────────────────────────────────────────────────────────────┤
-│ > _                                                            │
-├───────────────────────────────────────────────────────────────┤
-│ [tab] command palette  [ctrl+j] newline  [esc] back            │
-╰───────────────────────────────────────────────────────────────╯
-```
-
----
-
-### 5.5 Executive Axis
+### 5.5 Executive Compiler
 
 ```txt
 ╭─ Executive Compiler ───────────────────────────────────────────╮
@@ -534,381 +459,163 @@ Canonical markdown is updated atomically
 ╰───────────────────────────────────────────────────────────────╯
 ```
 
-Essa tela não deve virar task manager. Ela mostra o grafo executivo derivado e permite exportar.
-
----
-
-### 5.6 Artifacts
-
-```txt
-╭─ Artifacts ───────────────────────────────────────────────────╮
-│ Generated outputs                                             │
-├───────────────────────────────┬──────────────┬───────────────┤
-│ Path                          │ Type         │ Status        │
-├───────────────────────────────┼──────────────┼───────────────┤
-│ outcomes/html/project.html    │ HTML         │ fresh         │
-│ executive/executive-plan.json │ JSON         │ fresh         │
-│ executive/exports/agent-packs │ Agent Pack   │ stale         │
-│ executive/exports/github      │ GitHub Issue │ not generated │
-├───────────────────────────────┴──────────────┴───────────────┤
-│ Selected: outcomes/html/project.html                          │
-│ Source: docs.yml + docs/**/*.md                                │
-│ Last generated: 2026-05-24 13:42                               │
-│                                                               │
-│ Actions: open, regenerate, inspect source, copy path           │
-╰───────────────────────────────────────────────────────────────╯
-```
-
 ---
 
 ## 6. Camadas da arquitetura
 
-### 6.1 `apps/tui`
+### 6.1 `src/tui`
 
-Responsável pela superfície interativa em terminal.
+Superfície interativa em terminal (Ink + React).
 
-Ela contém:
+**Faz:**
+- Navegação entre telas (overview, phase, document, interview, executive, artifacts)
+- Atalhos de teclado
+- Renderização textual
+- Diff preview
+- Console de entrevista
+
+**Não faz:**
+- Validar schema diretamente
+- Montar prompts
+- Chamar LLM diretamente
+- Escrever arquivos diretamente
+- Conhecer estrutura interna do Executive JSON
+
+### 6.2 `src/interview`
+
+Máquina de estados da entrevista de documentação.
+
+**Faz:**
+- Governar transições de estado (ASKING_QUESTION → WAITING_FOR_ANSWER → … → INTERVIEW_COMPLETE)
+- Persistir transcrição literal antes de qualquer avaliação
+- Gerenciar fila de perguntas
+- Avaliar suficiência de respostas (com auxílio do LLM)
+- Sintetizar CanonicalAnswerRecords
+- Versionar revisões de respostas
+- Registrar DocumentationDecisions
+
+**Não faz:**
+- Chamar LLM diretamente (delega para funções semânticas em `src/prompts`)
+- Gerar documentação final (delega para `src/prompts/generate-document.prompt.ts`)
+
+**Regra crítica:**
 
 ```txt
-- navegação;
-- atalhos;
-- renderização textual;
-- estado de tela;
-- seleção de documentos;
-- console de agente;
-- diff preview;
-- status visual.
+Agente (LLM) recomenda → Core valida → Core aplica transição
 ```
 
-Ela não deve:
+### 6.3 `src/core`
+
+Núcleo determinístico. **Nada aqui chama LLM.**
+
+**Faz:**
+- Parsing de `logos.yml`, `docs.yml`, `phases/*.yml`
+- Validação de schema (Zod)
+- Grafo normativo do projeto
+- Leitura estrutural de Markdown
+- Diagnóstico de lacunas
+- Cálculo de completude
+- Regras canônicas
+
+**Regra de ouro:**
 
 ```txt
-- validar schema diretamente;
-- montar prompts;
-- chamar Pi SDK diretamente;
-- escrever arquivos diretamente;
-- conhecer estrutura interna do Executive JSON.
+Se uma função pode ser testada com fixture e snapshot sem rede,
+ela pertence ao src/core.
 ```
 
-Recomendação inicial:
+### 6.4 `src/llm`
 
-```txt
-MVP: Ink
-Depois: avaliar @earendil-works/pi-tui se fizer sentido alinhar visualmente com o Pi
-```
+Camada de transporte e validação para o provider OpenAI-compatible.
 
----
-
-### 6.2 `packages/logos-app`
-
-Camada de aplicação.
-
-Ela orquestra casos de uso sem saber detalhes de terminal, filesystem real ou Pi.
-
-Exemplo:
+**Primitivo central:**
 
 ```ts
-await generateDocument({
-  projectRoot,
-  phaseId: "03-product",
-  documentId: "04-ux-model",
-  mode: "draft",
-});
+// src/llm/generate-structured-output.ts
+generateStructuredOutput<T>(config, input): Promise<T>
 ```
 
-Essa função internamente deve:
+Toda chamada LLM que afete estado, decisões, respostas canônicas, documentos gerados ou Executive Plan **deve** usar `generateStructuredOutput()`. Esse primitivo usa `response_format: { type: "json_schema", … }` nativo da API para output garantido.
 
-```txt
-1. carregar projeto;
-2. validar pré-condições;
-3. montar contexto;
-4. chamar logos-agent;
-5. receber proposta;
-6. validar resultado;
-7. gravar patch ou draft;
-8. retornar diagnóstico para UI.
-```
-
----
-
-### 6.3 `packages/logos-core`
-
-Núcleo determinístico.
-
-Nada aqui deve chamar LLM.
-
-Contém:
-
-```txt
-- parsing de docs.yml;
-- parsing de phases/*.yml;
-- validação de schema;
-- grafo normativo;
-- leitura estrutural de Markdown;
-- diagnóstico de lacunas;
-- cálculo de completude;
-- regras canônicas.
-```
-
-Regra:
-
-```txt
-Se uma função pode ser testada com fixture e snapshot sem rede, ela provavelmente pertence ao logos-core.
-```
-
-Exemplos:
+**Primitivo de exceção:**
 
 ```ts
-loadProject(root): LogosProject
-validatePhase(project, "03-product"): Diagnostic[]
-extractDocumentSections(markdown): Section[]
-calculateProjectStatus(project): ProjectStatus
+// src/llm/generate-text.ts
+generateText(config, input): Promise<GenerateTextOutput>
 ```
 
----
+Usado apenas para texto não decisório (ex.: explicações para o usuário, resumos de transcrição já persistidos) ou quando o texto está encapsulado dentro de um envelope estruturado validado.
 
-### 6.4 `packages/logos-agent`
+**Demais módulos:**
 
-Integração com o Pi SDK.
+| Módulo | Papel |
+|---|---|
+| `config.ts` | `loadLlmConfig()` lê `.env` + `LOGOS_LLM_*` env vars |
+| `client.ts` | `LlmClient` interface + `createLlmClient()` factory (camada de transporte/config) |
+| `retry-policy.ts` | `withRetry()`, backoff exponencial com jitter |
+| `response-validation.ts` | `ValidationOutcome<T>`, `validateAgainstSchema()`, nunca lança exceção |
+| `generate-json.ts` | Prompt-based JSON (legado — preferir `generateStructuredOutput`) |
 
-Contém:
+**Não criamos:**
+- `LlmClient` abstrato pesado
+- `OpenAiCompatibleClient` paralelo
+- Runtime agentic genérico
+
+### 6.5 `src/prompts`
+
+Funções semânticas que montam mensagens e chamam `generateStructuredOutput()`.
+
+Cada prompt builder retorna mensagens determinísticas. A chamada LLM é delegada a funções semânticas que usam o primitivo central.
+
+**Funções semânticas:**
 
 ```txt
-- criação de AgentSession;
-- configuração de modelos;
-- system prompt do LOGOS;
-- skills por fase;
-- prompt builders;
-- assinatura de eventos;
-- normalização de eventos para TUI;
-- controle de abort/cancel;
-- bridge entre Pi tools e LOGOS tools.
+assessAnswer(messages, question)      → AnswerAssessment
+synthesizeCanonicalAnswer(messages)    → CanonicalAnswerDraft
+detectConflict(messages, history)      → ConflictRecord[]
+generateDocumentDraft(answers, tmpl)   → GeneratedDocumentDraft
+reviewDocument(markdown, schema)       → DocumentPatch[]
+compileExecutivePlan(docs, graph)      → ExecutivePlan
 ```
 
-Fluxo:
+Todas internamente chamam `generateStructuredOutput()` com schema JSON validado.
 
-```txt
-logos-app
-  ↓
-logos-agent.createSession()
-  ↓
-Pi createAgentSession / createAgentSessionRuntime
-  ↓
-customTools from logos-tools
-  ↓
-session.prompt(...)
-  ↓
-event stream normalized
-```
+### 6.6 `src/renderers`
 
-Recomendação:
+Transforma modelos validados em artefatos.
 
-```txt
-Use Pi SDK customTools, ResourceLoader customizado, skills carregadas pelo LOGOS e context files controlados pelo LOGOS.
-Evite depender de extensão global instalada em ~/.pi.
-```
+**Saídas:**
+- Markdown (documentos, reports)
+- HTML (dashboard, phase map, executive overview)
+- Agent Packs (prompts de implementação e revisão)
 
----
+**Regra:** Renderers não decidem conteúdo. Transformam dados validados em formato de saída.
 
-### 6.5 `packages/logos-tools`
+### 6.7 `src/executive`
 
-Ferramentas chamadas pelo agente.
+Compilador do Eixo Executivo.
 
-Essas tools são o contrato entre agente e sistema.
+**Entrada:** `docs.yml`, `phases/*.yml`, `docs/**/*.md`, diagnostics, decisions, risks
 
-Tools mínimas do MVP:
+**Saída:** `executive-plan.json` + exports (GitHub Issues, Notion, Markdown, HTML, Agent Packs)
 
-```txt
-read_project_manifest
-list_phase_documents
-read_canonical_document
-propose_document_patch
-write_generated_document
-validate_document
-validate_phase
-compile_executive_plan
-render_html_artifact
-create_agent_pack
-```
+**Entidades:** Roadmap, Milestone, Workstream, Initiative, ExecutionItem, Decision, Risk, Artifact, ExportProfile
 
-Regra de segurança:
+**Execution Item não é só task.** Pode ser: decision, question, risk, review, agent_prompt, doc_update, spike, artifact.
 
-```txt
-O agente não deve ter write livre.
-```
+### 6.8 `src/fs`
 
-Ele deve escrever apenas via tools específicas:
+Acesso seguro ao filesystem local.
 
-```txt
-write_generated_document
-apply_document_patch
-write_executive_plan
-write_artifact
-```
+**Faz:** safe path resolution, leitura YAML/Markdown/JSON/JSONL, escrita atômica, snapshots, proteção contra path traversal.
 
-Cada uma deve ter:
+### 6.9 `src/shared`
 
-```txt
-- path policy;
-- schema validation;
-- confirmação opcional;
-- atomic write;
-- backup/snapshot;
-- diff preview.
-```
+Utilitários transversais: `Result<T, E>`, `Brand<ID>`, `LogosError`, `invariant`, `id()`, `date()`, `json()`.
 
----
+### 6.10 `src/cli`
 
-### 6.6 `packages/logos-renderers`
-
-Renderiza saídas derivadas.
-
-Saídas:
-
-```txt
-Markdown
-HTML
-Agent Packs
-Reports
-Snapshots
-```
-
-Regra:
-
-```txt
-Renderers não decidem conteúdo. Eles transformam modelos validados em artefatos.
-```
-
-Exemplos:
-
-```txt
-ExecutivePlan → executive-overview.html
-ExecutiveItem → opencode-task.md
-ValidationReport → validation-report.md
-ProjectStatus → project-dashboard.html
-```
-
----
-
-### 6.7 `packages/logos-executive`
-
-Compila execução.
-
-Entrada:
-
-```txt
-docs.yml
-phases/*.yml
-docs/**/*.md
-diagnostics
-decisions
-risks
-```
-
-Saída:
-
-```txt
-executive/executive-plan.json
-executive/exports/*
-```
-
-Entidades principais:
-
-```txt
-Roadmap
-Milestone
-Workstream
-Initiative
-Execution Item
-Decision
-Risk
-Artifact
-Export Profile
-```
-
-Importante:
-
-```txt
-Execution Item não é só task.
-```
-
-Pode ser:
-
-```txt
-decision
-question
-risk
-review
-agent_prompt
-doc_update
-spike
-artifact
-```
-
----
-
-### 6.8 `packages/logos-fs`
-
-Acesso seguro ao filesystem.
-
-Contém:
-
-```txt
-- safe path resolution;
-- leitura YAML/Markdown/JSON;
-- escrita atômica;
-- snapshots;
-- proteção contra escrita fora do projeto;
-- normalização de paths;
-- backups antes de patch.
-```
-
-Filesystem deve ser isolado porque é fonte comum de bugs:
-
-```txt
-path traversal
-write parcial
-arquivo corrompido
-encoding errado
-mudança fora do root
-race condition
-```
-
----
-
-### 6.9 `.logos/`
-
-Estado local não-canônico.
-
-```txt
-.logos/
-├── sessions/
-├── cache/
-├── runs/
-├── logs/
-└── config.local.json
-```
-
-Pode conter:
-
-```txt
-- histórico de runs;
-- cache de contexto;
-- sessões do agente;
-- logs técnicos;
-- preferências locais;
-- último documento aberto;
-- modelo selecionado.
-```
-
-Não pode conter:
-
-```txt
-- documentos canônicos;
-- executive-plan.json;
-- outputs exportáveis;
-- decisões normativas permanentes.
-```
+Comandos CLI (Commander). A TUI é a interface principal, mas CLI é essencial para CI, scripts, debug, automação, testes e uso por outros agentes.
 
 ---
 
@@ -919,106 +626,108 @@ Não pode conter:
 ```txt
 User
   ↓
-TUI command
+CLI command (init.ts) ou TUI
   ↓
-logos-app.initProject
+Core: cria estrutura default (logos.yml, docs.yml, phases/*.yml, docs/*/)
   ↓
-logos-core creates default manifest structure
+FS: atomic write
   ↓
-logos-fs writes docs.yml / phases/*.yml
-  ↓
-TUI shows project overview
+TUI: mostra project overview
 ```
 
----
-
-### 7.2 `logos generate --phase foundation`
+### 7.2 Interview (fluxo completo)
 
 ```txt
-TUI
+logos interview
   ↓
-logos-app.generatePhase
+Interview state machine: SESSION_INITIALIZING → CONTEXT_LOADING
   ↓
-logos-core loads phase schema
+INTERVIEW_READY: carrega fase/doc, constrói question queue
   ↓
-logos-agent builds phase prompt
+ASKING_QUESTION: exibe pergunta atual
   ↓
-Pi AgentSession runs
+WAITING_FOR_ANSWER: aguarda input do usuário
   ↓
-logos-tools read/write/validate docs
+TRANSCRIBING_MESSAGE: persiste mensagem verbatim no transcript.jsonl
   ↓
-logos-core validates generated docs
+ASSESSING_ANSWER:
+  ├─ Prompt builder (assess-answer.prompt.ts) monta mensagens
+  ├─ generateStructuredOutput(…, AnswerAssessment schema) chama LLM
+  ├─ Core recebe AnswerAssessment estruturado
+  └─ Core decide transição: → ASKING_FOLLOW_UP | SYNTHESIZING | REFORMULATING | RECONCILING
   ↓
-TUI shows diff + diagnostics
+SYNTHESIZING_FINAL_ANSWER:
+  ├─ Prompt builder (synthesize-canonical-answer.prompt.ts)
+  ├─ generateStructuredOutput(…, CanonicalAnswerDraft schema)
+  └─ Core armazena rascunho
+  ↓
+FINALIZING_ANSWER: exibe para confirmação (conforme política de confiança)
+  ↓
+RECORDING_CANONICAL_ANSWER: persiste CanonicalAnswerRecord + traceabilidade
+  ↓
+ADVANCING_QUEUE: atualiza fila → ASKING_QUESTION ou INTERVIEW_COMPLETE
+  ↓
+OFFER_GENERATION: calcula prontidão, oferece modos de geração
+  ↓
+GENERATING_DOCUMENTS:
+  ├─ generate-document.prompt.ts monta template + canonical answers
+  ├─ generateStructuredOutput(…, GeneratedDocumentDraft schema)
+  ├─ Core valida rascunho contra document.schema
+  └─ TUI mostra diff → usuário aceita/rejeita
 ```
 
----
-
-### 7.3 Revisão de documento
+### 7.3 `logos generate --phase foundation`
 
 ```txt
-Open document
+TUI ou CLI
   ↓
-Run review
+Core: carrega phase schema, canonical answers, templates
   ↓
-Agent reads canonical markdown
+Prompts: generate-document.prompt.ts monta mensagens
   ↓
-Agent calls validate_document
+LLM: generateStructuredOutput() → GeneratedDocumentDraft
   ↓
-Agent proposes patch
+Core: valida draft contra document.schema
   ↓
-TUI renders diff
+TUI: mostra diff + diagnostics
   ↓
-User accepts/rejects
-  ↓
-logos-fs atomic write
-  ↓
-Project status recalculated
+Usuário: accept/reject → FS atomic write → status recalculado
 ```
 
----
-
-### 7.4 Compilar Executive Axis
+### 7.4 `logos compile executive`
 
 ```txt
-Normative docs
+Normative docs + diagnostics
   ↓
-logos-core project graph
+Core: project graph
   ↓
-logos-agent derives execution structure
+Prompts: compile-executive.prompt.ts
   ↓
-logos-executive validates graph
+LLM: generateStructuredOutput() → ExecutivePlan
+  ↓
+Executive: valida executive-plan.schema, deriva milestones/initiatives
   ↓
 executive-plan.json
   ↓
-adapters generate exports
+Adapters: geram exports (GitHub Issues, Agent Packs, HTML, Markdown)
 ```
 
 ---
 
 ## 8. Comandos CLI/TUI
 
-Mesmo com TUI, manter comandos diretos.
-
 ```bash
-logos init
-logos status
-logos validate
-logos generate --phase foundation
-logos generate --doc docs/03-product/04-ux-model.md
-logos review --doc docs/03-product/04-ux-model.md
-logos compile executive
-logos render html
-logos export github
-logos export agent-packs
-logos serve
-```
-
-Motivo:
-
-```txt
-TUI é ótima para uso humano.
-CLI é melhor para CI, scripts, debug, automação, testes e uso por outros agentes.
+logos init                          # inicializa projeto LOGOS
+logos status                        # status do projeto
+logos validate                      # valida schemas + docs
+logos interview                     # inicia/retoma entrevista
+logos generate --phase foundation   # gera docs de uma fase
+logos generate --doc 01-thesis      # gera documento específico
+logos review --doc 01-thesis        # revisa documento
+logos compile executive             # compila Executive Plan
+logos render html                   # renderiza HTML outcomes
+logos export github                 # exporta GitHub Issues
+logos export agent-packs            # exporta Agent Packs
 ```
 
 ---
@@ -1032,7 +741,7 @@ type TuiState = {
     | "overview"
     | "phase"
     | "document"
-    | "agent"
+    | "interview"
     | "executive"
     | "artifacts"
     | "settings";
@@ -1043,12 +752,16 @@ type TuiState = {
   projectStatus?: ProjectStatus;
   diagnostics: Diagnostic[];
 
-  agent: {
-    isRunning: boolean;
-    mode?: "generate" | "review" | "validate" | "compile";
-    activity: AgentActivityEvent[];
-    latestDraft?: GeneratedDraft;
-    latestPatch?: DocumentPatch;
+  interview: {
+    state: InterviewStateName;
+    currentQuestion?: InterviewQuestion;
+    currentAnswerDraft?: CanonicalAnswerRecord;
+    progress: { answered: number; total: number };
+  };
+
+  executive: {
+    plan?: ExecutivePlan;
+    exports: ExportSummary[];
   };
 
   artifacts: ArtifactSummary[];
@@ -1057,355 +770,346 @@ type TuiState = {
 
 ---
 
-## 10. Eventos normalizados do agente
+## 10. Eventos normalizados da entrevista
 
-O Pi emite eventos próprios. O LOGOS deve normalizar para a TUI.
+A máquina de estados emite eventos normalizados que a TUI consome:
 
 ```ts
-type AgentActivityEvent =
-  | { type: "agent.started"; label: string }
-  | { type: "agent.text.delta"; text: string }
-  | { type: "tool.started"; toolName: string; input: unknown }
-  | { type: "tool.updated"; toolName: string; summary: string }
-  | { type: "tool.completed"; toolName: string; ok: boolean }
-  | { type: "agent.completed"; result: AgentRunResult }
-  | { type: "agent.failed"; error: string };
-```
-
-Motivo:
-
-```txt
-Não acoplar a TUI diretamente aos tipos do Pi.
-```
-
-Isso permite:
-
-```txt
-- testar com mock;
-- trocar runtime no futuro;
-- adicionar segundo agente;
-- manter UI estável mesmo se o Pi mudar eventos internos.
+type InterviewEvent =
+  | { type: "interview.started"; phaseId: string; documentId: string }
+  | { type: "question.asked"; question: InterviewQuestion; index: number; total: number }
+  | { type: "answer.received"; messageId: string }
+  | { type: "assessment.completed"; assessment: AnswerAssessment }
+  | { type: "follow_up.asked"; question: string }
+  | { type: "canonical.draft_ready"; draft: CanonicalAnswerRecord }
+  | { type: "canonical.confirmed"; answerId: string }
+  | { type: "queue.advanced"; completed: number; remaining: number }
+  | { type: "interview.completed"; summary: InterviewSummary }
+  | { type: "generation.ready"; readiness: GenerationReadiness }
+  | { type: "draft.generated"; draft: GeneratedDocumentDraft }
+  | { type: "draft.accepted"; documentId: string }
+  | { type: "draft.rejected"; documentId: string; reason?: string };
 ```
 
 ---
 
-## 11. Políticas de escrita
+## 11. Persistência e rastreabilidade
 
-### Escrita direta proibida
-
-O agente não deve fazer:
+### 11.1 Cadeia de custódia semântica
 
 ```txt
-write arbitrary file
-edit arbitrary file
-bash cat > file
+Transcrição literal (transcript.jsonl)
+  ↓
+CanonicalAnswerRecord (canonical-answers.json)
+  ↓
+GeneratedDocumentDraft (generated-drafts/*.md + *.trace.json)
+  ↓
+Documento canônico validado (docs/**/*.md)
 ```
+
+### 11.2 Regras de integridade
+
+| # | Regra |
+|---|---|
+| 1 | Toda mensagem do usuário deve ser persistida **verbatim antes** de qualquer avaliação semântica |
+| 2 | Transcript é **append-only** — entradas nunca são editadas ou excluídas |
+| 3 | Respostas canônicas são **versionadas** — revisões criam novos registros |
+| 4 | Documentos derivam de **CanonicalAnswerRecords**, não de chat bruto |
+| 5 | Toda decisão de documentação deve ser **rastreável** a IDs de transcrição |
+| 6 | Decisões críticas exigem **confirmação explícita** do usuário |
+| 7 | Inferência do agente deve ser **rotulada** como `agent_inference` |
+| 8 | Lacunas não resolvidas devem **sobreviver** nos diagnósticos, readiness, trace e review |
+
+### 11.3 Layout de persistência
+
+```txt
+.logos/
+  interviews/
+    interview_2026-05-25_143000/
+      state.json                    # InterviewRunState
+      transcript.jsonl              # append-only, verbatim
+      transcript.md                 # export legível
+      canonical-answers.json        # CanonicalAnswerRecord[]
+      answer-revisions.json         # histórico de revisões
+      conflicts.json                # ConflictRecord[]
+      decisions.json                # DocumentationDecision[]
+      generation-readiness.json
+      generated-drafts/
+        01-thesis.draft-001.md
+        01-thesis.draft-001.trace.json
+```
+
+---
+
+## 12. Políticas de escrita
+
+### Escrita proibida
+
+O sistema **nunca** deve permitir:
+- Escrita arbitrária fora do projeto
+- Edição de transcrição
+- Sobrescrita de resposta canônica sem versionamento
+- Geração de documento sem rastreabilidade
 
 ### Escrita via contrato
 
-O agente deve fazer:
-
-```txt
-propose_document_patch
-apply_document_patch
-write_generated_document
-write_executive_plan
-write_artifact
-```
-
-Cada tool deve validar:
-
-```txt
-- path dentro do projeto;
-- arquivo pertence ao espaço LOGOS;
-- schema continua válido;
-- diff é exibível;
-- escrita é atômica;
-- backup/snapshot existe;
-- usuário aprovou quando necessário.
-```
+Toda escrita segue:
+- Path dentro do projeto (validado por `safePath`)
+- Schema validation antes e depois
+- Atomic write
+- Backup/snapshot automático
+- Diff preview quando aplicável
+- Confirmação do usuário para decisões críticas
 
 ---
 
-## 12. Estratégia de testes
+## 13. Estratégia de testes
 
 ### Unit tests
 
 ```txt
-logos-core
-logos-executive
-logos-renderers
-logos-fs
+src/core        → schemas, validators, completeness, graph
+src/executive   → compiler, adapters
+src/renderers   → markdown, html, agent packs
+src/fs          → safe path, atomic write
+src/shared      → Result, Brand, LogosError
 ```
 
 ### Integration tests
 
 ```txt
-generate document with mock agent
-validate project fixture
-compile executive plan from fixture
-render HTML from executive JSON
-create agent pack from execution item
+src/interview   → state machine transitions (mock LLM)
+src/prompts     → prompt builders (snapshot de mensagens)
+src/llm         → retry, validation, config loading
+```
+
+### Testes com mock de LLM
+
+```txt
+Mock generateStructuredOutput retorna fixtures conhecidos
+Assert validators catch invalid output
+Assert state machine transitions are deterministic
+Assert traceability chains are complete
 ```
 
 ### TUI snapshot tests
 
 ```txt
-OverviewScreen renders project status
-PhaseScreen renders missing docs
-DocumentScreen renders diagnostics
-ExecutiveScreen renders execution graph
-```
-
-### Agent tests
-
-No início, usar mock.
-
-```txt
-MockAgentRuntime returns known drafts/patches
-Assert validators catch invalid output
-Assert write policies block unsafe paths
+OverviewScreen renderiza project status
+PhaseScreen renderiza missing docs
+InterviewScreen renderiza pergunta ativa
+ExecutiveScreen renderiza execution graph
 ```
 
 ---
 
-## 13. MVP em etapas
+## 14. MVP em etapas
 
-### Etapa 1 — Core sem agente
-
-```txt
-- pnpm workspace
-- logos-core
-- logos-fs
-- schemas
-- fixtures
-- logos status
-- logos validate
-```
-
-Critério de aceite:
+### Etapa 1 — Core deterministico
 
 ```txt
-Um projeto LOGOS fixture pode ser carregado, validado e diagnosticado.
+src/core funcional:
+  - schemas (docs, phase, document, executive) em Zod
+  - loadProject, validateSchema, calculateStatus
+  - parseMarkdown, extractSections
+
+src/fs funcional:
+  - safePath, atomicWrite, readYaml
+
+CLI: logos init, logos status, logos validate
 ```
 
----
+**Critério:** Projeto fixture pode ser carregado, validado e diagnosticado.
 
-### Etapa 2 — TUI read-only
+### Etapa 2 — LLM transport + structured output
 
 ```txt
-- OverviewScreen
-- PhaseScreen
-- DocumentScreen
-- ArtifactScreen
-- navegação por teclado
+src/llm funcional:
+  - config.ts (loadLlmConfig, .env)
+  - generate-text.ts (raw text — exceção)
+  - generate-structured-output.ts (★ primitivo central)
+  - retry-policy.ts (withRetry, backoff)
+  - response-validation.ts (ValidationOutcome)
+  - client.ts (LlmClient interface + factory)
+
+src/prompts funcional:
+  - assess-answer.prompt.ts
+  - synthesize-canonical-answer.prompt.ts
+  - generate-document.prompt.ts
 ```
 
-Critério:
+**Critério:** `generateStructuredOutput()` funciona com provider OpenAI-compatible real.
+
+### Etapa 3 — Interview state machine
 
 ```txt
-Abrir um projeto real e navegar docs/fases sem gerar nada.
+src/interview funcional:
+  - TranscriptStore, TranscriptMessage
+  - CanonicalAnswerRecord, AnswerAssessment
+  - State machine (17 estados)
+  - Question queue
+  - Traceabilidade
+
+CLI: logos interview
 ```
 
----
+**Critério:** Entrevista completa: pergunta → resposta → avaliação → canonical answer → avanço.
 
-### Etapa 3 — Agent runtime com Pi SDK
+### Etapa 4 — TUI read-only + interview
 
 ```txt
-- logos-agent
-- createAgentSession
-- custom tools read-only
-- AgentConsole
-- event normalization
+src/tui funcional:
+  - OverviewScreen, PhaseScreen, DocumentScreen
+  - InterviewScreen com state machine ao vivo
+  - Navegação por teclado
+  - DiffPreview
 ```
 
-Critério:
+**Critério:** Navegar projeto real, conduzir entrevista completa via TUI.
+
+### Etapa 5 — Geração de documentos + review
 
 ```txt
-Agente consegue ler manifesto, listar fase e revisar documento sem escrever.
+Geração via generate-document.prompt.ts
+Review com propose_document_patch
+Diff → accept/reject → atomic write
+CLI: logos generate, logos review
 ```
 
----
-
-### Etapa 4 — Patches revisáveis
-
-```txt
-- propose_document_patch
-- DiffPreview
-- accept/reject
-- atomic write
-- validate after write
-```
-
-Critério:
-
-```txt
-Nenhuma escrita acontece sem diff e validação.
-```
-
----
-
-### Etapa 5 — Geração de docs
-
-```txt
-- generateDocument
-- generatePhase
-- skills por fase
-- templates por documento
-```
-
-Critério:
-
-```txt
-Gerar Foundation completa com schema válido.
-```
-
----
+**Critério:** Gerar documento canônico completo a partir de CanonicalAnswers, revisar com patch.
 
 ### Etapa 6 — Executive compiler
 
 ```txt
-- compileExecutivePlan
-- executive schema
-- execution graph
-- markdown export
-- agent pack export
+src/executive funcional:
+  - compile-executive-plan.ts
+  - Adapters (GitHub Issues, Notion, Markdown, HTML, Agent Pack)
+
+CLI: logos compile executive, logos export
 ```
 
-Critério:
+**Critério:** Gerar executive-plan.json + Agent Packs a partir dos docs canônicos.
+
+### Etapa 7 — Renderers + outcomes
 
 ```txt
-Gerar executive-plan.json + agent packs a partir dos docs.
+src/renderers funcional:
+  - HTML dashboard, phase map, executive overview
+  - Agent Pack implementation prompts
+
+CLI: logos render html
 ```
+
+**Critério:** HTML regenerável com fonte declarada, timestamp e sem edição manual.
 
 ---
 
-### Etapa 7 — HTML outcomes
+## 15. Decisões técnicas recomendadas
 
-```txt
-- project dashboard
-- phase map
-- executive overview
-```
-
-Critério:
-
-```txt
-HTML regenerável, com fonte declarada, timestamp e sem edição manual.
-```
-
----
-
-## 14. Decisões técnicas recomendadas
-
-| Área | Recomendação |
+| Área | Decisão |
 |---|---|
-| Linguagem | TypeScript |
-| Package manager | pnpm workspaces |
-| CLI | Commander ou Clipanion |
-| TUI MVP | Ink |
-| Agent runtime | Pi SDK |
-| Tool schemas | typebox |
-| Validação | Ajv ou TypeBox compiler |
-| YAML | yaml |
-| Markdown AST | remark / unified |
-| Diffs | diff ou structured-patch |
+| Linguagem | TypeScript (strict, NodeNext) |
+| Runtime | Node ≥22 |
+| Package manager | pnpm |
+| Estrutura | Single package modular (`src/`) |
+| CLI | Commander |
+| TUI | Ink + React |
+| Validação | Zod 4 (schemas + parse) |
+| LLM | OpenAI-compatible (`response_format: json_schema`) |
+| YAML | `yaml` |
 | Testes | Vitest |
-| Snapshots TUI | renderização textual controlada |
-| HTML | templates próprios ou React SSR estático |
-| Persistência inicial | filesystem local |
-| Estado local | `.logos/` |
+| Lint/Format | Biome |
+| Persistência | Filesystem local (`.logos/`) |
+| Transcript | JSONL append-only |
+| Estado local | `.logos/` directory |
 
 ---
 
-## 15. Fronteiras arquiteturais
+## 16. Fronteiras arquiteturais
 
-### TUI não pode
+### `src/tui` não pode
+- Validar schema diretamente
+- Chamar LLM diretamente
+- Escrever arquivos diretamente
+- Conhecer estrutura interna do Executive JSON
 
-```txt
-- validar schema diretamente;
-- montar prompts;
-- chamar Pi SDK diretamente;
-- escrever arquivos diretamente;
-- conhecer estrutura interna do Executive JSON.
-```
+### `src/prompts` + `src/llm` não podem
+- Decidir transições de estado
+- Escrever arquivos
+- Alterar estado canônico sem validação do Core
+- Tratar inferência como decisão do usuário
 
-### Agent não pode
+### `src/core` não pode
+- Chamar LLM
+- Depender de terminal
+- Acessar filesystem diretamente sem `src/fs`
 
-```txt
-- escrever fora de tools;
-- editar HTML como fonte;
-- decidir estado canônico sem validação;
-- exportar direto para ferramentas externas sem adapter;
-- virar task manager.
-```
-
-### Core não pode
-
-```txt
-- chamar LLM;
-- depender de terminal;
-- depender de Pi;
-- acessar filesystem diretamente sem porta/adaptador.
-```
-
-### Renderers não podem
-
-```txt
-- decidir conteúdo;
-- corrigir documentação;
-- inferir lacunas;
-- alterar estado canônico.
-```
+### `src/renderers` não podem
+- Decidir conteúdo
+- Corrigir documentação
+- Inferir lacunas
+- Alterar estado canônico
 
 ---
 
-## 16. Recomendação final
+## 17. Recomendação final
 
-A arquitetura mais forte para o LOGOS agora é:
+A arquitetura do LOGOS Engine MVP é:
 
 ```txt
 TUI-first
 Local-first
 Git-native
-Pi SDK-powered
-Schema-validated
-Patch-based
-HTML-output-capable
-Executive-compiler, not task-manager
+Single package modular
+OpenAI-compatible (generateStructuredOutput)
+State-machine-driven (interview)
+Transcript-verbatim (transcript.jsonl append-only)
+Canonical-answer-based (documentos derivam de CanonicalAnswerRecords)
+Patch-based (diffs revisáveis)
+Structured-output-first (response_format: json_schema)
+Executive-compiler (não task manager)
 ```
 
 A estrutura essencial:
 
 ```txt
-apps/tui
-packages/logos-app
-packages/logos-core
-packages/logos-agent
-packages/logos-tools
-packages/logos-renderers
-packages/logos-executive
-packages/logos-fs
+src/
+  cli/         → comandos scriptáveis
+  tui/         → interface de terminal (Ink)
+  core/        → schemas, validators, graph, determinístico
+  interview/   → state machine, transcript, canonical answers
+  llm/         → transporte, structured output, retry, validation
+  prompts/     → funções semânticas (assess, synthesize, detect, generate, compile)
+  renderers/   → markdown, html, agent packs
+  executive/   → compiler + adapters
+  fs/          → safe filesystem access
+  shared/      → Result, Brand, errors, utils
 ```
 
 O ponto mais importante:
 
 ```txt
-Não construir uma TUI de chat.
-Construir uma TUI de documentação executável.
+Não construímos uma TUI de chat.
+Não construímos um agent runtime genérico.
+Construímos uma TUI de documentação executável,
+apoiada por LLM para tarefas semânticas,
+governada por uma máquina de estados determinística,
+com cadeia de custódia completa da transcrição ao documento canônico.
 ```
 
-A TUI deve operar sobre:
+A TUI opera sobre:
 
 ```txt
 fases
 documentos
+perguntas
+avaliações
+respostas canônicas
 lacunas
 validações
 patches
 artefatos
 execução derivada
-agente contextual
 ```
 
-Esse formato preserva a ideia original do LOGOS: tirar ideias da cabeça, estabilizar em documentos canônicos, derivar execução e entregar artefatos que humanos e agentes conseguem usar.
+Esse formato preserva a ideia original do LOGOS: externalizar ideias, estabilizá-las em documentos canônicos, derivar execução e entregar artefatos que humanos e agentes conseguem usar — com rastreabilidade completa de cada decisão até a mensagem que a produziu.
