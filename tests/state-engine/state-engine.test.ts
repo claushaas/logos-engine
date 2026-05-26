@@ -147,7 +147,11 @@ describe('selectProfile', () => {
 		expect(result.state.activeNodeId).toBeNull();
 		expect(result.state.lastActiveNodeId).toBeNull();
 		expect(result.state.nodeStates).toEqual({});
-		expect(result.state.documentStates).toEqual({});
+		// Document states are initialised from the profile's documents.
+		expect(result.state.documentStates).toHaveProperty('test-profile-doc');
+		expect(result.state.documentStates['test-profile-doc']?.status).toBe(
+			'not_ready',
+		);
 	});
 
 	it('returns error for a non-existent profile ID', () => {
@@ -217,7 +221,9 @@ describe('selectProfile', () => {
 		expect(r2.state.selectedProfileId).toBe('second');
 		expect(r2.state.mode).toBe('structure_overview');
 		expect(r2.state.nodeStates).toEqual({});
-		expect(r2.state.documentStates).toEqual({});
+		// Document states are recomputed when switching profiles.
+		expect(r2.state.documentStates).toHaveProperty('second-doc');
+		expect(r2.state.documentStates['second-doc']?.status).toBe('not_ready');
 	});
 
 	it('preserves the original session ID across profile selection', () => {
@@ -261,7 +267,11 @@ describe('changeProfile', () => {
 		expect(changeResult.state.mode).toBe('structure_overview');
 		expect(changeResult.state.selectedProfileId).toBe('beta');
 		expect(changeResult.state.nodeStates).toEqual({});
-		expect(changeResult.state.documentStates).toEqual({});
+		// Document states are recomputed after changing profiles.
+		expect(changeResult.state.documentStates).toHaveProperty('beta-doc');
+		expect(changeResult.state.documentStates['beta-doc']?.status).toBe(
+			'not_ready',
+		);
 	});
 
 	it('returns error for invalid profile ID', () => {

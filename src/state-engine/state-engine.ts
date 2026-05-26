@@ -15,6 +15,7 @@ import type {
 import { getProfile, listProfiles } from '../profiles/index.js';
 import type { ProfileId, SessionId } from '../shared/index.js';
 import { generateId, nowIso } from '../shared/index.js';
+import { recomputeAllDocumentReadiness } from './document-readiness.js';
 import { resolveSessionMode } from './session-mode.js';
 import {
 	diagnostic,
@@ -137,7 +138,7 @@ export function selectProfile(
 
 	// Transition to structure_overview — reset all node/document runtime state.
 	const profile = result.value;
-	const nextState = patchState(state, {
+	let nextState = patchState(state, {
 		activeNodeId: null,
 		documentStates: {} as Record<string, RuntimeDocumentState>,
 		lastActiveNodeId: null,
@@ -146,7 +147,14 @@ export function selectProfile(
 	});
 	// Compute mode via the resolver instead of hardcoding.
 	const mode = resolveSessionMode(nextState, profile);
-	return stateOk(patchState(nextState, { mode }));
+	nextState = patchState(nextState, { mode });
+
+	// Initialize document states — recompute readiness for every document
+	// in the profile so that the sidebar and document preview have correct
+	// initial status.
+	nextState = recomputeAllDocumentReadiness(nextState, profile);
+
+	return stateOk(nextState);
 }
 
 /**

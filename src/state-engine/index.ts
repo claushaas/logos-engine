@@ -11,6 +11,8 @@
  * - Lifecycle validation: `isValidTransition`, `allLifecycles`
  * - Allowed actions: `getAllowedActions`, `isActionAllowed`
  * - Completeness evaluation: `evaluateCompleteness`
+ * - Document readiness: `computeDocumentReadiness`,
+ *   `recomputeAllDocumentReadiness`
  * - Session mode resolution: `resolveSessionMode`,
  *   `resolveSessionModeWithDiagnostics`, `SessionModeResolution`
  * - Type helpers: `StateEngineResult`, `StateDiagnostic`,
@@ -21,6 +23,10 @@ export {
 	isActionAllowed,
 } from './allowed-actions.js';
 export { evaluateCompleteness } from './completeness.js';
+export {
+	computeDocumentReadiness,
+	recomputeAllDocumentReadiness,
+} from './document-readiness.js';
 export {
 	type ApplyLifecycleTransitionOptions,
 	allLifecycles,

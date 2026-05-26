@@ -16,6 +16,7 @@
  * @see {@link https://logos-engine/docs/13-prototypes.md §1.2}
  */
 import type {
+	LogosProfile,
 	LogosRuntimeState,
 	NodeDefinition,
 	NodeLifecycle,
@@ -27,6 +28,7 @@ import type { NodeId } from '../shared/index.js';
 import { nowIso } from '../shared/index.js';
 import { getAllowedActions } from './allowed-actions.js';
 import { evaluateCompleteness } from './completeness.js';
+import { recomputeAllDocumentReadiness } from './document-readiness.js';
 import {
 	diagnostic,
 	type StateEngineResult,
@@ -397,6 +399,18 @@ export type ApplyLifecycleTransitionOptions = {
 	 * Optional for all other transitions.
 	 */
 	readonly nodeDef?: NodeDefinition;
+
+	/**
+	 * The loaded profile.
+	 *
+	 * When provided, document readiness is recomputed after every
+	 * successful lifecycle transition. This keeps `documentStates`
+	 * in sync with node lifecycle changes (e.g., accept, reopen)
+	 * without requiring callers to manually recompute readiness.
+	 *
+	 * Optional for callers that do not need document state updates.
+	 */
+	readonly profile?: LogosProfile;
 };
 
 /** Diagnostic codes for lifecycle transition errors. */
@@ -599,7 +613,7 @@ export function applyLifecycleTransition(
 		updatedAt: nowIso(),
 	};
 
-	const nextState: LogosRuntimeState = {
+	let nextState: LogosRuntimeState = {
 		...state,
 		nodeStates: {
 			...state.nodeStates,
@@ -607,6 +621,11 @@ export function applyLifecycleTransition(
 		},
 		updatedAt: nowIso(),
 	};
+
+	// ── Recompute document readiness ────────────────────────────────
+	if (options?.profile) {
+		nextState = recomputeAllDocumentReadiness(nextState, options.profile);
+	}
 
 	return stateOk(nextState);
 }
