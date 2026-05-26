@@ -28,6 +28,7 @@ import type {
 	NodeRuntimeState,
 	PromptState,
 	RuntimeDocumentState,
+	RuntimeExportState,
 	SessionMode,
 } from './index.js';
 
@@ -43,7 +44,7 @@ type ExpectFalse<T extends false> = T;
 const _minimalRuntimeState: LogosRuntimeState = {
 	activeNodeId: null,
 	documentStates: {} as Record<DocumentId, RuntimeDocumentState>,
-	exportState: {} as Record<string, unknown>,
+	exportState: { artifacts: [] } satisfies RuntimeExportState,
 	globalContext: {
 		preferences: {},
 		projectName: null,

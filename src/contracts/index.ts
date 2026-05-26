@@ -33,6 +33,18 @@ export type {
 	NodeMessageMetadata,
 	NodeMessageRole,
 } from './conversation.js';
+// Step 1.4 — Document state, export state, and materialization contracts.
+export type {
+	DocumentRuntimeState,
+	DocumentSectionRule,
+	DocumentStatus,
+	MaterializedDocumentDraft,
+} from './document-state.js';
+export type {
+	ExportRuntimeState,
+	GeneratedArtifact,
+	GeneratedArtifactType,
+} from './export-state.js';
 export type {
 	NodeAction,
 	NodeConversationEntry,

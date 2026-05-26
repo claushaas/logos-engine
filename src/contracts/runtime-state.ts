@@ -4,9 +4,6 @@
  * `LogosRuntimeState` is the root state object owned and mutated exclusively
  * by the state engine. Every other module consumes derived snapshots — never
  * the raw state directly.
- *
- * Document and export state types are stubbed here and will be fully defined
- * in Step 1.4 (`DocumentRuntimeState`, `ExportRuntimeState`).
  */
 import type {
 	DocumentId,
@@ -14,20 +11,21 @@ import type {
 	ProfileId,
 	SessionId,
 } from '../shared/index.js';
+import type { DocumentRuntimeState } from './document-state.js';
+import type { ExportRuntimeState } from './export-state.js';
 import type { NodeRuntimeState } from './node-state.js';
 
-// ─── Placeholders for future steps ─────────────────────────────────────────
+// ─── Backward-compatibility aliases ────────────────────────────────────────
 //
-// These minimal stubs allow `LogosRuntimeState` to compile without
-// depending on modules that do not exist yet.
-//
-// Step 1.4 → `DocumentRuntimeState`, `ExportRuntimeState`
+// `RuntimeDocumentState` and `RuntimeExportState` were placeholder types
+// introduced in Step 1.2 and replaced in Step 1.4. These aliases ensure
+// that existing imports (e.g., typecheck tests) do not break.
 
-/** Opaque placeholder — concrete document state defined in Step 1.4. */
-export type RuntimeDocumentState = Record<string, unknown>;
+/** Canonical type — defined in {@link ./document-state.js}. */
+export type RuntimeDocumentState = DocumentRuntimeState;
 
-/** Opaque placeholder — concrete export state defined in Step 1.4. */
-export type RuntimeExportState = Record<string, unknown>;
+/** Canonical type — defined in {@link ./export-state.js}. */
+export type RuntimeExportState = ExportRuntimeState;
 
 // ─── SessionMode ────────────────────────────────────────────────────────────
 
@@ -74,10 +72,10 @@ export type LogosRuntimeState = {
 	readonly nodeStates: Record<NodeId, NodeRuntimeState>;
 
 	/** Per-document runtime state keyed by document id. */
-	readonly documentStates: Record<DocumentId, RuntimeDocumentState>;
+	readonly documentStates: Record<DocumentId, DocumentRuntimeState>;
 
 	/** Global export/progress state. */
-	readonly exportState: RuntimeExportState;
+	readonly exportState: ExportRuntimeState;
 
 	/** User preferences and project-level metadata carried across the session. */
 	readonly globalContext: GlobalContext;
