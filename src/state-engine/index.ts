@@ -9,11 +9,16 @@
  * - State engine operations: `createSession`, `selectProfile`,
  *   `changeProfile`, `selectNode`, `applyLifecycleTransition`
  * - Lifecycle validation: `isValidTransition`, `allLifecycles`
+ * - Allowed actions: `getAllowedActions`, `isActionAllowed`
  * - Session mode resolution: `resolveSessionMode`,
  *   `resolveSessionModeWithDiagnostics`, `SessionModeResolution`
  * - Type helpers: `StateEngineResult`, `StateDiagnostic`,
  *   `StateEngineEvent`, `diagnostic`, `stateOk`, `stateErr`
  */
+export {
+	getAllowedActions,
+	isActionAllowed,
+} from './allowed-actions.js';
 export {
 	type ApplyLifecycleTransitionOptions,
 	allLifecycles,

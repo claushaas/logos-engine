@@ -17,7 +17,6 @@
  */
 import type {
 	LogosRuntimeState,
-	NodeAction,
 	NodeLifecycle,
 	NodeRuntimeState,
 	PromptState,
@@ -25,6 +24,7 @@ import type {
 } from '../contracts/index.js';
 import type { NodeId } from '../shared/index.js';
 import { nowIso } from '../shared/index.js';
+import { getAllowedActions } from './allowed-actions.js';
 import {
 	diagnostic,
 	type StateEngineResult,
@@ -369,34 +369,7 @@ function lifecycleToPromptState(lifecycle: NodeLifecycle): PromptState {
 	return map[lifecycle];
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// Allowed actions calculation — temporary; extracted to allowed-actions.ts
-//   in Step 3.5
-// ═══════════════════════════════════════════════════════════════════════════
 
-/**
- * Temporary local mapping of lifecycle → allowed actions.
- *
- * Required by Step 3.4 acceptance criteria ("recomputes `allowedActions`").
- * Will be replaced by `src/state-engine/allowed-actions.ts` in Step 3.5.
- *
- * @see {@link https://logos-engine/docs/04-node-lifecycle-and-question-state.md §8}
- */
-function getAllowedActionsForLifecycle(lifecycle: NodeLifecycle): NodeAction[] {
-	const map: Record<NodeLifecycle, NodeAction[]> = {
-		accepted: ['continue_next', 'reopen', 'open_document_preview'],
-		active: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
-		answered: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
-		blocked: ['open_prerequisite', 'defer'],
-		deferred: ['resume', 'continue_next'],
-		needs_clarification: ['answer', 'defer', 'open_prerequisite'],
-		needs_refinement: ['answer', 'defer', 'ask_for_example'],
-		not_started: ['answer', 'skip', 'ask_for_example'],
-		ready_for_synthesis: [], // automatic transition — no user actions
-		synthesized: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
-	};
-	return map[lifecycle];
-}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // applyLifecycleTransition
@@ -437,7 +410,7 @@ const DIAG_NO_ACTIVE_NODE_OVERRIDE =
  * Effects:
  * - Updates `node.lifecycle` to `newLifecycle`.
  * - Recomputes `node.promptState` via `lifecycleToPromptState`.
- * - Recomputes `node.allowedActions` via `getAllowedActionsForLifecycle`.
+ * - Recomputes `node.allowedActions` via `getAllowedActions`.
  * - Updates `node.updatedAt` and `state.updatedAt` to the current time.
  *
  * @param state        - The current runtime state (not mutated).
@@ -546,7 +519,7 @@ export function applyLifecycleTransition(
 
 	// ── Apply effects ───────────────────────────────────────────────
 	const nextPromptState = lifecycleToPromptState(newLifecycle);
-	const nextAllowedActions = getAllowedActionsForLifecycle(newLifecycle);
+	const nextAllowedActions = getAllowedActions(newLifecycle);
 
 	const updatedNode: NodeRuntimeState = {
 		...nodeState,
