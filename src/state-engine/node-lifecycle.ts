@@ -17,6 +17,7 @@
  */
 import type {
 	LogosRuntimeState,
+	NodeDefinition,
 	NodeLifecycle,
 	NodeRuntimeState,
 	PromptState,
@@ -25,6 +26,7 @@ import type {
 import type { NodeId } from '../shared/index.js';
 import { nowIso } from '../shared/index.js';
 import { getAllowedActions } from './allowed-actions.js';
+import { evaluateCompleteness } from './completeness.js';
 import {
 	diagnostic,
 	type StateEngineResult,
@@ -369,8 +371,6 @@ function lifecycleToPromptState(lifecycle: NodeLifecycle): PromptState {
 	return map[lifecycle];
 }
 
-
-
 // ═══════════════════════════════════════════════════════════════════════════
 // applyLifecycleTransition
 // ═══════════════════════════════════════════════════════════════════════════
@@ -386,6 +386,17 @@ export type ApplyLifecycleTransitionOptions = {
 	 * that explains why the transition occurred.
 	 */
 	readonly event: LifecycleTransitionEvent;
+
+	/**
+	 * The node's static definition from the profile.
+	 *
+	 * Required when transitioning to `ready_for_synthesis` so the
+	 * completeness guard can evaluate whether the conversation covers
+	 * all required topics with sufficient specificity.
+	 *
+	 * Optional for all other transitions.
+	 */
+	readonly nodeDef?: NodeDefinition;
 };
 
 /** Diagnostic codes for lifecycle transition errors. */
@@ -393,6 +404,8 @@ const DIAG_INVALID_TRANSITION = 'LOGOS_STATE_INVALID_LIFECYCLE_TRANSITION';
 const DIAG_WRONG_EVENT = 'LOGOS_STATE_WRONG_TRANSITION_EVENT';
 const DIAG_MISSING_EVENT = 'LOGOS_STATE_MISSING_TRANSITION_EVENT';
 const DIAG_UNRESOLVED_BLOCKERS = 'LOGOS_STATE_UNRESOLVED_BLOCKERS';
+const DIAG_INCOMPLETE_FOR_SYNTHESIS = 'LOGOS_STATE_INCOMPLETE_FOR_SYNTHESIS';
+const DIAG_MISSING_NODE_DEF = 'LOGOS_STATE_MISSING_NODE_DEF_FOR_SYNTHESIS';
 const DIAG_NO_ACTIVE_NODE_OVERRIDE =
 	'LOGOS_STATE_CANNOT_APPLY_LIFECYCLE_TRANSITION_TO_NON_EXISTENT_NODE';
 
@@ -406,6 +419,8 @@ const DIAG_NO_ACTIVE_NODE_OVERRIDE =
  * 4. The event must be appropriate for the (from → to) pair.
  * 5. For `blocked → active` or `blocked → not_started`, all
  *    dependencies must be resolved (`blockedBy` is empty).
+ * 6. For `→ ready_for_synthesis`, `options.nodeDef` is required and
+ *    the node must pass `evaluateCompleteness` with `complete: true`.
  *
  * Effects:
  * - Updates `node.lifecycle` to `newLifecycle`.
@@ -517,13 +532,68 @@ export function applyLifecycleTransition(
 		}
 	}
 
+	// ── Guard 6: ready_for_synthesis requires completeness ──────────
+	if (newLifecycle === 'ready_for_synthesis') {
+		if (!options?.nodeDef) {
+			return stateErr(
+				'Cannot transition to "ready_for_synthesis": node definition is required for completeness evaluation',
+				[
+					diagnostic(
+						DIAG_MISSING_NODE_DEF,
+						`Node "${nodeId}" cannot transition to "ready_for_synthesis" ` +
+							'without a node definition. Provide `options.nodeDef` so the completeness guard can evaluate coverage.',
+						'error',
+						nodeId,
+					),
+				],
+			);
+		}
+
+		const completeness = evaluateCompleteness(nodeState, options.nodeDef);
+		if (!completeness.complete) {
+			const reasons: string[] = [];
+			if (completeness.missing.length > 0) {
+				reasons.push(`missing topics: ${completeness.missing.join(', ')}`);
+			}
+			if (completeness.weak.length > 0) {
+				reasons.push(`weak topics: ${completeness.weak.join(', ')}`);
+			}
+			if (completeness.blockingIssues.length > 0) {
+				reasons.push(`${completeness.blockingIssues.length} blocking issue(s)`);
+			}
+			return stateErr(
+				`Cannot transition to "ready_for_synthesis": node is not complete. ` +
+					reasons.join('; '),
+				[
+					diagnostic(
+						DIAG_INCOMPLETE_FOR_SYNTHESIS,
+						`Node "${nodeId}" cannot transition to "ready_for_synthesis" ` +
+							'because completeness evaluation returned complete: false. ' +
+							reasons.join('; '),
+						'error',
+						nodeId,
+					),
+				],
+			);
+		}
+	}
+
 	// ── Apply effects ───────────────────────────────────────────────
 	const nextPromptState = lifecycleToPromptState(newLifecycle);
 	const nextAllowedActions = getAllowedActions(newLifecycle);
 
+	// Re-evaluate completeness when transitioning to ready_for_synthesis
+	// so the stored completeness reflects the evaluation that passed the
+	// guard above.
+	const nextCompleteness =
+		newLifecycle === 'ready_for_synthesis' && options?.nodeDef
+			? evaluateCompleteness(nodeState, options.nodeDef)
+			: nodeState.completeness;
+
 	const updatedNode: NodeRuntimeState = {
 		...nodeState,
 		allowedActions: nextAllowedActions,
+		completeness: nextCompleteness,
 		lifecycle: newLifecycle,
 		promptState: nextPromptState,
 		updatedAt: nowIso(),

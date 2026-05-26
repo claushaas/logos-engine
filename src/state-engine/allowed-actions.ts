@@ -31,16 +31,16 @@ import type { NodeAction, NodeLifecycle } from '../contracts/index.js';
 const ALLOWED_ACTIONS_BY_LIFECYCLE: Readonly<
 	Record<NodeLifecycle, readonly NodeAction[]>
 > = {
-	not_started: ['answer', 'skip', 'ask_for_example'],
+	accepted: ['continue_next', 'reopen', 'open_document_preview'],
 	active: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
 	answered: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+	blocked: ['open_prerequisite', 'defer'],
+	deferred: ['resume', 'continue_next'],
 	needs_clarification: ['answer', 'defer', 'open_prerequisite'],
 	needs_refinement: ['answer', 'defer', 'ask_for_example'],
+	not_started: ['answer', 'skip', 'ask_for_example'],
 	ready_for_synthesis: [], // automatic transition — no user actions
 	synthesized: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
-	accepted: ['continue_next', 'reopen', 'open_document_preview'],
-	deferred: ['resume', 'continue_next'],
-	blocked: ['open_prerequisite', 'defer'],
 };
 
 // ═══════════════════════════════════════════════════════════════════════════

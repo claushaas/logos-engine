@@ -16,13 +16,13 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { LogosRuntimeState } from '../../src/contracts/index.js';
+import type { NodeId, ProfileId } from '../../src/shared/index.js';
 import {
 	changeProfile,
 	createSession,
 	selectNode,
 	selectProfile,
 } from '../../src/state-engine/state-engine.js';
-import type { NodeId, ProfileId } from '../../src/shared/index.js';
 
 // ─── Test helpers ───────────────────────────────────────────────────────────
 
@@ -163,9 +163,7 @@ describe('selectProfile', () => {
 
 		expect(result.error).toContain('Failed to load profile');
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_PROFILE_LOAD_FAILED',
-		);
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_PROFILE_LOAD_FAILED');
 	});
 
 	it('returns error when profile directory is empty', () => {
@@ -179,7 +177,7 @@ describe('selectProfile', () => {
 		if (result.ok) throw new Error('Expected error');
 
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
+		expect(result.diagnostics[0]?.code).toBe(
 			'LOGOS_STATE_NO_PROFILES_AVAILABLE',
 		);
 	});
@@ -245,11 +243,9 @@ describe('changeProfile', () => {
 		const initial = createSession();
 
 		// Select alpha first.
-		const selectResult = selectProfile(
-			initial,
-			'alpha' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const selectResult = selectProfile(initial, 'alpha' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!selectResult.ok) throw new Error('Expected ok');
 
 		// Then change to beta.
@@ -291,22 +287,20 @@ describe('selectNode', () => {
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected error');
 
-		expect(result.error).toContain('Cannot select a node without a selected profile');
-		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_NO_PROFILE_SELECTED',
+		expect(result.error).toContain(
+			'Cannot select a node without a selected profile',
 		);
+		expect(result.diagnostics).toHaveLength(1);
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_NO_PROFILE_SELECTED');
 	});
 
 	it('sets activeNodeId and transitions to node_focus when profile is selected', () => {
 		writeMinimalProfile(tempDir, 'test-profile');
 		const initial = createSession();
 
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected ok');
 
 		const nodeResult = selectNode(
@@ -323,12 +317,10 @@ describe('selectNode', () => {
 		// node_focus.
 		expect(nodeResult.state.activeNodeId).toBe('test-profile-node-1');
 		expect(nodeResult.state.mode).toBe('node_focus');
-		expect(
-			nodeResult.state.nodeStates['test-profile-node-1'],
-		).toBeDefined();
-		expect(
-			nodeResult.state.nodeStates['test-profile-node-1']!.lifecycle,
-		).toBe('not_started');
+		expect(nodeResult.state.nodeStates['test-profile-node-1']).toBeDefined();
+		expect(nodeResult.state.nodeStates['test-profile-node-1']?.lifecycle).toBe(
+			'not_started',
+		);
 	});
 
 	it('does not mutate input state', () => {

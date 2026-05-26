@@ -32,6 +32,7 @@ import { describe, expect, it } from 'vitest';
 
 import type {
 	LogosRuntimeState,
+	NodeDefinition,
 	NodeDependencyState,
 	NodeLifecycle,
 	NodeRuntimeState,
@@ -328,11 +329,46 @@ describe('applyLifecycleTransition — valid transitions', () => {
 
 	it('needs_refinement → ready_for_synthesis succeeds', () => {
 		const state = stateWithNode('node-A' as NodeId, 'needs_refinement');
+		// Patch the node state to have a conversation that satisfies a
+		// minimal coverage topic so the completeness guard (Step 3.6)
+		// allows the transition.
+		const existingNode = state.nodeStates['node-A'];
+		const patchedState: LogosRuntimeState = {
+			...state,
+			nodeStates: {
+				...state.nodeStates,
+				'node-A': existingNode
+					? {
+							...existingNode,
+							conversation: [
+								{
+									content:
+										'Our target audience is SaaS founders with 2-10 employees.',
+									createdAt: nowIso(),
+									id: 'msg-1',
+									role: 'user' as const,
+								},
+							],
+						}
+					: undefined,
+			},
+		};
+		const nodeDef: NodeDefinition = {
+			canonicalQuestion: 'Who is the target audience?',
+			coverageTopics: ['Target audience'],
+			documentId: 'doc-1' as NodeId,
+			id: 'node-A' as NodeId,
+			order: 1,
+			phaseId: 'phase-1',
+			promptRefs: {},
+			sufficiencyCriteria: ['Audience is specific'],
+			title: 'Target audience',
+		};
 		const result = applyLifecycleTransition(
-			state,
+			patchedState,
 			'node-A' as NodeId,
 			'ready_for_synthesis',
-			{ event: 'SYNTHESIS_PROPOSED' },
+			{ event: 'SYNTHESIS_PROPOSED', nodeDef },
 		);
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected ok');

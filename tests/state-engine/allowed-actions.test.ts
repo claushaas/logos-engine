@@ -27,20 +27,19 @@ import {
 // Canonical action map — the source of truth for assertion
 // ═══════════════════════════════════════════════════════════════════════════
 
-const EXPECTED_ACTIONS: Readonly<
-	Record<NodeLifecycle, readonly NodeAction[]>
-> = {
-	accepted: ['continue_next', 'reopen', 'open_document_preview'],
-	active: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
-	answered: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
-	blocked: ['open_prerequisite', 'defer'],
-	deferred: ['resume', 'continue_next'],
-	needs_clarification: ['answer', 'defer', 'open_prerequisite'],
-	needs_refinement: ['answer', 'defer', 'ask_for_example'],
-	not_started: ['answer', 'skip', 'ask_for_example'],
-	ready_for_synthesis: [],
-	synthesized: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
-};
+const EXPECTED_ACTIONS: Readonly<Record<NodeLifecycle, readonly NodeAction[]>> =
+	{
+		accepted: ['continue_next', 'reopen', 'open_document_preview'],
+		active: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+		answered: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+		blocked: ['open_prerequisite', 'defer'],
+		deferred: ['resume', 'continue_next'],
+		needs_clarification: ['answer', 'defer', 'open_prerequisite'],
+		needs_refinement: ['answer', 'defer', 'ask_for_example'],
+		not_started: ['answer', 'skip', 'ask_for_example'],
+		ready_for_synthesis: [],
+		synthesized: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
+	};
 
 const ALL_LIFECYCLES: readonly NodeLifecycle[] = [
 	'not_started',
@@ -62,9 +61,7 @@ const ALL_LIFECYCLES: readonly NodeLifecycle[] = [
 describe('getAllowedActions', () => {
 	for (const lifecycle of ALL_LIFECYCLES) {
 		it(`returns the correct action set for lifecycle "${lifecycle}"`, () => {
-			expect(getAllowedActions(lifecycle)).toEqual(
-				EXPECTED_ACTIONS[lifecycle],
-			);
+			expect(getAllowedActions(lifecycle)).toEqual(EXPECTED_ACTIONS[lifecycle]);
 		});
 	}
 });

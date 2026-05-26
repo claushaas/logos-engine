@@ -10,6 +10,7 @@
  *   `changeProfile`, `selectNode`, `applyLifecycleTransition`
  * - Lifecycle validation: `isValidTransition`, `allLifecycles`
  * - Allowed actions: `getAllowedActions`, `isActionAllowed`
+ * - Completeness evaluation: `evaluateCompleteness`
  * - Session mode resolution: `resolveSessionMode`,
  *   `resolveSessionModeWithDiagnostics`, `SessionModeResolution`
  * - Type helpers: `StateEngineResult`, `StateDiagnostic`,
@@ -19,6 +20,7 @@ export {
 	getAllowedActions,
 	isActionAllowed,
 } from './allowed-actions.js';
+export { evaluateCompleteness } from './completeness.js';
 export {
 	type ApplyLifecycleTransitionOptions,
 	allLifecycles,

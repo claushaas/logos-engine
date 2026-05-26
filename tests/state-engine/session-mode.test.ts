@@ -12,27 +12,26 @@
  *  - Integration: `selectProfile` uses the resolver instead of
  *    hardcoding mode.
  */
-import { describe, expect, it } from 'vitest';
 
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type {
 	LogosProfile,
 	LogosRuntimeState,
 } from '../../src/contracts/index.js';
-import {
-	changeProfile,
-	createSession,
-	selectProfile,
-} from '../../src/state-engine/state-engine.js';
+import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
 import {
 	resolveSessionMode,
 	resolveSessionModeWithDiagnostics,
 	type SessionModeResolution,
 } from '../../src/state-engine/session-mode.js';
-import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { afterEach, beforeEach } from 'vitest';
+import {
+	changeProfile,
+	createSession,
+	selectProfile,
+} from '../../src/state-engine/state-engine.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Helpers
@@ -57,43 +56,43 @@ function minimalProfile(overrides?: Partial<LogosProfile>): LogosProfile {
 	const nodeId = `${profileId}-node-1` as NodeId;
 
 	return {
-		id: profileId,
-		title: 'Test Profile',
-		version: '1.0.0',
-		phases: [
-			{
-				id: 'phase-1',
-				title: 'Phase 1',
-				order: 1,
-				purpose: 'Testing',
-			},
-		],
 		documents: [
 			{
 				id: docId,
-				phaseId: 'phase-1',
-				title: 'Test Document',
-				order: 1,
-				purpose: 'Testing',
-				outputPath: '/dev/null',
-				requiredNodeIds: [],
 				optionalNodeIds: [],
+				order: 1,
+				outputPath: '/dev/null',
+				phaseId: 'phase-1',
+				purpose: 'Testing',
+				requiredNodeIds: [],
+				title: 'Test Document',
 			},
 		],
+		id: profileId,
+		materializationRules: [],
 		nodes: [
 			{
-				id: nodeId,
-				phaseId: 'phase-1',
-				documentId: docId,
-				title: 'Test Node 1',
-				order: 1,
 				canonicalQuestion: 'What is the answer?',
 				coverageTopics: [],
-				sufficiencyCriteria: [],
+				documentId: docId,
+				id: nodeId,
+				order: 1,
+				phaseId: 'phase-1',
 				promptRefs: {},
+				sufficiencyCriteria: [],
+				title: 'Test Node 1',
 			},
 		],
-		materializationRules: [],
+		phases: [
+			{
+				id: 'phase-1',
+				order: 1,
+				purpose: 'Testing',
+				title: 'Phase 1',
+			},
+		],
+		title: 'Test Profile',
+		version: '1.0.0',
 		...overrides,
 	};
 }
@@ -201,8 +200,8 @@ describe('resolveSessionMode', () => {
 	it('returns "node_focus" when valid activeNodeId with matching profile', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: `${profile.id}-node-1` as NodeId,
+			selectedProfileId: profile.id,
 		});
 
 		const mode = resolveSessionMode(state, profile);
@@ -226,8 +225,8 @@ describe('resolveSessionMode', () => {
 
 	it('returns "error" when activeNodeId is set but profile definition not supplied', () => {
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: 'some-profile' as ProfileId,
 			activeNodeId: 'some-node' as NodeId,
+			selectedProfileId: 'some-profile' as ProfileId,
 		});
 
 		// No profile supplied — cannot validate the node.
@@ -240,8 +239,8 @@ describe('resolveSessionMode', () => {
 	it('returns "error" when activeNodeId does not exist in profile', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: 'nonexistent-node' as NodeId,
+			selectedProfileId: profile.id,
 		});
 
 		const mode = resolveSessionMode(state, profile);
@@ -253,8 +252,8 @@ describe('resolveSessionMode', () => {
 	it('returns "error" when profile.id != state.selectedProfileId', () => {
 		const profile = minimalProfile({ id: 'profile-a' as ProfileId });
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: 'profile-b' as ProfileId,
 			activeNodeId: 'profile-a-node-1' as NodeId,
+			selectedProfileId: 'profile-b' as ProfileId,
 		});
 
 		const mode = resolveSessionMode(state, profile);
@@ -266,8 +265,8 @@ describe('resolveSessionMode', () => {
 	it('does not mutate the input state', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: `${profile.id}-node-1` as NodeId,
+			selectedProfileId: profile.id,
 		});
 		const original = cloneState(state);
 
@@ -280,8 +279,8 @@ describe('resolveSessionMode', () => {
 	it('is deterministic — same inputs always produce the same output', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: `${profile.id}-node-1` as NodeId,
+			selectedProfileId: profile.id,
 		});
 
 		const r1 = resolveSessionMode(state, profile);
@@ -326,8 +325,8 @@ describe('resolveSessionModeWithDiagnostics', () => {
 	it('returns node_focus with no diagnostics for valid active node', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: `${profile.id}-node-1` as NodeId,
+			selectedProfileId: profile.id,
 		});
 
 		const result = resolveSessionModeWithDiagnostics(state, profile);
@@ -347,26 +346,26 @@ describe('resolveSessionModeWithDiagnostics', () => {
 
 		expect(result.mode).toBe('error');
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
+		expect(result.diagnostics[0]?.code).toBe(
 			'LOGOS_STATE_ACTIVE_NODE_WITHOUT_PROFILE',
 		);
-		expect(result.diagnostics[0]!.severity).toBe('error');
-		expect(result.diagnostics[0]!.sourceId).toBe('orphan');
+		expect(result.diagnostics[0]?.severity).toBe('error');
+		expect(result.diagnostics[0]?.sourceId).toBe('orphan');
 	});
 
 	// ── error: missing profile definition ──────────────────────────────
 
 	it('returns error with diagnostic when profile definition is missing', () => {
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: 'p' as ProfileId,
 			activeNodeId: 'n' as NodeId,
+			selectedProfileId: 'p' as ProfileId,
 		});
 
 		const result = resolveSessionModeWithDiagnostics(state); // no profile
 
 		expect(result.mode).toBe('error');
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
+		expect(result.diagnostics[0]?.code).toBe(
 			'LOGOS_STATE_PROFILE_DEFINITION_REQUIRED',
 		);
 	});
@@ -376,17 +375,15 @@ describe('resolveSessionModeWithDiagnostics', () => {
 	it('returns error with diagnostic for profile ID mismatch', () => {
 		const profile = minimalProfile({ id: 'alpha' as ProfileId });
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: 'beta' as ProfileId,
 			activeNodeId: 'alpha-node-1' as NodeId,
+			selectedProfileId: 'beta' as ProfileId,
 		});
 
 		const result = resolveSessionModeWithDiagnostics(state, profile);
 
 		expect(result.mode).toBe('error');
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_PROFILE_MISMATCH',
-		);
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_PROFILE_MISMATCH');
 	});
 
 	// ── error: node not in profile ─────────────────────────────────────
@@ -394,18 +391,16 @@ describe('resolveSessionModeWithDiagnostics', () => {
 	it('returns error with diagnostic for node not in profile', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: 'ghost-node' as NodeId,
+			selectedProfileId: profile.id,
 		});
 
 		const result = resolveSessionModeWithDiagnostics(state, profile);
 
 		expect(result.mode).toBe('error');
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_NODE_NOT_IN_PROFILE',
-		);
-		expect(result.diagnostics[0]!.sourceId).toBe('ghost-node');
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_NODE_NOT_IN_PROFILE');
+		expect(result.diagnostics[0]?.sourceId).toBe('ghost-node');
 	});
 
 	// ── multiple errors are not accumulated (first error wins) ────────
@@ -421,7 +416,7 @@ describe('resolveSessionModeWithDiagnostics', () => {
 		expect(result.mode).toBe('error');
 		// Only one diagnostic — the first guard that failed.
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
+		expect(result.diagnostics[0]?.code).toBe(
 			'LOGOS_STATE_ACTIVE_NODE_WITHOUT_PROFILE',
 		);
 	});
@@ -431,8 +426,8 @@ describe('resolveSessionModeWithDiagnostics', () => {
 	it('does not mutate input state or profile', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: 'ghost' as NodeId,
+			selectedProfileId: profile.id,
 		});
 		const originalState = cloneState(state);
 		const originalProfile = JSON.parse(JSON.stringify(profile));
@@ -448,8 +443,8 @@ describe('resolveSessionModeWithDiagnostics', () => {
 	it('is deterministic across calls', () => {
 		const profile = minimalProfile();
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: profile.id,
 			activeNodeId: `${profile.id}-node-1` as NodeId,
+			selectedProfileId: profile.id,
 		});
 
 		const r1 = resolveSessionModeWithDiagnostics(state, profile);
@@ -470,17 +465,15 @@ describe('mode transitions', () => {
 		// then changed to profile B without clearing activeNodeId.
 		const profileB = minimalProfile({ id: 'profile-b' as ProfileId });
 		const state = patchRuntimeState(createSession(), {
-			selectedProfileId: 'profile-b' as ProfileId,
 			activeNodeId: 'profile-a-node-1' as NodeId, // stale — belongs to profile-a
+			selectedProfileId: 'profile-b' as ProfileId,
 		});
 
 		const result = resolveSessionModeWithDiagnostics(state, profileB);
 
 		expect(result.mode).toBe('error');
 		// The profile IDs match, but the node doesn't exist in profile B.
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_NODE_NOT_IN_PROFILE',
-		);
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_NODE_NOT_IN_PROFILE');
 	});
 
 	it('transitions from node_focus to structure_overview after changeProfile', () => {
@@ -490,11 +483,9 @@ describe('mode transitions', () => {
 		// Start session, select alpha, then change to beta.
 		const initial = createSession();
 
-		const selectResult = selectProfile(
-			initial,
-			'alpha' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const selectResult = selectProfile(initial, 'alpha' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!selectResult.ok) throw new Error('Expected ok');
 
 		// After selectProfile, mode should be structure_overview.
@@ -514,11 +505,9 @@ describe('mode transitions', () => {
 		writeMinimalProfile(tempDir, 'test-profile');
 		const initial = createSession();
 
-		const result = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const result = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!result.ok) throw new Error('Expected ok');
 
 		// After selecting a profile with no active node, mode is structure_overview.

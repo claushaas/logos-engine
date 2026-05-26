@@ -25,11 +25,16 @@ import type {
 	NodeRuntimeState,
 	PromptState,
 } from '../contracts/index.js';
+import { buildDependencyGraph, getProfile } from '../profiles/index.js';
 import type { NodeId } from '../shared/index.js';
 import { nowIso } from '../shared/index.js';
-import { buildDependencyGraph, getProfile } from '../profiles/index.js';
-import { diagnostic, stateErr, stateOk, type StateEngineResult } from './types.js';
 import { resolveSessionMode } from './session-mode.js';
+import {
+	diagnostic,
+	type StateEngineResult,
+	stateErr,
+	stateOk,
+} from './types.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Diagnostic codes
@@ -188,17 +193,14 @@ export function selectNode(
 		options?.profileDirectory,
 	);
 	if (!profileResult.ok) {
-		return stateErr(
-			`Failed to load profile "${state.selectedProfileId}"`,
-			[
-				diagnostic(
-					DIAG_PROFILE_LOAD_FAILED,
-					profileResult.error.userFacingMessage,
-					'error',
-					state.selectedProfileId,
-				),
-			],
-		);
+		return stateErr(`Failed to load profile "${state.selectedProfileId}"`, [
+			diagnostic(
+				DIAG_PROFILE_LOAD_FAILED,
+				profileResult.error.userFacingMessage,
+				'error',
+				state.selectedProfileId,
+			),
+		]);
 	}
 	const profile: LogosProfile = profileResult.value;
 

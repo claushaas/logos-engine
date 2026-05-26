@@ -6,8 +6,11 @@
  *
  * @see {@link https://logos-engine/docs/02-state-engine-canonical-spec.md §12}
  */
-import type { LogosRuntimeState, RuntimeDiagnostic } from '../contracts/index.js';
-import type { SessionEvent } from '../contracts/index.js';
+import type {
+	LogosRuntimeState,
+	RuntimeDiagnostic,
+	SessionEvent,
+} from '../contracts/index.js';
 
 // ─── StateDiagnostic ────────────────────────────────────────────────────────
 
@@ -29,7 +32,11 @@ export type StateDiagnostic = RuntimeDiagnostic;
  */
 export type StateEngineResult =
 	| { readonly ok: true; readonly state: LogosRuntimeState }
-	| { readonly ok: false; readonly error: string; readonly diagnostics: StateDiagnostic[] };
+	| {
+			readonly ok: false;
+			readonly error: string;
+			readonly diagnostics: StateDiagnostic[];
+	  };
 
 // ─── StateEngineEvent ───────────────────────────────────────────────────────
 

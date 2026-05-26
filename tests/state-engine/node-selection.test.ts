@@ -20,13 +20,13 @@ import type {
 	LogosRuntimeState,
 	NodeRuntimeState,
 } from '../../src/contracts/index.js';
+import type { NodeId, ProfileId } from '../../src/shared/index.js';
 import {
 	createSession,
 	deselectNode,
 	selectNode,
 	selectProfile,
 } from '../../src/state-engine/index.js';
-import type { NodeId, ProfileId } from '../../src/shared/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Test Helpers
@@ -111,20 +111,16 @@ function setupSessionWithNode(
 ): LogosRuntimeState {
 	const initial = createSession();
 
-	const profileResult = selectProfile(
-		initial,
-		profileId as ProfileId,
-		{ profileDirectory: tempDir },
-	);
+	const profileResult = selectProfile(initial, profileId as ProfileId, {
+		profileDirectory: tempDir,
+	});
 	if (!profileResult.ok) {
 		throw new Error(`Failed to select profile: ${profileResult.error}`);
 	}
 
-	const nodeResult = selectNode(
-		profileResult.state,
-		nodeId as NodeId,
-		{ profileDirectory: tempDir },
-	);
+	const nodeResult = selectNode(profileResult.state, nodeId as NodeId, {
+		profileDirectory: tempDir,
+	});
 	if (!nodeResult.ok) {
 		throw new Error(`Failed to select node: ${nodeResult.error}`);
 	}
@@ -156,35 +152,27 @@ describe('selectNode guards', () => {
 			'Cannot select a node without a selected profile',
 		);
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_NO_PROFILE_SELECTED',
-		);
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_NO_PROFILE_SELECTED');
 	});
 
 	it('returns error when node does not exist in profile', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const initial = createSession();
 
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected profile selected');
 
-		const result = selectNode(
-			profileResult.state,
-			'nonexistent' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const result = selectNode(profileResult.state, 'nonexistent' as NodeId, {
+			profileDirectory: tempDir,
+		});
 
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected error');
 		expect(result.error).toContain('does not exist in profile');
 		expect(result.diagnostics).toHaveLength(1);
-		expect(result.diagnostics[0]!.code).toBe(
-			'LOGOS_STATE_NODE_NOT_IN_PROFILE',
-		);
+		expect(result.diagnostics[0]?.code).toBe('LOGOS_STATE_NODE_NOT_IN_PROFILE');
 	});
 
 	it('does not mutate input state on error', () => {
@@ -206,38 +194,37 @@ describe('selectNode — first selection', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		const nodeState: NodeRuntimeState | undefined =
-			state.nodeStates['node-A'];
+		const nodeState: NodeRuntimeState | undefined = state.nodeStates['node-A'];
 		expect(nodeState).toBeDefined();
-		expect(nodeState!.lifecycle).toBe('not_started');
+		expect(nodeState?.lifecycle).toBe('not_started');
 	});
 
 	it('initialises promptState to "initial" for not_started', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		expect(state.nodeStates['node-A']!.promptState).toBe('initial');
+		expect(state.nodeStates['node-A']?.promptState).toBe('initial');
 	});
 
 	it('initialises empty conversation', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		expect(state.nodeStates['node-A']!.conversation).toEqual([]);
+		expect(state.nodeStates['node-A']?.conversation).toEqual([]);
 	});
 
 	it('initialises no canonical answer', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		expect(state.nodeStates['node-A']!.canonicalAnswer).toBeNull();
+		expect(state.nodeStates['node-A']?.canonicalAnswer).toBeNull();
 	});
 
 	it('initialises empty completeness state', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		expect(state.nodeStates['node-A']!.completeness).toEqual({
+		expect(state.nodeStates['node-A']?.completeness).toEqual({
 			blockingIssues: [],
 			complete: false,
 			coverage: {},
@@ -250,7 +237,7 @@ describe('selectNode — first selection', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		expect(state.nodeStates['node-A']!.extracted).toEqual({
+		expect(state.nodeStates['node-A']?.extracted).toEqual({
 			assumptions: [],
 			decisions: [],
 			facts: [],
@@ -284,19 +271,15 @@ describe('selectNode — first selection', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const initial = createSession();
 
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected ok');
 
 		const original = cloneState(profileResult.state);
-		selectNode(
-			profileResult.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		selectNode(profileResult.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 
 		expect(profileResult.state).toEqual(original);
 	});
@@ -315,16 +298,12 @@ describe('selectNode — re-selection', () => {
 		const deselected = deselectNode(first);
 		if (!deselected.ok) throw new Error('Expected deselect ok');
 
-		const reResult = selectNode(
-			deselected.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const reResult = selectNode(deselected.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!reResult.ok) throw new Error('Expected ok');
 
-		expect(reResult.state.nodeStates['node-A']!.lifecycle).toBe(
-			'not_started',
-		);
+		expect(reResult.state.nodeStates['node-A']?.lifecycle).toBe('not_started');
 	});
 
 	it('preserves conversation on re-selection', () => {
@@ -332,21 +311,24 @@ describe('selectNode — re-selection', () => {
 		const first = setupSessionWithNode('test-profile', 'node-A');
 
 		// Simulate adding a conversation entry by patching the state.
+		const existingA = first.nodeStates['node-A'];
 		const withMsg: LogosRuntimeState = {
 			...first,
 			nodeStates: {
 				...first.nodeStates,
-				'node-A': {
-					...first.nodeStates['node-A']!,
-					conversation: [
-						{
-							id: 'msg-1',
-							role: 'user',
-							content: 'Hello',
-							createdAt: new Date().toISOString(),
-						},
-					],
-				},
+				'node-A': existingA
+					? {
+							...existingA,
+							conversation: [
+								{
+									content: 'Hello',
+									createdAt: new Date().toISOString(),
+									id: 'msg-1',
+									role: 'user',
+								},
+							],
+						}
+					: undefined,
 			},
 		};
 
@@ -354,17 +336,13 @@ describe('selectNode — re-selection', () => {
 		const deselected = deselectNode(withMsg);
 		if (!deselected.ok) throw new Error('Expected deselect ok');
 
-		const reResult = selectNode(
-			deselected.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const reResult = selectNode(deselected.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!reResult.ok) throw new Error('Expected ok');
 
-		expect(
-			reResult.state.nodeStates['node-A']!.conversation,
-		).toHaveLength(1);
-		expect(reResult.state.nodeStates['node-A']!.conversation[0]!.content).toBe(
+		expect(reResult.state.nodeStates['node-A']?.conversation).toHaveLength(1);
+		expect(reResult.state.nodeStates['node-A']?.conversation[0]?.content).toBe(
 			'Hello',
 		);
 	});
@@ -373,72 +351,62 @@ describe('selectNode — re-selection', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const first = setupSessionWithNode('test-profile', 'node-A');
 
+		const existingA2 = first.nodeStates['node-A'];
 		const withAnswer: LogosRuntimeState = {
 			...first,
 			nodeStates: {
 				...first.nodeStates,
-				'node-A': {
-					...first.nodeStates['node-A']!,
-					canonicalAnswer: {
-						content: 'This is the answer.',
-						accepted: false,
-						confidence: 'medium',
-						sourceMessageIds: [],
-						generatedAt: new Date().toISOString(),
-					},
-				},
+				'node-A': existingA2
+					? {
+							...existingA2,
+							canonicalAnswer: {
+								accepted: false,
+								confidence: 'medium',
+								content: 'This is the answer.',
+								generatedAt: new Date().toISOString(),
+								sourceMessageIds: [],
+							},
+						}
+					: undefined,
 			},
 		};
 
 		const deselected = deselectNode(withAnswer);
 		if (!deselected.ok) throw new Error('Expected deselect ok');
 
-		const reResult = selectNode(
-			deselected.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const reResult = selectNode(deselected.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!reResult.ok) throw new Error('Expected ok');
 
-		expect(
-			reResult.state.nodeStates['node-A']!.canonicalAnswer,
-		).not.toBeNull();
-		expect(
-			reResult.state.nodeStates['node-A']!.canonicalAnswer!.content,
-		).toBe('This is the answer.');
+		expect(reResult.state.nodeStates['node-A']?.canonicalAnswer).not.toBeNull();
+		expect(reResult.state.nodeStates['node-A']?.canonicalAnswer?.content).toBe(
+			'This is the answer.',
+		);
 	});
 
 	it('updates lastActiveNodeId when navigating between nodes', () => {
-		writeProfile(tempDir, 'test-profile', [
-			{ id: 'node-A' },
-			{ id: 'node-B' },
-		]);
+		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }, { id: 'node-B' }]);
 		const initial = createSession();
 
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected ok');
 
 		// Select node-A first.
-		const aResult = selectNode(
-			profileResult.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const aResult = selectNode(profileResult.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!aResult.ok) throw new Error('Expected ok');
 		// No previous active node → lastActiveNodeId should still be null.
 		expect(aResult.state.lastActiveNodeId).toBeNull();
 		expect(aResult.state.activeNodeId).toBe('node-A');
 
 		// Now select node-B.
-		const bResult = selectNode(
-			aResult.state,
-			'node-B' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const bResult = selectNode(aResult.state, 'node-B' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!bResult.ok) throw new Error('Expected ok');
 		// lastActiveNodeId should now be node-A.
 		expect(bResult.state.lastActiveNodeId).toBe('node-A');
@@ -465,29 +433,23 @@ describe('selectNode — re-selection', () => {
 
 		// First select node-B (blocked, since node-A is not accepted).
 		const initial = createSession();
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected ok');
 
-		const bFirst = selectNode(
-			profileResult.state,
-			'node-B' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const bFirst = selectNode(profileResult.state, 'node-B' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!bFirst.ok) throw new Error('Expected ok');
-		expect(bFirst.state.nodeStates['node-B']!.lifecycle).toBe('blocked');
-		expect(bFirst.state.nodeStates['node-B']!.dependencies.blockedBy).toEqual(
-			['node-A'],
-		);
+		expect(bFirst.state.nodeStates['node-B']?.lifecycle).toBe('blocked');
+		expect(bFirst.state.nodeStates['node-B']?.dependencies.blockedBy).toEqual([
+			'node-A',
+		]);
 
 		// Manually accept node-A by patching its node state.
 		const aNodeState: NodeRuntimeState = {
-			nodeId: 'node-A' as NodeId,
-			lifecycle: 'accepted',
-			conversation: [],
+			allowedActions: [],
 			canonicalAnswer: null,
 			completeness: {
 				blockingIssues: [],
@@ -496,6 +458,12 @@ describe('selectNode — re-selection', () => {
 				missing: [],
 				weak: [],
 			},
+			conversation: [],
+			dependencies: {
+				blockedBy: [],
+				requiredNodeIds: [],
+				unlocks: ['node-B'],
+			},
 			extracted: {
 				assumptions: [],
 				decisions: [],
@@ -503,13 +471,9 @@ describe('selectNode — re-selection', () => {
 				openQuestions: [],
 				risks: [],
 			},
+			lifecycle: 'accepted',
+			nodeId: 'node-A' as NodeId,
 			promptState: 'accepted',
-			allowedActions: [],
-			dependencies: {
-				requiredNodeIds: [],
-				blockedBy: [],
-				unlocks: ['node-B'],
-			},
 			updatedAt: new Date().toISOString(),
 		};
 
@@ -525,20 +489,16 @@ describe('selectNode — re-selection', () => {
 		const deselected = deselectNode(withAAccepted);
 		if (!deselected.ok) throw new Error('Expected deselect ok');
 
-		const bSecond = selectNode(
-			deselected.state,
-			'node-B' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const bSecond = selectNode(deselected.state, 'node-B' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!bSecond.ok) throw new Error('Expected ok');
 
 		// node-B was blocked, now dependencies are met → auto-resolved to not_started.
-		expect(bSecond.state.nodeStates['node-B']!.lifecycle).toBe(
-			'not_started',
+		expect(bSecond.state.nodeStates['node-B']?.lifecycle).toBe('not_started');
+		expect(bSecond.state.nodeStates['node-B']?.dependencies.blockedBy).toEqual(
+			[],
 		);
-		expect(
-			bSecond.state.nodeStates['node-B']!.dependencies.blockedBy,
-		).toEqual([]);
 	});
 });
 
@@ -554,8 +514,8 @@ describe('selectNode — blocked nodes', () => {
 		]);
 		const state = setupSessionWithNode('test-profile', 'node-B');
 
-		expect(state.nodeStates['node-B']!.lifecycle).toBe('blocked');
-		expect(state.nodeStates['node-B']!.promptState).toBe('blocked');
+		expect(state.nodeStates['node-B']?.lifecycle).toBe('blocked');
+		expect(state.nodeStates['node-B']?.promptState).toBe('blocked');
 	});
 
 	it('populates dependencies.blockedBy with unmet dependency IDs', () => {
@@ -565,7 +525,7 @@ describe('selectNode — blocked nodes', () => {
 		]);
 		const state = setupSessionWithNode('test-profile', 'node-B');
 
-		expect(state.nodeStates['node-B']!.dependencies.blockedBy).toEqual([
+		expect(state.nodeStates['node-B']?.dependencies.blockedBy).toEqual([
 			'node-A',
 		]);
 	});
@@ -577,9 +537,9 @@ describe('selectNode — blocked nodes', () => {
 		]);
 		const state = setupSessionWithNode('test-profile', 'node-B');
 
-		expect(
-			state.nodeStates['node-B']!.dependencies.requiredNodeIds,
-		).toEqual(['node-A']);
+		expect(state.nodeStates['node-B']?.dependencies.requiredNodeIds).toEqual([
+			'node-A',
+		]);
 	});
 
 	it('populates dependencies.unlocks from the graph', () => {
@@ -590,7 +550,7 @@ describe('selectNode — blocked nodes', () => {
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
 		// node-A unlocks node-B.
-		expect(state.nodeStates['node-A']!.dependencies.unlocks).toEqual([
+		expect(state.nodeStates['node-A']?.dependencies.unlocks).toEqual([
 			'node-B',
 		]);
 	});
@@ -599,10 +559,8 @@ describe('selectNode — blocked nodes', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const state = setupSessionWithNode('test-profile', 'node-A');
 
-		expect(state.nodeStates['node-A']!.lifecycle).toBe('not_started');
-		expect(
-			state.nodeStates['node-A']!.dependencies.blockedBy,
-		).toEqual([]);
+		expect(state.nodeStates['node-A']?.lifecycle).toBe('not_started');
+		expect(state.nodeStates['node-A']?.dependencies.blockedBy).toEqual([]);
 	});
 
 	it('blocked node is still navigable (activeNodeId is set)', () => {
@@ -624,9 +582,8 @@ describe('selectNode — blocked nodes', () => {
 		]);
 		const state = setupSessionWithNode('test-profile', 'node-C');
 
-		expect(state.nodeStates['node-C']!.lifecycle).toBe('blocked');
-		const blockedBy =
-			state.nodeStates['node-C']!.dependencies.blockedBy;
+		expect(state.nodeStates['node-C']?.lifecycle).toBe('blocked');
+		const blockedBy = state.nodeStates['node-C']?.dependencies.blockedBy;
 		expect(blockedBy).toHaveLength(2);
 		expect(blockedBy).toContain('node-A');
 		expect(blockedBy).toContain('node-B');
@@ -666,9 +623,7 @@ describe('deselectNode', () => {
 		if (!result.ok) throw new Error('Expected ok');
 
 		expect(result.state.nodeStates['node-A']).toBeDefined();
-		expect(result.state.nodeStates['node-A']!.lifecycle).toBe(
-			'not_started',
-		);
+		expect(result.state.nodeStates['node-A']?.lifecycle).toBe('not_started');
 	});
 
 	it('updates lastActiveNodeId to the deselected node', () => {
@@ -685,11 +640,9 @@ describe('deselectNode', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 		const initial = createSession();
 
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected ok');
 
 		// activeNodeId is already null — but mode is always recomputed.
@@ -750,25 +703,19 @@ describe('navigation flow (end-to-end)', () => {
 		writeProfile(tempDir, 'test-profile', [{ id: 'node-A' }]);
 
 		const initial = createSession();
-		const profileResult = selectProfile(
-			initial,
-			'test-profile' as ProfileId,
-			{ profileDirectory: tempDir },
-		);
+		const profileResult = selectProfile(initial, 'test-profile' as ProfileId, {
+			profileDirectory: tempDir,
+		});
 		if (!profileResult.ok) throw new Error('Expected ok');
 
 		// First selection.
-		const first = selectNode(
-			profileResult.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const first = selectNode(profileResult.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!first.ok) throw new Error('Expected ok');
 		expect(first.state.mode).toBe('node_focus');
 		expect(first.state.activeNodeId).toBe('node-A');
-		expect(
-			first.state.nodeStates['node-A']!.lifecycle,
-		).toBe('not_started');
+		expect(first.state.nodeStates['node-A']?.lifecycle).toBe('not_started');
 
 		// Deselect.
 		const deselected = deselectNode(first.state);
@@ -777,21 +724,19 @@ describe('navigation flow (end-to-end)', () => {
 		expect(deselected.state.activeNodeId).toBeNull();
 		expect(deselected.state.lastActiveNodeId).toBe('node-A');
 		// Node state preserved.
-		expect(
-			deselected.state.nodeStates['node-A']!.lifecycle,
-		).toBe('not_started');
+		expect(deselected.state.nodeStates['node-A']?.lifecycle).toBe(
+			'not_started',
+		);
 
 		// Re-select.
-		const reselected = selectNode(
-			deselected.state,
-			'node-A' as NodeId,
-			{ profileDirectory: tempDir },
-		);
+		const reselected = selectNode(deselected.state, 'node-A' as NodeId, {
+			profileDirectory: tempDir,
+		});
 		if (!reselected.ok) throw new Error('Expected ok');
 		expect(reselected.state.mode).toBe('node_focus');
 		expect(reselected.state.activeNodeId).toBe('node-A');
-		expect(
-			reselected.state.nodeStates['node-A']!.lifecycle,
-		).toBe('not_started');
+		expect(reselected.state.nodeStates['node-A']?.lifecycle).toBe(
+			'not_started',
+		);
 	});
 });

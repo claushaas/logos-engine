@@ -12,11 +12,16 @@ import type {
 	LogosRuntimeState,
 	RuntimeDocumentState,
 } from '../contracts/index.js';
+import { getProfile, listProfiles } from '../profiles/index.js';
 import type { ProfileId, SessionId } from '../shared/index.js';
 import { generateId, nowIso } from '../shared/index.js';
-import { getProfile, listProfiles } from '../profiles/index.js';
-import { diagnostic, stateErr, stateOk, type StateEngineResult } from './types.js';
 import { resolveSessionMode } from './session-mode.js';
+import {
+	diagnostic,
+	type StateEngineResult,
+	stateErr,
+	stateOk,
+} from './types.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // State change helpers (pure — always return new objects)

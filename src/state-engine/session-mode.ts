@@ -12,11 +12,12 @@
  * @see {@link https://logos-engine/docs/02-state-engine-canonical-spec.md §5-6}
  * @see {@link https://logos-engine/docs/08-tui-state-and-rendering-contract.md §3}
  */
-import type { LogosProfile, LogosRuntimeState, SessionMode } from '../contracts/index.js';
-import {
-	diagnostic,
-	type StateDiagnostic,
-} from './types.js';
+import type {
+	LogosProfile,
+	LogosRuntimeState,
+	SessionMode,
+} from '../contracts/index.js';
+import { diagnostic, type StateDiagnostic } from './types.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Diagnostic codes
@@ -25,7 +26,8 @@ import {
 const DIAG_ACTIVE_NODE_NO_PROFILE = 'LOGOS_STATE_ACTIVE_NODE_WITHOUT_PROFILE';
 const DIAG_PROFILE_MISMATCH = 'LOGOS_STATE_PROFILE_MISMATCH';
 const DIAG_NODE_NOT_IN_PROFILE = 'LOGOS_STATE_NODE_NOT_IN_PROFILE';
-const DIAG_PROFILE_DEFINITION_REQUIRED = 'LOGOS_STATE_PROFILE_DEFINITION_REQUIRED';
+const DIAG_PROFILE_DEFINITION_REQUIRED =
+	'LOGOS_STATE_PROFILE_DEFINITION_REQUIRED';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Public types
@@ -118,9 +120,7 @@ export function resolveSessionModeWithDiagnostics(
 		}
 
 		// Validate that activeNodeId exists in the profile's node definitions.
-		const nodeExists = profile.nodes.some(
-			(n) => n.id === state.activeNodeId,
-		);
+		const nodeExists = profile.nodes.some((n) => n.id === state.activeNodeId);
 		if (!nodeExists) {
 			return {
 				diagnostics: [
