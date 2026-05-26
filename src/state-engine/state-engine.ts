@@ -16,6 +16,7 @@ import type { NodeId, ProfileId, SessionId } from '../shared/index.js';
 import { generateId, nowIso } from '../shared/index.js';
 import { getProfile, listProfiles } from '../profiles/index.js';
 import { diagnostic, stateErr, stateOk, type StateEngineResult } from './types.js';
+import { resolveSessionMode } from './session-mode.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // State change helpers (pure — always return new objects)
@@ -131,16 +132,16 @@ export function selectProfile(
 
 	// Transition to structure_overview — reset all node/document runtime state.
 	const profile = result.value;
-	return stateOk(
-		patchState(state, {
-			activeNodeId: null,
-			documentStates: {} as Record<string, RuntimeDocumentState>,
-			lastActiveNodeId: null,
-			mode: 'structure_overview',
-			nodeStates: {},
-			selectedProfileId: profile.id,
-		}),
-	);
+	const nextState = patchState(state, {
+		activeNodeId: null,
+		documentStates: {} as Record<string, RuntimeDocumentState>,
+		lastActiveNodeId: null,
+		nodeStates: {},
+		selectedProfileId: profile.id,
+	});
+	// Compute mode via the resolver instead of hardcoding.
+	const mode = resolveSessionMode(nextState, profile);
+	return stateOk(patchState(nextState, { mode }));
 }
 
 /**

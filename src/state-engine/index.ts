@@ -8,6 +8,8 @@
  * Exports:
  * - State engine operations: `createSession`, `selectProfile`,
  *   `changeProfile`, `selectNode`
+ * - Session mode resolution: `resolveSessionMode`,
+ *   `resolveSessionModeWithDiagnostics`, `SessionModeResolution`
  * - Type helpers: `StateEngineResult`, `StateDiagnostic`,
  *   `StateEngineEvent`, `diagnostic`, `stateOk`, `stateErr`
  */
@@ -17,6 +19,11 @@ export {
 	selectNode,
 	selectProfile,
 } from './state-engine.js';
+export {
+	resolveSessionMode,
+	resolveSessionModeWithDiagnostics,
+	type SessionModeResolution,
+} from './session-mode.js';
 export {
 	diagnostic,
 	stateErr,
