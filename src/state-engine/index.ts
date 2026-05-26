@@ -7,12 +7,25 @@
  *
  * Exports:
  * - State engine operations: `createSession`, `selectProfile`,
- *   `changeProfile`, `selectNode`
+ *   `changeProfile`, `selectNode`, `applyLifecycleTransition`
+ * - Lifecycle validation: `isValidTransition`, `allLifecycles`
  * - Session mode resolution: `resolveSessionMode`,
  *   `resolveSessionModeWithDiagnostics`, `SessionModeResolution`
  * - Type helpers: `StateEngineResult`, `StateDiagnostic`,
  *   `StateEngineEvent`, `diagnostic`, `stateOk`, `stateErr`
  */
+export {
+	type ApplyLifecycleTransitionOptions,
+	allLifecycles,
+	applyLifecycleTransition,
+	isValidTransition,
+	type LifecycleTransitionEvent,
+} from './node-lifecycle.js';
+export {
+	resolveSessionMode,
+	resolveSessionModeWithDiagnostics,
+	type SessionModeResolution,
+} from './session-mode.js';
 export {
 	changeProfile,
 	createSession,
@@ -21,15 +34,10 @@ export {
 	selectProfile,
 } from './state-engine.js';
 export {
-	resolveSessionMode,
-	resolveSessionModeWithDiagnostics,
-	type SessionModeResolution,
-} from './session-mode.js';
-export {
 	diagnostic,
-	stateErr,
-	stateOk,
 	type StateDiagnostic,
 	type StateEngineEvent,
 	type StateEngineResult,
+	stateErr,
+	stateOk,
 } from './types.js';
