@@ -13,12 +13,26 @@ export type {
 	PromptId,
 	SessionId,
 } from '../shared/index.js';
+// Step 1.3 — Agent turn output and transition contracts.
+export type {
+	AgentDiagnostic,
+	AgentTurnOutput,
+	TransitionEvent,
+	TransitionIntent,
+} from './agent-turn.js';
 // Step 1.2 — Runtime state, node state, canonical answer, and completeness types.
 export type {
 	CanonicalAnswer,
 	CanonicalAnswerDraft,
 } from './canonical-answer.js';
 export type { CompletenessState, ExtractedNodeData } from './completeness.js';
+// Step 1.3 — Message and conversation contracts.
+export type {
+	NodeConversation,
+	NodeMessage,
+	NodeMessageMetadata,
+	NodeMessageRole,
+} from './conversation.js';
 export type {
 	NodeAction,
 	NodeConversationEntry,

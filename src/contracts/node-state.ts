@@ -10,16 +10,14 @@
 import type { NodeId } from '../shared/index.js';
 import type { CanonicalAnswer } from './canonical-answer.js';
 import type { CompletenessState, ExtractedNodeData } from './completeness.js';
+import type { NodeMessage } from './conversation.js';
 
-// ─── Conversation entry placeholder ────────────────────────────────────────
+// ─── Conversation entry — resolved from Step 1.3 ──────────────────────────
 
 /**
- * Opaque placeholder — concrete `NodeMessage` contract defined in Step 1.3.
- *
- * Lived here (not in `runtime-state.ts`) to avoid a type-level circular
- * dependency between `runtime-state.ts` and `node-state.ts`.
+ * Concrete `NodeMessage` contract resolved from Step 1.3.
  */
-export type NodeConversationEntry = unknown;
+export type NodeConversationEntry = NodeMessage;
 
 // ─── NodeLifecycle ──────────────────────────────────────────────────────────
 
