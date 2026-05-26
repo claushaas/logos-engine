@@ -280,9 +280,9 @@ describe('changeProfile', () => {
 	});
 });
 
-// ─── selectNode (guard-only, Step 3.1) ─────────────────────────────────────
+// ─── selectNode ─────────────────────────────────────────────────────
 
-describe('selectNode (guard)', () => {
+describe('selectNode', () => {
 	it('returns error when no profile is selected', () => {
 		const initial = createSession();
 
@@ -298,7 +298,7 @@ describe('selectNode (guard)', () => {
 		);
 	});
 
-	it('passes the guard when a profile is selected (returns state unchanged)', () => {
+	it('sets activeNodeId and transitions to node_focus when profile is selected', () => {
 		writeMinimalProfile(tempDir, 'test-profile');
 		const initial = createSession();
 
@@ -312,14 +312,23 @@ describe('selectNode (guard)', () => {
 		const nodeResult = selectNode(
 			profileResult.state,
 			'test-profile-node-1' as NodeId,
+			{ profileDirectory: tempDir },
 		);
 
 		expect(nodeResult.ok).toBe(true);
 		if (!nodeResult.ok) throw new Error('Expected ok');
 
-		// Guard passes — state is returned unchanged (full implementation
-		// deferred to Step 3.3).
-		expect(nodeResult.state).toEqual(profileResult.state);
+		// Full implementation (Step 3.3): state is now mutated — activeNodeId
+		// is set, NodeRuntimeState is initialised, and mode transitions to
+		// node_focus.
+		expect(nodeResult.state.activeNodeId).toBe('test-profile-node-1');
+		expect(nodeResult.state.mode).toBe('node_focus');
+		expect(
+			nodeResult.state.nodeStates['test-profile-node-1'],
+		).toBeDefined();
+		expect(
+			nodeResult.state.nodeStates['test-profile-node-1']!.lifecycle,
+		).toBe('not_started');
 	});
 
 	it('does not mutate input state', () => {

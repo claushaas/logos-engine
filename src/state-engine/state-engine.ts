@@ -12,7 +12,7 @@ import type {
 	LogosRuntimeState,
 	RuntimeDocumentState,
 } from '../contracts/index.js';
-import type { NodeId, ProfileId, SessionId } from '../shared/index.js';
+import type { ProfileId, SessionId } from '../shared/index.js';
 import { generateId, nowIso } from '../shared/index.js';
 import { getProfile, listProfiles } from '../profiles/index.js';
 import { diagnostic, stateErr, stateOk, type StateEngineResult } from './types.js';
@@ -166,36 +166,7 @@ export function changeProfile(
 	return selectProfile(state, profileId, options);
 }
 
-/**
- * Select a node for focused conversation (guard-only for Step 3.1).
- *
- * **Step 3.1 scope:** This function only enforces the guard that a
- * profile must be selected before any node selection. Full node
- * selection — resolving node definitions, initialising `NodeRuntimeState`,
- * computing dependencies, and transitioning to `mode: "node_focus"` —
- * is deferred to Step 3.3.
- *
- * @param state  - The current runtime state (not mutated).
- * @param nodeId - The ID of the node to select.
- * @returns A successful result with unchanged state if the guard passes,
- *   or an error result with diagnostics if no profile is selected.
- */
-export function selectNode(
-	state: LogosRuntimeState,
-	nodeId: NodeId,
-): StateEngineResult {
-	if (state.selectedProfileId === null) {
-		return stateErr('Cannot select a node without a selected profile', [
-			diagnostic(
-				'LOGOS_STATE_NO_PROFILE_SELECTED',
-				'A profile must be selected before selecting a node.',
-				'error',
-				nodeId,
-			),
-		]);
-	}
-
-	// Guard passes — full implementation in Step 3.3.
-	// Return state unchanged for now.
-	return stateOk(state);
-}
+// Node selection and deselection — delegated to node-selection.ts (Step 3.3).
+// Re-exported so existing consumers (e.g., tests importing from state-engine.js)
+// continue to work.
+export { deselectNode, selectNode } from './node-selection.js';

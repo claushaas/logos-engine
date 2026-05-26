@@ -16,6 +16,7 @@
 export {
 	changeProfile,
 	createSession,
+	deselectNode,
 	selectNode,
 	selectProfile,
 } from './state-engine.js';
