@@ -8,9 +8,7 @@ describe('date utilities', () => {
 	describe('nowIso', () => {
 		it('returns an ISO 8601 string ending with Z', () => {
 			const iso = nowIso();
-			expect(iso).toMatch(
-				/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
-			);
+			expect(iso).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
 		});
 
 		it('produces a date close to the current time', () => {
@@ -45,7 +43,7 @@ describe('date utilities', () => {
 		it('parses a valid ISO string into a Date', () => {
 			const result = parseIsoDate('2024-01-15T10:30:00.000Z');
 			expect(result).toBeInstanceOf(Date);
-			expect(result!.toISOString()).toBe('2024-01-15T10:30:00.000Z');
+			expect(result?.toISOString()).toBe('2024-01-15T10:30:00.000Z');
 		});
 
 		it('returns null for invalid ISO strings', () => {

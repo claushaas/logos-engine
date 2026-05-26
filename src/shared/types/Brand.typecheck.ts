@@ -8,7 +8,13 @@
  * Uses the `Expect<T extends true>` pattern: if the expression evaluates
  * to `false`, the constraint `false extends true` fails at compile time.
  */
-import type { DocumentId, NodeId, ProfileId, PromptId, SessionId } from './Brand.js';
+import type {
+	DocumentId,
+	NodeId,
+	ProfileId,
+	PromptId,
+	SessionId,
+} from './Brand.js';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 

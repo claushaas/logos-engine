@@ -59,9 +59,7 @@ describe('invariant', () => {
 			invariant(false, 'node must have a profile');
 			expect.fail('should have thrown');
 		} catch (e) {
-			expect((e as LogosError).message).toContain(
-				'node must have a profile',
-			);
+			expect((e as LogosError).message).toContain('node must have a profile');
 		}
 	});
 

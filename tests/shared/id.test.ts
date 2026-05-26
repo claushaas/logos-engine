@@ -1,7 +1,7 @@
 /**
  * Tests for `generateId()` — uniqueness, sortability, and format.
  */
-import { describe, expect, it, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { generateId } from '../../src/shared/index.js';
 import { _resetIdCounter } from '../../src/shared/utils/id.js';
 
@@ -47,7 +47,9 @@ describe('generateId', () => {
 		const id1 = generateId();
 		const id2 = generateId();
 
+		// biome-ignore lint/style/noNonNullAssertion: format validated by regex test above
 		const counter1 = Number.parseInt(id1.split('_')[1]!, 10);
+		// biome-ignore lint/style/noNonNullAssertion: format validated by regex test above
 		const counter2 = Number.parseInt(id2.split('_')[1]!, 10);
 
 		// If they share the same timestamp, counter2 > counter1.
