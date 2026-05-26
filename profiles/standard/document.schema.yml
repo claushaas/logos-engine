@@ -42,6 +42,8 @@ schema:
       - reviewRules
       - metadata
       - specializedFormats
+      - interview
+      - reviewChecklist
 
     fields:
       id:
@@ -507,9 +509,11 @@ schema:
             default: true
           questions:
             type: "array<string>"
-            required: true
+            required: false
             description: >
               Questions that guide generation of the section.
+              @deprecated Use document.interview.coverageTopics[].sourceQuestions instead.
+              Preserved for backward compatibility during migration.
           outputGuidance:
             type: "array<string>"
             required: false
@@ -623,6 +627,161 @@ schema:
           tags:
             type: "array<string>"
             required: false
+
+      interview:
+        type: "object"
+        required: false
+        description: >
+          New interview model using a single canonical question with coverage topics.
+          Replaces the linear-question interview pattern. Old sections[].questions are
+          preserved for backward compatibility.
+        fields:
+          mode:
+            type: "string"
+            required: true
+            allowedValues:
+              - "canonical_question_with_coverage"
+            description: "Interview mode. Currently only canonical_question_with_coverage is supported."
+          canonicalQuestion:
+            type: "string"
+            required: true
+            description: >
+              Broad, synthetic question that covers the document's intent. The user answers this
+              single question instead of many individual section questions.
+          expectedAnswerShape:
+            type: "object"
+            required: true
+            fields:
+              style:
+                type: "string"
+                required: true
+                allowedValues: ["freeform_structured", "narrative", "bullets", "mixed"]
+              allowBullets:
+                type: "boolean"
+                required: true
+              allowNarrative:
+                type: "boolean"
+                required: true
+              preferredDepth:
+                type: "string"
+                required: false
+                allowedValues: ["brief", "medium", "deep"]
+          coverageTopics:
+            type: "array<object>"
+            required: true
+            description: >
+              Topics the answer must cover. Each topic maps to one or more old section questions.
+              These are used for evaluation, not as interview turns.
+            itemFields:
+              id:
+                type: "string"
+                required: true
+              label:
+                type: "string"
+                required: true
+              required:
+                type: "boolean"
+                required: true
+              description:
+                type: "string"
+                required: true
+              evaluationHint:
+                type: "string"
+                required: false
+              extractionHints:
+                type: "array<string>"
+                required: false
+              generationHints:
+                type: "array<string>"
+                required: false
+              sourceQuestions:
+                type: "array<string>"
+                required: true
+                description: >
+                  Preserved old questions from sections[].questions. These are coverage criteria,
+                  not interview turns.
+              targetSections:
+                type: "array<string>"
+                required: false
+                description: "Document sections this topic maps to during generation."
+          sufficiency:
+            type: "object"
+            required: true
+            fields:
+              requiredTopicsMustBeCovered:
+                type: "boolean"
+                required: true
+              requiredCoverageRatio:
+                type: "number"
+                required: false
+              minimumRequiredCoverage:
+                type: "array<string>"
+                required: false
+              maxFollowUps:
+                type: "integer"
+                required: true
+              allowPartialGeneration:
+                type: "boolean"
+                required: true
+          followUpPolicy:
+            type: "object"
+            required: true
+            fields:
+              askOnlyAboutMissingTopics:
+                type: "boolean"
+                required: true
+              maxMissingTopicsPerFollowUp:
+                type: "integer"
+                required: true
+              groupRelatedTopics:
+                type: "boolean"
+                required: true
+              allowPartialGenerationAfterMaxFollowUps:
+                type: "boolean"
+                required: true
+          generationMapping:
+            type: "record"
+            required: false
+            description: "Maps coverage topic IDs to target document sections."
+            valueFields:
+              targetSections:
+                type: "array<string>"
+                required: true
+
+      reviewChecklist:
+        type: "object"
+        required: false
+        description: >
+          Structured review checklist derived from qualityChecks + reviewRules.
+        fields:
+          documentId:
+            type: "string"
+            required: true
+          items:
+            type: "array<object>"
+            required: true
+            itemFields:
+              id:
+                type: "string"
+                required: true
+              category:
+                type: "string"
+                required: true
+                allowedValues:
+                  - "completeness"
+                  - "clarity"
+                  - "consistency"
+                  - "traceability"
+                  - "decision_quality"
+              description:
+                type: "string"
+                required: true
+              sourceSectionId:
+                type: "string"
+                required: false
+              sourceTopicId:
+                type: "string"
+                required: false
 
   outputPolicy:
     canonical:

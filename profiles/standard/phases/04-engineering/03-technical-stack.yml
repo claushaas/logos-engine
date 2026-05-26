@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 3
   type: "technical_stack"
-  purpose: "Define the concrete implementation technologies, versions, constraints, rationale, alternatives, dependency policies, maintenance rules, and stack risks used to build and operate the system."
-  centralQuestion: "What specific implementation technologies will be used, why were they chosen, what constraints do they create, and how will they be maintained?"
+  purpose: "Define the concrete implementation technologies, versions, constraints, rationale, alternatives, dependency
+    policies, maintenance rules, and stack risks used to build and operate the system."
+  centralQuestion: "What specific implementation technologies will be used, why were they chosen, what constraints do they
+    create, and how will they be maintained?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,9 @@ document:
       - id: "engineering.technical_stack_matrix"
         format: "html"
         path: "outcomes/html/04-engineering/technical-stack-matrix.html"
-        purpose: "Provide a navigable stack matrix covering runtime, languages, frameworks, package management, persistence, storage, auth, API, jobs, testing, deployment, observability, development tooling, versions, licensing, maintenance, and risks."
+        purpose: "Provide a navigable stack matrix covering runtime, languages, frameworks, package management, persistence,
+          storage, auth, API, jobs, testing, deployment, observability, development tooling, versions, licensing,
+          maintenance, and risks."
         audience: "founder"
         includes:
           - "stack overview"
@@ -45,7 +49,8 @@ document:
       - id: "engineering.technical_stack_review_prompt"
         format: "markdown"
         path: "outcomes/agents/04-engineering/technical-stack-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether stack decisions are concrete, justified, compatible, maintainable, secure, licensed appropriately, and aligned with system architecture and product constraints."
+        purpose: "Provide compact context for agents reviewing whether stack decisions are concrete, justified, compatible,
+          maintainable, secure, licensed appropriately, and aligned with system architecture and product constraints."
         agentRole: "reviewer"
         includes:
           - "canonical technical stack"
@@ -84,130 +89,165 @@ document:
     - id: "engineering-brief"
       type: "context"
       required: false
-      description: "Engineering objective, technical scope, constraints, implementation strategy, risks, deferred decisions, and success criteria."
+      description: "Engineering objective, technical scope, constraints, implementation strategy, risks, deferred decisions,
+        and success criteria."
     - id: "system-architecture"
       type: "context"
       required: false
-      description: "Architectural style, components, layers, module boundaries, dependency rules, runtime, deployment topology, data flow, failure modes, and architecture risks."
+      description: "Architectural style, components, layers, module boundaries, dependency rules, runtime, deployment
+        topology, data flow, failure modes, and architecture risks."
     - id: "product-stack"
       type: "context"
       required: false
-      description: "Product-level technology choices, platform strategy, UX-relevant technical constraints, integration surface, and product stack risks."
+      description: "Product-level technology choices, platform strategy, UX-relevant technical constraints, integration
+        surface, and product stack risks."
     - id: "non-functional-requirements"
       type: "context"
       required: false
-      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, compliance, and operational constraints."
+      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility,
+        observability, compliance, and operational constraints."
     - id: "acceptance-criteria"
       type: "context"
       required: false
-      description: "Release-blocking criteria, verification methods, readiness gates, sign-off model, and rollback expectations that stack choices must support."
+      description: "Release-blocking criteria, verification methods, readiness gates, sign-off model, and rollback
+        expectations that stack choices must support."
     - id: "stack-notes"
       type: "manual_note"
       required: false
-      description: "Candidate libraries, tools, versions, preferences, known constraints, licensing concerns, hosting preferences, maintenance concerns, and unresolved stack questions."
+      description: "Candidate libraries, tools, versions, preferences, known constraints, licensing concerns, hosting
+        preferences, maintenance concerns, and unresolved stack questions."
   completionCriteria:
-    - "The central question is answered through concrete stack decisions, rationale, alternatives, constraints, versions, policies, and risks."
-    - "Every material stack decision includes category, selected technology, version strategy, rationale, alternatives considered, constraints created, compatibility notes, security/privacy notes, licensing notes, maintenance burden, and downstream implications."
-    - "Runtime decisions specify execution environments, supported versions, version managers, compatibility constraints, upgrade policy, and unsupported runtimes."
-    - "Language decisions specify language, version, strictness/type-checking expectations, transpilation/build implications, interoperability, and language-level constraints."
-    - "Framework decisions specify framework, version, runtime fit, architectural fit, rendering/API behavior, ecosystem maturity, alternatives, and constraints."
-    - "Package management decisions specify package manager, workspace strategy, registry, lockfile policy, dependency review, transitive dependency controls, vulnerability scanning, and reproducibility expectations."
-    - "Database and storage decisions specify selected technologies, local/remote roles, persistence model, migration strategy, backup/restore expectations, data ownership implications, and operational constraints."
-    - "Authentication and API layer decisions specify libraries/protocols, auth boundaries, credential handling, session/token implications, API style, serialization, validation, versioning, error handling, and documentation expectations."
-    - "Background job decisions specify queue/worker technology, scheduling, retries, idempotency, long-running tasks, observability, failure handling, and operational ownership."
-    - "Testing tool decisions specify unit, integration, E2E, contract, accessibility, performance, security, visual, mocking, fixtures, coverage, and CI integration expectations."
-    - "Deployment and monitoring decisions specify platforms, environments, logging, metrics, tracing, alerting, dashboards, health checks, release constraints, and operational handoff."
-    - "Version constraints and upgrade policy define pinned, ranged, minimum, maximum, LTS, experimental, deprecated, blocked, and review-needed dependency statuses."
-    - "Licensing and compliance identify license types, copyleft risk, commercial-use risk, data-processing risk, policy review needs, and unknowns without inventing legal conclusions."
+    - "The central question is answered through concrete stack decisions, rationale, alternatives, constraints,
+      versions, policies, and risks."
+    - "Every material stack decision includes category, selected technology, version strategy, rationale, alternatives
+      considered, constraints created, compatibility notes, security/privacy notes, licensing notes, maintenance burden,
+      and downstream implications."
+    - "Runtime decisions specify execution environments, supported versions, version managers, compatibility
+      constraints, upgrade policy, and unsupported runtimes."
+    - "Language decisions specify language, version, strictness/type-checking expectations, transpilation/build
+      implications, interoperability, and language-level constraints."
+    - "Framework decisions specify framework, version, runtime fit, architectural fit, rendering/API behavior, ecosystem
+      maturity, alternatives, and constraints."
+    - "Package management decisions specify package manager, workspace strategy, registry, lockfile policy, dependency
+      review, transitive dependency controls, vulnerability scanning, and reproducibility expectations."
+    - "Database and storage decisions specify selected technologies, local/remote roles, persistence model, migration
+      strategy, backup/restore expectations, data ownership implications, and operational constraints."
+    - "Authentication and API layer decisions specify libraries/protocols, auth boundaries, credential handling,
+      session/token implications, API style, serialization, validation, versioning, error handling, and documentation
+      expectations."
+    - "Background job decisions specify queue/worker technology, scheduling, retries, idempotency, long-running tasks,
+      observability, failure handling, and operational ownership."
+    - "Testing tool decisions specify unit, integration, E2E, contract, accessibility, performance, security, visual,
+      mocking, fixtures, coverage, and CI integration expectations."
+    - "Deployment and monitoring decisions specify platforms, environments, logging, metrics, tracing, alerting,
+      dashboards, health checks, release constraints, and operational handoff."
+    - "Version constraints and upgrade policy define pinned, ranged, minimum, maximum, LTS, experimental, deprecated,
+      blocked, and review-needed dependency statuses."
+    - "Licensing and compliance identify license types, copyleft risk, commercial-use risk, data-processing risk, policy
+      review needs, and unknowns without inventing legal conclusions."
     - "Stack risks are concrete, source-linked, impact-aware, and routed to mitigation or downstream documents."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid stack theater: naming technologies without rationale, constraints, version policy, maintenance plan, or risk analysis."
+    - "Avoid stack theater: naming technologies without rationale, constraints, version policy, maintenance plan, or
+      risk analysis."
     - "Avoid choosing tools only by preference, novelty, popularity, or familiarity when product/NFR fit is unclear."
     - "Avoid treating unresolved or experimental technologies as committed stable dependencies."
-    - "Avoid hiding licensing, security, privacy, supply-chain, maintenance, ecosystem, lock-in, performance, or operational risks."
-    - "Avoid duplicating detailed architecture, schemas, API payloads, frontend component design, infrastructure topology, or test cases."
+    - "Avoid hiding licensing, security, privacy, supply-chain, maintenance, ecosystem, lock-in, performance, or
+      operational risks."
+    - "Avoid duplicating detailed architecture, schemas, API payloads, frontend component design, infrastructure
+      topology, or test cases."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent benchmark data, library guarantees, compliance status, license clearance, security review, team capacity, or vendor promises."
-    - "Stack choices must preserve System Architecture boundaries, dependency rules, NFRs, acceptance gates, and operational sustainability."
+    - "Do not invent benchmark data, library guarantees, compliance status, license clearance, security review, team
+      capacity, or vendor promises."
+    - "Stack choices must preserve System Architecture boundaries, dependency rules, NFRs, acceptance gates, and
+      operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate selected technology, version strategy, rationale, alternatives, constraints, compatibility, risks, and downstream implications."
-    - "Classify each stack item as committed, provisional, deferred, rejected, experimental, deprecated, blocked, or review-needed where useful."
-    - "Tie stack decisions to Engineering Brief, System Architecture, Product Stack, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries where possible."
+    - "Separate selected technology, version strategy, rationale, alternatives, constraints, compatibility, risks, and
+      downstream implications."
+    - "Classify each stack item as committed, provisional, deferred, rejected, experimental, deprecated, blocked, or
+      review-needed where useful."
+    - "Tie stack decisions to Engineering Brief, System Architecture, Product Stack, NFRs, Acceptance Criteria, Decision
+      Record, or Foundation Boundaries where possible."
     - "Use exact versions only when known; otherwise define version policy and mark exact version as unresolved."
     - "State how each stack decision will be reviewed, upgraded, replaced, or deprecated."
     - "Keep this document as stack decision record; detailed implementation belongs in downstream engineering documents."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Engineering Brief, System Architecture, Product Stack, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
-    - "Flag stack choices without rationale, alternatives considered, version strategy, compatibility notes, or downstream implication."
-    - "Flag dependencies with unclear maintenance status, license risk, security risk, supply-chain risk, or operational ownership."
+    - "Flag contradictions with Engineering Brief, System Architecture, Product Stack, NFRs, Acceptance Criteria,
+      Decision Record, or Foundation Boundaries."
+    - "Flag stack choices without rationale, alternatives considered, version strategy, compatibility notes, or
+      downstream implication."
+    - "Flag dependencies with unclear maintenance status, license risk, security risk, supply-chain risk, or operational
+      ownership."
     - "Flag exact version claims that are unsupported or likely stale."
-    - "Flag framework, runtime, database, auth, API, job, deployment, or observability choices that undermine architecture boundaries or NFRs."
+    - "Flag framework, runtime, database, auth, API, job, deployment, or observability choices that undermine
+      architecture boundaries or NFRs."
     - "Verify that upgrade policy, dependency policy, and risk handling are explicit."
-    - "Flag content that belongs better in Data Model, Security Architecture, API Contracts, Integration Architecture, Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or Operations."
+    - "Flag content that belongs better in Data Model, Security Architecture, API Contracts, Integration Architecture,
+      Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or
+      Operations."
   specializedFormats:
     stackDecisionFormat:
       description: "Required format for each material stack decision."
       fields:
-        - id
-        - category
-        - selectedTechnology
-        - status
-        - versionStrategy
-        - exactVersion
-        - rationale
-        - alternativesConsidered
-        - constraintsCreated
-        - compatibilityNotes
-        - securityPrivacyNotes
-        - licensingNotes
-        - maintenanceBurden
-        - upgradePolicy
-        - replacementTrigger
-        - downstreamDocuments
-        - ownerOrReviewTarget
-        - risks
-        - notes
+        - "id"
+        - "category"
+        - "selectedTechnology"
+        - "status"
+        - "versionStrategy"
+        - "exactVersion"
+        - "rationale"
+        - "alternativesConsidered"
+        - "constraintsCreated"
+        - "compatibilityNotes"
+        - "securityPrivacyNotes"
+        - "licensingNotes"
+        - "maintenanceBurden"
+        - "upgradePolicy"
+        - "replacementTrigger"
+        - "downstreamDocuments"
+        - "ownerOrReviewTarget"
+        - "risks"
+        - "notes"
     dependencyPolicyFormat:
       description: "Recommended format for dependency governance."
       fields:
-        - policyArea
-        - rule
-        - rationale
-        - enforcementMechanism
-        - exceptionProcess
-        - reviewCadence
-        - owner
+        - "policyArea"
+        - "rule"
+        - "rationale"
+        - "enforcementMechanism"
+        - "exceptionProcess"
+        - "reviewCadence"
+        - "owner"
     versionConstraintFormat:
       description: "Recommended format for version constraints."
       fields:
-        - dependency
-        - currentVersion
-        - minimumVersion
-        - maximumVersion
-        - pinnedOrRange
-        - ltsStatus
-        - experimentalStatus
-        - upgradeCadence
-        - breakingChangePolicy
-        - reviewTrigger
+        - "dependency"
+        - "currentVersion"
+        - "minimumVersion"
+        - "maximumVersion"
+        - "pinnedOrRange"
+        - "ltsStatus"
+        - "experimentalStatus"
+        - "upgradeCadence"
+        - "breakingChangePolicy"
+        - "reviewTrigger"
     stackRiskFormat:
       description: "Recommended format for stack risks."
       fields:
-        - risk
-        - affectedTechnology
-        - riskType
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - replacementOrExitPlan
-        - targetDocument
-        - releaseImpact
+        - "risk"
+        - "affectedTechnology"
+        - "riskType"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "replacementOrExitPlan"
+        - "targetDocument"
+        - "releaseImpact"
   sections:
     - id: "stack-overview"
       title: "Stack Overview"
@@ -221,7 +261,7 @@ document:
         - "The overview gives enough context to understand the technical posture."
         - "Certainty level is explicit."
         - "Trade-offs are not hidden behind tool names."
-      questions:
+      questions: &a1
         - "What is the overall technical stack?"
         - "Which stack decisions are committed versus provisional or deferred?"
         - "What are the primary trade-offs accepted by this stack?"
@@ -229,17 +269,19 @@ document:
         - "What stack choices require additional review?"
     - id: "stack-decision-register"
       title: "Stack Decision Register"
-      intent: "Maintain the master register of concrete technology decisions with rationale, version strategy, risks, alternatives, and downstream implications."
+      intent: "Maintain the master register of concrete technology decisions with rationale, version strategy, risks,
+        alternatives, and downstream implications."
       required: true
       outputGuidance:
         - "List stack decisions as structured records using the stack decision format."
-        - "Separate committed, provisional, deferred, rejected, experimental, deprecated, and review-needed technologies."
+        - "Separate committed, provisional, deferred, rejected, experimental, deprecated, and review-needed
+          technologies."
         - "Keep detailed implementation out of the register."
       qualityChecks:
         - "Every material stack decision has rationale and status."
         - "Alternatives and constraints are documented for consequential choices."
         - "Downstream documents are identified."
-      questions:
+      questions: &a2
         - "What is the complete inventory of stack decisions?"
         - "What is selected for each stack category?"
         - "What is the rationale for each material decision?"
@@ -248,17 +290,19 @@ document:
         - "Which downstream documents must inherit each decision?"
     - id: "runtime"
       title: "Runtime"
-      intent: "Specify execution runtimes, supported versions, runtime managers, compatibility constraints, unsupported runtimes, and runtime upgrade policy."
+      intent: "Specify execution runtimes, supported versions, runtime managers, compatibility constraints, unsupported
+        runtimes, and runtime upgrade policy."
       required: true
       outputGuidance:
-        - "Separate development runtime, production runtime, build runtime, test runtime, browser runtime, mobile/native runtime, edge runtime, and worker runtime where relevant."
+        - "Separate development runtime, production runtime, build runtime, test runtime, browser runtime, mobile/native
+          runtime, edge runtime, and worker runtime where relevant."
         - "State exact versions only when known; otherwise define version policy."
         - "Identify unsupported runtimes explicitly."
       qualityChecks:
         - "Runtime choices align with System Architecture and Product Stack."
         - "Version support and upgrade policy are explicit."
         - "Runtime constraints do not conflict with NFRs or Acceptance Criteria."
-      questions:
+      questions: &a3
         - "What runtimes will the system execute on?"
         - "What runtime versions are required or targeted?"
         - "What runtime manager or version manager is used?"
@@ -267,7 +311,8 @@ document:
         - "What is the runtime upgrade policy?"
     - id: "languages"
       title: "Languages"
-      intent: "Identify programming languages, versions, strictness rules, type-checking expectations, build/transpilation implications, and interoperability constraints."
+      intent: "Identify programming languages, versions, strictness rules, type-checking expectations, build/transpilation
+        implications, and interoperability constraints."
       required: true
       outputGuidance:
         - "State language choices by system area."
@@ -277,7 +322,7 @@ document:
         - "Language choices align with runtime, framework, team, maintainability, and architecture needs."
         - "Strictness and type-safety expectations are explicit."
         - "Interoperability and build implications are not ignored."
-      questions:
+      questions: &a4
         - "What programming languages will be used for each part of the system?"
         - "What language versions are targeted?"
         - "What strictness, type-checking, linting, formatting, or module-format constraints apply?"
@@ -285,17 +330,19 @@ document:
         - "What language choices are prohibited or deferred?"
     - id: "frameworks"
       title: "Frameworks"
-      intent: "Select frameworks for clients, APIs, workers, CLI/TUI, admin surfaces, and other frontends, with rationale and constraints."
+      intent: "Select frameworks for clients, APIs, workers, CLI/TUI, admin surfaces, and other frontends, with rationale and
+        constraints."
       required: true
       outputGuidance:
         - "State framework choices by surface and runtime."
-        - "Include architectural fit, ecosystem maturity, rendering/API model, plugin model, testing fit, and constraints."
+        - "Include architectural fit, ecosystem maturity, rendering/API model, plugin model, testing fit, and
+          constraints."
         - "Record alternatives and rejection rationale for consequential choices."
       qualityChecks:
         - "Frameworks align with System Architecture, Product Stack, UI, Interaction, and NFRs."
         - "Framework constraints and lock-in are explicit."
         - "Experimental framework usage is labeled."
-      questions:
+      questions: &a5
         - "What frameworks are selected for each client, API, worker, CLI/TUI, admin surface, or frontend?"
         - "What framework versions or version policies apply?"
         - "Why was each framework selected?"
@@ -304,7 +351,8 @@ document:
         - "What framework decisions require future review?"
     - id: "package-management"
       title: "Package Management"
-      intent: "Define package manager, workspace strategy, registry strategy, lockfile policy, dependency review, transitive dependency control, and reproducibility expectations."
+      intent: "Define package manager, workspace strategy, registry strategy, lockfile policy, dependency review, transitive
+        dependency control, and reproducibility expectations."
       required: true
       outputGuidance:
         - "State the package manager and workspace model."
@@ -314,7 +362,7 @@ document:
         - "Package management supports reproducible builds."
         - "Dependency review and vulnerability handling are explicit."
         - "Workspace and package rules align with module boundaries."
-      questions:
+      questions: &a6
         - "What package manager and registry will be used?"
         - "What workspace or monorepo strategy applies?"
         - "What lockfile and install reproducibility policy applies?"
@@ -323,17 +371,20 @@ document:
         - "What package publishing or internal package strategy is used, if any?"
     - id: "database"
       title: "Database"
-      intent: "Select database technologies for local and remote persistence, state, cache, search, analytics, or event storage with migration and operations implications."
+      intent: "Select database technologies for local and remote persistence, state, cache, search, analytics, or event
+        storage with migration and operations implications."
       required: true
       outputGuidance:
-        - "Separate primary database, local database, cache, search index, event store, analytics store, and temporary storage where relevant."
-        - "State data ownership, migration, backup/restore, consistency, transaction, offline/sync, and operational implications."
+        - "Separate primary database, local database, cache, search index, event store, analytics store, and temporary
+          storage where relevant."
+        - "State data ownership, migration, backup/restore, consistency, transaction, offline/sync, and operational
+          implications."
         - "Route schema details to Data Model."
       qualityChecks:
         - "Database choices align with Data Flow, NFRs, Product Stack, and System Architecture."
         - "Migration and backup/restore implications are explicit."
         - "The section does not contain full schema design."
-      questions:
+      questions: &a7
         - "What database technologies will be used for local and remote persistence?"
         - "What is the role of each database or storage engine?"
         - "What consistency, transaction, sync, offline, search, or analytics requirements affect database choice?"
@@ -342,17 +393,19 @@ document:
         - "What should Data Model and Infrastructure Architecture inherit?"
     - id: "storage"
       title: "Storage"
-      intent: "Specify file, blob, object, media, cache, temporary, encrypted, and large-asset storage technologies and policies."
+      intent: "Specify file, blob, object, media, cache, temporary, encrypted, and large-asset storage technologies and
+        policies."
       required: true
       outputGuidance:
         - "Separate structured data from file/object/blob/media storage."
-        - "Define storage role, access control, retention, deletion, encryption, size limits, upload/download behavior, and fallback where relevant."
+        - "Define storage role, access control, retention, deletion, encryption, size limits, upload/download behavior,
+          and fallback where relevant."
         - "Route operational details to Infrastructure and Data Model."
       qualityChecks:
         - "Storage choices align with privacy, security, reliability, and data requirements."
         - "Large asset handling and failure behavior are explicit."
         - "Access control and retention implications are not hidden."
-      questions:
+      questions: &a8
         - "What file storage, blob storage, object storage, cache, or temporary storage is needed?"
         - "How are large assets handled?"
         - "What size limits, upload/download behavior, and retention rules apply?"
@@ -360,7 +413,8 @@ document:
         - "What storage failures or limits must be handled?"
     - id: "authentication"
       title: "Authentication"
-      intent: "Define authentication technologies, providers, libraries, session/token handling, credential storage, account lifecycle, and auth boundaries."
+      intent: "Define authentication technologies, providers, libraries, session/token handling, credential storage, account
+        lifecycle, and auth boundaries."
       required: true
       outputGuidance:
         - "Separate authentication mechanism, provider, client library, server/session handling, and credential storage."
@@ -370,7 +424,7 @@ document:
         - "Authentication choice aligns with Security Architecture needs and Product requirements."
         - "Credentials and sessions are handled explicitly at stack level."
         - "Auth provider lock-in and privacy/security risks are considered."
-      questions:
+      questions: &a9
         - "What authentication mechanism, provider, and libraries will be used?"
         - "How are sessions, tokens, credentials, and refresh handled at application level?"
         - "What account lifecycle flows are required?"
@@ -379,18 +433,21 @@ document:
         - "What auth alternatives were considered?"
     - id: "api-layer"
       title: "API Layer"
-      intent: "Select API protocols, libraries, validation tooling, serialization, error model, versioning approach, documentation tooling, and compatibility strategy."
+      intent: "Select API protocols, libraries, validation tooling, serialization, error model, versioning approach,
+        documentation tooling, and compatibility strategy."
       required: true
       outputGuidance:
         - "State API style and libraries at stack level."
-        - "Include request/response validation, schema generation, auth integration, error handling, versioning, and docs expectations."
+        - "Include request/response validation, schema generation, auth integration, error handling, versioning, and
+          docs expectations."
         - "Route endpoint details and payloads to API Contracts."
       qualityChecks:
         - "API layer fits System Architecture, client needs, integration requirements, and NFRs."
         - "Validation, error handling, and versioning are not omitted."
         - "The section does not become endpoint specification."
-      questions:
-        - "What API protocols and libraries will be used: REST, GraphQL, gRPC, WebSocket, RPC, event stream, or another pattern?"
+      questions: &a10
+        - "What API protocols and libraries will be used: REST, GraphQL, gRPC, WebSocket, RPC, event stream, or another
+          pattern?"
         - "How is request and response validation handled?"
         - "How are serialization, errors, pagination, streaming, versioning, and compatibility handled at stack level?"
         - "How is API documentation generated or maintained?"
@@ -407,7 +464,7 @@ document:
         - "Background job stack supports runtime model and reliability NFRs."
         - "Failure handling and observability are explicit."
         - "Long-running tasks have user-visible implications routed to Product/Acceptance where relevant."
-      questions:
+      questions: &a11
         - "What job queue, scheduler, or background processing system will be used?"
         - "How are long-running tasks handled?"
         - "How are retries, dead-letter handling, idempotency, cancellation, timeouts, and concurrency handled?"
@@ -415,7 +472,8 @@ document:
         - "What background-job choices require Infrastructure or Observability review?"
     - id: "testing-tools"
       title: "Testing Tools"
-      intent: "Select tools for unit, integration, E2E, contract, accessibility, performance, security, visual, mocking, fixtures, coverage, and CI execution."
+      intent: "Select tools for unit, integration, E2E, contract, accessibility, performance, security, visual, mocking,
+        fixtures, coverage, and CI execution."
       required: true
       outputGuidance:
         - "Map test tools to test types."
@@ -425,26 +483,29 @@ document:
         - "Testing tools support Acceptance Criteria and NFR verification."
         - "Critical test types are not omitted."
         - "Tool selection does not replace Test Strategy."
-      questions:
+      questions: &a12
         - "What test runner, assertion library, mocking framework, and fixture tools will be used?"
-        - "What tools will support unit, integration, E2E, contract, accessibility, performance, security, and visual testing?"
+        - "What tools will support unit, integration, E2E, contract, accessibility, performance, security, and visual
+          testing?"
         - "What tests run locally versus in CI?"
         - "What coverage tools or thresholds are expected?"
         - "What test data and fixture strategy is required?"
         - "What should Test Strategy inherit?"
     - id: "deployment-platform"
       title: "Deployment Platform"
-      intent: "Specify deployment platforms, environments, runtime services, platform services, release channels, secrets/config management, and deployment constraints."
+      intent: "Specify deployment platforms, environments, runtime services, platform services, release channels,
+        secrets/config management, and deployment constraints."
       required: true
       outputGuidance:
         - "State deployment platform choices at stack level."
-        - "Separate hosting platform, build platform, CI/CD platform, artifact registry, secrets manager, environment manager, and release channel where relevant."
+        - "Separate hosting platform, build platform, CI/CD platform, artifact registry, secrets manager, environment
+          manager, and release channel where relevant."
         - "Route topology and automation details to Infrastructure and Deployment Plan."
       qualityChecks:
         - "Deployment platform supports System Architecture, NFRs, and operational constraints."
         - "Secrets, config, environments, and release constraints are not hidden."
         - "Platform lock-in and migration risk are considered."
-      questions:
+      questions: &a13
         - "Where will the system be deployed: cloud, on-premise, local, edge, app store, package registry, or hybrid?"
         - "What platform services are consumed?"
         - "What environments and release channels exist?"
@@ -453,35 +514,40 @@ document:
         - "What should Infrastructure Architecture and Deployment Plan inherit?"
     - id: "monitoring-tools"
       title: "Monitoring Tools"
-      intent: "Select tools for logging, metrics, tracing, alerting, dashboards, uptime checks, error tracking, audit visibility, and privacy-safe telemetry."
+      intent: "Select tools for logging, metrics, tracing, alerting, dashboards, uptime checks, error tracking, audit
+        visibility, and privacy-safe telemetry."
       required: true
       outputGuidance:
-        - "Separate logs, metrics, traces, alerts, dashboards, error tracking, product analytics, security events, and audit events."
+        - "Separate logs, metrics, traces, alerts, dashboards, error tracking, product analytics, security events, and
+          audit events."
         - "State what tools are committed, provisional, deferred, or review-needed."
         - "Route instrumentation detail to Observability Plan."
       qualityChecks:
         - "Monitoring tools support Observability NFRs and operational needs."
         - "Telemetry privacy and sensitive data handling are considered."
         - "Alerts are tied to actionable signals, not noise."
-      questions:
-        - "What tools are used for logging, metrics, tracing, alerting, error tracking, uptime checks, dashboards, and audit visibility?"
+      questions: &a14
+        - "What tools are used for logging, metrics, tracing, alerting, error tracking, uptime checks, dashboards, and audit
+          visibility?"
         - "What dashboards are required?"
         - "What telemetry is collected and what must not be collected?"
         - "How are monitoring tools integrated with deployment and support workflows?"
         - "What should Observability Plan inherit?"
     - id: "local-development-tools"
       title: "Local Development Tools"
-      intent: "Specify required local development tools, linters, formatters, type-checkers, code generators, dev servers, containers, fixtures, editor integrations, and reproducibility expectations."
+      intent: "Specify required local development tools, linters, formatters, type-checkers, code generators, dev servers,
+        containers, fixtures, editor integrations, and reproducibility expectations."
       required: true
       outputGuidance:
         - "List tools required for reliable local development and onboarding."
-        - "Include version managers, environment setup, local services, containerization, seed data, test data, and editor integrations where relevant."
+        - "Include version managers, environment setup, local services, containerization, seed data, test data, and
+          editor integrations where relevant."
         - "Separate required tools from recommended tools."
       qualityChecks:
         - "Local setup is reproducible enough for contributors or future maintainers."
         - "Linting, formatting, type checking, and codegen expectations are explicit."
         - "Local development constraints do not conflict with production architecture."
-      questions:
+      questions: &a15
         - "What local development tools are required?"
         - "What linters, formatters, type-checkers, code generators, dev servers, and local services are used?"
         - "What editor integrations are expected?"
@@ -490,7 +556,8 @@ document:
         - "Which local tools are required versus recommended?"
     - id: "version-constraints"
       title: "Version Constraints"
-      intent: "Define minimum, maximum, pinned, ranged, LTS, experimental, deprecated, and blocked versions for key dependencies and tooling."
+      intent: "Define minimum, maximum, pinned, ranged, LTS, experimental, deprecated, and blocked versions for key
+        dependencies and tooling."
       required: true
       outputGuidance:
         - "Record version constraints for key runtimes, languages, frameworks, databases, tools, and critical libraries."
@@ -500,7 +567,7 @@ document:
         - "Version constraints are explicit enough for reproducibility and review."
         - "Experimental or deprecated versions are clearly labeled."
         - "Upgrade path and breaking-change policy are explicit."
-      questions:
+      questions: &a16
         - "What are the minimum, maximum, pinned, or ranged versions for key dependencies?"
         - "Which versions are LTS, experimental, deprecated, blocked, or review-needed?"
         - "What is the breaking-change policy?"
@@ -512,40 +579,46 @@ document:
       required: true
       outputGuidance:
         - "State approval rules for new dependencies."
-        - "Include supply-chain risk, package health, license, security, size, performance, maintenance, and transitive dependency criteria."
+        - "Include supply-chain risk, package health, license, security, size, performance, maintenance, and transitive
+          dependency criteria."
         - "Define exception process and review cadence."
       qualityChecks:
         - "Dependency policy prevents uncontrolled dependency growth."
         - "Security and license review are included."
         - "Exceptions are governed rather than ad hoc."
-      questions:
+      questions: &a17
         - "What rules govern adding new dependencies?"
-        - "What package health, maintenance, license, security, size, performance, and transitive dependency checks are required?"
+        - "What package health, maintenance, license, security, size, performance, and transitive dependency checks are
+          required?"
         - "How are dependencies audited and upgraded?"
         - "How are dependencies deprecated, removed, or replaced?"
         - "What exceptions are allowed and who approves them?"
         - "What review cadence applies to dependencies?"
     - id: "licensing-and-compliance"
       title: "Licensing and Compliance"
-      intent: "Identify license types, license risks, copyleft exposure, commercial-use constraints, attribution requirements, data-processing concerns, and review needs."
+      intent: "Identify license types, license risks, copyleft exposure, commercial-use constraints, attribution requirements,
+        data-processing concerns, and review needs."
       required: true
       outputGuidance:
         - "State known license information and unknowns separately."
-        - "Flag copyleft, commercial-use, attribution, patent, data-processing, hosted-service, and policy concerns without inventing legal conclusions."
+        - "Flag copyleft, commercial-use, attribution, patent, data-processing, hosted-service, and policy concerns
+          without inventing legal conclusions."
         - "Route legal/compliance questions to appropriate review."
       qualityChecks:
         - "License risks are not ignored."
         - "Compliance claims are sourced or marked for review."
         - "Open source posture and dependency licenses are compatible or flagged."
-      questions:
+      questions: &a18
         - "What licenses apply to selected technologies and dependencies?"
-        - "Are any dependencies copyleft, source-available, non-commercial, attribution-required, patent-sensitive, or policy-sensitive?"
+        - "Are any dependencies copyleft, source-available, non-commercial, attribution-required, patent-sensitive, or
+          policy-sensitive?"
         - "What commercial-use or open-source distribution concerns exist?"
         - "What hosted-service, data-processing, or vendor policy concerns exist?"
         - "Which licensing or compliance questions require legal review?"
     - id: "maintenance-and-upgrade-policy"
       title: "Maintenance and Upgrade Policy"
-      intent: "Define maintenance ownership, upgrade cadence, security patch policy, deprecation policy, replacement triggers, and technical debt handling."
+      intent: "Define maintenance ownership, upgrade cadence, security patch policy, deprecation policy, replacement triggers,
+        and technical debt handling."
       required: true
       outputGuidance:
         - "Define how the stack remains healthy over time."
@@ -555,7 +628,7 @@ document:
         - "Upgrade and maintenance expectations are realistic."
         - "Security patch policy is explicit."
         - "Abandonment and replacement triggers are defined."
-      questions:
+      questions: &a19
         - "Who owns stack maintenance?"
         - "What is the routine upgrade cadence?"
         - "How are security patches handled?"
@@ -565,7 +638,8 @@ document:
         - "How is stack-related technical debt tracked?"
     - id: "stack-risks"
       title: "Stack Risks"
-      intent: "Identify risks associated with chosen technologies, including maturity, ecosystem, security, license, lock-in, performance, compatibility, maintenance, operational, and migration risks."
+      intent: "Identify risks associated with chosen technologies, including maturity, ecosystem, security, license, lock-in,
+        performance, compatibility, maintenance, operational, and migration risks."
       required: true
       outputGuidance:
         - "Describe stack risks as concrete failure modes."
@@ -575,7 +649,7 @@ document:
         - "Risks are specific enough to monitor, review, or mitigate."
         - "Unmaintained, experimental, unsupported, or high-lock-in dependencies are explicitly flagged."
         - "Mitigations are actionable or routed downstream."
-      questions:
+      questions: &a20
         - "What are the risks associated with the chosen stack?"
         - "Are any dependencies unmaintained, experimental, unsupported, immature, or vendor-locked?"
         - "What security, privacy, license, supply-chain, compatibility, performance, cost, or operational risks exist?"
@@ -584,17 +658,19 @@ document:
         - "What mitigation, replacement, or exit plans exist?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Engineering and Operations documents must inherit from the technical stack and what they must not assume."
+      intent: "Define what downstream Engineering and Operations documents must inherit from the technical stack and what they
+        must not assume."
       required: true
       outputGuidance:
         - "Route stack outputs to the correct downstream documents."
-        - "Separate data, security, API, integration, frontend, infrastructure, testing, design system, observability, deployment, release, and operations implications."
+        - "Separate data, security, API, integration, frontend, infrastructure, testing, design system, observability,
+          deployment, release, and operations implications."
         - "Preserve unresolved stack questions and risky assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing stack constraints silently."
         - "Stack decisions and detailed implementation responsibilities remain distinct."
-      questions:
+      questions: &a21
         - "What should Data Model inherit from Technical Stack?"
         - "What should Security Architecture inherit?"
         - "What should API Contracts and Integration Architecture inherit?"
@@ -602,3 +678,294 @@ document:
         - "What should Infrastructure Architecture, Test Strategy, Observability Plan, and Deployment Plan inherit?"
         - "What should Release Management and Risk Management inherit?"
         - "What unresolved stack questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain technical stack. What specific implementation technologies will be used, why were they
+      chosen, what constraints do they create, and how will they be maintained?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "stack-overview"
+        label: "Stack Overview"
+        required: true
+        description: "Summarize the selected stack, major technology decisions, current certainty level, and stack-level
+          trade-offs."
+        evaluationHint: "Look for concrete answers addressing: What is the overall technical stack?; Which stack decisions are
+          committed versus provisional or deferred?; What are the primary trade-offs accepted by this stack?."
+        sourceQuestions: *a1
+        targetSections: &a22
+          - "Stack Overview"
+      - id: "stack-decision-register"
+        label: "Stack Decision Register"
+        required: true
+        description: "Maintain the master register of concrete technology decisions with rationale, version strategy, risks,
+          alternatives, and downstream implications."
+        evaluationHint: "Look for concrete answers addressing: What is the complete inventory of stack decisions?; What is
+          selected for each stack category?; What is the rationale for each material decision?."
+        sourceQuestions: *a2
+        targetSections: &a23
+          - "Stack Decision Register"
+      - id: "runtime"
+        label: "Runtime"
+        required: true
+        description: "Specify execution runtimes, supported versions, runtime managers, compatibility constraints, unsupported
+          runtimes, and runtime upgrade policy."
+        evaluationHint: "Look for concrete answers addressing: What runtimes will the system execute on?; What runtime versions
+          are required or targeted?; What runtime manager or version manager is used?."
+        sourceQuestions: *a3
+        targetSections: &a24
+          - "Runtime"
+      - id: "languages"
+        label: "Languages"
+        required: true
+        description: "Identify programming languages, versions, strictness rules, type-checking expectations,
+          build/transpilation implications, and interoperability constraints."
+        evaluationHint: "Look for concrete answers addressing: What programming languages will be used for each part of the
+          system?; What language versions are targeted?; What strictness, type-checking, linting, formatting, or
+          module-format constraints apply?."
+        sourceQuestions: *a4
+        targetSections: &a25
+          - "Languages"
+      - id: "frameworks"
+        label: "Frameworks"
+        required: true
+        description: "Select frameworks for clients, APIs, workers, CLI/TUI, admin surfaces, and other frontends, with rationale
+          and constraints."
+        evaluationHint: "Look for concrete answers addressing: What frameworks are selected for each client, API, worker,
+          CLI/TUI, admin surface, or frontend?; What framework versions or version policies apply?; Why was each
+          framework selected?."
+        sourceQuestions: *a5
+        targetSections: &a26
+          - "Frameworks"
+      - id: "package-management"
+        label: "Package Management"
+        required: true
+        description: "Define package manager, workspace strategy, registry strategy, lockfile policy, dependency review,
+          transitive dependency control, and reproducibility expectations."
+        evaluationHint: "Look for concrete answers addressing: What package manager and registry will be used?; What workspace
+          or monorepo strategy applies?; What lockfile and install reproducibility policy applies?."
+        sourceQuestions: *a6
+        targetSections: &a27
+          - "Package Management"
+      - id: "database"
+        label: "Database"
+        required: true
+        description: "Select database technologies for local and remote persistence, state, cache, search, analytics, or event
+          storage with migration and operations implications."
+        evaluationHint: "Look for concrete answers addressing: What database technologies will be used for local and remote
+          persistence?; What is the role of each database or storage engine?; What consistency, transaction, sync,
+          offline, search, or analytics requirements affect database choice?."
+        sourceQuestions: *a7
+        targetSections: &a28
+          - "Database"
+      - id: "storage"
+        label: "Storage"
+        required: true
+        description: "Specify file, blob, object, media, cache, temporary, encrypted, and large-asset storage technologies and
+          policies."
+        evaluationHint: "Look for concrete answers addressing: What file storage, blob storage, object storage, cache, or
+          temporary storage is needed?; How are large assets handled?; What size limits, upload/download behavior, and
+          retention rules apply?."
+        sourceQuestions: *a8
+        targetSections: &a29
+          - "Storage"
+      - id: "authentication"
+        label: "Authentication"
+        required: true
+        description: "Define authentication technologies, providers, libraries, session/token handling, credential storage,
+          account lifecycle, and auth boundaries."
+        evaluationHint: "Look for concrete answers addressing: What authentication mechanism, provider, and libraries will be
+          used?; How are sessions, tokens, credentials, and refresh handled at application level?; What account
+          lifecycle flows are required?."
+        sourceQuestions: *a9
+        targetSections: &a30
+          - "Authentication"
+      - id: "api-layer"
+        label: "API Layer"
+        required: true
+        description: "Select API protocols, libraries, validation tooling, serialization, error model, versioning approach,
+          documentation tooling, and compatibility strategy."
+        evaluationHint: "Look for concrete answers addressing: What API protocols and libraries will be used: REST, GraphQL,
+          gRPC, WebSocket, RPC, event stream, or another pattern?; How is request and response validation handled?; How
+          are serialization, errors, pagination, streaming, versioning, and compatibility handled at stack level?."
+        sourceQuestions: *a10
+        targetSections: &a31
+          - "API Layer"
+      - id: "background-jobs"
+        label: "Background Jobs"
+        required: true
+        description: "Choose job queue, worker, scheduler, long-running task, retry, idempotency, and job observability
+          technologies."
+        evaluationHint: "Look for concrete answers addressing: What job queue, scheduler, or background processing system will
+          be used?; How are long-running tasks handled?; How are retries, dead-letter handling, idempotency,
+          cancellation, timeouts, and concurrency handled?."
+        sourceQuestions: *a11
+        targetSections: &a32
+          - "Background Jobs"
+      - id: "testing-tools"
+        label: "Testing Tools"
+        required: true
+        description: "Select tools for unit, integration, E2E, contract, accessibility, performance, security, visual, mocking,
+          fixtures, coverage, and CI execution."
+        evaluationHint: "Look for concrete answers addressing: What test runner, assertion library, mocking framework, and
+          fixture tools will be used?; What tools will support unit, integration, E2E, contract, accessibility,
+          performance, security, and visual testing?; What tests run locally versus in CI?."
+        sourceQuestions: *a12
+        targetSections: &a33
+          - "Testing Tools"
+      - id: "deployment-platform"
+        label: "Deployment Platform"
+        required: true
+        description: "Specify deployment platforms, environments, runtime services, platform services, release channels,
+          secrets/config management, and deployment constraints."
+        evaluationHint: "Look for concrete answers addressing: Where will the system be deployed: cloud, on-premise, local,
+          edge, app store, package registry, or hybrid?; What platform services are consumed?; What environments and
+          release channels exist?."
+        sourceQuestions: *a13
+        targetSections: &a34
+          - "Deployment Platform"
+      - id: "monitoring-tools"
+        label: "Monitoring Tools"
+        required: true
+        description: "Select tools for logging, metrics, tracing, alerting, dashboards, uptime checks, error tracking, audit
+          visibility, and privacy-safe telemetry."
+        evaluationHint: "Look for concrete answers addressing: What tools are used for logging, metrics, tracing, alerting,
+          error tracking, uptime checks, dashboards, and audit visibility?; What dashboards are required?; What
+          telemetry is collected and what must not be collected?."
+        sourceQuestions: *a14
+        targetSections: &a35
+          - "Monitoring Tools"
+      - id: "local-development-tools"
+        label: "Local Development Tools"
+        required: true
+        description: "Specify required local development tools, linters, formatters, type-checkers, code generators, dev
+          servers, containers, fixtures, editor integrations, and reproducibility expectations."
+        evaluationHint: "Look for concrete answers addressing: What local development tools are required?; What linters,
+          formatters, type-checkers, code generators, dev servers, and local services are used?; What editor
+          integrations are expected?."
+        sourceQuestions: *a15
+        targetSections: &a36
+          - "Local Development Tools"
+      - id: "version-constraints"
+        label: "Version Constraints"
+        required: true
+        description: "Define minimum, maximum, pinned, ranged, LTS, experimental, deprecated, and blocked versions for key
+          dependencies and tooling."
+        evaluationHint: "Look for concrete answers addressing: What are the minimum, maximum, pinned, or ranged versions for key
+          dependencies?; Which versions are LTS, experimental, deprecated, blocked, or review-needed?; What is the
+          breaking-change policy?."
+        sourceQuestions: *a16
+        targetSections: &a37
+          - "Version Constraints"
+      - id: "dependency-policy"
+        label: "Dependency Policy"
+        required: true
+        description: "Define how dependencies are added, reviewed, audited, upgraded, deprecated, removed, and replaced."
+        evaluationHint: "Look for concrete answers addressing: What rules govern adding new dependencies?; What package health,
+          maintenance, license, security, size, performance, and transitive dependency checks are required?; How are
+          dependencies audited and upgraded?."
+        sourceQuestions: *a17
+        targetSections: &a38
+          - "Dependency Policy"
+      - id: "licensing-and-compliance"
+        label: "Licensing and Compliance"
+        required: true
+        description: "Identify license types, license risks, copyleft exposure, commercial-use constraints, attribution
+          requirements, data-processing concerns, and review needs."
+        evaluationHint: "Look for concrete answers addressing: What licenses apply to selected technologies and dependencies?;
+          Are any dependencies copyleft, source-available, non-commercial, attribution-required, patent-sensitive, or
+          policy-sensitive?; What commercial-use or open-source distribution concerns exist?."
+        sourceQuestions: *a18
+        targetSections: &a39
+          - "Licensing and Compliance"
+      - id: "maintenance-and-upgrade-policy"
+        label: "Maintenance and Upgrade Policy"
+        required: true
+        description: "Define maintenance ownership, upgrade cadence, security patch policy, deprecation policy, replacement
+          triggers, and technical debt handling."
+        evaluationHint: "Look for concrete answers addressing: Who owns stack maintenance?; What is the routine upgrade
+          cadence?; How are security patches handled?."
+        sourceQuestions: *a19
+        targetSections: &a40
+          - "Maintenance and Upgrade Policy"
+      - id: "stack-risks"
+        label: "Stack Risks"
+        required: true
+        description: "Identify risks associated with chosen technologies, including maturity, ecosystem, security, license,
+          lock-in, performance, compatibility, maintenance, operational, and migration risks."
+        evaluationHint: "Look for concrete answers addressing: What are the risks associated with the chosen stack?; Are any
+          dependencies unmaintained, experimental, unsupported, immature, or vendor-locked?; What security, privacy,
+          license, supply-chain, compatibility, performance, cost, or operational risks exist?."
+        sourceQuestions: *a20
+        targetSections: &a41
+          - "Stack Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Engineering and Operations documents must inherit from the technical stack and what
+          they must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Data Model inherit from Technical Stack?; What should
+          Security Architecture inherit?; What should API Contracts and Integration Architecture inherit?."
+        sourceQuestions: *a21
+        targetSections: &a42
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      stack-overview:
+        targetSections: *a22
+      stack-decision-register:
+        targetSections: *a23
+      runtime:
+        targetSections: *a24
+      languages:
+        targetSections: *a25
+      frameworks:
+        targetSections: *a26
+      package-management:
+        targetSections: *a27
+      database:
+        targetSections: *a28
+      storage:
+        targetSections: *a29
+      authentication:
+        targetSections: *a30
+      api-layer:
+        targetSections: *a31
+      background-jobs:
+        targetSections: *a32
+      testing-tools:
+        targetSections: *a33
+      deployment-platform:
+        targetSections: *a34
+      monitoring-tools:
+        targetSections: *a35
+      local-development-tools:
+        targetSections: *a36
+      version-constraints:
+        targetSections: *a37
+      dependency-policy:
+        targetSections: *a38
+      licensing-and-compliance:
+        targetSections: *a39
+      maintenance-and-upgrade-policy:
+        targetSections: *a40
+      stack-risks:
+        targetSections: *a41
+      downstream-handoff:
+        targetSections: *a42
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.340Z"
+      totalSourceQuestions: 120
+      reviewRequired: false

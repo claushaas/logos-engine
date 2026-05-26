@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 10
   type: "functional_requirements"
-  purpose: "Define the mandatory product behaviors, user actions, system functions, data operations, integrations, business rules, and admin capabilities required to deliver the scoped product."
+  purpose: "Define the mandatory product behaviors, user actions, system functions, data operations, integrations,
+    business rules, and admin capabilities required to deliver the scoped product."
   centralQuestion: "What must the product functionally do, for whom, under what conditions, and how will each requirement be verified?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "product.functional_requirements_matrix"
         format: "html"
         path: "outcomes/html/03-product/functional-requirements-matrix.html"
-        purpose: "Provide a navigable matrix of functional requirements by priority, journey, module, capability, actor, data object, dependency, acceptance status, and traceability."
+        purpose: "Provide a navigable matrix of functional requirements by priority, journey, module, capability, actor, data
+          object, dependency, acceptance status, and traceability."
         audience: "founder"
         includes:
           - "requirement taxonomy"
@@ -35,7 +37,8 @@ document:
       - id: "product.functional_requirements_review_prompt"
         format: "markdown"
         path: "outcomes/agents/03-product/functional-requirements-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether functional requirements are complete, testable, traceable, scoped, prioritized, and aligned with product architecture and acceptance criteria."
+        purpose: "Provide compact context for agents reviewing whether functional requirements are complete, testable,
+          traceable, scoped, prioritized, and aligned with product architecture and acceptance criteria."
         agentRole: "reviewer"
         includes:
           - "canonical functional requirements"
@@ -81,19 +84,23 @@ document:
     - id: "user-journeys"
       type: "context"
       required: false
-      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys that requirements must support."
+      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys
+        that requirements must support."
     - id: "information-architecture"
       type: "context"
       required: false
-      description: "Core objects, relationships, lifecycle, visibility, navigation, naming, retrieval, and IA risks that requirements must reflect."
+      description: "Core objects, relationships, lifecycle, visibility, navigation, naming, retrieval, and IA risks that
+        requirements must reflect."
     - id: "interaction-model"
       type: "context"
       required: false
-      description: "Actions, commands, confirmations, undo, ambiguity handling, suggestions, corrections, state transitions, and interaction risks."
+      description: "Actions, commands, confirmations, undo, ambiguity handling, suggestions, corrections, state transitions,
+        and interaction risks."
     - id: "ui-specification"
       type: "context"
       required: false
-      description: "Screens, components, UI states, responsive behavior, accessibility UI rules, and UI risks that imply functional behavior."
+      description: "Screens, components, UI states, responsive behavior, accessibility UI rules, and UI risks that imply
+        functional behavior."
     - id: "product-architecture"
       type: "context"
       required: false
@@ -101,143 +108,173 @@ document:
     - id: "requirements-notes"
       type: "manual_note"
       required: false
-      description: "Candidate requirements, edge cases, business rules, system functions, admin needs, data operations, integration needs, and unresolved requirement questions."
+      description: "Candidate requirements, edge cases, business rules, system functions, admin needs, data operations,
+        integration needs, and unresolved requirement questions."
   completionCriteria:
     - "The central question is answered through a complete functional requirements register."
-    - "Each requirement includes id, statement, actor, user value, priority, source, scope classification, related journey, related module, related capability, data objects, dependencies, acceptance link, and verification method."
-    - "Requirement priority distinguishes must-have, should-have, could-have, won't-have, post-MVP, deferred, blocked, validation-required, and excluded where relevant."
-    - "Core requirements are limited to functionality required for the product promise, MVP scope, and primary journey to hold."
-    - "User requirements describe supported user actions, outputs, preferences, correction paths, recovery needs, and permission-relevant behavior."
-    - "System requirements describe background functions, automation, scheduling, data processing, retrieval, sync, health, maintenance, and degradation behavior without becoming engineering architecture."
+    - "Each requirement includes id, statement, actor, user value, priority, source, scope classification, related
+      journey, related module, related capability, data objects, dependencies, acceptance link, and verification
+      method."
+    - "Requirement priority distinguishes must-have, should-have, could-have, won't-have, post-MVP, deferred, blocked,
+      validation-required, and excluded where relevant."
+    - "Core requirements are limited to functionality required for the product promise, MVP scope, and primary journey
+      to hold."
+    - "User requirements describe supported user actions, outputs, preferences, correction paths, recovery needs, and
+      permission-relevant behavior."
+    - "System requirements describe background functions, automation, scheduling, data processing, retrieval, sync,
+      health, maintenance, and degradation behavior without becoming engineering architecture."
     - "Admin requirements distinguish mandatory admin capabilities from operational conveniences and post-MVP controls."
-    - "Integration requirements include data flow, auth, permissions, failure handling, fallback, ownership, and dependency criticality."
-    - "Data requirements are aligned with IA objects, state transitions, permission model needs, retention, deletion, export, accuracy, and consistency."
+    - "Integration requirements include data flow, auth, permissions, failure handling, fallback, ownership, and
+      dependency criticality."
+    - "Data requirements are aligned with IA objects, state transitions, permission model needs, retention, deletion,
+      export, accuracy, and consistency."
     - "Business rules include validation, constraints, conflict handling, configurability, precedence, and auditability."
-    - "Requirement traceability allows each material requirement to be traced back to scope, journey, module, capability, evidence, decision, or product constraint."
-    - "Change governance defines how requirements are proposed, accepted, rejected, deferred, versioned, and propagated downstream."
+    - "Requirement traceability allows each material requirement to be traced back to scope, journey, module,
+      capability, evidence, decision, or product constraint."
+    - "Change governance defines how requirements are proposed, accepted, rejected, deferred, versioned, and propagated
+      downstream."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid requirements theater: long requirement lists without actor, source, priority, verification, or traceability."
+    - "Avoid requirements theater: long requirement lists without actor, source, priority, verification, or
+      traceability."
     - "Avoid requirements that duplicate feature descriptions without specifying required behavior."
-    - "Avoid adding requirements outside Product Scope unless marked post-MVP, deferred, validation-required, or excluded."
-    - "Avoid treating non-functional requirements as functional requirements unless they directly define observable behavior."
+    - "Avoid adding requirements outside Product Scope unless marked post-MVP, deferred, validation-required, or
+      excluded."
+    - "Avoid treating non-functional requirements as functional requirements unless they directly define observable
+      behavior."
     - "Avoid hiding permissions, data, state, integration, failure, or recovery implications."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent user needs, validation evidence, technical constraints, integrations, admin roles, data retention obligations, or business rules."
+    - "Do not invent user needs, validation evidence, technical constraints, integrations, admin roles, data retention
+      obligations, or business rules."
     - "Functional requirements must be testable or clearly marked as needing refinement."
-    - "Requirements must preserve product boundaries, user responsibility boundaries, validation caveats, and scope governance."
+    - "Requirements must preserve product boundaries, user responsibility boundaries, validation caveats, and scope
+      governance."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
     - "Write requirements as testable product behavior, not implementation instructions."
-    - "Separate user-facing requirements, system requirements, admin requirements, integration requirements, data requirements, and business rules."
-    - "Tie requirements to Product Scope, User Journeys, Information Architecture, Interaction Model, Product Architecture, UI Specification, Validation Report, or Decision Record where possible."
+    - "Separate user-facing requirements, system requirements, admin requirements, integration requirements, data
+      requirements, and business rules."
+    - "Tie requirements to Product Scope, User Journeys, Information Architecture, Interaction Model, Product
+      Architecture, UI Specification, Validation Report, or Decision Record where possible."
     - "Classify each material requirement by priority, scope status, source, verification method, and downstream target."
-    - "Keep detailed feature composition in Feature Specification, non-functional constraints in Non-Functional Requirements, and final testable checks in Acceptance Criteria."
+    - "Keep detailed feature composition in Feature Specification, non-functional constraints in Non-Functional
+      Requirements, and final testable checks in Acceptance Criteria."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Product Brief, Product Scope, User Journeys, Information Architecture, Interaction Model, UI Specification, Product Architecture, Validation Report, Decision Record, or Foundation Boundaries."
+    - "Flag contradictions with Product Brief, Product Scope, User Journeys, Information Architecture, Interaction
+      Model, UI Specification, Product Architecture, Validation Report, Decision Record, or Foundation Boundaries."
     - "Flag requirements without actor, source, priority, verification method, or traceability."
     - "Flag requirements that are too vague to test."
     - "Flag core requirements that are actually post-MVP, convenience, operational, or speculative requirements."
-    - "Flag missing requirements implied by journeys, actions, objects, state transitions, permissions, integrations, or business rules."
-    - "Verify that data, integration, admin, system, and business-rule requirements do not drift into engineering implementation detail."
-    - "Verify that requirements can feed Feature Specification, Acceptance Criteria, Engineering Brief, Data Model, API Contracts, Frontend Architecture, and Test Strategy."
-    - "Flag content that belongs better in Non-Functional Requirements, Feature Specification, Acceptance Criteria, Engineering Architecture, Data Model, API Contracts, Security, or Operations."
+    - "Flag missing requirements implied by journeys, actions, objects, state transitions, permissions, integrations, or
+      business rules."
+    - "Verify that data, integration, admin, system, and business-rule requirements do not drift into engineering
+      implementation detail."
+    - "Verify that requirements can feed Feature Specification, Acceptance Criteria, Engineering Brief, Data Model, API
+      Contracts, Frontend Architecture, and Test Strategy."
+    - "Flag content that belongs better in Non-Functional Requirements, Feature Specification, Acceptance Criteria,
+      Engineering Architecture, Data Model, API Contracts, Security, or Operations."
   specializedFormats:
     requirementFormat:
       description: "Required format for each functional requirement."
       fields:
-        - id
-        - title
-        - statement
-        - actor
-        - requirementType
-        - scopeClassification
-        - priority
-        - source
-        - userValue
-        - relatedJourney
-        - relatedJourneyStep
-        - relatedModule
-        - relatedCapability
-        - relatedObjects
-        - relatedActions
-        - relatedStates
-        - permissionImplications
-        - dataImplications
-        - integrationImplications
-        - dependencies
-        - businessRules
-        - acceptanceCriteriaRefs
-        - verificationMethod
-        - failureBehavior
-        - recoveryBehavior
-        - ownerOrReviewTarget
-        - status
-        - notes
+        - "id"
+        - "title"
+        - "statement"
+        - "actor"
+        - "requirementType"
+        - "scopeClassification"
+        - "priority"
+        - "source"
+        - "userValue"
+        - "relatedJourney"
+        - "relatedJourneyStep"
+        - "relatedModule"
+        - "relatedCapability"
+        - "relatedObjects"
+        - "relatedActions"
+        - "relatedStates"
+        - "permissionImplications"
+        - "dataImplications"
+        - "integrationImplications"
+        - "dependencies"
+        - "businessRules"
+        - "acceptanceCriteriaRefs"
+        - "verificationMethod"
+        - "failureBehavior"
+        - "recoveryBehavior"
+        - "ownerOrReviewTarget"
+        - "status"
+        - "notes"
     requirementPriorityFormat:
       description: "Recommended format for requirement priority definitions."
       fields:
-        - priority
-        - definition
-        - inclusionRule
-        - exclusionRule
-        - decisionAuthority
-        - examples
+        - "priority"
+        - "definition"
+        - "inclusionRule"
+        - "exclusionRule"
+        - "decisionAuthority"
+        - "examples"
     businessRuleFormat:
       description: "Recommended format for product business rules."
       fields:
-        - id
-        - rule
-        - appliesTo
-        - rationale
-        - source
-        - configurable
-        - precedence
-        - conflictHandling
-        - validationBehavior
-        - auditability
-        - downstreamImplications
+        - "id"
+        - "rule"
+        - "appliesTo"
+        - "rationale"
+        - "source"
+        - "configurable"
+        - "precedence"
+        - "conflictHandling"
+        - "validationBehavior"
+        - "auditability"
+        - "downstreamImplications"
     requirementTraceFormat:
       description: "Recommended format for requirement traceability records."
       fields:
-        - requirementId
-        - sourceDocument
-        - sourceItem
-        - linkedJourney
-        - linkedModule
-        - linkedCapability
-        - linkedObject
-        - linkedAction
-        - linkedAcceptanceCriteria
-        - downstreamDocuments
-        - changeImpact
+        - "requirementId"
+        - "sourceDocument"
+        - "sourceItem"
+        - "linkedJourney"
+        - "linkedModule"
+        - "linkedCapability"
+        - "linkedObject"
+        - "linkedAction"
+        - "linkedAcceptanceCriteria"
+        - "downstreamDocuments"
+        - "changeImpact"
   sections:
     - id: "requirement-taxonomy"
       title: "Requirement Taxonomy"
-      intent: "Define requirement structure, types, priority model, lifecycle status, verification model, and traceability expectations."
+      intent: "Define requirement structure, types, priority model, lifecycle status, verification model, and traceability
+        expectations."
       required: true
       outputGuidance:
         - "Define the standard requirement record format before listing requirements."
         - "Classify requirements by type, priority, scope status, lifecycle status, and verification method."
-        - "Explain how requirements differ from features, acceptance criteria, non-functional requirements, and engineering tasks."
+        - "Explain how requirements differ from features, acceptance criteria, non-functional requirements, and
+          engineering tasks."
       qualityChecks:
         - "The taxonomy prevents ambiguous or inconsistent requirement writing."
         - "Priority labels have decision rules, not only names."
         - "Verification method expectations are explicit."
-      questions:
+      questions: &a1
         - "How are requirements structured?"
-        - "What requirement types exist: user, system, admin, integration, data, business rule, workflow, automation, output, or configuration?"
+        - "What requirement types exist: user, system, admin, integration, data, business rule, workflow, automation, output,
+          or configuration?"
         - "What is the taxonomy for requirement priority?"
-        - "How are must-have, should-have, could-have, won't-have, post-MVP, deferred, blocked, validation-required, and excluded requirements distinguished?"
+        - "How are must-have, should-have, could-have, won't-have, post-MVP, deferred, blocked, validation-required, and
+          excluded requirements distinguished?"
         - "What lifecycle statuses can a requirement have?"
         - "What constitutes a well-formed functional requirement?"
-        - "How does a requirement differ from a feature, acceptance criterion, non-functional requirement, or engineering task?"
+        - "How does a requirement differ from a feature, acceptance criterion, non-functional requirement, or engineering
+          task?"
     - id: "requirement-register"
       title: "Requirement Register"
-      intent: "Maintain the master inventory of all functional requirements with type, source, priority, traceability, dependencies, verification, and status."
+      intent: "Maintain the master inventory of all functional requirements with type, source, priority, traceability,
+        dependencies, verification, and status."
       required: true
       outputGuidance:
         - "List requirements as structured records using the requirement format."
@@ -247,7 +284,7 @@ document:
         - "Every material requirement is traceable to a source."
         - "Every active requirement has priority, verification method, and downstream implication."
         - "The register does not include speculative requirements without classification."
-      questions:
+      questions: &a2
         - "What is the complete inventory of functional requirements?"
         - "What type, priority, scope classification, and status does each requirement have?"
         - "Which requirements are active, deferred, post-MVP, excluded, blocked, or validation-required?"
@@ -256,7 +293,8 @@ document:
         - "What downstream documents must inherit each requirement?"
     - id: "core-requirements"
       title: "Core Requirements"
-      intent: "Enumerate must-have functional requirements essential to the product promise, MVP scope, primary journey, and product success criteria."
+      intent: "Enumerate must-have functional requirements essential to the product promise, MVP scope, primary journey, and
+        product success criteria."
       required: true
       outputGuidance:
         - "Only classify a requirement as core if the product promise or primary journey fails without it."
@@ -266,7 +304,7 @@ document:
         - "Core requirements are not inflated with convenience, polish, or post-MVP behavior."
         - "Each core requirement has explicit user or product value."
         - "Dependency chain among core requirements is clear."
-      questions:
+      questions: &a3
         - "What are the must-have functional requirements?"
         - "Which requirements are essential to the core product promise?"
         - "Which requirements are essential to the primary journey?"
@@ -275,7 +313,8 @@ document:
         - "What core requirements are risky, blocked, or dependent on unresolved decisions?"
     - id: "user-requirements"
       title: "User Requirements"
-      intent: "Define required end-user functions, supported actions, outputs, preferences, corrections, recovery paths, and user-facing controls."
+      intent: "Define required end-user functions, supported actions, outputs, preferences, corrections, recovery paths, and
+        user-facing controls."
       required: true
       outputGuidance:
         - "Describe what users must be able to do and what the product must return or change."
@@ -285,7 +324,7 @@ document:
         - "User requirements map to journeys and interaction actions."
         - "Outputs and state changes are explicit."
         - "Preferences and settings are included only when functionally required."
-      questions:
+      questions: &a4
         - "What functions do end users need from the product?"
         - "What user actions must be supported?"
         - "What user-facing outputs must the product produce?"
@@ -294,7 +333,8 @@ document:
         - "What user controls are required to preserve agency, trust, consent, or safety?"
     - id: "system-requirements"
       title: "System Requirements"
-      intent: "Define required background functions, automation, data processing, retrieval, scheduling, health, maintenance, degradation, and system-initiated behavior."
+      intent: "Define required background functions, automation, data processing, retrieval, scheduling, health, maintenance,
+        degradation, and system-initiated behavior."
       required: true
       outputGuidance:
         - "Describe system behavior at product level without specifying implementation architecture."
@@ -304,7 +344,7 @@ document:
         - "System requirements are product behaviors, not engineering designs."
         - "Automation and background actions preserve user consent and boundaries."
         - "Degradation behavior is specified for material system functions."
-      questions:
+      questions: &a5
         - "What background or automated functions are required?"
         - "What data processing, storage, retrieval, generation, sync, or transformation functions are needed?"
         - "What scheduling, queuing, notification, or batch processing is required?"
@@ -313,7 +353,8 @@ document:
         - "What degradation or fallback behavior is required when system functions fail?"
     - id: "admin-requirements"
       title: "Admin Requirements"
-      intent: "Define required administrative functions, roles, permissions, configuration, monitoring, support, moderation, and management capabilities."
+      intent: "Define required administrative functions, roles, permissions, configuration, monitoring, support, moderation,
+        and management capabilities."
       required: true
       outputGuidance:
         - "Separate mandatory admin functions from operational convenience."
@@ -323,7 +364,7 @@ document:
         - "Admin requirements are justified by product, support, security, operations, or compliance need."
         - "Admin roles and permission implications are explicit."
         - "Admin capabilities do not create hidden user trust or privacy risks."
-      questions:
+      questions: &a6
         - "What administrative functions are required?"
         - "Who needs admin access and for what purposes?"
         - "What configuration, monitoring, support, moderation, or management functions are needed?"
@@ -332,7 +373,8 @@ document:
         - "What admin actions require auditability or stronger permission controls?"
     - id: "integration-requirements"
       title: "Integration Requirements"
-      intent: "Define required external integrations, data flows, authentication, authorization, dependency behavior, failure handling, fallback, and ownership."
+      intent: "Define required external integrations, data flows, authentication, authorization, dependency behavior, failure
+        handling, fallback, and ownership."
       required: true
       outputGuidance:
         - "List integrations as product requirements, not implementation choices."
@@ -342,7 +384,7 @@ document:
         - "Integration requirements are tied to scope, user value, product architecture, or business rules."
         - "Failure handling and fallback are explicit."
         - "Auth and permission implications are not hidden."
-      questions:
+      questions: &a7
         - "What external integrations are required?"
         - "What data must flow in and out of the product?"
         - "What authentication and authorization integrations are needed?"
@@ -352,7 +394,8 @@ document:
         - "Who owns each integration requirement?"
     - id: "data-requirements"
       title: "Data Requirements"
-      intent: "Define product-level requirements for storing, processing, retrieving, retaining, deleting, exporting, importing, validating, and maintaining data consistency."
+      intent: "Define product-level requirements for storing, processing, retrieving, retaining, deleting, exporting,
+        importing, validating, and maintaining data consistency."
       required: true
       outputGuidance:
         - "Tie data requirements to IA objects, interactions, states, permissions, and user trust."
@@ -362,7 +405,7 @@ document:
         - "Data requirements are traceable to product objects or user/system actions."
         - "Data lifecycle implications are explicit."
         - "Data accuracy and consistency requirements are not overclaimed or left vague."
-      questions:
+      questions: &a8
         - "What data must the product store, process, retrieve, validate, or generate?"
         - "What data must be user-editable, correctable, auditable, importable, or exportable?"
         - "What are the data retention, deletion, archival, and portability requirements?"
@@ -371,7 +414,8 @@ document:
         - "What data requirements should feed Engineering Data Model?"
     - id: "business-rules"
       title: "Business Rules"
-      intent: "Define product rules, validation rules, constraints, workflow rules, precedence rules, configurability, conflict handling, and auditability."
+      intent: "Define product rules, validation rules, constraints, workflow rules, precedence rules, configurability,
+        conflict handling, and auditability."
       required: true
       outputGuidance:
         - "State rules as explicit enforceable product behavior."
@@ -381,7 +425,7 @@ document:
         - "Business rules are enforceable and testable."
         - "Configurable versus hard-coded rules are distinguished."
         - "Conflict handling is explicit for high-impact or likely rule conflicts."
-      questions:
+      questions: &a9
         - "What business rules must the product enforce?"
         - "What validation, constraint, and workflow rules apply?"
         - "What rules are configurable versus hard-coded?"
@@ -390,7 +434,8 @@ document:
         - "What rules require auditability, explanation, or user visibility?"
     - id: "requirement-traceability"
       title: "Requirement Traceability"
-      intent: "Define how requirements trace to sources, journeys, modules, capabilities, objects, actions, acceptance criteria, tests, and downstream documents."
+      intent: "Define how requirements trace to sources, journeys, modules, capabilities, objects, actions, acceptance
+        criteria, tests, and downstream documents."
       required: true
       outputGuidance:
         - "Trace requirements backward to source and forward to downstream documents."
@@ -400,7 +445,7 @@ document:
         - "Each material requirement has backward and forward traceability."
         - "No core journey, module, object, action, or business rule lacks corresponding requirements."
         - "Traceability is useful for review, not bureaucratic decoration."
-      questions:
+      questions: &a10
         - "How is each requirement traced to a source document or decision?"
         - "How is each requirement traced to a user journey?"
         - "How is each requirement traced to a product module or capability?"
@@ -410,7 +455,8 @@ document:
         - "How are requirement changes tracked and propagated?"
     - id: "change-governance"
       title: "Change Governance"
-      intent: "Define how functional requirements are proposed, revised, accepted, rejected, deferred, versioned, deprecated, and propagated downstream."
+      intent: "Define how functional requirements are proposed, revised, accepted, rejected, deferred, versioned, deprecated,
+        and propagated downstream."
       required: true
       outputGuidance:
         - "Define lightweight governance that prevents uncontrolled requirement growth without blocking learning."
@@ -420,10 +466,175 @@ document:
         - "Requirement changes require rationale, source, and impact review."
         - "Governance prevents scope creep and undocumented downstream drift."
         - "Deferred and deprecated requirements remain traceable."
-      questions:
+      questions: &a11
         - "How are new functional requirements proposed?"
         - "What evidence or decision authority is required to add, remove, or modify a requirement?"
         - "How are requirement changes reviewed and approved?"
         - "How are rejected, deferred, deprecated, or superseded requirements tracked?"
         - "How are requirement versions managed?"
         - "Which downstream documents must be updated after a requirement change?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain functional requirements. What must the product functionally do, for whom, under what
+      conditions, and how will each requirement be verified?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "requirement-taxonomy"
+        label: "Requirement Taxonomy"
+        required: true
+        description: "Define requirement structure, types, priority model, lifecycle status, verification model, and
+          traceability expectations."
+        evaluationHint: "Look for concrete answers addressing: How are requirements structured?; What requirement types exist:
+          user, system, admin, integration, data, business rule, workflow, automation, output, or configuration?; What
+          is the taxonomy for requirement priority?."
+        sourceQuestions: *a1
+        targetSections: &a12
+          - "Requirement Taxonomy"
+      - id: "requirement-register"
+        label: "Requirement Register"
+        required: true
+        description: "Maintain the master inventory of all functional requirements with type, source, priority, traceability,
+          dependencies, verification, and status."
+        evaluationHint: "Look for concrete answers addressing: What is the complete inventory of functional requirements?; What
+          type, priority, scope classification, and status does each requirement have?; Which requirements are active,
+          deferred, post-MVP, excluded, blocked, or validation-required?."
+        sourceQuestions: *a2
+        targetSections: &a13
+          - "Requirement Register"
+      - id: "core-requirements"
+        label: "Core Requirements"
+        required: true
+        description: "Enumerate must-have functional requirements essential to the product promise, MVP scope, primary journey,
+          and product success criteria."
+        evaluationHint: "Look for concrete answers addressing: What are the must-have functional requirements?; Which
+          requirements are essential to the core product promise?; Which requirements are essential to the primary
+          journey?."
+        sourceQuestions: *a3
+        targetSections: &a14
+          - "Core Requirements"
+      - id: "user-requirements"
+        label: "User Requirements"
+        required: true
+        description: "Define required end-user functions, supported actions, outputs, preferences, corrections, recovery paths,
+          and user-facing controls."
+        evaluationHint: "Look for concrete answers addressing: What functions do end users need from the product?; What user
+          actions must be supported?; What user-facing outputs must the product produce?."
+        sourceQuestions: *a4
+        targetSections: &a15
+          - "User Requirements"
+      - id: "system-requirements"
+        label: "System Requirements"
+        required: true
+        description: "Define required background functions, automation, data processing, retrieval, scheduling, health,
+          maintenance, degradation, and system-initiated behavior."
+        evaluationHint: "Look for concrete answers addressing: What background or automated functions are required?; What data
+          processing, storage, retrieval, generation, sync, or transformation functions are needed?; What scheduling,
+          queuing, notification, or batch processing is required?."
+        sourceQuestions: *a5
+        targetSections: &a16
+          - "System Requirements"
+      - id: "admin-requirements"
+        label: "Admin Requirements"
+        required: true
+        description: "Define required administrative functions, roles, permissions, configuration, monitoring, support,
+          moderation, and management capabilities."
+        evaluationHint: "Look for concrete answers addressing: What administrative functions are required?; Who needs admin
+          access and for what purposes?; What configuration, monitoring, support, moderation, or management functions
+          are needed?."
+        sourceQuestions: *a6
+        targetSections: &a17
+          - "Admin Requirements"
+      - id: "integration-requirements"
+        label: "Integration Requirements"
+        required: true
+        description: "Define required external integrations, data flows, authentication, authorization, dependency behavior,
+          failure handling, fallback, and ownership."
+        evaluationHint: "Look for concrete answers addressing: What external integrations are required?; What data must flow in
+          and out of the product?; What authentication and authorization integrations are needed?."
+        sourceQuestions: *a7
+        targetSections: &a18
+          - "Integration Requirements"
+      - id: "data-requirements"
+        label: "Data Requirements"
+        required: true
+        description: "Define product-level requirements for storing, processing, retrieving, retaining, deleting, exporting,
+          importing, validating, and maintaining data consistency."
+        evaluationHint: "Look for concrete answers addressing: What data must the product store, process, retrieve, validate, or
+          generate?; What data must be user-editable, correctable, auditable, importable, or exportable?; What are the
+          data retention, deletion, archival, and portability requirements?."
+        sourceQuestions: *a8
+        targetSections: &a19
+          - "Data Requirements"
+      - id: "business-rules"
+        label: "Business Rules"
+        required: true
+        description: "Define product rules, validation rules, constraints, workflow rules, precedence rules, configurability,
+          conflict handling, and auditability."
+        evaluationHint: "Look for concrete answers addressing: What business rules must the product enforce?; What validation,
+          constraint, and workflow rules apply?; What rules are configurable versus hard-coded?."
+        sourceQuestions: *a9
+        targetSections: &a20
+          - "Business Rules"
+      - id: "requirement-traceability"
+        label: "Requirement Traceability"
+        required: true
+        description: "Define how requirements trace to sources, journeys, modules, capabilities, objects, actions, acceptance
+          criteria, tests, and downstream documents."
+        evaluationHint: "Look for concrete answers addressing: How is each requirement traced to a source document or decision?;
+          How is each requirement traced to a user journey?; How is each requirement traced to a product module or
+          capability?."
+        sourceQuestions: *a10
+        targetSections: &a21
+          - "Requirement Traceability"
+      - id: "change-governance"
+        label: "Change Governance"
+        required: true
+        description: "Define how functional requirements are proposed, revised, accepted, rejected, deferred, versioned,
+          deprecated, and propagated downstream."
+        evaluationHint: "Look for concrete answers addressing: How are new functional requirements proposed?; What evidence or
+          decision authority is required to add, remove, or modify a requirement?; How are requirement changes reviewed
+          and approved?."
+        sourceQuestions: *a11
+        targetSections: &a22
+          - "Change Governance"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      requirement-taxonomy:
+        targetSections: *a12
+      requirement-register:
+        targetSections: *a13
+      core-requirements:
+        targetSections: *a14
+      user-requirements:
+        targetSections: *a15
+      system-requirements:
+        targetSections: *a16
+      admin-requirements:
+        targetSections: *a17
+      integration-requirements:
+        targetSections: *a18
+      data-requirements:
+        targetSections: *a19
+      business-rules:
+        targetSections: *a20
+      requirement-traceability:
+        targetSections: *a21
+      change-governance:
+        targetSections: *a22
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.314Z"
+      totalSourceQuestions: 69
+      reviewRequired: false

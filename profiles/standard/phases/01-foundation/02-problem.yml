@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 2
   type: "problem"
-  purpose: "Define the observable pain, friction, confusion, or limitation this project exists to confront before proposing solutions."
+  purpose: "Define the observable pain, friction, confusion, or limitation this project exists to confront before
+    proposing solutions."
   centralQuestion: "What pain, friction, confusion, or limitation does this project exist to confront?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "foundation.problem_map"
         format: "html"
         path: "outcomes/html/01-foundation/problem-map.html"
-        purpose: "Provide a navigable diagnostic map of the problem, symptoms, root causes, alternatives, insufficiencies, scope, and non-problems."
+        purpose: "Provide a navigable diagnostic map of the problem, symptoms, root causes, alternatives, insufficiencies,
+          scope, and non-problems."
         audience: "founder"
         includes:
           - "problem statement"
@@ -31,7 +33,8 @@ document:
       - id: "foundation.problem_review_prompt"
         format: "markdown"
         path: "outcomes/agents/01-foundation/problem-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the problem definition is observable, bounded, and aligned with the founding thesis."
+        purpose: "Provide compact context for agents reviewing whether the problem definition is observable, bounded, and
+          aligned with the founding thesis."
         agentRole: "reviewer"
         includes:
           - "canonical problem definition"
@@ -59,7 +62,8 @@ document:
     - id: "research-notes"
       type: "context"
       required: false
-      description: "Interviews, transcripts, desk research, survey notes, or other evidence that can support or challenge the problem definition."
+      description: "Interviews, transcripts, desk research, survey notes, or other evidence that can support or challenge the
+        problem definition."
   completionCriteria:
     - "The central question is answered explicitly in the Problem Statement section."
     - "The problem is described through observable symptoms, not only abstract claims."
@@ -98,7 +102,7 @@ document:
       qualityChecks:
         - "The problem is not phrased as the absence of the proposed product."
         - "The statement is specific enough to guide validation."
-      questions:
+      questions: &a1
         - "What problem is being solved?"
         - "How does this problem appear in real life?"
         - "Who suffers from this problem?"
@@ -115,7 +119,7 @@ document:
       qualityChecks:
         - "Symptoms are observable rather than speculative."
         - "The section distinguishes directly observed symptoms from inferred symptoms."
-      questions:
+      questions: &a2
         - "What observable signs indicate the problem exists?"
         - "What do people say when they experience the problem?"
         - "Which symptoms have been directly observed?"
@@ -132,7 +136,7 @@ document:
         - "Root causes are not asserted as facts unless supported by evidence."
         - "Each root cause explains why symptoms persist."
         - "The section does not confuse symptoms with causes."
-      questions:
+      questions: &a3
         - "Why does the problem exist in the first place?"
         - "What systemic conditions sustain the problem?"
         - "Which root causes are evidenced, assumed, or still unknown?"
@@ -146,7 +150,7 @@ document:
       qualityChecks:
         - "Alternatives are described without caricature."
         - "The section explains why people use them despite their limitations."
-      questions:
+      questions: &a4
         - "What do people currently do to cope with the problem?"
         - "What tools or processes are in use today?"
         - "Why do people continue using these alternatives?"
@@ -161,7 +165,7 @@ document:
       qualityChecks:
         - "The critique is fair and specific."
         - "The section identifies for whom current solutions remain acceptable."
-      questions:
+      questions: &a5
         - "What do current solutions solve well?"
         - "Where do they fail structurally?"
         - "What trade-offs do current solutions force?"
@@ -176,7 +180,7 @@ document:
       qualityChecks:
         - "The scope is specific enough to inform audience and validation."
         - "The section does not imply false precision."
-      questions:
+      questions: &a6
         - "Who is clearly affected by this problem?"
         - "How severe is the pain for the most affected?"
         - "How frequently does the problem occur?"
@@ -192,7 +196,108 @@ document:
       qualityChecks:
         - "The exclusions protect focus without denying that adjacent problems may be real."
         - "The section does not prematurely block future expansion that could be validated later."
-      questions:
+      questions: &a7
         - "What problems are adjacent but not the target?"
         - "What should this project not claim to solve?"
         - "Which exclusions should be expanded later in the Boundaries document?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain the real problem. What pain, friction, confusion, or limitation does this project exist to confront?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "problem-statement"
+        label: "Problem Statement"
+        required: true
+        description: "Define the core problem in concrete, observable terms."
+        evaluationHint: "Look for concrete answers addressing: What problem is being solved?; How does this problem appear in
+          real life?; Who suffers from this problem?."
+        sourceQuestions: *a1
+        targetSections: &a8
+          - "Problem Statement"
+      - id: "symptoms"
+        label: "Symptoms"
+        required: true
+        description: "List the observable signs that the problem exists."
+        evaluationHint: "Look for concrete answers addressing: What observable signs indicate the problem exists?; What do
+          people say when they experience the problem?; Which symptoms have been directly observed?."
+        sourceQuestions: *a2
+        targetSections: &a9
+          - "Symptoms"
+      - id: "root-causes"
+        label: "Root Causes"
+        required: true
+        description: "Identify the systemic reasons the problem persists."
+        evaluationHint: "Look for concrete answers addressing: Why does the problem exist in the first place?; What systemic
+          conditions sustain the problem?; Which root causes are evidenced, assumed, or still unknown?."
+        sourceQuestions: *a3
+        targetSections: &a10
+          - "Root Causes"
+      - id: "existing-alternatives"
+        label: "Existing Alternatives"
+        required: true
+        description: "Survey what people currently do to cope with the problem."
+        evaluationHint: "Look for concrete answers addressing: What do people currently do to cope with the problem?; What tools
+          or processes are in use today?; Why do people continue using these alternatives?."
+        sourceQuestions: *a4
+        targetSections: &a11
+          - "Existing Alternatives"
+      - id: "why-current-solutions-are-insufficient"
+        label: "Why Current Solutions Are Insufficient"
+        required: true
+        description: "Articulate the structural gaps left by current approaches."
+        evaluationHint: "Look for concrete answers addressing: What do current solutions solve well?; Where do they fail
+          structurally?; What trade-offs do current solutions force?."
+        sourceQuestions: *a5
+        targetSections: &a12
+          - "Why Current Solutions Are Insufficient"
+      - id: "scope-of-the-problem"
+        label: "Scope of the Problem"
+        required: true
+        description: "Bound the affected context, severity, frequency, and evidence level of the problem."
+        evaluationHint: "Look for concrete answers addressing: Who is clearly affected by this problem?; How severe is the pain
+          for the most affected?; How frequently does the problem occur?."
+        sourceQuestions: *a6
+        targetSections: &a13
+          - "Scope of the Problem"
+      - id: "non-problems"
+        label: "Non-Problems"
+        required: true
+        description: "Identify adjacent problems that the project does not target."
+        evaluationHint: "Look for concrete answers addressing: What problems are adjacent but not the target?; What should this
+          project not claim to solve?; Which exclusions should be expanded later in the Boundaries document?."
+        sourceQuestions: *a7
+        targetSections: &a14
+          - "Non-Problems"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      problem-statement:
+        targetSections: *a8
+      symptoms:
+        targetSections: *a9
+      root-causes:
+        targetSections: *a10
+      existing-alternatives:
+        targetSections: *a11
+      why-current-solutions-are-insufficient:
+        targetSections: *a12
+      scope-of-the-problem:
+        targetSections: *a13
+      non-problems:
+        targetSections: *a14
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.222Z"
+      totalSourceQuestions: 29
+      reviewRequired: false

@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 6
   type: "economic_model"
-  purpose: "Determine whether the project can pay its own costs, sustain required operations, and generate enough margin to continue existing under explicit economic assumptions."
-  centralQuestion: "Is there a plausible configuration where this project pays its own costs and generates enough margin to continue existing?"
+  purpose: "Determine whether the project can pay its own costs, sustain required operations, and generate enough margin
+    to continue existing under explicit economic assumptions."
+  centralQuestion: "Is there a plausible configuration where this project pays its own costs and generates enough margin
+    to continue existing?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,8 @@ document:
       - id: "validation.economic_model_dashboard"
         format: "html"
         path: "outcomes/html/02-validation/economic-model-dashboard.html"
-        purpose: "Provide a navigable economic dashboard covering revenue model, pricing assumptions, costs, unit economics, break-even, scenarios, sensitivity, risks, invalidating conditions, and evidence gaps."
+        purpose: "Provide a navigable economic dashboard covering revenue model, pricing assumptions, costs, unit economics,
+          break-even, scenarios, sensitivity, risks, invalidating conditions, and evidence gaps."
         audience: "founder"
         includes:
           - "economic validation objective"
@@ -35,7 +38,8 @@ document:
       - id: "validation.economic_model_review_prompt"
         format: "markdown"
         path: "outcomes/agents/02-validation/economic-model-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the economic model is assumption-aware, evidence-based, internally consistent, and decision-useful."
+        purpose: "Provide compact context for agents reviewing whether the economic model is assumption-aware, evidence-based,
+          internally consistent, and decision-useful."
         agentRole: "reviewer"
         includes:
           - "canonical economic model"
@@ -66,7 +70,8 @@ document:
     - id: "core-assumptions"
       type: "context"
       required: false
-      description: "Economic, pricing, demand, cost, conversion, churn, and operational assumptions extracted from the assumptions map."
+      description: "Economic, pricing, demand, cost, conversion, churn, and operational assumptions extracted from the
+        assumptions map."
     - id: "willingness-to-pay-hypotheses"
       type: "context"
       required: false
@@ -78,21 +83,26 @@ document:
     - id: "cost-notes"
       type: "manual_note"
       required: false
-      description: "Known or estimated fixed costs, variable costs, infrastructure costs, tool costs, payment costs, support costs, and one-time costs."
+      description: "Known or estimated fixed costs, variable costs, infrastructure costs, tool costs, payment costs, support
+        costs, and one-time costs."
     - id: "pricing-notes"
       type: "manual_note"
       required: false
-      description: "Candidate price points, packaging ideas, willingness-to-pay notes, competitor references, or substitute-cost notes."
+      description: "Candidate price points, packaging ideas, willingness-to-pay notes, competitor references, or
+        substitute-cost notes."
   completionCriteria:
     - "The central question is answered explicitly in the Economic Validation Summary section."
     - "Revenue streams and pricing assumptions are stated with evidence level and uncertainty."
-    - "Fixed, variable, one-time, infrastructure, support, payment, and operational costs are identified or marked unknown."
-    - "Unit economics include gross margin, contribution margin, CAC, LTV, payback period, and major unknowns where applicable."
+    - "Fixed, variable, one-time, infrastructure, support, payment, and operational costs are identified or marked
+      unknown."
+    - "Unit economics include gross margin, contribution margin, CAC, LTV, payback period, and major unknowns where
+      applicable."
     - "Break-even analysis states customer, revenue, conversion, and timeline assumptions."
     - "Scenario analysis includes conservative, realistic, optimistic, and failure scenarios with explicit assumptions."
     - "Sensitivity analysis identifies which variables most affect viability."
     - "Invalidating economic thresholds are concrete enough to trigger revise, pivot, or stop decisions."
-    - "Evidence gaps are surfaced and routed to Evidence Log, Decision Record, Business Model, GTM Pricing, or Financial Operations where appropriate."
+    - "Evidence gaps are surfaced and routed to Evidence Log, Decision Record, Business Model, GTM Pricing, or Financial
+      Operations where appropriate."
   qualityChecks:
     - "Avoid vague claims."
     - "Avoid false precision."
@@ -103,7 +113,8 @@ document:
     - "Do not invent revenue, cost, conversion, churn, CAC, LTV, margin, or market data."
     - "Label provisional numbers as assumptions, estimates, or placeholders."
     - "Separate economic viability from business model strategy and go-to-market execution."
-    - "Do not hide founder labor, support burden, infrastructure cost, payment fees, or AI/API usage costs when relevant."
+    - "Do not hide founder labor, support burden, infrastructure cost, payment fees, or AI/API usage costs when
+      relevant."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
@@ -112,7 +123,8 @@ document:
     - "State formulas used for break-even, margin, LTV, CAC, and sensitivity analysis when applicable."
     - "Tie economic assumptions to hypotheses, experiments, or evidence where possible."
     - "Mark assumptions requiring future validation instead of presenting them as facts."
-    - "Keep this document quantitative and viability-focused; detailed business mechanics belong in Business Model and offer packaging belongs in Go-to-market."
+    - "Keep this document quantitative and viability-focused; detailed business mechanics belong in Business Model and
+      offer packaging belongs in Go-to-market."
   reviewRules:
     - "Check whether each section answers its intended question."
     - "Flag contradictions with Foundation documents, Validation Strategy, Core Assumptions, Hypotheses, or Experiments."
@@ -121,62 +133,64 @@ document:
     - "Verify that cost structure includes fixed, variable, one-time, and scale-sensitive costs where relevant."
     - "Verify that unit economics and break-even assumptions are internally consistent."
     - "Flag economic conclusions that should instead be treated as unresolved evidence gaps."
-    - "Flag content that belongs better in Business Model, Pricing and Packaging, Financial Operations, or Validation Report."
+    - "Flag content that belongs better in Business Model, Pricing and Packaging, Financial Operations, or Validation
+      Report."
   specializedFormats:
     economicAssumptionFormat:
       description: "Recommended format for economic assumptions."
       fields:
-        - id
-        - assumption
-        - category
-        - value
-        - range
-        - evidenceLevel
-        - source
-        - uncertainty
-        - sensitivity
-        - validationNeeded
-        - notes
+        - "id"
+        - "assumption"
+        - "category"
+        - "value"
+        - "range"
+        - "evidenceLevel"
+        - "source"
+        - "uncertainty"
+        - "sensitivity"
+        - "validationNeeded"
+        - "notes"
     scenarioFormat:
       description: "Recommended format for economic scenarios."
       fields:
-        - scenario
-        - description
-        - revenueAssumptions
-        - costAssumptions
-        - conversionAssumptions
-        - churnAssumptions
-        - marginOutcome
-        - breakEvenOutcome
-        - risk
-        - interpretation
+        - "scenario"
+        - "description"
+        - "revenueAssumptions"
+        - "costAssumptions"
+        - "conversionAssumptions"
+        - "churnAssumptions"
+        - "marginOutcome"
+        - "breakEvenOutcome"
+        - "risk"
+        - "interpretation"
     economicMetricFormat:
       description: "Recommended format for economic metrics."
       fields:
-        - metric
-        - formula
-        - value
-        - range
-        - assumptions
-        - evidenceLevel
-        - interpretation
-        - riskIfWrong
-        - updateCadence
+        - "metric"
+        - "formula"
+        - "value"
+        - "range"
+        - "assumptions"
+        - "evidenceLevel"
+        - "interpretation"
+        - "riskIfWrong"
+        - "updateCadence"
     invalidatingThresholdFormat:
       description: "Recommended format for economic invalidating conditions."
       fields:
-        - condition
-        - threshold
-        - relatedAssumptions
-        - evidenceSource
-        - consequence
-        - decisionGate
-        - mitigation
-        - status
+        - "condition"
+        - "threshold"
+        - "relatedAssumptions"
+        - "evidenceSource"
+        - "consequence"
+        - "decisionGate"
+        - "mitigation"
+        - "status"
   sections:
     - id: "economic-validation-objective"
       title: "Economic Validation Objective"
-      intent: "Define the financial viability question, minimum viable economic outcome, and decision implications of economic validation."
+      intent: "Define the financial viability question, minimum viable economic outcome, and decision implications of economic
+        validation."
       required: true
       outputGuidance:
         - "State the economic question in terms of project survival and sustainability, not growth fantasy."
@@ -186,7 +200,7 @@ document:
         - "The objective is tied to the project's actual operating needs."
         - "The section does not overreach into full business model strategy."
         - "The minimum viable outcome is concrete enough to inform go/no-go decisions."
-      questions:
+      questions: &a1
         - "What is the financial goal for this project?"
         - "What economic assumptions must hold true?"
         - "What is the minimum viable economic outcome?"
@@ -194,7 +208,8 @@ document:
         - "What decision will this economic model inform?"
     - id: "revenue-model"
       title: "Revenue Model"
-      intent: "Define how the project could generate revenue and identify primary, secondary, deferred, and excluded revenue streams."
+      intent: "Define how the project could generate revenue and identify primary, secondary, deferred, and excluded revenue
+        streams."
       required: true
       outputGuidance:
         - "Separate actual planned revenue streams from possible future revenue streams."
@@ -204,16 +219,18 @@ document:
         - "Revenue streams are plausible for the defined audience and problem."
         - "The section distinguishes payer, buyer, user, and beneficiary where relevant."
         - "Revenue assumptions are labeled by evidence level."
-      questions:
+      questions: &a2
         - "How can the project generate revenue?"
         - "What are the primary and secondary revenue streams?"
         - "Which revenue streams are deferred or explicitly excluded?"
         - "Who pays, who uses, who buys, and who benefits?"
-        - "What is the pricing model: subscription, one-time, usage-based, freemium, hosted, support, services, licensing, or another model?"
+        - "What is the pricing model: subscription, one-time, usage-based, freemium, hosted, support, services, licensing, or
+          another model?"
         - "What evidence supports each revenue stream?"
     - id: "pricing-assumptions"
       title: "Pricing Assumptions"
-      intent: "Establish candidate price points, willingness-to-pay evidence, substitute comparisons, packaging constraints, and uncertainty around pricing."
+      intent: "Establish candidate price points, willingness-to-pay evidence, substitute comparisons, packaging constraints,
+        and uncertainty around pricing."
       required: true
       outputGuidance:
         - "Separate price point assumptions from willingness-to-pay evidence."
@@ -223,7 +240,7 @@ document:
         - "Price points are not presented as validated unless evidence exists."
         - "Willingness-to-pay is not inferred from compliments, interest, or signups alone."
         - "Pricing assumptions are compatible with the audience and revenue model."
-      questions:
+      questions: &a3
         - "What price points are being considered?"
         - "What is the willingness-to-pay evidence supporting each price point?"
         - "How does pricing compare to alternatives and substitutes?"
@@ -232,17 +249,19 @@ document:
         - "What pricing evidence is missing?"
     - id: "cost-structure"
       title: "Cost Structure"
-      intent: "Map fixed costs, variable costs, one-time costs, support costs, payment costs, infrastructure costs, and scale-sensitive cost drivers."
+      intent: "Map fixed costs, variable costs, one-time costs, support costs, payment costs, infrastructure costs, and
+        scale-sensitive cost drivers."
       required: true
       outputGuidance:
         - "Separate fixed, variable, one-time, and scale-sensitive costs."
-        - "Include hidden costs such as founder labor, support, payment processing, AI/API usage, compliance, tooling, and infrastructure where relevant."
+        - "Include hidden costs such as founder labor, support, payment processing, AI/API usage, compliance, tooling,
+          and infrastructure where relevant."
         - "Mark unknown or estimated costs explicitly."
       qualityChecks:
         - "Cost categories are complete enough to support break-even analysis."
         - "Variable costs per customer or usage unit are not ignored."
         - "Scale-sensitive costs are identified even if not yet quantified."
-      questions:
+      questions: &a4
         - "What are fixed monthly costs?"
         - "What are variable costs per customer, account, transaction, usage unit, or workspace?"
         - "What are one-time setup or launch costs?"
@@ -251,7 +270,8 @@ document:
         - "Which costs are unknown, estimated, or evidence-backed?"
     - id: "unit-economics"
       title: "Unit Economics"
-      intent: "Calculate or estimate gross margin, contribution margin, LTV, CAC, payback period, and LTV:CAC ratio per customer or account."
+      intent: "Calculate or estimate gross margin, contribution margin, LTV, CAC, payback period, and LTV:CAC ratio per
+        customer or account."
       required: true
       outputGuidance:
         - "State formulas and assumptions before conclusions."
@@ -261,7 +281,7 @@ document:
         - "Unit economics are based on explicit assumptions."
         - "CAC, LTV, churn, and payback are not invented or overclaimed."
         - "The section identifies which metrics are currently unknowable and how they will be validated later."
-      questions:
+      questions: &a5
         - "What is the estimated gross margin per customer?"
         - "What is the estimated contribution margin per customer?"
         - "What is the customer lifetime value (LTV)?"
@@ -271,7 +291,8 @@ document:
         - "Which unit economics inputs are known, estimated, or unknown?"
     - id: "break-even-analysis"
       title: "Break-even Analysis"
-      intent: "Determine the customers, revenue, conversion, timeline, and cost assumptions required to break even under different scenarios."
+      intent: "Determine the customers, revenue, conversion, timeline, and cost assumptions required to break even under
+        different scenarios."
       required: true
       outputGuidance:
         - "State the break-even formula and all required assumptions."
@@ -281,7 +302,7 @@ document:
         - "Break-even calculations use inputs stated elsewhere in the document."
         - "Required customer counts and conversion rates are plausible or clearly marked as assumptions."
         - "The section identifies what must be true operationally to reach break-even."
-      questions:
+      questions: &a6
         - "How many paying customers are needed to break even?"
         - "What monthly recurring revenue or total revenue is needed to break even?"
         - "What is the time to break-even under different scenarios?"
@@ -300,7 +321,7 @@ document:
         - "Scenarios differ by meaningful variables, not arbitrary optimism."
         - "The realistic scenario is not secretly optimistic."
         - "Failure scenarios identify what breaks the economic model."
-      questions:
+      questions: &a7
         - "Conservative scenario: what are the assumptions and outcome?"
         - "Realistic scenario: what are the assumptions and outcome?"
         - "Optimistic scenario: what are the assumptions and outcome?"
@@ -309,7 +330,8 @@ document:
         - "What decision follows from each scenario?"
     - id: "sensitivity-analysis"
       title: "Sensitivity Analysis"
-      intent: "Test how sensitive the model is to changes in price, churn, CAC, conversion, support burden, usage cost, and infrastructure cost."
+      intent: "Test how sensitive the model is to changes in price, churn, CAC, conversion, support burden, usage cost, and
+        infrastructure cost."
       required: true
       outputGuidance:
         - "Identify which variables most affect viability."
@@ -319,7 +341,7 @@ document:
         - "Sensitivity analysis focuses on variables that can change the decision."
         - "Maximum tolerable thresholds are explicit where useful."
         - "The section does not pretend precise sensitivity where inputs are purely speculative."
-      questions:
+      questions: &a8
         - "How sensitive is the model to price changes?"
         - "How sensitive is the model to churn rate?"
         - "How sensitive is the model to CAC?"
@@ -330,7 +352,8 @@ document:
         - "Which variable most threatens viability?"
     - id: "economic-risks"
       title: "Economic Risks"
-      intent: "Identify top economic risks, non-viability conditions, margin threats, cost shocks, demand risks, and competitive threats."
+      intent: "Identify top economic risks, non-viability conditions, margin threats, cost shocks, demand risks, and
+        competitive threats."
       required: true
       outputGuidance:
         - "Describe risks as economic mechanisms, not generic fears."
@@ -340,7 +363,7 @@ document:
         - "Risks are specific enough to monitor or validate."
         - "Economic risks are not duplicated from generic product or market risks unless they affect viability."
         - "Mitigations do not hide a non-viable model."
-      questions:
+      questions: &a9
         - "What are the top economic risks?"
         - "What economic conditions would make the project non-viable?"
         - "What cost shocks could break the model?"
@@ -350,7 +373,8 @@ document:
         - "What mitigations or pivots are available?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
-      intent: "Define economic thresholds or evidence patterns that would invalidate the model, require revision, or trigger a pivot."
+      intent: "Define economic thresholds or evidence patterns that would invalidate the model, require revision, or trigger a
+        pivot."
       required: true
       outputGuidance:
         - "State invalidating thresholds before relying on the model for decisions."
@@ -360,7 +384,7 @@ document:
         - "Invalidating conditions are concrete enough to apply."
         - "Thresholds are not set so loosely that the model can never fail."
         - "The section identifies what action follows invalidation."
-      questions:
+      questions: &a10
         - "What economic results would invalidate the project?"
         - "At what thresholds is a pivot required?"
         - "At what thresholds is revision required rather than pivot?"
@@ -369,7 +393,8 @@ document:
         - "What decision gate evaluates economic invalidation?"
     - id: "economic-validation-summary"
       title: "Economic Validation Summary"
-      intent: "Synthesize the overall economic viability verdict, confidence, evidence gaps, decision implications, and downstream handoff."
+      intent: "Synthesize the overall economic viability verdict, confidence, evidence gaps, decision implications, and
+        downstream handoff."
       required: true
       outputGuidance:
         - "Answer the central question directly."
@@ -380,10 +405,170 @@ document:
         - "The summary follows from the model rather than optimism."
         - "Evidence gaps are explicit."
         - "The verdict is precise about what has and has not been validated."
-      questions:
+      questions: &a11
         - "Is the project economically viable based on current evidence?"
         - "Is the model viable, conditionally viable, not yet proven, or non-viable?"
         - "What is the confidence level in the economic model?"
         - "What additional evidence is needed to increase confidence?"
         - "What economic decisions should be recorded now?"
         - "What should feed Business Model, Pricing and Packaging, Financial Operations, and Validation Report?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain economic model. Is there a plausible configuration where this project pays its own costs and
+      generates enough margin to continue existing?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "economic-validation-objective"
+        label: "Economic Validation Objective"
+        required: true
+        description: "Define the financial viability question, minimum viable economic outcome, and decision implications of
+          economic validation."
+        evaluationHint: "Look for concrete answers addressing: What is the financial goal for this project?; What economic
+          assumptions must hold true?; What is the minimum viable economic outcome?."
+        sourceQuestions: *a1
+        targetSections: &a12
+          - "Economic Validation Objective"
+      - id: "revenue-model"
+        label: "Revenue Model"
+        required: true
+        description: "Define how the project could generate revenue and identify primary, secondary, deferred, and excluded
+          revenue streams."
+        evaluationHint: "Look for concrete answers addressing: How can the project generate revenue?; What are the primary and
+          secondary revenue streams?; Which revenue streams are deferred or explicitly excluded?."
+        sourceQuestions: *a2
+        targetSections: &a13
+          - "Revenue Model"
+      - id: "pricing-assumptions"
+        label: "Pricing Assumptions"
+        required: true
+        description: "Establish candidate price points, willingness-to-pay evidence, substitute comparisons, packaging
+          constraints, and uncertainty around pricing."
+        evaluationHint: "Look for concrete answers addressing: What price points are being considered?; What is the
+          willingness-to-pay evidence supporting each price point?; How does pricing compare to alternatives and
+          substitutes?."
+        sourceQuestions: *a3
+        targetSections: &a14
+          - "Pricing Assumptions"
+      - id: "cost-structure"
+        label: "Cost Structure"
+        required: true
+        description: "Map fixed costs, variable costs, one-time costs, support costs, payment costs, infrastructure costs, and
+          scale-sensitive cost drivers."
+        evaluationHint: "Look for concrete answers addressing: What are fixed monthly costs?; What are variable costs per
+          customer, account, transaction, usage unit, or workspace?; What are one-time setup or launch costs?."
+        sourceQuestions: *a4
+        targetSections: &a15
+          - "Cost Structure"
+      - id: "unit-economics"
+        label: "Unit Economics"
+        required: true
+        description: "Calculate or estimate gross margin, contribution margin, LTV, CAC, payback period, and LTV:CAC ratio per
+          customer or account."
+        evaluationHint: "Look for concrete answers addressing: What is the estimated gross margin per customer?; What is the
+          estimated contribution margin per customer?; What is the customer lifetime value (LTV)?."
+        sourceQuestions: *a5
+        targetSections: &a16
+          - "Unit Economics"
+      - id: "break-even-analysis"
+        label: "Break-even Analysis"
+        required: true
+        description: "Determine the customers, revenue, conversion, timeline, and cost assumptions required to break even under
+          different scenarios."
+        evaluationHint: "Look for concrete answers addressing: How many paying customers are needed to break even?; What monthly
+          recurring revenue or total revenue is needed to break even?; What is the time to break-even under different
+          scenarios?."
+        sourceQuestions: *a6
+        targetSections: &a17
+          - "Break-even Analysis"
+      - id: "scenario-analysis"
+        label: "Scenario Analysis"
+        required: true
+        description: "Model conservative, realistic, optimistic, and failure scenarios with explicit assumptions and implications."
+        evaluationHint: "Look for concrete answers addressing: Conservative scenario: what are the assumptions and outcome?;
+          Realistic scenario: what are the assumptions and outcome?; Optimistic scenario: what are the assumptions and
+          outcome?."
+        sourceQuestions: *a7
+        targetSections: &a18
+          - "Scenario Analysis"
+      - id: "sensitivity-analysis"
+        label: "Sensitivity Analysis"
+        required: true
+        description: "Test how sensitive the model is to changes in price, churn, CAC, conversion, support burden, usage cost,
+          and infrastructure cost."
+        evaluationHint: "Look for concrete answers addressing: How sensitive is the model to price changes?; How sensitive is
+          the model to churn rate?; How sensitive is the model to CAC?."
+        sourceQuestions: *a8
+        targetSections: &a19
+          - "Sensitivity Analysis"
+      - id: "economic-risks"
+        label: "Economic Risks"
+        required: true
+        description: "Identify top economic risks, non-viability conditions, margin threats, cost shocks, demand risks, and
+          competitive threats."
+        evaluationHint: "Look for concrete answers addressing: What are the top economic risks?; What economic conditions would
+          make the project non-viable?; What cost shocks could break the model?."
+        sourceQuestions: *a9
+        targetSections: &a20
+          - "Economic Risks"
+      - id: "invalidating-conditions"
+        label: "Invalidating Conditions"
+        required: true
+        description: "Define economic thresholds or evidence patterns that would invalidate the model, require revision, or
+          trigger a pivot."
+        evaluationHint: "Look for concrete answers addressing: What economic results would invalidate the project?; At what
+          thresholds is a pivot required?; At what thresholds is revision required rather than pivot?."
+        sourceQuestions: *a10
+        targetSections: &a21
+          - "Invalidating Conditions"
+      - id: "economic-validation-summary"
+        label: "Economic Validation Summary"
+        required: true
+        description: "Synthesize the overall economic viability verdict, confidence, evidence gaps, decision implications, and
+          downstream handoff."
+        evaluationHint: "Look for concrete answers addressing: Is the project economically viable based on current evidence?; Is
+          the model viable, conditionally viable, not yet proven, or non-viable?; What is the confidence level in the
+          economic model?."
+        sourceQuestions: *a11
+        targetSections: &a22
+          - "Economic Validation Summary"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      economic-validation-objective:
+        targetSections: *a12
+      revenue-model:
+        targetSections: *a13
+      pricing-assumptions:
+        targetSections: *a14
+      cost-structure:
+        targetSections: *a15
+      unit-economics:
+        targetSections: *a16
+      break-even-analysis:
+        targetSections: *a17
+      scenario-analysis:
+        targetSections: *a18
+      sensitivity-analysis:
+        targetSections: *a19
+      economic-risks:
+        targetSections: *a20
+      invalidating-conditions:
+        targetSections: *a21
+      economic-validation-summary:
+        targetSections: *a22
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.260Z"
+      totalSourceQuestions: 69
+      reviewRequired: false

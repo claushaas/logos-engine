@@ -1,4 +1,3 @@
-
 document:
   id: "10-risk-and-compliance"
   title: "Risk and Compliance"
@@ -6,8 +5,13 @@ document:
   status: "not_started"
   order: 10
   type: "risk_compliance"
-  purpose: "Define how operational, regulatory, legal, contractual, policy, vendor, audit, governance, privacy, security, financial, and compliance-related risks are identified, classified, reviewed, assigned, mitigated, accepted, escalated, documented, and handed off without pretending that operational documentation replaces professional legal, accounting, security, or compliance review."
-  centralQuestion: "What operational, regulatory, legal, contractual, policy, vendor, audit, governance, privacy, security, financial, and compliance risks can affect the project, and how are they detected, reviewed, assigned, mitigated, accepted, escalated, evidenced, and kept current?"
+  purpose: "Define how operational, regulatory, legal, contractual, policy, vendor, audit, governance, privacy, security,
+    financial, and compliance-related risks are identified, classified, reviewed, assigned, mitigated, accepted,
+    escalated, documented, and handed off without pretending that operational documentation replaces professional legal,
+    accounting, security, or compliance review."
+  centralQuestion: "What operational, regulatory, legal, contractual, policy, vendor, audit, governance, privacy,
+    security, financial, and compliance risks can affect the project, and how are they detected, reviewed, assigned,
+    mitigated, accepted, escalated, evidenced, and kept current?"
   outputs:
     canonical:
       format: "markdown"
@@ -17,7 +21,10 @@ document:
       - id: "operations.risk_compliance_register"
         format: "html"
         path: "outcomes/html/06-operations/risk-and-compliance-register.html"
-        purpose: "Provide a founder-facing risk and compliance register covering scope, obligation inventory, risk taxonomy, privacy/data protection, terms and policies, vendor compliance, contractual obligations, audit trail, governance, exceptions, accepted risks, review cadence, compliance incidents, evidence, risks, and downstream handoff."
+        purpose: "Provide a founder-facing risk and compliance register covering scope, obligation inventory, risk taxonomy,
+          privacy/data protection, terms and policies, vendor compliance, contractual obligations, audit trail,
+          governance, exceptions, accepted risks, review cadence, compliance incidents, evidence, risks, and downstream
+          handoff."
         audience: "founder"
         includes:
           - "risk and compliance objective"
@@ -48,7 +55,9 @@ document:
       - id: "operations.risk_compliance_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/risk-and-compliance-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether risk and compliance operations are scoped, owner-assigned, review-aware, evidence-backed, escalation-ready, and not overclaiming legal, accounting, security, privacy, or regulatory certainty."
+        purpose: "Provide compact context for agents reviewing whether risk and compliance operations are scoped,
+          owner-assigned, review-aware, evidence-backed, escalation-ready, and not overclaiming legal, accounting,
+          security, privacy, or regulatory certainty."
         agentRole: "reviewer"
         includes:
           - "canonical risk and compliance model"
@@ -99,302 +108,372 @@ document:
     - id: "foundation-context"
       type: "context"
       required: false
-      description: "Principles, boundaries, success definition, non-goals, ethical constraints, data rights commitments, and governance expectations."
+      description: "Principles, boundaries, success definition, non-goals, ethical constraints, data rights commitments, and
+        governance expectations."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Product scope, capabilities, customer-facing promises, acceptance criteria, data collection, data processing, sensitive workflows, and deferred or unsupported capabilities."
+      description: "Product scope, capabilities, customer-facing promises, acceptance criteria, data collection, data
+        processing, sensitive workflows, and deferred or unsupported capabilities."
     - id: "engineering-security-context"
       type: "context"
       required: false
-      description: "Data model, security/privacy model, observability, deployment environments, access controls, logging, telemetry, technical risks, security obligations, and engineering-owned safeguards."
+      description: "Data model, security/privacy model, observability, deployment environments, access controls, logging,
+        telemetry, technical risks, security obligations, and engineering-owned safeguards."
     - id: "gtm-financial-context"
       type: "context"
       required: false
-      description: "Launch promises, pricing and packaging, payment flow, billing terms, refund/cancellation policy, growth metrics, GTM risks, public claims, and financial/legal review needs."
+      description: "Launch promises, pricing and packaging, payment flow, billing terms, refund/cancellation policy, growth
+        metrics, GTM risks, public claims, and financial/legal review needs."
     - id: "operations-context"
       type: "context"
       required: false
-      description: "Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, and Incident Management outputs."
+      description: "Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business
+        Processes, Operational Metrics, Reporting and Cadence, and Incident Management outputs."
     - id: "vendor-contract-context"
       type: "context"
       required: false
-      description: "Known vendors, processors, platforms, infrastructure providers, analytics tools, support tools, contracts, terms, DPAs, invoices, account ownership, and renewal/review obligations."
+      description: "Known vendors, processors, platforms, infrastructure providers, analytics tools, support tools, contracts,
+        terms, DPAs, invoices, account ownership, and renewal/review obligations."
     - id: "risk-compliance-notes"
       type: "manual_note"
       required: false
-      description: "Known legal/regulatory concerns, compliance assumptions, policy drafts, contractual constraints, vendor due diligence notes, accepted risk candidates, audit needs, governance concerns, and unresolved compliance questions."
+      description: "Known legal/regulatory concerns, compliance assumptions, policy drafts, contractual constraints, vendor
+        due diligence notes, accepted risk candidates, audit needs, governance concerns, and unresolved compliance
+        questions."
   completionCriteria:
-    - "The central question is answered through a risk and compliance operating model with scope, taxonomy, obligation inventory, owners, evidence, review cadence, exceptions, accepted risks, incidents, metrics, risks, and downstream handoff."
-    - "Risk and compliance objective defines what the function protects: legal/regulatory awareness, contractual discipline, policy consistency, customer trust, data/privacy safety, security interface, financial correctness, vendor accountability, governance, auditability, and operational continuity."
-    - "Compliance disclaimer states that this document is an operational control surface and does not replace professional legal, accounting, security, tax, privacy, or compliance review."
-    - "Risk and compliance scope defines what is inside this document, what belongs to Engineering Security/Privacy, Data and Privacy Operations, Financial Operations, Incident Management, Risk Management, Customer Support, and Product, and what is explicitly out of scope."
-    - "Risk taxonomy defines categories, severity, likelihood, impact, confidence, review-needed labels, evidence states, obligation states, exception states, accepted-risk states, escalation levels, and downstream ownership."
-    - "Obligation inventory lists each known or suspected obligation with source, jurisdiction/scope when known, affected area, owner, reviewer, evidence, review cadence, status, professional-review need, and downstream document."
-    - "Legal and regulatory requirements identify known obligations, suspected obligations, unknowns, review-needed items, monitoring source, owner, external review need, customer-facing impact, and operational controls."
-    - "Privacy requirements identify applicable or potentially applicable privacy obligations, data subject/customer rights, consent/notice requirements, lawful-basis or equivalent review needs, privacy request handling, notification uncertainty, and Data/Privacy Operations handoff."
-    - "Data protection requirements define classification, access, retention, deletion, export, backup, logging, telemetry, data minimization, audit trail, and verification requirements that must be operationalized downstream."
-    - "Security compliance interface defines the boundary between compliance operations and engineering security controls, including access reviews, security policies, incident escalation, vendor security review, audit evidence, and technical-control ownership."
-    - "Financial compliance interface defines operational obligations around billing, payments, refunds, invoices/receipts, taxes, chargebacks, subscription terms, discounts, accounting review, and Financial Operations handoff."
-    - "Terms and policies define required public or internal policies, owner, source assumptions, approval requirement, review cadence, publication location, customer-facing impact, update trigger, and legal review state."
-    - "Vendor compliance defines vendor inventory, vendor criticality, data touched, compliance/security/privacy review, DPA/contract needs, access/billing owner, renewal cadence, monitoring method, fallback, and offboarding."
-    - "Contractual obligations define contracts, customer commitments, vendor commitments, platform obligations, payment processor terms, open-source/license obligations, support commitments, renewal/termination terms, and tracking owner."
-    - "Audit trail defines which actions, decisions, approvals, incidents, data requests, financial exceptions, policy changes, vendor reviews, accepted risks, and compliance reviews are recorded, protected, reviewed, retained, and redacted."
-    - "Governance rules define decision rules, approval authority, policy-change authority, exception authority, risk-acceptance authority, review requirements, violation handling, and decision log requirements."
-    - "Exception handling defines how compliance exceptions are requested, reviewed, approved, time-boxed, documented, monitored, escalated, renewed, or closed."
-    - "Accepted risks define intentionally accepted legal/compliance/contractual/vendor/governance risks with rationale, approver, residual risk, mitigation still required, review trigger, expiration, and downstream owner."
-    - "Compliance review cadence defines daily/weekly/monthly/quarterly/annual/event-triggered reviews where relevant, participants, inputs, outputs, evidence, escalation triggers, and downstream updates."
-    - "Compliance evidence defines what evidence is required, where it is stored, who owns it, access rules, retention rules, review cadence, redaction rules, and what evidence proves control operation."
-    - "Compliance incidents define incidents involving privacy, security, billing/payment, contractual breach, vendor failure, policy violation, audit failure, governance violation, or regulatory concern and route them to Incident Management/Data Privacy/Finance/Risk as needed."
-    - "Compliance metrics define obligation coverage, review completion, exception count, accepted-risk count, vendor review freshness, policy freshness, audit evidence completeness, access review completion, privacy request handling, financial exception rate, and incident trend."
-    - "Compliance risks identify missing obligations, unsupported legal assumptions, stale policies, vendor noncompliance, weak audit trail, unresolved contracts, privacy mishandling, financial compliance gaps, governance drift, owner gaps, and review failure."
-    - "Downstream handoff clarifies what Data and Privacy Operations, Financial Operations, and Risk Management must inherit."
+    - "The central question is answered through a risk and compliance operating model with scope, taxonomy, obligation
+      inventory, owners, evidence, review cadence, exceptions, accepted risks, incidents, metrics, risks, and downstream
+      handoff."
+    - "Risk and compliance objective defines what the function protects: legal/regulatory awareness, contractual
+      discipline, policy consistency, customer trust, data/privacy safety, security interface, financial correctness,
+      vendor accountability, governance, auditability, and operational continuity."
+    - "Compliance disclaimer states that this document is an operational control surface and does not replace
+      professional legal, accounting, security, tax, privacy, or compliance review."
+    - "Risk and compliance scope defines what is inside this document, what belongs to Engineering Security/Privacy,
+      Data and Privacy Operations, Financial Operations, Incident Management, Risk Management, Customer Support, and
+      Product, and what is explicitly out of scope."
+    - "Risk taxonomy defines categories, severity, likelihood, impact, confidence, review-needed labels, evidence
+      states, obligation states, exception states, accepted-risk states, escalation levels, and downstream ownership."
+    - "Obligation inventory lists each known or suspected obligation with source, jurisdiction/scope when known,
+      affected area, owner, reviewer, evidence, review cadence, status, professional-review need, and downstream
+      document."
+    - "Legal and regulatory requirements identify known obligations, suspected obligations, unknowns, review-needed
+      items, monitoring source, owner, external review need, customer-facing impact, and operational controls."
+    - "Privacy requirements identify applicable or potentially applicable privacy obligations, data subject/customer
+      rights, consent/notice requirements, lawful-basis or equivalent review needs, privacy request handling,
+      notification uncertainty, and Data/Privacy Operations handoff."
+    - "Data protection requirements define classification, access, retention, deletion, export, backup, logging,
+      telemetry, data minimization, audit trail, and verification requirements that must be operationalized downstream."
+    - "Security compliance interface defines the boundary between compliance operations and engineering security
+      controls, including access reviews, security policies, incident escalation, vendor security review, audit
+      evidence, and technical-control ownership."
+    - "Financial compliance interface defines operational obligations around billing, payments, refunds,
+      invoices/receipts, taxes, chargebacks, subscription terms, discounts, accounting review, and Financial Operations
+      handoff."
+    - "Terms and policies define required public or internal policies, owner, source assumptions, approval requirement,
+      review cadence, publication location, customer-facing impact, update trigger, and legal review state."
+    - "Vendor compliance defines vendor inventory, vendor criticality, data touched, compliance/security/privacy review,
+      DPA/contract needs, access/billing owner, renewal cadence, monitoring method, fallback, and offboarding."
+    - "Contractual obligations define contracts, customer commitments, vendor commitments, platform obligations, payment
+      processor terms, open-source/license obligations, support commitments, renewal/termination terms, and tracking
+      owner."
+    - "Audit trail defines which actions, decisions, approvals, incidents, data requests, financial exceptions, policy
+      changes, vendor reviews, accepted risks, and compliance reviews are recorded, protected, reviewed, retained, and
+      redacted."
+    - "Governance rules define decision rules, approval authority, policy-change authority, exception authority,
+      risk-acceptance authority, review requirements, violation handling, and decision log requirements."
+    - "Exception handling defines how compliance exceptions are requested, reviewed, approved, time-boxed, documented,
+      monitored, escalated, renewed, or closed."
+    - "Accepted risks define intentionally accepted legal/compliance/contractual/vendor/governance risks with rationale,
+      approver, residual risk, mitigation still required, review trigger, expiration, and downstream owner."
+    - "Compliance review cadence defines daily/weekly/monthly/quarterly/annual/event-triggered reviews where relevant,
+      participants, inputs, outputs, evidence, escalation triggers, and downstream updates."
+    - "Compliance evidence defines what evidence is required, where it is stored, who owns it, access rules, retention
+      rules, review cadence, redaction rules, and what evidence proves control operation."
+    - "Compliance incidents define incidents involving privacy, security, billing/payment, contractual breach, vendor
+      failure, policy violation, audit failure, governance violation, or regulatory concern and route them to Incident
+      Management/Data Privacy/Finance/Risk as needed."
+    - "Compliance metrics define obligation coverage, review completion, exception count, accepted-risk count, vendor
+      review freshness, policy freshness, audit evidence completeness, access review completion, privacy request
+      handling, financial exception rate, and incident trend."
+    - "Compliance risks identify missing obligations, unsupported legal assumptions, stale policies, vendor
+      noncompliance, weak audit trail, unresolved contracts, privacy mishandling, financial compliance gaps, governance
+      drift, owner gaps, and review failure."
+    - "Downstream handoff clarifies what Data and Privacy Operations, Financial Operations, and Risk Management must
+      inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid compliance theater: naming regulations, frameworks, or policies without applicability status, source, owner, evidence, review cadence, operational control, professional-review need, and downstream handoff."
-    - "Avoid asserting legal, tax, accounting, regulatory, privacy, security, or contractual compliance as final unless verified by appropriate professional review."
-    - "Avoid using GDPR, LGPD, CCPA, SOC 2, ISO 27001, HIPAA, PCI, tax, employment, consumer protection, or accessibility claims as generic checkboxes without applicability analysis."
+    - "Avoid compliance theater: naming regulations, frameworks, or policies without applicability status, source,
+      owner, evidence, review cadence, operational control, professional-review need, and downstream handoff."
+    - "Avoid asserting legal, tax, accounting, regulatory, privacy, security, or contractual compliance as final unless
+      verified by appropriate professional review."
+    - "Avoid using GDPR, LGPD, CCPA, SOC 2, ISO 27001, HIPAA, PCI, tax, employment, consumer protection, or
+      accessibility claims as generic checkboxes without applicability analysis."
     - "Avoid treating security compliance as purely legal or privacy compliance as purely engineering."
-    - "Avoid public terms/policies that promise capabilities, rights, timelines, refunds, support, uptime, deletion, export, or security controls the operation cannot sustain."
-    - "Avoid vendor compliance without data touched, access, DPA/contract needs, security/privacy review, billing owner, monitoring, fallback, and offboarding."
-    - "Avoid audit trail requirements without storage, protection, access, retention, redaction, review, and evidence owner."
-    - "Avoid accepted risks without approver, residual risk, mitigation, review trigger, expiration, and escalation rule."
-    - "Avoid compliance reviews without cadence, participants, inputs, outputs, evidence, escalation, and documentation update."
+    - "Avoid public terms/policies that promise capabilities, rights, timelines, refunds, support, uptime, deletion,
+      export, or security controls the operation cannot sustain."
+    - "Avoid vendor compliance without data touched, access, DPA/contract needs, security/privacy review, billing owner,
+      monitoring, fallback, and offboarding."
+    - "Avoid audit trail requirements without storage, protection, access, retention, redaction, review, and evidence
+      owner."
+    - "Avoid accepted risks without approver, residual risk, mitigation, review trigger, expiration, and escalation
+      rule."
+    - "Avoid compliance reviews without cadence, participants, inputs, outputs, evidence, escalation, and documentation
+      update."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent applicable laws, jurisdictions, professional conclusions, certification status, vendor compliance status, tax obligations, legal deadlines, contractual duties, audit-readiness, or policy sufficiency."
-    - "Risk and compliance must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
+    - "Do not invent applicable laws, jurisdictions, professional conclusions, certification status, vendor compliance
+      status, tax obligations, legal deadlines, contractual duties, audit-readiness, or policy sufficiency."
+    - "Risk and compliance must preserve Foundation boundaries, product truth, technical truth, pricing truth,
+      privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate obligation, risk, policy, vendor, contract, audit evidence, governance rule, exception, accepted risk, incident, metric, review cadence, and handoff."
-    - "Tie compliance and risk claims to Foundation, Product, Security/Privacy, Data Model, Observability, Deployment, Technical Risks, Pricing, GTM Risks, Operations Brief, Operating Model, Team Responsibilities, Business Processes, Operational Metrics, Reporting Cadence, Incident Management, or Decision Record where possible."
-    - "Classify items as applicable, potentially-applicable, not-applicable, unknown, current, required, deferred, blocked, review-needed, professional-review-needed, customer-facing, internal-only, privacy-sensitive, financial-sensitive, security-sensitive, contractual, vendor-owned, accepted-risk, or downstream-owned where useful."
-    - "State whether each obligation or control is verified, assumed, suspected, unverified, professionally reviewed, or review-needed."
-    - "Route detailed privacy procedures, financial procedures, incident procedures, and enterprise risk governance downstream."
+    - "Separate obligation, risk, policy, vendor, contract, audit evidence, governance rule, exception, accepted risk,
+      incident, metric, review cadence, and handoff."
+    - "Tie compliance and risk claims to Foundation, Product, Security/Privacy, Data Model, Observability, Deployment,
+      Technical Risks, Pricing, GTM Risks, Operations Brief, Operating Model, Team Responsibilities, Business Processes,
+      Operational Metrics, Reporting Cadence, Incident Management, or Decision Record where possible."
+    - "Classify items as applicable, potentially-applicable, not-applicable, unknown, current, required, deferred,
+      blocked, review-needed, professional-review-needed, customer-facing, internal-only, privacy-sensitive,
+      financial-sensitive, security-sensitive, contractual, vendor-owned, accepted-risk, or downstream-owned where
+      useful."
+    - "State whether each obligation or control is verified, assumed, suspected, unverified, professionally reviewed, or
+      review-needed."
+    - "Route detailed privacy procedures, financial procedures, incident procedures, and enterprise risk governance
+      downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Product, Acceptance Criteria, NFRs, Data Model, Security/Privacy, Observability, Deployment, Technical Risks, Launch Plan, Pricing, GTM Risks, Operations Brief, Operating Model, Team and Responsibilities, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, or Decision Record."
-    - "Flag obligations without source, applicability status, owner, evidence, review cadence, operational control, professional-review need, and downstream target."
-    - "Flag legal/regulatory/privacy/security/financial claims that sound final but are not marked reviewed or review-needed."
-    - "Flag policies without owner, approval requirement, publication location, update trigger, review cadence, and claim-boundary review."
-    - "Flag vendors without criticality, data touched, compliance/security/privacy review, contract/DPA state, access/billing owner, monitoring, fallback, and offboarding path."
+    - "Flag contradictions with Foundation, Product, Acceptance Criteria, NFRs, Data Model, Security/Privacy,
+      Observability, Deployment, Technical Risks, Launch Plan, Pricing, GTM Risks, Operations Brief, Operating Model,
+      Team and Responsibilities, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, or
+      Decision Record."
+    - "Flag obligations without source, applicability status, owner, evidence, review cadence, operational control,
+      professional-review need, and downstream target."
+    - "Flag legal/regulatory/privacy/security/financial claims that sound final but are not marked reviewed or
+      review-needed."
+    - "Flag policies without owner, approval requirement, publication location, update trigger, review cadence, and
+      claim-boundary review."
+    - "Flag vendors without criticality, data touched, compliance/security/privacy review, contract/DPA state,
+      access/billing owner, monitoring, fallback, and offboarding path."
     - "Flag contracts without obligation owner, renewal/termination tracking, customer/vendor commitments, and evidence."
     - "Flag audit trails without storage, access control, retention, redaction, review, and evidence owner."
-    - "Flag exceptions and accepted risks without approver, expiration/review trigger, mitigation, residual risk, and escalation path."
+    - "Flag exceptions and accepted risks without approver, expiration/review trigger, mitigation, residual risk, and
+      escalation path."
     - "Verify that downstream Operations documents receive concrete compliance/risk handoff inputs."
     - "Flag content that belongs better in Data and Privacy Operations, Financial Operations, or Risk Management."
   specializedFormats:
     obligationFormat:
       description: "Recommended format for compliance/legal/regulatory/contractual obligations."
       fields:
-        - obligation
-        - obligationType
-        - source
-        - jurisdictionOrScope
-        - applicabilityStatus
-        - affectedArea
-        - operationalControl
-        - evidenceRequired
-        - owner
-        - reviewer
-        - reviewCadence
-        - professionalReviewNeeded
-        - downstreamDocument
-        - status
+        - "obligation"
+        - "obligationType"
+        - "source"
+        - "jurisdictionOrScope"
+        - "applicabilityStatus"
+        - "affectedArea"
+        - "operationalControl"
+        - "evidenceRequired"
+        - "owner"
+        - "reviewer"
+        - "reviewCadence"
+        - "professionalReviewNeeded"
+        - "downstreamDocument"
+        - "status"
     complianceRiskFormat:
       description: "Recommended format for risk and compliance risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - affectedArea
-        - likelihood
-        - impact
-        - confidence
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - reviewTrigger
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "source"
+        - "affectedArea"
+        - "likelihood"
+        - "impact"
+        - "confidence"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "reviewTrigger"
+        - "downstreamDocument"
+        - "status"
     policyFormat:
       description: "Recommended format for terms, policies, and governance documents."
       fields:
-        - policy
-        - policyType
-        - purpose
-        - audience
-        - publicationLocation
-        - owner
-        - approver
-        - professionalReviewNeeded
-        - reviewCadence
-        - updateTrigger
-        - claimBoundary
-        - downstreamDocument
-        - status
+        - "policy"
+        - "policyType"
+        - "purpose"
+        - "audience"
+        - "publicationLocation"
+        - "owner"
+        - "approver"
+        - "professionalReviewNeeded"
+        - "reviewCadence"
+        - "updateTrigger"
+        - "claimBoundary"
+        - "downstreamDocument"
+        - "status"
     vendorComplianceFormat:
       description: "Recommended format for vendor compliance records."
       fields:
-        - vendor
-        - vendorType
-        - operationalPurpose
-        - criticality
-        - dataTouched
-        - accessLevel
-        - complianceClaims
-        - contractOrDPAStatus
-        - securityPrivacyReview
-        - billingOwner
-        - accountOwner
-        - monitoringMethod
-        - fallback
-        - offboardingRequirement
-        - reviewCadence
-        - status
+        - "vendor"
+        - "vendorType"
+        - "operationalPurpose"
+        - "criticality"
+        - "dataTouched"
+        - "accessLevel"
+        - "complianceClaims"
+        - "contractOrDPAStatus"
+        - "securityPrivacyReview"
+        - "billingOwner"
+        - "accountOwner"
+        - "monitoringMethod"
+        - "fallback"
+        - "offboardingRequirement"
+        - "reviewCadence"
+        - "status"
     contractObligationFormat:
       description: "Recommended format for contractual obligations."
       fields:
-        - contractOrAgreement
-        - counterparty
-        - obligation
-        - obligationOwner
-        - affectedArea
-        - customerFacing
-        - renewalOrTerminationTrigger
-        - evidenceRequired
-        - reviewCadence
-        - escalationIfAtRisk
-        - downstreamDocument
-        - status
+        - "contractOrAgreement"
+        - "counterparty"
+        - "obligation"
+        - "obligationOwner"
+        - "affectedArea"
+        - "customerFacing"
+        - "renewalOrTerminationTrigger"
+        - "evidenceRequired"
+        - "reviewCadence"
+        - "escalationIfAtRisk"
+        - "downstreamDocument"
+        - "status"
     auditTrailFormat:
       description: "Recommended format for audit trail requirements."
       fields:
-        - auditItem
-        - actionOrDecisionRecorded
-        - purpose
-        - sourceSystem
-        - owner
-        - storageLocation
-        - accessRule
-        - retentionRule
-        - redactionRule
-        - reviewCadence
-        - evidenceOfReview
-        - status
+        - "auditItem"
+        - "actionOrDecisionRecorded"
+        - "purpose"
+        - "sourceSystem"
+        - "owner"
+        - "storageLocation"
+        - "accessRule"
+        - "retentionRule"
+        - "redactionRule"
+        - "reviewCadence"
+        - "evidenceOfReview"
+        - "status"
     governanceRuleFormat:
       description: "Recommended format for governance rules."
       fields:
-        - rule
-        - decisionArea
-        - purpose
-        - appliesTo
-        - decisionOwner
-        - approvalRequired
-        - evidenceRequired
-        - violationSignal
-        - exceptionPath
-        - escalationPath
-        - reviewCadence
-        - status
+        - "rule"
+        - "decisionArea"
+        - "purpose"
+        - "appliesTo"
+        - "decisionOwner"
+        - "approvalRequired"
+        - "evidenceRequired"
+        - "violationSignal"
+        - "exceptionPath"
+        - "escalationPath"
+        - "reviewCadence"
+        - "status"
     exceptionFormat:
       description: "Recommended format for compliance exceptions."
       fields:
-        - exception
-        - obligationOrRuleAffected
-        - rationale
-        - requester
-        - approver
-        - residualRisk
-        - mitigationStillRequired
-        - expirationOrReviewTrigger
-        - evidenceRequired
-        - escalationIfExpired
-        - downstreamDocument
-        - status
+        - "exception"
+        - "obligationOrRuleAffected"
+        - "rationale"
+        - "requester"
+        - "approver"
+        - "residualRisk"
+        - "mitigationStillRequired"
+        - "expirationOrReviewTrigger"
+        - "evidenceRequired"
+        - "escalationIfExpired"
+        - "downstreamDocument"
+        - "status"
     acceptedRiskFormat:
       description: "Recommended format for accepted compliance risks."
       fields:
-        - risk
-        - riskType
-        - rationale
-        - approver
-        - residualRisk
-        - mitigationStillRequired
-        - expirationOrReviewTrigger
-        - communicationRequirement
-        - downstreamOwner
-        - status
+        - "risk"
+        - "riskType"
+        - "rationale"
+        - "approver"
+        - "residualRisk"
+        - "mitigationStillRequired"
+        - "expirationOrReviewTrigger"
+        - "communicationRequirement"
+        - "downstreamOwner"
+        - "status"
     reviewCadenceFormat:
       description: "Recommended format for compliance review cadence."
       fields:
-        - review
-        - cadence
-        - purpose
-        - participants
-        - inputs
-        - outputs
-        - evidenceProduced
-        - escalationCondition
-        - documentationUpdateRequired
-        - downstreamDocument
-        - status
+        - "review"
+        - "cadence"
+        - "purpose"
+        - "participants"
+        - "inputs"
+        - "outputs"
+        - "evidenceProduced"
+        - "escalationCondition"
+        - "documentationUpdateRequired"
+        - "downstreamDocument"
+        - "status"
     evidenceFormat:
       description: "Recommended format for compliance evidence."
       fields:
-        - evidence
-        - proves
-        - source
-        - owner
-        - storageLocation
-        - accessRule
-        - retentionRule
-        - reviewCadence
-        - redactionRequired
-        - downstreamUse
-        - status
+        - "evidence"
+        - "proves"
+        - "source"
+        - "owner"
+        - "storageLocation"
+        - "accessRule"
+        - "retentionRule"
+        - "reviewCadence"
+        - "redactionRequired"
+        - "downstreamUse"
+        - "status"
     complianceIncidentFormat:
       description: "Recommended format for compliance-related incidents."
       fields:
-        - incidentType
-        - trigger
-        - severityConsideration
-        - owner
-        - escalationTarget
-        - evidenceRequired
-        - communicationConstraint
-        - downstreamProcedure
-        - professionalReviewNeeded
-        - status
+        - "incidentType"
+        - "trigger"
+        - "severityConsideration"
+        - "owner"
+        - "escalationTarget"
+        - "evidenceRequired"
+        - "communicationConstraint"
+        - "downstreamProcedure"
+        - "professionalReviewNeeded"
+        - "status"
     complianceMetricFormat:
       description: "Recommended format for compliance metrics."
       fields:
-        - metric
-        - metricType
-        - purpose
-        - formulaOrMeasurement
-        - source
-        - threshold
-        - cadence
-        - owner
-        - decisionImplication
-        - downstreamDocument
-        - status
+        - "metric"
+        - "metricType"
+        - "purpose"
+        - "formulaOrMeasurement"
+        - "source"
+        - "threshold"
+        - "cadence"
+        - "owner"
+        - "decisionImplication"
+        - "downstreamDocument"
+        - "status"
     complianceHandoffFormat:
       description: "Recommended format for downstream compliance handoffs."
       fields:
-        - handoffTarget
-        - complianceContext
-        - obligationsToPreserve
-        - risksToPreserve
-        - evidenceToPreserve
-        - ownerToPreserve
-        - requiredAction
-        - timing
-        - unresolvedQuestion
-        - status
+        - "handoffTarget"
+        - "complianceContext"
+        - "obligationsToPreserve"
+        - "risksToPreserve"
+        - "evidenceToPreserve"
+        - "ownerToPreserve"
+        - "requiredAction"
+        - "timing"
+        - "unresolvedQuestion"
+        - "status"
   sections:
     - id: "risk-and-compliance-objective"
       title: "Risk and Compliance Objective"
@@ -402,29 +481,32 @@ document:
       required: true
       outputGuidance:
         - "Open with the purpose of risk and compliance operations in one concise paragraph."
-        - "State what it protects: trust, legal/regulatory awareness, policy consistency, data/privacy safety, financial correctness, vendor accountability, governance, evidence, and continuity."
+        - "State what it protects: trust, legal/regulatory awareness, policy consistency, data/privacy safety, financial
+          correctness, vendor accountability, governance, evidence, and continuity."
         - "Clarify that the document manages operational controls and does not provide legal/accounting advice."
       qualityChecks:
         - "Objective is operational, not legalistic theater."
         - "The professional-review boundary is explicit."
         - "Objective connects to downstream Data/Privacy, Finance, and Risk Management."
-      questions:
+      questions: &a1
         - "Why does this risk and compliance document exist?"
         - "What operational outcomes does it protect?"
         - "What does it not replace?"
     - id: "compliance-disclaimer"
       title: "Compliance Disclaimer"
-      intent: "State the boundary between operational documentation and professional legal, accounting, security, privacy, tax, or compliance review."
+      intent: "State the boundary between operational documentation and professional legal, accounting, security, privacy,
+        tax, or compliance review."
       required: true
       outputGuidance:
         - "State that this document identifies operational obligations, assumptions, evidence, and review needs."
-        - "State that professional review is required where legal, tax, accounting, security, privacy, regulatory, or contractual conclusions are uncertain."
+        - "State that professional review is required where legal, tax, accounting, security, privacy, regulatory, or
+          contractual conclusions are uncertain."
         - "Prohibit treating unreviewed assumptions as compliance facts."
       qualityChecks:
         - "Disclaimer prevents false certainty."
         - "Review-needed assumptions remain visible."
         - "The document remains operationally useful."
-      questions:
+      questions: &a2
         - "What professional review boundaries apply?"
         - "Which conclusions must not be treated as final without review?"
         - "How are unreviewed assumptions labeled?"
@@ -434,46 +516,52 @@ document:
       required: true
       outputGuidance:
         - "Separate in-scope, out-of-scope, shared, downstream-owned, and professional-review-needed areas."
-        - "Clarify relationship with Engineering Security, Data/Privacy Operations, Financial Operations, Incident Management, and Risk Management."
+        - "Clarify relationship with Engineering Security, Data/Privacy Operations, Financial Operations, Incident
+          Management, and Risk Management."
         - "Preserve unresolved scope questions."
       qualityChecks:
         - "Scope prevents duplication and gaps."
         - "Downstream ownership is clear."
         - "Professional-review-needed areas are visible."
-      questions:
+      questions: &a3
         - "What risk and compliance areas are covered here?"
         - "What belongs to Engineering Security or Data/Privacy Operations instead?"
         - "What belongs to Financial Operations, Incident Management, or Risk Management?"
         - "What is explicitly out of scope?"
     - id: "risk-taxonomy"
       title: "Risk Taxonomy"
-      intent: "Define how risks, obligations, controls, evidence, exceptions, accepted risks, and review-needed items are classified."
+      intent: "Define how risks, obligations, controls, evidence, exceptions, accepted risks, and review-needed items are
+        classified."
       required: true
       outputGuidance:
-        - "Define categories, likelihood, impact, confidence, evidence state, obligation state, exception state, accepted-risk state, review-needed state, and escalation level."
-        - "Define labels for applicable, potentially-applicable, not-applicable, unknown, verified, assumed, review-needed, and professional-review-needed."
+        - "Define categories, likelihood, impact, confidence, evidence state, obligation state, exception state,
+          accepted-risk state, review-needed state, and escalation level."
+        - "Define labels for applicable, potentially-applicable, not-applicable, unknown, verified, assumed,
+          review-needed, and professional-review-needed."
         - "Include downstream ownership labels."
       qualityChecks:
         - "Taxonomy prevents false certainty."
         - "Unknown and review-needed states are first-class."
         - "Risk labels support decisions and escalation."
-      questions:
+      questions: &a4
         - "How are compliance and governance risks classified?"
         - "What applicability, evidence, review, exception, and acceptance statuses exist?"
         - "How are severity and escalation determined?"
     - id: "obligation-inventory"
       title: "Obligation Inventory"
-      intent: "List known, suspected, unknown, applicable, potentially applicable, and not applicable obligations with source, owner, evidence, review cadence, and downstream target."
+      intent: "List known, suspected, unknown, applicable, potentially applicable, and not applicable obligations with source,
+        owner, evidence, review cadence, and downstream target."
       required: true
       outputGuidance:
         - "Use obligation records."
-        - "Include legal, regulatory, contractual, privacy, data protection, financial, vendor, platform, policy, audit, and governance obligations."
+        - "Include legal, regulatory, contractual, privacy, data protection, financial, vendor, platform, policy, audit,
+          and governance obligations."
         - "Mark unknown and review-needed obligations explicitly."
       qualityChecks:
         - "Obligations are not merely named; each has source, applicability, owner, evidence, and review cadence."
         - "Unknowns are not hidden."
         - "Professional-review needs are explicit."
-      questions:
+      questions: &a5
         - "What known or suspected obligations apply?"
         - "What obligations are potentially applicable or unknown?"
         - "What is the source of each obligation?"
@@ -492,31 +580,34 @@ document:
         - "Legal/regulatory claims do not exceed evidence."
         - "Monitoring and update process are explicit."
         - "Professional review is marked where needed."
-      questions:
+      questions: &a6
         - "What legal or regulatory obligations does the project have or potentially have?"
         - "What obligations are unknown or require review?"
         - "How are legal/regulatory changes monitored?"
         - "Who owns review and operationalization?"
     - id: "privacy-requirements"
       title: "Privacy Requirements"
-      intent: "Identify privacy obligations and how they are routed into Data and Privacy Operations without overclaiming compliance."
+      intent: "Identify privacy obligations and how they are routed into Data and Privacy Operations without overclaiming
+        compliance."
       required: true
       outputGuidance:
         - "Use obligation records for privacy obligations."
-        - "Include notice, consent, rights requests, lawful basis or equivalent review, data subject/customer rights, deletion/export/correction, notification uncertainty, and privacy incident escalation."
+        - "Include notice, consent, rights requests, lawful basis or equivalent review, data subject/customer rights,
+          deletion/export/correction, notification uncertainty, and privacy incident escalation."
         - "Mark jurisdiction and applicability uncertainty."
       qualityChecks:
         - "Privacy requirements are not reduced to a privacy policy."
         - "Data rights and request handling are operationalized downstream."
         - "Jurisdictional uncertainty is explicit."
-      questions:
+      questions: &a7
         - "What privacy obligations may apply?"
         - "What customer/data subject rights must be supported or reviewed?"
         - "What privacy notices, consent, or lawful-basis/equivalent questions exist?"
         - "What should Data and Privacy Operations inherit?"
     - id: "data-protection-requirements"
       title: "Data Protection Requirements"
-      intent: "Define operational data protection obligations around classification, access, retention, deletion, export, backup, logs, telemetry, and minimization."
+      intent: "Define operational data protection obligations around classification, access, retention, deletion, export,
+        backup, logs, telemetry, and minimization."
       required: true
       outputGuidance:
         - "Use obligation or control records where useful."
@@ -526,9 +617,10 @@ document:
         - "Data protection requirements are operational, not only policy-level."
         - "Access, retention, deletion, export, backup, logs, and telemetry are included."
         - "Verification/evidence is defined."
-      questions:
+      questions: &a8
         - "What data protection obligations exist?"
-        - "How are data classification, access, retention, deletion, export, backup, logs, telemetry, and minimization handled?"
+        - "How are data classification, access, retention, deletion, export, backup, logs, telemetry, and minimization
+          handled?"
         - "How is data protection compliance verified?"
     - id: "security-compliance-interface"
       title: "Security Compliance Interface"
@@ -537,12 +629,13 @@ document:
       outputGuidance:
         - "Identify security controls that produce compliance evidence."
         - "Define who owns policy/evidence versus implementation."
-        - "Route technical controls to Engineering Security/Privacy and incident handling to Incident Management/Data Privacy where relevant."
+        - "Route technical controls to Engineering Security/Privacy and incident handling to Incident Management/Data
+          Privacy where relevant."
       qualityChecks:
         - "Security compliance is not treated as legal paperwork only."
         - "Technical-control ownership is explicit."
         - "Evidence and review cadence are included."
-      questions:
+      questions: &a9
         - "Which security controls have compliance relevance?"
         - "Who owns security implementation versus compliance evidence?"
         - "How are access reviews, security incidents, vendor security review, and audit evidence handled?"
@@ -551,30 +644,35 @@ document:
       intent: "Define the boundary between compliance operations and financial operations."
       required: true
       outputGuidance:
-        - "Identify billing, payment, refund, invoice, tax, chargeback, subscription, discount, and accounting review obligations."
+        - "Identify billing, payment, refund, invoice, tax, chargeback, subscription, discount, and accounting review
+          obligations."
         - "Mark tax/accounting/legal assumptions as review-needed unless verified."
         - "Route detailed execution to Financial Operations."
       qualityChecks:
         - "Financial compliance does not invent tax/accounting conclusions."
         - "Customer-facing financial commitments are checked against Pricing."
         - "Financial Operations handoff is concrete."
-      questions:
-        - "What billing, payment, refund, invoice, tax, chargeback, subscription, discount, or accounting obligations may apply?"
+      questions: &a10
+        - "What billing, payment, refund, invoice, tax, chargeback, subscription, discount, or accounting obligations may
+          apply?"
         - "What requires accounting/legal review?"
         - "What should Financial Operations inherit?"
     - id: "terms-and-policies"
       title: "Terms and Policies"
-      intent: "Define published and internal policies, their owners, approval needs, review cadence, update triggers, and claim boundaries."
+      intent: "Define published and internal policies, their owners, approval needs, review cadence, update triggers, and
+        claim boundaries."
       required: true
       outputGuidance:
         - "Use policy records."
-        - "Include terms of service, privacy policy, refund policy, cancellation policy, acceptable use, support policy, security statement, cookie/tracking notice, community policy, vendor policy, and internal governance policies where relevant."
+        - "Include terms of service, privacy policy, refund policy, cancellation policy, acceptable use, support policy,
+          security statement, cookie/tracking notice, community policy, vendor policy, and internal governance policies
+          where relevant."
         - "Mark policies as required, deferred, professional-review-needed, or not applicable."
       qualityChecks:
         - "Policies do not promise unsupported capabilities or timelines."
         - "Policies have owner, approver, review cadence, update trigger, and publication location."
         - "Professional review is marked where needed."
-      questions:
+      questions: &a11
         - "What public and internal policies are required?"
         - "Who owns and approves each policy?"
         - "Where is each policy published or stored?"
@@ -582,34 +680,38 @@ document:
         - "What claims must policies avoid or qualify?"
     - id: "vendor-compliance"
       title: "Vendor Compliance"
-      intent: "Define vendor due diligence, compliance review, contract/DPA state, access/billing ownership, monitoring, fallback, and offboarding."
+      intent: "Define vendor due diligence, compliance review, contract/DPA state, access/billing ownership, monitoring,
+        fallback, and offboarding."
       required: true
       outputGuidance:
         - "Use vendor compliance records."
-        - "Include vendors touching customer data, payments, analytics, infrastructure, support, messaging, storage, AI, auth, or observability."
+        - "Include vendors touching customer data, payments, analytics, infrastructure, support, messaging, storage, AI,
+          auth, or observability."
         - "Tie vendor records to Operating Model dependencies and Business Processes vendor management."
       qualityChecks:
         - "Vendor data access and criticality are explicit."
         - "Review and offboarding are included."
         - "Vendor compliance claims are not accepted without evidence."
-      questions:
+      questions: &a12
         - "Which vendors require compliance review?"
         - "What data or access does each vendor have?"
         - "What contracts, DPAs, security/privacy reviews, or compliance evidence are needed?"
         - "Who owns vendor monitoring, billing, and offboarding?"
     - id: "contractual-obligations"
       title: "Contractual Obligations"
-      intent: "Define contractual obligations that affect operations and how they are tracked, evidenced, reviewed, and escalated."
+      intent: "Define contractual obligations that affect operations and how they are tracked, evidenced, reviewed, and
+        escalated."
       required: true
       outputGuidance:
         - "Use contract obligation records."
-        - "Include customer commitments, vendor commitments, platform terms, payment processor terms, open-source/license obligations, support commitments, renewals, and termination triggers."
+        - "Include customer commitments, vendor commitments, platform terms, payment processor terms,
+          open-source/license obligations, support commitments, renewals, and termination triggers."
         - "Mark unknown contracts or terms as review-needed."
       qualityChecks:
         - "Contractual obligations have owners and evidence."
         - "Renewal/termination and support commitments are tracked."
         - "License/platform/payment terms are not ignored."
-      questions:
+      questions: &a13
         - "What contractual obligations affect operations?"
         - "What customer, vendor, platform, payment processor, or license commitments exist?"
         - "Who owns each obligation?"
@@ -620,13 +722,14 @@ document:
       required: true
       outputGuidance:
         - "Use audit trail records."
-        - "Include policy changes, vendor reviews, data requests, access reviews, financial exceptions, refunds, incidents, accepted risks, compliance reviews, governance decisions, and approvals where relevant."
+        - "Include policy changes, vendor reviews, data requests, access reviews, financial exceptions, refunds,
+          incidents, accepted risks, compliance reviews, governance decisions, and approvals where relevant."
         - "Define storage, access, retention, redaction, and review."
       qualityChecks:
         - "Audit trail requirements are concrete."
         - "Sensitive audit data is protected."
         - "Audit evidence is reviewable."
-      questions:
+      questions: &a14
         - "What operational actions and decisions must be recorded?"
         - "Where are audit logs or records stored?"
         - "Who can access audit records?"
@@ -638,19 +741,21 @@ document:
       required: true
       outputGuidance:
         - "Use governance rule records."
-        - "Include policy changes, customer-facing commitments, pricing/refund exceptions, privacy/security decisions, vendor onboarding, risk acceptance, and incident communication where relevant."
+        - "Include policy changes, customer-facing commitments, pricing/refund exceptions, privacy/security decisions,
+          vendor onboarding, risk acceptance, and incident communication where relevant."
         - "State violation detection and escalation."
       qualityChecks:
         - "Governance rules have decision owner and evidence."
         - "Exception path and escalation are explicit."
         - "Rules do not create unnecessary bureaucracy."
-      questions:
+      questions: &a15
         - "What governance rules apply to operational decisions?"
         - "Who approves policy changes, exceptions, vendor onboarding, pricing/refund exceptions, and risk acceptance?"
         - "How are governance violations detected and addressed?"
     - id: "exception-handling"
       title: "Exception Handling"
-      intent: "Define how compliance and governance exceptions are requested, approved, time-boxed, monitored, escalated, and closed."
+      intent: "Define how compliance and governance exceptions are requested, approved, time-boxed, monitored, escalated, and
+        closed."
       required: true
       outputGuidance:
         - "Use exception records."
@@ -660,7 +765,7 @@ document:
         - "Exceptions are explicit and auditable."
         - "Time-box and review trigger are required."
         - "Expired exceptions escalate."
-      questions:
+      questions: &a16
         - "How are compliance or governance exceptions requested?"
         - "Who approves exceptions?"
         - "What residual risk remains?"
@@ -668,17 +773,19 @@ document:
         - "What happens if an exception is not closed?"
     - id: "accepted-risks"
       title: "Accepted Risks"
-      intent: "Define intentionally accepted risk and distinguish it from ignored risk, deferred work, unknown obligations, and temporary exceptions."
+      intent: "Define intentionally accepted risk and distinguish it from ignored risk, deferred work, unknown obligations,
+        and temporary exceptions."
       required: true
       outputGuidance:
         - "Use accepted risk records."
-        - "Include rationale, approver, residual risk, mitigation, review trigger, communication requirement, and downstream owner."
+        - "Include rationale, approver, residual risk, mitigation, review trigger, communication requirement, and
+          downstream owner."
         - "Do not treat accepted risk as resolved risk."
       qualityChecks:
         - "Accepted risks are explicit and reviewable."
         - "Residual risk remains visible."
         - "Acceptance authority is documented."
-      questions:
+      questions: &a17
         - "What risk and compliance risks are intentionally accepted?"
         - "Who accepts each risk?"
         - "What rationale and residual risk apply?"
@@ -686,7 +793,8 @@ document:
         - "When must the accepted risk be reviewed?"
     - id: "compliance-review-cadence"
       title: "Compliance Review Cadence"
-      intent: "Define how often obligations, policies, vendors, contracts, audit evidence, governance rules, exceptions, and accepted risks are reviewed."
+      intent: "Define how often obligations, policies, vendors, contracts, audit evidence, governance rules, exceptions, and
+        accepted risks are reviewed."
       required: true
       outputGuidance:
         - "Use review cadence records."
@@ -696,7 +804,7 @@ document:
         - "Review cadence produces evidence and decisions."
         - "Event-triggered reviews are included."
         - "Review ownership is explicit."
-      questions:
+      questions: &a18
         - "How often are compliance obligations reviewed?"
         - "What triggers out-of-cycle review?"
         - "Who participates?"
@@ -704,17 +812,19 @@ document:
         - "What documentation updates follow review?"
     - id: "compliance-evidence"
       title: "Compliance Evidence"
-      intent: "Define what evidence proves compliance-related controls are operating and how evidence is stored, protected, reviewed, and retained."
+      intent: "Define what evidence proves compliance-related controls are operating and how evidence is stored, protected,
+        reviewed, and retained."
       required: true
       outputGuidance:
         - "Use evidence records."
-        - "Include evidence for policy reviews, vendor reviews, access reviews, data requests, financial exceptions, incidents, accepted risks, and governance approvals."
+        - "Include evidence for policy reviews, vendor reviews, access reviews, data requests, financial exceptions,
+          incidents, accepted risks, and governance approvals."
         - "Define access, retention, redaction, and downstream use."
       qualityChecks:
         - "Evidence is specific and retrievable."
         - "Sensitive evidence is protected."
         - "Evidence links to controls and reviews."
-      questions:
+      questions: &a19
         - "What evidence is required for compliance-related controls?"
         - "Where is evidence stored?"
         - "Who owns evidence collection and review?"
@@ -725,13 +835,15 @@ document:
       required: true
       outputGuidance:
         - "Use compliance incident records."
-        - "Include privacy, security, billing/payment, contractual breach, vendor failure, audit failure, policy violation, governance violation, or regulatory concern."
-        - "Route to Incident Management, Data/Privacy Operations, Financial Operations, and Risk Management as appropriate."
+        - "Include privacy, security, billing/payment, contractual breach, vendor failure, audit failure, policy
+          violation, governance violation, or regulatory concern."
+        - "Route to Incident Management, Data/Privacy Operations, Financial Operations, and Risk Management as
+          appropriate."
       qualityChecks:
         - "Compliance incidents have escalation path."
         - "Sensitive communication constraints are explicit."
         - "Professional review needs are marked."
-      questions:
+      questions: &a20
         - "What compliance-related events become incidents?"
         - "Who owns escalation?"
         - "What evidence is required?"
@@ -743,29 +855,35 @@ document:
       required: true
       outputGuidance:
         - "Use compliance metric records."
-        - "Include obligation coverage, review completion, exception count, accepted-risk count, vendor review freshness, policy freshness, audit evidence completeness, access review completion, privacy request handling, financial exception rate, and incident trend."
+        - "Include obligation coverage, review completion, exception count, accepted-risk count, vendor review
+          freshness, policy freshness, audit evidence completeness, access review completion, privacy request handling,
+          financial exception rate, and incident trend."
         - "Tie to Operational Metrics and Reporting Cadence."
       qualityChecks:
         - "Metrics are operational and decision-useful."
         - "Metrics have source, owner, threshold, cadence, and decision implication."
         - "Metrics do not imply certified compliance."
-      questions:
+      questions: &a21
         - "What metrics show compliance operating health?"
-        - "How are obligation coverage, review completion, vendor review freshness, policy freshness, evidence completeness, accepted risks, exceptions, and compliance incidents measured?"
+        - "How are obligation coverage, review completion, vendor review freshness, policy freshness, evidence completeness,
+          accepted risks, exceptions, and compliance incidents measured?"
         - "What thresholds trigger escalation or review?"
     - id: "compliance-risks"
       title: "Compliance Risks"
-      intent: "Identify failure modes of risk and compliance operations and how they are detected, mitigated, escalated, or handed off."
+      intent: "Identify failure modes of risk and compliance operations and how they are detected, mitigated, escalated, or
+        handed off."
       required: true
       outputGuidance:
         - "Use compliance risk records."
-        - "Include missing obligations, unsupported assumptions, stale policies, vendor noncompliance, weak audit trail, unresolved contracts, privacy mishandling, financial compliance gaps, governance drift, owner gaps, review failure, and evidence gaps."
+        - "Include missing obligations, unsupported assumptions, stale policies, vendor noncompliance, weak audit trail,
+          unresolved contracts, privacy mishandling, financial compliance gaps, governance drift, owner gaps, review
+          failure, and evidence gaps."
         - "Route risks to Risk Management where needed."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a22
         - "What could cause a compliance or governance failure?"
         - "What assumptions could be wrong or unsupported?"
         - "Where could policies, vendors, contracts, audit trails, privacy, finance, governance, reviews, or evidence fail?"
@@ -773,18 +891,326 @@ document:
         - "What should Risk Management inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Operations documents must inherit from Risk and Compliance and what they must not assume."
+      intent: "Define what downstream Operations documents must inherit from Risk and Compliance and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Use compliance handoff records."
         - "Route context to Data and Privacy Operations, Financial Operations, and Risk Management."
-        - "Preserve obligations, risks, evidence, owners, policies, vendor records, contracts, exceptions, accepted risks, review cadence, incidents, and unresolved questions."
+        - "Preserve obligations, risks, evidence, owners, policies, vendor records, contracts, exceptions, accepted
+          risks, review cadence, incidents, and unresolved questions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing compliance assumptions silently."
-        - "Risk and Compliance remains obligation/control architecture; detailed privacy, finance, and enterprise risk procedures remain downstream."
-      questions:
+        - "Risk and Compliance remains obligation/control architecture; detailed privacy, finance, and enterprise risk
+          procedures remain downstream."
+      questions: &a23
         - "What should Data and Privacy Operations inherit?"
         - "What should Financial Operations inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved risk and compliance questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain risk and compliance. What operational, regulatory, legal, contractual, policy, vendor,
+      audit, governance, privacy, security, financial, and compliance risks can affect the project, and how are they
+      detected, reviewed, assigned, mitigated, accepted, escalated, evidenced, and kept current?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "risk-and-compliance-objective"
+        label: "Risk and Compliance Objective"
+        required: true
+        description: "Define why operational risk and compliance management exists and what it protects."
+        evaluationHint: "Look for concrete answers addressing: Why does this risk and compliance document exist?; What
+          operational outcomes does it protect?; What does it not replace?."
+        sourceQuestions: *a1
+        targetSections: &a24
+          - "Risk and Compliance Objective"
+      - id: "compliance-disclaimer"
+        label: "Compliance Disclaimer"
+        required: true
+        description: "State the boundary between operational documentation and professional legal, accounting, security,
+          privacy, tax, or compliance review."
+        evaluationHint: "Look for concrete answers addressing: What professional review boundaries apply?; Which conclusions
+          must not be treated as final without review?; How are unreviewed assumptions labeled?."
+        sourceQuestions: *a2
+        targetSections: &a25
+          - "Compliance Disclaimer"
+      - id: "risk-and-compliance-scope"
+        label: "Risk and Compliance Scope"
+        required: true
+        description: "Define what this document covers and what belongs in downstream Operations documents."
+        evaluationHint: "Look for concrete answers addressing: What risk and compliance areas are covered here?; What belongs to
+          Engineering Security or Data/Privacy Operations instead?; What belongs to Financial Operations, Incident
+          Management, or Risk Management?."
+        sourceQuestions: *a3
+        targetSections: &a26
+          - "Risk and Compliance Scope"
+      - id: "risk-taxonomy"
+        label: "Risk Taxonomy"
+        required: true
+        description: "Define how risks, obligations, controls, evidence, exceptions, accepted risks, and review-needed items are
+          classified."
+        evaluationHint: "Look for concrete answers addressing: How are compliance and governance risks classified?; What
+          applicability, evidence, review, exception, and acceptance statuses exist?; How are severity and escalation
+          determined?."
+        sourceQuestions: *a4
+        targetSections: &a27
+          - "Risk Taxonomy"
+      - id: "obligation-inventory"
+        label: "Obligation Inventory"
+        required: true
+        description: "List known, suspected, unknown, applicable, potentially applicable, and not applicable obligations with
+          source, owner, evidence, review cadence, and downstream target."
+        evaluationHint: "Look for concrete answers addressing: What known or suspected obligations apply?; What obligations are
+          potentially applicable or unknown?; What is the source of each obligation?."
+        sourceQuestions: *a5
+        targetSections: &a28
+          - "Obligation Inventory"
+      - id: "legal-and-regulatory-requirements"
+        label: "Legal and Regulatory Requirements"
+        required: true
+        description: "Identify legal/regulatory obligations and how they are monitored, reviewed, operationalized, and escalated."
+        evaluationHint: "Look for concrete answers addressing: What legal or regulatory obligations does the project have or
+          potentially have?; What obligations are unknown or require review?; How are legal/regulatory changes
+          monitored?."
+        sourceQuestions: *a6
+        targetSections: &a29
+          - "Legal and Regulatory Requirements"
+      - id: "privacy-requirements"
+        label: "Privacy Requirements"
+        required: true
+        description: "Identify privacy obligations and how they are routed into Data and Privacy Operations without overclaiming
+          compliance."
+        evaluationHint: "Look for concrete answers addressing: What privacy obligations may apply?; What customer/data subject
+          rights must be supported or reviewed?; What privacy notices, consent, or lawful-basis/equivalent questions
+          exist?."
+        sourceQuestions: *a7
+        targetSections: &a30
+          - "Privacy Requirements"
+      - id: "data-protection-requirements"
+        label: "Data Protection Requirements"
+        required: true
+        description: "Define operational data protection obligations around classification, access, retention, deletion, export,
+          backup, logs, telemetry, and minimization."
+        evaluationHint: "Look for concrete answers addressing: What data protection obligations exist?; How are data
+          classification, access, retention, deletion, export, backup, logs, telemetry, and minimization handled?; How
+          is data protection compliance verified?."
+        sourceQuestions: *a8
+        targetSections: &a31
+          - "Data Protection Requirements"
+      - id: "security-compliance-interface"
+        label: "Security Compliance Interface"
+        required: true
+        description: "Define the boundary between compliance operations and engineering-owned security controls."
+        evaluationHint: "Look for concrete answers addressing: Which security controls have compliance relevance?; Who owns
+          security implementation versus compliance evidence?; How are access reviews, security incidents, vendor
+          security review, and audit evidence handled?."
+        sourceQuestions: *a9
+        targetSections: &a32
+          - "Security Compliance Interface"
+      - id: "financial-compliance-interface"
+        label: "Financial Compliance Interface"
+        required: true
+        description: "Define the boundary between compliance operations and financial operations."
+        evaluationHint: "Look for concrete answers addressing: What billing, payment, refund, invoice, tax, chargeback,
+          subscription, discount, or accounting obligations may apply?; What requires accounting/legal review?; What
+          should Financial Operations inherit?."
+        sourceQuestions: *a10
+        targetSections: &a33
+          - "Financial Compliance Interface"
+      - id: "terms-and-policies"
+        label: "Terms and Policies"
+        required: true
+        description: "Define published and internal policies, their owners, approval needs, review cadence, update triggers, and
+          claim boundaries."
+        evaluationHint: "Look for concrete answers addressing: What public and internal policies are required?; Who owns and
+          approves each policy?; Where is each policy published or stored?."
+        sourceQuestions: *a11
+        targetSections: &a34
+          - "Terms and Policies"
+      - id: "vendor-compliance"
+        label: "Vendor Compliance"
+        required: true
+        description: "Define vendor due diligence, compliance review, contract/DPA state, access/billing ownership, monitoring,
+          fallback, and offboarding."
+        evaluationHint: "Look for concrete answers addressing: Which vendors require compliance review?; What data or access
+          does each vendor have?; What contracts, DPAs, security/privacy reviews, or compliance evidence are needed?."
+        sourceQuestions: *a12
+        targetSections: &a35
+          - "Vendor Compliance"
+      - id: "contractual-obligations"
+        label: "Contractual Obligations"
+        required: true
+        description: "Define contractual obligations that affect operations and how they are tracked, evidenced, reviewed, and
+          escalated."
+        evaluationHint: "Look for concrete answers addressing: What contractual obligations affect operations?; What customer,
+          vendor, platform, payment processor, or license commitments exist?; Who owns each obligation?."
+        sourceQuestions: *a13
+        targetSections: &a36
+          - "Contractual Obligations"
+      - id: "audit-trail"
+        label: "Audit Trail"
+        required: true
+        description: "Define which operational actions and decisions are recorded for evidence, review, accountability, and
+          learning."
+        evaluationHint: "Look for concrete answers addressing: What operational actions and decisions must be recorded?; Where
+          are audit logs or records stored?; Who can access audit records?."
+        sourceQuestions: *a14
+        targetSections: &a37
+          - "Audit Trail"
+      - id: "governance-rules"
+        label: "Governance Rules"
+        required: true
+        description: "Define governance rules for operational decisions, approvals, exceptions, violations, and decision logs."
+        evaluationHint: "Look for concrete answers addressing: What governance rules apply to operational decisions?; Who
+          approves policy changes, exceptions, vendor onboarding, pricing/refund exceptions, and risk acceptance?; How
+          are governance violations detected and addressed?."
+        sourceQuestions: *a15
+        targetSections: &a38
+          - "Governance Rules"
+      - id: "exception-handling"
+        label: "Exception Handling"
+        required: true
+        description: "Define how compliance and governance exceptions are requested, approved, time-boxed, monitored, escalated,
+          and closed."
+        evaluationHint: "Look for concrete answers addressing: How are compliance or governance exceptions requested?; Who
+          approves exceptions?; What residual risk remains?."
+        sourceQuestions: *a16
+        targetSections: &a39
+          - "Exception Handling"
+      - id: "accepted-risks"
+        label: "Accepted Risks"
+        required: true
+        description: "Define intentionally accepted risk and distinguish it from ignored risk, deferred work, unknown
+          obligations, and temporary exceptions."
+        evaluationHint: "Look for concrete answers addressing: What risk and compliance risks are intentionally accepted?; Who
+          accepts each risk?; What rationale and residual risk apply?."
+        sourceQuestions: *a17
+        targetSections: &a40
+          - "Accepted Risks"
+      - id: "compliance-review-cadence"
+        label: "Compliance Review Cadence"
+        required: true
+        description: "Define how often obligations, policies, vendors, contracts, audit evidence, governance rules, exceptions,
+          and accepted risks are reviewed."
+        evaluationHint: "Look for concrete answers addressing: How often are compliance obligations reviewed?; What triggers
+          out-of-cycle review?; Who participates?."
+        sourceQuestions: *a18
+        targetSections: &a41
+          - "Compliance Review Cadence"
+      - id: "compliance-evidence"
+        label: "Compliance Evidence"
+        required: true
+        description: "Define what evidence proves compliance-related controls are operating and how evidence is stored,
+          protected, reviewed, and retained."
+        evaluationHint: "Look for concrete answers addressing: What evidence is required for compliance-related controls?; Where
+          is evidence stored?; Who owns evidence collection and review?."
+        sourceQuestions: *a19
+        targetSections: &a42
+          - "Compliance Evidence"
+      - id: "compliance-incidents"
+        label: "Compliance Incidents"
+        required: true
+        description: "Define which compliance-related events become incidents and how they are escalated and handed off."
+        evaluationHint: "Look for concrete answers addressing: What compliance-related events become incidents?; Who owns
+          escalation?; What evidence is required?."
+        sourceQuestions: *a20
+        targetSections: &a43
+          - "Compliance Incidents"
+      - id: "compliance-metrics"
+        label: "Compliance Metrics"
+        required: true
+        description: "Define metrics that measure risk and compliance operating health."
+        evaluationHint: "Look for concrete answers addressing: What metrics show compliance operating health?; How are
+          obligation coverage, review completion, vendor review freshness, policy freshness, evidence completeness,
+          accepted risks, exceptions, and compliance incidents measured?; What thresholds trigger escalation or
+          review?."
+        sourceQuestions: *a21
+        targetSections: &a44
+          - "Compliance Metrics"
+      - id: "compliance-risks"
+        label: "Compliance Risks"
+        required: true
+        description: "Identify failure modes of risk and compliance operations and how they are detected, mitigated, escalated,
+          or handed off."
+        evaluationHint: "Look for concrete answers addressing: What could cause a compliance or governance failure?; What
+          assumptions could be wrong or unsupported?; Where could policies, vendors, contracts, audit trails, privacy,
+          finance, governance, reviews, or evidence fail?."
+        sourceQuestions: *a22
+        targetSections: &a45
+          - "Compliance Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Operations documents must inherit from Risk and Compliance and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Data and Privacy Operations inherit?; What should
+          Financial Operations inherit?; What should Risk Management inherit?."
+        sourceQuestions: *a23
+        targetSections: &a46
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      risk-and-compliance-objective:
+        targetSections: *a24
+      compliance-disclaimer:
+        targetSections: *a25
+      risk-and-compliance-scope:
+        targetSections: *a26
+      risk-taxonomy:
+        targetSections: *a27
+      obligation-inventory:
+        targetSections: *a28
+      legal-and-regulatory-requirements:
+        targetSections: *a29
+      privacy-requirements:
+        targetSections: *a30
+      data-protection-requirements:
+        targetSections: *a31
+      security-compliance-interface:
+        targetSections: *a32
+      financial-compliance-interface:
+        targetSections: *a33
+      terms-and-policies:
+        targetSections: *a34
+      vendor-compliance:
+        targetSections: *a35
+      contractual-obligations:
+        targetSections: *a36
+      audit-trail:
+        targetSections: *a37
+      governance-rules:
+        targetSections: *a38
+      exception-handling:
+        targetSections: *a39
+      accepted-risks:
+        targetSections: *a40
+      compliance-review-cadence:
+        targetSections: *a41
+      compliance-evidence:
+        targetSections: *a42
+      compliance-incidents:
+        targetSections: *a43
+      compliance-metrics:
+        targetSections: *a44
+      compliance-risks:
+        targetSections: *a45
+      downstream-handoff:
+        targetSections: *a46
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.537Z"
+      totalSourceQuestions: 93
+      reviewRequired: false

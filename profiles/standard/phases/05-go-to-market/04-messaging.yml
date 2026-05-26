@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 4
   type: "messaging"
-  purpose: "Translate positioning into precise, reusable, channel-aware, audience-aware, proof-aware, and claim-safe messages without distorting the product, overstating evidence, or creating false expectations."
+  purpose: "Translate positioning into precise, reusable, channel-aware, audience-aware, proof-aware, and claim-safe
+    messages without distorting the product, overstating evidence, or creating false expectations."
   centralQuestion: "What should we say, to whom, in what context, with what proof, and under what claim boundaries?"
   outputs:
     canonical:
@@ -16,7 +17,9 @@ document:
       - id: "gtm.messaging_reference"
         format: "html"
         path: "outcomes/html/05-go-to-market/messaging-reference.html"
-        purpose: "Provide a founder-facing messaging reference covering core message, message house, one-liners, descriptions, pain/outcome messages, audience variants, channel variants, proof, objections, tone, forbidden claims, examples, and downstream handoff."
+        purpose: "Provide a founder-facing messaging reference covering core message, message house, one-liners, descriptions,
+          pain/outcome messages, audience variants, channel variants, proof, objections, tone, forbidden claims,
+          examples, and downstream handoff."
         audience: "founder"
         includes:
           - "messaging objective"
@@ -42,7 +45,8 @@ document:
       - id: "gtm.messaging_review_prompt"
         format: "markdown"
         path: "outcomes/agents/05-go-to-market/messaging-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether messaging is specific, proof-aware, claim-safe, audience-aware, channel-ready, consistent with positioning, and not misleading."
+        purpose: "Provide compact context for agents reviewing whether messaging is specific, proof-aware, claim-safe,
+          audience-aware, channel-ready, consistent with positioning, and not misleading."
         agentRole: "reviewer"
         includes:
           - "canonical messaging"
@@ -89,181 +93,217 @@ document:
     - id: "positioning"
       type: "context"
       required: false
-      description: "Positioning statement, category frame, target customer context, primary pain, alternatives, differentiated value, proof hierarchy, claim boundaries, messaging pillars, narrative frame, anti-positioning, and positioning risks."
+      description: "Positioning statement, category frame, target customer context, primary pain, alternatives, differentiated
+        value, proof hierarchy, claim boundaries, messaging pillars, narrative frame, anti-positioning, and positioning
+        risks."
     - id: "market-definition"
       type: "context"
       required: false
-      description: "Market category, market boundaries, alternatives, substitute behaviors, comparison lens, maturity, timing, constraints, evidence quality, and market risks."
+      description: "Market category, market boundaries, alternatives, substitute behaviors, comparison lens, maturity, timing,
+        constraints, evidence quality, and market risks."
     - id: "go-to-market-brief"
       type: "context"
       required: false
-      description: "GTM objective, market-entry thesis, beachhead segment, primary customer, primary use case, launch strategy, revenue motion, constraints, and GTM risks."
+      description: "GTM objective, market-entry thesis, beachhead segment, primary customer, primary use case, launch
+        strategy, revenue motion, constraints, and GTM risks."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Product brief, value proposition, personas, user journeys, product scope, acceptance criteria, current readiness, and unsupported claims."
+      description: "Product brief, value proposition, personas, user journeys, product scope, acceptance criteria, current
+        readiness, and unsupported claims."
     - id: "technical-risk-context"
       type: "context"
       required: false
-      description: "Deployment readiness, technical limitations, operational constraints, support constraints, known risks, and claims that must not be made."
+      description: "Deployment readiness, technical limitations, operational constraints, support constraints, known risks,
+        and claims that must not be made."
     - id: "messaging-notes"
       type: "manual_note"
       required: false
-      description: "Draft copy, customer phrases, desired tone, phrases to avoid, proof ideas, objection notes, channel-specific copy ideas, launch copy ideas, and unresolved messaging questions."
+      description: "Draft copy, customer phrases, desired tone, phrases to avoid, proof ideas, objection notes,
+        channel-specific copy ideas, launch copy ideas, and unresolved messaging questions."
   completionCriteria:
-    - "The central question is answered through message architecture, audience/channel variants, proof, tone, objections, examples, and claim boundaries."
-    - "Messaging objective defines what the audience should think, feel, understand, trust, and do after encountering the message."
-    - "Message house includes core message, supporting pillars, proof points, emotional frame, functional frame, objections addressed, and claims to avoid."
+    - "The central question is answered through message architecture, audience/channel variants, proof, tone,
+      objections, examples, and claim boundaries."
+    - "Messaging objective defines what the audience should think, feel, understand, trust, and do after encountering
+      the message."
+    - "Message house includes core message, supporting pillars, proof points, emotional frame, functional frame,
+      objections addressed, and claims to avoid."
     - "Core message expresses the single most important market-facing idea in clear, specific, non-misleading language."
-    - "One-liner is concise, memorable, and faithful to positioning; it does not overload multiple audiences, categories, or claims."
-    - "Short description works for bios/listings and includes audience, problem, value, and proof or category context where useful."
-    - "Long description explains product context, target audience, pain, differentiated value, proof, and boundaries without becoming a feature dump."
-    - "Audience message variants adapt the core message to primary, secondary, evaluator, buyer, user, supporter, and skeptical audiences where relevant."
-    - "Channel message variants adapt the message to website, social, email, launch page, app store/listing, sales, community, paid, partner, and support contexts where relevant."
-    - "Pain messages use customer language, name the felt problem, avoid manipulation, and connect to current alternatives/substitute behaviors."
-    - "Outcome messages describe the after-state without promising guaranteed, unsupported, universal, medical/legal/financial, or technically untrue outcomes."
-    - "Objection responses address top objections with honest answers, proof, boundary-setting, and escalation to support/sales/product when needed."
-    - "Proof points map claims to evidence strength and indicate which proof is public-ready, internal-only, provisional, weak, missing, or review-needed."
-    - "Claim boundaries translate Positioning claim boundaries into messaging rules: allowed claims, provisional claims, prohibited claims, context-specific claims, and review-needed claims."
-    - "Tone and voice define practical voice rules, emotional register, vocabulary, sentence style, prohibited tone, examples, and channel adjustments."
-    - "Message examples provide safe examples for key contexts without pretending they are final campaign copy when not requested."
-    - "Forbidden claims include untrue, unproven, misleading, overbroad, technically unsupported, legally risky, ethically misaligned, or support-heavy claims."
+    - "One-liner is concise, memorable, and faithful to positioning; it does not overload multiple audiences,
+      categories, or claims."
+    - "Short description works for bios/listings and includes audience, problem, value, and proof or category context
+      where useful."
+    - "Long description explains product context, target audience, pain, differentiated value, proof, and boundaries
+      without becoming a feature dump."
+    - "Audience message variants adapt the core message to primary, secondary, evaluator, buyer, user, supporter, and
+      skeptical audiences where relevant."
+    - "Channel message variants adapt the message to website, social, email, launch page, app store/listing, sales,
+      community, paid, partner, and support contexts where relevant."
+    - "Pain messages use customer language, name the felt problem, avoid manipulation, and connect to current
+      alternatives/substitute behaviors."
+    - "Outcome messages describe the after-state without promising guaranteed, unsupported, universal,
+      medical/legal/financial, or technically untrue outcomes."
+    - "Objection responses address top objections with honest answers, proof, boundary-setting, and escalation to
+      support/sales/product when needed."
+    - "Proof points map claims to evidence strength and indicate which proof is public-ready, internal-only,
+      provisional, weak, missing, or review-needed."
+    - "Claim boundaries translate Positioning claim boundaries into messaging rules: allowed claims, provisional claims,
+      prohibited claims, context-specific claims, and review-needed claims."
+    - "Tone and voice define practical voice rules, emotional register, vocabulary, sentence style, prohibited tone,
+      examples, and channel adjustments."
+    - "Message examples provide safe examples for key contexts without pretending they are final campaign copy when not
+      requested."
+    - "Forbidden claims include untrue, unproven, misleading, overbroad, technically unsupported, legally risky,
+      ethically misaligned, or support-heavy claims."
     - "Messaging risks are concrete, source-linked, impact-aware, and routed to downstream GTM or Operations documents."
-    - "Downstream handoff clarifies what Channel Strategy, Launch, Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks, Support, and Operations must inherit."
+    - "Downstream handoff clarifies what Channel Strategy, Launch, Pricing, Content, Sales, Partnerships, Experiments,
+      Analytics, GTM Risks, Support, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid messaging theater: catchy copy without audience, pain, outcome, proof, claim boundary, context, or downstream use."
-    - "Avoid generic AI/product language such as smarter, effortless, revolutionary, all-in-one, seamless, magical, or game-changing unless evidence and claim boundaries support it."
+    - "Avoid messaging theater: catchy copy without audience, pain, outcome, proof, claim boundary, context, or
+      downstream use."
+    - "Avoid generic AI/product language such as smarter, effortless, revolutionary, all-in-one, seamless, magical, or
+      game-changing unless evidence and claim boundaries support it."
     - "Avoid turning messaging into final campaign copy when strategic message architecture is still unresolved."
-    - "Avoid overpromising results, certainty, speed, ease, automation, support, compliance, security, privacy, revenue, health, financial outcomes, or technical capability."
+    - "Avoid overpromising results, certainty, speed, ease, automation, support, compliance, security, privacy, revenue,
+      health, financial outcomes, or technical capability."
     - "Avoid pain amplification that manipulates fear or shame instead of accurately naming the customer problem."
     - "Avoid outcome language that implies guaranteed transformation."
     - "Avoid inconsistent terminology across Positioning, Market Definition, Product, and Foundation."
     - "Avoid unsupported proof, fake testimonials, invented metrics, unverifiable quotes, or vague social proof."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent customer quotes, metrics, proof points, compliance status, launch readiness, product capabilities, or technical guarantees."
-    - "Messaging must preserve Foundation principles, validated customer language, market/category context, positioning claim boundaries, product truth, technical truth, and support capacity."
+    - "Do not invent customer quotes, metrics, proof points, compliance status, launch readiness, product capabilities,
+      or technical guarantees."
+    - "Messaging must preserve Foundation principles, validated customer language, market/category context, positioning
+      claim boundaries, product truth, technical truth, and support capacity."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate strategic message, draft copy, evidence, assumption, claim, proof, boundary, audience variant, channel variant, and risk."
-    - "Tie messages to Positioning, Market Definition, Customer Discovery, Product, Acceptance Criteria, Technical Risks, GTM Brief, or Decision Record where possible."
-    - "Classify messages and claims as approved, draft, provisional, proof-needed, channel-specific, audience-specific, prohibited, review-needed, or rejected where useful."
+    - "Separate strategic message, draft copy, evidence, assumption, claim, proof, boundary, audience variant, channel
+      variant, and risk."
+    - "Tie messages to Positioning, Market Definition, Customer Discovery, Product, Acceptance Criteria, Technical
+      Risks, GTM Brief, or Decision Record where possible."
+    - "Classify messages and claims as approved, draft, provisional, proof-needed, channel-specific, audience-specific,
+      prohibited, review-needed, or rejected where useful."
     - "State where each message may be used and where it must not be used."
-    - "Route detailed content calendar, landing page copy, sales scripts, launch copy, partner pitch, paid ads, email sequences, analytics instrumentation, and support macros to downstream GTM/Operations documents."
+    - "Route detailed content calendar, landing page copy, sales scripts, launch copy, partner pitch, paid ads, email
+      sequences, analytics instrumentation, and support macros to downstream GTM/Operations documents."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, or Decision Record."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM
+      Brief, Market Definition, Positioning, or Decision Record."
     - "Flag messages that lack target audience, customer context, value, proof, or allowed use."
-    - "Flag claims that exceed product readiness, evidence, technical truth, legal/compliance certainty, support capacity, or Positioning claim boundaries."
+    - "Flag claims that exceed product readiness, evidence, technical truth, legal/compliance certainty, support
+      capacity, or Positioning claim boundaries."
     - "Flag one-liners or descriptions that are too broad, jargon-heavy, generic, misleading, or category-confusing."
     - "Flag pain messages that are manipulative, vague, shame-based, or not grounded in customer evidence."
     - "Flag outcome messages that imply guaranteed transformation or unsupported performance."
     - "Flag objection responses that dodge the objection, overpromise, or contradict product constraints."
     - "Flag proof points without source, strength, limitation, and allowed use."
     - "Verify that downstream GTM documents receive concrete messaging handoff inputs."
-    - "Flag content that belongs better in Positioning, Content Strategy, Launch Plan, Channel Strategy, Sales Motion, Partnerships, Pricing, Experiments, Analytics, GTM Risks, Support Model, or Operations."
+    - "Flag content that belongs better in Positioning, Content Strategy, Launch Plan, Channel Strategy, Sales Motion,
+      Partnerships, Pricing, Experiments, Analytics, GTM Risks, Support Model, or Operations."
   specializedFormats:
     messageFormat:
       description: "Recommended format for reusable message units."
       fields:
-        - id
-        - message
-        - messageType
-        - targetAudience
-        - intendedUse
-        - customerPain
-        - valuePromise
-        - proofRequired
-        - claimBoundary
-        - allowedChannels
-        - prohibitedChannels
-        - status
+        - "id"
+        - "message"
+        - "messageType"
+        - "targetAudience"
+        - "intendedUse"
+        - "customerPain"
+        - "valuePromise"
+        - "proofRequired"
+        - "claimBoundary"
+        - "allowedChannels"
+        - "prohibitedChannels"
+        - "status"
     messageHouseFormat:
       description: "Recommended format for message house elements."
       fields:
-        - coreMessage
-        - pillar
-        - customerPain
-        - valuePromise
-        - supportingProof
-        - objectionAddressed
-        - emotionalFrame
-        - functionalFrame
-        - claimsToAvoid
-        - downstreamUse
+        - "coreMessage"
+        - "pillar"
+        - "customerPain"
+        - "valuePromise"
+        - "supportingProof"
+        - "objectionAddressed"
+        - "emotionalFrame"
+        - "functionalFrame"
+        - "claimsToAvoid"
+        - "downstreamUse"
     descriptionFormat:
       description: "Recommended format for product descriptions."
       fields:
-        - descriptionType
-        - copy
-        - wordOrLengthTarget
-        - targetAudience
-        - intendedUse
-        - includedClaims
-        - proofUsed
-        - claimsExcluded
-        - status
+        - "descriptionType"
+        - "copy"
+        - "wordOrLengthTarget"
+        - "targetAudience"
+        - "intendedUse"
+        - "includedClaims"
+        - "proofUsed"
+        - "claimsExcluded"
+        - "status"
     objectionResponseFormat:
       description: "Recommended format for objection responses."
       fields:
-        - objection
-        - sourceOrAudience
-        - underlyingConcern
-        - honestResponse
-        - proofOrEvidence
-        - boundaryOrCaveat
-        - escalationPath
-        - downstreamUse
-        - status
+        - "objection"
+        - "sourceOrAudience"
+        - "underlyingConcern"
+        - "honestResponse"
+        - "proofOrEvidence"
+        - "boundaryOrCaveat"
+        - "escalationPath"
+        - "downstreamUse"
+        - "status"
     proofPointFormat:
       description: "Recommended format for messaging proof points."
       fields:
-        - proofPoint
-        - supportsClaim
-        - proofType
-        - source
-        - strength
-        - limitation
-        - publicUseAllowed
-        - internalUseOnly
-        - reviewNeeded
-        - status
+        - "proofPoint"
+        - "supportsClaim"
+        - "proofType"
+        - "source"
+        - "strength"
+        - "limitation"
+        - "publicUseAllowed"
+        - "internalUseOnly"
+        - "reviewNeeded"
+        - "status"
     voiceRuleFormat:
       description: "Recommended format for tone and voice rules."
       fields:
-        - rule
-        - rationale
-        - preferredPattern
-        - avoidPattern
-        - examples
-        - appliesToChannels
-        - exception
-        - status
+        - "rule"
+        - "rationale"
+        - "preferredPattern"
+        - "avoidPattern"
+        - "examples"
+        - "appliesToChannels"
+        - "exception"
+        - "status"
     forbiddenClaimFormat:
       description: "Recommended format for forbidden claims."
       fields:
-        - claim
-        - reasonForbidden
-        - riskType
-        - saferAlternative
-        - evidenceRequiredToRevisit
-        - ownerOrReviewer
-        - downstreamImplication
-        - status
+        - "claim"
+        - "reasonForbidden"
+        - "riskType"
+        - "saferAlternative"
+        - "evidenceRequiredToRevisit"
+        - "ownerOrReviewer"
+        - "downstreamImplication"
+        - "status"
     messagingRiskFormat:
       description: "Recommended format for messaging risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - downstreamDocument
-        - launchImpact
+        - "risk"
+        - "riskType"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "downstreamDocument"
+        - "launchImpact"
   sections:
     - id: "messaging-objective"
       title: "Messaging Objective"
@@ -277,7 +317,7 @@ document:
         - "Objective is specific enough to evaluate message quality."
         - "Objective does not try to make messaging do every GTM job at once."
         - "Objective is realistic for product readiness and proof level."
-      questions:
+      questions: &a1
         - "What should the audience think after encountering the message?"
         - "What should the audience feel?"
         - "What should the audience understand?"
@@ -286,7 +326,8 @@ document:
         - "What should messaging intentionally not try to do yet?"
     - id: "message-house"
       title: "Message House"
-      intent: "Define the core message architecture: core message, pillars, proof, emotional frame, functional frame, objections addressed, and claims to avoid."
+      intent: "Define the core message architecture: core message, pillars, proof, emotional frame, functional frame,
+        objections addressed, and claims to avoid."
       required: true
       outputGuidance:
         - "Use the message house format where useful."
@@ -296,7 +337,7 @@ document:
         - "Message house is coherent and not a list of unrelated slogans."
         - "Every pillar connects pain, value, and proof."
         - "Claims to avoid are visible."
-      questions:
+      questions: &a2
         - "What is the message house?"
         - "What is the core message?"
         - "What are the supporting pillars?"
@@ -316,7 +357,7 @@ document:
         - "Core message is specific, clear, and faithful to Positioning."
         - "Core message does not mix too many audiences or value propositions."
         - "Core message does not overclaim."
-      questions:
+      questions: &a3
         - "What is the single most important sentence the market must hear?"
         - "Who is it for?"
         - "What pain or outcome does it center?"
@@ -335,7 +376,7 @@ document:
         - "One-liner identifies audience or product context where needed."
         - "One-liner is not generic."
         - "One-liner is consistent with claim boundaries."
-      questions:
+      questions: &a4
         - "What is the 10–15 word description?"
         - "What must it include to remain clear?"
         - "What must it avoid to remain true?"
@@ -352,7 +393,7 @@ document:
         - "Short description is usable without extra explanation."
         - "Short description does not become a feature list."
         - "Short description respects product readiness."
-      questions:
+      questions: &a5
         - "What is the 2–3 sentence description for listings and bios?"
         - "What audience and problem should it mention?"
         - "What value promise should it include?"
@@ -360,7 +401,8 @@ document:
         - "What contexts need variants?"
     - id: "long-description"
       title: "Long Description"
-      intent: "Write the paragraph-level product description for website, launch, investor/founder context, long-form profiles, or product overviews."
+      intent: "Write the paragraph-level product description for website, launch, investor/founder context, long-form
+        profiles, or product overviews."
       required: true
       outputGuidance:
         - "Explain audience, problem, alternative, differentiated value, product role, proof, and claim boundaries."
@@ -370,7 +412,7 @@ document:
         - "Long description explains the product clearly and credibly."
         - "Description includes enough context for a new reader."
         - "Description avoids unsupported claims and category confusion."
-      questions:
+      questions: &a6
         - "What is the full paragraph-level description?"
         - "What product context does a new reader need?"
         - "What customer pain and alternative should it name?"
@@ -382,13 +424,14 @@ document:
       required: true
       outputGuidance:
         - "Use message records for important audience variants."
-        - "Cover primary customer first; add buyer, user, evaluator, influencer, skeptical, technical, or partner variants only where relevant."
+        - "Cover primary customer first; add buyer, user, evaluator, influencer, skeptical, technical, or partner
+          variants only where relevant."
         - "Keep variants consistent with core positioning."
       qualityChecks:
         - "Variants adapt emphasis, not truth."
         - "Each variant identifies intended audience and allowed use."
         - "Variants do not create contradictory promises."
-      questions:
+      questions: &a7
         - "What message should the primary customer hear?"
         - "What changes for buyers, users, evaluators, influencers, partners, or skeptics?"
         - "What pain or outcome should each audience variant emphasize?"
@@ -406,7 +449,7 @@ document:
         - "Channel variants preserve strategic consistency."
         - "Variants are appropriate to channel context and audience intent."
         - "Short-form channels do not remove necessary claim boundaries."
-      questions:
+      questions: &a8
         - "What message should be used on the website?"
         - "What message should be used in social channels?"
         - "What message should be used in email?"
@@ -425,7 +468,7 @@ document:
         - "Pain messages are specific and grounded in customer context."
         - "Pain messages do not exaggerate or manipulate."
         - "Pain messages connect to a credible product value."
-      questions:
+      questions: &a9
         - "What messages speak directly to the problem the customer feels?"
         - "What customer language should be preserved?"
         - "What current alternative or coping mechanism should be named?"
@@ -442,7 +485,7 @@ document:
         - "Outcome messages are credible and not absolute."
         - "Outcome messages do not imply guaranteed transformation."
         - "Outcome messages remain connected to specific use case and audience."
-      questions:
+      questions: &a10
         - "What messages describe the after-state?"
         - "What outcome can be credibly promised?"
         - "What outcome should be framed as enabled or supported rather than guaranteed?"
@@ -459,7 +502,7 @@ document:
         - "Responses answer the real concern."
         - "Responses do not overpromise to neutralize objections."
         - "Limitations are acknowledged where necessary."
-      questions:
+      questions: &a11
         - "What are the top objections?"
         - "What concern sits underneath each objection?"
         - "What is the honest response?"
@@ -468,7 +511,8 @@ document:
         - "When should the objection be escalated to support, sales, product, or founder review?"
     - id: "proof-points"
       title: "Proof Points"
-      intent: "Gather and classify facts, customer signals, quotes, numbers, demos, product capabilities, and technical/design choices that can support messaging."
+      intent: "Gather and classify facts, customer signals, quotes, numbers, demos, product capabilities, and technical/design
+        choices that can support messaging."
       required: true
       outputGuidance:
         - "Use proof point records for material proof."
@@ -478,8 +522,9 @@ document:
         - "Every proof point maps to a claim."
         - "Proof strength and limitation are explicit."
         - "Public-use permission or review need is clear."
-      questions:
-        - "What facts, quotes, numbers, demos, product capabilities, design choices, or validation signals back the messaging?"
+      questions: &a12
+        - "What facts, quotes, numbers, demos, product capabilities, design choices, or validation signals back the
+          messaging?"
         - "Which claims does each proof point support?"
         - "How strong is each proof point?"
         - "What limitations apply?"
@@ -492,12 +537,13 @@ document:
       outputGuidance:
         - "Use claim and forbidden-claim records where useful."
         - "Separate allowed, provisional, context-specific, review-needed, and prohibited claims."
-        - "Tie boundaries to evidence, product readiness, technical truth, legal/compliance uncertainty, and support capacity."
+        - "Tie boundaries to evidence, product readiness, technical truth, legal/compliance uncertainty, and support
+          capacity."
       qualityChecks:
         - "Claim boundaries are concrete enough for writers and reviewers."
         - "No downstream document needs to infer what is safe to say."
         - "Review-needed claims are not treated as approved."
-      questions:
+      questions: &a13
         - "What claims are approved for use?"
         - "What claims are provisional?"
         - "What claims require review?"
@@ -506,7 +552,8 @@ document:
         - "What evidence or readiness milestone would change a claim boundary?"
     - id: "tone-and-voice"
       title: "Tone and Voice"
-      intent: "Define brand voice, emotional register, vocabulary, sentence style, rhythm, prohibited tone, and channel-specific tone adjustments."
+      intent: "Define brand voice, emotional register, vocabulary, sentence style, rhythm, prohibited tone, and
+        channel-specific tone adjustments."
       required: true
       outputGuidance:
         - "Use voice rule records for practical rules."
@@ -516,7 +563,7 @@ document:
         - "Voice rules are concrete enough to guide copy."
         - "Tone supports trust and product truth."
         - "Voice does not become generic brand adjectives only."
-      questions:
+      questions: &a14
         - "What is the brand voice?"
         - "What emotional register does the messaging use?"
         - "What vocabulary should be preferred?"
@@ -535,14 +582,15 @@ document:
         - "Examples follow the message house and claim boundaries."
         - "Examples are not mistaken for final campaign copy unless explicitly approved."
         - "Examples are channel-aware where relevant."
-      questions:
+      questions: &a15
         - "What safe example messages should be used as starting points?"
         - "Which examples are approved, draft, provisional, or review-needed?"
         - "Where may each example be used?"
         - "What examples should downstream writers avoid?"
     - id: "forbidden-claims"
       title: "Forbidden Claims"
-      intent: "Define what must never be said because it is untrue, unproven, misleading, technically unsupported, ethically misaligned, legally risky, or operationally unsafe."
+      intent: "Define what must never be said because it is untrue, unproven, misleading, technically unsupported, ethically
+        misaligned, legally risky, or operationally unsafe."
       required: true
       outputGuidance:
         - "Use forbidden claim records for material prohibited claims."
@@ -552,15 +600,17 @@ document:
         - "Forbidden claims are specific and actionable."
         - "Safer alternatives do not become softer versions of the same overclaim."
         - "Review path is clear if evidence changes."
-      questions:
+      questions: &a16
         - "What must never be said about the product?"
-        - "What claims are untrue, unproven, misleading, technically unsupported, ethically misaligned, legally risky, or operationally unsafe?"
+        - "What claims are untrue, unproven, misleading, technically unsupported, ethically misaligned, legally risky, or
+          operationally unsafe?"
         - "Why is each claim forbidden?"
         - "What safer alternative may be used, if any?"
         - "What evidence would be required to revisit the claim?"
     - id: "messaging-risks"
       title: "Messaging Risks"
-      intent: "Identify risks that messaging is unclear, generic, misleading, overpromising, unsupported, off-brand, channel-inappropriate, or operationally dangerous."
+      intent: "Identify risks that messaging is unclear, generic, misleading, overpromising, unsupported, off-brand,
+        channel-inappropriate, or operationally dangerous."
       required: true
       outputGuidance:
         - "Use messaging risk records for material risks."
@@ -570,7 +620,7 @@ document:
         - "Risks are concrete and monitorable."
         - "Risks include customer misunderstanding and internal misuse."
         - "Mitigations are actionable or routed downstream."
-      questions:
+      questions: &a17
         - "What are the biggest messaging risks?"
         - "Where could messaging be misunderstood?"
         - "Where could messaging sound generic or unbelievable?"
@@ -584,13 +634,14 @@ document:
       required: true
       outputGuidance:
         - "Route messaging outputs to the correct downstream documents."
-        - "Separate channel, launch, pricing, content, sales, partnerships, experiments, analytics, GTM risk, support, and operations implications."
+        - "Separate channel, launch, pricing, content, sales, partnerships, experiments, analytics, GTM risk, support,
+          and operations implications."
         - "Preserve unresolved messaging questions and claim restrictions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing messaging assumptions silently."
         - "Messaging architecture and downstream copy execution remain distinct."
-      questions:
+      questions: &a18
         - "What should Channel Strategy inherit?"
         - "What should Launch Plan inherit?"
         - "What should Pricing and Packaging inherit?"
@@ -599,3 +650,237 @@ document:
         - "What should Growth Experiments and GTM Analytics inherit?"
         - "What should GTM Risks, Support Model, and Risk Management inherit?"
         - "What unresolved messaging questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain messaging. What should we say, to whom, in what context, with what proof, and under what
+      claim boundaries?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "messaging-objective"
+        label: "Messaging Objective"
+        required: true
+        description: "Define what the target audience should think, feel, understand, trust, and do after encountering the message."
+        evaluationHint: "Look for concrete answers addressing: What should the audience think after encountering the message?;
+          What should the audience feel?; What should the audience understand?."
+        sourceQuestions: *a1
+        targetSections: &a19
+          - "Messaging Objective"
+      - id: "message-house"
+        label: "Message House"
+        required: true
+        description: "Define the core message architecture: core message, pillars, proof, emotional frame, functional frame,
+          objections addressed, and claims to avoid."
+        evaluationHint: "Look for concrete answers addressing: What is the message house?; What is the core message?; What are
+          the supporting pillars?."
+        sourceQuestions: *a2
+        targetSections: &a20
+          - "Message House"
+      - id: "core-message"
+        label: "Core Message"
+        required: true
+        description: "Craft the single most important market-facing idea the audience must hear."
+        evaluationHint: "Look for concrete answers addressing: What is the single most important sentence the market must hear?;
+          Who is it for?; What pain or outcome does it center?."
+        sourceQuestions: *a3
+        targetSections: &a21
+          - "Core Message"
+      - id: "one-liner"
+        label: "One-liner"
+        required: true
+        description: "Write the shortest faithful product description for quick recall and lightweight contexts."
+        evaluationHint: "Look for concrete answers addressing: What is the 10–15 word description?; What must it include to
+          remain clear?; What must it avoid to remain true?."
+        sourceQuestions: *a4
+        targetSections: &a22
+          - "One-liner"
+      - id: "short-description"
+        label: "Short Description"
+        required: true
+        description: "Write the 2–3 sentence description for listings, bios, short launch pages, profiles, and compact
+          introductions."
+        evaluationHint: "Look for concrete answers addressing: What is the 2–3 sentence description for listings and bios?; What
+          audience and problem should it mention?; What value promise should it include?."
+        sourceQuestions: *a5
+        targetSections: &a23
+          - "Short Description"
+      - id: "long-description"
+        label: "Long Description"
+        required: true
+        description: "Write the paragraph-level product description for website, launch, investor/founder context, long-form
+          profiles, or product overviews."
+        evaluationHint: "Look for concrete answers addressing: What is the full paragraph-level description?; What product
+          context does a new reader need?; What customer pain and alternative should it name?."
+        sourceQuestions: *a6
+        targetSections: &a24
+          - "Long Description"
+      - id: "audience-message-variants"
+        label: "Audience Message Variants"
+        required: true
+        description: "Adapt the core message to different audiences without fragmenting positioning."
+        evaluationHint: "Look for concrete answers addressing: What message should the primary customer hear?; What changes for
+          buyers, users, evaluators, influencers, partners, or skeptics?; What pain or outcome should each audience
+          variant emphasize?."
+        sourceQuestions: *a7
+        targetSections: &a25
+          - "Audience Message Variants"
+      - id: "channel-message-variants"
+        label: "Channel Message Variants"
+        required: true
+        description: "Adapt messaging to channels while preserving the same positioning and claim boundaries."
+        evaluationHint: "Look for concrete answers addressing: What message should be used on the website?; What message should
+          be used in social channels?; What message should be used in email?."
+        sourceQuestions: *a8
+        targetSections: &a26
+          - "Channel Message Variants"
+      - id: "pain-messages"
+        label: "Pain Messages"
+        required: true
+        description: "Craft messages that speak directly to the customer's felt problem without manipulation or exaggeration."
+        evaluationHint: "Look for concrete answers addressing: What messages speak directly to the problem the customer feels?;
+          What customer language should be preserved?; What current alternative or coping mechanism should be named?."
+        sourceQuestions: *a9
+        targetSections: &a27
+          - "Pain Messages"
+      - id: "outcome-messages"
+        label: "Outcome Messages"
+        required: true
+        description: "Craft messages that describe the desired after-state while staying within proof and claim boundaries."
+        evaluationHint: "Look for concrete answers addressing: What messages describe the after-state?; What outcome can be
+          credibly promised?; What outcome should be framed as enabled or supported rather than guaranteed?."
+        sourceQuestions: *a10
+        targetSections: &a28
+          - "Outcome Messages"
+      - id: "objection-responses"
+        label: "Objection Responses"
+        required: true
+        description: "Prepare honest responses to likely objections, concerns, skepticism, and comparison questions."
+        evaluationHint: "Look for concrete answers addressing: What are the top objections?; What concern sits underneath each
+          objection?; What is the honest response?."
+        sourceQuestions: *a11
+        targetSections: &a29
+          - "Objection Responses"
+      - id: "proof-points"
+        label: "Proof Points"
+        required: true
+        description: "Gather and classify facts, customer signals, quotes, numbers, demos, product capabilities, and
+          technical/design choices that can support messaging."
+        evaluationHint: "Look for concrete answers addressing: What facts, quotes, numbers, demos, product capabilities, design
+          choices, or validation signals back the messaging?; Which claims does each proof point support?; How strong is
+          each proof point?."
+        sourceQuestions: *a12
+        targetSections: &a30
+          - "Proof Points"
+      - id: "claim-boundaries"
+        label: "Claim Boundaries"
+        required: true
+        description: "Translate positioning claim boundaries into concrete messaging rules."
+        evaluationHint: "Look for concrete answers addressing: What claims are approved for use?; What claims are provisional?;
+          What claims require review?."
+        sourceQuestions: *a13
+        targetSections: &a31
+          - "Claim Boundaries"
+      - id: "tone-and-voice"
+        label: "Tone and Voice"
+        required: true
+        description: "Define brand voice, emotional register, vocabulary, sentence style, rhythm, prohibited tone, and
+          channel-specific tone adjustments."
+        evaluationHint: "Look for concrete answers addressing: What is the brand voice?; What emotional register does the
+          messaging use?; What vocabulary should be preferred?."
+        sourceQuestions: *a14
+        targetSections: &a32
+          - "Tone and Voice"
+      - id: "message-examples"
+        label: "Message Examples"
+        required: true
+        description: "Provide safe example messages for key contexts so downstream execution has concrete starting points."
+        evaluationHint: "Look for concrete answers addressing: What safe example messages should be used as starting points?;
+          Which examples are approved, draft, provisional, or review-needed?; Where may each example be used?."
+        sourceQuestions: *a15
+        targetSections: &a33
+          - "Message Examples"
+      - id: "forbidden-claims"
+        label: "Forbidden Claims"
+        required: true
+        description: "Define what must never be said because it is untrue, unproven, misleading, technically unsupported,
+          ethically misaligned, legally risky, or operationally unsafe."
+        evaluationHint: "Look for concrete answers addressing: What must never be said about the product?; What claims are
+          untrue, unproven, misleading, technically unsupported, ethically misaligned, legally risky, or operationally
+          unsafe?; Why is each claim forbidden?."
+        sourceQuestions: *a16
+        targetSections: &a34
+          - "Forbidden Claims"
+      - id: "messaging-risks"
+        label: "Messaging Risks"
+        required: true
+        description: "Identify risks that messaging is unclear, generic, misleading, overpromising, unsupported, off-brand,
+          channel-inappropriate, or operationally dangerous."
+        evaluationHint: "Look for concrete answers addressing: What are the biggest messaging risks?; Where could messaging be
+          misunderstood?; Where could messaging sound generic or unbelievable?."
+        sourceQuestions: *a17
+        targetSections: &a35
+          - "Messaging Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream GTM and Operations documents must inherit from Messaging and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Channel Strategy inherit?; What should Launch Plan
+          inherit?; What should Pricing and Packaging inherit?."
+        sourceQuestions: *a18
+        targetSections: &a36
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      messaging-objective:
+        targetSections: *a19
+      message-house:
+        targetSections: *a20
+      core-message:
+        targetSections: *a21
+      one-liner:
+        targetSections: *a22
+      short-description:
+        targetSections: *a23
+      long-description:
+        targetSections: *a24
+      audience-message-variants:
+        targetSections: *a25
+      channel-message-variants:
+        targetSections: *a26
+      pain-messages:
+        targetSections: *a27
+      outcome-messages:
+        targetSections: *a28
+      objection-responses:
+        targetSections: *a29
+      proof-points:
+        targetSections: *a30
+      claim-boundaries:
+        targetSections: *a31
+      tone-and-voice:
+        targetSections: *a32
+      message-examples:
+        targetSections: *a33
+      forbidden-claims:
+        targetSections: *a34
+      messaging-risks:
+        targetSections: *a35
+      downstream-handoff:
+        targetSections: *a36
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.426Z"
+      totalSourceQuestions: 100
+      reviewRequired: false

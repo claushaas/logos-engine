@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 11
   type: "marketing_assets"
-  purpose: "Define, prioritize, specify, produce, approve, maintain, and retire the marketing materials required to launch, communicate, sell, support, measure, and iterate the product without violating positioning, messaging, claim boundaries, product readiness, or operational constraints."
-  centralQuestion: "What marketing assets must exist, for whom, in which channel, with what message, proof, format, owner, approval, readiness state, and downstream use?"
+  purpose: "Define, prioritize, specify, produce, approve, maintain, and retire the marketing materials required to
+    launch, communicate, sell, support, measure, and iterate the product without violating positioning, messaging, claim
+    boundaries, product readiness, or operational constraints."
+  centralQuestion: "What marketing assets must exist, for whom, in which channel, with what message, proof, format, owner,
+    approval, readiness state, and downstream use?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "gtm.marketing_assets_inventory"
         format: "html"
         path: "outcomes/html/05-go-to-market/marketing-assets-inventory.html"
-        purpose: "Provide a founder-facing marketing asset inventory covering required assets, specifications, audiences, channels, messages, proof, claim boundaries, formats, owners, readiness, approvals, deadlines, risks, and downstream handoff."
+        purpose: "Provide a founder-facing marketing asset inventory covering required assets, specifications, audiences,
+          channels, messages, proof, claim boundaries, formats, owners, readiness, approvals, deadlines, risks, and
+          downstream handoff."
         audience: "founder"
         includes:
           - "asset objective"
@@ -47,7 +52,9 @@ document:
       - id: "gtm.marketing_assets_review_prompt"
         format: "markdown"
         path: "outcomes/agents/05-go-to-market/marketing-assets-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether marketing assets are complete, prioritized, channel-ready, claim-safe, proof-aware, production-ready, measurable, maintainable, and aligned with GTM strategy."
+        purpose: "Provide compact context for agents reviewing whether marketing assets are complete, prioritized,
+          channel-ready, claim-safe, proof-aware, production-ready, measurable, maintainable, and aligned with GTM
+          strategy."
         agentRole: "reviewer"
         includes:
           - "canonical marketing assets inventory"
@@ -100,254 +107,310 @@ document:
     - id: "positioning"
       type: "context"
       required: false
-      description: "Positioning statement, category frame, target customer context, primary pain, differentiated value, proof hierarchy, claim boundaries, messaging pillars, narrative frame, anti-positioning, and positioning risks."
+      description: "Positioning statement, category frame, target customer context, primary pain, differentiated value, proof
+        hierarchy, claim boundaries, messaging pillars, narrative frame, anti-positioning, and positioning risks."
     - id: "messaging"
       type: "context"
       required: false
-      description: "Core message, message house, one-liner, short/long descriptions, audience variants, channel variants, proof points, objection responses, tone, message examples, and forbidden claims."
+      description: "Core message, message house, one-liner, short/long descriptions, audience variants, channel variants,
+        proof points, objection responses, tone, message examples, and forbidden claims."
     - id: "customer-segments"
       type: "context"
       required: false
-      description: "ICP, primary segment, secondary segments, role map, qualification/disqualification signals, segment-specific messaging, segment-specific channels, exclusions, and segment risks."
+      description: "ICP, primary segment, secondary segments, role map, qualification/disqualification signals,
+        segment-specific messaging, segment-specific channels, exclusions, and segment risks."
     - id: "channel-strategy"
       type: "context"
       required: false
-      description: "Primary channel, secondary channels, segment-channel fit, message-channel fit, required channel assets, channel experiments, channel metrics, constraints, fallback strategy, and risks."
+      description: "Primary channel, secondary channels, segment-channel fit, message-channel fit, required channel assets,
+        channel experiments, channel metrics, constraints, fallback strategy, and risks."
     - id: "launch-plan"
       type: "context"
       required: false
-      description: "Launch objective, launch type, audience, cohorts, readiness gates, launch assets, launch communications, support readiness, analytics readiness, go/no-go criteria, success criteria, contingencies, and launch risks."
+      description: "Launch objective, launch type, audience, cohorts, readiness gates, launch assets, launch communications,
+        support readiness, analytics readiness, go/no-go criteria, success criteria, contingencies, and launch risks."
     - id: "conversion-funnel"
       type: "context"
       required: false
-      description: "Funnel model, stages, events, metrics, attribution, cohorts, drop-off risks, funnel experiments, and instrumentation ownership that marketing assets must support."
+      description: "Funnel model, stages, events, metrics, attribution, cohorts, drop-off risks, funnel experiments, and
+        instrumentation ownership that marketing assets must support."
     - id: "sales-strategy"
       type: "context"
       required: false
-      description: "Sales motion, qualification criteria, sales process, demo strategy, objection handling, sales assets, sales metrics, handoffs, constraints, and risks."
+      description: "Sales motion, qualification criteria, sales process, demo strategy, objection handling, sales assets,
+        sales metrics, handoffs, constraints, and risks."
     - id: "pricing-and-packaging"
       type: "context"
       required: false
-      description: "Pricing thesis, value metric, pricing model, packages/plans, trial/free strategy, payment flow, discounts, plan changes, objections, pricing experiments, metrics, and risks."
+      description: "Pricing thesis, value metric, pricing model, packages/plans, trial/free strategy, payment flow, discounts,
+        plan changes, objections, pricing experiments, metrics, and risks."
     - id: "product-readiness"
       type: "context"
       required: false
-      description: "Product scope, launchable capabilities, acceptance criteria, screenshots/demoable flows, unsupported claims, known limitations, and product readiness constraints."
+      description: "Product scope, launchable capabilities, acceptance criteria, screenshots/demoable flows, unsupported
+        claims, known limitations, and product readiness constraints."
     - id: "technical-risk-context"
       type: "context"
       required: false
-      description: "Deployment readiness, technical risks, observability constraints, measurement constraints, support implications, and claims/assets that require caution."
+      description: "Deployment readiness, technical risks, observability constraints, measurement constraints, support
+        implications, and claims/assets that require caution."
     - id: "asset-notes"
       type: "manual_note"
       required: false
-      description: "Known asset needs, landing page ideas, copy drafts, screenshot lists, video ideas, pitch materials, press kit needs, listing requirements, deadlines, owners, and unresolved asset questions."
+      description: "Known asset needs, landing page ideas, copy drafts, screenshot lists, video ideas, pitch materials, press
+        kit needs, listing requirements, deadlines, owners, and unresolved asset questions."
   completionCriteria:
-    - "The central question is answered through a complete, prioritized, owner-assigned, claim-safe, channel-aware, and readiness-tracked marketing asset inventory."
-    - "Asset objective defines what assets must enable now: launch, acquisition, conversion, sales, onboarding, support, partnerships, experiments, analytics, or credibility."
-    - "Asset taxonomy distinguishes launch assets, website assets, content assets, email assets, social assets, sales assets, partner assets, product media, listing assets, press assets, support-adjacent assets, tracking assets, and internal enablement assets."
-    - "Asset inventory includes asset, purpose, audience, channel, funnel stage, message supported, proof included, format, owner, dependency, approval, readiness status, due trigger, maintenance rule, and downstream use."
-    - "Asset priority defines required launch blockers, required non-blockers, recommended assets, optional assets, deferred assets, rejected assets, and post-launch assets with rationale."
-    - "Landing page requirements define audience, objective, message hierarchy, sections, CTA, proof, pricing display, claim boundaries, tracking needs, SEO/social metadata, and launch readiness."
-    - "Website copy requirements define required pages, page purpose, audience, core message, CTA, proof, claim boundaries, owner, approval, and readiness."
-    - "Email assets define sequences, transactional emails, launch emails, onboarding emails, nurture emails, re-engagement emails, support-adjacent emails, triggers, cadence, audience, message, CTA, and opt-out/privacy requirements."
-    - "Social assets define platforms, post types, launch posts, evergreen posts, proof posts, founder posts, community posts, visual needs, CTA, claim boundaries, and timing."
-    - "Demo assets define demo script, demo environment, demo data, product areas shown, product areas avoided, narrative, proof, follow-up assets, caveats, and readiness."
-    - "Product screenshots define screens/flows, audience, channel, device/frame requirements, format, resolution, state/data shown, privacy/sensitive data checks, annotation rules, and update triggers."
-    - "Explainer video defines whether it is required, objective, target audience, script/narrative, length, format, distribution channels, production scope, proof, CTA, and fallback if deferred."
-    - "Sales and pitch materials define one-pager, deck, FAQ, comparison sheet, demo script, objection sheet, pricing explainer, proposal, proof sheet, case study, or other collateral with audience and stage."
-    - "Press kit defines whether press is relevant, kit contents, boilerplate, founder/product bio, logos/visuals, screenshots, media contact, press angles, claim boundaries, and target contacts if known."
-    - "App store and marketplace listings define target platforms, listing title/subtitle, descriptions, keywords, screenshots, videos, categories, compliance/platform constraints, review assets, and analytics limitations."
-    - "Partner assets define partner one-pager, co-marketing copy, partner pitch, integration description, referral assets, enablement materials, partner proof, and approval requirements where relevant."
-    - "Support-adjacent assets define FAQs, known-issues page, onboarding guide, help snippets, support macros, troubleshooting notes, and escalation references needed before launch."
-    - "Tracking and attribution assets define UTM conventions, tracking links, QR codes, campaign IDs, landing page variants, analytics tags, source mapping, and ownership."
-    - "Asset production workflow defines intake, drafting, review, approval, implementation, QA, publishing, tracking, maintenance, and retirement."
-    - "Asset approval workflow defines claim review, product review, technical review, pricing review, legal/compliance/accounting review when needed, support review, and final approver."
-    - "Asset readiness checklist defines each asset's status, owner, due date or trigger, dependency, approval state, QA state, launch impact, and blocker status."
-    - "Asset maintenance defines when assets must be updated due to product change, pricing change, claim change, launch phase change, screenshot drift, broken links, analytics changes, or support learnings."
-    - "Asset risks identify missing asset, stale asset, overclaiming, inconsistent messaging, wrong format, unsupported screenshot/demo, untracked links, approval delay, legal/compliance risk, and launch blocker risks."
-    - "Downstream handoff clarifies what Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Customer Success, Release Management, Support, and Risk Management must inherit."
+    - "The central question is answered through a complete, prioritized, owner-assigned, claim-safe, channel-aware, and
+      readiness-tracked marketing asset inventory."
+    - "Asset objective defines what assets must enable now: launch, acquisition, conversion, sales, onboarding, support,
+      partnerships, experiments, analytics, or credibility."
+    - "Asset taxonomy distinguishes launch assets, website assets, content assets, email assets, social assets, sales
+      assets, partner assets, product media, listing assets, press assets, support-adjacent assets, tracking assets, and
+      internal enablement assets."
+    - "Asset inventory includes asset, purpose, audience, channel, funnel stage, message supported, proof included,
+      format, owner, dependency, approval, readiness status, due trigger, maintenance rule, and downstream use."
+    - "Asset priority defines required launch blockers, required non-blockers, recommended assets, optional assets,
+      deferred assets, rejected assets, and post-launch assets with rationale."
+    - "Landing page requirements define audience, objective, message hierarchy, sections, CTA, proof, pricing display,
+      claim boundaries, tracking needs, SEO/social metadata, and launch readiness."
+    - "Website copy requirements define required pages, page purpose, audience, core message, CTA, proof, claim
+      boundaries, owner, approval, and readiness."
+    - "Email assets define sequences, transactional emails, launch emails, onboarding emails, nurture emails,
+      re-engagement emails, support-adjacent emails, triggers, cadence, audience, message, CTA, and opt-out/privacy
+      requirements."
+    - "Social assets define platforms, post types, launch posts, evergreen posts, proof posts, founder posts, community
+      posts, visual needs, CTA, claim boundaries, and timing."
+    - "Demo assets define demo script, demo environment, demo data, product areas shown, product areas avoided,
+      narrative, proof, follow-up assets, caveats, and readiness."
+    - "Product screenshots define screens/flows, audience, channel, device/frame requirements, format, resolution,
+      state/data shown, privacy/sensitive data checks, annotation rules, and update triggers."
+    - "Explainer video defines whether it is required, objective, target audience, script/narrative, length, format,
+      distribution channels, production scope, proof, CTA, and fallback if deferred."
+    - "Sales and pitch materials define one-pager, deck, FAQ, comparison sheet, demo script, objection sheet, pricing
+      explainer, proposal, proof sheet, case study, or other collateral with audience and stage."
+    - "Press kit defines whether press is relevant, kit contents, boilerplate, founder/product bio, logos/visuals,
+      screenshots, media contact, press angles, claim boundaries, and target contacts if known."
+    - "App store and marketplace listings define target platforms, listing title/subtitle, descriptions, keywords,
+      screenshots, videos, categories, compliance/platform constraints, review assets, and analytics limitations."
+    - "Partner assets define partner one-pager, co-marketing copy, partner pitch, integration description, referral
+      assets, enablement materials, partner proof, and approval requirements where relevant."
+    - "Support-adjacent assets define FAQs, known-issues page, onboarding guide, help snippets, support macros,
+      troubleshooting notes, and escalation references needed before launch."
+    - "Tracking and attribution assets define UTM conventions, tracking links, QR codes, campaign IDs, landing page
+      variants, analytics tags, source mapping, and ownership."
+    - "Asset production workflow defines intake, drafting, review, approval, implementation, QA, publishing, tracking,
+      maintenance, and retirement."
+    - "Asset approval workflow defines claim review, product review, technical review, pricing review,
+      legal/compliance/accounting review when needed, support review, and final approver."
+    - "Asset readiness checklist defines each asset's status, owner, due date or trigger, dependency, approval state, QA
+      state, launch impact, and blocker status."
+    - "Asset maintenance defines when assets must be updated due to product change, pricing change, claim change, launch
+      phase change, screenshot drift, broken links, analytics changes, or support learnings."
+    - "Asset risks identify missing asset, stale asset, overclaiming, inconsistent messaging, wrong format, unsupported
+      screenshot/demo, untracked links, approval delay, legal/compliance risk, and launch blocker risks."
+    - "Downstream handoff clarifies what Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Customer Success,
+      Release Management, Support, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid asset theater: asset lists without audience, channel, message, proof, owner, approval, readiness, dependency, and launch impact."
-    - "Avoid creating assets that are not tied to a channel, funnel stage, launch need, sales process, experiment, support need, or downstream decision."
-    - "Avoid final copy that violates Messaging claim boundaries, Positioning proof limits, Pricing terms, Product readiness, Technical Risks, legal/compliance uncertainty, or support capacity."
-    - "Avoid screenshots, demos, or videos showing mock, unstable, private, sensitive, misleading, outdated, or unsupported product states without clear caveat."
-    - "Avoid app store/marketplace assumptions without platform requirements, review constraints, screenshot specs, metadata needs, and analytics limitations."
-    - "Avoid press kit assumptions when press is not part of the launch strategy; mark as deferred or not applicable instead."
+    - "Avoid asset theater: asset lists without audience, channel, message, proof, owner, approval, readiness,
+      dependency, and launch impact."
+    - "Avoid creating assets that are not tied to a channel, funnel stage, launch need, sales process, experiment,
+      support need, or downstream decision."
+    - "Avoid final copy that violates Messaging claim boundaries, Positioning proof limits, Pricing terms, Product
+      readiness, Technical Risks, legal/compliance uncertainty, or support capacity."
+    - "Avoid screenshots, demos, or videos showing mock, unstable, private, sensitive, misleading, outdated, or
+      unsupported product states without clear caveat."
+    - "Avoid app store/marketplace assumptions without platform requirements, review constraints, screenshot specs,
+      metadata needs, and analytics limitations."
+    - "Avoid press kit assumptions when press is not part of the launch strategy; mark as deferred or not applicable
+      instead."
     - "Avoid asset overproduction before launch-critical assets are complete."
     - "Avoid analytics links or campaign assets without tracking convention and owner."
     - "Avoid stale assets by defining maintenance and retirement triggers."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent customer quotes, testimonials, logos, media contacts, case studies, performance metrics, compliance claims, app store requirements, or platform approvals."
-    - "Marketing assets must preserve segment focus, positioning, messaging claim boundaries, pricing truth, product truth, technical truth, privacy/security constraints, and support capacity."
+    - "Do not invent customer quotes, testimonials, logos, media contacts, case studies, performance metrics, compliance
+      claims, app store requirements, or platform approvals."
+    - "Marketing assets must preserve segment focus, positioning, messaging claim boundaries, pricing truth, product
+      truth, technical truth, privacy/security constraints, and support capacity."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate asset, purpose, audience, channel, message, proof, format, owner, dependency, approval, readiness, maintenance, and risk."
-    - "Tie each material asset to Messaging, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, Customer Segments, Product Scope, Technical Risks, or Decision Record where possible."
-    - "Classify assets as required, recommended, optional, deferred, rejected, blocked, draft, review-needed, approved, launch-ready, post-launch, stale, or retired where useful."
-    - "State whether each asset is launch-blocking, conversion-supporting, sales-supporting, support-supporting, experiment-supporting, analytics-supporting, or credibility-supporting."
-    - "Route detailed campaign planning, content calendar, sales execution, partner outreach, experiment execution, analytics implementation, support operations, and release procedures downstream."
+    - "Separate asset, purpose, audience, channel, message, proof, format, owner, dependency, approval, readiness,
+      maintenance, and risk."
+    - "Tie each material asset to Messaging, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing
+      and Packaging, Customer Segments, Product Scope, Technical Risks, or Decision Record where possible."
+    - "Classify assets as required, recommended, optional, deferred, rejected, blocked, draft, review-needed, approved,
+      launch-ready, post-launch, stale, or retired where useful."
+    - "State whether each asset is launch-blocking, conversion-supporting, sales-supporting, support-supporting,
+      experiment-supporting, analytics-supporting, or credibility-supporting."
+    - "Route detailed campaign planning, content calendar, sales execution, partner outreach, experiment execution,
+      analytics implementation, support operations, and release procedures downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, Pricing and Packaging, or Decision Record."
-    - "Flag assets without audience, channel, purpose, message, proof, owner, status, dependency, approval, or launch impact."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM
+      Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion
+      Funnel, Sales Strategy, Pricing and Packaging, or Decision Record."
+    - "Flag assets without audience, channel, purpose, message, proof, owner, status, dependency, approval, or launch
+      impact."
     - "Flag asset priorities that do not match Launch Plan readiness gates and Channel Strategy required assets."
-    - "Flag copy, screenshots, demos, videos, listings, sales assets, or press materials that violate claim boundaries or product/technical truth."
-    - "Flag assets that require legal, compliance, accounting, product, technical, or support review but are not marked review-needed."
+    - "Flag copy, screenshots, demos, videos, listings, sales assets, or press materials that violate claim boundaries
+      or product/technical truth."
+    - "Flag assets that require legal, compliance, accounting, product, technical, or support review but are not marked
+      review-needed."
     - "Flag untracked campaign assets, missing UTM/tracking conventions, or analytics handoff gaps."
     - "Flag stale or drift-prone assets without maintenance trigger."
     - "Verify that downstream GTM and Operations documents receive concrete asset handoff inputs."
-    - "Flag content that belongs better in Content Strategy, Sales Strategy, Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Customer Success, Support Model, Release Management, or Operations."
+    - "Flag content that belongs better in Content Strategy, Sales Strategy, Partnerships, Growth Experiments, GTM
+      Analytics, GTM Risks, Customer Success, Support Model, Release Management, or Operations."
   specializedFormats:
     assetFormat:
       description: "Recommended format for marketing asset records."
       fields:
-        - asset
-        - assetType
-        - purpose
-        - targetAudience
-        - channel
-        - funnelStage
-        - messageSupported
-        - proofIncluded
-        - format
-        - owner
-        - dependency
-        - approvalRequired
-        - readinessStatus
-        - dueDateOrTrigger
-        - launchImpact
-        - maintenanceTrigger
-        - downstreamUse
+        - "asset"
+        - "assetType"
+        - "purpose"
+        - "targetAudience"
+        - "channel"
+        - "funnelStage"
+        - "messageSupported"
+        - "proofIncluded"
+        - "format"
+        - "owner"
+        - "dependency"
+        - "approvalRequired"
+        - "readinessStatus"
+        - "dueDateOrTrigger"
+        - "launchImpact"
+        - "maintenanceTrigger"
+        - "downstreamUse"
     assetPriorityFormat:
       description: "Recommended format for asset prioritization."
       fields:
-        - asset
-        - priority
-        - priorityReason
-        - launchBlocking
-        - channelDependency
-        - funnelDependency
-        - salesDependency
-        - supportDependency
-        - effortLevel
-        - riskIfMissing
-        - decision
+        - "asset"
+        - "priority"
+        - "priorityReason"
+        - "launchBlocking"
+        - "channelDependency"
+        - "funnelDependency"
+        - "salesDependency"
+        - "supportDependency"
+        - "effortLevel"
+        - "riskIfMissing"
+        - "decision"
     landingPageSectionFormat:
       description: "Recommended format for landing page sections."
       fields:
-        - section
-        - purpose
-        - targetAudience
-        - message
-        - proof
-        - CTA
-        - claimBoundary
-        - requiredAsset
-        - trackingEvent
-        - status
+        - "section"
+        - "purpose"
+        - "targetAudience"
+        - "message"
+        - "proof"
+        - "CTA"
+        - "claimBoundary"
+        - "requiredAsset"
+        - "trackingEvent"
+        - "status"
     emailAssetFormat:
       description: "Recommended format for email assets."
       fields:
-        - email
-        - sequence
-        - trigger
-        - audience
-        - purpose
-        - subjectLineDirection
-        - coreMessage
-        - CTA
-        - cadence
-        - optOutOrPrivacyRequirement
-        - owner
-        - status
+        - "email"
+        - "sequence"
+        - "trigger"
+        - "audience"
+        - "purpose"
+        - "subjectLineDirection"
+        - "coreMessage"
+        - "CTA"
+        - "cadence"
+        - "optOutOrPrivacyRequirement"
+        - "owner"
+        - "status"
     socialAssetFormat:
       description: "Recommended format for social assets."
       fields:
-        - postOrAsset
-        - platform
-        - postType
-        - audience
-        - message
-        - visualRequired
-        - proofOrLink
-        - CTA
-        - timing
-        - claimsToAvoid
-        - owner
-        - status
+        - "postOrAsset"
+        - "platform"
+        - "postType"
+        - "audience"
+        - "message"
+        - "visualRequired"
+        - "proofOrLink"
+        - "CTA"
+        - "timing"
+        - "claimsToAvoid"
+        - "owner"
+        - "status"
     productMediaFormat:
       description: "Recommended format for screenshots, videos, and demos."
       fields:
-        - media
-        - mediaType
-        - productArea
-        - flowOrScreen
-        - audience
-        - channel
-        - format
-        - resolutionOrLength
-        - dataShown
-        - privacyCheck
-        - claimBoundary
-        - updateTrigger
-        - owner
-        - status
+        - "media"
+        - "mediaType"
+        - "productArea"
+        - "flowOrScreen"
+        - "audience"
+        - "channel"
+        - "format"
+        - "resolutionOrLength"
+        - "dataShown"
+        - "privacyCheck"
+        - "claimBoundary"
+        - "updateTrigger"
+        - "owner"
+        - "status"
     salesAssetFormat:
       description: "Recommended format for sales and pitch collateral."
       fields:
-        - asset
-        - audience
-        - salesStage
-        - purpose
-        - messageSupported
-        - proofIncluded
-        - objectionAddressed
-        - pricingReference
-        - owner
-        - approvalRequired
-        - readinessStatus
+        - "asset"
+        - "audience"
+        - "salesStage"
+        - "purpose"
+        - "messageSupported"
+        - "proofIncluded"
+        - "objectionAddressed"
+        - "pricingReference"
+        - "owner"
+        - "approvalRequired"
+        - "readinessStatus"
     listingAssetFormat:
       description: "Recommended format for app store and marketplace listing assets."
       fields:
-        - platform
-        - listingElement
-        - requirement
-        - copyOrAssetNeeded
-        - formatOrSpec
-        - claimBoundary
-        - approvalOrReviewConstraint
-        - analyticsLimitation
-        - owner
-        - status
+        - "platform"
+        - "listingElement"
+        - "requirement"
+        - "copyOrAssetNeeded"
+        - "formatOrSpec"
+        - "claimBoundary"
+        - "approvalOrReviewConstraint"
+        - "analyticsLimitation"
+        - "owner"
+        - "status"
     trackingAssetFormat:
       description: "Recommended format for tracking and attribution assets."
       fields:
-        - trackingAsset
-        - channel
-        - campaignOrLaunchUse
-        - sourceMediumCampaignRule
-        - destination
-        - owner
-        - QARequirement
-        - analyticsDestination
-        - status
+        - "trackingAsset"
+        - "channel"
+        - "campaignOrLaunchUse"
+        - "sourceMediumCampaignRule"
+        - "destination"
+        - "owner"
+        - "QARequirement"
+        - "analyticsDestination"
+        - "status"
     assetRiskFormat:
       description: "Recommended format for marketing asset risks."
       fields:
-        - risk
-        - affectedAsset
-        - riskType
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - downstreamDocument
-        - launchImpact
+        - "risk"
+        - "affectedAsset"
+        - "riskType"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "downstreamDocument"
+        - "launchImpact"
   sections:
     - id: "asset-objective"
       title: "Asset Objective"
@@ -355,15 +418,17 @@ document:
       required: true
       outputGuidance:
         - "State the primary objective of the asset set."
-        - "Identify whether assets primarily support launch, acquisition, conversion, sales, onboarding, support, partnerships, experiments, analytics, or credibility."
+        - "Identify whether assets primarily support launch, acquisition, conversion, sales, onboarding, support,
+          partnerships, experiments, analytics, or credibility."
         - "State what asset production should not optimize yet."
       qualityChecks:
         - "Objective matches GTM stage and Launch Plan."
         - "Asset production is not broader than current needs."
         - "Objective is tied to channel and funnel decisions."
-      questions:
+      questions: &a1
         - "What must the marketing asset set enable now?"
-        - "Are assets primarily for launch, acquisition, conversion, sales, onboarding, support, partnerships, experiments, analytics, credibility, or another purpose?"
+        - "Are assets primarily for launch, acquisition, conversion, sales, onboarding, support, partnerships, experiments,
+          analytics, credibility, or another purpose?"
         - "What should asset production intentionally not optimize yet?"
         - "What would make the asset set insufficient for launch?"
     - id: "asset-taxonomy"
@@ -372,13 +437,14 @@ document:
       required: true
       outputGuidance:
         - "Define asset categories before listing assets."
-        - "Define statuses such as required, recommended, optional, deferred, rejected, blocked, draft, review-needed, approved, launch-ready, stale, and retired."
+        - "Define statuses such as required, recommended, optional, deferred, rejected, blocked, draft, review-needed,
+          approved, launch-ready, stale, and retired."
         - "Clarify difference between asset, copy, campaign, channel, and content strategy."
       qualityChecks:
         - "Taxonomy prevents confusing assets with campaigns or strategy."
         - "Statuses have clear meaning."
         - "Approval and maintenance states are explicit."
-      questions:
+      questions: &a2
         - "What asset categories exist?"
         - "What readiness statuses are used?"
         - "What priority labels are used?"
@@ -387,7 +453,8 @@ document:
         - "How is an asset different from a campaign, channel, tactic, or content strategy?"
     - id: "asset-inventory"
       title: "Asset Inventory"
-      intent: "List all marketing assets needed with purpose, audience, channel, message, proof, format, owner, dependency, approval, readiness, and downstream use."
+      intent: "List all marketing assets needed with purpose, audience, channel, message, proof, format, owner, dependency,
+        approval, readiness, and downstream use."
       required: true
       outputGuidance:
         - "Use asset records for each material asset."
@@ -395,9 +462,10 @@ document:
         - "Mark missing, blocked, deferred, and launch-ready assets explicitly."
       qualityChecks:
         - "Every asset has purpose and owner."
-        - "Every asset maps to a channel, funnel stage, launch need, sales process, support need, experiment, or downstream decision."
+        - "Every asset maps to a channel, funnel stage, launch need, sales process, support need, experiment, or
+          downstream decision."
         - "No critical asset lacks approval/readiness status."
-      questions:
+      questions: &a3
         - "What is the complete list of marketing assets needed?"
         - "What is each asset for?"
         - "Who is the audience?"
@@ -407,7 +475,8 @@ document:
         - "What is the readiness and approval status?"
     - id: "asset-priority"
       title: "Asset Priority"
-      intent: "Prioritize assets by launch need, channel dependency, funnel impact, sales impact, support impact, effort, and risk if missing."
+      intent: "Prioritize assets by launch need, channel dependency, funnel impact, sales impact, support impact, effort, and
+        risk if missing."
       required: true
       outputGuidance:
         - "Use asset priority records for material assets."
@@ -417,7 +486,7 @@ document:
         - "Prioritization matches Launch Plan and Channel Strategy."
         - "Effort and risk are considered."
         - "Deferred assets do not hide launch blockers."
-      questions:
+      questions: &a4
         - "What is the priority order for asset creation?"
         - "Which assets block launch?"
         - "Which assets support conversion or sales but do not block launch?"
@@ -425,7 +494,8 @@ document:
         - "What is the risk if each asset is missing?"
     - id: "landing-page"
       title: "Landing Page"
-      intent: "Define landing page purpose, audience, message hierarchy, sections, CTA, proof, pricing display, claim boundaries, tracking, and readiness."
+      intent: "Define landing page purpose, audience, message hierarchy, sections, CTA, proof, pricing display, claim
+        boundaries, tracking, and readiness."
       required: true
       outputGuidance:
         - "Use landing page section records for major sections."
@@ -435,7 +505,7 @@ document:
         - "Landing page has one primary job."
         - "Message hierarchy is clear."
         - "CTA, proof, claim boundaries, and tracking are explicit."
-      questions:
+      questions: &a5
         - "What must the landing page communicate?"
         - "Who is the landing page for?"
         - "What is the message hierarchy?"
@@ -445,7 +515,8 @@ document:
         - "What tracking events are required?"
     - id: "website-copy"
       title: "Website Copy"
-      intent: "Define required website pages beyond the landing page and the purpose, audience, CTA, proof, and claim boundaries for each."
+      intent: "Define required website pages beyond the landing page and the purpose, audience, CTA, proof, and claim
+        boundaries for each."
       required: true
       outputGuidance:
         - "List pages as assets, not a full content strategy."
@@ -455,7 +526,7 @@ document:
         - "Each page has a clear purpose."
         - "Pages are not created without funnel or trust purpose."
         - "Copy respects claim boundaries."
-      questions:
+      questions: &a6
         - "What pages are needed beyond the landing page?"
         - "What is the purpose of each page?"
         - "What audience does each page serve?"
@@ -464,7 +535,8 @@ document:
         - "Which pages are launch-critical versus deferred?"
     - id: "email-assets"
       title: "Email Assets"
-      intent: "Define email sequences and standalone emails needed for launch, onboarding, nurture, re-engagement, transactional, support, and sales contexts."
+      intent: "Define email sequences and standalone emails needed for launch, onboarding, nurture, re-engagement,
+        transactional, support, and sales contexts."
       required: true
       outputGuidance:
         - "Use email asset records for each email or sequence."
@@ -474,7 +546,7 @@ document:
         - "Emails have trigger and purpose."
         - "Cadence is realistic and not spammy."
         - "Privacy, consent, and opt-out requirements are considered."
-      questions:
+      questions: &a7
         - "What email sequences are needed?"
         - "What standalone emails are needed?"
         - "What triggers each email or sequence?"
@@ -484,7 +556,8 @@ document:
         - "What privacy or opt-out rules apply?"
     - id: "social-assets"
       title: "Social Assets"
-      intent: "Define social posts, visual assets, launch announcements, founder posts, proof posts, evergreen posts, and community-safe assets."
+      intent: "Define social posts, visual assets, launch announcements, founder posts, proof posts, evergreen posts, and
+        community-safe assets."
       required: true
       outputGuidance:
         - "Use social asset records."
@@ -494,7 +567,7 @@ document:
         - "Social assets are platform-appropriate."
         - "Posts are not generic announcements without audience and CTA."
         - "Community norms and claim boundaries are respected."
-      questions:
+      questions: &a8
         - "What social platforms will be used?"
         - "What post types are needed?"
         - "What is the launch announcement plan?"
@@ -503,7 +576,8 @@ document:
         - "What claims or tone should be avoided by platform?"
     - id: "demo-assets"
       title: "Demo Assets"
-      intent: "Define demo script, demo environment, demo data, product areas shown, product areas avoided, narrative, proof, caveats, and follow-up assets."
+      intent: "Define demo script, demo environment, demo data, product areas shown, product areas avoided, narrative, proof,
+        caveats, and follow-up assets."
       required: true
       outputGuidance:
         - "Tie demo assets to Sales Strategy and Product readiness."
@@ -513,7 +587,7 @@ document:
         - "Demo does not overstate unsupported capabilities."
         - "Demo data is safe and realistic."
         - "Caveats are explicit for unstable/manual/mock areas."
-      questions:
+      questions: &a9
         - "What is the standard demo narrative?"
         - "What product areas are shown?"
         - "What product areas are avoided?"
@@ -522,7 +596,8 @@ document:
         - "What follow-up assets are needed after the demo?"
     - id: "product-screenshots"
       title: "Product Screenshots"
-      intent: "List screenshots and flows to capture with audience, channel, format, resolution, data shown, privacy check, claim boundary, and update trigger."
+      intent: "List screenshots and flows to capture with audience, channel, format, resolution, data shown, privacy check,
+        claim boundary, and update trigger."
       required: true
       outputGuidance:
         - "Use product media records for screenshots."
@@ -532,7 +607,7 @@ document:
         - "Screenshots represent real or clearly labeled product state."
         - "Sensitive data is not exposed."
         - "Update triggers are defined."
-      questions:
+      questions: &a10
         - "What screens or flows must be captured?"
         - "What audience and channel uses each screenshot?"
         - "What format and resolution are required?"
@@ -541,7 +616,8 @@ document:
         - "When must screenshots be updated?"
     - id: "explainer-video"
       title: "Explainer Video"
-      intent: "Determine whether an explainer video is required and define objective, audience, script, length, format, distribution, proof, CTA, and fallback if deferred."
+      intent: "Determine whether an explainer video is required and define objective, audience, script, length, format,
+        distribution, proof, CTA, and fallback if deferred."
       required: true
       outputGuidance:
         - "Include this section even if explainer video is deferred or rejected."
@@ -551,7 +627,7 @@ document:
         - "Video need is justified."
         - "Script respects claim boundaries."
         - "Production scope matches launch stage."
-      questions:
+      questions: &a11
         - "Is an explainer video needed now?"
         - "What objective would it serve?"
         - "Who is the audience?"
@@ -561,7 +637,8 @@ document:
         - "What fallback exists if it is deferred?"
     - id: "sales-and-pitch-materials"
       title: "Sales and Pitch Materials"
-      intent: "Define sales and pitch collateral by audience, sales stage, message, proof, objection, pricing reference, owner, approval, and readiness."
+      intent: "Define sales and pitch collateral by audience, sales stage, message, proof, objection, pricing reference,
+        owner, approval, and readiness."
       required: true
       outputGuidance:
         - "Use sales asset records."
@@ -571,9 +648,10 @@ document:
         - "Collateral maps to sales stages and objections."
         - "Pricing and proof claims are safe."
         - "Audience for each pitch asset is explicit."
-      questions:
+      questions: &a12
         - "What sales or pitch materials are needed?"
-        - "Is a deck, one-pager, FAQ, comparison sheet, demo script, pricing explainer, proposal, proof sheet, or case study needed?"
+        - "Is a deck, one-pager, FAQ, comparison sheet, demo script, pricing explainer, proposal, proof sheet, or case study
+          needed?"
         - "Who is the audience for each asset?"
         - "What sales stage uses each asset?"
         - "What objection does each asset address?"
@@ -585,12 +663,13 @@ document:
       outputGuidance:
         - "Mark press kit as deferred or not applicable if press is not part of launch strategy."
         - "Do not invent media contacts or press interest."
-        - "Define boilerplate, visuals, screenshots, founder/product bio, media contact, and claim boundaries if relevant."
+        - "Define boilerplate, visuals, screenshots, founder/product bio, media contact, and claim boundaries if
+          relevant."
       qualityChecks:
         - "Press kit relevance is justified."
         - "Press claims are especially claim-safe."
         - "Target contacts are not invented."
-      questions:
+      questions: &a13
         - "Is a press kit needed?"
         - "What goes in the press kit?"
         - "What boilerplate, founder/product bio, visuals, screenshots, or media contact are needed?"
@@ -599,7 +678,8 @@ document:
         - "What claims should press materials avoid?"
     - id: "app-store-marketplace-listing"
       title: "App Store / Marketplace Listing"
-      intent: "Define listing requirements for app stores, marketplaces, extension directories, package registries, integration directories, or platform ecosystems."
+      intent: "Define listing requirements for app stores, marketplaces, extension directories, package registries,
+        integration directories, or platform ecosystems."
       required: true
       outputGuidance:
         - "Use listing asset records for each platform."
@@ -609,34 +689,39 @@ document:
         - "Listings respect platform constraints and claim boundaries."
         - "Required assets and specs are explicit or marked research-needed."
         - "Analytics limitations are considered."
-      questions:
+      questions: &a14
         - "What app stores or marketplaces will the product be listed on?"
-        - "What listing title, subtitle, description, keywords, screenshots, video, category, and support links are required?"
+        - "What listing title, subtitle, description, keywords, screenshots, video, category, and support links are
+          required?"
         - "What platform approval or review constraints exist?"
         - "What assets are required for each listing?"
         - "What analytics limitations exist?"
         - "What listing requirements still need research?"
     - id: "partner-assets"
       title: "Partner Assets"
-      intent: "Define partner-facing assets needed for co-marketing, referrals, integrations, distribution, enablement, or partner sales."
+      intent: "Define partner-facing assets needed for co-marketing, referrals, integrations, distribution, enablement, or
+        partner sales."
       required: true
       outputGuidance:
-        - "Include partner assets only if Partnerships and Distribution requires them or they are likely launch-relevant."
+        - "Include partner assets only if Partnerships and Distribution requires them or they are likely
+          launch-relevant."
         - "Define mutual value and approval needs."
         - "Route detailed partner process downstream."
       qualityChecks:
         - "Partner assets have clear partner use case."
         - "Co-marketing claims are approved."
         - "Partner materials do not imply commitments that do not exist."
-      questions:
+      questions: &a15
         - "What partner-facing assets are needed?"
-        - "Is a partner one-pager, referral copy, co-marketing blurb, integration description, partner pitch, enablement guide, or affiliate asset needed?"
+        - "Is a partner one-pager, referral copy, co-marketing blurb, integration description, partner pitch, enablement
+          guide, or affiliate asset needed?"
         - "What partner use case does each asset support?"
         - "What claims require partner or internal approval?"
         - "What partner assets are deferred?"
     - id: "support-adjacent-assets"
       title: "Support-Adjacent Assets"
-      intent: "Define FAQs, onboarding guides, known-issues pages, support macros, troubleshooting notes, and escalation references needed to support launch."
+      intent: "Define FAQs, onboarding guides, known-issues pages, support macros, troubleshooting notes, and escalation
+        references needed to support launch."
       required: true
       outputGuidance:
         - "Route operational ownership to Support Model, but capture GTM launch needs here."
@@ -646,15 +731,17 @@ document:
         - "Support needs created by marketing are addressed."
         - "Assets reduce avoidable support load."
         - "Known limitations are documented safely."
-      questions:
+      questions: &a16
         - "What support-adjacent assets are needed before launch?"
-        - "What FAQs, onboarding guides, known-issues pages, macros, troubleshooting notes, or escalation references are needed?"
+        - "What FAQs, onboarding guides, known-issues pages, macros, troubleshooting notes, or escalation references are
+          needed?"
         - "What questions will marketing generate that support must answer?"
         - "What assets are launch-blocking?"
         - "What should Support Model inherit?"
     - id: "tracking-and-attribution-assets"
       title: "Tracking and Attribution Assets"
-      intent: "Define tracking links, UTM conventions, campaign IDs, QR codes, landing page variants, analytics tags, and ownership for campaign measurement."
+      intent: "Define tracking links, UTM conventions, campaign IDs, QR codes, landing page variants, analytics tags, and
+        ownership for campaign measurement."
       required: true
       outputGuidance:
         - "Use tracking asset records."
@@ -664,7 +751,7 @@ document:
         - "Campaign assets are measurable."
         - "Tracking conventions are consistent."
         - "Privacy and attribution limits are considered."
-      questions:
+      questions: &a17
         - "What tracking and attribution assets are needed?"
         - "What UTM or campaign naming convention is used?"
         - "What tracking links or QR codes are required?"
@@ -673,7 +760,8 @@ document:
         - "What should GTM Analytics inherit?"
     - id: "asset-production-workflow"
       title: "Asset Production Workflow"
-      intent: "Define how assets move from need to draft, review, approval, implementation, QA, publishing, measurement, maintenance, and retirement."
+      intent: "Define how assets move from need to draft, review, approval, implementation, QA, publishing, measurement,
+        maintenance, and retirement."
       required: true
       outputGuidance:
         - "Describe workflow at a process level."
@@ -683,7 +771,7 @@ document:
         - "Workflow prevents unreviewed assets from going live."
         - "Production process is not heavier than necessary."
         - "Launch-critical assets can be tracked."
-      questions:
+      questions: &a18
         - "How does an asset move from idea to published?"
         - "Who can request an asset?"
         - "Who drafts, reviews, approves, implements, QA checks, publishes, and maintains assets?"
@@ -691,7 +779,8 @@ document:
         - "How are published assets tracked?"
     - id: "asset-approval-workflow"
       title: "Asset Approval Workflow"
-      intent: "Define approval needs by asset type, including claim, product, technical, pricing, legal/compliance/accounting, support, and final approval."
+      intent: "Define approval needs by asset type, including claim, product, technical, pricing, legal/compliance/accounting,
+        support, and final approval."
       required: true
       outputGuidance:
         - "Define approval by asset risk and type."
@@ -701,7 +790,7 @@ document:
         - "Risky assets receive proper review."
         - "Approval is not needlessly heavy for low-risk assets."
         - "Review-needed assets are clearly marked."
-      questions:
+      questions: &a19
         - "What approval is required for each asset type?"
         - "Who reviews claims?"
         - "Who reviews product or technical accuracy?"
@@ -710,7 +799,8 @@ document:
         - "Who gives final approval?"
     - id: "asset-readiness-checklist"
       title: "Asset Readiness Checklist"
-      intent: "Track status, ownership, dependencies, approval, QA, deadlines/triggers, and launch impact for all launch-critical assets."
+      intent: "Track status, ownership, dependencies, approval, QA, deadlines/triggers, and launch impact for all
+        launch-critical assets."
       required: true
       outputGuidance:
         - "Use asset records or checklist-style records for all launch-critical assets."
@@ -720,7 +810,7 @@ document:
         - "Checklist is actionable."
         - "Every launch-critical asset has readiness status."
         - "Incomplete blockers are explicit."
-      questions:
+      questions: &a20
         - "What is the status of each asset?"
         - "Who owns each asset?"
         - "What is the due date or due trigger?"
@@ -729,7 +819,8 @@ document:
         - "What launch impact does each asset have?"
     - id: "asset-maintenance"
       title: "Asset Maintenance"
-      intent: "Define how assets are kept current, reviewed, updated, retired, or replaced as product, pricing, messaging, screenshots, channels, and support knowledge change."
+      intent: "Define how assets are kept current, reviewed, updated, retired, or replaced as product, pricing, messaging,
+        screenshots, channels, and support knowledge change."
       required: true
       outputGuidance:
         - "Define maintenance triggers by asset type."
@@ -739,7 +830,7 @@ document:
         - "Stale assets are treated as risk."
         - "Update triggers are concrete."
         - "Ownership extends beyond initial creation."
-      questions:
+      questions: &a21
         - "When must assets be updated?"
         - "What product, pricing, messaging, launch, screenshot, link, analytics, or support changes trigger asset updates?"
         - "Who owns asset maintenance?"
@@ -747,7 +838,8 @@ document:
         - "When should an asset be retired?"
     - id: "asset-risks"
       title: "Asset Risks"
-      intent: "Identify risks related to missing, stale, misleading, unapproved, untracked, unsupported, or inconsistent marketing assets."
+      intent: "Identify risks related to missing, stale, misleading, unapproved, untracked, unsupported, or inconsistent
+        marketing assets."
       required: true
       outputGuidance:
         - "Use asset risk records for material risks."
@@ -757,7 +849,7 @@ document:
         - "Risks are concrete and monitorable."
         - "Risks include claim safety, product truth, analytics, support, and launch blockers."
         - "Mitigation and contingency are distinct."
-      questions:
+      questions: &a22
         - "What asset risks exist?"
         - "What happens if a launch-critical asset is missing?"
         - "What assets could become stale or misleading?"
@@ -766,17 +858,19 @@ document:
         - "What mitigation or contingency is needed?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream GTM and Operations documents must inherit from Marketing Assets and what they must not assume."
+      intent: "Define what downstream GTM and Operations documents must inherit from Marketing Assets and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Route asset outputs to the correct downstream documents."
-        - "Separate partnerships, experiments, analytics, GTM risk, customer success, release, support, and risk management implications."
+        - "Separate partnerships, experiments, analytics, GTM risk, customer success, release, support, and risk
+          management implications."
         - "Preserve unresolved asset questions, missing assets, blocked assets, and claim restrictions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing asset assumptions silently."
         - "Asset inventory and downstream execution remain distinct."
-      questions:
+      questions: &a23
         - "What should Partnerships and Distribution inherit?"
         - "What should Growth Experiments inherit?"
         - "What should GTM Analytics inherit?"
@@ -785,3 +879,306 @@ document:
         - "What should Release Management and Support Model inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved asset questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain marketing assets. What marketing assets must exist, for whom, in which channel, with what
+      message, proof, format, owner, approval, readiness state, and downstream use?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "asset-objective"
+        label: "Asset Objective"
+        required: true
+        description: "Define what the marketing asset system must enable at the current GTM stage."
+        evaluationHint: "Look for concrete answers addressing: What must the marketing asset set enable now?; Are assets
+          primarily for launch, acquisition, conversion, sales, onboarding, support, partnerships, experiments,
+          analytics, credibility, or another purpose?; What should asset production intentionally not optimize yet?."
+        sourceQuestions: *a1
+        targetSections: &a24
+          - "Asset Objective"
+      - id: "asset-taxonomy"
+        label: "Asset Taxonomy"
+        required: true
+        description: "Define asset categories, statuses, priorities, approval states, and maintenance states."
+        evaluationHint: "Look for concrete answers addressing: What asset categories exist?; What readiness statuses are used?;
+          What priority labels are used?."
+        sourceQuestions: *a2
+        targetSections: &a25
+          - "Asset Taxonomy"
+      - id: "asset-inventory"
+        label: "Asset Inventory"
+        required: true
+        description: "List all marketing assets needed with purpose, audience, channel, message, proof, format, owner,
+          dependency, approval, readiness, and downstream use."
+        evaluationHint: "Look for concrete answers addressing: What is the complete list of marketing assets needed?; What is
+          each asset for?; Who is the audience?."
+        sourceQuestions: *a3
+        targetSections: &a26
+          - "Asset Inventory"
+      - id: "asset-priority"
+        label: "Asset Priority"
+        required: true
+        description: "Prioritize assets by launch need, channel dependency, funnel impact, sales impact, support impact, effort,
+          and risk if missing."
+        evaluationHint: "Look for concrete answers addressing: What is the priority order for asset creation?; Which assets
+          block launch?; Which assets support conversion or sales but do not block launch?."
+        sourceQuestions: *a4
+        targetSections: &a27
+          - "Asset Priority"
+      - id: "landing-page"
+        label: "Landing Page"
+        required: true
+        description: "Define landing page purpose, audience, message hierarchy, sections, CTA, proof, pricing display, claim
+          boundaries, tracking, and readiness."
+        evaluationHint: "Look for concrete answers addressing: What must the landing page communicate?; Who is the landing page
+          for?; What is the message hierarchy?."
+        sourceQuestions: *a5
+        targetSections: &a28
+          - "Landing Page"
+      - id: "website-copy"
+        label: "Website Copy"
+        required: true
+        description: "Define required website pages beyond the landing page and the purpose, audience, CTA, proof, and claim
+          boundaries for each."
+        evaluationHint: "Look for concrete answers addressing: What pages are needed beyond the landing page?; What is the
+          purpose of each page?; What audience does each page serve?."
+        sourceQuestions: *a6
+        targetSections: &a29
+          - "Website Copy"
+      - id: "email-assets"
+        label: "Email Assets"
+        required: true
+        description: "Define email sequences and standalone emails needed for launch, onboarding, nurture, re-engagement,
+          transactional, support, and sales contexts."
+        evaluationHint: "Look for concrete answers addressing: What email sequences are needed?; What standalone emails are
+          needed?; What triggers each email or sequence?."
+        sourceQuestions: *a7
+        targetSections: &a30
+          - "Email Assets"
+      - id: "social-assets"
+        label: "Social Assets"
+        required: true
+        description: "Define social posts, visual assets, launch announcements, founder posts, proof posts, evergreen posts, and
+          community-safe assets."
+        evaluationHint: "Look for concrete answers addressing: What social platforms will be used?; What post types are needed?;
+          What is the launch announcement plan?."
+        sourceQuestions: *a8
+        targetSections: &a31
+          - "Social Assets"
+      - id: "demo-assets"
+        label: "Demo Assets"
+        required: true
+        description: "Define demo script, demo environment, demo data, product areas shown, product areas avoided, narrative,
+          proof, caveats, and follow-up assets."
+        evaluationHint: "Look for concrete answers addressing: What is the standard demo narrative?; What product areas are
+          shown?; What product areas are avoided?."
+        sourceQuestions: *a9
+        targetSections: &a32
+          - "Demo Assets"
+      - id: "product-screenshots"
+        label: "Product Screenshots"
+        required: true
+        description: "List screenshots and flows to capture with audience, channel, format, resolution, data shown, privacy
+          check, claim boundary, and update trigger."
+        evaluationHint: "Look for concrete answers addressing: What screens or flows must be captured?; What audience and
+          channel uses each screenshot?; What format and resolution are required?."
+        sourceQuestions: *a10
+        targetSections: &a33
+          - "Product Screenshots"
+      - id: "explainer-video"
+        label: "Explainer Video"
+        required: true
+        description: "Determine whether an explainer video is required and define objective, audience, script, length, format,
+          distribution, proof, CTA, and fallback if deferred."
+        evaluationHint: "Look for concrete answers addressing: Is an explainer video needed now?; What objective would it
+          serve?; Who is the audience?."
+        sourceQuestions: *a11
+        targetSections: &a34
+          - "Explainer Video"
+      - id: "sales-and-pitch-materials"
+        label: "Sales and Pitch Materials"
+        required: true
+        description: "Define sales and pitch collateral by audience, sales stage, message, proof, objection, pricing reference,
+          owner, approval, and readiness."
+        evaluationHint: "Look for concrete answers addressing: What sales or pitch materials are needed?; Is a deck, one-pager,
+          FAQ, comparison sheet, demo script, pricing explainer, proposal, proof sheet, or case study needed?; Who is
+          the audience for each asset?."
+        sourceQuestions: *a12
+        targetSections: &a35
+          - "Sales and Pitch Materials"
+      - id: "press-kit"
+        label: "Press Kit"
+        required: true
+        description: "Define whether press is relevant and, if so, what press kit assets and target contacts are needed."
+        evaluationHint: "Look for concrete answers addressing: Is a press kit needed?; What goes in the press kit?; What
+          boilerplate, founder/product bio, visuals, screenshots, or media contact are needed?."
+        sourceQuestions: *a13
+        targetSections: &a36
+          - "Press Kit"
+      - id: "app-store-marketplace-listing"
+        label: "App Store / Marketplace Listing"
+        required: true
+        description: "Define listing requirements for app stores, marketplaces, extension directories, package registries,
+          integration directories, or platform ecosystems."
+        evaluationHint: "Look for concrete answers addressing: What app stores or marketplaces will the product be listed on?;
+          What listing title, subtitle, description, keywords, screenshots, video, category, and support links are
+          required?; What platform approval or review constraints exist?."
+        sourceQuestions: *a14
+        targetSections: &a37
+          - "App Store / Marketplace Listing"
+      - id: "partner-assets"
+        label: "Partner Assets"
+        required: true
+        description: "Define partner-facing assets needed for co-marketing, referrals, integrations, distribution, enablement,
+          or partner sales."
+        evaluationHint: "Look for concrete answers addressing: What partner-facing assets are needed?; Is a partner one-pager,
+          referral copy, co-marketing blurb, integration description, partner pitch, enablement guide, or affiliate
+          asset needed?; What partner use case does each asset support?."
+        sourceQuestions: *a15
+        targetSections: &a38
+          - "Partner Assets"
+      - id: "support-adjacent-assets"
+        label: "Support-Adjacent Assets"
+        required: true
+        description: "Define FAQs, onboarding guides, known-issues pages, support macros, troubleshooting notes, and escalation
+          references needed to support launch."
+        evaluationHint: "Look for concrete answers addressing: What support-adjacent assets are needed before launch?; What
+          FAQs, onboarding guides, known-issues pages, macros, troubleshooting notes, or escalation references are
+          needed?; What questions will marketing generate that support must answer?."
+        sourceQuestions: *a16
+        targetSections: &a39
+          - "Support-Adjacent Assets"
+      - id: "tracking-and-attribution-assets"
+        label: "Tracking and Attribution Assets"
+        required: true
+        description: "Define tracking links, UTM conventions, campaign IDs, QR codes, landing page variants, analytics tags, and
+          ownership for campaign measurement."
+        evaluationHint: "Look for concrete answers addressing: What tracking and attribution assets are needed?; What UTM or
+          campaign naming convention is used?; What tracking links or QR codes are required?."
+        sourceQuestions: *a17
+        targetSections: &a40
+          - "Tracking and Attribution Assets"
+      - id: "asset-production-workflow"
+        label: "Asset Production Workflow"
+        required: true
+        description: "Define how assets move from need to draft, review, approval, implementation, QA, publishing, measurement,
+          maintenance, and retirement."
+        evaluationHint: "Look for concrete answers addressing: How does an asset move from idea to published?; Who can request
+          an asset?; Who drafts, reviews, approves, implements, QA checks, publishes, and maintains assets?."
+        sourceQuestions: *a18
+        targetSections: &a41
+          - "Asset Production Workflow"
+      - id: "asset-approval-workflow"
+        label: "Asset Approval Workflow"
+        required: true
+        description: "Define approval needs by asset type, including claim, product, technical, pricing,
+          legal/compliance/accounting, support, and final approval."
+        evaluationHint: "Look for concrete answers addressing: What approval is required for each asset type?; Who reviews
+          claims?; Who reviews product or technical accuracy?."
+        sourceQuestions: *a19
+        targetSections: &a42
+          - "Asset Approval Workflow"
+      - id: "asset-readiness-checklist"
+        label: "Asset Readiness Checklist"
+        required: true
+        description: "Track status, ownership, dependencies, approval, QA, deadlines/triggers, and launch impact for all
+          launch-critical assets."
+        evaluationHint: "Look for concrete answers addressing: What is the status of each asset?; Who owns each asset?; What is
+          the due date or due trigger?."
+        sourceQuestions: *a20
+        targetSections: &a43
+          - "Asset Readiness Checklist"
+      - id: "asset-maintenance"
+        label: "Asset Maintenance"
+        required: true
+        description: "Define how assets are kept current, reviewed, updated, retired, or replaced as product, pricing,
+          messaging, screenshots, channels, and support knowledge change."
+        evaluationHint: "Look for concrete answers addressing: When must assets be updated?; What product, pricing, messaging,
+          launch, screenshot, link, analytics, or support changes trigger asset updates?; Who owns asset maintenance?."
+        sourceQuestions: *a21
+        targetSections: &a44
+          - "Asset Maintenance"
+      - id: "asset-risks"
+        label: "Asset Risks"
+        required: true
+        description: "Identify risks related to missing, stale, misleading, unapproved, untracked, unsupported, or inconsistent
+          marketing assets."
+        evaluationHint: "Look for concrete answers addressing: What asset risks exist?; What happens if a launch-critical asset
+          is missing?; What assets could become stale or misleading?."
+        sourceQuestions: *a22
+        targetSections: &a45
+          - "Asset Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream GTM and Operations documents must inherit from Marketing Assets and what they must
+          not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Partnerships and Distribution inherit?; What should
+          Growth Experiments inherit?; What should GTM Analytics inherit?."
+        sourceQuestions: *a23
+        targetSections: &a46
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      asset-objective:
+        targetSections: *a24
+      asset-taxonomy:
+        targetSections: *a25
+      asset-inventory:
+        targetSections: *a26
+      asset-priority:
+        targetSections: *a27
+      landing-page:
+        targetSections: *a28
+      website-copy:
+        targetSections: *a29
+      email-assets:
+        targetSections: *a30
+      social-assets:
+        targetSections: *a31
+      demo-assets:
+        targetSections: *a32
+      product-screenshots:
+        targetSections: *a33
+      explainer-video:
+        targetSections: *a34
+      sales-and-pitch-materials:
+        targetSections: *a35
+      press-kit:
+        targetSections: *a36
+      app-store-marketplace-listing:
+        targetSections: *a37
+      partner-assets:
+        targetSections: *a38
+      support-adjacent-assets:
+        targetSections: *a39
+      tracking-and-attribution-assets:
+        targetSections: *a40
+      asset-production-workflow:
+        targetSections: *a41
+      asset-approval-workflow:
+        targetSections: *a42
+      asset-readiness-checklist:
+        targetSections: *a43
+      asset-maintenance:
+        targetSections: *a44
+      asset-risks:
+        targetSections: *a45
+      downstream-handoff:
+        targetSections: *a46
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.464Z"
+      totalSourceQuestions: 137
+      reviewRequired: false

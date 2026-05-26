@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 6
   type: "channel_strategy"
-  purpose: "Define how the product reaches qualified customers through focused, segment-aligned, message-consistent, testable, measurable, and operationally sustainable channels."
-  centralQuestion: "Which channels can credibly reach the right customers first, why should they work, how will they be tested, and what happens if they fail?"
+  purpose: "Define how the product reaches qualified customers through focused, segment-aligned, message-consistent,
+    testable, measurable, and operationally sustainable channels."
+  centralQuestion: "Which channels can credibly reach the right customers first, why should they work, how will they be
+    tested, and what happens if they fail?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,9 @@ document:
       - id: "gtm.channel_strategy_map"
         format: "html"
         path: "outcomes/html/05-go-to-market/channel-strategy-map.html"
-        purpose: "Provide a founder-facing channel strategy map covering channel thesis, primary channel, secondary channels, segment fit, channel roles, assets, economics, experiments, constraints, fallbacks, risks, metrics, and downstream handoff."
+        purpose: "Provide a founder-facing channel strategy map covering channel thesis, primary channel, secondary channels,
+          segment fit, channel roles, assets, economics, experiments, constraints, fallbacks, risks, metrics, and
+          downstream handoff."
         audience: "founder"
         includes:
           - "channel objective"
@@ -45,7 +49,8 @@ document:
       - id: "gtm.channel_strategy_review_prompt"
         format: "markdown"
         path: "outcomes/agents/05-go-to-market/channel-strategy-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether channel strategy is focused, segment-aligned, message-safe, testable, measurable, asset-aware, capacity-aware, and realistic for launch."
+        purpose: "Provide compact context for agents reviewing whether channel strategy is focused, segment-aligned,
+          message-safe, testable, measurable, asset-aware, capacity-aware, and realistic for launch."
         agentRole: "reviewer"
         includes:
           - "canonical channel strategy"
@@ -95,84 +100,127 @@ document:
     - id: "go-to-market-brief"
       type: "context"
       required: false
-      description: "GTM objective, market-entry thesis, beachhead segment, channel thesis, launch strategy, revenue motion, constraints, and GTM risks."
+      description: "GTM objective, market-entry thesis, beachhead segment, channel thesis, launch strategy, revenue motion,
+        constraints, and GTM risks."
     - id: "market-definition"
       type: "context"
       required: false
-      description: "Market category, alternatives, substitute behaviors, comparison lens, maturity, timing, constraints, evidence quality, and market risks."
+      description: "Market category, alternatives, substitute behaviors, comparison lens, maturity, timing, constraints,
+        evidence quality, and market risks."
     - id: "positioning"
       type: "context"
       required: false
-      description: "Positioning statement, category frame, target customer, primary pain, alternatives, differentiated value, proof hierarchy, claim boundaries, messaging pillars, and anti-positioning."
+      description: "Positioning statement, category frame, target customer, primary pain, alternatives, differentiated value,
+        proof hierarchy, claim boundaries, messaging pillars, and anti-positioning."
     - id: "messaging"
       type: "context"
       required: false
-      description: "Core message, message house, audience variants, channel variants, proof points, objection responses, claim boundaries, tone, and forbidden claims."
+      description: "Core message, message house, audience variants, channel variants, proof points, objection responses, claim
+        boundaries, tone, and forbidden claims."
     - id: "customer-segments"
       type: "context"
       required: false
-      description: "ICP, primary segment, secondary segments, early adopters, role map, qualification/disqualification signals, segment-specific messaging, segment-specific channels, exclusions, expansion triggers, and segment risks."
+      description: "ICP, primary segment, secondary segments, early adopters, role map, qualification/disqualification
+        signals, segment-specific messaging, segment-specific channels, exclusions, expansion triggers, and segment
+        risks."
     - id: "product-readiness"
       type: "context"
       required: false
-      description: "Product scope, acceptance criteria, launchable capabilities, onboarding needs, support constraints, and current limitations affecting channel promises."
+      description: "Product scope, acceptance criteria, launchable capabilities, onboarding needs, support constraints, and
+        current limitations affecting channel promises."
     - id: "technical-risk-context"
       type: "context"
       required: false
-      description: "Deployment readiness, technical limitations, unsupported capabilities, operational risks, scalability constraints, and claims/channels that may create risk."
+      description: "Deployment readiness, technical limitations, unsupported capabilities, operational risks, scalability
+        constraints, and claims/channels that may create risk."
     - id: "channel-notes"
       type: "manual_note"
       required: false
-      description: "Candidate channels, founder distribution assets, owned audience, community access, paid channel assumptions, partnership ideas, marketplace ideas, sales channel notes, cost constraints, and unresolved channel questions."
+      description: "Candidate channels, founder distribution assets, owned audience, community access, paid channel
+        assumptions, partnership ideas, marketplace ideas, sales channel notes, cost constraints, and unresolved channel
+        questions."
   completionCriteria:
-    - "The central question is answered through a focused, testable channel strategy with primary channel, supporting channels, segment fit, message fit, experiments, metrics, constraints, fallbacks, risks, and downstream handoff."
-    - "Channel objective defines what channels must achieve first: validation, waitlist, acquisition, activation, revenue, community, awareness, sales pipeline, retention learning, or another explicit outcome."
-    - "Channel thesis explains why the selected channel mix can reach the primary segment now and what must be true for channels to become repeatable."
-    - "Channel taxonomy distinguishes owned, earned, paid, community, sales, partner, marketplace, referral, product-led, content-led, event-led, outbound, and support-led channels where relevant."
-    - "Primary channel identifies one main channel for the first GTM motion, with rationale, segment fit, message fit, asset requirements, cost/capacity implications, experiment plan, success metric, failure signal, and fallback."
-    - "Secondary channels are explicitly supportive and do not dilute focus; each has a role such as amplification, credibility, nurture, conversion, feedback, referral, retention, or proof generation."
-    - "Organic channels include SEO, content, social, community, GitHub/open-source, referrals, email/newsletter, word-of-mouth, founder audience, and other relevant unpaid channels with realistic ramp assumptions."
-    - "Paid channels are treated as tests unless validated; each includes audience fit, budget constraint, conversion path, creative/message fit, measurement plan, scaling condition, and stop condition."
-    - "Community channels include community fit, participation ethics, contribution plan, non-promotional value, trust bar, moderator/platform rules, and reputation risk."
-    - "Partnership channels include partner types, fit criteria, mutual value, distribution mechanism, activation requirements, proof needed, commercial model, operational burden, and risks."
-    - "Sales channels include direct, founder-led, outbound, inbound, consultative, marketplace-assisted, app-store-assisted, reseller, or partner-led sales where relevant, with motion and handoff implications."
-    - "Marketplace/app-store channels include listing strategy, ranking/discovery assumptions, review dynamics, platform rules, approval constraints, asset requirements, analytics limitations, and support implications where relevant."
-    - "Segment-channel fit maps each material segment to plausible channels, reachability logic, required assets, validation signal, and cost/support risk."
-    - "Message-channel fit maps which messages can safely be used in each channel, what proof is required, what claims are prohibited, and how tone must adapt."
-    - "Channel assets define required landing pages, content, posts, email sequences, demos, videos, docs, lead magnets, open-source artifacts, case studies, proof assets, sales collateral, partner materials, and tracking links."
-    - "Channel economics define expected effort, budget, CAC hypothesis if relevant, conversion assumptions, time-to-signal, scalability, capacity limits, and opportunity cost without inventing precision."
-    - "Channel experiments define hypothesis, target segment, channel, message, asset, sample/reach target, timeframe, success threshold, failure threshold, instrumentation, owner, and next decision."
-    - "Channel metrics define leading indicators, lagging indicators, diagnostic metrics, quality metrics, conversion metrics, cost metrics, and decision thresholds."
-    - "Channel constraints include budget, team capacity, time, brand/ethics, platform rules, compliance/legal review, product readiness, support capacity, technical readiness, and measurement limitations."
-    - "Fallback strategy defines what happens if the primary channel underperforms, including iteration path, alternate channel, narrower segment, messaging adjustment, offer adjustment, or launch pause."
+    - "The central question is answered through a focused, testable channel strategy with primary channel, supporting
+      channels, segment fit, message fit, experiments, metrics, constraints, fallbacks, risks, and downstream handoff."
+    - "Channel objective defines what channels must achieve first: validation, waitlist, acquisition, activation,
+      revenue, community, awareness, sales pipeline, retention learning, or another explicit outcome."
+    - "Channel thesis explains why the selected channel mix can reach the primary segment now and what must be true for
+      channels to become repeatable."
+    - "Channel taxonomy distinguishes owned, earned, paid, community, sales, partner, marketplace, referral,
+      product-led, content-led, event-led, outbound, and support-led channels where relevant."
+    - "Primary channel identifies one main channel for the first GTM motion, with rationale, segment fit, message fit,
+      asset requirements, cost/capacity implications, experiment plan, success metric, failure signal, and fallback."
+    - "Secondary channels are explicitly supportive and do not dilute focus; each has a role such as amplification,
+      credibility, nurture, conversion, feedback, referral, retention, or proof generation."
+    - "Organic channels include SEO, content, social, community, GitHub/open-source, referrals, email/newsletter,
+      word-of-mouth, founder audience, and other relevant unpaid channels with realistic ramp assumptions."
+    - "Paid channels are treated as tests unless validated; each includes audience fit, budget constraint, conversion
+      path, creative/message fit, measurement plan, scaling condition, and stop condition."
+    - "Community channels include community fit, participation ethics, contribution plan, non-promotional value, trust
+      bar, moderator/platform rules, and reputation risk."
+    - "Partnership channels include partner types, fit criteria, mutual value, distribution mechanism, activation
+      requirements, proof needed, commercial model, operational burden, and risks."
+    - "Sales channels include direct, founder-led, outbound, inbound, consultative, marketplace-assisted,
+      app-store-assisted, reseller, or partner-led sales where relevant, with motion and handoff implications."
+    - "Marketplace/app-store channels include listing strategy, ranking/discovery assumptions, review dynamics, platform
+      rules, approval constraints, asset requirements, analytics limitations, and support implications where relevant."
+    - "Segment-channel fit maps each material segment to plausible channels, reachability logic, required assets,
+      validation signal, and cost/support risk."
+    - "Message-channel fit maps which messages can safely be used in each channel, what proof is required, what claims
+      are prohibited, and how tone must adapt."
+    - "Channel assets define required landing pages, content, posts, email sequences, demos, videos, docs, lead magnets,
+      open-source artifacts, case studies, proof assets, sales collateral, partner materials, and tracking links."
+    - "Channel economics define expected effort, budget, CAC hypothesis if relevant, conversion assumptions,
+      time-to-signal, scalability, capacity limits, and opportunity cost without inventing precision."
+    - "Channel experiments define hypothesis, target segment, channel, message, asset, sample/reach target, timeframe,
+      success threshold, failure threshold, instrumentation, owner, and next decision."
+    - "Channel metrics define leading indicators, lagging indicators, diagnostic metrics, quality metrics, conversion
+      metrics, cost metrics, and decision thresholds."
+    - "Channel constraints include budget, team capacity, time, brand/ethics, platform rules, compliance/legal review,
+      product readiness, support capacity, technical readiness, and measurement limitations."
+    - "Fallback strategy defines what happens if the primary channel underperforms, including iteration path, alternate
+      channel, narrower segment, messaging adjustment, offer adjustment, or launch pause."
     - "Channel risks are concrete, source-linked, impact-aware, and routed to downstream GTM or Operations documents."
-    - "Downstream handoff clarifies what Launch, Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks, Support, Release, and Operations must inherit."
+    - "Downstream handoff clarifies what Launch, Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM
+      Risks, Support, Release, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid channel theater: channel lists without segment fit, message fit, asset requirements, experiment design, metrics, cost/capacity implications, constraints, or fallback."
+    - "Avoid channel theater: channel lists without segment fit, message fit, asset requirements, experiment design,
+      metrics, cost/capacity implications, constraints, or fallback."
     - "Avoid running many channels before validating a primary channel."
-    - "Avoid assuming channels are free because they are organic; time, trust, content, community participation, and support load are real costs."
-    - "Avoid paid acquisition assumptions without conversion path, tracking plan, budget constraint, stop condition, and scaling condition."
+    - "Avoid assuming channels are free because they are organic; time, trust, content, community participation, and
+      support load are real costs."
+    - "Avoid paid acquisition assumptions without conversion path, tracking plan, budget constraint, stop condition, and
+      scaling condition."
     - "Avoid community spam, extractive promotion, or participation plans that violate community norms."
-    - "Avoid partnership assumptions without mutual value, activation path, operational owner, and distribution mechanism."
-    - "Avoid channels that target segments Product, Engineering, Acceptance Criteria, Deployment, Technical Risks, or Support cannot serve truthfully."
+    - "Avoid partnership assumptions without mutual value, activation path, operational owner, and distribution
+      mechanism."
+    - "Avoid channels that target segments Product, Engineering, Acceptance Criteria, Deployment, Technical Risks, or
+      Support cannot serve truthfully."
     - "Avoid using messages in channels where claim boundaries, proof level, or tone do not fit."
     - "Avoid channel metrics that measure reach only while ignoring quality, fit, activation, conversion, and learning."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent traffic numbers, CAC, conversion rates, community access, paid channel performance, partner willingness, marketplace ranking, or channel scalability."
-    - "Channel strategy must preserve Foundation boundaries, segment focus, positioning, messaging claim boundaries, product truth, technical truth, support capacity, and operational sustainability."
+    - "Do not invent traffic numbers, CAC, conversion rates, community access, paid channel performance, partner
+      willingness, marketplace ranking, or channel scalability."
+    - "Channel strategy must preserve Foundation boundaries, segment focus, positioning, messaging claim boundaries,
+      product truth, technical truth, support capacity, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate channel decision, hypothesis, evidence, assumption, asset, experiment, metric, constraint, fallback, and risk."
-    - "Tie channel claims to GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Product, Acceptance Criteria, Technical Risks, or Decision Record where possible."
-    - "Classify channels as primary, secondary, supportive, experimental, deferred, rejected, unavailable, review-needed, launch-ready, post-launch, or scale-only where useful."
+    - "Separate channel decision, hypothesis, evidence, assumption, asset, experiment, metric, constraint, fallback, and
+      risk."
+    - "Tie channel claims to GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Product,
+      Acceptance Criteria, Technical Risks, or Decision Record where possible."
+    - "Classify channels as primary, secondary, supportive, experimental, deferred, rejected, unavailable,
+      review-needed, launch-ready, post-launch, or scale-only where useful."
     - "State what must be validated before a channel gets more investment."
-    - "Route detailed content calendars, launch sequences, pricing tests, sales scripts, partner outreach, experiment execution, analytics implementation, and support workflows downstream."
+    - "Route detailed content calendars, launch sequences, pricing tests, sales scripts, partner outreach, experiment
+      execution, analytics implementation, and support workflows downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, or Decision Record."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM
+      Brief, Market Definition, Positioning, Messaging, Customer Segments, or Decision Record."
     - "Flag channels without segment fit, message fit, asset requirement, metric, experiment, owner, or fallback."
     - "Flag primary-channel choices that are not focused, measurable, reachable, or aligned with the primary segment."
     - "Flag channel mixes that spread effort too thin for the launch stage."
@@ -180,121 +228,122 @@ document:
     - "Flag community or partnership channels that may create trust, ethics, reputation, support, or operational risk."
     - "Flag channel messages that violate claim boundaries or product/technical truth."
     - "Verify that downstream GTM and Operations documents receive concrete channel handoff inputs."
-    - "Flag content that belongs better in Launch Plan, Pricing, Content Strategy, Sales Motion, Partnerships, Growth Experiments, Analytics, GTM Risks, Support Model, Release Management, or Operations."
+    - "Flag content that belongs better in Launch Plan, Pricing, Content Strategy, Sales Motion, Partnerships, Growth
+      Experiments, Analytics, GTM Risks, Support Model, Release Management, or Operations."
   specializedFormats:
     channelFormat:
       description: "Recommended format for channel definitions."
       fields:
-        - channel
-        - channelType
-        - role
-        - targetSegment
-        - rationale
-        - reachabilityLogic
-        - messageFit
-        - requiredAssets
-        - costOrCapacityImplication
-        - measurementMethod
-        - successSignal
-        - failureSignal
-        - fallback
-        - status
+        - "channel"
+        - "channelType"
+        - "role"
+        - "targetSegment"
+        - "rationale"
+        - "reachabilityLogic"
+        - "messageFit"
+        - "requiredAssets"
+        - "costOrCapacityImplication"
+        - "measurementMethod"
+        - "successSignal"
+        - "failureSignal"
+        - "fallback"
+        - "status"
     channelExperimentFormat:
       description: "Recommended format for channel experiments."
       fields:
-        - experiment
-        - hypothesis
-        - channel
-        - targetSegment
-        - message
-        - asset
-        - sampleOrReachTarget
-        - timeframe
-        - successThreshold
-        - failureThreshold
-        - instrumentation
-        - owner
-        - nextDecision
-        - status
+        - "experiment"
+        - "hypothesis"
+        - "channel"
+        - "targetSegment"
+        - "message"
+        - "asset"
+        - "sampleOrReachTarget"
+        - "timeframe"
+        - "successThreshold"
+        - "failureThreshold"
+        - "instrumentation"
+        - "owner"
+        - "nextDecision"
+        - "status"
     segmentChannelFitFormat:
       description: "Recommended format for segment-channel fit."
       fields:
-        - segment
-        - channel
-        - whyReachableHere
-        - customerIntent
-        - messageFit
-        - requiredAsset
-        - trustRequirement
-        - validationSignal
-        - costOrSupportRisk
-        - status
+        - "segment"
+        - "channel"
+        - "whyReachableHere"
+        - "customerIntent"
+        - "messageFit"
+        - "requiredAsset"
+        - "trustRequirement"
+        - "validationSignal"
+        - "costOrSupportRisk"
+        - "status"
     messageChannelFitFormat:
       description: "Recommended format for message-channel fit."
       fields:
-        - channel
-        - messageType
-        - allowedMessage
-        - proofRequired
-        - toneAdjustment
-        - claimsToAvoid
-        - prohibitedUse
-        - reviewNeeded
-        - status
+        - "channel"
+        - "messageType"
+        - "allowedMessage"
+        - "proofRequired"
+        - "toneAdjustment"
+        - "claimsToAvoid"
+        - "prohibitedUse"
+        - "reviewNeeded"
+        - "status"
     channelAssetFormat:
       description: "Recommended format for channel assets."
       fields:
-        - asset
-        - channel
-        - purpose
-        - targetSegment
-        - messageSupported
-        - proofIncluded
-        - owner
-        - readinessStatus
-        - dependency
-        - downstreamDocument
+        - "asset"
+        - "channel"
+        - "purpose"
+        - "targetSegment"
+        - "messageSupported"
+        - "proofIncluded"
+        - "owner"
+        - "readinessStatus"
+        - "dependency"
+        - "downstreamDocument"
     channelMetricFormat:
       description: "Recommended format for channel metrics."
       fields:
-        - metric
-        - metricType
-        - channel
-        - purpose
-        - measurementMethod
-        - leadingOrLagging
-        - qualitySignal
-        - threshold
-        - decisionImplication
-        - owner
+        - "metric"
+        - "metricType"
+        - "channel"
+        - "purpose"
+        - "measurementMethod"
+        - "leadingOrLagging"
+        - "qualitySignal"
+        - "threshold"
+        - "decisionImplication"
+        - "owner"
     channelEconomicsFormat:
       description: "Recommended format for channel economics."
       fields:
-        - channel
-        - effortCost
-        - budgetCost
-        - timeToSignal
-        - CACAssumption
-        - conversionAssumption
-        - scalabilityAssumption
-        - capacityLimit
-        - opportunityCost
-        - confidenceLevel
-        - reviewNeeded
+        - "channel"
+        - "effortCost"
+        - "budgetCost"
+        - "timeToSignal"
+        - "CACAssumption"
+        - "conversionAssumption"
+        - "scalabilityAssumption"
+        - "capacityLimit"
+        - "opportunityCost"
+        - "confidenceLevel"
+        - "reviewNeeded"
     channelRiskFormat:
       description: "Recommended format for channel risks."
       fields:
-        - risk
-        - channel
-        - riskType
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - fallback
-        - downstreamDocument
-        - launchImpact
+        - "risk"
+        - "channel"
+        - "riskType"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "fallback"
+        - "downstreamDocument"
+        - "launchImpact"
   sections:
     - id: "channel-objective"
       title: "Channel Objective"
@@ -302,15 +351,17 @@ document:
       required: true
       outputGuidance:
         - "State the primary channel objective in one clear sentence."
-        - "Classify the objective as validation, waitlist, acquisition, activation, revenue, community, awareness, pipeline, feedback, retention learning, or another explicit outcome."
+        - "Classify the objective as validation, waitlist, acquisition, activation, revenue, community, awareness,
+          pipeline, feedback, retention learning, or another explicit outcome."
         - "Tie objective to GTM Brief and launch stage."
       qualityChecks:
         - "Objective is specific enough to choose channels and metrics."
         - "Objective does not try to optimize reach, revenue, learning, and scale all at once."
         - "Objective matches product readiness and support capacity."
-      questions:
+      questions: &a1
         - "What is the primary goal of the channel strategy?"
-        - "Is the goal validation, waitlist, acquisition, activation, revenue, community, awareness, pipeline, feedback, retention learning, or something else?"
+        - "Is the goal validation, waitlist, acquisition, activation, revenue, community, awareness, pipeline, feedback,
+          retention learning, or something else?"
         - "What should channel strategy intentionally not optimize yet?"
         - "What would make the first channel motion a failure?"
     - id: "channel-thesis"
@@ -325,7 +376,7 @@ document:
         - "Thesis is testable."
         - "Thesis is focused on the primary segment."
         - "The biggest assumption is explicit."
-      questions:
+      questions: &a2
         - "What is the channel thesis?"
         - "Why should this channel strategy work for the primary segment?"
         - "Why now?"
@@ -336,16 +387,19 @@ document:
       intent: "Define the channel classes used in this strategy and how each class should be interpreted."
       required: true
       outputGuidance:
-        - "Define owned, earned, paid, community, partner, marketplace, sales, referral, product-led, content-led, event-led, outbound, and support-led channels where relevant."
-        - "Classify channel status labels: primary, secondary, supportive, experimental, deferred, rejected, scale-only, review-needed."
+        - "Define owned, earned, paid, community, partner, marketplace, sales, referral, product-led, content-led,
+          event-led, outbound, and support-led channels where relevant."
+        - "Classify channel status labels: primary, secondary, supportive, experimental, deferred, rejected, scale-only,
+          review-needed."
         - "State how channel classes differ from tactics and assets."
       qualityChecks:
         - "Taxonomy prevents mixing channels, tactics, assets, and metrics."
         - "Status labels are clear."
         - "The taxonomy supports downstream execution."
-      questions:
+      questions: &a3
         - "What channel categories are used?"
-        - "How are owned, earned, paid, community, partner, marketplace, sales, referral, product-led, content-led, event-led, outbound, and support-led channels defined?"
+        - "How are owned, earned, paid, community, partner, marketplace, sales, referral, product-led, content-led, event-led,
+          outbound, and support-led channels defined?"
         - "What channel statuses exist?"
         - "How is a channel different from a tactic, asset, or campaign?"
     - id: "primary-channel"
@@ -354,13 +408,14 @@ document:
       required: true
       outputGuidance:
         - "Use the channel format for the primary channel."
-        - "Include rationale, target segment, message fit, required assets, measurement method, success signal, failure signal, and fallback."
+        - "Include rationale, target segment, message fit, required assets, measurement method, success signal, failure
+          signal, and fallback."
         - "Avoid selecting multiple primary channels."
       qualityChecks:
         - "Primary channel is specific and testable."
         - "It is plausible for the primary segment and current stage."
         - "It has clear success/failure signals."
-      questions:
+      questions: &a4
         - "What is the single primary acquisition or validation channel?"
         - "Why is this channel the best first bet?"
         - "Which segment does it reach?"
@@ -374,13 +429,14 @@ document:
       required: true
       outputGuidance:
         - "Use channel records for secondary channels."
-        - "Assign each channel a clear role: amplification, credibility, nurture, conversion, feedback, referral, retention, or proof generation."
+        - "Assign each channel a clear role: amplification, credibility, nurture, conversion, feedback, referral,
+          retention, or proof generation."
         - "State why each is secondary rather than primary."
       qualityChecks:
         - "Secondary channels support the primary channel."
         - "They do not fragment launch effort."
         - "Each has a measurable role."
-      questions:
+      questions: &a5
         - "What channels support the primary channel?"
         - "What role does each secondary channel play?"
         - "How do they reinforce each other?"
@@ -388,7 +444,8 @@ document:
         - "What metric indicates each secondary channel is doing its job?"
     - id: "organic-channels"
       title: "Organic Channels"
-      intent: "Define unpaid channels such as SEO, content, social, community, GitHub/open-source, referrals, email/newsletter, word-of-mouth, and founder audience."
+      intent: "Define unpaid channels such as SEO, content, social, community, GitHub/open-source, referrals,
+        email/newsletter, word-of-mouth, and founder audience."
       required: true
       outputGuidance:
         - "List only relevant organic channels."
@@ -398,15 +455,17 @@ document:
         - "Organic channels include time and consistency costs."
         - "SEO/content/community assumptions are realistic for the stage."
         - "Each channel has a measurable learning or acquisition role."
-      questions:
+      questions: &a6
         - "What organic channels will be used?"
-        - "What role will SEO, content, social, community, GitHub/open-source, referrals, email/newsletter, word-of-mouth, or founder audience play?"
+        - "What role will SEO, content, social, community, GitHub/open-source, referrals, email/newsletter, word-of-mouth, or
+          founder audience play?"
         - "What organic channels are too slow or not useful yet?"
         - "What consistency or asset requirement does each organic channel create?"
         - "How will organic channel quality be measured?"
     - id: "paid-channels"
       title: "Paid Channels"
-      intent: "Define paid channels to test, why they might work, budget limits, conversion path, measurement, scaling condition, and stop condition."
+      intent: "Define paid channels to test, why they might work, budget limits, conversion path, measurement, scaling
+        condition, and stop condition."
       required: true
       outputGuidance:
         - "Treat paid channels as tests unless already validated."
@@ -416,7 +475,7 @@ document:
         - "Paid tests have clear hypothesis and budget limit."
         - "Scaling condition is explicit."
         - "Paid channels are not used to compensate for unclear positioning or broken activation."
-      questions:
+      questions: &a7
         - "What paid channels will be tested?"
         - "Why might each paid channel work for the target segment?"
         - "What budget or spend cap applies?"
@@ -436,7 +495,7 @@ document:
         - "Community strategy is not disguised spam."
         - "Participation plan creates value before extraction."
         - "Trust and reputation risks are explicit."
-      questions:
+      questions: &a8
         - "What communities does the target audience already inhabit?"
         - "Why are those communities relevant?"
         - "How will the product or founder participate authentically?"
@@ -445,7 +504,8 @@ document:
         - "What reputation risks exist?"
     - id: "partnership-channels"
       title: "Partnership Channels"
-      intent: "Identify partnership, affiliate, integration, reseller, creator, community, institutional, or ecosystem channels and define partner fit criteria."
+      intent: "Identify partnership, affiliate, integration, reseller, creator, community, institutional, or ecosystem
+        channels and define partner fit criteria."
       required: true
       outputGuidance:
         - "Use channel records for material partnership channels."
@@ -455,7 +515,7 @@ document:
         - "Partnerships have clear mutual value and distribution mechanism."
         - "Operational burden is visible."
         - "Partner assumptions are not treated as commitments."
-      questions:
+      questions: &a9
         - "What partnership or affiliate channels exist?"
         - "What types of partners are plausible?"
         - "What makes a potential partner a good fit?"
@@ -465,7 +525,8 @@ document:
         - "What operational or reputation risks exist?"
     - id: "sales-channels"
       title: "Sales Channels"
-      intent: "Define direct or indirect sales channels, including founder-led, inbound, outbound, consultative, marketplace-assisted, app-store-assisted, reseller, or partner-led motions."
+      intent: "Define direct or indirect sales channels, including founder-led, inbound, outbound, consultative,
+        marketplace-assisted, app-store-assisted, reseller, or partner-led motions."
       required: true
       outputGuidance:
         - "State whether sales is primary, secondary, deferred, or not applicable."
@@ -475,27 +536,31 @@ document:
         - "Sales channels align with buyer dynamics and pricing."
         - "Sales motion is not implied without capacity and process."
         - "Indirect sales assumptions are explicit."
-      questions:
+      questions: &a10
         - "What direct or indirect sales channels will be used?"
-        - "Is sales founder-led, inbound, outbound, consultative, marketplace-assisted, app-store-assisted, reseller, partner-led, or another motion?"
+        - "Is sales founder-led, inbound, outbound, consultative, marketplace-assisted, app-store-assisted, reseller,
+          partner-led, or another motion?"
         - "What buyer/user roles does sales need to handle?"
         - "What assets or proof does sales require?"
         - "What sales channels are deferred or not applicable?"
     - id: "marketplace-and-platform-channels"
       title: "Marketplace and Platform Channels"
-      intent: "Define marketplace, app store, extension marketplace, integration directory, template gallery, package registry, or platform discovery channels where relevant."
+      intent: "Define marketplace, app store, extension marketplace, integration directory, template gallery, package
+        registry, or platform discovery channels where relevant."
       required: true
       outputGuidance:
         - "Include this section even if marketplaces are deferred or not applicable."
-        - "Define listing requirements, ranking/discovery assumptions, review dynamics, platform rules, analytics limitations, and support implications."
+        - "Define listing requirements, ranking/discovery assumptions, review dynamics, platform rules, analytics
+          limitations, and support implications."
         - "Route app-store/package/platform-specific tactics downstream where needed."
       qualityChecks:
         - "Platform discovery assumptions are explicit."
         - "Approval, ranking, review, and support risks are considered."
         - "Marketplace channels do not bypass messaging and claim boundaries."
-      questions:
+      questions: &a11
         - "Are marketplace or platform channels relevant?"
-        - "What app stores, marketplaces, extension directories, integration directories, template galleries, package registries, or platform ecosystems matter?"
+        - "What app stores, marketplaces, extension directories, integration directories, template galleries, package
+          registries, or platform ecosystems matter?"
         - "What listing assets and approval constraints apply?"
         - "How do ranking, reviews, platform rules, and analytics limitations affect strategy?"
         - "What marketplace/platform channels are deferred or not applicable?"
@@ -511,7 +576,7 @@ document:
         - "Reachability logic is concrete."
         - "Channels are not assigned to segments just because they are popular."
         - "Validation signals are explicit."
-      questions:
+      questions: &a12
         - "Which channels fit each segment?"
         - "Why is the segment reachable through each channel?"
         - "What is the customer's intent in that channel?"
@@ -530,7 +595,7 @@ document:
         - "Messages fit channel context and audience intent."
         - "Claim boundaries are preserved."
         - "Tone adaptations do not change truth."
-      questions:
+      questions: &a13
         - "Which messages fit which channels?"
         - "What proof does each channel require?"
         - "How should tone adapt by channel?"
@@ -548,15 +613,17 @@ document:
         - "Channels do not depend on missing assets without being marked blocked or deferred."
         - "Assets connect to messages and proof."
         - "Ownership and readiness are explicit."
-      questions:
+      questions: &a14
         - "What assets are required for each channel?"
-        - "What landing pages, content, posts, emails, demos, docs, videos, proof assets, open-source artifacts, sales collateral, partner materials, or tracking links are needed?"
+        - "What landing pages, content, posts, emails, demos, docs, videos, proof assets, open-source artifacts, sales
+          collateral, partner materials, or tracking links are needed?"
         - "Which assets are ready, missing, deferred, or review-needed?"
         - "Who owns each asset?"
         - "What downstream document should produce or manage each asset?"
     - id: "channel-economics"
       title: "Channel Economics"
-      intent: "Estimate effort, budget, time-to-signal, scalability, CAC assumptions, conversion assumptions, capacity limits, and opportunity cost by channel."
+      intent: "Estimate effort, budget, time-to-signal, scalability, CAC assumptions, conversion assumptions, capacity limits,
+        and opportunity cost by channel."
       required: true
       outputGuidance:
         - "Use channel economics records where useful."
@@ -566,7 +633,7 @@ document:
         - "Economics are decision-useful without fake precision."
         - "Time and founder/team effort are treated as costs."
         - "Scaling assumptions are not made before validation."
-      questions:
+      questions: &a15
         - "What effort cost does each channel require?"
         - "What budget cost does each channel require?"
         - "How long until each channel produces a useful signal?"
@@ -575,7 +642,8 @@ document:
         - "What confidence level applies to each assumption?"
     - id: "channel-experiments"
       title: "Channel Experiments"
-      intent: "Define channel experiments with hypotheses, segments, messages, assets, thresholds, instrumentation, and next decisions."
+      intent: "Define channel experiments with hypotheses, segments, messages, assets, thresholds, instrumentation, and next
+        decisions."
       required: true
       outputGuidance:
         - "Use channel experiment records for material experiments."
@@ -585,7 +653,7 @@ document:
         - "Experiments are small enough to run and clear enough to decide."
         - "Each experiment validates or invalidates a channel assumption."
         - "Instrumentation is defined."
-      questions:
+      questions: &a16
         - "What channel experiments are planned?"
         - "What hypothesis does each experiment test?"
         - "What segment, message, and asset are used?"
@@ -605,7 +673,7 @@ document:
         - "Metrics lead to decisions."
         - "Quality and fit are measured, not just volume."
         - "Measurement method is explicit."
-      questions:
+      questions: &a17
         - "What metrics measure channel performance?"
         - "What leading indicators matter?"
         - "What lagging indicators matter?"
@@ -617,16 +685,18 @@ document:
       intent: "Identify constraints that limit channel choice, channel claims, channel scale, or channel timing."
       required: true
       outputGuidance:
-        - "Classify constraints by budget, team capacity, time, platform rules, brand/ethics, compliance/legal review, product readiness, support capacity, technical readiness, and measurement limitations."
+        - "Classify constraints by budget, team capacity, time, platform rules, brand/ethics, compliance/legal review,
+          product readiness, support capacity, technical readiness, and measurement limitations."
         - "State concrete channel implication for each constraint."
         - "Separate launch-blocking constraints from manageable constraints."
       qualityChecks:
         - "Constraints affect channel decisions concretely."
         - "Product/technical/support constraints are not hidden."
         - "Platform and community rules are considered."
-      questions:
+      questions: &a18
         - "What constraints limit channel choice?"
-        - "What budget, team, time, platform, brand, ethics, compliance, product, support, technical, or measurement constraints exist?"
+        - "What budget, team, time, platform, brand, ethics, compliance, product, support, technical, or measurement
+          constraints exist?"
         - "What channels or claims are constrained?"
         - "What constraints are launch-blocking versus manageable?"
     - id: "fallback-strategy"
@@ -635,13 +705,14 @@ document:
       required: true
       outputGuidance:
         - "Define fallback by failure type."
-        - "Separate message iteration, segment narrowing, offer adjustment, asset improvement, alternate channel, launch pause, and strategy revisit."
+        - "Separate message iteration, segment narrowing, offer adjustment, asset improvement, alternate channel, launch
+          pause, and strategy revisit."
         - "State decision thresholds."
       qualityChecks:
         - "Fallbacks are realistic and decision-triggered."
         - "Underperformance does not automatically cause random channel hopping."
         - "Fallbacks preserve learning."
-      questions:
+      questions: &a19
         - "What happens if the primary channel underperforms?"
         - "What signal indicates message failure versus segment failure versus channel failure versus offer failure?"
         - "When should the channel be iterated, paused, replaced, or scaled down?"
@@ -649,7 +720,8 @@ document:
         - "What evidence would trigger strategy revisit?"
     - id: "channel-risks"
       title: "Channel Risks"
-      intent: "Surface channel failure risks, reputation risks, support risks, cost risks, measurement risks, and fallback needs."
+      intent: "Surface channel failure risks, reputation risks, support risks, cost risks, measurement risks, and fallback
+        needs."
       required: true
       outputGuidance:
         - "Use channel risk records for material risks."
@@ -659,7 +731,7 @@ document:
         - "Risks are concrete and monitorable."
         - "Risks include trust, ethics, cost, support, measurement, and operational burden."
         - "Mitigations are actionable or routed downstream."
-      questions:
+      questions: &a20
         - "What could cause a channel to fail?"
         - "What could make a channel reach the wrong audience?"
         - "What could create reputation, trust, support, cost, or measurement risk?"
@@ -668,17 +740,19 @@ document:
         - "What risks should downstream documents inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream GTM and Operations documents must inherit from Channel Strategy and what they must not assume."
+      intent: "Define what downstream GTM and Operations documents must inherit from Channel Strategy and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Route channel outputs to the correct downstream documents."
-        - "Separate launch, pricing, content, sales, partnerships, experiments, analytics, GTM risk, release, support, and operations implications."
+        - "Separate launch, pricing, content, sales, partnerships, experiments, analytics, GTM risk, release, support,
+          and operations implications."
         - "Preserve unresolved channel questions and rejected/deferred channel decisions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing channel assumptions silently."
         - "Channel strategy and downstream tactical execution remain distinct."
-      questions:
+      questions: &a21
         - "What should Launch Plan inherit?"
         - "What should Pricing and Packaging inherit?"
         - "What should Content Strategy inherit?"
@@ -687,3 +761,276 @@ document:
         - "What should Growth Experiments and GTM Analytics inherit?"
         - "What should GTM Risks, Release Management, Support Model, Operating Model, and Risk Management inherit?"
         - "What unresolved channel questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain channel strategy. Which channels can credibly reach the right customers first, why should
+      they work, how will they be tested, and what happens if they fail?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "channel-objective"
+        label: "Channel Objective"
+        required: true
+        description: "Define what the channel strategy must achieve first and what it should not optimize yet."
+        evaluationHint: "Look for concrete answers addressing: What is the primary goal of the channel strategy?; Is the goal
+          validation, waitlist, acquisition, activation, revenue, community, awareness, pipeline, feedback, retention
+          learning, or something else?; What should channel strategy intentionally not optimize yet?."
+        sourceQuestions: *a1
+        targetSections: &a22
+          - "Channel Objective"
+      - id: "channel-thesis"
+        label: "Channel Thesis"
+        required: true
+        description: "State why the selected channel strategy can credibly reach the first qualified customers now."
+        evaluationHint: "Look for concrete answers addressing: What is the channel thesis?; Why should this channel strategy
+          work for the primary segment?; Why now?."
+        sourceQuestions: *a2
+        targetSections: &a23
+          - "Channel Thesis"
+      - id: "channel-taxonomy"
+        label: "Channel Taxonomy"
+        required: true
+        description: "Define the channel classes used in this strategy and how each class should be interpreted."
+        evaluationHint: "Look for concrete answers addressing: What channel categories are used?; How are owned, earned, paid,
+          community, partner, marketplace, sales, referral, product-led, content-led, event-led, outbound, and
+          support-led channels defined?; What channel statuses exist?."
+        sourceQuestions: *a3
+        targetSections: &a24
+          - "Channel Taxonomy"
+      - id: "primary-channel"
+        label: "Primary Channel"
+        required: true
+        description: "Identify the single primary acquisition or validation channel and explain why it is the best first bet."
+        evaluationHint: "Look for concrete answers addressing: What is the single primary acquisition or validation channel?;
+          Why is this channel the best first bet?; Which segment does it reach?."
+        sourceQuestions: *a4
+        targetSections: &a25
+          - "Primary Channel"
+      - id: "secondary-channels"
+        label: "Secondary Channels"
+        required: true
+        description: "Define supporting channels and how they reinforce the primary channel without diluting focus."
+        evaluationHint: "Look for concrete answers addressing: What channels support the primary channel?; What role does each
+          secondary channel play?; How do they reinforce each other?."
+        sourceQuestions: *a5
+        targetSections: &a26
+          - "Secondary Channels"
+      - id: "organic-channels"
+        label: "Organic Channels"
+        required: true
+        description: "Define unpaid channels such as SEO, content, social, community, GitHub/open-source, referrals,
+          email/newsletter, word-of-mouth, and founder audience."
+        evaluationHint: "Look for concrete answers addressing: What organic channels will be used?; What role will SEO, content,
+          social, community, GitHub/open-source, referrals, email/newsletter, word-of-mouth, or founder audience play?;
+          What organic channels are too slow or not useful yet?."
+        sourceQuestions: *a6
+        targetSections: &a27
+          - "Organic Channels"
+      - id: "paid-channels"
+        label: "Paid Channels"
+        required: true
+        description: "Define paid channels to test, why they might work, budget limits, conversion path, measurement, scaling
+          condition, and stop condition."
+        evaluationHint: "Look for concrete answers addressing: What paid channels will be tested?; Why might each paid channel
+          work for the target segment?; What budget or spend cap applies?."
+        sourceQuestions: *a7
+        targetSections: &a28
+          - "Paid Channels"
+      - id: "community-channels"
+        label: "Community Channels"
+        required: true
+        description: "Map communities the target audience inhabits and define authentic, non-extractive participation plans."
+        evaluationHint: "Look for concrete answers addressing: What communities does the target audience already inhabit?; Why
+          are those communities relevant?; How will the product or founder participate authentically?."
+        sourceQuestions: *a8
+        targetSections: &a29
+          - "Community Channels"
+      - id: "partnership-channels"
+        label: "Partnership Channels"
+        required: true
+        description: "Identify partnership, affiliate, integration, reseller, creator, community, institutional, or ecosystem
+          channels and define partner fit criteria."
+        evaluationHint: "Look for concrete answers addressing: What partnership or affiliate channels exist?; What types of
+          partners are plausible?; What makes a potential partner a good fit?."
+        sourceQuestions: *a9
+        targetSections: &a30
+          - "Partnership Channels"
+      - id: "sales-channels"
+        label: "Sales Channels"
+        required: true
+        description: "Define direct or indirect sales channels, including founder-led, inbound, outbound, consultative,
+          marketplace-assisted, app-store-assisted, reseller, or partner-led motions."
+        evaluationHint: "Look for concrete answers addressing: What direct or indirect sales channels will be used?; Is sales
+          founder-led, inbound, outbound, consultative, marketplace-assisted, app-store-assisted, reseller, partner-led,
+          or another motion?; What buyer/user roles does sales need to handle?."
+        sourceQuestions: *a10
+        targetSections: &a31
+          - "Sales Channels"
+      - id: "marketplace-and-platform-channels"
+        label: "Marketplace and Platform Channels"
+        required: true
+        description: "Define marketplace, app store, extension marketplace, integration directory, template gallery, package
+          registry, or platform discovery channels where relevant."
+        evaluationHint: "Look for concrete answers addressing: Are marketplace or platform channels relevant?; What app stores,
+          marketplaces, extension directories, integration directories, template galleries, package registries, or
+          platform ecosystems matter?; What listing assets and approval constraints apply?."
+        sourceQuestions: *a11
+        targetSections: &a32
+          - "Marketplace and Platform Channels"
+      - id: "segment-channel-fit"
+        label: "Segment-Channel Fit"
+        required: true
+        description: "Map each material segment to plausible channels and explain why the segment can be reached there."
+        evaluationHint: "Look for concrete answers addressing: Which channels fit each segment?; Why is the segment reachable
+          through each channel?; What is the customer's intent in that channel?."
+        sourceQuestions: *a12
+        targetSections: &a33
+          - "Segment-Channel Fit"
+      - id: "message-channel-fit"
+        label: "Message-Channel Fit"
+        required: true
+        description: "Define which messages can safely and effectively be used in each channel."
+        evaluationHint: "Look for concrete answers addressing: Which messages fit which channels?; What proof does each channel
+          require?; How should tone adapt by channel?."
+        sourceQuestions: *a13
+        targetSections: &a34
+          - "Message-Channel Fit"
+      - id: "channel-assets"
+        label: "Channel Assets"
+        required: true
+        description: "Define the assets required to make each channel work."
+        evaluationHint: "Look for concrete answers addressing: What assets are required for each channel?; What landing pages,
+          content, posts, emails, demos, docs, videos, proof assets, open-source artifacts, sales collateral, partner
+          materials, or tracking links are needed?; Which assets are ready, missing, deferred, or review-needed?."
+        sourceQuestions: *a14
+        targetSections: &a35
+          - "Channel Assets"
+      - id: "channel-economics"
+        label: "Channel Economics"
+        required: true
+        description: "Estimate effort, budget, time-to-signal, scalability, CAC assumptions, conversion assumptions, capacity
+          limits, and opportunity cost by channel."
+        evaluationHint: "Look for concrete answers addressing: What effort cost does each channel require?; What budget cost
+          does each channel require?; How long until each channel produces a useful signal?."
+        sourceQuestions: *a15
+        targetSections: &a36
+          - "Channel Economics"
+      - id: "channel-experiments"
+        label: "Channel Experiments"
+        required: true
+        description: "Define channel experiments with hypotheses, segments, messages, assets, thresholds, instrumentation, and
+          next decisions."
+        evaluationHint: "Look for concrete answers addressing: What channel experiments are planned?; What hypothesis does each
+          experiment test?; What segment, message, and asset are used?."
+        sourceQuestions: *a16
+        targetSections: &a37
+          - "Channel Experiments"
+      - id: "channel-metrics"
+        label: "Channel Metrics"
+        required: true
+        description: "Define leading, lagging, quality, conversion, cost, and diagnostic metrics for each channel."
+        evaluationHint: "Look for concrete answers addressing: What metrics measure channel performance?; What leading
+          indicators matter?; What lagging indicators matter?."
+        sourceQuestions: *a17
+        targetSections: &a38
+          - "Channel Metrics"
+      - id: "channel-constraints"
+        label: "Channel Constraints"
+        required: true
+        description: "Identify constraints that limit channel choice, channel claims, channel scale, or channel timing."
+        evaluationHint: "Look for concrete answers addressing: What constraints limit channel choice?; What budget, team, time,
+          platform, brand, ethics, compliance, product, support, technical, or measurement constraints exist?; What
+          channels or claims are constrained?."
+        sourceQuestions: *a18
+        targetSections: &a39
+          - "Channel Constraints"
+      - id: "fallback-strategy"
+        label: "Fallback Strategy"
+        required: true
+        description: "Define what happens if the primary channel or a major supporting channel underperforms."
+        evaluationHint: "Look for concrete answers addressing: What happens if the primary channel underperforms?; What signal
+          indicates message failure versus segment failure versus channel failure versus offer failure?; When should the
+          channel be iterated, paused, replaced, or scaled down?."
+        sourceQuestions: *a19
+        targetSections: &a40
+          - "Fallback Strategy"
+      - id: "channel-risks"
+        label: "Channel Risks"
+        required: true
+        description: "Surface channel failure risks, reputation risks, support risks, cost risks, measurement risks, and
+          fallback needs."
+        evaluationHint: "Look for concrete answers addressing: What could cause a channel to fail?; What could make a channel
+          reach the wrong audience?; What could create reputation, trust, support, cost, or measurement risk?."
+        sourceQuestions: *a20
+        targetSections: &a41
+          - "Channel Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream GTM and Operations documents must inherit from Channel Strategy and what they must
+          not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Launch Plan inherit?; What should Pricing and
+          Packaging inherit?; What should Content Strategy inherit?."
+        sourceQuestions: *a21
+        targetSections: &a42
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      channel-objective:
+        targetSections: *a22
+      channel-thesis:
+        targetSections: *a23
+      channel-taxonomy:
+        targetSections: *a24
+      primary-channel:
+        targetSections: *a25
+      secondary-channels:
+        targetSections: *a26
+      organic-channels:
+        targetSections: *a27
+      paid-channels:
+        targetSections: *a28
+      community-channels:
+        targetSections: *a29
+      partnership-channels:
+        targetSections: *a30
+      sales-channels:
+        targetSections: *a31
+      marketplace-and-platform-channels:
+        targetSections: *a32
+      segment-channel-fit:
+        targetSections: *a33
+      message-channel-fit:
+        targetSections: *a34
+      channel-assets:
+        targetSections: *a35
+      channel-economics:
+        targetSections: *a36
+      channel-experiments:
+        targetSections: *a37
+      channel-metrics:
+        targetSections: *a38
+      channel-constraints:
+        targetSections: *a39
+      fallback-strategy:
+        targetSections: *a40
+      channel-risks:
+        targetSections: *a41
+      downstream-handoff:
+        targetSections: *a42
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.437Z"
+      totalSourceQuestions: 118
+      reviewRequired: false

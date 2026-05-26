@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 10
   type: "pricing_packaging"
-  purpose: "Define how value is packaged, priced, purchased, upgraded, downgraded, cancelled, tested, measured, and reviewed, while staying aligned with customer willingness, product readiness, sales motion, support capacity, and operational constraints."
-  centralQuestion: "How should the offer be packaged and priced so the right customers can understand, trust, buy, use, expand, or cancel it without creating unsustainable product, support, or operational burden?"
+  purpose: "Define how value is packaged, priced, purchased, upgraded, downgraded, cancelled, tested, measured, and
+    reviewed, while staying aligned with customer willingness, product readiness, sales motion, support capacity, and
+    operational constraints."
+  centralQuestion: "How should the offer be packaged and priced so the right customers can understand, trust, buy, use,
+    expand, or cancel it without creating unsustainable product, support, or operational burden?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "gtm.pricing_packaging_reference"
         format: "html"
         path: "outcomes/html/05-go-to-market/pricing-and-packaging-reference.html"
-        purpose: "Provide a founder-facing pricing and packaging reference covering pricing objective, value metric, model, packages, tiers, trial/free strategy, billing, checkout, taxes, discounts, upgrades, cancellations, objections, experiments, metrics, risks, and downstream handoff."
+        purpose: "Provide a founder-facing pricing and packaging reference covering pricing objective, value metric, model,
+          packages, tiers, trial/free strategy, billing, checkout, taxes, discounts, upgrades, cancellations,
+          objections, experiments, metrics, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "pricing objective"
@@ -47,7 +52,9 @@ document:
       - id: "gtm.pricing_packaging_review_prompt"
         format: "markdown"
         path: "outcomes/agents/05-go-to-market/pricing-and-packaging-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether pricing and packaging are customer-aligned, value-aligned, conversion-aware, sales-aware, technically feasible, supportable, measurable, and not overfitted to unsupported assumptions."
+        purpose: "Provide compact context for agents reviewing whether pricing and packaging are customer-aligned,
+          value-aligned, conversion-aware, sales-aware, technically feasible, supportable, measurable, and not
+          overfitted to unsupported assumptions."
         agentRole: "reviewer"
         includes:
           - "canonical pricing and packaging"
@@ -111,257 +118,308 @@ document:
     - id: "customer-segments"
       type: "context"
       required: false
-      description: "ICP, primary segment, buyers, payers, decision makers, willingness signals, objections, support needs, excluded segments, and expansion triggers."
+      description: "ICP, primary segment, buyers, payers, decision makers, willingness signals, objections, support needs,
+        excluded segments, and expansion triggers."
     - id: "channel-strategy"
       type: "context"
       required: false
-      description: "Primary channel, secondary channels, channel economics, channel experiments, channel constraints, and channel risks affecting price presentation and conversion."
+      description: "Primary channel, secondary channels, channel economics, channel experiments, channel constraints, and
+        channel risks affecting price presentation and conversion."
     - id: "launch-plan"
       type: "context"
       required: false
-      description: "Launch type, launch cohorts, readiness gates, launch assets, communications, support readiness, analytics readiness, go/no-go criteria, and launch risks."
+      description: "Launch type, launch cohorts, readiness gates, launch assets, communications, support readiness, analytics
+        readiness, go/no-go criteria, and launch risks."
     - id: "conversion-funnel"
       type: "context"
       required: false
-      description: "Funnel model, acquisition, qualification, signup, activation, conversion, retention, expansion, funnel metrics, attribution, and drop-off risks."
+      description: "Funnel model, acquisition, qualification, signup, activation, conversion, retention, expansion, funnel
+        metrics, attribution, and drop-off risks."
     - id: "sales-strategy"
       type: "context"
       required: false
-      description: "Sales motion, self-serve motion, founder-led sales, qualification, buyer/user roles, demo strategy, objection handling, sales assets, metrics, constraints, and risks."
+      description: "Sales motion, self-serve motion, founder-led sales, qualification, buyer/user roles, demo strategy,
+        objection handling, sales assets, metrics, constraints, and risks."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Product scope, supported capabilities, feature limits, acceptance criteria, onboarding needs, activation moments, retention behaviors, upgradeable value, and unsupported claims."
+      description: "Product scope, supported capabilities, feature limits, acceptance criteria, onboarding needs, activation
+        moments, retention behaviors, upgradeable value, and unsupported claims."
     - id: "engineering-billing-context"
       type: "context"
       required: false
-      description: "Payment processor constraints, entitlement model, data model, privacy/security constraints, tax/invoice implications, observability, deployment readiness, technical risks, and support constraints."
+      description: "Payment processor constraints, entitlement model, data model, privacy/security constraints, tax/invoice
+        implications, observability, deployment readiness, technical risks, and support constraints."
     - id: "pricing-notes"
       type: "manual_note"
       required: false
-      description: "Candidate prices, plans, trial/free ideas, discount ideas, billing terms, payment processor ideas, refund ideas, objections, experiment ideas, and unresolved pricing questions."
+      description: "Candidate prices, plans, trial/free ideas, discount ideas, billing terms, payment processor ideas, refund
+        ideas, objections, experiment ideas, and unresolved pricing questions."
   completionCriteria:
-    - "The central question is answered through a clear pricing and packaging strategy that is customer-aligned, value-aligned, conversion-aware, technically feasible, supportable, measurable, and reviewable."
-    - "Pricing objective defines whether pricing currently optimizes validation, adoption, revenue, retention, expansion, willingness-to-pay discovery, positioning, or operational simplicity."
-    - "Pricing thesis explains why the proposed price/package structure fits the customer, pain, alternatives, category, value promise, channel, sales motion, launch stage, and support capacity."
-    - "Value metric defines the unit of value customers understand and are willing to pay for, such as user, seat, account, usage, volume, outcome, workspace, dog, household, project, transaction, storage, automation, or another relevant unit."
-    - "Pricing model defines subscription, one-time, usage-based, seat-based, tiered, flat-rate, freemium, trial-led, pay-as-you-go, credit-based, enterprise, donation/open-source support, or hybrid model, with rationale and assumptions."
-    - "Packaging strategy defines what is bundled, what is gated, what is unlimited, what is limited, what is add-on, what is excluded, and what is intentionally deferred."
-    - "Plan structure defines each plan/package with target customer, price, billing cycle, included capabilities, limits, entitlements, support level, upgrade trigger, downgrade behavior, and status."
-    - "Feature and limit mapping defines which capabilities belong in which package, why, how limits are enforced, and whether each limit is value-aligned, cost-control, support-control, or positioning-driven."
-    - "Free tier strategy defines whether a free tier exists, what it includes, what it excludes, why it exists, abuse/spam/cost/support risk, upgrade path, and success metric."
-    - "Trial strategy defines whether a trial exists, duration, requirements, feature access, onboarding, reminders, conversion path, payment requirement, cancellation behavior, and trial abuse risk."
-    - "Subscription terms define monthly/annual cycles, renewals, commitments, cancellation timing, plan changes, grace periods, failed payment handling, invoices/receipts, and customer communication."
-    - "Payment flow defines checkout path, processor, payment methods, account creation order, entitlement activation, receipt/invoice behavior, failure states, support fallback, and analytics events."
-    - "Tax and invoice considerations identify VAT/GST/sales tax/local tax needs, invoice requirements, refund implications, jurisdiction review needs, and what must be reviewed before launch."
-    - "Discount strategy defines allowed discounts, annual discount, early adopter discount, founder/customer development discount, volume discount, nonprofit/education discount, partner discount, coupon rules, expiration, approval, and risks."
-    - "Upgrade and downgrade logic defines triggers, customer path, entitlement changes, billing/proration behavior, data access, feature loss, communication, support impact, and edge cases."
-    - "Cancellation logic defines cancel path, timing, access until period end, data export/deletion, retention, win-back, support escalation, feedback capture, and analytics events."
-    - "Refund policy defines eligibility, window, process, exceptions, abuse prevention, customer communication, and support escalation."
-    - "Pricing objections map objections to underlying concern, honest response, proof, caveat, pricing/page asset needed, and escalation path."
-    - "Pricing experiments define hypothesis, segment, offer/package/price/trial change, metric, threshold, timeframe, instrumentation, owner, and next decision."
-    - "Pricing metrics define conversion, trial-to-paid, ARPU/ARPA, churn, expansion, downgrade, failed payment, refund, support burden, willingness-to-pay, discount usage, and cohort metrics where relevant."
-    - "Pricing risks identify underpricing, overpricing, wrong value metric, support overload, free-tier abuse, trial abuse, conversion friction, tax/payment issues, entitlement bugs, reputational risk, and operational burden."
-    - "Downstream handoff clarifies what Content, Partnerships, Experiments, Analytics, GTM Risks, Customer Success, Support, Release, Operations, and Risk Management must inherit."
+    - "The central question is answered through a clear pricing and packaging strategy that is customer-aligned,
+      value-aligned, conversion-aware, technically feasible, supportable, measurable, and reviewable."
+    - "Pricing objective defines whether pricing currently optimizes validation, adoption, revenue, retention,
+      expansion, willingness-to-pay discovery, positioning, or operational simplicity."
+    - "Pricing thesis explains why the proposed price/package structure fits the customer, pain, alternatives, category,
+      value promise, channel, sales motion, launch stage, and support capacity."
+    - "Value metric defines the unit of value customers understand and are willing to pay for, such as user, seat,
+      account, usage, volume, outcome, workspace, dog, household, project, transaction, storage, automation, or another
+      relevant unit."
+    - "Pricing model defines subscription, one-time, usage-based, seat-based, tiered, flat-rate, freemium, trial-led,
+      pay-as-you-go, credit-based, enterprise, donation/open-source support, or hybrid model, with rationale and
+      assumptions."
+    - "Packaging strategy defines what is bundled, what is gated, what is unlimited, what is limited, what is add-on,
+      what is excluded, and what is intentionally deferred."
+    - "Plan structure defines each plan/package with target customer, price, billing cycle, included capabilities,
+      limits, entitlements, support level, upgrade trigger, downgrade behavior, and status."
+    - "Feature and limit mapping defines which capabilities belong in which package, why, how limits are enforced, and
+      whether each limit is value-aligned, cost-control, support-control, or positioning-driven."
+    - "Free tier strategy defines whether a free tier exists, what it includes, what it excludes, why it exists,
+      abuse/spam/cost/support risk, upgrade path, and success metric."
+    - "Trial strategy defines whether a trial exists, duration, requirements, feature access, onboarding, reminders,
+      conversion path, payment requirement, cancellation behavior, and trial abuse risk."
+    - "Subscription terms define monthly/annual cycles, renewals, commitments, cancellation timing, plan changes, grace
+      periods, failed payment handling, invoices/receipts, and customer communication."
+    - "Payment flow defines checkout path, processor, payment methods, account creation order, entitlement activation,
+      receipt/invoice behavior, failure states, support fallback, and analytics events."
+    - "Tax and invoice considerations identify VAT/GST/sales tax/local tax needs, invoice requirements, refund
+      implications, jurisdiction review needs, and what must be reviewed before launch."
+    - "Discount strategy defines allowed discounts, annual discount, early adopter discount, founder/customer
+      development discount, volume discount, nonprofit/education discount, partner discount, coupon rules, expiration,
+      approval, and risks."
+    - "Upgrade and downgrade logic defines triggers, customer path, entitlement changes, billing/proration behavior,
+      data access, feature loss, communication, support impact, and edge cases."
+    - "Cancellation logic defines cancel path, timing, access until period end, data export/deletion, retention,
+      win-back, support escalation, feedback capture, and analytics events."
+    - "Refund policy defines eligibility, window, process, exceptions, abuse prevention, customer communication, and
+      support escalation."
+    - "Pricing objections map objections to underlying concern, honest response, proof, caveat, pricing/page asset
+      needed, and escalation path."
+    - "Pricing experiments define hypothesis, segment, offer/package/price/trial change, metric, threshold, timeframe,
+      instrumentation, owner, and next decision."
+    - "Pricing metrics define conversion, trial-to-paid, ARPU/ARPA, churn, expansion, downgrade, failed payment, refund,
+      support burden, willingness-to-pay, discount usage, and cohort metrics where relevant."
+    - "Pricing risks identify underpricing, overpricing, wrong value metric, support overload, free-tier abuse, trial
+      abuse, conversion friction, tax/payment issues, entitlement bugs, reputational risk, and operational burden."
+    - "Downstream handoff clarifies what Content, Partnerships, Experiments, Analytics, GTM Risks, Customer Success,
+      Support, Release, Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid pricing theater: prices and tiers without customer value logic, willingness evidence, value metric, conversion path, support impact, entitlement rules, and measurement."
-    - "Avoid copying competitor pricing without explaining customer value, positioning, cost structure, support burden, and sales/channel fit."
+    - "Avoid pricing theater: prices and tiers without customer value logic, willingness evidence, value metric,
+      conversion path, support impact, entitlement rules, and measurement."
+    - "Avoid copying competitor pricing without explaining customer value, positioning, cost structure, support burden,
+      and sales/channel fit."
     - "Avoid freemium or free tier by default; free must have a strategic reason and cost/support/abuse controls."
-    - "Avoid trials without onboarding, conversion path, reminder strategy, abuse control, support expectation, and analytics."
+    - "Avoid trials without onboarding, conversion path, reminder strategy, abuse control, support expectation, and
+      analytics."
     - "Avoid complex packages before the product, market, and support model can sustain them."
     - "Avoid price precision that lacks willingness-to-pay evidence; mark prices as hypotheses when unvalidated."
-    - "Avoid hidden operational work caused by discounts, custom plans, manual billing, invoice requests, refunds, taxes, or entitlement overrides."
+    - "Avoid hidden operational work caused by discounts, custom plans, manual billing, invoice requests, refunds,
+      taxes, or entitlement overrides."
     - "Avoid payment or tax claims that require legal/accounting review unless verified."
-    - "Avoid pricing claims or guarantees that violate Messaging, Positioning, Product, Technical Risks, or Support constraints."
+    - "Avoid pricing claims or guarantees that violate Messaging, Positioning, Product, Technical Risks, or Support
+      constraints."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent willingness-to-pay data, competitor prices, tax obligations, processor support, conversion rates, churn rates, revenue projections, or billing capability."
-    - "Pricing and packaging must preserve segment focus, value proposition, product truth, technical feasibility, sales motion, support capacity, privacy/security constraints, and operational sustainability."
+    - "Do not invent willingness-to-pay data, competitor prices, tax obligations, processor support, conversion rates,
+      churn rates, revenue projections, or billing capability."
+    - "Pricing and packaging must preserve segment focus, value proposition, product truth, technical feasibility, sales
+      motion, support capacity, privacy/security constraints, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate pricing hypothesis, packaging decision, value metric, feature gate, limit, entitlement, payment flow, billing term, discount, objection, experiment, metric, risk, and handoff."
-    - "Tie pricing decisions to Customer Segments, Value Proposition, Conversion Funnel, Sales Strategy, Channel Strategy, Launch Plan, Product Scope, Acceptance Criteria, Technical Risks, or Decision Record where possible."
-    - "Classify prices, packages, discounts, terms, and policies as committed, hypothesis, experimental, deferred, rejected, launch-ready, blocked, review-needed, legal/accounting-review-needed, or post-launch."
+    - "Separate pricing hypothesis, packaging decision, value metric, feature gate, limit, entitlement, payment flow,
+      billing term, discount, objection, experiment, metric, risk, and handoff."
+    - "Tie pricing decisions to Customer Segments, Value Proposition, Conversion Funnel, Sales Strategy, Channel
+      Strategy, Launch Plan, Product Scope, Acceptance Criteria, Technical Risks, or Decision Record where possible."
+    - "Classify prices, packages, discounts, terms, and policies as committed, hypothesis, experimental, deferred,
+      rejected, launch-ready, blocked, review-needed, legal/accounting-review-needed, or post-launch."
     - "State what must be validated before treating a price, package, trial, discount, or billing policy as stable."
-    - "Route landing-page copy, price-page copy, sales collateral, partner commercial terms, experiments, analytics implementation, support macros, billing operations, and legal/accounting review downstream."
+    - "Route landing-page copy, price-page copy, sales collateral, partner commercial terms, experiments, analytics
+      implementation, support macros, billing operations, and legal/accounting review downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Security/Privacy, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, Sales Strategy, or Decision Record."
-    - "Flag pricing without value metric, customer segment, willingness evidence or assumption label, conversion path, and support implication."
-    - "Flag packages without target customer, entitlement rules, feature/limit rationale, upgrade trigger, downgrade behavior, and operational impact."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Security/Privacy, Deployment,
+      Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch
+      Plan, Conversion Funnel, Sales Strategy, or Decision Record."
+    - "Flag pricing without value metric, customer segment, willingness evidence or assumption label, conversion path,
+      and support implication."
+    - "Flag packages without target customer, entitlement rules, feature/limit rationale, upgrade trigger, downgrade
+      behavior, and operational impact."
     - "Flag free tier or trial strategy without abuse/cost/support controls and conversion path."
-    - "Flag payment flow without processor, failure states, entitlement activation, analytics events, and support fallback."
+    - "Flag payment flow without processor, failure states, entitlement activation, analytics events, and support
+      fallback."
     - "Flag tax/invoice/refund statements that require professional review but are treated as final."
     - "Flag discounts without approval, expiration, eligibility, tracking, and margin/support/reputation impact."
-    - "Flag upgrade/downgrade/cancellation logic that ignores data access, billing, entitlement, support, and customer communication."
+    - "Flag upgrade/downgrade/cancellation logic that ignores data access, billing, entitlement, support, and customer
+      communication."
     - "Verify that downstream GTM and Operations documents receive concrete pricing handoff inputs."
-    - "Flag content that belongs better in Content Strategy, Sales Strategy, Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Customer Success, Support Model, Operating Model, or Risk Management."
+    - "Flag content that belongs better in Content Strategy, Sales Strategy, Partnerships, Growth Experiments, GTM
+      Analytics, GTM Risks, Customer Success, Support Model, Operating Model, or Risk Management."
   specializedFormats:
     pricingThesisFormat:
       description: "Recommended format for pricing thesis."
       fields:
-        - thesis
-        - targetCustomer
-        - valueMetric
-        - pricingModel
-        - primaryPackage
-        - rationale
-        - willingnessEvidence
-        - biggestAssumption
-        - validationNeeded
-        - status
+        - "thesis"
+        - "targetCustomer"
+        - "valueMetric"
+        - "pricingModel"
+        - "primaryPackage"
+        - "rationale"
+        - "willingnessEvidence"
+        - "biggestAssumption"
+        - "validationNeeded"
+        - "status"
     planFormat:
       description: "Recommended format for plans/packages."
       fields:
-        - plan
-        - targetCustomer
-        - price
-        - billingCycle
-        - includedCapabilities
-        - limits
-        - entitlements
-        - supportLevel
-        - upgradeTrigger
-        - downgradeBehavior
-        - operationalImpact
-        - status
+        - "plan"
+        - "targetCustomer"
+        - "price"
+        - "billingCycle"
+        - "includedCapabilities"
+        - "limits"
+        - "entitlements"
+        - "supportLevel"
+        - "upgradeTrigger"
+        - "downgradeBehavior"
+        - "operationalImpact"
+        - "status"
     featureLimitFormat:
       description: "Recommended format for feature and limit mapping."
       fields:
-        - capabilityOrLimit
-        - includedInPlans
-        - rationale
-        - limitType
-        - enforcementMethod
-        - customerImpact
-        - costOrSupportImpact
-        - upgradeImplication
-        - status
+        - "capabilityOrLimit"
+        - "includedInPlans"
+        - "rationale"
+        - "limitType"
+        - "enforcementMethod"
+        - "customerImpact"
+        - "costOrSupportImpact"
+        - "upgradeImplication"
+        - "status"
     trialFormat:
       description: "Recommended format for trial/free strategy."
       fields:
-        - offerType
-        - duration
-        - accessLevel
-        - requirements
-        - onboardingPath
-        - conversionTrigger
-        - reminders
-        - abuseRisk
-        - supportExpectation
-        - successMetric
-        - status
+        - "offerType"
+        - "duration"
+        - "accessLevel"
+        - "requirements"
+        - "onboardingPath"
+        - "conversionTrigger"
+        - "reminders"
+        - "abuseRisk"
+        - "supportExpectation"
+        - "successMetric"
+        - "status"
     billingTermFormat:
       description: "Recommended format for billing and subscription terms."
       fields:
-        - term
-        - appliesTo
-        - rule
-        - customerCommunication
-        - billingImpact
-        - supportImpact
-        - exceptionPolicy
-        - reviewNeeded
-        - status
+        - "term"
+        - "appliesTo"
+        - "rule"
+        - "customerCommunication"
+        - "billingImpact"
+        - "supportImpact"
+        - "exceptionPolicy"
+        - "reviewNeeded"
+        - "status"
     paymentFlowFormat:
       description: "Recommended format for payment flow."
       fields:
-        - step
-        - customerAction
-        - systemAction
-        - processorOrTool
-        - dataCollected
-        - entitlementChange
-        - failureState
-        - analyticsEvent
-        - supportFallback
-        - status
+        - "step"
+        - "customerAction"
+        - "systemAction"
+        - "processorOrTool"
+        - "dataCollected"
+        - "entitlementChange"
+        - "failureState"
+        - "analyticsEvent"
+        - "supportFallback"
+        - "status"
     discountFormat:
       description: "Recommended format for discount rules."
       fields:
-        - discount
-        - purpose
-        - eligibility
-        - amountOrRule
-        - duration
-        - approvalRequired
-        - expiration
-        - trackingRequirement
-        - risk
-        - status
+        - "discount"
+        - "purpose"
+        - "eligibility"
+        - "amountOrRule"
+        - "duration"
+        - "approvalRequired"
+        - "expiration"
+        - "trackingRequirement"
+        - "risk"
+        - "status"
     planChangeFormat:
       description: "Recommended format for upgrade, downgrade, and cancellation rules."
       fields:
-        - changeType
-        - trigger
-        - customerPath
-        - entitlementChange
-        - billingOrProrationRule
-        - dataAccessRule
-        - communication
-        - supportImpact
-        - edgeCases
-        - analyticsEvent
-        - status
+        - "changeType"
+        - "trigger"
+        - "customerPath"
+        - "entitlementChange"
+        - "billingOrProrationRule"
+        - "dataAccessRule"
+        - "communication"
+        - "supportImpact"
+        - "edgeCases"
+        - "analyticsEvent"
+        - "status"
     pricingObjectionFormat:
       description: "Recommended format for pricing objections."
       fields:
-        - objection
-        - sourceOrSegment
-        - underlyingConcern
-        - honestResponse
-        - proofOrEvidence
-        - caveat
-        - assetNeeded
-        - escalationPath
-        - status
+        - "objection"
+        - "sourceOrSegment"
+        - "underlyingConcern"
+        - "honestResponse"
+        - "proofOrEvidence"
+        - "caveat"
+        - "assetNeeded"
+        - "escalationPath"
+        - "status"
     pricingExperimentFormat:
       description: "Recommended format for pricing experiments."
       fields:
-        - experiment
-        - hypothesis
-        - segment
-        - changeType
-        - changeDescription
-        - metric
-        - successThreshold
-        - failureThreshold
-        - timeframe
-        - instrumentation
-        - owner
-        - nextDecision
-        - status
+        - "experiment"
+        - "hypothesis"
+        - "segment"
+        - "changeType"
+        - "changeDescription"
+        - "metric"
+        - "successThreshold"
+        - "failureThreshold"
+        - "timeframe"
+        - "instrumentation"
+        - "owner"
+        - "nextDecision"
+        - "status"
     pricingMetricFormat:
       description: "Recommended format for pricing metrics."
       fields:
-        - metric
-        - metricType
-        - purpose
-        - formula
-        - dataSource
-        - baseline
-        - target
-        - threshold
-        - timeframe
-        - segmentOrCohortBreakdown
-        - decisionImplication
-        - owner
-        - status
+        - "metric"
+        - "metricType"
+        - "purpose"
+        - "formula"
+        - "dataSource"
+        - "baseline"
+        - "target"
+        - "threshold"
+        - "timeframe"
+        - "segmentOrCohortBreakdown"
+        - "decisionImplication"
+        - "owner"
+        - "status"
     pricingRiskFormat:
       description: "Recommended format for pricing risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - downstreamDocument
-        - launchImpact
+        - "risk"
+        - "riskType"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "downstreamDocument"
+        - "launchImpact"
   sections:
     - id: "pricing-objective"
       title: "Pricing Objective"
@@ -369,15 +427,17 @@ document:
       required: true
       outputGuidance:
         - "State the primary pricing objective in one sentence."
-        - "Classify the objective as validation, adoption, revenue, retention, expansion, willingness-to-pay discovery, positioning, operational simplicity, or another explicit goal."
+        - "Classify the objective as validation, adoption, revenue, retention, expansion, willingness-to-pay discovery,
+          positioning, operational simplicity, or another explicit goal."
         - "State what pricing should not optimize yet."
       qualityChecks:
         - "Objective matches launch stage, segment, channel, and sales motion."
         - "Objective is decision-useful."
         - "Pricing does not try to optimize all commercial outcomes at once."
-      questions:
+      questions: &a1
         - "What is the primary goal of pricing right now?"
-        - "Is the focus validation, adoption, revenue, retention, expansion, willingness-to-pay discovery, positioning, or operational simplicity?"
+        - "Is the focus validation, adoption, revenue, retention, expansion, willingness-to-pay discovery, positioning, or
+          operational simplicity?"
         - "What should pricing intentionally not optimize yet?"
         - "What would make the pricing strategy a failure?"
     - id: "pricing-thesis"
@@ -392,7 +452,7 @@ document:
         - "Thesis connects customer value, alternative, willingness, channel, sales motion, and support."
         - "Thesis is testable."
         - "Unvalidated price points are labeled as hypotheses."
-      questions:
+      questions: &a2
         - "What is the pricing thesis?"
         - "Why should this pricing work for the target customer?"
         - "How does it fit the value proposition and alternatives?"
@@ -411,9 +471,10 @@ document:
         - "Value metric aligns with perceived customer value."
         - "Metric is technically and operationally measurable."
         - "Metric does not create perverse incentives or confusing billing."
-      questions:
+      questions: &a3
         - "What unit of value should pricing use?"
-        - "Is value tied to users, seats, accounts, usage, volume, outcomes, workspaces, projects, transactions, storage, automations, households, or another unit?"
+        - "Is value tied to users, seats, accounts, usage, volume, outcomes, workspaces, projects, transactions, storage,
+          automations, households, or another unit?"
         - "Why will customers understand this metric?"
         - "How is it measured or enforced?"
         - "What value metrics were rejected and why?"
@@ -429,8 +490,9 @@ document:
         - "Pricing model fits customer behavior and operational feasibility."
         - "Hybrid models are explained clearly."
         - "Rejected models have rationale."
-      questions:
-        - "What pricing model is used: subscription, one-time, usage-based, seat-based, tiered, flat-rate, freemium, trial-led, pay-as-you-go, credit-based, enterprise, donation/open-source support, or hybrid?"
+      questions: &a4
+        - "What pricing model is used: subscription, one-time, usage-based, seat-based, tiered, flat-rate, freemium,
+          trial-led, pay-as-you-go, credit-based, enterprise, donation/open-source support, or hybrid?"
         - "Why this model?"
         - "What models are rejected or deferred?"
         - "What assumptions must be validated?"
@@ -446,7 +508,7 @@ document:
         - "Packaging is understandable to customers."
         - "Packaging reflects value and support burden."
         - "Packaging does not require unsupported capabilities."
-      questions:
+      questions: &a5
         - "How is the offer packaged?"
         - "What is bundled?"
         - "What is gated?"
@@ -456,7 +518,8 @@ document:
         - "What is excluded or deferred?"
     - id: "plan-structure"
       title: "Plan Structure"
-      intent: "Define plans/packages, target customers, price, billing cycle, included capabilities, limits, entitlements, support levels, and status."
+      intent: "Define plans/packages, target customers, price, billing cycle, included capabilities, limits, entitlements,
+        support levels, and status."
       required: true
       outputGuidance:
         - "Use plan records for each plan/package."
@@ -466,7 +529,7 @@ document:
         - "Each plan has a clear target customer."
         - "Plan differences are meaningful and understandable."
         - "Entitlements and support implications are explicit."
-      questions:
+      questions: &a6
         - "What packages or plans are offered?"
         - "Who is each plan for?"
         - "What is the price and billing cycle?"
@@ -485,7 +548,7 @@ document:
         - "Feature gates are justified."
         - "Limits are enforceable and understandable."
         - "Customer impact and support impact are considered."
-      questions:
+      questions: &a7
         - "Which features or capabilities belong in each plan?"
         - "What limits apply?"
         - "Why does each feature or limit belong there?"
@@ -493,7 +556,8 @@ document:
         - "What customer, cost, support, or upgrade implication follows?"
     - id: "free-tier-strategy"
       title: "Free Tier Strategy"
-      intent: "Define whether a free tier exists and how it supports GTM without creating unsustainable cost or support burden."
+      intent: "Define whether a free tier exists and how it supports GTM without creating unsustainable cost or support
+        burden."
       required: true
       outputGuidance:
         - "State whether free tier is active, deferred, rejected, or experimental."
@@ -503,7 +567,7 @@ document:
         - "Free tier has strategic purpose."
         - "Cost, abuse, and support risks are addressed."
         - "Upgrade path is explicit."
-      questions:
+      questions: &a8
         - "Is there a free tier?"
         - "What does it include and exclude?"
         - "Why should a free tier exist?"
@@ -512,7 +576,8 @@ document:
         - "What metric determines whether the free tier works?"
     - id: "trial-strategy"
       title: "Trial Strategy"
-      intent: "Define trial terms, access, conversion path, onboarding, reminders, payment requirement, cancellation behavior, and abuse risk."
+      intent: "Define trial terms, access, conversion path, onboarding, reminders, payment requirement, cancellation behavior,
+        and abuse risk."
       required: true
       outputGuidance:
         - "Use trial records where useful."
@@ -522,7 +587,7 @@ document:
         - "Trial leads users to meaningful value."
         - "Trial conversion path is explicit."
         - "Trial abuse and support expectations are addressed."
-      questions:
+      questions: &a9
         - "Is there a trial?"
         - "How long is the trial?"
         - "What features are included?"
@@ -532,7 +597,8 @@ document:
         - "What abuse or support risk exists?"
     - id: "subscription-terms"
       title: "Subscription Terms"
-      intent: "Define billing cycles, renewals, commitments, failed payments, grace periods, invoices, receipts, and subscription communications."
+      intent: "Define billing cycles, renewals, commitments, failed payments, grace periods, invoices, receipts, and
+        subscription communications."
       required: true
       outputGuidance:
         - "Use billing term records for material terms."
@@ -542,7 +608,7 @@ document:
         - "Terms are clear and customer-safe."
         - "Failed payment and renewal behavior are not ignored."
         - "Review-needed terms are not treated as final."
-      questions:
+      questions: &a10
         - "What billing cycles exist?"
         - "How do renewals work?"
         - "Are there contracts or commitments?"
@@ -552,7 +618,8 @@ document:
         - "What customer communications are required?"
     - id: "payment-flow"
       title: "Payment Flow"
-      intent: "Define checkout, payment methods, processor, account creation order, entitlement activation, failure states, analytics, and support fallback."
+      intent: "Define checkout, payment methods, processor, account creation order, entitlement activation, failure states,
+        analytics, and support fallback."
       required: true
       outputGuidance:
         - "Use payment flow records for material steps."
@@ -562,7 +629,7 @@ document:
         - "Payment flow is clear and technically feasible."
         - "Entitlement activation is explicit."
         - "Payment failures are handled."
-      questions:
+      questions: &a11
         - "How does the customer pay?"
         - "What payment methods and processors are used?"
         - "Does account creation happen before or after payment?"
@@ -572,7 +639,8 @@ document:
         - "What support fallback exists?"
     - id: "tax-and-invoice-considerations"
       title: "Tax and Invoice Considerations"
-      intent: "Identify tax, invoicing, receipt, jurisdiction, and review implications without inventing legal/accounting conclusions."
+      intent: "Identify tax, invoicing, receipt, jurisdiction, and review implications without inventing legal/accounting
+        conclusions."
       required: true
       outputGuidance:
         - "State known requirements and unknowns."
@@ -582,7 +650,7 @@ document:
         - "Tax and invoice claims are not overstated."
         - "Review-needed areas are explicit."
         - "Customer-facing invoice/receipt expectations are considered."
-      questions:
+      questions: &a12
         - "What tax or invoice considerations apply?"
         - "What invoices or receipts must customers receive?"
         - "What jurisdictions or customer locations create uncertainty?"
@@ -600,16 +668,18 @@ document:
         - "Discounts have strategic purpose."
         - "Discounting does not silently destroy positioning or operations."
         - "Discount usage is trackable."
-      questions:
+      questions: &a13
         - "What discounts are allowed?"
-        - "Is there an annual, early adopter, founder/customer development, volume, nonprofit, education, partner, or coupon discount?"
+        - "Is there an annual, early adopter, founder/customer development, volume, nonprofit, education, partner, or coupon
+          discount?"
         - "Who qualifies?"
         - "Who approves discounts?"
         - "When do discounts expire?"
         - "What risks do discounts create?"
     - id: "upgrade-and-downgrade-logic"
       title: "Upgrade and Downgrade Logic"
-      intent: "Define plan changes, entitlement changes, billing/proration, data access, customer communication, support impact, edge cases, and analytics."
+      intent: "Define plan changes, entitlement changes, billing/proration, data access, customer communication, support
+        impact, edge cases, and analytics."
       required: true
       outputGuidance:
         - "Use plan change records for upgrade and downgrade rules."
@@ -619,7 +689,7 @@ document:
         - "Plan changes are customer-safe and technically feasible."
         - "Downgrade does not accidentally destroy or hide data without policy."
         - "Billing and entitlement behavior are explicit."
-      questions:
+      questions: &a14
         - "How does a customer upgrade?"
         - "How does a customer downgrade?"
         - "What triggers upgrade or downgrade?"
@@ -629,7 +699,8 @@ document:
         - "What communication and support are required?"
     - id: "cancellation-logic"
       title: "Cancellation Logic"
-      intent: "Define cancellation flow, access timing, data export/deletion, feedback capture, win-back, support escalation, and analytics."
+      intent: "Define cancellation flow, access timing, data export/deletion, feedback capture, win-back, support escalation,
+        and analytics."
       required: true
       outputGuidance:
         - "Use plan change records for cancellation when useful."
@@ -639,7 +710,7 @@ document:
         - "Cancellation is clear and not hostile."
         - "Data export/deletion options are considered."
         - "Feedback and analytics are captured without creating friction."
-      questions:
+      questions: &a15
         - "What is the cancellation flow?"
         - "When does access end?"
         - "What data export or deletion option is offered?"
@@ -649,7 +720,8 @@ document:
         - "What analytics event marks cancellation?"
     - id: "refund-policy"
       title: "Refund Policy"
-      intent: "Define refund eligibility, window, process, exceptions, abuse prevention, communication, and support escalation."
+      intent: "Define refund eligibility, window, process, exceptions, abuse prevention, communication, and support
+        escalation."
       required: true
       outputGuidance:
         - "State policy as committed, hypothesis, or review-needed."
@@ -659,7 +731,7 @@ document:
         - "Refund policy is customer-safe and operationally feasible."
         - "Exceptions and abuse prevention are considered."
         - "Review-needed areas are explicit."
-      questions:
+      questions: &a16
         - "Is there a refund policy?"
         - "What refund window applies?"
         - "Who is eligible?"
@@ -679,7 +751,7 @@ document:
         - "Objections reveal underlying concern."
         - "Responses are honest and evidence-aware."
         - "Escalation path and asset needs are explicit."
-      questions:
+      questions: &a17
         - "What pricing objections are anticipated?"
         - "What concern sits underneath each objection?"
         - "How should each objection be handled?"
@@ -688,7 +760,8 @@ document:
         - "What asset or escalation is needed?"
     - id: "pricing-experiments"
       title: "Pricing Experiments"
-      intent: "Define experiments to validate price, package, value metric, trial, discount, billing cycle, or payment flow assumptions."
+      intent: "Define experiments to validate price, package, value metric, trial, discount, billing cycle, or payment flow
+        assumptions."
       required: true
       outputGuidance:
         - "Use pricing experiment records."
@@ -698,7 +771,7 @@ document:
         - "Experiments are decision-linked."
         - "Instrumentation is defined."
         - "Experiments do not create customer confusion or unfairness without controls."
-      questions:
+      questions: &a18
         - "What pricing experiments are planned?"
         - "What hypothesis does each experiment test?"
         - "What segment is included?"
@@ -717,9 +790,10 @@ document:
         - "Metrics are formula-defined and decision-linked."
         - "Operational burden is measured, not ignored."
         - "Targets are not invented without assumption labels."
-      questions:
+      questions: &a19
         - "What metrics measure pricing performance?"
-        - "What conversion, trial-to-paid, ARPU/ARPA, churn, expansion, downgrade, failed payment, refund, discount usage, support burden, and willingness-to-pay metrics matter?"
+        - "What conversion, trial-to-paid, ARPU/ARPA, churn, expansion, downgrade, failed payment, refund, discount usage,
+          support burden, and willingness-to-pay metrics matter?"
         - "What is the formula and data source?"
         - "What threshold changes the pricing decision?"
         - "How are metrics segmented by cohort, segment, channel, plan, or experiment?"
@@ -735,7 +809,7 @@ document:
         - "Risks are concrete and monitorable."
         - "Risks include operational, support, payment, tax, entitlement, and reputation dimensions."
         - "Mitigation and contingency are distinct."
-      questions:
+      questions: &a20
         - "What could make the pricing model fail?"
         - "What could indicate underpricing or overpricing?"
         - "What could make the value metric wrong?"
@@ -744,17 +818,19 @@ document:
         - "What would trigger a pricing review?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream GTM and Operations documents must inherit from Pricing and Packaging and what they must not assume."
+      intent: "Define what downstream GTM and Operations documents must inherit from Pricing and Packaging and what they must
+        not assume."
       required: true
       outputGuidance:
         - "Route pricing outputs to the correct downstream documents."
-        - "Separate content, partnerships, experiments, analytics, GTM risk, customer success, support, release, operations, and risk implications."
+        - "Separate content, partnerships, experiments, analytics, GTM risk, customer success, support, release,
+          operations, and risk implications."
         - "Preserve unresolved pricing questions, review-needed terms, and unsupported assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing pricing assumptions silently."
         - "Pricing strategy and downstream implementation remain distinct."
-      questions:
+      questions: &a21
         - "What should Content Strategy inherit?"
         - "What should Partnerships and Distribution inherit?"
         - "What should Growth Experiments inherit?"
@@ -763,3 +839,273 @@ document:
         - "What should Customer Success and Support Model inherit?"
         - "What should Release Management, Operating Model, and Risk Management inherit?"
         - "What unresolved pricing questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain pricing and packaging. How should the offer be packaged and priced so the right customers
+      can understand, trust, buy, use, expand, or cancel it without creating unsustainable product, support, or
+      operational burden?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "pricing-objective"
+        label: "Pricing Objective"
+        required: true
+        description: "Define what pricing must optimize at this stage and what it should intentionally not optimize yet."
+        evaluationHint: "Look for concrete answers addressing: What is the primary goal of pricing right now?; Is the focus
+          validation, adoption, revenue, retention, expansion, willingness-to-pay discovery, positioning, or operational
+          simplicity?; What should pricing intentionally not optimize yet?."
+        sourceQuestions: *a1
+        targetSections: &a22
+          - "Pricing Objective"
+      - id: "pricing-thesis"
+        label: "Pricing Thesis"
+        required: true
+        description: "State why the proposed price and package structure should work for the target customer and GTM motion."
+        evaluationHint: "Look for concrete answers addressing: What is the pricing thesis?; Why should this pricing work for the
+          target customer?; How does it fit the value proposition and alternatives?."
+        sourceQuestions: *a2
+        targetSections: &a23
+          - "Pricing Thesis"
+      - id: "value-metric"
+        label: "Value Metric"
+        required: true
+        description: "Define the unit of value that pricing should align with."
+        evaluationHint: "Look for concrete answers addressing: What unit of value should pricing use?; Is value tied to users,
+          seats, accounts, usage, volume, outcomes, workspaces, projects, transactions, storage, automations,
+          households, or another unit?; Why will customers understand this metric?."
+        sourceQuestions: *a3
+        targetSections: &a24
+          - "Value Metric"
+      - id: "pricing-model"
+        label: "Pricing Model"
+        required: true
+        description: "Choose the pricing model and justify why it fits value, segment, channel, sales motion, and operations."
+        evaluationHint: "Look for concrete answers addressing: What pricing model is used: subscription, one-time, usage-based,
+          seat-based, tiered, flat-rate, freemium, trial-led, pay-as-you-go, credit-based, enterprise,
+          donation/open-source support, or hybrid?; Why this model?; What models are rejected or deferred?."
+        sourceQuestions: *a4
+        targetSections: &a25
+          - "Pricing Model"
+      - id: "packaging-strategy"
+        label: "Packaging Strategy"
+        required: true
+        description: "Define how value is bundled, gated, limited, expanded, or excluded."
+        evaluationHint: "Look for concrete answers addressing: How is the offer packaged?; What is bundled?; What is gated?."
+        sourceQuestions: *a5
+        targetSections: &a26
+          - "Packaging Strategy"
+      - id: "plan-structure"
+        label: "Plan Structure"
+        required: true
+        description: "Define plans/packages, target customers, price, billing cycle, included capabilities, limits,
+          entitlements, support levels, and status."
+        evaluationHint: "Look for concrete answers addressing: What packages or plans are offered?; Who is each plan for?; What
+          is the price and billing cycle?."
+        sourceQuestions: *a6
+        targetSections: &a27
+          - "Plan Structure"
+      - id: "feature-and-limit-mapping"
+        label: "Feature and Limit Mapping"
+        required: true
+        description: "Map features, limits, entitlements, and gates to plans with rationale and enforcement implications."
+        evaluationHint: "Look for concrete answers addressing: Which features or capabilities belong in each plan?; What limits
+          apply?; Why does each feature or limit belong there?."
+        sourceQuestions: *a7
+        targetSections: &a28
+          - "Feature and Limit Mapping"
+      - id: "free-tier-strategy"
+        label: "Free Tier Strategy"
+        required: true
+        description: "Define whether a free tier exists and how it supports GTM without creating unsustainable cost or support
+          burden."
+        evaluationHint: "Look for concrete answers addressing: Is there a free tier?; What does it include and exclude?; Why
+          should a free tier exist?."
+        sourceQuestions: *a8
+        targetSections: &a29
+          - "Free Tier Strategy"
+      - id: "trial-strategy"
+        label: "Trial Strategy"
+        required: true
+        description: "Define trial terms, access, conversion path, onboarding, reminders, payment requirement, cancellation
+          behavior, and abuse risk."
+        evaluationHint: "Look for concrete answers addressing: Is there a trial?; How long is the trial?; What features are included?."
+        sourceQuestions: *a9
+        targetSections: &a30
+          - "Trial Strategy"
+      - id: "subscription-terms"
+        label: "Subscription Terms"
+        required: true
+        description: "Define billing cycles, renewals, commitments, failed payments, grace periods, invoices, receipts, and
+          subscription communications."
+        evaluationHint: "Look for concrete answers addressing: What billing cycles exist?; How do renewals work?; Are there
+          contracts or commitments?."
+        sourceQuestions: *a10
+        targetSections: &a31
+          - "Subscription Terms"
+      - id: "payment-flow"
+        label: "Payment Flow"
+        required: true
+        description: "Define checkout, payment methods, processor, account creation order, entitlement activation, failure
+          states, analytics, and support fallback."
+        evaluationHint: "Look for concrete answers addressing: How does the customer pay?; What payment methods and processors
+          are used?; Does account creation happen before or after payment?."
+        sourceQuestions: *a11
+        targetSections: &a32
+          - "Payment Flow"
+      - id: "tax-and-invoice-considerations"
+        label: "Tax and Invoice Considerations"
+        required: true
+        description: "Identify tax, invoicing, receipt, jurisdiction, and review implications without inventing legal/accounting
+          conclusions."
+        evaluationHint: "Look for concrete answers addressing: What tax or invoice considerations apply?; What invoices or
+          receipts must customers receive?; What jurisdictions or customer locations create uncertainty?."
+        sourceQuestions: *a12
+        targetSections: &a33
+          - "Tax and Invoice Considerations"
+      - id: "discount-strategy"
+        label: "Discount Strategy"
+        required: true
+        description: "Define discounts, eligibility, purpose, approval, duration, tracking, expiration, and risks."
+        evaluationHint: "Look for concrete answers addressing: What discounts are allowed?; Is there an annual, early adopter,
+          founder/customer development, volume, nonprofit, education, partner, or coupon discount?; Who qualifies?."
+        sourceQuestions: *a13
+        targetSections: &a34
+          - "Discount Strategy"
+      - id: "upgrade-and-downgrade-logic"
+        label: "Upgrade and Downgrade Logic"
+        required: true
+        description: "Define plan changes, entitlement changes, billing/proration, data access, customer communication, support
+          impact, edge cases, and analytics."
+        evaluationHint: "Look for concrete answers addressing: How does a customer upgrade?; How does a customer downgrade?;
+          What triggers upgrade or downgrade?."
+        sourceQuestions: *a14
+        targetSections: &a35
+          - "Upgrade and Downgrade Logic"
+      - id: "cancellation-logic"
+        label: "Cancellation Logic"
+        required: true
+        description: "Define cancellation flow, access timing, data export/deletion, feedback capture, win-back, support
+          escalation, and analytics."
+        evaluationHint: "Look for concrete answers addressing: What is the cancellation flow?; When does access end?; What data
+          export or deletion option is offered?."
+        sourceQuestions: *a15
+        targetSections: &a36
+          - "Cancellation Logic"
+      - id: "refund-policy"
+        label: "Refund Policy"
+        required: true
+        description: "Define refund eligibility, window, process, exceptions, abuse prevention, communication, and support
+          escalation."
+        evaluationHint: "Look for concrete answers addressing: Is there a refund policy?; What refund window applies?; Who is
+          eligible?."
+        sourceQuestions: *a16
+        targetSections: &a37
+          - "Refund Policy"
+      - id: "pricing-objections"
+        label: "Pricing Objections"
+        required: true
+        description: "Anticipate pricing objections and prepare honest, claim-safe responses."
+        evaluationHint: "Look for concrete answers addressing: What pricing objections are anticipated?; What concern sits
+          underneath each objection?; How should each objection be handled?."
+        sourceQuestions: *a17
+        targetSections: &a38
+          - "Pricing Objections"
+      - id: "pricing-experiments"
+        label: "Pricing Experiments"
+        required: true
+        description: "Define experiments to validate price, package, value metric, trial, discount, billing cycle, or payment
+          flow assumptions."
+        evaluationHint: "Look for concrete answers addressing: What pricing experiments are planned?; What hypothesis does each
+          experiment test?; What segment is included?."
+        sourceQuestions: *a18
+        targetSections: &a39
+          - "Pricing Experiments"
+      - id: "pricing-metrics"
+        label: "Pricing Metrics"
+        required: true
+        description: "Define metrics that measure whether pricing and packaging are working commercially and operationally."
+        evaluationHint: "Look for concrete answers addressing: What metrics measure pricing performance?; What conversion,
+          trial-to-paid, ARPU/ARPA, churn, expansion, downgrade, failed payment, refund, discount usage, support burden,
+          and willingness-to-pay metrics matter?; What is the formula and data source?."
+        sourceQuestions: *a19
+        targetSections: &a40
+          - "Pricing Metrics"
+      - id: "pricing-risks"
+        label: "Pricing Risks"
+        required: true
+        description: "Identify what could make pricing fail commercially, operationally, technically, legally, or reputationally."
+        evaluationHint: "Look for concrete answers addressing: What could make the pricing model fail?; What could indicate
+          underpricing or overpricing?; What could make the value metric wrong?."
+        sourceQuestions: *a20
+        targetSections: &a41
+          - "Pricing Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream GTM and Operations documents must inherit from Pricing and Packaging and what they
+          must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Content Strategy inherit?; What should Partnerships
+          and Distribution inherit?; What should Growth Experiments inherit?."
+        sourceQuestions: *a21
+        targetSections: &a42
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      pricing-objective:
+        targetSections: *a22
+      pricing-thesis:
+        targetSections: *a23
+      value-metric:
+        targetSections: *a24
+      pricing-model:
+        targetSections: *a25
+      packaging-strategy:
+        targetSections: *a26
+      plan-structure:
+        targetSections: *a27
+      feature-and-limit-mapping:
+        targetSections: *a28
+      free-tier-strategy:
+        targetSections: *a29
+      trial-strategy:
+        targetSections: *a30
+      subscription-terms:
+        targetSections: *a31
+      payment-flow:
+        targetSections: *a32
+      tax-and-invoice-considerations:
+        targetSections: *a33
+      discount-strategy:
+        targetSections: *a34
+      upgrade-and-downgrade-logic:
+        targetSections: *a35
+      cancellation-logic:
+        targetSections: *a36
+      refund-policy:
+        targetSections: *a37
+      pricing-objections:
+        targetSections: *a38
+      pricing-experiments:
+        targetSections: *a39
+      pricing-metrics:
+        targetSections: *a40
+      pricing-risks:
+        targetSections: *a41
+      downstream-handoff:
+        targetSections: *a42
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.459Z"
+      totalSourceQuestions: 127
+      reviewRequired: false

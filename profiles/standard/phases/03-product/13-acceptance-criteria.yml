@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 13
   type: "acceptance_criteria"
-  purpose: "Define what 'done' means at product, feature, UX, UI, functional, non-functional, release, and operational-readiness levels, with evidence, gates, owners, and release-blocking rules."
+  purpose: "Define what 'done' means at product, feature, UX, UI, functional, non-functional, release, and
+    operational-readiness levels, with evidence, gates, owners, and release-blocking rules."
   centralQuestion: "What does done mean, how is it verified, who accepts it, and what blocks release?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "product.acceptance_criteria_matrix"
         format: "html"
         path: "outcomes/html/03-product/acceptance-criteria-matrix.html"
-        purpose: "Provide a navigable matrix of product, feature, UX, UI, functional, non-functional, release-blocking, readiness, sign-off, rollback, and downstream acceptance criteria."
+        purpose: "Provide a navigable matrix of product, feature, UX, UI, functional, non-functional, release-blocking,
+          readiness, sign-off, rollback, and downstream acceptance criteria."
         audience: "founder"
         includes:
           - "acceptance taxonomy"
@@ -38,7 +40,8 @@ document:
       - id: "product.acceptance_criteria_review_prompt"
         format: "markdown"
         path: "outcomes/agents/03-product/acceptance-criteria-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether acceptance criteria are complete, testable, traceable, release-aware, and aligned with Product, Engineering, Test, and Operations needs."
+        purpose: "Provide compact context for agents reviewing whether acceptance criteria are complete, testable, traceable,
+          release-aware, and aligned with Product, Engineering, Test, and Operations needs."
         agentRole: "reviewer"
         includes:
           - "canonical acceptance criteria"
@@ -95,15 +98,18 @@ document:
     - id: "functional-requirements"
       type: "context"
       required: false
-      description: "Functional requirements, user requirements, system requirements, admin requirements, integration requirements, data requirements, business rules, and traceability."
+      description: "Functional requirements, user requirements, system requirements, admin requirements, integration
+        requirements, data requirements, business rules, and traceability."
     - id: "non-functional-requirements"
       type: "context"
       required: false
-      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, internationalization, compliance, and operational constraints."
+      description: "Performance, accessibility, privacy, security, reliability, availability, scalability, compatibility,
+        observability, internationalization, compliance, and operational constraints."
     - id: "product-design-documents"
       type: "context"
       required: false
-      description: "User Journeys, UX Model, Information Architecture, Interaction Model, UI Specification, Design System, and Product Architecture documents."
+      description: "User Journeys, UX Model, Information Architecture, Interaction Model, UI Specification, Design System, and
+        Product Architecture documents."
     - id: "product-stack"
       type: "context"
       required: false
@@ -111,143 +117,174 @@ document:
     - id: "acceptance-notes"
       type: "manual_note"
       required: false
-      description: "Known acceptance gates, release criteria, quality thresholds, sign-off process, severity definitions, rollback expectations, and unresolved acceptance questions."
+      description: "Known acceptance gates, release criteria, quality thresholds, sign-off process, severity definitions,
+        rollback expectations, and unresolved acceptance questions."
   completionCriteria:
-    - "The central question is answered through explicit acceptance standards, verification methods, gates, owners, evidence requirements, and release-blocking rules."
-    - "Acceptance criteria are traceable to Product Scope, Functional Requirements, Non-Functional Requirements, UX, UI, Interaction, IA, Design System, Product Architecture, Product Stack, Validation Report, or Decision Record."
-    - "Each material criterion includes id, statement, source, acceptance level, verification method, evidence required, owner or reviewer, release impact, and status."
-    - "Product acceptance standard defines whole-product acceptance, release gates, authority, evidence required, unresolved-risk handling, and product-level definition of done."
-    - "Feature acceptance standard defines feature-level definition of done, test expectations, documentation expectations, review process, traceability, and sign-off."
-    - "UX and UI acceptance criteria verify journey success, recovery, accessibility, design-system alignment, visual QA, state coverage, microcopy, and interaction behavior."
-    - "Functional acceptance criteria verify user actions, system behavior, data behavior, business rules, edge cases, integrations, permissions, state transitions, failure behavior, and recovery behavior."
-    - "Non-functional acceptance criteria verify performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, i18n, compliance, and operational constraints."
-    - "Release-blocking issues define severity, categories, automatic blockers, exception rules, escalation, ownership, resolution evidence, and re-test requirements."
-    - "Product readiness checklist covers product, engineering, test, data, security, privacy, accessibility, observability, support, release, GTM, and operations readiness where relevant."
-    - "Sign-off model defines who accepts what, when, with what evidence, and how dissent, exceptions, deferrals, and accepted risk are recorded."
-    - "Rollback and contingency define post-release failure triggers, rollback criteria, mitigation options, communication requirements, and ownership."
+    - "The central question is answered through explicit acceptance standards, verification methods, gates, owners,
+      evidence requirements, and release-blocking rules."
+    - "Acceptance criteria are traceable to Product Scope, Functional Requirements, Non-Functional Requirements, UX, UI,
+      Interaction, IA, Design System, Product Architecture, Product Stack, Validation Report, or Decision Record."
+    - "Each material criterion includes id, statement, source, acceptance level, verification method, evidence required,
+      owner or reviewer, release impact, and status."
+    - "Product acceptance standard defines whole-product acceptance, release gates, authority, evidence required,
+      unresolved-risk handling, and product-level definition of done."
+    - "Feature acceptance standard defines feature-level definition of done, test expectations, documentation
+      expectations, review process, traceability, and sign-off."
+    - "UX and UI acceptance criteria verify journey success, recovery, accessibility, design-system alignment, visual
+      QA, state coverage, microcopy, and interaction behavior."
+    - "Functional acceptance criteria verify user actions, system behavior, data behavior, business rules, edge cases,
+      integrations, permissions, state transitions, failure behavior, and recovery behavior."
+    - "Non-functional acceptance criteria verify performance, accessibility, privacy, security, reliability,
+      availability, scalability, compatibility, observability, i18n, compliance, and operational constraints."
+    - "Release-blocking issues define severity, categories, automatic blockers, exception rules, escalation, ownership,
+      resolution evidence, and re-test requirements."
+    - "Product readiness checklist covers product, engineering, test, data, security, privacy, accessibility,
+      observability, support, release, GTM, and operations readiness where relevant."
+    - "Sign-off model defines who accepts what, when, with what evidence, and how dissent, exceptions, deferrals, and
+      accepted risk are recorded."
+    - "Rollback and contingency define post-release failure triggers, rollback criteria, mitigation options,
+      communication requirements, and ownership."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid acceptance theater: broad readiness claims without objective evidence, owner, verification, or release consequence."
+    - "Avoid acceptance theater: broad readiness claims without objective evidence, owner, verification, or release
+      consequence."
     - "Avoid criteria that cannot be tested, reviewed, observed, or explicitly accepted as risk."
-    - "Avoid treating successful implementation as acceptance if UX, UI, data, security, reliability, accessibility, and operational criteria are unmet."
+    - "Avoid treating successful implementation as acceptance if UX, UI, data, security, reliability, accessibility, and
+      operational criteria are unmet."
     - "Avoid hiding edge cases, error states, permission states, partial states, degraded modes, or recovery paths."
     - "Avoid creating release blockers so broad that nothing can ship or so weak that unsafe releases pass."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent test results, compliance approval, accessibility compliance, security clearance, performance benchmarks, stakeholder approval, or operational readiness."
-    - "Acceptance criteria must be measurable, observable, reviewable, or explicitly marked as requiring further definition."
-    - "Acceptance must preserve product boundaries, validation caveats, user trust, accessibility, privacy, security, reliability, and operational sustainability."
+    - "Do not invent test results, compliance approval, accessibility compliance, security clearance, performance
+      benchmarks, stakeholder approval, or operational readiness."
+    - "Acceptance criteria must be measurable, observable, reviewable, or explicitly marked as requiring further
+      definition."
+    - "Acceptance must preserve product boundaries, validation caveats, user trust, accessibility, privacy, security,
+      reliability, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
     - "Separate acceptance level, criterion, verification method, evidence, owner, release impact, and status."
-    - "Classify criteria as product, feature, UX, UI, functional, non-functional, integration, data, permission, release, operational, or GTM-related where useful."
-    - "Classify criteria status as draft, ready-for-review, accepted, failed, blocked, deferred, accepted-risk, or not-applicable where useful."
+    - "Classify criteria as product, feature, UX, UI, functional, non-functional, integration, data, permission,
+      release, operational, or GTM-related where useful."
+    - "Classify criteria status as draft, ready-for-review, accepted, failed, blocked, deferred, accepted-risk, or
+      not-applicable where useful."
     - "Tie every material criterion to a source document or explicit decision where possible."
-    - "State what happens if a criterion fails: block release, block feature, require fix, require retest, accept risk, defer, rollback, or remove scope."
-    - "Keep detailed test implementation in Engineering Test Strategy; keep this document as product acceptance contract."
+    - "State what happens if a criterion fails: block release, block feature, require fix, require retest, accept risk,
+      defer, rollback, or remove scope."
+    - "Keep detailed test implementation in Engineering Test Strategy; keep this document as product acceptance
+      contract."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Product Scope, User Journeys, UX Model, Information Architecture, Interaction Model, UI Specification, Design System, Product Architecture, Functional Requirements, Non-Functional Requirements, Product Stack, Validation Report, Decision Record, or Foundation Boundaries."
+    - "Flag contradictions with Product Scope, User Journeys, UX Model, Information Architecture, Interaction Model, UI
+      Specification, Design System, Product Architecture, Functional Requirements, Non-Functional Requirements, Product
+      Stack, Validation Report, Decision Record, or Foundation Boundaries."
     - "Flag criteria without source, verification method, evidence requirement, owner, release impact, or status."
     - "Flag criteria that are too vague to test or review."
     - "Flag release-blocking categories that are ambiguous, excessive, or too weak."
-    - "Verify that edge cases, failure states, recovery paths, permissions, integrations, privacy, security, accessibility, observability, and rollback are covered."
-    - "Verify that acceptance criteria can feed Engineering Brief, Test Strategy, Release Management, Support Model, Risk Management, and Operations."
-    - "Flag content that belongs better in Feature Specification, Test Strategy, Security Architecture, Observability Plan, Release Management, Support Model, GTM, or Operations."
+    - "Verify that edge cases, failure states, recovery paths, permissions, integrations, privacy, security,
+      accessibility, observability, and rollback are covered."
+    - "Verify that acceptance criteria can feed Engineering Brief, Test Strategy, Release Management, Support Model,
+      Risk Management, and Operations."
+    - "Flag content that belongs better in Feature Specification, Test Strategy, Security Architecture, Observability
+      Plan, Release Management, Support Model, GTM, or Operations."
   specializedFormats:
     acceptanceCriterionFormat:
       description: "Required format for each acceptance criterion."
       fields:
-        - id
-        - title
-        - acceptanceLevel
-        - category
-        - statement
-        - sourceDocument
-        - sourceItem
-        - relatedRequirement
-        - relatedFeature
-        - relatedJourney
-        - relatedScreenOrComponent
-        - relatedNFR
-        - verificationMethod
-        - evidenceRequired
-        - ownerOrReviewer
-        - releaseImpact
-        - failureConsequence
-        - retestRequirement
-        - status
-        - notes
+        - "id"
+        - "title"
+        - "acceptanceLevel"
+        - "category"
+        - "statement"
+        - "sourceDocument"
+        - "sourceItem"
+        - "relatedRequirement"
+        - "relatedFeature"
+        - "relatedJourney"
+        - "relatedScreenOrComponent"
+        - "relatedNFR"
+        - "verificationMethod"
+        - "evidenceRequired"
+        - "ownerOrReviewer"
+        - "releaseImpact"
+        - "failureConsequence"
+        - "retestRequirement"
+        - "status"
+        - "notes"
     acceptanceGateFormat:
       description: "Recommended format for product or release gates."
       fields:
-        - gate
-        - purpose
-        - requiredCriteria
-        - requiredEvidence
-        - owner
-        - possibleOutcomes
-        - exceptionRule
-        - downstreamImpact
-        - status
+        - "gate"
+        - "purpose"
+        - "requiredCriteria"
+        - "requiredEvidence"
+        - "owner"
+        - "possibleOutcomes"
+        - "exceptionRule"
+        - "downstreamImpact"
+        - "status"
     releaseBlockingIssueFormat:
       description: "Recommended format for release-blocking issue definitions."
       fields:
-        - severity
-        - definition
-        - automaticBlockerCategories
-        - examples
-        - exceptionAllowed
-        - exceptionAuthority
-        - resolutionEvidence
-        - retestRequirement
-        - escalationPath
+        - "severity"
+        - "definition"
+        - "automaticBlockerCategories"
+        - "examples"
+        - "exceptionAllowed"
+        - "exceptionAuthority"
+        - "resolutionEvidence"
+        - "retestRequirement"
+        - "escalationPath"
     readinessChecklistItemFormat:
       description: "Recommended format for product readiness checklist items."
       fields:
-        - item
-        - category
-        - requiredEvidence
-        - owner
-        - status
-        - blockerIfIncomplete
-        - downstreamDependency
-        - notes
+        - "item"
+        - "category"
+        - "requiredEvidence"
+        - "owner"
+        - "status"
+        - "blockerIfIncomplete"
+        - "downstreamDependency"
+        - "notes"
     signOffFormat:
       description: "Recommended format for sign-off records."
       fields:
-        - area
-        - approverOrAuthority
-        - requiredEvidence
-        - decision
-        - acceptedRisks
-        - exceptions
-        - date
-        - revisitTrigger
+        - "area"
+        - "approverOrAuthority"
+        - "requiredEvidence"
+        - "decision"
+        - "acceptedRisks"
+        - "exceptions"
+        - "date"
+        - "revisitTrigger"
   sections:
     - id: "acceptance-taxonomy"
       title: "Acceptance Taxonomy"
-      intent: "Define acceptance levels, criterion structure, verification methods, evidence expectations, statuses, owners, and release impact semantics."
+      intent: "Define acceptance levels, criterion structure, verification methods, evidence expectations, statuses, owners,
+        and release impact semantics."
       required: true
       outputGuidance:
         - "Define the standard acceptance criterion record format before listing criteria."
-        - "Clarify acceptance levels and how they differ: product, feature, UX, UI, functional, non-functional, integration, data, permission, release, operational, or GTM-related."
+        - "Clarify acceptance levels and how they differ: product, feature, UX, UI, functional, non-functional,
+          integration, data, permission, release, operational, or GTM-related."
         - "Explain acceptable verification methods and evidence types."
       qualityChecks:
         - "The taxonomy prevents vague or inconsistent acceptance criteria."
         - "Status and release-impact labels have decision rules."
         - "Evidence expectations are explicit enough to support auditability."
-      questions:
+      questions: &a1
         - "How are acceptance criteria structured?"
         - "What acceptance levels exist?"
-        - "What verification methods are allowed: automated test, manual QA, visual review, accessibility review, security review, performance test, stakeholder review, analytics check, or operational rehearsal?"
+        - "What verification methods are allowed: automated test, manual QA, visual review, accessibility review, security
+          review, performance test, stakeholder review, analytics check, or operational rehearsal?"
         - "What evidence is required for acceptance?"
         - "What statuses can an acceptance criterion have?"
         - "How are release-blocking, feature-blocking, accepted-risk, deferred, and not-applicable criteria distinguished?"
     - id: "product-acceptance-standard"
       title: "Product Acceptance Standard"
-      intent: "Define what it means for the whole product to be accepted, which gates must pass, who has authority, and what evidence is required."
+      intent: "Define what it means for the whole product to be accepted, which gates must pass, who has authority, and what
+        evidence is required."
       required: true
       outputGuidance:
         - "State the whole-product definition of done."
@@ -257,7 +294,7 @@ document:
         - "Product acceptance covers more than feature completion."
         - "Authority, evidence, and release impact are explicit."
         - "Accepted risk is recorded rather than silently ignored."
-      questions:
+      questions: &a2
         - "What does it mean for the product as a whole to be accepted?"
         - "What gates must the product pass before release?"
         - "Who has authority to accept or reject the product?"
@@ -266,17 +303,20 @@ document:
         - "What product-level failures automatically block release?"
     - id: "feature-acceptance-standard"
       title: "Feature Acceptance Standard"
-      intent: "Define what done means for features, including scope alignment, behavior, state coverage, testing, documentation, review, and sign-off."
+      intent: "Define what done means for features, including scope alignment, behavior, state coverage, testing,
+        documentation, review, and sign-off."
       required: true
       outputGuidance:
         - "Define feature-level definition of done as more than implementation complete."
-        - "Require traceability to Product Scope, Functional Requirements, NFRs, UX/UI/Interaction docs, and Acceptance Criteria where relevant."
+        - "Require traceability to Product Scope, Functional Requirements, NFRs, UX/UI/Interaction docs, and Acceptance
+          Criteria where relevant."
         - "Separate feature acceptance from release acceptance."
       qualityChecks:
-        - "Feature acceptance includes edge cases, failure states, recovery, permissions, and documentation where relevant."
+        - "Feature acceptance includes edge cases, failure states, recovery, permissions, and documentation where
+          relevant."
         - "Feature done does not imply release-ready if product-level gates fail."
         - "Feature acceptance owner and evidence are explicit."
-      questions:
+      questions: &a3
         - "What does it mean for a feature to be done?"
         - "What testing, review, documentation, and traceability are required per feature?"
         - "What edge cases and failure paths must be covered before a feature is accepted?"
@@ -285,17 +325,19 @@ document:
         - "When can a feature be accepted but not released?"
     - id: "ux-acceptance-criteria"
       title: "UX Acceptance Criteria"
-      intent: "Define UX qualities, journey validation, recovery validation, trust validation, heuristic review, usability evidence, and UX exception handling."
+      intent: "Define UX qualities, journey validation, recovery validation, trust validation, heuristic review, usability
+        evidence, and UX exception handling."
       required: true
       outputGuidance:
         - "Tie UX acceptance to UX Model, User Journeys, product promise, and target user constraints."
-        - "Include first-value, repeat-use, failure, recovery, abandonment, re-entry, guidance, feedback, proactivity, and trust."
+        - "Include first-value, repeat-use, failure, recovery, abandonment, re-entry, guidance, feedback, proactivity,
+          and trust."
         - "State when usability testing is required versus heuristic review is sufficient."
       qualityChecks:
         - "UX acceptance verifies real journey success, not only screen completion."
         - "Recovery and trust criteria are explicit."
         - "UX criteria do not require invented usability results."
-      questions:
+      questions: &a4
         - "What UX qualities must be met for acceptance?"
         - "How is UX validated against the UX Model and User Journeys?"
         - "What first-value, repeat-use, failure, recovery, abandonment, and re-entry criteria must pass?"
@@ -304,17 +346,19 @@ document:
         - "What UX issues block feature acceptance or release?"
     - id: "ui-acceptance-criteria"
       title: "UI Acceptance Criteria"
-      intent: "Define UI qualities, screen coverage, state coverage, design-system alignment, visual QA, microcopy, responsive behavior, and UI accessibility gates."
+      intent: "Define UI qualities, screen coverage, state coverage, design-system alignment, visual QA, microcopy, responsive
+        behavior, and UI accessibility gates."
       required: true
       outputGuidance:
         - "Tie UI acceptance to UI Specification and Design System."
-        - "Require coverage for empty, loading, error, success, permission, disabled, partial, offline, and low-confidence states where relevant."
+        - "Require coverage for empty, loading, error, success, permission, disabled, partial, offline, and
+          low-confidence states where relevant."
         - "State visual QA and responsive requirements."
       qualityChecks:
         - "UI acceptance covers states and edge cases, not only the happy path."
         - "Design-system deviations are documented and approved."
         - "UI accessibility and responsive behavior are verifiable."
-      questions:
+      questions: &a5
         - "What UI qualities must be met for acceptance?"
         - "How is UI validated against the UI Specification and Design System?"
         - "What visual QA gates exist?"
@@ -324,7 +368,8 @@ document:
         - "What design-system deviations are acceptable and how are they approved?"
     - id: "functional-acceptance-criteria"
       title: "Functional Acceptance Criteria"
-      intent: "Define how functional correctness is verified across user actions, system behavior, data operations, business rules, integrations, permissions, edge cases, failure, and recovery."
+      intent: "Define how functional correctness is verified across user actions, system behavior, data operations, business
+        rules, integrations, permissions, edge cases, failure, and recovery."
       required: true
       outputGuidance:
         - "Tie criteria to Functional Requirements and Interaction Model."
@@ -334,7 +379,7 @@ document:
         - "Functional criteria are testable and traceable."
         - "Edge cases and failure paths are not omitted."
         - "Integration, permission, and data behavior are covered where relevant."
-      questions:
+      questions: &a6
         - "How is functional correctness verified?"
         - "What user actions, system actions, business rules, and data operations must pass?"
         - "What test coverage thresholds or evidence requirements must be met?"
@@ -343,17 +388,19 @@ document:
         - "What permission, state transition, failure, and recovery behavior must be verified?"
     - id: "non-functional-acceptance-criteria"
       title: "Non-Functional Acceptance Criteria"
-      intent: "Define how performance, accessibility, privacy, security, reliability, availability, scalability, compatibility, observability, i18n, compliance, and operational constraints are verified."
+      intent: "Define how performance, accessibility, privacy, security, reliability, availability, scalability,
+        compatibility, observability, i18n, compliance, and operational constraints are verified."
       required: true
       outputGuidance:
         - "Tie criteria to Non-Functional Requirements."
-        - "State verification method, target, threshold, release impact, and evidence required for each major NFR category."
+        - "State verification method, target, threshold, release impact, and evidence required for each major NFR
+          category."
         - "Mark unknowns or engineering-review-needed items explicitly."
       qualityChecks:
         - "NFR acceptance does not rely on vague quality claims."
         - "Release-blocking thresholds are explicit where relevant."
         - "Security, privacy, accessibility, reliability, and observability are not deferred silently."
-      questions:
+      questions: &a7
         - "How are performance requirements verified?"
         - "How are security and privacy requirements verified?"
         - "How are accessibility requirements verified?"
@@ -362,17 +409,19 @@ document:
         - "Which NFR failures block release?"
     - id: "data-and-permission-acceptance-criteria"
       title: "Data and Permission Acceptance Criteria"
-      intent: "Define acceptance criteria for data correctness, lifecycle, retention, deletion, export, auditability, permissions, consent, and access boundaries."
+      intent: "Define acceptance criteria for data correctness, lifecycle, retention, deletion, export, auditability,
+        permissions, consent, and access boundaries."
       required: true
       outputGuidance:
-        - "Tie data criteria to Information Architecture, Functional Requirements, NFRs, Interaction Model, and future Engineering Data Model."
+        - "Tie data criteria to Information Architecture, Functional Requirements, NFRs, Interaction Model, and future
+          Engineering Data Model."
         - "Tie permission criteria to Permission Model, Security Architecture, and user trust requirements."
         - "Include destructive, sensitive, privileged, and consent-gated actions."
       qualityChecks:
         - "Data and permission criteria protect user trust and product boundaries."
         - "Retention, deletion, export, and access behavior are verifiable or marked for review."
         - "Privileged and sensitive actions include stronger gates."
-      questions:
+      questions: &a8
         - "How is data correctness verified?"
         - "How are data lifecycle, retention, deletion, archival, export, import, and portability verified?"
         - "How are permission boundaries verified?"
@@ -381,17 +430,20 @@ document:
         - "What data or permission failures block release?"
     - id: "integration-acceptance-criteria"
       title: "Integration Acceptance Criteria"
-      intent: "Define acceptance criteria for external integrations, auth, data flows, rate limits, failure modes, fallback behavior, observability, and user-visible degradation."
+      intent: "Define acceptance criteria for external integrations, auth, data flows, rate limits, failure modes, fallback
+        behavior, observability, and user-visible degradation."
       required: true
       outputGuidance:
-        - "Tie integration criteria to Functional Requirements, Product Stack, Product Architecture, Security, and Operations."
-        - "Verify success path, auth failure, permission failure, timeout, partial response, incorrect response, unavailable dependency, and fallback behavior."
+        - "Tie integration criteria to Functional Requirements, Product Stack, Product Architecture, Security, and
+          Operations."
+        - "Verify success path, auth failure, permission failure, timeout, partial response, incorrect response,
+          unavailable dependency, and fallback behavior."
         - "State what integration failures block feature acceptance or release."
       qualityChecks:
         - "Integration acceptance includes failure and fallback, not only success path."
         - "User-visible degradation is specified."
         - "Privacy, security, cost, rate-limit, and observability implications are considered."
-      questions:
+      questions: &a9
         - "How are required integrations accepted?"
         - "What auth, permission, and data-flow behavior must be verified?"
         - "What failure modes must be tested?"
@@ -400,7 +452,8 @@ document:
         - "Which integration failures block release?"
     - id: "release-blocking-issues"
       title: "Release Blocking Issues"
-      intent: "Define issue severity, release-blocking categories, automatic blockers, exception process, escalation, resolution evidence, and re-test requirements."
+      intent: "Define issue severity, release-blocking categories, automatic blockers, exception process, escalation,
+        resolution evidence, and re-test requirements."
       required: true
       outputGuidance:
         - "Define severity levels with release impact."
@@ -410,7 +463,7 @@ document:
         - "Release blockers are specific enough to apply consistently."
         - "Critical categories cannot be bypassed without explicit accepted-risk process."
         - "Resolution and re-test requirements are explicit."
-      questions:
+      questions: &a10
         - "What issue severity blocks release?"
         - "What categories of issues are automatically release-blocking?"
         - "What process governs release-blocking issue resolution?"
@@ -419,7 +472,8 @@ document:
         - "What exceptions can override release-blocking status, and who can approve them?"
     - id: "product-readiness-checklist"
       title: "Product Readiness Checklist"
-      intent: "Define the complete product readiness checklist across product, engineering, testing, security, privacy, accessibility, observability, support, release, GTM, and operations."
+      intent: "Define the complete product readiness checklist across product, engineering, testing, security, privacy,
+        accessibility, observability, support, release, GTM, and operations."
       required: true
       outputGuidance:
         - "List readiness items as structured checklist records."
@@ -429,7 +483,7 @@ document:
         - "Checklist items are evidence-based and not ceremonial."
         - "Operational, support, monitoring, rollback, and communication readiness are included where relevant."
         - "Incomplete items have clear release impact."
-      questions:
+      questions: &a11
         - "What is the complete checklist for product readiness?"
         - "What must be true across all dimensions for the product to ship?"
         - "What evidence is required for each readiness item?"
@@ -438,7 +492,8 @@ document:
         - "What downstream dependencies remain?"
     - id: "sign-off-model"
       title: "Sign-Off Model"
-      intent: "Define who accepts each area, when sign-off happens, what evidence is required, and how exceptions, dissent, deferrals, and accepted risk are recorded."
+      intent: "Define who accepts each area, when sign-off happens, what evidence is required, and how exceptions, dissent,
+        deferrals, and accepted risk are recorded."
       required: true
       outputGuidance:
         - "Define sign-off by area and authority model."
@@ -448,25 +503,28 @@ document:
         - "Sign-off authority is unambiguous."
         - "Exceptions and accepted risks are auditable."
         - "Sign-off does not override unresolved release blockers without explicit exception process."
-      questions:
-        - "Who signs off on product, UX, UI, functionality, NFRs, security, privacy, accessibility, engineering, release, support, and operations?"
+      questions: &a12
+        - "Who signs off on product, UX, UI, functionality, NFRs, security, privacy, accessibility, engineering, release,
+          support, and operations?"
         - "When does sign-off happen?"
         - "What evidence is required for each sign-off?"
         - "How are dissent, exceptions, deferrals, and accepted risk recorded?"
         - "What sign-off is required before release?"
     - id: "rollback-and-contingency"
       title: "Rollback and Contingency"
-      intent: "Define post-release failure triggers, rollback criteria, mitigation options, contingency plans, communication requirements, and ownership."
+      intent: "Define post-release failure triggers, rollback criteria, mitigation options, contingency plans, communication
+        requirements, and ownership."
       required: true
       outputGuidance:
         - "State rollback and mitigation criteria before release."
-        - "Separate rollback, hotfix, feature flag disablement, degraded mode, user communication, support escalation, and incident response."
+        - "Separate rollback, hotfix, feature flag disablement, degraded mode, user communication, support escalation,
+          and incident response."
         - "Route operational details to Release Management and Support Model where appropriate."
       qualityChecks:
         - "Contingency plans are realistic and tied to failure severity."
         - "User-impacting failures include communication and support expectations."
         - "Rollback criteria do not rely on improvisation."
-      questions:
+      questions: &a13
         - "What post-release failures trigger rollback, hotfix, feature disablement, degraded mode, or support escalation?"
         - "What is the rollback or contingency plan if acceptance fails post-release?"
         - "What communication is required if release causes user impact?"
@@ -475,17 +533,19 @@ document:
         - "What should Release Management and Support Model inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what Engineering, Test Strategy, Release Management, Support, Risk Management, Operations, and GTM must inherit from acceptance criteria."
+      intent: "Define what Engineering, Test Strategy, Release Management, Support, Risk Management, Operations, and GTM must
+        inherit from acceptance criteria."
       required: true
       outputGuidance:
         - "Route acceptance outputs to the correct downstream documents."
-        - "Separate engineering, testing, security, observability, release, support, operations, risk, and GTM implications."
+        - "Separate engineering, testing, security, observability, release, support, operations, risk, and GTM
+          implications."
         - "Preserve unresolved acceptance questions and risky assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing acceptance gates silently."
         - "Release blockers, readiness, sign-off, rollback, and accepted-risk implications are included."
-      questions:
+      questions: &a14
         - "What should Engineering Brief inherit from Acceptance Criteria?"
         - "What should Test Strategy inherit?"
         - "What should Security Architecture and Observability Plan inherit?"
@@ -493,3 +553,202 @@ document:
         - "What should Support Model, Risk Management, and Operations inherit?"
         - "What should GTM not promise until acceptance is achieved?"
         - "What unresolved acceptance questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain acceptance criteria. What does done mean, how is it verified, who accepts it, and what blocks release?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "acceptance-taxonomy"
+        label: "Acceptance Taxonomy"
+        required: true
+        description: "Define acceptance levels, criterion structure, verification methods, evidence expectations, statuses,
+          owners, and release impact semantics."
+        evaluationHint: "Look for concrete answers addressing: How are acceptance criteria structured?; What acceptance levels
+          exist?; What verification methods are allowed: automated test, manual QA, visual review, accessibility review,
+          security review, performance test, stakeholder review, analytics check, or operational rehearsal?."
+        sourceQuestions: *a1
+        targetSections: &a15
+          - "Acceptance Taxonomy"
+      - id: "product-acceptance-standard"
+        label: "Product Acceptance Standard"
+        required: true
+        description: "Define what it means for the whole product to be accepted, which gates must pass, who has authority, and
+          what evidence is required."
+        evaluationHint: "Look for concrete answers addressing: What does it mean for the product as a whole to be accepted?;
+          What gates must the product pass before release?; Who has authority to accept or reject the product?."
+        sourceQuestions: *a2
+        targetSections: &a16
+          - "Product Acceptance Standard"
+      - id: "feature-acceptance-standard"
+        label: "Feature Acceptance Standard"
+        required: true
+        description: "Define what done means for features, including scope alignment, behavior, state coverage, testing,
+          documentation, review, and sign-off."
+        evaluationHint: "Look for concrete answers addressing: What does it mean for a feature to be done?; What testing,
+          review, documentation, and traceability are required per feature?; What edge cases and failure paths must be
+          covered before a feature is accepted?."
+        sourceQuestions: *a3
+        targetSections: &a17
+          - "Feature Acceptance Standard"
+      - id: "ux-acceptance-criteria"
+        label: "UX Acceptance Criteria"
+        required: true
+        description: "Define UX qualities, journey validation, recovery validation, trust validation, heuristic review,
+          usability evidence, and UX exception handling."
+        evaluationHint: "Look for concrete answers addressing: What UX qualities must be met for acceptance?; How is UX
+          validated against the UX Model and User Journeys?; What first-value, repeat-use, failure, recovery,
+          abandonment, and re-entry criteria must pass?."
+        sourceQuestions: *a4
+        targetSections: &a18
+          - "UX Acceptance Criteria"
+      - id: "ui-acceptance-criteria"
+        label: "UI Acceptance Criteria"
+        required: true
+        description: "Define UI qualities, screen coverage, state coverage, design-system alignment, visual QA, microcopy,
+          responsive behavior, and UI accessibility gates."
+        evaluationHint: "Look for concrete answers addressing: What UI qualities must be met for acceptance?; How is UI
+          validated against the UI Specification and Design System?; What visual QA gates exist?."
+        sourceQuestions: *a5
+        targetSections: &a19
+          - "UI Acceptance Criteria"
+      - id: "functional-acceptance-criteria"
+        label: "Functional Acceptance Criteria"
+        required: true
+        description: "Define how functional correctness is verified across user actions, system behavior, data operations,
+          business rules, integrations, permissions, edge cases, failure, and recovery."
+        evaluationHint: "Look for concrete answers addressing: How is functional correctness verified?; What user actions,
+          system actions, business rules, and data operations must pass?; What test coverage thresholds or evidence
+          requirements must be met?."
+        sourceQuestions: *a6
+        targetSections: &a20
+          - "Functional Acceptance Criteria"
+      - id: "non-functional-acceptance-criteria"
+        label: "Non-Functional Acceptance Criteria"
+        required: true
+        description: "Define how performance, accessibility, privacy, security, reliability, availability, scalability,
+          compatibility, observability, i18n, compliance, and operational constraints are verified."
+        evaluationHint: "Look for concrete answers addressing: How are performance requirements verified?; How are security and
+          privacy requirements verified?; How are accessibility requirements verified?."
+        sourceQuestions: *a7
+        targetSections: &a21
+          - "Non-Functional Acceptance Criteria"
+      - id: "data-and-permission-acceptance-criteria"
+        label: "Data and Permission Acceptance Criteria"
+        required: true
+        description: "Define acceptance criteria for data correctness, lifecycle, retention, deletion, export, auditability,
+          permissions, consent, and access boundaries."
+        evaluationHint: "Look for concrete answers addressing: How is data correctness verified?; How are data lifecycle,
+          retention, deletion, archival, export, import, and portability verified?; How are permission boundaries
+          verified?."
+        sourceQuestions: *a8
+        targetSections: &a22
+          - "Data and Permission Acceptance Criteria"
+      - id: "integration-acceptance-criteria"
+        label: "Integration Acceptance Criteria"
+        required: true
+        description: "Define acceptance criteria for external integrations, auth, data flows, rate limits, failure modes,
+          fallback behavior, observability, and user-visible degradation."
+        evaluationHint: "Look for concrete answers addressing: How are required integrations accepted?; What auth, permission,
+          and data-flow behavior must be verified?; What failure modes must be tested?."
+        sourceQuestions: *a9
+        targetSections: &a23
+          - "Integration Acceptance Criteria"
+      - id: "release-blocking-issues"
+        label: "Release Blocking Issues"
+        required: true
+        description: "Define issue severity, release-blocking categories, automatic blockers, exception process, escalation,
+          resolution evidence, and re-test requirements."
+        evaluationHint: "Look for concrete answers addressing: What issue severity blocks release?; What categories of issues
+          are automatically release-blocking?; What process governs release-blocking issue resolution?."
+        sourceQuestions: *a10
+        targetSections: &a24
+          - "Release Blocking Issues"
+      - id: "product-readiness-checklist"
+        label: "Product Readiness Checklist"
+        required: true
+        description: "Define the complete product readiness checklist across product, engineering, testing, security, privacy,
+          accessibility, observability, support, release, GTM, and operations."
+        evaluationHint: "Look for concrete answers addressing: What is the complete checklist for product readiness?; What must
+          be true across all dimensions for the product to ship?; What evidence is required for each readiness item?."
+        sourceQuestions: *a11
+        targetSections: &a25
+          - "Product Readiness Checklist"
+      - id: "sign-off-model"
+        label: "Sign-Off Model"
+        required: true
+        description: "Define who accepts each area, when sign-off happens, what evidence is required, and how exceptions,
+          dissent, deferrals, and accepted risk are recorded."
+        evaluationHint: "Look for concrete answers addressing: Who signs off on product, UX, UI, functionality, NFRs, security,
+          privacy, accessibility, engineering, release, support, and operations?; When does sign-off happen?; What
+          evidence is required for each sign-off?."
+        sourceQuestions: *a12
+        targetSections: &a26
+          - "Sign-Off Model"
+      - id: "rollback-and-contingency"
+        label: "Rollback and Contingency"
+        required: true
+        description: "Define post-release failure triggers, rollback criteria, mitigation options, contingency plans,
+          communication requirements, and ownership."
+        evaluationHint: "Look for concrete answers addressing: What post-release failures trigger rollback, hotfix, feature
+          disablement, degraded mode, or support escalation?; What is the rollback or contingency plan if acceptance
+          fails post-release?; What communication is required if release causes user impact?."
+        sourceQuestions: *a13
+        targetSections: &a27
+          - "Rollback and Contingency"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what Engineering, Test Strategy, Release Management, Support, Risk Management, Operations, and GTM
+          must inherit from acceptance criteria."
+        evaluationHint: "Look for concrete answers addressing: What should Engineering Brief inherit from Acceptance Criteria?;
+          What should Test Strategy inherit?; What should Security Architecture and Observability Plan inherit?."
+        sourceQuestions: *a14
+        targetSections: &a28
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      acceptance-taxonomy:
+        targetSections: *a15
+      product-acceptance-standard:
+        targetSections: *a16
+      feature-acceptance-standard:
+        targetSections: *a17
+      ux-acceptance-criteria:
+        targetSections: *a18
+      ui-acceptance-criteria:
+        targetSections: *a19
+      functional-acceptance-criteria:
+        targetSections: *a20
+      non-functional-acceptance-criteria:
+        targetSections: *a21
+      data-and-permission-acceptance-criteria:
+        targetSections: *a22
+      integration-acceptance-criteria:
+        targetSections: *a23
+      release-blocking-issues:
+        targetSections: *a24
+      product-readiness-checklist:
+        targetSections: *a25
+      sign-off-model:
+        targetSections: *a26
+      rollback-and-contingency:
+        targetSections: *a27
+      downstream-handoff:
+        targetSections: *a28
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.326Z"
+      totalSourceQuestions: 85
+      reviewRequired: false

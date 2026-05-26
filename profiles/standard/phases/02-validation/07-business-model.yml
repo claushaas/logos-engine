@@ -1,4 +1,3 @@
-
 document:
   id: "07-business-model"
   title: "Business Model"
@@ -6,7 +5,8 @@ document:
   status: "not_started"
   order: 7
   type: "business_model"
-  purpose: "Define the integrated mechanism by which the project creates, delivers, captures, protects, and sustains value in a way that is economically, operationally, and strategically viable."
+  purpose: "Define the integrated mechanism by which the project creates, delivers, captures, protects, and sustains value
+    in a way that is economically, operationally, and strategically viable."
   centralQuestion: "What is the mechanism by which this project becomes economically, operationally, and strategically viable?"
   outputs:
     canonical:
@@ -17,7 +17,9 @@ document:
       - id: "validation.business_model_canvas"
         format: "html"
         path: "outcomes/html/02-validation/business-model-canvas.html"
-        purpose: "Provide a navigable business model canvas covering value creation, customer segments, revenue streams, pricing logic, channels, relationships, activities, resources, partners, costs, defensibility, scalability, risks, and invalidating conditions."
+        purpose: "Provide a navigable business model canvas covering value creation, customer segments, revenue streams, pricing
+          logic, channels, relationships, activities, resources, partners, costs, defensibility, scalability, risks, and
+          invalidating conditions."
         audience: "founder"
         includes:
           - "business model objective"
@@ -41,7 +43,8 @@ document:
       - id: "validation.business_model_review_prompt"
         format: "markdown"
         path: "outcomes/agents/02-validation/business-model-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the business model is coherent, evidence-aware, defensible, operationally plausible, and aligned with the economic model."
+        purpose: "Provide compact context for agents reviewing whether the business model is coherent, evidence-aware,
+          defensible, operationally plausible, and aligned with the economic model."
         agentRole: "reviewer"
         includes:
           - "canonical business model"
@@ -85,7 +88,8 @@ document:
     - id: "core-assumptions"
       type: "context"
       required: false
-      description: "Business, distribution, operations, pricing, customer, and defensibility assumptions extracted from the assumptions map."
+      description: "Business, distribution, operations, pricing, customer, and defensibility assumptions extracted from the
+        assumptions map."
     - id: "experiment-results"
       type: "context"
       required: false
@@ -93,32 +97,39 @@ document:
     - id: "market-notes"
       type: "manual_note"
       required: false
-      description: "Notes about market category, alternatives, customer segments, competitors, buyer behavior, or stakeholder expectations."
+      description: "Notes about market category, alternatives, customer segments, competitors, buyer behavior, or stakeholder
+        expectations."
     - id: "business-constraints"
       type: "manual_note"
       required: false
-      description: "Constraints related to open source posture, monetization ethics, operational capacity, founder bandwidth, partnerships, funding, or legal/compliance concerns."
+      description: "Constraints related to open source posture, monetization ethics, operational capacity, founder bandwidth,
+        partnerships, funding, or legal/compliance concerns."
   completionCriteria:
     - "The central question is answered explicitly in the Business Model Summary section."
     - "The model explains how the project creates, delivers, captures, protects, and sustains value."
     - "Users, customers, buyers, payers, beneficiaries, and stakeholders are distinguished where relevant."
-    - "Revenue streams, pricing logic, channels, customer relationships, key activities, resources, partners, and cost drivers form a coherent mechanism."
+    - "Revenue streams, pricing logic, channels, customer relationships, key activities, resources, partners, and cost
+      drivers form a coherent mechanism."
     - "The business model is consistent with the Economic Model and explicitly identifies any unresolved economic gaps."
     - "Competitive advantage and scalability logic are stated as assumptions or evidence-backed claims, not slogans."
-    - "Operational plausibility is addressed, including support, delivery, partnerships, founder/team workload, and repeatability."
+    - "Operational plausibility is addressed, including support, delivery, partnerships, founder/team workload, and
+      repeatability."
     - "Business model risks and invalidating conditions are concrete enough to trigger revise, pivot, or stop decisions."
-    - "Downstream implications for Product, Go-to-market, Pricing, Sales, Operations, and Financial Operations are explicit."
+    - "Downstream implications for Product, Go-to-market, Pricing, Sales, Operations, and Financial Operations are
+      explicit."
   qualityChecks:
     - "Avoid vague claims."
     - "Avoid false precision."
     - "Avoid business-model theater: canvas sections that sound complete but do not explain a real mechanism."
     - "Avoid treating revenue possibility as revenue strategy."
-    - "Avoid assuming open source, virality, community, or partnerships will work without evidence or explicit assumptions."
+    - "Avoid assuming open source, virality, community, or partnerships will work without evidence or explicit
+      assumptions."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
     - "Do not invent revenue, market, competitor, channel, CAC, conversion, partnership, or investor evidence."
     - "Separate economic viability from business model mechanism and go-to-market execution."
-    - "Do not hide operational burden, support requirements, sales complexity, stakeholder misalignment, or partner dependency."
+    - "Do not hide operational burden, support requirements, sales complexity, stakeholder misalignment, or partner
+      dependency."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
@@ -127,68 +138,72 @@ document:
     - "Describe the model as an integrated mechanism, not a disconnected list of canvas boxes."
     - "State what must be true for each major mechanism to work."
     - "Mark unvalidated business claims as assumptions or hypotheses."
-    - "Keep this document strategic-operational; detailed GTM execution belongs in Go-to-market and ongoing processes belong in Operations."
+    - "Keep this document strategic-operational; detailed GTM execution belongs in Go-to-market and ongoing processes
+      belong in Operations."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation documents, Validation Strategy, Core Assumptions, Hypotheses, Experiments, or Economic Model."
+    - "Flag contradictions with Foundation documents, Validation Strategy, Core Assumptions, Hypotheses, Experiments, or
+      Economic Model."
     - "Flag claims that are not supported by evidence or explicitly marked as assumptions."
     - "Flag disconnected model components that do not form a coherent mechanism."
     - "Verify that economic assumptions are consistent with the Economic Model."
     - "Verify that customer, buyer, payer, and beneficiary distinctions are explicit where relevant."
     - "Verify that operational burden and partner dependencies are not hidden."
-    - "Flag content that belongs better in Economic Model, Go-to-market, Pricing and Packaging, Sales Strategy, Operating Model, or Financial Operations."
+    - "Flag content that belongs better in Economic Model, Go-to-market, Pricing and Packaging, Sales Strategy,
+      Operating Model, or Financial Operations."
   specializedFormats:
     businessModelComponentFormat:
       description: "Recommended format for major business model components."
       fields:
-        - component
-        - statement
-        - roleInModel
-        - assumptions
-        - evidenceLevel
-        - dependencies
-        - risks
-        - downstreamImplications
-        - status
+        - "component"
+        - "statement"
+        - "roleInModel"
+        - "assumptions"
+        - "evidenceLevel"
+        - "dependencies"
+        - "risks"
+        - "downstreamImplications"
+        - "status"
     stakeholderRoleFormat:
       description: "Recommended format for distinguishing business model actors."
       fields:
-        - role
-        - actor
-        - valueReceived
-        - valueProvided
-        - decisionPower
-        - paymentResponsibility
-        - relationshipToUser
-        - evidenceLevel
+        - "role"
+        - "actor"
+        - "valueReceived"
+        - "valueProvided"
+        - "decisionPower"
+        - "paymentResponsibility"
+        - "relationshipToUser"
+        - "evidenceLevel"
     businessModelRiskFormat:
       description: "Recommended format for business model risks."
       fields:
-        - id
-        - risk
-        - category
-        - affectedComponents
-        - likelihood
-        - impact
-        - evidenceSignal
-        - mitigation
-        - decisionGate
-        - status
+        - "id"
+        - "risk"
+        - "category"
+        - "affectedComponents"
+        - "likelihood"
+        - "impact"
+        - "evidenceSignal"
+        - "mitigation"
+        - "decisionGate"
+        - "status"
     invalidatingConditionFormat:
       description: "Recommended format for business model invalidating conditions."
       fields:
-        - condition
-        - relatedComponents
-        - evidenceSource
-        - threshold
-        - consequence
-        - mitigationOrPivot
-        - decisionGate
-        - status
+        - "condition"
+        - "relatedComponents"
+        - "evidenceSource"
+        - "threshold"
+        - "consequence"
+        - "mitigationOrPivot"
+        - "decisionGate"
+        - "status"
   sections:
     - id: "business-model-objective"
       title: "Business Model Objective"
-      intent: "State the integrated business logic that makes the project viable as a coherent value creation, delivery, capture, and sustainability mechanism."
+      intent: "State the integrated business logic that makes the project viable as a coherent value creation, delivery,
+        capture, and sustainability mechanism."
       required: true
       outputGuidance:
         - "State the business model as a mechanism, not as a category label."
@@ -198,7 +213,7 @@ document:
         - "The objective is business-model specific, not a duplicate of the economic model."
         - "The mechanism can be understood as a coherent system."
         - "The section identifies the decision this model is meant to inform."
-      questions:
+      questions: &a1
         - "What is the overall business logic that makes the project viable?"
         - "How does the project create, deliver, capture, and sustain value?"
         - "How do the pieces fit together into a coherent whole?"
@@ -216,7 +231,7 @@ document:
         - "The value proposition is specific to the defined audience and problem."
         - "The section does not rely on generic claims like productivity, clarity, or simplicity unless operationalized."
         - "Defensibility is stated as evidence or assumption, not assertion."
-      questions:
+      questions: &a2
         - "What unique value does the project create?"
         - "For whom does it create value?"
         - "What cost, risk, friction, confusion, or inefficiency does it reduce?"
@@ -235,7 +250,7 @@ document:
         - "The section does not confuse interest with buying power."
         - "Segment prioritization is justified by urgency, reachability, willingness to pay, strategic fit, or evidence."
         - "Excluded or deferred segments are explicit."
-      questions:
+      questions: &a3
         - "Who are the users who interact with the product?"
         - "Who are the customers who pay or adopt?"
         - "Who are the buyers who make the purchasing decision?"
@@ -256,7 +271,7 @@ document:
         - "Revenue streams are compatible with project principles and boundaries."
         - "Expected contribution is labeled as assumption unless evidenced."
         - "The section does not assume every possible revenue stream belongs in the model."
-      questions:
+      questions: &a4
         - "What are all plausible sources of revenue?"
         - "Which revenue stream is primary and why?"
         - "Which revenue streams are secondary, deferred, experimental, or excluded?"
@@ -266,7 +281,8 @@ document:
         - "What evidence supports or weakens each revenue stream?"
     - id: "pricing-logic"
       title: "Pricing Logic"
-      intent: "Explain how price connects to value, buyer perception, willingness to pay, cost structure, packaging, and economic viability."
+      intent: "Explain how price connects to value, buyer perception, willingness to pay, cost structure, packaging, and
+        economic viability."
       required: true
       outputGuidance:
         - "Explain pricing logic without duplicating full pricing execution from GTM."
@@ -276,7 +292,7 @@ document:
         - "Pricing logic is compatible with cost structure and revenue model."
         - "Price is not justified only by desired revenue."
         - "Unvalidated price points are clearly marked as assumptions."
-      questions:
+      questions: &a5
         - "What is the rationale behind the chosen pricing model?"
         - "How does pricing align with perceived value?"
         - "How does pricing relate to cost, willingness to pay, alternatives, and economic viability?"
@@ -285,17 +301,19 @@ document:
         - "What should feed Pricing and Packaging later?"
     - id: "distribution-channels"
       title: "Distribution Channels"
-      intent: "Define how the project reaches customers, which channels are plausible, what each channel requires, and which assumptions must be validated."
+      intent: "Define how the project reaches customers, which channels are plausible, what each channel requires, and which
+        assumptions must be validated."
       required: true
       outputGuidance:
         - "Separate channel logic from detailed go-to-market execution."
         - "Identify channel assumptions, costs, conversion risks, and operational requirements."
-        - "Include organic, community, content, partnership, sales, marketplace, open source, or product-led channels where relevant."
+        - "Include organic, community, content, partnership, sales, marketplace, open source, or product-led channels
+          where relevant."
       qualityChecks:
         - "Channels are plausible for the defined customer segments."
         - "Cost and conversion assumptions are labeled as assumptions unless evidenced."
         - "The model does not depend on a channel that has no credible access path."
-      questions:
+      questions: &a6
         - "How will the product reach customers?"
         - "What are the primary and secondary channels?"
         - "What must be true for each channel to work?"
@@ -305,17 +323,19 @@ document:
         - "What should feed Channel Strategy later?"
     - id: "customer-relationships"
       title: "Customer Relationships"
-      intent: "Define the customer relationship model, support expectations, feedback loops, trust requirements, and retention logic."
+      intent: "Define the customer relationship model, support expectations, feedback loops, trust requirements, and retention
+        logic."
       required: true
       outputGuidance:
-        - "Explain the relationship model as self-serve, community-led, founder-led, sales-led, support-heavy, high-touch, or hybrid where relevant."
+        - "Explain the relationship model as self-serve, community-led, founder-led, sales-led, support-heavy,
+          high-touch, or hybrid where relevant."
         - "Clarify support and customer success implications without becoming an Operations playbook."
         - "Connect relationship model to retention and trust."
       qualityChecks:
         - "Support burden is not hidden."
         - "Feedback loops are concrete enough to inform Operations later."
         - "The relationship model matches customer segment and price level."
-      questions:
+      questions: &a7
         - "What type of relationship will be established with customers?"
         - "How will customers be supported?"
         - "How much human involvement does the model require?"
@@ -324,17 +344,19 @@ document:
         - "What expectations should not be created?"
     - id: "key-activities"
       title: "Key Activities"
-      intent: "Identify the recurring activities required to create value, acquire customers, deliver the product, support users, maintain trust, and sustain revenue."
+      intent: "Identify the recurring activities required to create value, acquire customers, deliver the product, support
+        users, maintain trust, and sustain revenue."
       required: true
       outputGuidance:
         - "List activities that must happen repeatedly, not only one-time setup tasks."
-        - "Separate product, engineering, marketing, sales, support, community, finance, and governance activities where relevant."
+        - "Separate product, engineering, marketing, sales, support, community, finance, and governance activities where
+          relevant."
         - "Identify which activities are manual now and candidates for automation later."
       qualityChecks:
         - "The section avoids fantasy that the product operates or sells itself."
         - "Key activities are compatible with available capacity or explicitly marked as constraints."
         - "Activities connect to value delivery and revenue capture."
-      questions:
+      questions: &a8
         - "What are the most important activities required to deliver the value proposition?"
         - "What activities are needed to operate the business?"
         - "What activities are needed to acquire, convert, support, and retain customers?"
@@ -342,25 +364,29 @@ document:
         - "Which activities become bottlenecks as the model scales?"
     - id: "key-resources"
       title: "Key Resources"
-      intent: "Identify essential intellectual, human, financial, technical, operational, brand, community, data, and distribution resources."
+      intent: "Identify essential intellectual, human, financial, technical, operational, brand, community, data, and
+        distribution resources."
       required: true
       outputGuidance:
         - "Separate resources that exist now from resources that must be built, bought, accessed, or partnered for."
         - "Identify resource constraints that could block the model."
-        - "Include non-obvious resources such as trust, documentation, community, data rights, brand, or open source credibility when relevant."
+        - "Include non-obvious resources such as trust, documentation, community, data rights, brand, or open source
+          credibility when relevant."
       qualityChecks:
         - "Resources are tied to value creation, delivery, revenue capture, or defensibility."
         - "Missing resources are not silently assumed."
         - "The section distinguishes resources from activities and partners."
-      questions:
+      questions: &a9
         - "What resources are essential to deliver the value proposition?"
-        - "What intellectual, human, financial, technical, operational, brand, community, data, or distribution resources are needed?"
+        - "What intellectual, human, financial, technical, operational, brand, community, data, or distribution resources are
+          needed?"
         - "Which resources already exist?"
         - "Which resources must be built, acquired, funded, or partnered for?"
         - "Which missing resources create business model risk?"
     - id: "key-partners"
       title: "Key Partners"
-      intent: "Identify partners, suppliers, platforms, communities, vendors, and ecosystem actors the model depends on or benefits from."
+      intent: "Identify partners, suppliers, platforms, communities, vendors, and ecosystem actors the model depends on or
+        benefits from."
       required: true
       outputGuidance:
         - "Separate essential partners from optional accelerators."
@@ -370,7 +396,7 @@ document:
         - "Partner dependencies are not assumed to exist without evidence."
         - "The section distinguishes vendors from strategic partners."
         - "Vendor lock-in and platform dependency risks are explicit where relevant."
-      questions:
+      questions: &a10
         - "Who are the key partners and suppliers?"
         - "What activities or resources do partners provide?"
         - "What is the nature of each partnership?"
@@ -389,7 +415,7 @@ document:
         - "Cost drivers are connected to the actual business mechanism."
         - "Support, sales, operations, infrastructure, and third-party costs are not ignored."
         - "The section distinguishes structural costs from temporary startup costs."
-      questions:
+      questions: &a11
         - "What are the most significant cost drivers?"
         - "Which costs are fixed, variable, scale-sensitive, or step-function costs?"
         - "How do costs scale with growth?"
@@ -398,17 +424,19 @@ document:
         - "How does this connect back to the Economic Model?"
     - id: "competitive-advantage"
       title: "Competitive Advantage"
-      intent: "Identify defensibility sources, why the project could win, what is hard to copy, and what assumptions support that claim."
+      intent: "Identify defensibility sources, why the project could win, what is hard to copy, and what assumptions support
+        that claim."
       required: true
       outputGuidance:
         - "Distinguish differentiation from defensibility."
-        - "Explain whether advantage comes from product, distribution, community, data, brand, domain expertise, workflow integration, switching costs, cost structure, timing, or open source strategy."
+        - "Explain whether advantage comes from product, distribution, community, data, brand, domain expertise,
+          workflow integration, switching costs, cost structure, timing, or open source strategy."
         - "Mark weak or aspirational defensibility as assumption."
       qualityChecks:
         - "Advantage claims are not slogans."
         - "Barriers to entry and exit are plausible and evidence-aware."
         - "The section explains why competitors or substitutes cannot easily neutralize the model."
-      questions:
+      questions: &a12
         - "What is the source of competitive advantage?"
         - "How is this different from simple differentiation?"
         - "How sustainable is the advantage?"
@@ -418,7 +446,8 @@ document:
         - "What evidence supports the defensibility claim?"
     - id: "scalability-logic"
       title: "Scalability Logic"
-      intent: "Describe how the model improves, degrades, or changes with scale across product, support, infrastructure, sales, community, economics, and operations."
+      intent: "Describe how the model improves, degrades, or changes with scale across product, support, infrastructure,
+        sales, community, economics, and operations."
       required: true
       outputGuidance:
         - "Explain whether scale improves margin, distribution, value, defensibility, or operational efficiency."
@@ -428,7 +457,7 @@ document:
         - "Scalability claims are tied to mechanism, not hope."
         - "The section identifies what gets harder with growth."
         - "The section distinguishes product scalability from business scalability."
-      questions:
+      questions: &a13
         - "How does the business model scale?"
         - "Does the model improve or worsen with more users, customers, data, usage, or partners?"
         - "What are the limits to scaling?"
@@ -437,10 +466,12 @@ document:
         - "What scaling assumptions need validation?"
     - id: "investor-stakeholder-narrative"
       title: "Investor/Stakeholder Narrative"
-      intent: "Articulate why the project deserves attention, confidence, capital, time, partnership, or institutional support without turning the document into a pitch deck."
+      intent: "Articulate why the project deserves attention, confidence, capital, time, partnership, or institutional support
+        without turning the document into a pitch deck."
       required: true
       outputGuidance:
-        - "Frame the stakeholder narrative around problem urgency, market logic, value creation, defensibility, economic upside, and execution thesis."
+        - "Frame the stakeholder narrative around problem urgency, market logic, value creation, defensibility, economic
+          upside, and execution thesis."
         - "Separate investor narrative from user-facing messaging."
         - "Avoid hype or claims not backed by the model."
       qualityChecks:
@@ -459,7 +490,8 @@ document:
         - "What is the current validation status?"
     - id: "business-model-risks"
       title: "Business Model Risks"
-      intent: "Identify risks that could break the integrated model, including customer, revenue, channel, cost, partner, defensibility, scalability, operational, and stakeholder risks."
+      intent: "Identify risks that could break the integrated model, including customer, revenue, channel, cost, partner,
+        defensibility, scalability, operational, and stakeholder risks."
       required: true
       outputGuidance:
         - "Describe risks as failures in the mechanism, not generic threats."
@@ -469,7 +501,7 @@ document:
         - "Risks are specific enough to monitor, validate, or mitigate."
         - "The section does not duplicate Economic Risks unless they affect the business mechanism."
         - "Mitigations do not pretend to solve risks that actually require a pivot."
-      questions:
+      questions: &a14
         - "What are the biggest risks to the business model?"
         - "What assumptions about the business model are least validated?"
         - "What customer, revenue, channel, pricing, partner, scalability, operational, or stakeholder risks exist?"
@@ -478,7 +510,8 @@ document:
         - "What mitigations or pivots are available?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
-      intent: "Define evidence or conditions that would prove the business model unworkable, require revision, or trigger a fundamental rethink."
+      intent: "Define evidence or conditions that would prove the business model unworkable, require revision, or trigger a
+        fundamental rethink."
       required: true
       outputGuidance:
         - "State invalidating conditions before relying on the model for downstream decisions."
@@ -488,7 +521,7 @@ document:
         - "Invalidating conditions are concrete enough to apply."
         - "Conditions are not so extreme that the model can never fail."
         - "The section identifies what decision follows invalidation."
-      questions:
+      questions: &a15
         - "What conditions would prove the business model unworkable?"
         - "What specific evidence would trigger a fundamental rethink?"
         - "What evidence would require revising only part of the model?"
@@ -497,7 +530,8 @@ document:
         - "What decision gate evaluates business model invalidation?"
     - id: "business-model-summary"
       title: "Business Model Summary"
-      intent: "Synthesize viability verdict, coherence, evidence level, strongest support, weakest point, unresolved gaps, and downstream handoff."
+      intent: "Synthesize viability verdict, coherence, evidence level, strongest support, weakest point, unresolved gaps, and
+        downstream handoff."
       required: true
       outputGuidance:
         - "Answer the central question directly."
@@ -507,7 +541,7 @@ document:
         - "The verdict follows from the stated mechanism and evidence."
         - "The summary does not hide weak points or unresolved assumptions."
         - "The handoff to downstream phases is explicit."
-      questions:
+      questions: &a16
         - "Is the business model viable based on current evidence?"
         - "Is the model coherent as a mechanism?"
         - "Is it viable, conditionally viable, not yet proven, incoherent, or non-viable?"
@@ -515,3 +549,269 @@ document:
         - "What is the single weakest point in the model?"
         - "What unresolved assumptions or evidence gaps remain?"
         - "What should feed Evidence Log, Decision Record, Validation Report, Product, Go-to-market, and Operations?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain business model. What is the mechanism by which this project becomes economically,
+      operationally, and strategically viable?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "business-model-objective"
+        label: "Business Model Objective"
+        required: true
+        description: "State the integrated business logic that makes the project viable as a coherent value creation, delivery,
+          capture, and sustainability mechanism."
+        evaluationHint: "Look for concrete answers addressing: What is the overall business logic that makes the project
+          viable?; How does the project create, deliver, capture, and sustain value?; How do the pieces fit together
+          into a coherent whole?."
+        sourceQuestions: *a1
+        targetSections: &a17
+          - "Business Model Objective"
+      - id: "value-proposition"
+        label: "Value Proposition"
+        required: true
+        description: "Define the value created, for whom, why it matters now, and why it can be defended."
+        evaluationHint: "Look for concrete answers addressing: What unique value does the project create?; For whom does it
+          create value?; What cost, risk, friction, confusion, or inefficiency does it reduce?."
+        sourceQuestions: *a2
+        targetSections: &a18
+          - "Value Proposition"
+      - id: "customer-segments"
+        label: "Customer Segments"
+        required: true
+        description: "Distinguish users, customers, buyers, payers, beneficiaries, influencers, blockers, and early adopters."
+        evaluationHint: "Look for concrete answers addressing: Who are the users who interact with the product?; Who are the
+          customers who pay or adopt?; Who are the buyers who make the purchasing decision?."
+        sourceQuestions: *a3
+        targetSections: &a19
+          - "Customer Segments"
+      - id: "revenue-streams"
+        label: "Revenue Streams"
+        required: true
+        description: "Identify all plausible revenue sources, their role in the model, evidence level, interactions, and
+          exclusions."
+        evaluationHint: "Look for concrete answers addressing: What are all plausible sources of revenue?; Which revenue stream
+          is primary and why?; Which revenue streams are secondary, deferred, experimental, or excluded?."
+        sourceQuestions: *a4
+        targetSections: &a20
+          - "Revenue Streams"
+      - id: "pricing-logic"
+        label: "Pricing Logic"
+        required: true
+        description: "Explain how price connects to value, buyer perception, willingness to pay, cost structure, packaging, and
+          economic viability."
+        evaluationHint: "Look for concrete answers addressing: What is the rationale behind the chosen pricing model?; How does
+          pricing align with perceived value?; How does pricing relate to cost, willingness to pay, alternatives, and
+          economic viability?."
+        sourceQuestions: *a5
+        targetSections: &a21
+          - "Pricing Logic"
+      - id: "distribution-channels"
+        label: "Distribution Channels"
+        required: true
+        description: "Define how the project reaches customers, which channels are plausible, what each channel requires, and
+          which assumptions must be validated."
+        evaluationHint: "Look for concrete answers addressing: How will the product reach customers?; What are the primary and
+          secondary channels?; What must be true for each channel to work?."
+        sourceQuestions: *a6
+        targetSections: &a22
+          - "Distribution Channels"
+      - id: "customer-relationships"
+        label: "Customer Relationships"
+        required: true
+        description: "Define the customer relationship model, support expectations, feedback loops, trust requirements, and
+          retention logic."
+        evaluationHint: "Look for concrete answers addressing: What type of relationship will be established with customers?;
+          How will customers be supported?; How much human involvement does the model require?."
+        sourceQuestions: *a7
+        targetSections: &a23
+          - "Customer Relationships"
+      - id: "key-activities"
+        label: "Key Activities"
+        required: true
+        description: "Identify the recurring activities required to create value, acquire customers, deliver the product,
+          support users, maintain trust, and sustain revenue."
+        evaluationHint: "Look for concrete answers addressing: What are the most important activities required to deliver the
+          value proposition?; What activities are needed to operate the business?; What activities are needed to
+          acquire, convert, support, and retain customers?."
+        sourceQuestions: *a8
+        targetSections: &a24
+          - "Key Activities"
+      - id: "key-resources"
+        label: "Key Resources"
+        required: true
+        description: "Identify essential intellectual, human, financial, technical, operational, brand, community, data, and
+          distribution resources."
+        evaluationHint: "Look for concrete answers addressing: What resources are essential to deliver the value proposition?;
+          What intellectual, human, financial, technical, operational, brand, community, data, or distribution resources
+          are needed?; Which resources already exist?."
+        sourceQuestions: *a9
+        targetSections: &a25
+          - "Key Resources"
+      - id: "key-partners"
+        label: "Key Partners"
+        required: true
+        description: "Identify partners, suppliers, platforms, communities, vendors, and ecosystem actors the model depends on
+          or benefits from."
+        evaluationHint: "Look for concrete answers addressing: Who are the key partners and suppliers?; What activities or
+          resources do partners provide?; What is the nature of each partnership?."
+        sourceQuestions: *a10
+        targetSections: &a26
+          - "Key Partners"
+      - id: "cost-drivers"
+        label: "Cost Drivers"
+        required: true
+        description: "Identify structural cost drivers and explain how costs behave as the business model scales."
+        evaluationHint: "Look for concrete answers addressing: What are the most significant cost drivers?; Which costs are
+          fixed, variable, scale-sensitive, or step-function costs?; How do costs scale with growth?."
+        sourceQuestions: *a11
+        targetSections: &a27
+          - "Cost Drivers"
+      - id: "competitive-advantage"
+        label: "Competitive Advantage"
+        required: true
+        description: "Identify defensibility sources, why the project could win, what is hard to copy, and what assumptions
+          support that claim."
+        evaluationHint: "Look for concrete answers addressing: What is the source of competitive advantage?; How is this
+          different from simple differentiation?; How sustainable is the advantage?."
+        sourceQuestions: *a12
+        targetSections: &a28
+          - "Competitive Advantage"
+      - id: "scalability-logic"
+        label: "Scalability Logic"
+        required: true
+        description: "Describe how the model improves, degrades, or changes with scale across product, support, infrastructure,
+          sales, community, economics, and operations."
+        evaluationHint: "Look for concrete answers addressing: How does the business model scale?; Does the model improve or
+          worsen with more users, customers, data, usage, or partners?; What are the limits to scaling?."
+        sourceQuestions: *a13
+        targetSections: &a29
+          - "Scalability Logic"
+      - id: "investor-stakeholder-narrative_1"
+        label: "Investor/Stakeholder Narrative (1/3)"
+        required: true
+        description: "Articulate why the project deserves attention, confidence, capital, time, partnership, or institutional
+          support without turning the document into a pitch deck."
+        evaluationHint: "Look for concrete answers addressing: Why does this project deserve attention, confidence, capital,
+          time, or support?; What is the market logic?; What is the problem urgency?."
+        sourceQuestions:
+          - "Why does this project deserve attention, confidence, capital, time, or support?"
+          - "What is the market logic?"
+          - "What is the problem urgency?"
+        targetSections: &a30
+          - "Investor/Stakeholder Narrative"
+      - id: "investor-stakeholder-narrative_2"
+        label: "Investor/Stakeholder Narrative (2/3)"
+        required: true
+        description: "Articulate why the project deserves attention, confidence, capital, time, partnership, or institutional
+          support without turning the document into a pitch deck."
+        evaluationHint: "Look for concrete answers addressing: What is the business opportunity?; What is the strategic timing?;
+          What is the defensibility story?."
+        sourceQuestions:
+          - "What is the business opportunity?"
+          - "What is the strategic timing?"
+          - "What is the defensibility story?"
+        targetSections: &a31
+          - "Investor/Stakeholder Narrative"
+      - id: "investor-stakeholder-narrative_3"
+        label: "Investor/Stakeholder Narrative (3/3)"
+        required: true
+        description: "Articulate why the project deserves attention, confidence, capital, time, partnership, or institutional
+          support without turning the document into a pitch deck."
+        evaluationHint: "Look for concrete answers addressing: What is the economic upside?; What is the execution thesis?; What
+          is the current validation status?."
+        sourceQuestions:
+          - "What is the economic upside?"
+          - "What is the execution thesis?"
+          - "What is the current validation status?"
+        targetSections: &a32
+          - "Investor/Stakeholder Narrative"
+      - id: "business-model-risks"
+        label: "Business Model Risks"
+        required: true
+        description: "Identify risks that could break the integrated model, including customer, revenue, channel, cost, partner,
+          defensibility, scalability, operational, and stakeholder risks."
+        evaluationHint: "Look for concrete answers addressing: What are the biggest risks to the business model?; What
+          assumptions about the business model are least validated?; What customer, revenue, channel, pricing, partner,
+          scalability, operational, or stakeholder risks exist?."
+        sourceQuestions: *a14
+        targetSections: &a33
+          - "Business Model Risks"
+      - id: "invalidating-conditions"
+        label: "Invalidating Conditions"
+        required: true
+        description: "Define evidence or conditions that would prove the business model unworkable, require revision, or trigger
+          a fundamental rethink."
+        evaluationHint: "Look for concrete answers addressing: What conditions would prove the business model unworkable?; What
+          specific evidence would trigger a fundamental rethink?; What evidence would require revising only part of the
+          model?."
+        sourceQuestions: *a15
+        targetSections: &a34
+          - "Invalidating Conditions"
+      - id: "business-model-summary"
+        label: "Business Model Summary"
+        required: true
+        description: "Synthesize viability verdict, coherence, evidence level, strongest support, weakest point, unresolved
+          gaps, and downstream handoff."
+        evaluationHint: "Look for concrete answers addressing: Is the business model viable based on current evidence?; Is the
+          model coherent as a mechanism?; Is it viable, conditionally viable, not yet proven, incoherent, or
+          non-viable?."
+        sourceQuestions: *a16
+        targetSections: &a35
+          - "Business Model Summary"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      business-model-objective:
+        targetSections: *a17
+      value-proposition:
+        targetSections: *a18
+      customer-segments:
+        targetSections: *a19
+      revenue-streams:
+        targetSections: *a20
+      pricing-logic:
+        targetSections: *a21
+      distribution-channels:
+        targetSections: *a22
+      customer-relationships:
+        targetSections: *a23
+      key-activities:
+        targetSections: *a24
+      key-resources:
+        targetSections: *a25
+      key-partners:
+        targetSections: *a26
+      cost-drivers:
+        targetSections: *a27
+      competitive-advantage:
+        targetSections: *a28
+      scalability-logic:
+        targetSections: *a29
+      investor-stakeholder-narrative_1:
+        targetSections: *a30
+      investor-stakeholder-narrative_2:
+        targetSections: *a31
+      investor-stakeholder-narrative_3:
+        targetSections: *a32
+      business-model-risks:
+        targetSections: *a33
+      invalidating-conditions:
+        targetSections: *a34
+      business-model-summary:
+        targetSections: *a35
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.265Z"
+      totalSourceQuestions: 108
+      reviewRequired: false

@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 6
   type: "interaction_model"
-  purpose: "Define how users and the system act, respond, confirm, undo, recover, resolve ambiguity, exchange suggestions, apply corrections, and transition state across product journeys."
-  centralQuestion: "What actions can the user or system take, what happens after each action, and how are ambiguity, confirmation, recovery, and state transitions handled?"
+  purpose: "Define how users and the system act, respond, confirm, undo, recover, resolve ambiguity, exchange suggestions,
+    apply corrections, and transition state across product journeys."
+  centralQuestion: "What actions can the user or system take, what happens after each action, and how are ambiguity,
+    confirmation, recovery, and state transitions handled?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,8 @@ document:
       - id: "product.interaction_model_map"
         format: "html"
         path: "outcomes/html/03-product/interaction-model-map.html"
-        purpose: "Provide a navigable interaction map covering principles, patterns, commands, confirmations, undo, ambiguity, suggestions, corrections, state transitions, accessibility, anti-patterns, risks, and downstream handoff."
+        purpose: "Provide a navigable interaction map covering principles, patterns, commands, confirmations, undo, ambiguity,
+          suggestions, corrections, state transitions, accessibility, anti-patterns, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "interaction principles"
@@ -37,7 +40,8 @@ document:
       - id: "product.interaction_model_review_prompt"
         format: "markdown"
         path: "outcomes/agents/03-product/interaction-model-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether interactions are predictable, recoverable, accessible, state-aware, permission-aware, and aligned with UX, IA, and journeys."
+        purpose: "Provide compact context for agents reviewing whether interactions are predictable, recoverable, accessible,
+          state-aware, permission-aware, and aligned with UX, IA, and journeys."
         agentRole: "reviewer"
         includes:
           - "canonical interaction model"
@@ -80,120 +84,145 @@ document:
     - id: "ux-model"
       type: "context"
       required: false
-      description: "UX thesis, guidance model, feedback model, error and recovery model, proactivity model, trust model, and anti-patterns."
+      description: "UX thesis, guidance model, feedback model, error and recovery model, proactivity model, trust model, and
+        anti-patterns."
     - id: "information-architecture"
       type: "context"
       required: false
-      description: "Core objects, relationships, navigation, content hierarchy, naming, empty states, retrieval, lifecycle, and IA risks."
+      description: "Core objects, relationships, navigation, content hierarchy, naming, empty states, retrieval, lifecycle,
+        and IA risks."
     - id: "interaction-notes"
       type: "manual_note"
       required: false
-      description: "Candidate commands, actions, gestures, shortcuts, confirmations, undo needs, suggestions, corrections, and interaction concerns."
+      description: "Candidate commands, actions, gestures, shortcuts, confirmations, undo needs, suggestions, corrections, and
+        interaction concerns."
   completionCriteria:
-    - "The central question is answered through explicit user actions, system actions, outcomes, confirmations, undo rules, ambiguity resolution, suggestions, corrections, and state transitions."
-    - "Each material command or action includes trigger, actor, target object, preconditions, permission requirements, system response, feedback, state changes, reversibility, failure modes, and downstream implications."
-    - "Confirmation rules distinguish destructive, irreversible, high-risk, low-risk, batch, bulk, automated, AI-assisted, and user-owned actions."
-    - "Undo and recovery rules define what is reversible, how long recovery is available, what persists across sessions, and what cannot be undone."
-    - "Ambiguity handling defines when the system asks, suggests, defaults, refuses, or proceeds with correction available."
+    - "The central question is answered through explicit user actions, system actions, outcomes, confirmations, undo
+      rules, ambiguity resolution, suggestions, corrections, and state transitions."
+    - "Each material command or action includes trigger, actor, target object, preconditions, permission requirements,
+      system response, feedback, state changes, reversibility, failure modes, and downstream implications."
+    - "Confirmation rules distinguish destructive, irreversible, high-risk, low-risk, batch, bulk, automated,
+      AI-assisted, and user-owned actions."
+    - "Undo and recovery rules define what is reversible, how long recovery is available, what persists across sessions,
+      and what cannot be undone."
+    - "Ambiguity handling defines when the system asks, suggests, defaults, refuses, or proceeds with correction
+      available."
     - "System suggestions preserve user agency, consent, dismissal, explanation, prioritization, and reversibility."
-    - "User corrections define how users correct inputs, outputs, actions, state, classification, and system interpretation."
-    - "State transitions are aligned with Information Architecture and routed to State Model where detailed lifecycle rules belong."
-    - "Accessibility interaction rules address keyboard, pointer, touch, screen reader, focus, reduced motion, and error recovery where relevant."
-    - "Downstream handoff clarifies what State Model, Permission Model, Content Model, Feature Specification, API Contracts, and Acceptance Criteria must inherit."
+    - "User corrections define how users correct inputs, outputs, actions, state, classification, and system
+      interpretation."
+    - "State transitions are aligned with Information Architecture and routed to State Model where detailed lifecycle
+      rules belong."
+    - "Accessibility interaction rules address keyboard, pointer, touch, screen reader, focus, reduced motion, and error
+      recovery where relevant."
+    - "Downstream handoff clarifies what State Model, Permission Model, Content Model, Feature Specification, API
+      Contracts, and Acceptance Criteria must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid interaction theater: elegant action descriptions that omit state, failure, recovery, permissions, or consequences."
+    - "Avoid interaction theater: elegant action descriptions that omit state, failure, recovery, permissions, or
+      consequences."
     - "Avoid assuming ideal user precision, attention, memory, motor ability, or intent clarity."
     - "Avoid destructive or irreversible actions without explicit safeguards."
     - "Avoid hidden automation, silent state changes, or unclear system-initiated transitions."
     - "Avoid treating suggestions as commands or consent."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent platform capabilities, accessibility guarantees, validated behavior, shortcuts, gestures, permissions, or system states."
-    - "Do not move detailed UI layout, visual design, database schema, or implementation architecture into this document."
-    - "Interactions must preserve user agency, trust, recoverability, product boundaries, and user responsibility boundaries."
+    - "Do not invent platform capabilities, accessibility guarantees, validated behavior, shortcuts, gestures,
+      permissions, or system states."
+    - "Do not move detailed UI layout, visual design, database schema, or implementation architecture into this
+      document."
+    - "Interactions must preserve user agency, trust, recoverability, product boundaries, and user responsibility
+      boundaries."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate command, action, trigger, actor, target, precondition, feedback, state transition, reversibility, failure mode, and recovery path where useful."
-    - "Tie interactions to User Journeys, UX Model, Information Architecture, Product Scope, Foundation Boundaries, and validation evidence where possible."
-    - "Classify actions as read, create, update, delete, transform, suggest, confirm, execute, automate, recover, dismiss, escalate, or configure where useful."
-    - "State interaction rules before detailed feature behavior; detailed per-feature behavior belongs in Feature Specification and Acceptance Criteria."
+    - "Separate command, action, trigger, actor, target, precondition, feedback, state transition, reversibility,
+      failure mode, and recovery path where useful."
+    - "Tie interactions to User Journeys, UX Model, Information Architecture, Product Scope, Foundation Boundaries, and
+      validation evidence where possible."
+    - "Classify actions as read, create, update, delete, transform, suggest, confirm, execute, automate, recover,
+      dismiss, escalate, or configure where useful."
+    - "State interaction rules before detailed feature behavior; detailed per-feature behavior belongs in Feature
+      Specification and Acceptance Criteria."
     - "Keep state transition detail sufficient for product reasoning, but route formal state lifecycle to State Model."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Product Scope, User Journeys, UX Model, Information Architecture, Foundation Principles, or Foundation Boundaries."
-    - "Flag actions without clear actor, target, precondition, feedback, state change, failure mode, or recovery behavior."
+    - "Flag contradictions with Product Scope, User Journeys, UX Model, Information Architecture, Foundation Principles,
+      or Foundation Boundaries."
+    - "Flag actions without clear actor, target, precondition, feedback, state change, failure mode, or recovery
+      behavior."
     - "Flag interactions that silently transfer agency from user to system."
     - "Flag confirmation rules that either over-confirm harmless actions or under-confirm risky actions."
     - "Flag undo or recovery gaps for high-risk actions."
     - "Verify that system suggestions can be accepted, rejected, dismissed, and explained."
-    - "Verify that interaction rules are accessible enough to feed UI Model, Feature Specification, and Acceptance Criteria."
-    - "Flag content that belongs better in UI Model, Content Model, State Model, Permission Model, Feature Specification, Engineering, Go-to-market, or Operations."
+    - "Verify that interaction rules are accessible enough to feed UI Model, Feature Specification, and Acceptance
+      Criteria."
+    - "Flag content that belongs better in UI Model, Content Model, State Model, Permission Model, Feature
+      Specification, Engineering, Go-to-market, or Operations."
   specializedFormats:
     actionFormat:
       description: "Recommended format for material user or system actions."
       fields:
-        - id
-        - name
-        - actor
-        - targetObject
-        - actionType
-        - trigger
-        - preconditions
-        - permissionRequirements
-        - systemResponse
-        - visibleFeedback
-        - stateChange
-        - confirmationRequired
-        - reversible
-        - undoWindow
-        - failureModes
-        - recoveryPath
-        - downstreamImplications
-        - status
+        - "id"
+        - "name"
+        - "actor"
+        - "targetObject"
+        - "actionType"
+        - "trigger"
+        - "preconditions"
+        - "permissionRequirements"
+        - "systemResponse"
+        - "visibleFeedback"
+        - "stateChange"
+        - "confirmationRequired"
+        - "reversible"
+        - "undoWindow"
+        - "failureModes"
+        - "recoveryPath"
+        - "downstreamImplications"
+        - "status"
     commandFormat:
       description: "Recommended format for commands and invocation methods."
       fields:
-        - command
-        - purpose
-        - invocationMethods
-        - discoverability
-        - targetObject
-        - parameters
-        - validationRules
-        - confirmationRule
-        - output
-        - errorHandling
-        - permissionRequirements
+        - "command"
+        - "purpose"
+        - "invocationMethods"
+        - "discoverability"
+        - "targetObject"
+        - "parameters"
+        - "validationRules"
+        - "confirmationRule"
+        - "output"
+        - "errorHandling"
+        - "permissionRequirements"
     stateTransitionFormat:
       description: "Recommended format for product-level state transitions."
       fields:
-        - object
-        - fromState
-        - toState
-        - trigger
-        - actor
-        - preconditions
-        - permissionRequirements
-        - visibleFeedback
-        - reversible
-        - invalidTransitions
-        - downstreamStateModelImplication
+        - "object"
+        - "fromState"
+        - "toState"
+        - "trigger"
+        - "actor"
+        - "preconditions"
+        - "permissionRequirements"
+        - "visibleFeedback"
+        - "reversible"
+        - "invalidTransitions"
+        - "downstreamStateModelImplication"
     interactionRiskFormat:
       description: "Recommended format for interaction risks."
       fields:
-        - risk
-        - affectedActionOrJourney
-        - riskType
-        - userImpact
-        - earlySignal
-        - mitigation
-        - targetDocument
+        - "risk"
+        - "affectedActionOrJourney"
+        - "riskType"
+        - "userImpact"
+        - "earlySignal"
+        - "mitigation"
+        - "targetDocument"
   sections:
     - id: "interaction-principles"
       title: "Interaction Principles"
-      intent: "Define actionable principles guiding all interaction design, including predictability, reversibility, accessibility, trust, and user agency."
+      intent: "Define actionable principles guiding all interaction design, including predictability, reversibility,
+        accessibility, trust, and user agency."
       required: true
       outputGuidance:
         - "State principles as decision rules, not slogans."
@@ -203,26 +232,29 @@ document:
         - "Each principle can reject at least one plausible interaction pattern."
         - "Principles align with UX Model, Foundation Principles, and Product Boundaries."
         - "Trade-offs are explicit where safety or clarity creates friction."
-      questions:
+      questions: &a1
         - "What principles guide all interaction design in the product?"
-        - "What is the interaction philosophy: direct manipulation, command, conversational, guided workflow, object-first, or hybrid?"
+        - "What is the interaction philosophy: direct manipulation, command, conversational, guided workflow, object-first, or
+          hybrid?"
         - "How are interactions made predictable and learnable?"
         - "How are interactions made reversible, recoverable, or safely constrained?"
         - "How are speed, safety, clarity, accessibility, and user control balanced?"
         - "What interaction patterns would violate these principles?"
     - id: "primary-interaction-patterns"
       title: "Primary Interaction Patterns"
-      intent: "Define the dominant ways users interact with the product across journeys, objects, inputs, outputs, and devices."
+      intent: "Define the dominant ways users interact with the product across journeys, objects, inputs, outputs, and
+        devices."
       required: true
       outputGuidance:
         - "Define primary patterns before naming UI components."
-        - "Separate object interactions, command interactions, conversational interactions, form interactions, selection interactions, and bulk interactions where relevant."
+        - "Separate object interactions, command interactions, conversational interactions, form interactions, selection
+          interactions, and bulk interactions where relevant."
         - "State input modality assumptions and constraints."
       qualityChecks:
         - "Interaction patterns fit the primary journey and UX paradigm."
         - "Patterns are consistent enough to be learnable."
         - "Patterns do not depend on out-of-scope platforms or capabilities."
-      questions:
+      questions: &a2
         - "What are the primary ways the user interacts with the product?"
         - "What interaction patterns support the primary journey?"
         - "What input modalities are supported?"
@@ -231,37 +263,43 @@ document:
         - "Which interaction patterns are MVP, post-MVP, deferred, or excluded?"
     - id: "commands-and-actions"
       title: "Commands and Actions"
-      intent: "Enumerate available user and system actions and define their invocation, preconditions, feedback, state effects, and failure handling."
+      intent: "Enumerate available user and system actions and define their invocation, preconditions, feedback, state
+        effects, and failure handling."
       required: true
       outputGuidance:
         - "List actions as structured records, not only names."
-        - "Separate user-initiated, system-initiated, suggested, automated, destructive, reversible, and permission-gated actions."
+        - "Separate user-initiated, system-initiated, suggested, automated, destructive, reversible, and
+          permission-gated actions."
         - "State what happens after each important action."
       qualityChecks:
         - "Each material action has actor, target, trigger, response, feedback, and state effect."
         - "Destructive and irreversible actions are clearly marked."
         - "Commands are discoverable enough for the intended user and journey."
-      questions:
+      questions: &a3
         - "What commands and actions are available to the user?"
         - "What actions can the system initiate or suggest?"
         - "How are commands discovered?"
-        - "What is the command invocation model: menus, shortcuts, command palette, slash commands, gestures, inline actions, contextual actions, or another model?"
+        - "What is the command invocation model: menus, shortcuts, command palette, slash commands, gestures, inline actions,
+          contextual actions, or another model?"
         - "What preconditions and permissions apply to each material action?"
         - "What feedback and state transition follows each material action?"
         - "How are destructive, risky, reversible, and non-destructive actions distinguished?"
     - id: "confirmation-rules"
       title: "Confirmation Rules"
-      intent: "Define when confirmation is required, skipped, delayed, batched, replaced by undo, or escalated into stronger consent."
+      intent: "Define when confirmation is required, skipped, delayed, batched, replaced by undo, or escalated into stronger
+        consent."
       required: true
       outputGuidance:
-        - "Classify confirmation by risk, reversibility, data impact, user responsibility, permission, automation, and ambiguity."
+        - "Classify confirmation by risk, reversibility, data impact, user responsibility, permission, automation, and
+          ambiguity."
         - "Avoid excessive confirmation for low-risk reversible actions."
-        - "Require stronger confirmation for irreversible, destructive, external, privacy-sensitive, or user-agency-transfer actions."
+        - "Require stronger confirmation for irreversible, destructive, external, privacy-sensitive, or
+          user-agency-transfer actions."
       qualityChecks:
         - "Confirmation rules reduce risk without creating unnecessary friction."
         - "High-risk actions are not allowed to execute silently."
         - "Undo is used as a substitute for confirmation only when safe."
-      questions:
+      questions: &a4
         - "When is confirmation required before an action executes?"
         - "When is confirmation skipped?"
         - "When is undo sufficient instead of confirmation?"
@@ -271,7 +309,8 @@ document:
         - "When is stronger consent required instead of ordinary confirmation?"
     - id: "undo-and-recovery"
       title: "Undo and Recovery"
-      intent: "Define reversibility, undo windows, history, snapshots, recovery paths, persistence, and non-recoverable action handling."
+      intent: "Define reversibility, undo windows, history, snapshots, recovery paths, persistence, and non-recoverable action
+        handling."
       required: true
       outputGuidance:
         - "Separate undo, redo, restore, retry, cancel, revert, archive recovery, and support escalation."
@@ -281,27 +320,30 @@ document:
         - "High-risk actions have recovery or stronger prevention mechanisms."
         - "Undo state and recovery limits are clear to users."
         - "Recovery paths preserve data integrity and user trust."
-      questions:
+      questions: &a5
         - "What actions are undoable?"
         - "What actions are not undoable and why?"
-        - "What is the undo model: immediate undo, history-based, snapshot-based, object-version-based, archive-based, or another model?"
+        - "What is the undo model: immediate undo, history-based, snapshot-based, object-version-based, archive-based, or
+          another model?"
         - "How far back can the user undo or recover?"
         - "What happens to undo state across sessions?"
         - "What recovery paths exist after failure, abandonment, or accidental action?"
         - "What requires support, escalation, or manual intervention?"
     - id: "ambiguity-handling"
       title: "Ambiguity Handling"
-      intent: "Define how ambiguous user intent, incomplete input, conflicting commands, low-confidence interpretation, and uncertain system output are resolved."
+      intent: "Define how ambiguous user intent, incomplete input, conflicting commands, low-confidence interpretation, and
+        uncertain system output are resolved."
       required: true
       outputGuidance:
         - "Define when the product asks, suggests, defaults, refuses, or proceeds with correction available."
-        - "Separate ambiguous input, ambiguous command target, ambiguous object reference, ambiguous output, and conflicting instructions."
+        - "Separate ambiguous input, ambiguous command target, ambiguous object reference, ambiguous output, and
+          conflicting instructions."
         - "Explain confidence and uncertainty to users when it affects action."
       qualityChecks:
         - "Ambiguity handling preserves user agency and avoids silent harmful guesses."
         - "Clarification is required when consequences are high or irreversible."
         - "Best guesses are allowed only when low-risk and easily correctable."
-      questions:
+      questions: &a6
         - "How does the product handle ambiguous user intent?"
         - "When does the product ask for clarification?"
         - "When does the product make a best guess and allow correction?"
@@ -311,7 +353,8 @@ document:
         - "How are ambiguous inputs resolved without frustrating the user?"
     - id: "system-suggestions"
       title: "System Suggestions"
-      intent: "Define what suggestions the system offers, how they are prioritized, explained, accepted, rejected, dismissed, configured, and bounded."
+      intent: "Define what suggestions the system offers, how they are prioritized, explained, accepted, rejected, dismissed,
+        configured, and bounded."
       required: true
       outputGuidance:
         - "Separate suggestions from alerts, warnings, recommendations, automations, and executed actions."
@@ -321,17 +364,19 @@ document:
         - "Suggestions do not imply consent or execute silently."
         - "Suggestions are relevant to journey context and user goals."
         - "The user can reject or dismiss suggestions without penalty."
-      questions:
+      questions: &a7
         - "What types of suggestions does the system offer?"
         - "What suggestions are MVP, post-MVP, deferred, or prohibited?"
-        - "How are suggestions presented: inline, contextual, modal, ambient, notification, sidebar, command surface, or another pattern?"
+        - "How are suggestions presented: inline, contextual, modal, ambient, notification, sidebar, command surface, or
+          another pattern?"
         - "How are suggestions prioritized?"
         - "How does the system explain why a suggestion appears?"
         - "How can the user accept, reject, dismiss, snooze, or configure suggestions?"
         - "What suggestion patterns would violate user agency or trust?"
     - id: "user-corrections"
       title: "User Corrections"
-      intent: "Define how users correct their own input, system interpretation, generated output, action outcomes, object state, and future behavior."
+      intent: "Define how users correct their own input, system interpretation, generated output, action outcomes, object
+        state, and future behavior."
       required: true
       outputGuidance:
         - "Separate correction of input, interpretation, output, state, classification, suggestion, and action."
@@ -341,7 +386,7 @@ document:
         - "Correction paths are available where misinterpretation is likely or costly."
         - "Corrections do not silently create new hidden assumptions."
         - "Use of correction data respects consent, privacy, and user control."
-      questions:
+      questions: &a8
         - "How does the user correct their own input or actions?"
         - "How does the user correct system interpretation or generated output?"
         - "How does the user correct object state, classification, or relationship errors?"
@@ -351,17 +396,19 @@ document:
         - "What corrections require review, confirmation, or support?"
     - id: "state-transitions"
       title: "State Transitions"
-      intent: "Define product-level object states and the interactions that trigger transitions, while routing formal lifecycle detail to the State Model."
+      intent: "Define product-level object states and the interactions that trigger transitions, while routing formal
+        lifecycle detail to the State Model."
       required: true
       outputGuidance:
         - "List material state transitions at product level."
-        - "Separate user-initiated, system-initiated, time-based, dependency-based, permission-based, and recovery-based transitions."
+        - "Separate user-initiated, system-initiated, time-based, dependency-based, permission-based, and recovery-based
+          transitions."
         - "Define invalid, irreversible, hidden, and user-visible transitions."
       qualityChecks:
         - "State transitions align with Information Architecture object lifecycles."
         - "State transitions include feedback and permission implications where relevant."
         - "The section does not duplicate full State Model detail."
-      questions:
+      questions: &a9
         - "What states can each core object be in?"
         - "What triggers a state transition?"
         - "What transitions are user-initiated versus system-initiated?"
@@ -371,17 +418,19 @@ document:
         - "What transition details should be expanded in State Model?"
     - id: "accessibility-interaction-rules"
       title: "Accessibility Interaction Rules"
-      intent: "Define interaction accessibility expectations for keyboard, pointer, touch, focus, screen readers, reduced motion, timing, errors, and recovery."
+      intent: "Define interaction accessibility expectations for keyboard, pointer, touch, focus, screen readers, reduced
+        motion, timing, errors, and recovery."
       required: true
       outputGuidance:
-        - "State accessibility expectations at interaction level without pretending to replace detailed accessibility testing."
+        - "State accessibility expectations at interaction level without pretending to replace detailed accessibility
+          testing."
         - "Cover input alternatives, focus behavior, timing, motion, error recovery, and discoverability."
         - "Mark unresolved accessibility requirements for downstream review."
       qualityChecks:
         - "Critical actions can be performed without relying on a single fragile input modality."
         - "Focus, feedback, and recovery are not hidden from assistive technologies."
         - "Accessibility claims are not stated as guarantees without testing."
-      questions:
+      questions: &a10
         - "How are keyboard, pointer, touch, and assistive interaction needs handled?"
         - "What interactions require focus management rules?"
         - "What interactions require screen reader-visible feedback?"
@@ -390,7 +439,8 @@ document:
         - "What accessibility assumptions require later testing?"
     - id: "interaction-risks"
       title: "Interaction Risks"
-      intent: "Identify risky actions, confusing patterns, hidden state changes, permission mistakes, automation risks, accessibility risks, and recovery gaps."
+      intent: "Identify risky actions, confusing patterns, hidden state changes, permission mistakes, automation risks,
+        accessibility risks, and recovery gaps."
       required: true
       outputGuidance:
         - "Describe risks as concrete interaction failure modes."
@@ -400,7 +450,7 @@ document:
         - "Risks are specific enough to become review checks or acceptance criteria."
         - "High-risk interactions include prevention, confirmation, undo, recovery, or escalation."
         - "Automation, ambiguity, and accessibility risks are not hidden."
-      questions:
+      questions: &a11
         - "What actions carry the highest interaction risk?"
         - "Where could the user misunderstand what happened?"
         - "Where could hidden state changes damage trust?"
@@ -409,17 +459,19 @@ document:
         - "What mitigations or acceptance criteria should address each risk?"
     - id: "interaction-anti-patterns"
       title: "Interaction Anti-Patterns"
-      intent: "Enumerate interaction patterns explicitly avoided because they create confusion, hidden agency transfer, irrecoverable harm, dark patterns, or accessibility barriers."
+      intent: "Enumerate interaction patterns explicitly avoided because they create confusion, hidden agency transfer,
+        irrecoverable harm, dark patterns, or accessibility barriers."
       required: true
       outputGuidance:
         - "List anti-patterns as recognizable interaction behaviors."
         - "Tie each anti-pattern to a principle, boundary, risk, or user harm."
-        - "Include accessibility-hostile, automation-hostile, ambiguity-hostile, and recovery-hostile patterns where relevant."
+        - "Include accessibility-hostile, automation-hostile, ambiguity-hostile, and recovery-hostile patterns where
+          relevant."
       qualityChecks:
         - "Anti-patterns are specific enough to identify during review."
         - "The section does not reject patterns only because they are unfamiliar or stylistically disliked."
         - "Each anti-pattern includes why it is harmful in this product context."
-      questions:
+      questions: &a12
         - "What interaction patterns are avoided?"
         - "What patterns cause unnecessary friction or confusion?"
         - "What patterns silently transfer control from user to system?"
@@ -428,7 +480,8 @@ document:
         - "What patterns would violate trust, consent, or product boundaries?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Product and Engineering documents must inherit from the interaction model and what they must not assume."
+      intent: "Define what downstream Product and Engineering documents must inherit from the interaction model and what they
+        must not assume."
       required: true
       outputGuidance:
         - "Route interaction outputs to the correct downstream documents."
@@ -437,8 +490,9 @@ document:
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing interaction rules silently."
-        - "Confirmation, undo, ambiguity, suggestion, correction, state, permission, and accessibility implications are included."
-      questions:
+        - "Confirmation, undo, ambiguity, suggestion, correction, state, permission, and accessibility implications are
+          included."
+      questions: &a13
         - "What should Content Model inherit from this interaction model?"
         - "What should State Model inherit?"
         - "What should Permission Model inherit?"
@@ -446,3 +500,189 @@ document:
         - "What should Acceptance Criteria inherit?"
         - "What should Engineering API Contracts inherit?"
         - "What unresolved interaction questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain interaction model. What actions can the user or system take, what happens after each action,
+      and how are ambiguity, confirmation, recovery, and state transitions handled?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "interaction-principles"
+        label: "Interaction Principles"
+        required: true
+        description: "Define actionable principles guiding all interaction design, including predictability, reversibility,
+          accessibility, trust, and user agency."
+        evaluationHint: "Look for concrete answers addressing: What principles guide all interaction design in the product?;
+          What is the interaction philosophy: direct manipulation, command, conversational, guided workflow,
+          object-first, or hybrid?; How are interactions made predictable and learnable?."
+        sourceQuestions: *a1
+        targetSections: &a14
+          - "Interaction Principles"
+      - id: "primary-interaction-patterns"
+        label: "Primary Interaction Patterns"
+        required: true
+        description: "Define the dominant ways users interact with the product across journeys, objects, inputs, outputs, and
+          devices."
+        evaluationHint: "Look for concrete answers addressing: What are the primary ways the user interacts with the product?;
+          What interaction patterns support the primary journey?; What input modalities are supported?."
+        sourceQuestions: *a2
+        targetSections: &a15
+          - "Primary Interaction Patterns"
+      - id: "commands-and-actions"
+        label: "Commands and Actions"
+        required: true
+        description: "Enumerate available user and system actions and define their invocation, preconditions, feedback, state
+          effects, and failure handling."
+        evaluationHint: "Look for concrete answers addressing: What commands and actions are available to the user?; What
+          actions can the system initiate or suggest?; How are commands discovered?."
+        sourceQuestions: *a3
+        targetSections: &a16
+          - "Commands and Actions"
+      - id: "confirmation-rules"
+        label: "Confirmation Rules"
+        required: true
+        description: "Define when confirmation is required, skipped, delayed, batched, replaced by undo, or escalated into
+          stronger consent."
+        evaluationHint: "Look for concrete answers addressing: When is confirmation required before an action executes?; When is
+          confirmation skipped?; When is undo sufficient instead of confirmation?."
+        sourceQuestions: *a4
+        targetSections: &a17
+          - "Confirmation Rules"
+      - id: "undo-and-recovery"
+        label: "Undo and Recovery"
+        required: true
+        description: "Define reversibility, undo windows, history, snapshots, recovery paths, persistence, and non-recoverable
+          action handling."
+        evaluationHint: "Look for concrete answers addressing: What actions are undoable?; What actions are not undoable and
+          why?; What is the undo model: immediate undo, history-based, snapshot-based, object-version-based,
+          archive-based, or another model?."
+        sourceQuestions: *a5
+        targetSections: &a18
+          - "Undo and Recovery"
+      - id: "ambiguity-handling"
+        label: "Ambiguity Handling"
+        required: true
+        description: "Define how ambiguous user intent, incomplete input, conflicting commands, low-confidence interpretation,
+          and uncertain system output are resolved."
+        evaluationHint: "Look for concrete answers addressing: How does the product handle ambiguous user intent?; When does the
+          product ask for clarification?; When does the product make a best guess and allow correction?."
+        sourceQuestions: *a6
+        targetSections: &a19
+          - "Ambiguity Handling"
+      - id: "system-suggestions"
+        label: "System Suggestions"
+        required: true
+        description: "Define what suggestions the system offers, how they are prioritized, explained, accepted, rejected,
+          dismissed, configured, and bounded."
+        evaluationHint: "Look for concrete answers addressing: What types of suggestions does the system offer?; What
+          suggestions are MVP, post-MVP, deferred, or prohibited?; How are suggestions presented: inline, contextual,
+          modal, ambient, notification, sidebar, command surface, or another pattern?."
+        sourceQuestions: *a7
+        targetSections: &a20
+          - "System Suggestions"
+      - id: "user-corrections"
+        label: "User Corrections"
+        required: true
+        description: "Define how users correct their own input, system interpretation, generated output, action outcomes, object
+          state, and future behavior."
+        evaluationHint: "Look for concrete answers addressing: How does the user correct their own input or actions?; How does
+          the user correct system interpretation or generated output?; How does the user correct object state,
+          classification, or relationship errors?."
+        sourceQuestions: *a8
+        targetSections: &a21
+          - "User Corrections"
+      - id: "state-transitions"
+        label: "State Transitions"
+        required: true
+        description: "Define product-level object states and the interactions that trigger transitions, while routing formal
+          lifecycle detail to the State Model."
+        evaluationHint: "Look for concrete answers addressing: What states can each core object be in?; What triggers a state
+          transition?; What transitions are user-initiated versus system-initiated?."
+        sourceQuestions: *a9
+        targetSections: &a22
+          - "State Transitions"
+      - id: "accessibility-interaction-rules"
+        label: "Accessibility Interaction Rules"
+        required: true
+        description: "Define interaction accessibility expectations for keyboard, pointer, touch, focus, screen readers, reduced
+          motion, timing, errors, and recovery."
+        evaluationHint: "Look for concrete answers addressing: How are keyboard, pointer, touch, and assistive interaction needs
+          handled?; What interactions require focus management rules?; What interactions require screen reader-visible
+          feedback?."
+        sourceQuestions: *a10
+        targetSections: &a23
+          - "Accessibility Interaction Rules"
+      - id: "interaction-risks"
+        label: "Interaction Risks"
+        required: true
+        description: "Identify risky actions, confusing patterns, hidden state changes, permission mistakes, automation risks,
+          accessibility risks, and recovery gaps."
+        evaluationHint: "Look for concrete answers addressing: What actions carry the highest interaction risk?; Where could the
+          user misunderstand what happened?; Where could hidden state changes damage trust?."
+        sourceQuestions: *a11
+        targetSections: &a24
+          - "Interaction Risks"
+      - id: "interaction-anti-patterns"
+        label: "Interaction Anti-Patterns"
+        required: true
+        description: "Enumerate interaction patterns explicitly avoided because they create confusion, hidden agency transfer,
+          irrecoverable harm, dark patterns, or accessibility barriers."
+        evaluationHint: "Look for concrete answers addressing: What interaction patterns are avoided?; What patterns cause
+          unnecessary friction or confusion?; What patterns silently transfer control from user to system?."
+        sourceQuestions: *a12
+        targetSections: &a25
+          - "Interaction Anti-Patterns"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Product and Engineering documents must inherit from the interaction model and what
+          they must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Content Model inherit from this interaction model?;
+          What should State Model inherit?; What should Permission Model inherit?."
+        sourceQuestions: *a13
+        targetSections: &a26
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      interaction-principles:
+        targetSections: *a14
+      primary-interaction-patterns:
+        targetSections: *a15
+      commands-and-actions:
+        targetSections: *a16
+      confirmation-rules:
+        targetSections: *a17
+      undo-and-recovery:
+        targetSections: *a18
+      ambiguity-handling:
+        targetSections: *a19
+      system-suggestions:
+        targetSections: *a20
+      user-corrections:
+        targetSections: *a21
+      state-transitions:
+        targetSections: *a22
+      accessibility-interaction-rules:
+        targetSections: *a23
+      interaction-risks:
+        targetSections: *a24
+      interaction-anti-patterns:
+        targetSections: *a25
+      downstream-handoff:
+        targetSections: *a26
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.297Z"
+      totalSourceQuestions: 86
+      reviewRequired: false

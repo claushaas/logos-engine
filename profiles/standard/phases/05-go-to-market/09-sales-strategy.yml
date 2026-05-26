@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 9
   type: "sales_strategy"
-  purpose: "Define whether, when, and how active selling is used, including sales motion, qualification, buyer/user roles, process stages, conversion criteria, demo strategy, objection handling, sales assets, handoff rules, metrics, risks, and operational implications."
-  centralQuestion: "What sales motion, if any, is appropriate for this product, target segment, price point, launch stage, and operational capacity?"
+  purpose: "Define whether, when, and how active selling is used, including sales motion, qualification, buyer/user roles,
+    process stages, conversion criteria, demo strategy, objection handling, sales assets, handoff rules, metrics, risks,
+    and operational implications."
+  centralQuestion: "What sales motion, if any, is appropriate for this product, target segment, price point, launch stage,
+    and operational capacity?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "gtm.sales_strategy_playbook"
         format: "html"
         path: "outcomes/html/05-go-to-market/sales-strategy-playbook.html"
-        purpose: "Provide a founder-facing sales strategy playbook covering sales motion, self-serve, founder-led sales, sales-led motion, qualification, stages, demo, objections, assets, metrics, handoffs, risks, and downstream implications."
+        purpose: "Provide a founder-facing sales strategy playbook covering sales motion, self-serve, founder-led sales,
+          sales-led motion, qualification, stages, demo, objections, assets, metrics, handoffs, risks, and downstream
+          implications."
         audience: "founder"
         includes:
           - "sales objective"
@@ -44,7 +49,8 @@ document:
       - id: "gtm.sales_strategy_review_prompt"
         format: "markdown"
         path: "outcomes/agents/05-go-to-market/sales-strategy-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the sales strategy is realistic, segment-aligned, pricing-aware, support-aware, claim-safe, measurable, and appropriate for the launch stage."
+        purpose: "Provide compact context for agents reviewing whether the sales strategy is realistic, segment-aligned,
+          pricing-aware, support-aware, claim-safe, measurable, and appropriate for the launch stage."
         agentRole: "reviewer"
         includes:
           - "canonical sales strategy"
@@ -97,228 +103,271 @@ document:
     - id: "customer-segments"
       type: "context"
       required: false
-      description: "ICP, primary segment, role map, buyers, payers, decision makers, champions, blockers, qualification/disqualification signals, segment needs, objections, support needs, and segment risks."
+      description: "ICP, primary segment, role map, buyers, payers, decision makers, champions, blockers,
+        qualification/disqualification signals, segment needs, objections, support needs, and segment risks."
     - id: "channel-strategy"
       type: "context"
       required: false
-      description: "Primary and secondary channels, segment-channel fit, message-channel fit, channel assets, channel metrics, channel experiments, constraints, fallback strategy, and channel risks."
+      description: "Primary and secondary channels, segment-channel fit, message-channel fit, channel assets, channel metrics,
+        channel experiments, constraints, fallback strategy, and channel risks."
     - id: "conversion-funnel"
       type: "context"
       required: false
-      description: "Funnel model, stage definitions, qualification, acquisition, signup/lead capture, activation, conversion, retention, metrics, cohorts, attribution, drop-off risks, and funnel experiments."
+      description: "Funnel model, stage definitions, qualification, acquisition, signup/lead capture, activation, conversion,
+        retention, metrics, cohorts, attribution, drop-off risks, and funnel experiments."
     - id: "launch-plan"
       type: "context"
       required: false
-      description: "Launch objective, launch audience, cohorts, readiness gates, launch assets, communications, support readiness, analytics readiness, go/no-go criteria, and launch risks."
+      description: "Launch objective, launch audience, cohorts, readiness gates, launch assets, communications, support
+        readiness, analytics readiness, go/no-go criteria, and launch risks."
     - id: "messaging"
       type: "context"
       required: false
-      description: "Core message, one-liner, descriptions, audience variants, channel variants, proof points, objection responses, claim boundaries, tone, forbidden claims, and messaging risks."
+      description: "Core message, one-liner, descriptions, audience variants, channel variants, proof points, objection
+        responses, claim boundaries, tone, forbidden claims, and messaging risks."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Product scope, supported use cases, product journeys, acceptance criteria, demoable capabilities, onboarding flow, current limitations, and unsupported claims."
+      description: "Product scope, supported use cases, product journeys, acceptance criteria, demoable capabilities,
+        onboarding flow, current limitations, and unsupported claims."
     - id: "technical-risk-context"
       type: "context"
       required: false
-      description: "Deployment readiness, product limitations, technical risks, observability readiness, support constraints, operational risks, and claims sales must not make."
+      description: "Deployment readiness, product limitations, technical risks, observability readiness, support constraints,
+        operational risks, and claims sales must not make."
     - id: "sales-notes"
       type: "manual_note"
       required: false
-      description: "Founder sales assumptions, self-serve expectations, demo ideas, qualification notes, objections, sales asset ideas, price sensitivity notes, target cycle assumptions, and unresolved sales questions."
+      description: "Founder sales assumptions, self-serve expectations, demo ideas, qualification notes, objections, sales
+        asset ideas, price sensitivity notes, target cycle assumptions, and unresolved sales questions."
   completionCriteria:
-    - "The central question is answered through a clear sales motion decision and a practical process appropriate to product readiness, target segment, price point, launch stage, and capacity."
-    - "Sales objective defines what sales must achieve now: validation, learning, revenue, onboarding support, enterprise discovery, pricing discovery, objection discovery, or conversion."
-    - "Sales motion thesis explains whether the product is self-serve, product-led, founder-led, sales-led, assisted self-serve, partner-led, or hybrid, with rationale and assumptions."
+    - "The central question is answered through a clear sales motion decision and a practical process appropriate to
+      product readiness, target segment, price point, launch stage, and capacity."
+    - "Sales objective defines what sales must achieve now: validation, learning, revenue, onboarding support,
+      enterprise discovery, pricing discovery, objection discovery, or conversion."
+    - "Sales motion thesis explains whether the product is self-serve, product-led, founder-led, sales-led, assisted
+      self-serve, partner-led, or hybrid, with rationale and assumptions."
     - "Sales motion taxonomy defines supported, deferred, rejected, experimental, and scale-only sales motions."
-    - "Self-serve motion defines what can be completed without human interaction, purchase/activation path, checkout/payment dependency, support fallback, and failure points."
-    - "Product-led motion defines product signals, activation behaviors, upgrade triggers, in-product prompts, lifecycle messaging, and when human intervention is needed."
-    - "Founder-led sales defines founder role, target prospects, learning goals, discovery script, demo flow, qualification criteria, documentation outputs, and handoff trigger."
-    - "Sales-led motion defines whether a dedicated sales process is needed, target account type, sales stages, cycle assumptions, qualification, handoff, assets, and deferred team/process needs."
-    - "Hybrid motion defines where self-serve ends and assisted/founder-led/sales-led intervention begins, including triggers and ownership."
-    - "Buyer and user roles map user, buyer, payer, decision maker, champion, influencer, blocker, implementer, and support contact for each relevant segment."
-    - "Qualification criteria define fit, urgency, use case, role, budget/willingness, technical readiness, support burden, disqualification signals, and priority."
-    - "Lead scoring defines scoring dimensions, thresholds, score meaning, routing, next action, and where scoring is provisional or not useful yet."
-    - "Sales process defines stages from first signal to close/activation/payment, entry/exit criteria, owner, artifacts, metrics, and failure conditions."
-    - "Demo strategy defines when a demo is needed, who receives it, what narrative is used, what product areas are shown, what is not shown, and how demo claims stay within boundaries."
-    - "Objection handling maps objections to underlying concern, honest response, proof, boundary/caveat, escalation path, and downstream use."
-    - "Sales assets define required one-pager, landing page, demo script, FAQ, comparison sheet, proof assets, pricing explanation, onboarding guide, case study, ROI calculator, proposal, or other collateral with readiness status."
-    - "Sales metrics define leading indicators, conversion metrics, cycle metrics, quality metrics, revenue metrics, support burden metrics, learning metrics, and decision thresholds."
-    - "Sales handoffs define when leads move between marketing, product, founder, sales, support, partnerships, onboarding, and operations."
-    - "Sales constraints include price point, support capacity, founder capacity, product readiness, technical limitations, channel fit, legal/compliance review, procurement complexity, and operational burden."
-    - "Sales risks identify low conversion, poor qualification, long cycle, overpromising, unsupported buyers, excessive support load, wrong segment, pricing friction, weak proof, and operational risk."
-    - "Downstream handoff clarifies what Pricing, Content, Partnerships, Experiments, Analytics, GTM Risks, Support, Release, Incident Response, Operating Model, and Risk Management must inherit."
+    - "Self-serve motion defines what can be completed without human interaction, purchase/activation path,
+      checkout/payment dependency, support fallback, and failure points."
+    - "Product-led motion defines product signals, activation behaviors, upgrade triggers, in-product prompts, lifecycle
+      messaging, and when human intervention is needed."
+    - "Founder-led sales defines founder role, target prospects, learning goals, discovery script, demo flow,
+      qualification criteria, documentation outputs, and handoff trigger."
+    - "Sales-led motion defines whether a dedicated sales process is needed, target account type, sales stages, cycle
+      assumptions, qualification, handoff, assets, and deferred team/process needs."
+    - "Hybrid motion defines where self-serve ends and assisted/founder-led/sales-led intervention begins, including
+      triggers and ownership."
+    - "Buyer and user roles map user, buyer, payer, decision maker, champion, influencer, blocker, implementer, and
+      support contact for each relevant segment."
+    - "Qualification criteria define fit, urgency, use case, role, budget/willingness, technical readiness, support
+      burden, disqualification signals, and priority."
+    - "Lead scoring defines scoring dimensions, thresholds, score meaning, routing, next action, and where scoring is
+      provisional or not useful yet."
+    - "Sales process defines stages from first signal to close/activation/payment, entry/exit criteria, owner,
+      artifacts, metrics, and failure conditions."
+    - "Demo strategy defines when a demo is needed, who receives it, what narrative is used, what product areas are
+      shown, what is not shown, and how demo claims stay within boundaries."
+    - "Objection handling maps objections to underlying concern, honest response, proof, boundary/caveat, escalation
+      path, and downstream use."
+    - "Sales assets define required one-pager, landing page, demo script, FAQ, comparison sheet, proof assets, pricing
+      explanation, onboarding guide, case study, ROI calculator, proposal, or other collateral with readiness status."
+    - "Sales metrics define leading indicators, conversion metrics, cycle metrics, quality metrics, revenue metrics,
+      support burden metrics, learning metrics, and decision thresholds."
+    - "Sales handoffs define when leads move between marketing, product, founder, sales, support, partnerships,
+      onboarding, and operations."
+    - "Sales constraints include price point, support capacity, founder capacity, product readiness, technical
+      limitations, channel fit, legal/compliance review, procurement complexity, and operational burden."
+    - "Sales risks identify low conversion, poor qualification, long cycle, overpromising, unsupported buyers, excessive
+      support load, wrong segment, pricing friction, weak proof, and operational risk."
+    - "Downstream handoff clarifies what Pricing, Content, Partnerships, Experiments, Analytics, GTM Risks, Support,
+      Release, Incident Response, Operating Model, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid sales theater: sales stages without qualification, entry/exit criteria, owner, assets, metrics, objections, support impact, and next action."
-    - "Avoid choosing sales-led motion when price point, customer behavior, product readiness, or capacity cannot support it."
-    - "Avoid pretending self-serve works without clear purchase path, onboarding path, support fallback, analytics, and activation definition."
+    - "Avoid sales theater: sales stages without qualification, entry/exit criteria, owner, assets, metrics, objections,
+      support impact, and next action."
+    - "Avoid choosing sales-led motion when price point, customer behavior, product readiness, or capacity cannot
+      support it."
+    - "Avoid pretending self-serve works without clear purchase path, onboarding path, support fallback, analytics, and
+      activation definition."
     - "Avoid founder-led sales without learning goals, documentation, handoff trigger, and capacity limit."
     - "Avoid lead scoring if there is not enough data; mark as provisional instead of inventing precision."
-    - "Avoid sales claims that violate Messaging claim boundaries, Positioning proof limits, product truth, technical truth, or legal/compliance uncertainty."
+    - "Avoid sales claims that violate Messaging claim boundaries, Positioning proof limits, product truth, technical
+      truth, or legal/compliance uncertainty."
     - "Avoid demos that show mock, unstable, manual, or unsupported functionality without clear caveat."
     - "Avoid objection responses that dodge concerns, overpromise, or create support/product debt."
-    - "Avoid sales metrics that track activity only while ignoring quality, conversion, learning, support load, and retention."
+    - "Avoid sales metrics that track activity only while ignoring quality, conversion, learning, support load, and
+      retention."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent sales cycle length, close rate, conversion rate, CAC, buyer roles, procurement process, willingness-to-pay, proof, or capacity."
-    - "Sales strategy must preserve segment focus, messaging claim boundaries, product readiness, technical truth, pricing assumptions, support capacity, and operational sustainability."
+    - "Do not invent sales cycle length, close rate, conversion rate, CAC, buyer roles, procurement process,
+      willingness-to-pay, proof, or capacity."
+    - "Sales strategy must preserve segment focus, messaging claim boundaries, product readiness, technical truth,
+      pricing assumptions, support capacity, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate sales motion, hypothesis, evidence, qualification rule, stage, asset, metric, objection, handoff, constraint, and risk."
-    - "Tie sales decisions to Customer Segments, Channel Strategy, Conversion Funnel, Launch Plan, Messaging, Product, Acceptance Criteria, Technical Risks, or Decision Record where possible."
-    - "Classify sales motions, stages, assets, and rules as required, optional, deferred, rejected, experimental, launch-ready, blocked, review-needed, or scale-only where useful."
+    - "Separate sales motion, hypothesis, evidence, qualification rule, stage, asset, metric, objection, handoff,
+      constraint, and risk."
+    - "Tie sales decisions to Customer Segments, Channel Strategy, Conversion Funnel, Launch Plan, Messaging, Product,
+      Acceptance Criteria, Technical Risks, or Decision Record where possible."
+    - "Classify sales motions, stages, assets, and rules as required, optional, deferred, rejected, experimental,
+      launch-ready, blocked, review-needed, or scale-only where useful."
     - "State what must be validated before increasing sales effort or hiring/adding dedicated sales capacity."
-    - "Route pricing mechanics, content production, partner sales, experiment execution, analytics implementation, support workflows, and operational procedures downstream."
+    - "Route pricing mechanics, content production, partner sales, experiment execution, analytics implementation,
+      support workflows, and operational procedures downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion Funnel, or Decision Record."
-    - "Flag sales motion choices that do not match product readiness, segment behavior, price point, support capacity, or channel strategy."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Deployment, Technical Risks, GTM
+      Brief, Market Definition, Positioning, Messaging, Customer Segments, Channel Strategy, Launch Plan, Conversion
+      Funnel, or Decision Record."
+    - "Flag sales motion choices that do not match product readiness, segment behavior, price point, support capacity,
+      or channel strategy."
     - "Flag qualification criteria without observable signals or disqualification rules."
     - "Flag sales process stages without entry criteria, exit criteria, owner, asset, metric, or failure condition."
     - "Flag lead scoring that invents precision without evidence."
     - "Flag objection responses, demo scripts, or sales assets that violate claim boundaries or product/technical truth."
     - "Flag sales strategy that creates unsupported support, onboarding, implementation, or operations burden."
     - "Verify that downstream GTM and Operations documents receive concrete sales handoff inputs."
-    - "Flag content that belongs better in Pricing, Content Strategy, Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Support Model, Release Management, Incident Response, or Operations."
+    - "Flag content that belongs better in Pricing, Content Strategy, Partnerships, Growth Experiments, GTM Analytics,
+      GTM Risks, Support Model, Release Management, Incident Response, or Operations."
   specializedFormats:
     salesMotionFormat:
       description: "Recommended format for sales motion decisions."
       fields:
-        - motion
-        - status
-        - targetSegment
-        - rationale
-        - assumptions
-        - entryTrigger
-        - humanInvolvement
-        - conversionPath
-        - supportImplication
-        - validationNeeded
-        - owner
+        - "motion"
+        - "status"
+        - "targetSegment"
+        - "rationale"
+        - "assumptions"
+        - "entryTrigger"
+        - "humanInvolvement"
+        - "conversionPath"
+        - "supportImplication"
+        - "validationNeeded"
+        - "owner"
     qualificationCriterionFormat:
       description: "Recommended format for lead/customer qualification criteria."
       fields:
-        - criterion
-        - criterionType
-        - observableSignal
-        - positiveSignal
-        - negativeSignal
-        - disqualificationRule
-        - evidenceStatus
-        - routingImplication
-        - owner
-        - status
+        - "criterion"
+        - "criterionType"
+        - "observableSignal"
+        - "positiveSignal"
+        - "negativeSignal"
+        - "disqualificationRule"
+        - "evidenceStatus"
+        - "routingImplication"
+        - "owner"
+        - "status"
     leadScoringFormat:
       description: "Recommended format for lead scoring when useful."
       fields:
-        - dimension
-        - scoreRange
-        - signal
-        - weight
-        - threshold
-        - meaning
-        - nextAction
-        - confidenceLevel
-        - status
+        - "dimension"
+        - "scoreRange"
+        - "signal"
+        - "weight"
+        - "threshold"
+        - "meaning"
+        - "nextAction"
+        - "confidenceLevel"
+        - "status"
     salesStageFormat:
       description: "Recommended format for sales process stages."
       fields:
-        - stage
-        - purpose
-        - entryCriteria
-        - exitCriteria
-        - owner
-        - requiredAsset
-        - customerAction
-        - internalAction
-        - primaryMetric
-        - failureCondition
-        - nextStage
-        - status
+        - "stage"
+        - "purpose"
+        - "entryCriteria"
+        - "exitCriteria"
+        - "owner"
+        - "requiredAsset"
+        - "customerAction"
+        - "internalAction"
+        - "primaryMetric"
+        - "failureCondition"
+        - "nextStage"
+        - "status"
     demoFlowFormat:
       description: "Recommended format for demo strategy."
       fields:
-        - demoType
-        - audience
-        - objective
-        - narrative
-        - productAreasShown
-        - proofUsed
-        - claimsAllowed
-        - claimsAvoided
-        - fallbackIfFeatureUnavailable
-        - followUpAction
-        - owner
-        - status
+        - "demoType"
+        - "audience"
+        - "objective"
+        - "narrative"
+        - "productAreasShown"
+        - "proofUsed"
+        - "claimsAllowed"
+        - "claimsAvoided"
+        - "fallbackIfFeatureUnavailable"
+        - "followUpAction"
+        - "owner"
+        - "status"
     objectionFormat:
       description: "Recommended format for sales objections."
       fields:
-        - objection
-        - sourceOrRole
-        - underlyingConcern
-        - honestResponse
-        - proofOrEvidence
-        - boundaryOrCaveat
-        - escalationPath
-        - assetNeeded
-        - downstreamUse
-        - status
+        - "objection"
+        - "sourceOrRole"
+        - "underlyingConcern"
+        - "honestResponse"
+        - "proofOrEvidence"
+        - "boundaryOrCaveat"
+        - "escalationPath"
+        - "assetNeeded"
+        - "downstreamUse"
+        - "status"
     salesAssetFormat:
       description: "Recommended format for sales assets."
       fields:
-        - asset
-        - purpose
-        - targetAudience
-        - salesStage
-        - messageSupported
-        - proofIncluded
-        - owner
-        - dependency
-        - approvalRequired
-        - readinessStatus
-        - downstreamDocument
+        - "asset"
+        - "purpose"
+        - "targetAudience"
+        - "salesStage"
+        - "messageSupported"
+        - "proofIncluded"
+        - "owner"
+        - "dependency"
+        - "approvalRequired"
+        - "readinessStatus"
+        - "downstreamDocument"
     salesMetricFormat:
       description: "Recommended format for sales metrics."
       fields:
-        - metric
-        - metricType
-        - stage
-        - purpose
-        - formula
-        - dataSource
-        - threshold
-        - timeframe
-        - decisionImplication
-        - owner
-        - status
+        - "metric"
+        - "metricType"
+        - "stage"
+        - "purpose"
+        - "formula"
+        - "dataSource"
+        - "threshold"
+        - "timeframe"
+        - "decisionImplication"
+        - "owner"
+        - "status"
     salesHandoffFormat:
       description: "Recommended format for sales handoffs."
       fields:
-        - handoff
-        - fromOwner
-        - toOwner
-        - trigger
-        - requiredContext
-        - requiredAsset
-        - SLAOrExpectation
-        - failureRisk
-        - downstreamDocument
-        - status
+        - "handoff"
+        - "fromOwner"
+        - "toOwner"
+        - "trigger"
+        - "requiredContext"
+        - "requiredAsset"
+        - "SLAOrExpectation"
+        - "failureRisk"
+        - "downstreamDocument"
+        - "status"
     salesRiskFormat:
       description: "Recommended format for sales risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - downstreamDocument
-        - launchImpact
+        - "risk"
+        - "riskType"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "downstreamDocument"
+        - "launchImpact"
   sections:
     - id: "sales-objective"
       title: "Sales Objective"
@@ -326,30 +375,34 @@ document:
       required: true
       outputGuidance:
         - "State the current sales objective in one sentence."
-        - "Classify the objective as validation, learning, revenue, pricing discovery, objection discovery, onboarding support, enterprise discovery, or another explicit outcome."
+        - "Classify the objective as validation, learning, revenue, pricing discovery, objection discovery, onboarding
+          support, enterprise discovery, or another explicit outcome."
         - "State what is out of scope for this stage."
       qualityChecks:
         - "Objective matches launch stage and GTM objective."
         - "Objective is not trying to optimize learning, revenue, scale, and enterprise complexity all at once."
         - "Objective is measurable or decision-linked."
-      questions:
+      questions: &a1
         - "What must sales achieve right now?"
-        - "Is sales primarily for revenue, validation, learning, pricing discovery, objection discovery, onboarding support, enterprise discovery, or another purpose?"
+        - "Is sales primarily for revenue, validation, learning, pricing discovery, objection discovery, onboarding support,
+          enterprise discovery, or another purpose?"
         - "What should sales intentionally not optimize yet?"
         - "What would make the sales motion a failure?"
     - id: "sales-motion-thesis"
       title: "Sales Motion Thesis"
-      intent: "Choose the appropriate sales motion and explain why it fits the product, segment, price point, channel, launch stage, and capacity."
+      intent: "Choose the appropriate sales motion and explain why it fits the product, segment, price point, channel, launch
+        stage, and capacity."
       required: true
       outputGuidance:
         - "Use the sales motion format where useful."
-        - "Select the primary motion and classify other motions as secondary, deferred, rejected, experimental, or scale-only."
+        - "Select the primary motion and classify other motions as secondary, deferred, rejected, experimental, or
+          scale-only."
         - "State the biggest sales-motion assumption."
       qualityChecks:
         - "Sales motion fits customer behavior and product economics."
         - "Motion choice is testable."
         - "Unsupported motions are explicitly rejected or deferred."
-      questions:
+      questions: &a2
         - "What is the primary sales motion?"
         - "Is the product self-serve, product-led, founder-led, sales-led, assisted self-serve, partner-led, or hybrid?"
         - "Why does this motion fit the target segment and price point?"
@@ -360,14 +413,15 @@ document:
       intent: "Define how sales motions are classified and what each motion means in this project."
       required: true
       outputGuidance:
-        - "Define self-serve, product-led, founder-led, sales-led, assisted self-serve, partner-led, and hybrid only as relevant."
+        - "Define self-serve, product-led, founder-led, sales-led, assisted self-serve, partner-led, and hybrid only as
+          relevant."
         - "State supported, deferred, rejected, experimental, and scale-only status labels."
         - "Clarify difference between sales motion, channel, funnel, and pricing model."
       qualityChecks:
         - "Taxonomy prevents confusion between channel, funnel, and sales process."
         - "Statuses are clear and useful."
         - "Unsupported motions are not accidentally implied downstream."
-      questions:
+      questions: &a3
         - "What sales motion categories are relevant?"
         - "How is sales motion different from channel strategy, conversion funnel, and pricing model?"
         - "What does self-serve mean here?"
@@ -386,8 +440,9 @@ document:
         - "Self-serve is not claimed unless purchase/activation path exists."
         - "Human fallback is explicit."
         - "Analytics and support implications are included."
-      questions:
-        - "What parts of discovery, signup, onboarding, activation, purchase, and support can be completed without human interaction?"
+      questions: &a4
+        - "What parts of discovery, signup, onboarding, activation, purchase, and support can be completed without human
+          interaction?"
         - "What is the self-serve checkout or conversion flow?"
         - "Where does self-serve fail?"
         - "What human fallback exists?"
@@ -404,7 +459,7 @@ document:
         - "Product-led claims depend on actual product instrumentation and value delivery."
         - "Upgrade or hand-raise triggers are explicit."
         - "Product-led motion does not replace support unless support needs are solved."
-      questions:
+      questions: &a5
         - "Can the product itself drive activation or conversion?"
         - "What product signals indicate sales readiness or upgrade intent?"
         - "What in-product prompts, lifecycle emails, or usage triggers matter?"
@@ -422,7 +477,7 @@ document:
         - "Founder-led sales has a learning agenda."
         - "Founder capacity is not treated as infinite."
         - "Handoff trigger is explicit."
-      questions:
+      questions: &a6
         - "What role does the founder play in sales?"
         - "What should founder-led sales learn?"
         - "What prospects should founder-led sales target?"
@@ -435,13 +490,14 @@ document:
       required: true
       outputGuidance:
         - "State whether sales-led motion is active, deferred, rejected, or scale-only."
-        - "Define target account/customer type, stages, sales cycle assumptions, required proof, and operational needs if applicable."
+        - "Define target account/customer type, stages, sales cycle assumptions, required proof, and operational needs
+          if applicable."
         - "Avoid inventing a sales team or enterprise process unless supported."
       qualityChecks:
         - "Sales-led motion is justified by price, complexity, buyer process, or segment need."
         - "Deferred sales-led needs are captured without forcing premature process."
         - "Cycle assumptions are labeled as assumptions unless validated."
-      questions:
+      questions: &a7
         - "Is a sales-led process needed?"
         - "If yes, what customer or account type requires it?"
         - "What is the sales process?"
@@ -450,7 +506,8 @@ document:
         - "If deferred, what would trigger sales-led motion later?"
     - id: "hybrid-motion"
       title: "Hybrid Motion"
-      intent: "Define how self-serve, product-led, founder-led, sales-led, and support-assisted motions combine without creating confusion."
+      intent: "Define how self-serve, product-led, founder-led, sales-led, and support-assisted motions combine without
+        creating confusion."
       required: true
       outputGuidance:
         - "Include this section when more than one motion is active or plausible."
@@ -460,7 +517,7 @@ document:
         - "Hybrid motion has explicit boundaries."
         - "Users/leads are not passed around without context."
         - "Handoff triggers are measurable or observable."
-      questions:
+      questions: &a8
         - "Where does self-serve end and human involvement begin?"
         - "What triggers founder-led or sales-assisted intervention?"
         - "What triggers support involvement?"
@@ -472,13 +529,14 @@ document:
       required: true
       outputGuidance:
         - "Use Customer Segments role map."
-        - "Identify when user, buyer, payer, decision maker, champion, influencer, blocker, implementer, and support contact differ."
+        - "Identify when user, buyer, payer, decision maker, champion, influencer, blocker, implementer, and support
+          contact differ."
         - "Tie each role to message, objection, proof, and asset needs."
       qualityChecks:
         - "Role assumptions are explicit."
         - "Sales does not speak to every role the same way."
         - "Blockers and implementers are considered when relevant."
-      questions:
+      questions: &a9
         - "Who uses the product?"
         - "Who buys it?"
         - "Who pays?"
@@ -492,13 +550,14 @@ document:
       required: true
       outputGuidance:
         - "Use qualification criterion records."
-        - "Separate fit, urgency, use case, role, budget/willingness, technical readiness, support burden, and disqualification."
+        - "Separate fit, urgency, use case, role, budget/willingness, technical readiness, support burden, and
+          disqualification."
         - "Tie criteria to Customer Segments and Conversion Funnel."
       qualityChecks:
         - "Criteria are observable."
         - "Disqualification rules are present."
         - "Qualification prevents wasted sales/support effort."
-      questions:
+      questions: &a10
         - "What criteria qualify a lead, user, account, or opportunity?"
         - "What signals indicate fit?"
         - "What signals indicate urgency?"
@@ -517,7 +576,7 @@ document:
         - "Scoring does not invent precision."
         - "Scores map to action."
         - "Scoring is grounded in qualification criteria."
-      questions:
+      questions: &a11
         - "Is lead scoring useful at this stage?"
         - "What dimensions are scored?"
         - "What weight or threshold applies?"
@@ -536,7 +595,7 @@ document:
         - "Stages are actionable and measurable."
         - "Movement between stages has triggers."
         - "Disqualification and no-decision are included."
-      questions:
+      questions: &a12
         - "What are the stages from first signal to close, activation, payment, or disqualification?"
         - "What triggers entry into each stage?"
         - "What triggers movement to the next stage?"
@@ -545,7 +604,8 @@ document:
         - "What metric measures each stage?"
     - id: "demo-strategy"
       title: "Demo Strategy"
-      intent: "Define when a demo is needed, what narrative it follows, what is shown, what is not shown, and what follow-up is required."
+      intent: "Define when a demo is needed, what narrative it follows, what is shown, what is not shown, and what follow-up
+        is required."
       required: true
       outputGuidance:
         - "Use demo flow records where useful."
@@ -555,7 +615,7 @@ document:
         - "Demo shows only supportable claims or labels caveats clearly."
         - "Demo has objective and follow-up action."
         - "Demo is adapted to audience role where needed."
-      questions:
+      questions: &a13
         - "Is a demo required to close or convert?"
         - "Who receives the demo?"
         - "What is the standard demo flow and narrative?"
@@ -564,7 +624,8 @@ document:
         - "What follow-up action happens after the demo?"
     - id: "objection-handling"
       title: "Objection Handling"
-      intent: "Define common objections, underlying concerns, honest responses, proof, caveats, escalation, and required assets."
+      intent: "Define common objections, underlying concerns, honest responses, proof, caveats, escalation, and required
+        assets."
       required: true
       outputGuidance:
         - "Use objection records for material objections."
@@ -574,7 +635,7 @@ document:
         - "Objections are answered honestly."
         - "Responses include proof or caveat."
         - "Objection handling does not create overpromises."
-      questions:
+      questions: &a14
         - "What are the most common sales objections?"
         - "What concern sits underneath each objection?"
         - "What is the honest response?"
@@ -583,7 +644,8 @@ document:
         - "What asset or escalation is needed?"
     - id: "sales-assets"
       title: "Sales Assets"
-      intent: "List materials that support sales and identify purpose, audience, stage, proof, owner, readiness, and downstream dependency."
+      intent: "List materials that support sales and identify purpose, audience, stage, proof, owner, readiness, and
+        downstream dependency."
       required: true
       outputGuidance:
         - "Use sales asset records."
@@ -593,9 +655,10 @@ document:
         - "Assets map to sales stages and objections."
         - "Assets respect claim boundaries."
         - "Readiness and owner are explicit."
-      questions:
+      questions: &a15
         - "What materials support the sales process?"
-        - "Are one-pager, landing page, pitch deck, demo script, FAQ, comparison sheet, proof assets, case studies, ROI calculator, pricing explainer, proposal, onboarding guide, or security/privacy notes needed?"
+        - "Are one-pager, landing page, pitch deck, demo script, FAQ, comparison sheet, proof assets, case studies, ROI
+          calculator, pricing explainer, proposal, onboarding guide, or security/privacy notes needed?"
         - "What stage uses each asset?"
         - "What proof does each asset include?"
         - "Who owns each asset?"
@@ -612,7 +675,7 @@ document:
         - "Metrics lead to decisions."
         - "Quality and learning are measured, not only activity."
         - "Support burden and retention implications are visible."
-      questions:
+      questions: &a16
         - "What metrics measure the sales motion?"
         - "What leading indicators matter?"
         - "What conversion metrics matter?"
@@ -622,7 +685,8 @@ document:
         - "What threshold changes the sales strategy?"
     - id: "sales-handoffs"
       title: "Sales Handoffs"
-      intent: "Define how context moves between marketing, product, founder, sales, support, onboarding, partnerships, and operations."
+      intent: "Define how context moves between marketing, product, founder, sales, support, onboarding, partnerships, and
+        operations."
       required: true
       outputGuidance:
         - "Use sales handoff records."
@@ -632,7 +696,7 @@ document:
         - "Handoffs preserve context."
         - "No lead/customer is handed off without owner and next action."
         - "Support and onboarding implications are explicit."
-      questions:
+      questions: &a17
         - "What handoffs exist in the sales process?"
         - "When does marketing hand off to founder/sales?"
         - "When does sales hand off to product, onboarding, support, or operations?"
@@ -641,17 +705,19 @@ document:
         - "What failure risk exists in each handoff?"
     - id: "sales-constraints"
       title: "Sales Constraints"
-      intent: "Identify constraints that limit sales motion, claims, scale, pricing, process, support, or operational feasibility."
+      intent: "Identify constraints that limit sales motion, claims, scale, pricing, process, support, or operational
+        feasibility."
       required: true
       outputGuidance:
-        - "Classify constraints by price point, product readiness, support capacity, founder capacity, technical limitations, channel fit, compliance/legal review, procurement, onboarding, and operations."
+        - "Classify constraints by price point, product readiness, support capacity, founder capacity, technical
+          limitations, channel fit, compliance/legal review, procurement, onboarding, and operations."
         - "State concrete implication for sales."
         - "Separate blockers from manageable constraints."
       qualityChecks:
         - "Constraints are connected to sales decisions."
         - "Operational and support constraints are not hidden."
         - "Claims are constrained by product and technical truth."
-      questions:
+      questions: &a18
         - "What constraints limit the sales motion?"
         - "What price point or packaging constraints exist?"
         - "What product, technical, support, founder-capacity, compliance, procurement, or operational constraints exist?"
@@ -659,7 +725,8 @@ document:
         - "What constraints block sales versus merely shape the process?"
     - id: "sales-risks"
       title: "Sales Risks"
-      intent: "Identify what could prevent the sales motion from working or create downstream GTM, product, support, legal, technical, reputational, or operational risk."
+      intent: "Identify what could prevent the sales motion from working or create downstream GTM, product, support, legal,
+        technical, reputational, or operational risk."
       required: true
       outputGuidance:
         - "Use sales risk records for material risks."
@@ -669,7 +736,7 @@ document:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "Risks are routed downstream."
-      questions:
+      questions: &a19
         - "What could prevent the sales motion from working?"
         - "What could make conversion too low?"
         - "What could make sales cycle too long?"
@@ -678,17 +745,19 @@ document:
         - "What is the contingency if the sales motion fails?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream GTM and Operations documents must inherit from Sales Strategy and what they must not assume."
+      intent: "Define what downstream GTM and Operations documents must inherit from Sales Strategy and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Route sales outputs to the correct downstream documents."
-        - "Separate pricing, content, partnerships, experiments, analytics, GTM risks, support, release, incident response, operating model, and risk management implications."
+        - "Separate pricing, content, partnerships, experiments, analytics, GTM risks, support, release, incident
+          response, operating model, and risk management implications."
         - "Preserve unresolved sales questions, deferred motions, rejected motions, and claim restrictions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing sales assumptions silently."
         - "Sales strategy and downstream execution remain distinct."
-      questions:
+      questions: &a20
         - "What should Pricing and Packaging inherit?"
         - "What should Content Strategy inherit?"
         - "What should Partnerships and Distribution inherit?"
@@ -697,3 +766,264 @@ document:
         - "What should Support Model and Release Management inherit?"
         - "What should Incident Response, Operating Model, and Risk Management inherit?"
         - "What unresolved sales questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain sales strategy. What sales motion, if any, is appropriate for this product, target segment,
+      price point, launch stage, and operational capacity?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "sales-objective"
+        label: "Sales Objective"
+        required: true
+        description: "Define what sales must achieve now and what sales should intentionally not optimize yet."
+        evaluationHint: "Look for concrete answers addressing: What must sales achieve right now?; Is sales primarily for
+          revenue, validation, learning, pricing discovery, objection discovery, onboarding support, enterprise
+          discovery, or another purpose?; What should sales intentionally not optimize yet?."
+        sourceQuestions: *a1
+        targetSections: &a21
+          - "Sales Objective"
+      - id: "sales-motion-thesis"
+        label: "Sales Motion Thesis"
+        required: true
+        description: "Choose the appropriate sales motion and explain why it fits the product, segment, price point, channel,
+          launch stage, and capacity."
+        evaluationHint: "Look for concrete answers addressing: What is the primary sales motion?; Is the product self-serve,
+          product-led, founder-led, sales-led, assisted self-serve, partner-led, or hybrid?; Why does this motion fit
+          the target segment and price point?."
+        sourceQuestions: *a2
+        targetSections: &a22
+          - "Sales Motion Thesis"
+      - id: "sales-motion-taxonomy"
+        label: "Sales Motion Taxonomy"
+        required: true
+        description: "Define how sales motions are classified and what each motion means in this project."
+        evaluationHint: "Look for concrete answers addressing: What sales motion categories are relevant?; How is sales motion
+          different from channel strategy, conversion funnel, and pricing model?; What does self-serve mean here?."
+        sourceQuestions: *a3
+        targetSections: &a23
+          - "Sales Motion Taxonomy"
+      - id: "self-serve-motion"
+        label: "Self-Serve Motion"
+        required: true
+        description: "Define what can be completed without human interaction and what support or human fallback is still required."
+        evaluationHint: "Look for concrete answers addressing: What parts of discovery, signup, onboarding, activation,
+          purchase, and support can be completed without human interaction?; What is the self-serve checkout or
+          conversion flow?; Where does self-serve fail?."
+        sourceQuestions: *a4
+        targetSections: &a24
+          - "Self-Serve Motion"
+      - id: "product-led-motion"
+        label: "Product-Led Motion"
+        required: true
+        description: "Define whether the product itself drives activation, conversion, upsell, referral, or sales-assist signals."
+        evaluationHint: "Look for concrete answers addressing: Can the product itself drive activation or conversion?; What
+          product signals indicate sales readiness or upgrade intent?; What in-product prompts, lifecycle emails, or
+          usage triggers matter?."
+        sourceQuestions: *a5
+        targetSections: &a25
+          - "Product-Led Motion"
+      - id: "founder-led-sales"
+        label: "Founder-Led Sales"
+        required: true
+        description: "Define the founder's role in early sales, learning, discovery, demos, qualification, and documentation."
+        evaluationHint: "Look for concrete answers addressing: What role does the founder play in sales?; What should
+          founder-led sales learn?; What prospects should founder-led sales target?."
+        sourceQuestions: *a6
+        targetSections: &a26
+          - "Founder-Led Sales"
+      - id: "sales-led-motion"
+        label: "Sales-Led Motion"
+        required: true
+        description: "Define whether a dedicated sales-led process is needed now, later, or not at all."
+        evaluationHint: "Look for concrete answers addressing: Is a sales-led process needed?; If yes, what customer or account
+          type requires it?; What is the sales process?."
+        sourceQuestions: *a7
+        targetSections: &a27
+          - "Sales-Led Motion"
+      - id: "hybrid-motion"
+        label: "Hybrid Motion"
+        required: true
+        description: "Define how self-serve, product-led, founder-led, sales-led, and support-assisted motions combine without
+          creating confusion."
+        evaluationHint: "Look for concrete answers addressing: Where does self-serve end and human involvement begin?; What
+          triggers founder-led or sales-assisted intervention?; What triggers support involvement?."
+        sourceQuestions: *a8
+        targetSections: &a28
+          - "Hybrid Motion"
+      - id: "buyer-and-user-roles"
+        label: "Buyer and User Roles"
+        required: true
+        description: "Map sales-relevant roles and how each affects the sales process."
+        evaluationHint: "Look for concrete answers addressing: Who uses the product?; Who buys it?; Who pays?."
+        sourceQuestions: *a9
+        targetSections: &a29
+          - "Buyer and User Roles"
+      - id: "qualification-criteria"
+        label: "Qualification Criteria"
+        required: true
+        description: "Define observable criteria for deciding whether a lead, user, account, or opportunity deserves sales
+          attention."
+        evaluationHint: "Look for concrete answers addressing: What criteria qualify a lead, user, account, or opportunity?;
+          What signals indicate fit?; What signals indicate urgency?."
+        sourceQuestions: *a10
+        targetSections: &a30
+          - "Qualification Criteria"
+      - id: "lead-scoring"
+        label: "Lead Scoring"
+        required: true
+        description: "Define whether scoring is needed now and, if so, how leads are scored and routed."
+        evaluationHint: "Look for concrete answers addressing: Is lead scoring useful at this stage?; What dimensions are
+          scored?; What weight or threshold applies?."
+        sourceQuestions: *a11
+        targetSections: &a31
+          - "Lead Scoring"
+      - id: "sales-process"
+        label: "Sales Process"
+        required: true
+        description: "Map stages from first signal to close, activation, payment, or disqualification."
+        evaluationHint: "Look for concrete answers addressing: What are the stages from first signal to close, activation,
+          payment, or disqualification?; What triggers entry into each stage?; What triggers movement to the next
+          stage?."
+        sourceQuestions: *a12
+        targetSections: &a32
+          - "Sales Process"
+      - id: "demo-strategy"
+        label: "Demo Strategy"
+        required: true
+        description: "Define when a demo is needed, what narrative it follows, what is shown, what is not shown, and what
+          follow-up is required."
+        evaluationHint: "Look for concrete answers addressing: Is a demo required to close or convert?; Who receives the demo?;
+          What is the standard demo flow and narrative?."
+        sourceQuestions: *a13
+        targetSections: &a33
+          - "Demo Strategy"
+      - id: "objection-handling"
+        label: "Objection Handling"
+        required: true
+        description: "Define common objections, underlying concerns, honest responses, proof, caveats, escalation, and required
+          assets."
+        evaluationHint: "Look for concrete answers addressing: What are the most common sales objections?; What concern sits
+          underneath each objection?; What is the honest response?."
+        sourceQuestions: *a14
+        targetSections: &a34
+          - "Objection Handling"
+      - id: "sales-assets"
+        label: "Sales Assets"
+        required: true
+        description: "List materials that support sales and identify purpose, audience, stage, proof, owner, readiness, and
+          downstream dependency."
+        evaluationHint: "Look for concrete answers addressing: What materials support the sales process?; Are one-pager, landing
+          page, pitch deck, demo script, FAQ, comparison sheet, proof assets, case studies, ROI calculator, pricing
+          explainer, proposal, onboarding guide, or security/privacy notes needed?; What stage uses each asset?."
+        sourceQuestions: *a15
+        targetSections: &a35
+          - "Sales Assets"
+      - id: "sales-metrics"
+        label: "Sales Metrics"
+        required: true
+        description: "Define metrics that show whether the sales motion is working, learning, or creating hidden operational cost."
+        evaluationHint: "Look for concrete answers addressing: What metrics measure the sales motion?; What leading indicators
+          matter?; What conversion metrics matter?."
+        sourceQuestions: *a16
+        targetSections: &a36
+          - "Sales Metrics"
+      - id: "sales-handoffs"
+        label: "Sales Handoffs"
+        required: true
+        description: "Define how context moves between marketing, product, founder, sales, support, onboarding, partnerships,
+          and operations."
+        evaluationHint: "Look for concrete answers addressing: What handoffs exist in the sales process?; When does marketing
+          hand off to founder/sales?; When does sales hand off to product, onboarding, support, or operations?."
+        sourceQuestions: *a17
+        targetSections: &a37
+          - "Sales Handoffs"
+      - id: "sales-constraints"
+        label: "Sales Constraints"
+        required: true
+        description: "Identify constraints that limit sales motion, claims, scale, pricing, process, support, or operational
+          feasibility."
+        evaluationHint: "Look for concrete answers addressing: What constraints limit the sales motion?; What price point or
+          packaging constraints exist?; What product, technical, support, founder-capacity, compliance, procurement, or
+          operational constraints exist?."
+        sourceQuestions: *a18
+        targetSections: &a38
+          - "Sales Constraints"
+      - id: "sales-risks"
+        label: "Sales Risks"
+        required: true
+        description: "Identify what could prevent the sales motion from working or create downstream GTM, product, support,
+          legal, technical, reputational, or operational risk."
+        evaluationHint: "Look for concrete answers addressing: What could prevent the sales motion from working?; What could
+          make conversion too low?; What could make sales cycle too long?."
+        sourceQuestions: *a19
+        targetSections: &a39
+          - "Sales Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream GTM and Operations documents must inherit from Sales Strategy and what they must
+          not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Pricing and Packaging inherit?; What should Content
+          Strategy inherit?; What should Partnerships and Distribution inherit?."
+        sourceQuestions: *a20
+        targetSections: &a40
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      sales-objective:
+        targetSections: *a21
+      sales-motion-thesis:
+        targetSections: *a22
+      sales-motion-taxonomy:
+        targetSections: *a23
+      self-serve-motion:
+        targetSections: *a24
+      product-led-motion:
+        targetSections: *a25
+      founder-led-sales:
+        targetSections: *a26
+      sales-led-motion:
+        targetSections: *a27
+      hybrid-motion:
+        targetSections: *a28
+      buyer-and-user-roles:
+        targetSections: *a29
+      qualification-criteria:
+        targetSections: *a30
+      lead-scoring:
+        targetSections: *a31
+      sales-process:
+        targetSections: *a32
+      demo-strategy:
+        targetSections: *a33
+      objection-handling:
+        targetSections: *a34
+      sales-assets:
+        targetSections: *a35
+      sales-metrics:
+        targetSections: *a36
+      sales-handoffs:
+        targetSections: *a37
+      sales-constraints:
+        targetSections: *a38
+      sales-risks:
+        targetSections: *a39
+      downstream-handoff:
+        targetSections: *a40
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.453Z"
+      totalSourceQuestions: 117
+      reviewRequired: false

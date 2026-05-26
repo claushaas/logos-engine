@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 1
   type: "strategy"
-  purpose: "Define what needs to be validated, in what order, to what evidence standard, and under which decision gates the project may advance, pivot, or stop."
+  purpose: "Define what needs to be validated, in what order, to what evidence standard, and under which decision gates
+    the project may advance, pivot, or stop."
   centralQuestion: "What needs to be validated, in what order, to what standard?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "validation.strategy_map"
         format: "html"
         path: "outcomes/html/02-validation/validation-strategy-map.html"
-        purpose: "Provide a navigable validation map showing validation objectives, scope, priorities, evidence standards, sequence, invalidating conditions, and decision gates."
+        purpose: "Provide a navigable validation map showing validation objectives, scope, priorities, evidence standards,
+          sequence, invalidating conditions, and decision gates."
         audience: "founder"
         includes:
           - "validation objective"
@@ -31,7 +33,8 @@ document:
       - id: "validation.strategy_review_prompt"
         format: "markdown"
         path: "outcomes/agents/02-validation/validation-strategy-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the validation strategy is evidence-driven, sequenced, falsifiable, and aligned with the foundation documents."
+        purpose: "Provide compact context for agents reviewing whether the validation strategy is evidence-driven, sequenced,
+          falsifiable, and aligned with the foundation documents."
         agentRole: "reviewer"
         includes:
           - "canonical validation strategy"
@@ -62,7 +65,8 @@ document:
     - id: "foundation-documents"
       type: "context"
       required: false
-      description: "Approved or drafted Foundation documents that define the thesis, problem, audience, principles, boundaries, success definition, and glossary."
+      description: "Approved or drafted Foundation documents that define the thesis, problem, audience, principles,
+        boundaries, success definition, and glossary."
     - id: "known-risks"
       type: "manual_note"
       required: false
@@ -70,16 +74,21 @@ document:
     - id: "available-evidence"
       type: "context"
       required: false
-      description: "Existing interviews, observations, analytics, market notes, experiments, or other evidence that may inform validation strategy."
+      description: "Existing interviews, observations, analytics, market notes, experiments, or other evidence that may inform
+        validation strategy."
     - id: "resource-constraints"
       type: "manual_note"
       required: false
-      description: "Constraints on time, budget, access to users, tooling, sample size, or execution capacity that affect validation design."
+      description: "Constraints on time, budget, access to users, tooling, sample size, or execution capacity that affect
+        validation design."
   completionCriteria:
-    - "The central question is answered explicitly through validation priorities, evidence standards, and decision gates."
-    - "The strategy identifies what must be validated before Product, Engineering, or Go-to-market decisions become committed."
+    - "The central question is answered explicitly through validation priorities, evidence standards, and decision
+      gates."
+    - "The strategy identifies what must be validated before Product, Engineering, or Go-to-market decisions become
+      committed."
     - "Validation scope distinguishes what is being validated now from what is deferred."
-    - "Evidence standards distinguish weak evidence, strong evidence, qualitative evidence, quantitative evidence, and invalidating evidence."
+    - "Evidence standards distinguish weak evidence, strong evidence, qualitative evidence, quantitative evidence, and
+      invalidating evidence."
     - "Validation sequence identifies prerequisites, parallelizable work, and decision dependencies."
     - "Invalidating conditions are concrete enough to trigger stop, pivot, or revision decisions."
     - "Decision gates state required evidence, decision criteria, and decision owner or authority model."
@@ -99,42 +108,45 @@ document:
     - "Separate claims, assumptions, hypotheses, evidence, and decisions."
     - "Classify evidence standards by claim type where useful."
     - "State what would change the project direction, not only what would support it."
-    - "Keep this document strategic; detailed interview scripts, experiment protocols, and metrics plans belong in downstream Validation documents."
+    - "Keep this document strategic; detailed interview scripts, experiment protocols, and metrics plans belong in
+      downstream Validation documents."
   reviewRules:
     - "Check whether each section answers its intended question."
     - "Flag contradictions with Foundation documents."
     - "Flag validation steps that cannot produce decision-changing evidence."
     - "Verify that the strategy tests risky assumptions before expensive commitments."
     - "Verify that go/no-go gates include clear criteria and required evidence."
-    - "Flag content that belongs better in Core Assumptions, Hypotheses, Research Plan, Experiments, Economic Model, Business Model, or Validation Report."
+    - "Flag content that belongs better in Core Assumptions, Hypotheses, Research Plan, Experiments, Economic Model,
+      Business Model, or Validation Report."
   specializedFormats:
     validationItemFormat:
       description: "Recommended format for validation items when listing what must be validated."
       fields:
-        - name
-        - claimType
-        - relatedFoundationDoc
-        - riskLevel
-        - evidenceStandard
-        - validationMethod
-        - invalidatingCondition
-        - decisionGate
-        - status
+        - "name"
+        - "claimType"
+        - "relatedFoundationDoc"
+        - "riskLevel"
+        - "evidenceStandard"
+        - "validationMethod"
+        - "invalidatingCondition"
+        - "decisionGate"
+        - "status"
     decisionGateFormat:
       description: "Recommended format for validation decision gates."
       fields:
-        - gate
-        - purpose
-        - requiredEvidence
-        - decisionCriteria
-        - possibleDecisions
-        - decisionOwner
-        - downstreamEffect
-        - status
+        - "gate"
+        - "purpose"
+        - "requiredEvidence"
+        - "decisionCriteria"
+        - "possibleDecisions"
+        - "decisionOwner"
+        - "downstreamEffect"
+        - "status"
   sections:
     - id: "validation-objective"
       title: "Validation Objective"
-      intent: "Clarify what outcome the Validation phase seeks to confirm, refute, or revise before deeper product, engineering, or market commitments."
+      intent: "Clarify what outcome the Validation phase seeks to confirm, refute, or revise before deeper product,
+        engineering, or market commitments."
       required: true
       outputGuidance:
         - "State the purpose of validation in decision terms, not activity terms."
@@ -144,7 +156,7 @@ document:
         - "The objective is tied to Foundation, especially Thesis, Problem, Audience, and Success Definition."
         - "The objective can change project decisions if evidence is negative."
         - "The section avoids generic statements like 'validate the idea'."
-      questions:
+      questions: &a1
         - "What is the outcome we are trying to validate?"
         - "What does success look like for this validation phase?"
         - "What uncertainty should this phase reduce first?"
@@ -162,7 +174,7 @@ document:
         - "The scope is narrow enough to execute and broad enough to reduce the main project risks."
         - "Deferred validation items are explicitly named."
         - "The section does not validate downstream product details before upstream risks."
-      questions:
+      questions: &a2
         - "What needs to be validated?"
         - "What does not need to be validated now?"
         - "What is explicitly out of scope for this phase?"
@@ -180,7 +192,7 @@ document:
         - "The highest-risk assumptions are tested early."
         - "Problem and audience validation are not skipped in favor of solution validation."
         - "The priority order is justified, not merely listed."
-      questions:
+      questions: &a3
         - "Which risk comes first: problem, audience, solution, willingness to use, willingness to pay?"
         - "What is the priority order for testing assumptions?"
         - "Which validations are prerequisites for others?"
@@ -191,7 +203,8 @@ document:
       intent: "Define what constitutes sufficient evidence for different claim types and decision levels."
       required: true
       outputGuidance:
-        - "Define evidence standards by type of claim: problem, audience, behavior, willingness to use, willingness to pay, economic viability, and business logic."
+        - "Define evidence standards by type of claim: problem, audience, behavior, willingness to use, willingness to
+          pay, economic viability, and business logic."
         - "Distinguish signal strength from evidence volume."
         - "Define invalidating evidence, not only confirming evidence."
       qualityChecks:
@@ -199,7 +212,7 @@ document:
         - "Qualitative evidence is allowed where appropriate but not overclaimed."
         - "Quantitative evidence is not demanded where it would create false precision."
         - "The section distinguishes evidence from opinion, preference, and speculation."
-      questions:
+      questions: &a4
         - "What level of evidence is sufficient for each type of claim?"
         - "What distinguishes strong evidence from weak evidence?"
         - "When is qualitative evidence enough vs. needing quantitative evidence?"
@@ -218,7 +231,7 @@ document:
         - "The sequence respects dependency order."
         - "Parallel work does not depend on unavailable evidence."
         - "The sequence is actionable enough to guide planning without becoming a detailed roadmap."
-      questions:
+      questions: &a5
         - "In what order will validations be executed?"
         - "What is the dependency chain between validation activities?"
         - "What can be parallelized vs. what must be sequential?"
@@ -226,7 +239,8 @@ document:
         - "What should be reviewed after each validation step?"
     - id: "invalidating-conditions"
       title: "Invalidating Conditions"
-      intent: "Identify specific evidence, results, or patterns that would prevent the project from advancing, require revision, or trigger a pivot."
+      intent: "Identify specific evidence, results, or patterns that would prevent the project from advancing, require
+        revision, or trigger a pivot."
       required: true
       outputGuidance:
         - "Define invalidation before experiments are run, where possible."
@@ -236,7 +250,7 @@ document:
         - "Invalidating conditions are concrete enough to apply during review."
         - "The section protects against moving forward only because effort was already invested."
         - "Invalidating conditions are not so extreme that they never trigger."
-      questions:
+      questions: &a6
         - "What would prevent the project from advancing?"
         - "What specific results would kill the project?"
         - "What results would trigger a significant pivot?"
@@ -254,9 +268,114 @@ document:
         - "Each gate can produce go, no-go, revise, pivot, or defer decisions."
         - "Each gate states required evidence before downstream commitment."
         - "Decision ownership is explicit enough to avoid ambiguity."
-      questions:
+      questions: &a7
         - "At what points are go/no-go decisions made?"
         - "Who makes each decision and with what criteria?"
         - "What evidence must be available at each gate?"
         - "What are the possible decisions at each gate?"
         - "What downstream work is allowed or blocked by each decision?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain validation strategy. What needs to be validated, in what order, to what standard?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "validation-objective"
+        label: "Validation Objective"
+        required: true
+        description: "Clarify what outcome the Validation phase seeks to confirm, refute, or revise before deeper product,
+          engineering, or market commitments."
+        evaluationHint: "Look for concrete answers addressing: What is the outcome we are trying to validate?; What does success
+          look like for this validation phase?; What uncertainty should this phase reduce first?."
+        sourceQuestions: *a1
+        targetSections: &a8
+          - "Validation Objective"
+      - id: "validation-scope"
+        label: "Validation Scope"
+        required: true
+        description: "Define the boundaries of what will and will not be validated in this phase."
+        evaluationHint: "Look for concrete answers addressing: What needs to be validated?; What does not need to be validated
+          now?; What is explicitly out of scope for this phase?."
+        sourceQuestions: *a2
+        targetSections: &a9
+          - "Validation Scope"
+      - id: "validation-priorities"
+        label: "Validation Priorities"
+        required: true
+        description: "Establish the priority order for testing assumptions, claims, risks, and dependencies."
+        evaluationHint: "Look for concrete answers addressing: Which risk comes first: problem, audience, solution, willingness
+          to use, willingness to pay?; What is the priority order for testing assumptions?; Which validations are
+          prerequisites for others?."
+        sourceQuestions: *a3
+        targetSections: &a10
+          - "Validation Priorities"
+      - id: "evidence-standards"
+        label: "Evidence Standards"
+        required: true
+        description: "Define what constitutes sufficient evidence for different claim types and decision levels."
+        evaluationHint: "Look for concrete answers addressing: What level of evidence is sufficient for each type of claim?;
+          What distinguishes strong evidence from weak evidence?; When is qualitative evidence enough vs. needing
+          quantitative evidence?."
+        sourceQuestions: *a4
+        targetSections: &a11
+          - "Evidence Standards"
+      - id: "validation-sequence"
+        label: "Validation Sequence"
+        required: true
+        description: "Map the dependency chain and execution order of validation activities."
+        evaluationHint: "Look for concrete answers addressing: In what order will validations be executed?; What is the
+          dependency chain between validation activities?; What can be parallelized vs. what must be sequential?."
+        sourceQuestions: *a5
+        targetSections: &a12
+          - "Validation Sequence"
+      - id: "invalidating-conditions"
+        label: "Invalidating Conditions"
+        required: true
+        description: "Identify specific evidence, results, or patterns that would prevent the project from advancing, require
+          revision, or trigger a pivot."
+        evaluationHint: "Look for concrete answers addressing: What would prevent the project from advancing?; What specific
+          results would kill the project?; What results would trigger a significant pivot?."
+        sourceQuestions: *a6
+        targetSections: &a13
+          - "Invalidating Conditions"
+      - id: "decision-gates"
+        label: "Decision Gates"
+        required: true
+        description: "Define go/no-go decision points, required evidence, decision criteria, and decision authority."
+        evaluationHint: "Look for concrete answers addressing: At what points are go/no-go decisions made?; Who makes each
+          decision and with what criteria?; What evidence must be available at each gate?."
+        sourceQuestions: *a7
+        targetSections: &a14
+          - "Decision Gates"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      validation-objective:
+        targetSections: *a8
+      validation-scope:
+        targetSections: *a9
+      validation-priorities:
+        targetSections: *a10
+      evidence-standards:
+        targetSections: *a11
+      validation-sequence:
+        targetSections: *a12
+      invalidating-conditions:
+        targetSections: *a13
+      decision-gates:
+        targetSections: *a14
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.242Z"
+      totalSourceQuestions: 36
+      reviewRequired: false

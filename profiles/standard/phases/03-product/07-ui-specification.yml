@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 7
   type: "ui_specification"
-  purpose: "Specify the product's screens, views, layouts, visual hierarchy, components, responsive behavior, interface states, accessibility expectations, microcopy rules, and UI risks."
-  centralQuestion: "What screens and interface states exist, how are they composed visually, and how should they behave across contexts?"
+  purpose: "Specify the product's screens, views, layouts, visual hierarchy, components, responsive behavior, interface
+    states, accessibility expectations, microcopy rules, and UI risks."
+  centralQuestion: "What screens and interface states exist, how are they composed visually, and how should they behave
+    across contexts?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,9 @@ document:
       - id: "product.ui_specification_map"
         format: "html"
         path: "outcomes/html/03-product/ui-specification-map.html"
-        purpose: "Provide a navigable UI specification covering screen inventory, layout rules, visual hierarchy, component usage, screen-by-screen specs, states, responsiveness, accessibility, microcopy, risks, and downstream handoff."
+        purpose: "Provide a navigable UI specification covering screen inventory, layout rules, visual hierarchy, component
+          usage, screen-by-screen specs, states, responsiveness, accessibility, microcopy, risks, and downstream
+          handoff."
         audience: "founder"
         includes:
           - "UI thesis"
@@ -39,7 +43,8 @@ document:
       - id: "product.ui_specification_review_prompt"
         format: "markdown"
         path: "outcomes/agents/03-product/ui-specification-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the UI specification is complete, consistent, accessible, state-aware, and aligned with IA, UX, interaction, and scope."
+        purpose: "Provide compact context for agents reviewing whether the UI specification is complete, consistent, accessible,
+          state-aware, and aligned with IA, UX, interaction, and scope."
         agentRole: "reviewer"
         includes:
           - "canonical UI specification"
@@ -81,130 +86,156 @@ document:
     - id: "user-journeys"
       type: "context"
       required: false
-      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys that screens must support."
+      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys
+        that screens must support."
     - id: "ux-model"
       type: "context"
       required: false
-      description: "UX thesis, cognitive load rules, guidance, feedback, error, recovery, proactivity, trust, and anti-patterns that shape UI decisions."
+      description: "UX thesis, cognitive load rules, guidance, feedback, error, recovery, proactivity, trust, and
+        anti-patterns that shape UI decisions."
     - id: "information-architecture"
       type: "context"
       required: false
-      description: "Objects, relationships, navigation, content hierarchy, naming, retrieval, empty states, and density rules that UI must express."
+      description: "Objects, relationships, navigation, content hierarchy, naming, retrieval, empty states, and density rules
+        that UI must express."
     - id: "interaction-model"
       type: "context"
       required: false
-      description: "Actions, commands, confirmations, undo, ambiguity handling, suggestions, corrections, state transitions, and accessibility interaction rules."
+      description: "Actions, commands, confirmations, undo, ambiguity handling, suggestions, corrections, state transitions,
+        and accessibility interaction rules."
     - id: "ui-notes"
       type: "manual_note"
       required: false
-      description: "Candidate screens, components, layout ideas, visual hierarchy notes, responsive constraints, state examples, and UI concerns."
+      description: "Candidate screens, components, layout ideas, visual hierarchy notes, responsive constraints, state
+        examples, and UI concerns."
   completionCriteria:
-    - "The central question is answered through complete screen, layout, component, state, responsive, accessibility, and microcopy specifications."
-    - "Every screen or view includes purpose, user goal, entry points, exit points, primary content, actions, states, dependencies, and downstream implications."
-    - "Layout rules define global structure, spacing logic, density behavior, viewport adaptation, and content adaptation without becoming frontend implementation detail."
-    - "Visual hierarchy defines primary, secondary, contextual, risk-critical, empty, loading, error, and success information treatment."
-    - "Component usage rules define where components are used, when they are not used, variants, states, accessibility expectations, and consistency requirements."
-    - "Screen-by-screen specifications are detailed enough to feed Feature Specification, Acceptance Criteria, Design System, and Frontend Architecture."
-    - "Empty, loading, error, success, permission, disabled, offline, partial, and low-confidence states are specified where relevant."
-    - "Responsive behavior states supported viewport classes, platform constraints, adaptive rules, hidden content rules, and unsupported cases."
+    - "The central question is answered through complete screen, layout, component, state, responsive, accessibility,
+      and microcopy specifications."
+    - "Every screen or view includes purpose, user goal, entry points, exit points, primary content, actions, states,
+      dependencies, and downstream implications."
+    - "Layout rules define global structure, spacing logic, density behavior, viewport adaptation, and content
+      adaptation without becoming frontend implementation detail."
+    - "Visual hierarchy defines primary, secondary, contextual, risk-critical, empty, loading, error, and success
+      information treatment."
+    - "Component usage rules define where components are used, when they are not used, variants, states, accessibility
+      expectations, and consistency requirements."
+    - "Screen-by-screen specifications are detailed enough to feed Feature Specification, Acceptance Criteria, Design
+      System, and Frontend Architecture."
+    - "Empty, loading, error, success, permission, disabled, offline, partial, and low-confidence states are specified
+      where relevant."
+    - "Responsive behavior states supported viewport classes, platform constraints, adaptive rules, hidden content
+      rules, and unsupported cases."
     - "Microcopy rules align with Glossary, IA naming rules, UX trust model, and interaction feedback requirements."
-    - "UI risks identify scale, accessibility, state, density, responsiveness, visual hierarchy, and edge-case risks with mitigation or downstream routing."
+    - "UI risks identify scale, accessibility, state, density, responsiveness, visual hierarchy, and edge-case risks
+      with mitigation or downstream routing."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid UI theater: polished interface descriptions that omit states, edge cases, accessibility, or responsive behavior."
+    - "Avoid UI theater: polished interface descriptions that omit states, edge cases, accessibility, or responsive
+      behavior."
     - "Avoid treating visual preference as product requirement without rationale."
-    - "Avoid duplicating UX Model, Information Architecture, Interaction Model, or Feature Specification content beyond necessary UI implications."
+    - "Avoid duplicating UX Model, Information Architecture, Interaction Model, or Feature Specification content beyond
+      necessary UI implications."
     - "Avoid introducing screens, components, or actions outside Product Scope unless marked post-MVP or deferred."
     - "Avoid hiding critical state, risk, uncertainty, permission, or destructive consequences for visual cleanliness."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent platform capabilities, design system components, accessibility compliance, user evidence, or implementation constraints."
+    - "Do not invent platform capabilities, design system components, accessibility compliance, user evidence, or
+      implementation constraints."
     - "UI must preserve user agency, trust, recovery paths, product boundaries, and terminology consistency."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate screen structure, visual hierarchy, component usage, interaction availability, state presentation, responsive behavior, and microcopy."
-    - "Tie UI decisions to Product Scope, User Journeys, UX Model, Information Architecture, Interaction Model, Glossary, or validation evidence where possible."
-    - "Classify screens and components as MVP, post-MVP, deferred, excluded, global, contextual, or experimental where useful."
+    - "Separate screen structure, visual hierarchy, component usage, interaction availability, state presentation,
+      responsive behavior, and microcopy."
+    - "Tie UI decisions to Product Scope, User Journeys, UX Model, Information Architecture, Interaction Model,
+      Glossary, or validation evidence where possible."
+    - "Classify screens and components as MVP, post-MVP, deferred, excluded, global, contextual, or experimental where
+      useful."
     - "Specify UI states before assuming the happy path is sufficient."
-    - "Keep this document at UI specification level; detailed component implementation belongs in Design System and Frontend Architecture."
+    - "Keep this document at UI specification level; detailed component implementation belongs in Design System and
+      Frontend Architecture."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Product Scope, User Journeys, UX Model, Information Architecture, Interaction Model, Foundation Glossary, or Foundation Boundaries."
+    - "Flag contradictions with Product Scope, User Journeys, UX Model, Information Architecture, Interaction Model,
+      Foundation Glossary, or Foundation Boundaries."
     - "Flag screens or components not supported by scope, journeys, IA, or explicit assumptions."
     - "Flag screen specs missing state coverage, entry/exit paths, actions, or data dependencies."
-    - "Flag UI states that obscure errors, permissions, uncertainty, loading, partial results, or destructive consequences."
+    - "Flag UI states that obscure errors, permissions, uncertainty, loading, partial results, or destructive
+      consequences."
     - "Verify that responsive behavior does not remove critical functionality or information without an explicit rule."
-    - "Verify that accessibility expectations are explicit enough to feed Design System, Frontend Architecture, and Acceptance Criteria."
-    - "Flag content that belongs better in UX Model, Information Architecture, Interaction Model, Content Model, State Model, Permission Model, Feature Specification, Design System, or Frontend Architecture."
+    - "Verify that accessibility expectations are explicit enough to feed Design System, Frontend Architecture, and
+      Acceptance Criteria."
+    - "Flag content that belongs better in UX Model, Information Architecture, Interaction Model, Content Model, State
+      Model, Permission Model, Feature Specification, Design System, or Frontend Architecture."
   specializedFormats:
     screenFormat:
       description: "Recommended format for each screen or view."
       fields:
-        - id
-        - name
-        - classification
-        - purpose
-        - userGoal
-        - primaryJourney
-        - entryPoints
-        - exitPoints
-        - primaryContent
-        - secondaryContent
-        - availableActions
-        - componentComposition
-        - states
-        - emptyState
-        - loadingState
-        - errorState
-        - successState
-        - permissionState
-        - responsiveRules
-        - accessibilityNotes
-        - dataDependencies
-        - downstreamImplications
-        - openQuestions
+        - "id"
+        - "name"
+        - "classification"
+        - "purpose"
+        - "userGoal"
+        - "primaryJourney"
+        - "entryPoints"
+        - "exitPoints"
+        - "primaryContent"
+        - "secondaryContent"
+        - "availableActions"
+        - "componentComposition"
+        - "states"
+        - "emptyState"
+        - "loadingState"
+        - "errorState"
+        - "successState"
+        - "permissionState"
+        - "responsiveRules"
+        - "accessibilityNotes"
+        - "dataDependencies"
+        - "downstreamImplications"
+        - "openQuestions"
     componentUsageFormat:
       description: "Recommended format for reusable component usage rules."
       fields:
-        - component
-        - purpose
-        - usedIn
-        - variants
-        - states
-        - usageRules
-        - doNotUseWhen
-        - accessibilityExpectations
-        - contentRules
-        - interactionRules
-        - consistencyRequirements
+        - "component"
+        - "purpose"
+        - "usedIn"
+        - "variants"
+        - "states"
+        - "usageRules"
+        - "doNotUseWhen"
+        - "accessibilityExpectations"
+        - "contentRules"
+        - "interactionRules"
+        - "consistencyRequirements"
     uiStateFormat:
       description: "Recommended format for interface states."
       fields:
-        - state
-        - appliesTo
-        - trigger
-        - visualTreatment
-        - contentTreatment
-        - availableActions
-        - recoveryPath
-        - persistence
-        - accessibilityNotes
-        - acceptanceImplications
+        - "state"
+        - "appliesTo"
+        - "trigger"
+        - "visualTreatment"
+        - "contentTreatment"
+        - "availableActions"
+        - "recoveryPath"
+        - "persistence"
+        - "accessibilityNotes"
+        - "acceptanceImplications"
     uiRiskFormat:
       description: "Recommended format for UI risks."
       fields:
-        - risk
-        - affectedScreenOrComponent
-        - riskType
-        - userImpact
-        - earlySignal
-        - mitigation
-        - targetDocument
+        - "risk"
+        - "affectedScreenOrComponent"
+        - "riskType"
+        - "userImpact"
+        - "earlySignal"
+        - "mitigation"
+        - "targetDocument"
   sections:
     - id: "ui-thesis"
       title: "UI Thesis"
-      intent: "State the visual and interface-level thesis that governs screen composition, hierarchy, component usage, and state presentation."
+      intent: "State the visual and interface-level thesis that governs screen composition, hierarchy, component usage, and
+        state presentation."
       required: true
       outputGuidance:
         - "Open with the interface-level principle that should guide screens and components."
@@ -214,7 +245,7 @@ document:
         - "The thesis is specific enough to guide visual and interface decisions."
         - "The thesis does not duplicate the UX thesis without UI implications."
         - "The thesis can reject at least one plausible UI direction."
-      questions:
+      questions: &a1
         - "What is the interface-level thesis of the product?"
         - "What should the UI make visually obvious?"
         - "What should the UI make calm, restrained, direct, dense, sparse, guided, or exploratory, and why?"
@@ -222,17 +253,19 @@ document:
         - "What should the UI avoid becoming?"
     - id: "screen-inventory"
       title: "Screen Inventory"
-      intent: "Enumerate all screens, views, overlays, panels, sheets, modals, and system surfaces with purpose, hierarchy, navigation, and scope classification."
+      intent: "Enumerate all screens, views, overlays, panels, sheets, modals, and system surfaces with purpose, hierarchy,
+        navigation, and scope classification."
       required: true
       outputGuidance:
         - "List screens and views as structured records, not only names."
-        - "Classify each screen as MVP, post-MVP, deferred, global, contextual, overlay, modal, or system surface where useful."
+        - "Classify each screen as MVP, post-MVP, deferred, global, contextual, overlay, modal, or system surface where
+          useful."
         - "Link each screen to journeys, IA objects, and available actions."
       qualityChecks:
         - "Every screen has a clear purpose and user goal."
         - "Screens exist because of scope, journey, IA, or interaction needs, not visual completeness."
         - "Entry and exit paths are explicit."
-      questions:
+      questions: &a2
         - "What screens, views, overlays, panels, sheets, modals, and system surfaces exist in the product?"
         - "What is the purpose of each screen or view?"
         - "What user goal does each screen support?"
@@ -241,7 +274,8 @@ document:
         - "Which screens are MVP, post-MVP, deferred, or excluded?"
     - id: "layout-rules"
       title: "Layout Rules"
-      intent: "Define the global layout system, structural regions, spacing logic, density behavior, viewport adaptation, and composition rules."
+      intent: "Define the global layout system, structural regions, spacing logic, density behavior, viewport adaptation, and
+        composition rules."
       required: true
       outputGuidance:
         - "Define layout regions and composition rules without over-specifying implementation CSS or code."
@@ -251,7 +285,7 @@ document:
         - "Layout rules support IA hierarchy and UX cognitive load rules."
         - "Layout rules do not hide critical information for aesthetic reasons."
         - "Responsive layout changes preserve user goal and task continuity."
-      questions:
+      questions: &a3
         - "What layout system is used across screens?"
         - "What are the global layout regions and composition rules?"
         - "How does layout adapt to different content types and content volumes?"
@@ -260,17 +294,19 @@ document:
         - "What layout constraints are hard versus provisional?"
     - id: "visual-hierarchy"
       title: "Visual Hierarchy"
-      intent: "Define how attention, priority, grouping, affordance, risk, uncertainty, state, and next action are visually communicated."
+      intent: "Define how attention, priority, grouping, affordance, risk, uncertainty, state, and next action are visually
+        communicated."
       required: true
       outputGuidance:
         - "Describe hierarchy by information role and user decision priority."
-        - "Define treatment for primary actions, secondary actions, destructive actions, status, warnings, uncertainty, and low-confidence information."
+        - "Define treatment for primary actions, secondary actions, destructive actions, status, warnings, uncertainty,
+          and low-confidence information."
         - "Avoid relying only on color, icon, or position for critical meaning."
       qualityChecks:
         - "Visual hierarchy matches Content Hierarchy from IA."
         - "Risk-critical and state-critical information remains visible."
         - "Primary action prominence does not manipulate or over-direct the user."
-      questions:
+      questions: &a4
         - "What should visually dominate each screen type?"
         - "How are primary, secondary, contextual, and destructive actions distinguished?"
         - "How are status, risk, uncertainty, warnings, and low-confidence information surfaced?"
@@ -279,17 +315,19 @@ document:
         - "What hierarchy rules should become acceptance criteria?"
     - id: "component-usage"
       title: "Component Usage"
-      intent: "Define reusable components, variants, states, consistency rules, usage constraints, and accessibility expectations."
+      intent: "Define reusable components, variants, states, consistency rules, usage constraints, and accessibility
+        expectations."
       required: true
       outputGuidance:
         - "Describe component usage rules before visual implementation details."
-        - "Separate global components, contextual components, object-specific components, feedback components, and system components."
+        - "Separate global components, contextual components, object-specific components, feedback components, and
+          system components."
         - "Define when each component must not be used."
       qualityChecks:
         - "Components map to real screens, actions, states, or IA objects."
         - "Variants and states are explicit enough for Design System and Frontend Architecture."
         - "Component usage remains consistent across similar contexts."
-      questions:
+      questions: &a5
         - "What reusable components are used across screens?"
         - "What are the usage rules for each component?"
         - "What variants and states does each component need?"
@@ -299,7 +337,8 @@ document:
         - "What accessibility expectations apply to each component class?"
     - id: "screen-by-screen-specification"
       title: "Screen-by-Screen Specification"
-      intent: "Specify layout, content, components, actions, state coverage, data dependencies, and responsive behavior for each screen."
+      intent: "Specify layout, content, components, actions, state coverage, data dependencies, and responsive behavior for
+        each screen."
       required: true
       outputGuidance:
         - "Specify each screen in a consistent structured format."
@@ -309,7 +348,7 @@ document:
         - "Each screen spec is detailed enough to feed Feature Specification and Acceptance Criteria."
         - "Screen specs do not silently invent new actions, objects, or states."
         - "Data and state dependencies are explicit."
-      questions:
+      questions: &a6
         - "For each screen, what is the exact layout and content structure?"
         - "What components appear on each screen?"
         - "What actions and interactions are available on each screen?"
@@ -319,17 +358,19 @@ document:
         - "What open questions remain for each screen?"
     - id: "empty-states"
       title: "Empty States"
-      intent: "Define what each screen looks like with no content, no result, no access, missing permission, filtered absence, or intentional emptiness."
+      intent: "Define what each screen looks like with no content, no result, no access, missing permission, filtered absence,
+        or intentional emptiness."
       required: true
       outputGuidance:
-        - "Distinguish new-user empty, zero-results, filtered-empty, permission-empty, loading-empty, error-empty, and intentionally-empty states."
+        - "Distinguish new-user empty, zero-results, filtered-empty, permission-empty, loading-empty, error-empty, and
+          intentionally-empty states."
         - "Connect each empty state to explanation, next action, recovery, or safe silence."
         - "Avoid fake positivity when emptiness indicates a problem."
       qualityChecks:
         - "Empty states are visually and semantically distinct from loading and error states."
         - "The empty-state action is useful and scope-aligned."
         - "Empty states do not imply unavailable data, missing permissions, or errors are normal content absence."
-      questions:
+      questions: &a7
         - "What does each screen look like with no data or no content?"
         - "What is the empty-state explanation and call to action?"
         - "How does the product guide the user from empty to populated?"
@@ -338,7 +379,8 @@ document:
         - "Which empty states should become acceptance criteria?"
     - id: "loading-states"
       title: "Loading States"
-      intent: "Define loading patterns, partial loading, optimistic UI, skeleton strategy, perceived performance expectations, and timeout behavior."
+      intent: "Define loading patterns, partial loading, optimistic UI, skeleton strategy, perceived performance expectations,
+        and timeout behavior."
       required: true
       outputGuidance:
         - "Choose loading patterns based on content type, expected duration, action risk, and partial data availability."
@@ -348,8 +390,9 @@ document:
         - "Loading states communicate progress without false precision."
         - "Long-running operations include user control or expectation management."
         - "Partial loads do not imply complete data."
-      questions:
-        - "What loading patterns are used: skeleton, spinner, progress bar, inline pending, optimistic UI, staged reveal, or background status?"
+      questions: &a8
+        - "What loading patterns are used: skeleton, spinner, progress bar, inline pending, optimistic UI, staged reveal, or
+          background status?"
         - "What is the loading strategy for each screen or operation type?"
         - "How are partial loads handled?"
         - "What actions remain available or disabled while loading?"
@@ -357,17 +400,19 @@ document:
         - "What happens on timeout, cancellation, retry, or background completion?"
     - id: "error-states"
       title: "Error States"
-      intent: "Define how errors are visually surfaced, explained, prioritized, localized, recovered from, and escalated across screens."
+      intent: "Define how errors are visually surfaced, explained, prioritized, localized, recovered from, and escalated
+        across screens."
       required: true
       outputGuidance:
-        - "Classify errors by user error, validation error, permission error, network error, system error, dependency error, AI/low-confidence error, and destructive-action risk where relevant."
+        - "Classify errors by user error, validation error, permission error, network error, system error, dependency
+          error, AI/low-confidence error, and destructive-action risk where relevant."
         - "Define inline, screen-level, modal, toast, banner, and background error behavior."
         - "Connect each error to recovery action and state preservation."
       qualityChecks:
         - "Errors are helpful without exposing unnecessary technical detail."
         - "Recovery actions are visible and appropriate to severity."
         - "Background or non-blocking errors are not hidden when they affect trust or data integrity."
-      questions:
+      questions: &a9
         - "What error states can each screen display?"
         - "How are errors surfaced to the user?"
         - "What recovery actions are offered in each error state?"
@@ -377,7 +422,8 @@ document:
         - "What errors require escalation, support, or manual intervention?"
     - id: "success-states"
       title: "Success States"
-      intent: "Define how successful actions, completed journeys, saved changes, generated outputs, and milestones are communicated."
+      intent: "Define how successful actions, completed journeys, saved changes, generated outputs, and milestones are
+        communicated."
       required: true
       outputGuidance:
         - "Separate transient confirmation, persistent status, completed state, milestone, and next-step guidance."
@@ -387,7 +433,7 @@ document:
         - "Success states do not overstate completion or certainty."
         - "Next action after success is clear where appropriate."
         - "Success feedback is proportional to action importance."
-      questions:
+      questions: &a10
         - "What success states exist for each screen or action?"
         - "How is success communicated to the user?"
         - "What is the next action after success?"
@@ -396,7 +442,8 @@ document:
         - "What success states require auditability, persistence, or traceability?"
     - id: "responsive-behavior"
       title: "Responsive Behavior"
-      intent: "Define supported viewport classes, platform adaptations, density changes, content priority, unsupported cases, and responsive interaction implications."
+      intent: "Define supported viewport classes, platform adaptations, density changes, content priority, unsupported cases,
+        and responsive interaction implications."
       required: true
       outputGuidance:
         - "State supported viewport classes and platform assumptions explicitly."
@@ -406,7 +453,7 @@ document:
         - "Responsive behavior preserves primary journeys."
         - "Hidden or unavailable content is explicitly justified."
         - "Platform-specific behavior does not contradict Product Scope or Interaction Model."
-      questions:
+      questions: &a11
         - "What viewport sizes and platform classes are supported?"
         - "How does the UI adapt at each breakpoint or platform class?"
         - "What content or functionality is hidden, collapsed, moved, or unavailable at smaller sizes?"
@@ -415,17 +462,19 @@ document:
         - "What responsive assumptions are provisional or require engineering review?"
     - id: "accessibility-ui-rules"
       title: "Accessibility UI Rules"
-      intent: "Define interface-level accessibility expectations for hierarchy, contrast, focus, labels, touch targets, motion, readable content, and state communication."
+      intent: "Define interface-level accessibility expectations for hierarchy, contrast, focus, labels, touch targets,
+        motion, readable content, and state communication."
       required: true
       outputGuidance:
         - "State accessibility expectations at UI level without pretending to replace formal accessibility testing."
-        - "Cover labels, focus visibility, non-color meaning, readable hierarchy, target size, motion, and state announcements where relevant."
+        - "Cover labels, focus visibility, non-color meaning, readable hierarchy, target size, motion, and state
+          announcements where relevant."
         - "Mark unresolved accessibility questions for downstream review."
       qualityChecks:
         - "Critical meaning is not conveyed only through color, position, motion, or iconography."
         - "UI states are perceivable and distinguishable."
         - "Accessibility claims are not stated as guarantees without testing."
-      questions:
+      questions: &a12
         - "What interface-level accessibility rules apply?"
         - "How are focus, labels, targets, contrast, hierarchy, and state communication handled?"
         - "What UI meaning must not rely on color alone?"
@@ -434,17 +483,19 @@ document:
         - "What accessibility assumptions require later testing?"
     - id: "microcopy-rules"
       title: "Microcopy Rules"
-      intent: "Define UI wording rules, labels, tone, terminology, action text, state messages, error language, and confirmation language."
+      intent: "Define UI wording rules, labels, tone, terminology, action text, state messages, error language, and
+        confirmation language."
       required: true
       outputGuidance:
         - "Align wording with Glossary, IA naming rules, UX trust model, and Interaction Model."
-        - "Define patterns for labels, buttons, empty states, loading text, errors, confirmations, warnings, success, and low-confidence messages."
+        - "Define patterns for labels, buttons, empty states, loading text, errors, confirmations, warnings, success,
+          and low-confidence messages."
         - "Avoid ornamental copy that adds ambiguity or hides state."
       qualityChecks:
         - "Microcopy is clear, consistent, and action-specific."
         - "Error and recovery copy is helpful without blame."
         - "Copy does not overpromise, manipulate, or imply unsupported certainty."
-      questions:
+      questions: &a13
         - "What tone and voice guide all microcopy?"
         - "What are the standard labels, button text, and messages?"
         - "How are errors phrased to be helpful rather than technical or blaming?"
@@ -453,7 +504,8 @@ document:
         - "What microcopy patterns are prohibited?"
     - id: "ui-risks"
       title: "UI Risks"
-      intent: "Identify highest-risk UI decisions, untested patterns, state coverage gaps, responsive failures, accessibility risks, density risks, and scale risks."
+      intent: "Identify highest-risk UI decisions, untested patterns, state coverage gaps, responsive failures, accessibility
+        risks, density risks, and scale risks."
       required: true
       outputGuidance:
         - "Describe UI risks as concrete interface failure modes."
@@ -463,7 +515,7 @@ document:
         - "Risks are specific enough to become review checks or acceptance criteria."
         - "State, responsiveness, accessibility, scale, density, and edge-case risks are considered."
         - "Mitigations are actionable or routed downstream."
-      questions:
+      questions: &a14
         - "What UI decisions carry the highest risk?"
         - "Where is the UI most likely to break with scale, density, or edge cases?"
         - "What UI patterns have not been tested with real users?"
@@ -473,17 +525,19 @@ document:
         - "Which UI risks should become acceptance criteria or design system constraints?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Product and Engineering documents must inherit from the UI specification and what they must not assume."
+      intent: "Define what downstream Product and Engineering documents must inherit from the UI specification and what they
+        must not assume."
       required: true
       outputGuidance:
         - "Route UI outputs to the correct downstream documents."
-        - "Separate content, state, permission, feature, acceptance, design system, frontend, and engineering implications."
+        - "Separate content, state, permission, feature, acceptance, design system, frontend, and engineering
+          implications."
         - "Preserve unresolved UI questions and risky assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing UI rules silently."
         - "Screen, component, state, responsive, accessibility, and microcopy implications are included."
-      questions:
+      questions: &a15
         - "What should Content Model inherit from this UI specification?"
         - "What should State Model inherit?"
         - "What should Permission Model inherit?"
@@ -491,3 +545,215 @@ document:
         - "What should Acceptance Criteria inherit?"
         - "What should Design System and Frontend Architecture inherit?"
         - "What unresolved UI questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain ui specification. What screens and interface states exist, how are they composed visually,
+      and how should they behave across contexts?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "ui-thesis"
+        label: "UI Thesis"
+        required: true
+        description: "State the visual and interface-level thesis that governs screen composition, hierarchy, component usage,
+          and state presentation."
+        evaluationHint: "Look for concrete answers addressing: What is the interface-level thesis of the product?; What should
+          the UI make visually obvious?; What should the UI make calm, restrained, direct, dense, sparse, guided, or
+          exploratory, and why?."
+        sourceQuestions: *a1
+        targetSections: &a16
+          - "UI Thesis"
+      - id: "screen-inventory"
+        label: "Screen Inventory"
+        required: true
+        description: "Enumerate all screens, views, overlays, panels, sheets, modals, and system surfaces with purpose,
+          hierarchy, navigation, and scope classification."
+        evaluationHint: "Look for concrete answers addressing: What screens, views, overlays, panels, sheets, modals, and system
+          surfaces exist in the product?; What is the purpose of each screen or view?; What user goal does each screen
+          support?."
+        sourceQuestions: *a2
+        targetSections: &a17
+          - "Screen Inventory"
+      - id: "layout-rules"
+        label: "Layout Rules"
+        required: true
+        description: "Define the global layout system, structural regions, spacing logic, density behavior, viewport adaptation,
+          and composition rules."
+        evaluationHint: "Look for concrete answers addressing: What layout system is used across screens?; What are the global
+          layout regions and composition rules?; How does layout adapt to different content types and content volumes?."
+        sourceQuestions: *a3
+        targetSections: &a18
+          - "Layout Rules"
+      - id: "visual-hierarchy"
+        label: "Visual Hierarchy"
+        required: true
+        description: "Define how attention, priority, grouping, affordance, risk, uncertainty, state, and next action are
+          visually communicated."
+        evaluationHint: "Look for concrete answers addressing: What should visually dominate each screen type?; How are primary,
+          secondary, contextual, and destructive actions distinguished?; How are status, risk, uncertainty, warnings,
+          and low-confidence information surfaced?."
+        sourceQuestions: *a4
+        targetSections: &a19
+          - "Visual Hierarchy"
+      - id: "component-usage"
+        label: "Component Usage"
+        required: true
+        description: "Define reusable components, variants, states, consistency rules, usage constraints, and accessibility
+          expectations."
+        evaluationHint: "Look for concrete answers addressing: What reusable components are used across screens?; What are the
+          usage rules for each component?; What variants and states does each component need?."
+        sourceQuestions: *a5
+        targetSections: &a20
+          - "Component Usage"
+      - id: "screen-by-screen-specification"
+        label: "Screen-by-Screen Specification"
+        required: true
+        description: "Specify layout, content, components, actions, state coverage, data dependencies, and responsive behavior
+          for each screen."
+        evaluationHint: "Look for concrete answers addressing: For each screen, what is the exact layout and content structure?;
+          What components appear on each screen?; What actions and interactions are available on each screen?."
+        sourceQuestions: *a6
+        targetSections: &a21
+          - "Screen-by-Screen Specification"
+      - id: "empty-states"
+        label: "Empty States"
+        required: true
+        description: "Define what each screen looks like with no content, no result, no access, missing permission, filtered
+          absence, or intentional emptiness."
+        evaluationHint: "Look for concrete answers addressing: What does each screen look like with no data or no content?; What
+          is the empty-state explanation and call to action?; How does the product guide the user from empty to
+          populated?."
+        sourceQuestions: *a7
+        targetSections: &a22
+          - "Empty States"
+      - id: "loading-states"
+        label: "Loading States"
+        required: true
+        description: "Define loading patterns, partial loading, optimistic UI, skeleton strategy, perceived performance
+          expectations, and timeout behavior."
+        evaluationHint: "Look for concrete answers addressing: What loading patterns are used: skeleton, spinner, progress bar,
+          inline pending, optimistic UI, staged reveal, or background status?; What is the loading strategy for each
+          screen or operation type?; How are partial loads handled?."
+        sourceQuestions: *a8
+        targetSections: &a23
+          - "Loading States"
+      - id: "error-states"
+        label: "Error States"
+        required: true
+        description: "Define how errors are visually surfaced, explained, prioritized, localized, recovered from, and escalated
+          across screens."
+        evaluationHint: "Look for concrete answers addressing: What error states can each screen display?; How are errors
+          surfaced to the user?; What recovery actions are offered in each error state?."
+        sourceQuestions: *a9
+        targetSections: &a24
+          - "Error States"
+      - id: "success-states"
+        label: "Success States"
+        required: true
+        description: "Define how successful actions, completed journeys, saved changes, generated outputs, and milestones are
+          communicated."
+        evaluationHint: "Look for concrete answers addressing: What success states exist for each screen or action?; How is
+          success communicated to the user?; What is the next action after success?."
+        sourceQuestions: *a10
+        targetSections: &a25
+          - "Success States"
+      - id: "responsive-behavior"
+        label: "Responsive Behavior"
+        required: true
+        description: "Define supported viewport classes, platform adaptations, density changes, content priority, unsupported
+          cases, and responsive interaction implications."
+        evaluationHint: "Look for concrete answers addressing: What viewport sizes and platform classes are supported?; How does
+          the UI adapt at each breakpoint or platform class?; What content or functionality is hidden, collapsed, moved,
+          or unavailable at smaller sizes?."
+        sourceQuestions: *a11
+        targetSections: &a26
+          - "Responsive Behavior"
+      - id: "accessibility-ui-rules"
+        label: "Accessibility UI Rules"
+        required: true
+        description: "Define interface-level accessibility expectations for hierarchy, contrast, focus, labels, touch targets,
+          motion, readable content, and state communication."
+        evaluationHint: "Look for concrete answers addressing: What interface-level accessibility rules apply?; How are focus,
+          labels, targets, contrast, hierarchy, and state communication handled?; What UI meaning must not rely on color
+          alone?."
+        sourceQuestions: *a12
+        targetSections: &a27
+          - "Accessibility UI Rules"
+      - id: "microcopy-rules"
+        label: "Microcopy Rules"
+        required: true
+        description: "Define UI wording rules, labels, tone, terminology, action text, state messages, error language, and
+          confirmation language."
+        evaluationHint: "Look for concrete answers addressing: What tone and voice guide all microcopy?; What are the standard
+          labels, button text, and messages?; How are errors phrased to be helpful rather than technical or blaming?."
+        sourceQuestions: *a13
+        targetSections: &a28
+          - "Microcopy Rules"
+      - id: "ui-risks"
+        label: "UI Risks"
+        required: true
+        description: "Identify highest-risk UI decisions, untested patterns, state coverage gaps, responsive failures,
+          accessibility risks, density risks, and scale risks."
+        evaluationHint: "Look for concrete answers addressing: What UI decisions carry the highest risk?; Where is the UI most
+          likely to break with scale, density, or edge cases?; What UI patterns have not been tested with real users?."
+        sourceQuestions: *a14
+        targetSections: &a29
+          - "UI Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Product and Engineering documents must inherit from the UI specification and what
+          they must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Content Model inherit from this UI specification?;
+          What should State Model inherit?; What should Permission Model inherit?."
+        sourceQuestions: *a15
+        targetSections: &a30
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      ui-thesis:
+        targetSections: *a16
+      screen-inventory:
+        targetSections: *a17
+      layout-rules:
+        targetSections: *a18
+      visual-hierarchy:
+        targetSections: *a19
+      component-usage:
+        targetSections: *a20
+      screen-by-screen-specification:
+        targetSections: *a21
+      empty-states:
+        targetSections: *a22
+      loading-states:
+        targetSections: *a23
+      error-states:
+        targetSections: *a24
+      success-states:
+        targetSections: *a25
+      responsive-behavior:
+        targetSections: *a26
+      accessibility-ui-rules:
+        targetSections: *a27
+      microcopy-rules:
+        targetSections: *a28
+      ui-risks:
+        targetSections: *a29
+      downstream-handoff:
+        targetSections: *a30
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.301Z"
+      totalSourceQuestions: 94
+      reviewRequired: false

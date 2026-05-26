@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 14
   type: "technical_risk_register"
-  purpose: "Define, classify, score, monitor, mitigate, accept, escalate, and retire technical risks that could threaten feasibility, delivery, reliability, security, privacy, performance, maintainability, cost, release readiness, or operational sustainability."
-  centralQuestion: "What technical risks could make the system difficult, expensive, unsafe, unstable, unmaintainable, unreleasable, or unviable, and how will they be detected, reduced, accepted, or escalated?"
+  purpose: "Define, classify, score, monitor, mitigate, accept, escalate, and retire technical risks that could threaten
+    feasibility, delivery, reliability, security, privacy, performance, maintainability, cost, release readiness, or
+    operational sustainability."
+  centralQuestion: "What technical risks could make the system difficult, expensive, unsafe, unstable, unmaintainable,
+    unreleasable, or unviable, and how will they be detected, reduced, accepted, or escalated?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "engineering.technical_risk_register"
         format: "html"
         path: "outcomes/html/04-engineering/technical-risk-register.html"
-        purpose: "Provide a navigable technical risk register covering taxonomy, scoring, ownership, risk entries, detection signals, mitigations, spikes, accepted risks, escalation rules, release blockers, review cadence, and downstream handoff."
+        purpose: "Provide a navigable technical risk register covering taxonomy, scoring, ownership, risk entries, detection
+          signals, mitigations, spikes, accepted risks, escalation rules, release blockers, review cadence, and
+          downstream handoff."
         audience: "founder"
         includes:
           - "risk objective"
@@ -50,7 +55,8 @@ document:
       - id: "engineering.technical_risks_review_prompt"
         format: "markdown"
         path: "outcomes/agents/04-engineering/technical-risks-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether technical risks are complete, specific, scored, owned, detectable, mitigated, tied to release readiness, and routed to Operations/Risk Management."
+        purpose: "Provide compact context for agents reviewing whether technical risks are complete, specific, scored, owned,
+          detectable, mitigated, tied to release readiness, and routed to Operations/Risk Management."
         agentRole: "reviewer"
         includes:
           - "canonical technical risk register"
@@ -95,39 +101,48 @@ document:
     - id: "engineering-brief"
       type: "context"
       required: false
-      description: "Engineering objective, scope, constraints, capabilities, implementation strategy, deferred decisions, risks, and success criteria."
+      description: "Engineering objective, scope, constraints, capabilities, implementation strategy, deferred decisions,
+        risks, and success criteria."
     - id: "system-architecture"
       type: "context"
       required: false
-      description: "Architecture decisions, components, boundaries, dependency rules, runtime model, deployment topology, failure modes, and architecture risks."
+      description: "Architecture decisions, components, boundaries, dependency rules, runtime model, deployment topology,
+        failure modes, and architecture risks."
     - id: "technical-stack"
       type: "context"
       required: false
-      description: "Runtime, languages, frameworks, package management, database, auth, API, testing, deployment, monitoring, dependency policy, maintenance policy, and stack risks."
+      description: "Runtime, languages, frameworks, package management, database, auth, API, testing, deployment, monitoring,
+        dependency policy, maintenance policy, and stack risks."
     - id: "domain-model"
       type: "context"
       required: false
-      description: "Domain concepts, invariants, commands, events, state machines, bounded contexts, ambiguous terms, hidden rules, and domain modeling risks."
+      description: "Domain concepts, invariants, commands, events, state machines, bounded contexts, ambiguous terms, hidden
+        rules, and domain modeling risks."
     - id: "data-model"
       type: "context"
       required: false
-      description: "Data structures, constraints, indexes, migrations, sync model, sensitivity, retention, backup/restore, lineage, and data model risks."
+      description: "Data structures, constraints, indexes, migrations, sync model, sensitivity, retention, backup/restore,
+        lineage, and data model risks."
     - id: "api-contracts"
       type: "context"
       required: false
-      description: "API surfaces, schemas, auth/authz, errors, pagination, idempotency, versioning, realtime/webhooks, contract testing, and API risks."
+      description: "API surfaces, schemas, auth/authz, errors, pagination, idempotency, versioning, realtime/webhooks,
+        contract testing, and API risks."
     - id: "integration-architecture"
       type: "context"
       required: false
-      description: "External services, adapters, webhooks, rate limits, retries, idempotency, circuit breakers, fallbacks, provider lock-in, mocks, and integration risks."
+      description: "External services, adapters, webhooks, rate limits, retries, idempotency, circuit breakers, fallbacks,
+        provider lock-in, mocks, and integration risks."
     - id: "security-and-privacy"
       type: "context"
       required: false
-      description: "Threat model, assets, controls, authorization, data handling, logging restrictions, secrets, privacy rights, vulnerability management, incident response, and security/privacy risks."
+      description: "Threat model, assets, controls, authorization, data handling, logging restrictions, secrets, privacy
+        rights, vulnerability management, incident response, and security/privacy risks."
     - id: "sync-and-state"
       type: "context"
       required: false
-      description: "State taxonomy, source of truth, cache, derived state, hydration, offline behavior, mutation queue, sync protocol, conflicts, idempotency, recovery, and sync risks."
+      description: "State taxonomy, source of truth, cache, derived state, hydration, offline behavior, mutation queue, sync
+        protocol, conflicts, idempotency, recovery, and sync risks."
     - id: "testing-strategy"
       type: "context"
       required: false
@@ -135,203 +150,251 @@ document:
     - id: "observability"
       type: "context"
       required: false
-      description: "Signals, logs, metrics, traces, audit events, health checks, SLOs, alerts, dashboards, incident hooks, cost controls, and observability risks."
+      description: "Signals, logs, metrics, traces, audit events, health checks, SLOs, alerts, dashboards, incident hooks,
+        cost controls, and observability risks."
     - id: "deployment-and-environments"
       type: "context"
       required: false
-      description: "Environment risks, build/deploy pipeline, configuration, secrets, migrations, release verification, feature flags, rollback, post-deploy monitoring, and deployment risks."
+      description: "Environment risks, build/deploy pipeline, configuration, secrets, migrations, release verification,
+        feature flags, rollback, post-deploy monitoring, and deployment risks."
     - id: "engineering-standards"
       type: "context"
       required: false
-      description: "Repository, code, type-safety, validation, error, dependency, migration, testing, review, automation, exception, ownership, and standards risks."
+      description: "Repository, code, type-safety, validation, error, dependency, migration, testing, review, automation,
+        exception, ownership, and standards risks."
     - id: "technical-risk-notes"
       type: "manual_note"
       required: false
-      description: "Known technical risks, unresolved assumptions, spike needs, delivery concerns, vendor concerns, release blockers, operational risks, and accepted-risk candidates."
+      description: "Known technical risks, unresolved assumptions, spike needs, delivery concerns, vendor concerns, release
+        blockers, operational risks, and accepted-risk candidates."
   completionCriteria:
-    - "The central question is answered through a complete technical risk register with taxonomy, scoring, ownership, detection signals, mitigation, acceptance, escalation, release impact, review cadence, and downstream handoff."
-    - "Risk taxonomy defines categories, severity levels, likelihood levels, impact levels, confidence levels, risk states, escalation classes, and release impact classes."
-    - "Risk scoring model defines how likelihood, impact, confidence, detectability, reversibility, blast radius, cost, schedule impact, user impact, security/privacy impact, and operational impact combine into prioritization."
-    - "Every material risk includes id, category, source document, description, cause, affected systems, affected requirements/NFRs/acceptance gates, likelihood, impact, confidence, detection signals, mitigation, contingency, owner, review date, release impact, status, and downstream target."
-    - "Architecture risks include boundary erosion, coupling, wrong architectural style, runtime assumptions, deployment topology gaps, failure-mode blind spots, and hard-to-reverse decisions."
-    - "Stack risks include immature tools, unsupported versions, dependency health, licensing, security vulnerabilities, vendor lock-in, ecosystem fit, maintenance burden, and upgrade risk."
-    - "Domain risks include ambiguous language, hidden invariants, unstable rules, wrong aggregate boundaries, over-modeling, under-modeling, and domain evidence gaps."
-    - "Data risks include data loss, integrity failure, migration failure, bad indexing, query bottlenecks, retention conflicts, sensitivity exposure, backup/restore gaps, and auditability gaps."
-    - "API risks include breaking changes, schema ambiguity, permission gaps, inconsistent errors, idempotency gaps, rate-limit gaps, versioning drift, and contract-test gaps."
-    - "Integration risks include provider outage, API deprecation, auth failure, rate limits, malformed responses, webhook replay, duplicate events, privacy exposure, cost spikes, and replacement difficulty."
-    - "Security and privacy risks include access-control gaps, sensitive data leakage, secrets leakage, unsafe logging, weak auth, third-party data exposure, abuse vectors, vulnerability handling gaps, and incident unreadiness."
-    - "Sync and state risks include source-of-truth ambiguity, stale data, offline queue failure, conflict loss, duplicate side effects, cursor corruption, invalid replay, local data corruption, and recovery gaps."
-    - "Testing risks include false confidence, missing coverage, over-mocking, flaky tests, environment drift, untested migrations, untested failure modes, and release-gate weakness."
-    - "Observability risks include blind spots, noisy alerts, missing correlation, privacy leaks, untested alerts, stale dashboards, missing SLOs, and cost blowups."
-    - "Deployment risks include environment drift, bad config, leaked secrets, broken artifacts, failed migrations, bad feature flags, rollback failure, smoke-test gaps, and post-deploy monitoring gaps."
-    - "Performance and scalability risks include untested load profiles, slow queries, resource exhaustion, background job backlog, sync lag, integration latency, frontend performance degradation, and cost scaling."
-    - "Vendor and dependency risks include pricing changes, provider shutdown, API deprecation, license changes, dependency abandonment, supply-chain risk, and difficult substitution."
-    - "Maintenance risks include knowledge silos, standards drift, dependency debt, migration debt, documentation drift, operational burden, review bottlenecks, and single points of failure."
-    - "Operational readiness risks include missing runbooks, missing ownership, weak incident response, unsupported restore paths, unclear support escalation, and unresolved release blockers."
-    - "Required technical spikes define unknown, risk reduced, scope, method, timebox, success criteria, decision criteria, output artifact, owner, and downstream decision."
-    - "Accepted risks define risk, rationale, approver, mitigation, residual risk, expiration/review trigger, release impact, and rollback/contingency condition."
-    - "Risk escalation defines thresholds, escalation targets, response expectations, release blocking rules, acceptance authority, and unresolved-risk handling."
-    - "Risk review cadence defines how often risks are reviewed, updated, retired, escalated, and transferred into Operations Risk Management."
+    - "The central question is answered through a complete technical risk register with taxonomy, scoring, ownership,
+      detection signals, mitigation, acceptance, escalation, release impact, review cadence, and downstream handoff."
+    - "Risk taxonomy defines categories, severity levels, likelihood levels, impact levels, confidence levels, risk
+      states, escalation classes, and release impact classes."
+    - "Risk scoring model defines how likelihood, impact, confidence, detectability, reversibility, blast radius, cost,
+      schedule impact, user impact, security/privacy impact, and operational impact combine into prioritization."
+    - "Every material risk includes id, category, source document, description, cause, affected systems, affected
+      requirements/NFRs/acceptance gates, likelihood, impact, confidence, detection signals, mitigation, contingency,
+      owner, review date, release impact, status, and downstream target."
+    - "Architecture risks include boundary erosion, coupling, wrong architectural style, runtime assumptions, deployment
+      topology gaps, failure-mode blind spots, and hard-to-reverse decisions."
+    - "Stack risks include immature tools, unsupported versions, dependency health, licensing, security vulnerabilities,
+      vendor lock-in, ecosystem fit, maintenance burden, and upgrade risk."
+    - "Domain risks include ambiguous language, hidden invariants, unstable rules, wrong aggregate boundaries,
+      over-modeling, under-modeling, and domain evidence gaps."
+    - "Data risks include data loss, integrity failure, migration failure, bad indexing, query bottlenecks, retention
+      conflicts, sensitivity exposure, backup/restore gaps, and auditability gaps."
+    - "API risks include breaking changes, schema ambiguity, permission gaps, inconsistent errors, idempotency gaps,
+      rate-limit gaps, versioning drift, and contract-test gaps."
+    - "Integration risks include provider outage, API deprecation, auth failure, rate limits, malformed responses,
+      webhook replay, duplicate events, privacy exposure, cost spikes, and replacement difficulty."
+    - "Security and privacy risks include access-control gaps, sensitive data leakage, secrets leakage, unsafe logging,
+      weak auth, third-party data exposure, abuse vectors, vulnerability handling gaps, and incident unreadiness."
+    - "Sync and state risks include source-of-truth ambiguity, stale data, offline queue failure, conflict loss,
+      duplicate side effects, cursor corruption, invalid replay, local data corruption, and recovery gaps."
+    - "Testing risks include false confidence, missing coverage, over-mocking, flaky tests, environment drift, untested
+      migrations, untested failure modes, and release-gate weakness."
+    - "Observability risks include blind spots, noisy alerts, missing correlation, privacy leaks, untested alerts, stale
+      dashboards, missing SLOs, and cost blowups."
+    - "Deployment risks include environment drift, bad config, leaked secrets, broken artifacts, failed migrations, bad
+      feature flags, rollback failure, smoke-test gaps, and post-deploy monitoring gaps."
+    - "Performance and scalability risks include untested load profiles, slow queries, resource exhaustion, background
+      job backlog, sync lag, integration latency, frontend performance degradation, and cost scaling."
+    - "Vendor and dependency risks include pricing changes, provider shutdown, API deprecation, license changes,
+      dependency abandonment, supply-chain risk, and difficult substitution."
+    - "Maintenance risks include knowledge silos, standards drift, dependency debt, migration debt, documentation drift,
+      operational burden, review bottlenecks, and single points of failure."
+    - "Operational readiness risks include missing runbooks, missing ownership, weak incident response, unsupported
+      restore paths, unclear support escalation, and unresolved release blockers."
+    - "Required technical spikes define unknown, risk reduced, scope, method, timebox, success criteria, decision
+      criteria, output artifact, owner, and downstream decision."
+    - "Accepted risks define risk, rationale, approver, mitigation, residual risk, expiration/review trigger, release
+      impact, and rollback/contingency condition."
+    - "Risk escalation defines thresholds, escalation targets, response expectations, release blocking rules, acceptance
+      authority, and unresolved-risk handling."
+    - "Risk review cadence defines how often risks are reviewed, updated, retired, escalated, and transferred into
+      Operations Risk Management."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid risk-register theater: risks without cause, impact, detection signal, mitigation, owner, status, review cadence, or release consequence."
+    - "Avoid risk-register theater: risks without cause, impact, detection signal, mitigation, owner, status, review
+      cadence, or release consequence."
     - "Avoid generic risks that could apply to any software project unless made specific to this system."
-    - "Avoid listing mitigations that are wishes rather than actions, gates, tests, controls, spikes, fallback paths, or architectural changes."
+    - "Avoid listing mitigations that are wishes rather than actions, gates, tests, controls, spikes, fallback paths, or
+      architectural changes."
     - "Avoid treating unknowns as low risk merely because they are not yet understood."
     - "Avoid hiding accepted risks, deferred risks, residual risks, or risks transferred to Operations."
     - "Avoid double-counting the same risk in multiple sections without a parent/child relationship."
-    - "Avoid inventing likelihood, impact, compliance exposure, vendor guarantees, operational readiness, or mitigation completion when evidence is absent."
+    - "Avoid inventing likelihood, impact, compliance exposure, vendor guarantees, operational readiness, or mitigation
+      completion when evidence is absent."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Risks must be tied to source documents, release gates, detection signals, owners, and downstream documents wherever possible."
-    - "Technical risk register must preserve Acceptance Criteria, NFRs, Security/Privacy requirements, Testing gates, Observability needs, Deployment safety, and Operations handoff."
+    - "Risks must be tied to source documents, release gates, detection signals, owners, and downstream documents
+      wherever possible."
+    - "Technical risk register must preserve Acceptance Criteria, NFRs, Security/Privacy requirements, Testing gates,
+      Observability needs, Deployment safety, and Operations handoff."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate risk, cause, impact, likelihood, confidence, detection, mitigation, contingency, owner, acceptance, escalation, and release impact."
-    - "Tie each material risk to Engineering Brief, System Architecture, Technical Stack, Domain Model, Data Model, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, Observability, Deployment and Environments, Engineering Standards, NFRs, Acceptance Criteria, or Decision Record where possible."
-    - "Classify risks as open, monitoring, mitigated, accepted, transferred, deferred, escalated, retired, release-blocking, post-MVP, or review-needed where useful."
-    - "State whether the next action is spike, test, architecture change, documentation change, dependency replacement, monitoring, release gate, contingency plan, accepted risk, or escalation."
+    - "Separate risk, cause, impact, likelihood, confidence, detection, mitigation, contingency, owner, acceptance,
+      escalation, and release impact."
+    - "Tie each material risk to Engineering Brief, System Architecture, Technical Stack, Domain Model, Data Model, API
+      Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, Observability,
+      Deployment and Environments, Engineering Standards, NFRs, Acceptance Criteria, or Decision Record where possible."
+    - "Classify risks as open, monitoring, mitigated, accepted, transferred, deferred, escalated, retired,
+      release-blocking, post-MVP, or review-needed where useful."
+    - "State whether the next action is spike, test, architecture change, documentation change, dependency replacement,
+      monitoring, release gate, contingency plan, accepted risk, or escalation."
     - "Do not mark risks mitigated unless the mitigation has evidence or a downstream gate."
-    - "Keep detailed operational risk procedures in Operations/Risk Management while preserving Engineering-specific source and mitigation context here."
+    - "Keep detailed operational risk procedures in Operations/Risk Management while preserving Engineering-specific
+      source and mitigation context here."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Engineering Brief, System Architecture, Technical Stack, Domain Model, Data Model, API Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, Observability, Deployment and Environments, Engineering Standards, NFRs, Acceptance Criteria, Decision Record, or Foundation Boundaries."
-    - "Flag risks without cause, affected area, likelihood, impact, confidence, detection signal, owner, mitigation, contingency, review date, status, or release impact."
-    - "Flag mitigations that are vague, unactionable, unowned, untestable, or not connected to a gate/control/spike/fallback."
+    - "Flag contradictions with Engineering Brief, System Architecture, Technical Stack, Domain Model, Data Model, API
+      Contracts, Integration Architecture, Security and Privacy, Sync and State, Testing Strategy, Observability,
+      Deployment and Environments, Engineering Standards, NFRs, Acceptance Criteria, Decision Record, or Foundation
+      Boundaries."
+    - "Flag risks without cause, affected area, likelihood, impact, confidence, detection signal, owner, mitigation,
+      contingency, review date, status, or release impact."
+    - "Flag mitigations that are vague, unactionable, unowned, untestable, or not connected to a
+      gate/control/spike/fallback."
     - "Flag risks marked accepted without approver, rationale, residual risk, review trigger, and contingency."
     - "Flag technical spikes without success criteria, decision criteria, output artifact, and downstream decision."
-    - "Flag release-impacting risks not connected to Acceptance Criteria, Testing Strategy, Deployment, Release Management, or Risk Management."
+    - "Flag release-impacting risks not connected to Acceptance Criteria, Testing Strategy, Deployment, Release
+      Management, or Risk Management."
     - "Verify that severe risks have escalation path and release consequence."
     - "Verify that risks transferred to Operations are clearly handed off with context and ownership."
-    - "Flag content that belongs better in detailed architecture documents, Testing Strategy, Observability, Deployment, Release Management, Incident Response, Support Model, or Operations Risk Management."
+    - "Flag content that belongs better in detailed architecture documents, Testing Strategy, Observability, Deployment,
+      Release Management, Incident Response, Support Model, or Operations Risk Management."
   specializedFormats:
     riskFormat:
       description: "Required format for each technical risk."
       fields:
-        - id
-        - title
-        - category
-        - sourceDocument
-        - sourceItem
-        - description
-        - cause
-        - affectedSystems
-        - affectedRequirements
-        - affectedAcceptanceCriteria
-        - likelihood
-        - impact
-        - confidence
-        - detectability
-        - reversibility
-        - blastRadius
-        - detectionSignals
-        - mitigation
-        - contingency
-        - owner
-        - reviewDate
-        - status
-        - releaseImpact
-        - downstreamTarget
-        - notes
+        - "id"
+        - "title"
+        - "category"
+        - "sourceDocument"
+        - "sourceItem"
+        - "description"
+        - "cause"
+        - "affectedSystems"
+        - "affectedRequirements"
+        - "affectedAcceptanceCriteria"
+        - "likelihood"
+        - "impact"
+        - "confidence"
+        - "detectability"
+        - "reversibility"
+        - "blastRadius"
+        - "detectionSignals"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "reviewDate"
+        - "status"
+        - "releaseImpact"
+        - "downstreamTarget"
+        - "notes"
     scoringFormat:
       description: "Recommended format for scoring dimensions."
       fields:
-        - dimension
-        - scale
-        - definition
-        - examples
-        - priorityEffect
-        - reviewNotes
+        - "dimension"
+        - "scale"
+        - "definition"
+        - "examples"
+        - "priorityEffect"
+        - "reviewNotes"
     spikeFormat:
       description: "Recommended format for technical spikes."
       fields:
-        - id
-        - unknown
-        - riskReduced
-        - hypothesis
-        - scope
-        - method
-        - timebox
-        - successCriteria
-        - decisionCriteria
-        - outputArtifact
-        - owner
-        - downstreamDecision
-        - status
+        - "id"
+        - "unknown"
+        - "riskReduced"
+        - "hypothesis"
+        - "scope"
+        - "method"
+        - "timebox"
+        - "successCriteria"
+        - "decisionCriteria"
+        - "outputArtifact"
+        - "owner"
+        - "downstreamDecision"
+        - "status"
     mitigationFormat:
       description: "Recommended format for mitigation actions."
       fields:
-        - riskId
-        - mitigation
-        - mitigationType
-        - owner
-        - targetDateOrTrigger
-        - evidenceRequired
-        - linkedTestOrGate
-        - linkedDocument
-        - residualRisk
-        - status
+        - "riskId"
+        - "mitigation"
+        - "mitigationType"
+        - "owner"
+        - "targetDateOrTrigger"
+        - "evidenceRequired"
+        - "linkedTestOrGate"
+        - "linkedDocument"
+        - "residualRisk"
+        - "status"
     acceptedRiskFormat:
       description: "Recommended format for accepted risks."
       fields:
-        - riskId
-        - rationale
-        - approver
-        - residualRisk
-        - mitigationStillRequired
-        - expirationOrReviewTrigger
-        - releaseImpact
-        - contingency
-        - rollbackTrigger
-        - status
+        - "riskId"
+        - "rationale"
+        - "approver"
+        - "residualRisk"
+        - "mitigationStillRequired"
+        - "expirationOrReviewTrigger"
+        - "releaseImpact"
+        - "contingency"
+        - "rollbackTrigger"
+        - "status"
     escalationFormat:
       description: "Recommended format for escalation rules."
       fields:
-        - trigger
-        - severity
-        - escalationTarget
-        - responseExpectation
-        - decisionRequired
-        - releaseConsequence
-        - communicationRequirement
-        - status
+        - "trigger"
+        - "severity"
+        - "escalationTarget"
+        - "responseExpectation"
+        - "decisionRequired"
+        - "releaseConsequence"
+        - "communicationRequirement"
+        - "status"
     riskReviewFormat:
       description: "Recommended format for risk review cadence and governance."
       fields:
-        - reviewType
-        - cadence
-        - participants
-        - inputs
-        - outputs
-        - escalationRules
-        - retirementRules
-        - downstreamHandoff
+        - "reviewType"
+        - "cadence"
+        - "participants"
+        - "inputs"
+        - "outputs"
+        - "escalationRules"
+        - "retirementRules"
+        - "downstreamHandoff"
     riskHandoffFormat:
       description: "Recommended format for downstream risk handoff."
       fields:
-        - riskId
-        - handoffTarget
-        - contextToPreserve
-        - requiredAction
-        - owner
-        - timing
-        - acceptanceOrEscalationRule
-        - status
+        - "riskId"
+        - "handoffTarget"
+        - "contextToPreserve"
+        - "requiredAction"
+        - "owner"
+        - "timing"
+        - "acceptanceOrEscalationRule"
+        - "status"
   sections:
     - id: "risk-objective"
       title: "Risk Objective"
-      intent: "Define why this technical risk register exists, what outcomes it protects, how risk decisions affect release readiness, and how it differs from operational risk management."
+      intent: "Define why this technical risk register exists, what outcomes it protects, how risk decisions affect release
+        readiness, and how it differs from operational risk management."
       required: true
       outputGuidance:
         - "Open with the purpose of technical risk management for this engineering phase."
-        - "State which outcomes the register protects: feasibility, safety, reliability, delivery, maintainability, privacy, security, cost, release readiness, and operations handoff."
+        - "State which outcomes the register protects: feasibility, safety, reliability, delivery, maintainability,
+          privacy, security, cost, release readiness, and operations handoff."
         - "Clarify the boundary between Engineering technical risks and Operations risk management."
       qualityChecks:
         - "Objective is specific enough to reject generic risk lists."
         - "Release readiness and operational handoff are explicit."
         - "Engineering risk and business/market risk are not conflated."
-      questions:
+      questions: &a1
         - "Why does this technical risk register exist?"
         - "What outcomes does it protect?"
         - "How do risks affect release readiness?"
@@ -339,17 +402,19 @@ document:
         - "What risks are explicitly outside this document?"
     - id: "risk-taxonomy"
       title: "Risk Taxonomy"
-      intent: "Define risk categories, states, severity classes, release impact classes, confidence levels, escalation labels, and accepted-risk labels used throughout the register."
+      intent: "Define risk categories, states, severity classes, release impact classes, confidence levels, escalation labels,
+        and accepted-risk labels used throughout the register."
       required: true
       outputGuidance:
         - "Define categories before listing risks."
-        - "Include states such as open, monitoring, mitigated, accepted, transferred, deferred, escalated, retired, release-blocking, and review-needed."
+        - "Include states such as open, monitoring, mitigated, accepted, transferred, deferred, escalated, retired,
+          release-blocking, and review-needed."
         - "Define what each release impact class means."
       qualityChecks:
         - "Taxonomy prevents ambiguous risk status."
         - "Release impact labels have consequences."
         - "Accepted/transferred/deferred risks are distinguishable."
-      questions:
+      questions: &a2
         - "What risk categories are used?"
         - "What risk statuses exist?"
         - "What severity and release impact classes exist?"
@@ -358,7 +423,8 @@ document:
         - "How are technical, operational, security, privacy, and release risks distinguished?"
     - id: "risk-scoring-model"
       title: "Risk Scoring Model"
-      intent: "Define how risks are scored, prioritized, compared, escalated, and reviewed based on likelihood, impact, confidence, detectability, reversibility, blast radius, and release impact."
+      intent: "Define how risks are scored, prioritized, compared, escalated, and reviewed based on likelihood, impact,
+        confidence, detectability, reversibility, blast radius, and release impact."
       required: true
       outputGuidance:
         - "Use scoring records for each scoring dimension."
@@ -368,15 +434,17 @@ document:
         - "Scoring model is simple enough to use consistently."
         - "Low confidence does not hide high risk."
         - "Release blockers are not based only on numeric score."
-      questions:
+      questions: &a3
         - "How are likelihood and impact scored?"
         - "How is confidence scored?"
-        - "How do detectability, reversibility, blast radius, cost, schedule, user impact, security/privacy impact, and operational impact influence priority?"
+        - "How do detectability, reversibility, blast radius, cost, schedule, user impact, security/privacy impact, and
+          operational impact influence priority?"
         - "What makes a risk release-blocking?"
         - "What risks require escalation even if likelihood is uncertain?"
     - id: "risk-register"
       title: "Risk Register"
-      intent: "Maintain the master register of technical risks with source, category, cause, impact, detection signal, mitigation, contingency, owner, review date, status, and release impact."
+      intent: "Maintain the master register of technical risks with source, category, cause, impact, detection signal,
+        mitigation, contingency, owner, review date, status, and release impact."
       required: true
       outputGuidance:
         - "Use the risk format for every material risk."
@@ -386,7 +454,7 @@ document:
         - "Every risk is specific, owned, detectable, and actionable."
         - "Every risk has release impact and downstream target."
         - "Risks are tied to source documents or explicit assumptions."
-      questions:
+      questions: &a4
         - "What is the complete technical risk register?"
         - "What is the source of each risk?"
         - "What caused or could cause each risk?"
@@ -396,7 +464,8 @@ document:
         - "Who owns review and action?"
     - id: "architecture-risks"
       title: "Architecture Risks"
-      intent: "Identify architecture decisions and assumptions that could create coupling, boundary erosion, runtime fragility, deployment difficulty, or hard-to-reverse consequences."
+      intent: "Identify architecture decisions and assumptions that could create coupling, boundary erosion, runtime
+        fragility, deployment difficulty, or hard-to-reverse consequences."
       required: true
       outputGuidance:
         - "Tie risks to System Architecture decisions and assumptions."
@@ -406,7 +475,7 @@ document:
         - "Architecture risks are not just restatements of decisions."
         - "Hard-to-reverse risks are highlighted."
         - "Boundary erosion risks include detection and enforcement."
-      questions:
+      questions: &a5
         - "What architecture decisions carry the most risk?"
         - "Which architectural assumptions are least validated?"
         - "Where could boundaries erode or coupling appear?"
@@ -414,24 +483,27 @@ document:
         - "What architecture risks require ADRs, spikes, tests, or standards enforcement?"
     - id: "stack-risks"
       title: "Stack Risks"
-      intent: "Identify risks from selected technologies, versions, dependencies, licenses, ecosystem maturity, upgrades, package health, and maintenance burden."
+      intent: "Identify risks from selected technologies, versions, dependencies, licenses, ecosystem maturity, upgrades,
+        package health, and maintenance burden."
       required: true
       outputGuidance:
         - "Tie risks to Technical Stack decisions."
-        - "Include immature, unsupported, experimental, abandoned, vulnerable, expensive, or hard-to-replace stack items."
+        - "Include immature, unsupported, experimental, abandoned, vulnerable, expensive, or hard-to-replace stack
+          items."
         - "State replacement triggers where relevant."
       qualityChecks:
         - "Stack risks include maintenance and supply-chain implications."
         - "License/security/dependency health risks are not hidden."
         - "Replacement or exit path is explicit for high-risk choices."
-      questions:
+      questions: &a6
         - "What stack choices are riskiest?"
         - "What technologies are immature, experimental, unsupported, abandoned, vulnerable, costly, or hard to replace?"
         - "What dependency, license, security, package health, or upgrade risks exist?"
         - "What stack risks require replacement triggers or exit plans?"
     - id: "domain-risks"
       title: "Domain Risks"
-      intent: "Identify risks from ambiguous language, hidden invariants, unstable rules, wrong aggregates, wrong bounded contexts, over-modeling, under-modeling, and insufficient domain evidence."
+      intent: "Identify risks from ambiguous language, hidden invariants, unstable rules, wrong aggregates, wrong bounded
+        contexts, over-modeling, under-modeling, and insufficient domain evidence."
       required: true
       outputGuidance:
         - "Tie risks to Domain Model terms, entities, invariants, commands, events, state machines, and contexts."
@@ -441,7 +513,7 @@ document:
         - "Domain risks are expressed as modeling failure modes."
         - "Ambiguity and evidence gaps are explicit."
         - "Downstream consequences are identified."
-      questions:
+      questions: &a7
         - "What domain concepts remain ambiguous?"
         - "What hidden invariants or unstable rules could break implementation?"
         - "Where could aggregate or bounded-context boundaries be wrong?"
@@ -449,17 +521,19 @@ document:
         - "What domain risks require further discovery or spikes?"
     - id: "data-risks"
       title: "Data Risks"
-      intent: "Identify risks in storage, constraints, indexes, migrations, retention, sensitivity, backup/restore, auditability, data consistency, and query performance."
+      intent: "Identify risks in storage, constraints, indexes, migrations, retention, sensitivity, backup/restore,
+        auditability, data consistency, and query performance."
       required: true
       outputGuidance:
-        - "Tie risks to Data Model structures, constraints, migrations, indexes, sync, sensitivity, retention, and backup/restore rules."
+        - "Tie risks to Data Model structures, constraints, migrations, indexes, sync, sensitivity, retention, and
+          backup/restore rules."
         - "Include both data loss and data exposure risks."
         - "State test or observability signal required."
       qualityChecks:
         - "Data risks include integrity, privacy, performance, and recovery dimensions."
         - "Migrations and backup/restore are explicitly considered."
         - "High-risk data assumptions are connected to tests or gates."
-      questions:
+      questions: &a8
         - "What data modelling or storage decisions could cause problems?"
         - "What data consistency or integrity risks exist?"
         - "Where could migrations, backfills, indexes, constraints, or query patterns fail?"
@@ -467,7 +541,8 @@ document:
         - "What data risks require release gates or recovery plans?"
     - id: "api-risks"
       title: "API Risks"
-      intent: "Identify risks in API contracts, schemas, auth/authz, errors, idempotency, versioning, pagination, rate limits, realtime/webhooks, and contract tests."
+      intent: "Identify risks in API contracts, schemas, auth/authz, errors, idempotency, versioning, pagination, rate limits,
+        realtime/webhooks, and contract tests."
       required: true
       outputGuidance:
         - "Tie risks to API Contracts."
@@ -477,31 +552,35 @@ document:
         - "API risks include breaking-change and permission dimensions."
         - "Schema ambiguity and error inconsistency are considered."
         - "Contract-test gaps are explicit."
-      questions:
+      questions: &a9
         - "What API contracts are most likely to change or break consumers?"
         - "Where are schema, nullability, error, pagination, idempotency, rate-limit, or versioning risks?"
         - "Where could authorization or object-level access be wrong?"
         - "What API risks require contract tests or compatibility gates?"
     - id: "integration-risks"
       title: "Integration Risks"
-      intent: "Identify risks from external services, provider APIs, webhooks, event streams, credentials, rate limits, retries, malformed data, provider outages, and provider deprecations."
+      intent: "Identify risks from external services, provider APIs, webhooks, event streams, credentials, rate limits,
+        retries, malformed data, provider outages, and provider deprecations."
       required: true
       outputGuidance:
         - "Tie risks to Integration Architecture."
-        - "Include provider outage, auth failure, rate-limit exhaustion, webhook duplicate/replay, malformed responses, privacy exposure, and replacement difficulty."
+        - "Include provider outage, auth failure, rate-limit exhaustion, webhook duplicate/replay, malformed responses,
+          privacy exposure, and replacement difficulty."
         - "State fallback, degraded mode, or provider substitution path."
       qualityChecks:
         - "Integration risks include both technical and operational consequences."
         - "Critical provider failure has fallback or accepted-risk path."
         - "Webhook/event risks include idempotency and ordering."
-      questions:
+      questions: &a10
         - "What external integrations carry the most risk?"
         - "What happens if a critical integration fails permanently?"
-        - "Where could provider auth, rate limits, retries, malformed data, duplicate events, or deprecations break the system?"
+        - "Where could provider auth, rate limits, retries, malformed data, duplicate events, or deprecations break the
+          system?"
         - "What fallback, degraded mode, or substitution plan exists?"
     - id: "security-and-privacy-risks"
       title: "Security and Privacy Risks"
-      intent: "Identify technical risks related to access control, sensitive data, secrets, unsafe logging, third-party exposure, abuse, vulnerability handling, and incident readiness."
+      intent: "Identify technical risks related to access control, sensitive data, secrets, unsafe logging, third-party
+        exposure, abuse, vulnerability handling, and incident readiness."
       required: true
       outputGuidance:
         - "Tie risks to Security and Privacy threat model, assets, controls, data handling rules, and incident response."
@@ -511,7 +590,7 @@ document:
         - "Security/privacy risks include assets, threats, controls, and residual risk."
         - "Accepted security/privacy risks require authority."
         - "Sensitive data leakage paths are explicit."
-      questions:
+      questions: &a11
         - "What unresolved security risks exist?"
         - "What unresolved privacy risks exist?"
         - "What attack surfaces are most exposed?"
@@ -519,17 +598,19 @@ document:
         - "What security/privacy risks block release?"
     - id: "sync-and-state-risks"
       title: "Sync and State Risks"
-      intent: "Identify risks in source of truth, local/remote state, cache, derived state, hydration, offline behavior, queues, sync protocol, conflicts, idempotency, ordering, and recovery."
+      intent: "Identify risks in source of truth, local/remote state, cache, derived state, hydration, offline behavior,
+        queues, sync protocol, conflicts, idempotency, ordering, and recovery."
       required: true
       outputGuidance:
         - "Tie risks to Sync and State."
-        - "Include data loss, permanent divergence, duplicate side effects, stale decisions, local corruption, cursor corruption, invalid replay, and failed recovery."
+        - "Include data loss, permanent divergence, duplicate side effects, stale decisions, local corruption, cursor
+          corruption, invalid replay, and failed recovery."
         - "State sync tests and observability signals required."
       qualityChecks:
         - "Sync risks include adverse conditions and recovery."
         - "Conflict strategies are tested or marked risky."
         - "Source-of-truth ambiguity is release-impacting when it affects core data."
-      questions:
+      questions: &a12
         - "What sync-related risks exist?"
         - "Where could data loss, divergence, conflict storms, stale data, duplicate side effects, or invalid replay occur?"
         - "How is sync correctness verified under adverse conditions?"
@@ -537,35 +618,40 @@ document:
         - "What sync risks block release?"
     - id: "testing-risks"
       title: "Testing Risks"
-      intent: "Identify risks that the test strategy could produce false confidence, miss critical behavior, normalize flaky tests, over-mock dependencies, or fail to catch release blockers."
+      intent: "Identify risks that the test strategy could produce false confidence, miss critical behavior, normalize flaky
+        tests, over-mock dependencies, or fail to catch release blockers."
       required: true
       outputGuidance:
         - "Tie risks to Testing Strategy gaps and release gates."
-        - "Include coverage gaps, flaky tests, over-mocking, environment drift, missing negative tests, and untested failure modes."
+        - "Include coverage gaps, flaky tests, over-mocking, environment drift, missing negative tests, and untested
+          failure modes."
         - "State additional test, gate, or accepted-risk decision required."
       qualityChecks:
         - "Testing risks identify blind spots rather than only missing tools."
         - "Release-gate weakness is explicit."
         - "False confidence is treated as a first-class risk."
-      questions:
+      questions: &a13
         - "Where could tests create false confidence?"
-        - "What critical requirements, NFRs, migrations, integrations, security controls, sync flows, or recovery paths lack coverage?"
+        - "What critical requirements, NFRs, migrations, integrations, security controls, sync flows, or recovery paths lack
+          coverage?"
         - "Where could mocks or fixtures drift from reality?"
         - "What flaky or slow tests could undermine CI?"
         - "What testing risks block release?"
     - id: "observability-risks"
       title: "Observability Risks"
-      intent: "Identify risks that failures cannot be diagnosed, alerts are noisy or absent, dashboards rot, traces do not correlate, telemetry leaks sensitive data, or observability costs become unsustainable."
+      intent: "Identify risks that failures cannot be diagnosed, alerts are noisy or absent, dashboards rot, traces do not
+        correlate, telemetry leaks sensitive data, or observability costs become unsustainable."
       required: true
       outputGuidance:
-        - "Tie risks to Observability signal gaps, alert gaps, SLO gaps, dashboard gaps, and privacy-safe telemetry rules."
+        - "Tie risks to Observability signal gaps, alert gaps, SLO gaps, dashboard gaps, and privacy-safe telemetry
+          rules."
         - "Include incident diagnosis and support implications."
         - "State missing signal or alert test required."
       qualityChecks:
         - "Observability risks are tied to actual operational questions."
         - "Alert fatigue and blind spots are both considered."
         - "Privacy and cost risks are included."
-      questions:
+      questions: &a14
         - "Where could failures be invisible or hard to diagnose?"
         - "Where could alerts be noisy, missing, delayed, or unactionable?"
         - "Where could logs, metrics, traces, audit events, or telemetry leak sensitive data?"
@@ -573,43 +659,50 @@ document:
         - "What observability risks block release or require accepted risk?"
     - id: "deployment-risks"
       title: "Deployment Risks"
-      intent: "Identify risks in environments, configuration, secrets, builds, artifacts, CI/CD, migrations, promotion, feature flags, rollback, smoke tests, and post-deploy monitoring."
+      intent: "Identify risks in environments, configuration, secrets, builds, artifacts, CI/CD, migrations, promotion,
+        feature flags, rollback, smoke tests, and post-deploy monitoring."
       required: true
       outputGuidance:
         - "Tie risks to Deployment and Environments."
-        - "Include environment drift, bad config, leaked secrets, broken artifacts, failed migrations, bad flags, rollback failure, and missing post-deploy signals."
+        - "Include environment drift, bad config, leaked secrets, broken artifacts, failed migrations, bad flags,
+          rollback failure, and missing post-deploy signals."
         - "State rollback/recovery path and release impact."
       qualityChecks:
         - "Deployment risks include blast radius and recovery."
         - "Migration and rollback constraints are explicit."
         - "Post-deploy monitoring gaps are included."
-      questions:
+      questions: &a15
         - "What deployment risks exist?"
-        - "Where could environment drift, bad config, leaked secrets, broken artifacts, failed migrations, bad flags, or rollback failure occur?"
+        - "Where could environment drift, bad config, leaked secrets, broken artifacts, failed migrations, bad flags, or
+          rollback failure occur?"
         - "What is the blast radius of deployment failure?"
         - "What smoke tests or monitoring signals are needed?"
         - "What deployment risks block release?"
     - id: "performance-and-scalability-risks"
       title: "Performance and Scalability Risks"
-      intent: "Identify bottlenecks, untested load profiles, scaling limits, resource exhaustion, slow queries, sync lag, job backlog, integration latency, frontend degradation, and cost scaling risks."
+      intent: "Identify bottlenecks, untested load profiles, scaling limits, resource exhaustion, slow queries, sync lag, job
+        backlog, integration latency, frontend degradation, and cost scaling risks."
       required: true
       outputGuidance:
-        - "Tie risks to NFRs, Technical Stack, Data Model, API Contracts, Integration Architecture, Sync/State, Observability, and Testing Strategy."
+        - "Tie risks to NFRs, Technical Stack, Data Model, API Contracts, Integration Architecture, Sync/State,
+          Observability, and Testing Strategy."
         - "Distinguish actual known bottlenecks from untested assumptions."
         - "State measurement or spike needed."
       qualityChecks:
         - "Performance risks include measurable detection signals."
         - "Untested load profiles are marked explicitly."
         - "Scaling and cost risks are considered together where relevant."
-      questions:
+      questions: &a16
         - "What are the performance risks?"
-        - "What bottlenecks, scaling limits, resource exhaustion, sync lag, queue backlogs, slow queries, or integration latency risks exist?"
+        - "What bottlenecks, scaling limits, resource exhaustion, sync lag, queue backlogs, slow queries, or integration
+          latency risks exist?"
         - "What frontend performance risks exist?"
         - "What load profiles are untested?"
         - "What measurements, benchmarks, or load tests are required?"
     - id: "vendor-and-dependency-risks"
       title: "Vendor and Dependency Risks"
-      intent: "Identify pricing, outage, deprecation, API change, license, supply-chain, dependency abandonment, data portability, and substitution risks."
+      intent: "Identify pricing, outage, deprecation, API change, license, supply-chain, dependency abandonment, data
+        portability, and substitution risks."
       required: true
       outputGuidance:
         - "Tie risks to Technical Stack and Integration Architecture."
@@ -619,7 +712,7 @@ document:
         - "Vendor risks are specific to actual vendors/dependencies or explicit candidates."
         - "Substitution plan is realistic or risk is accepted."
         - "License/supply-chain risks are not hidden."
-      questions:
+      questions: &a17
         - "What vendor-related risks exist?"
         - "What pricing, deprecation, outage, API change, license, supply-chain, or data portability risks exist?"
         - "What dependency abandonment or ecosystem risks exist?"
@@ -627,17 +720,19 @@ document:
         - "What would trigger vendor or dependency replacement?"
     - id: "maintenance-risks"
       title: "Maintenance Risks"
-      intent: "Identify risks that the system becomes hard to maintain due to complexity, documentation drift, knowledge silos, standards drift, dependency debt, migration debt, review bottlenecks, or operational burden."
+      intent: "Identify risks that the system becomes hard to maintain due to complexity, documentation drift, knowledge
+        silos, standards drift, dependency debt, migration debt, review bottlenecks, or operational burden."
       required: true
       outputGuidance:
-        - "Tie risks to Engineering Standards, Technical Stack, Architecture, Testing, Deployment, and Operations handoff."
+        - "Tie risks to Engineering Standards, Technical Stack, Architecture, Testing, Deployment, and Operations
+          handoff."
         - "Include knowledge and ownership risks, but avoid inventing team facts."
         - "State mitigation through standards, docs, automation, ownership, or simplification."
       qualityChecks:
         - "Maintenance risks are specific and tied to ownership or complexity."
         - "Documentation and standards drift are considered."
         - "Single points of failure are identified only when grounded or marked as assumption."
-      questions:
+      questions: &a18
         - "What parts of the system will be hardest to maintain?"
         - "What complexity could accumulate into technical debt?"
         - "What knowledge silos or single points of failure could exist?"
@@ -645,34 +740,39 @@ document:
         - "What maintenance mitigations are required?"
     - id: "operational-readiness-risks"
       title: "Operational Readiness Risks"
-      intent: "Identify risks that engineering output is technically built but not operable, supportable, recoverable, observable, or releasable."
+      intent: "Identify risks that engineering output is technically built but not operable, supportable, recoverable,
+        observable, or releasable."
       required: true
       outputGuidance:
-        - "Tie risks to Observability, Deployment, Testing, Support, Incident Response, Release Management, and Operations handoff."
-        - "Include missing runbooks, missing ownership, weak support escalation, restore gaps, incident unreadiness, and unclear release criteria."
+        - "Tie risks to Observability, Deployment, Testing, Support, Incident Response, Release Management, and
+          Operations handoff."
+        - "Include missing runbooks, missing ownership, weak support escalation, restore gaps, incident unreadiness, and
+          unclear release criteria."
         - "State downstream Operations document that must inherit each risk."
       qualityChecks:
         - "Operational readiness risks bridge Engineering and Operations."
         - "Risks are not treated as solved just because implementation exists."
         - "Support, incident, release, and restore implications are explicit."
-      questions:
+      questions: &a19
         - "What could make the system built but not operable?"
         - "What support, incident, release, restore, runbook, monitoring, ownership, or escalation gaps exist?"
         - "What operational readiness risks block production release?"
         - "What risks must be transferred to Operations Risk Management?"
     - id: "required-technical-spikes"
       title: "Required Technical Spikes"
-      intent: "Identify unknowns requiring dedicated technical investigation before committing to architecture, stack, data, sync, integration, security, performance, or deployment decisions."
+      intent: "Identify unknowns requiring dedicated technical investigation before committing to architecture, stack, data,
+        sync, integration, security, performance, or deployment decisions."
       required: true
       outputGuidance:
         - "Use spike records for each required technical spike."
-        - "Define hypothesis, scope, timebox, success criteria, decision criteria, output artifact, and downstream decision."
+        - "Define hypothesis, scope, timebox, success criteria, decision criteria, output artifact, and downstream
+          decision."
         - "Separate required spikes from optional research."
       qualityChecks:
         - "Each spike reduces a named risk."
         - "Each spike has decision criteria and output artifact."
         - "Spikes are bounded enough to complete."
-      questions:
+      questions: &a20
         - "What unknowns require dedicated spikes before committing to an approach?"
         - "What risk does each spike reduce?"
         - "What is the spike hypothesis and scope?"
@@ -682,25 +782,29 @@ document:
         - "What downstream decision depends on the spike?"
     - id: "risk-mitigation-plan"
       title: "Risk Mitigation Plan"
-      intent: "Define the overall mitigation approach, including avoidance, reduction, transfer, acceptance, contingency, testing, monitoring, spikes, standards, architecture changes, and release gates."
+      intent: "Define the overall mitigation approach, including avoidance, reduction, transfer, acceptance, contingency,
+        testing, monitoring, spikes, standards, architecture changes, and release gates."
       required: true
       outputGuidance:
         - "Use mitigation records for material mitigation actions."
-        - "Classify mitigation type: avoid, reduce, transfer, accept, monitor, spike, test, automate, document, gate, fallback, rollback, replace, or escalate."
+        - "Classify mitigation type: avoid, reduce, transfer, accept, monitor, spike, test, automate, document, gate,
+          fallback, rollback, replace, or escalate."
         - "State evidence required to close or downgrade a risk."
       qualityChecks:
         - "Mitigations are actions, not hopes."
         - "Each high-priority risk has mitigation or accepted-risk path."
         - "Risk closure requires evidence."
-      questions:
+      questions: &a21
         - "What is the overall risk mitigation approach?"
-        - "Which risks are avoided, reduced, transferred, accepted, monitored, tested, spiked, automated, documented, gated, replaced, or escalated?"
+        - "Which risks are avoided, reduced, transferred, accepted, monitored, tested, spiked, automated, documented, gated,
+          replaced, or escalated?"
         - "What evidence is required to downgrade or close each risk?"
         - "What contingency exists if mitigation fails?"
         - "How do mitigations affect release gates?"
     - id: "accepted-risks"
       title: "Accepted Risks"
-      intent: "Define risks that are intentionally accepted, who approved them, why, what residual risk remains, and when acceptance expires or must be reviewed."
+      intent: "Define risks that are intentionally accepted, who approved them, why, what residual risk remains, and when
+        acceptance expires or must be reviewed."
       required: true
       outputGuidance:
         - "Use accepted risk records for each accepted risk."
@@ -710,7 +814,7 @@ document:
         - "Accepted risks are not hidden under deferred or monitoring status."
         - "Acceptance authority is explicit."
         - "Residual risk and contingency are documented."
-      questions:
+      questions: &a22
         - "What technical risks are intentionally accepted?"
         - "Who accepts each risk?"
         - "What is the rationale for acceptance?"
@@ -719,17 +823,19 @@ document:
         - "What expiration, review trigger, rollback trigger, or contingency applies?"
     - id: "risk-escalation"
       title: "Risk Escalation"
-      intent: "Define when technical risks must be escalated, to whom, with what context, what decision is required, and what release consequence applies."
+      intent: "Define when technical risks must be escalated, to whom, with what context, what decision is required, and what
+        release consequence applies."
       required: true
       outputGuidance:
         - "Use escalation records for material escalation rules."
-        - "Include release-blocking thresholds, security/privacy escalation, operational escalation, and unresolved-decision escalation."
+        - "Include release-blocking thresholds, security/privacy escalation, operational escalation, and
+          unresolved-decision escalation."
         - "State communication requirements."
       qualityChecks:
         - "Severe risks have clear escalation path."
         - "Release consequences are explicit."
         - "Escalation does not depend on informal memory."
-      questions:
+      questions: &a23
         - "When is a technical risk escalated?"
         - "Who receives escalation?"
         - "What information must be included?"
@@ -742,13 +848,14 @@ document:
       required: true
       outputGuidance:
         - "Use risk review records for review events."
-        - "Define cadence by project phase, release cycle, incident, major architecture change, dependency change, and pre-release gate."
+        - "Define cadence by project phase, release cycle, incident, major architecture change, dependency change, and
+          pre-release gate."
         - "State retirement and transfer rules."
       qualityChecks:
         - "Risks are living records, not one-time notes."
         - "Review triggers include architecture, release, incident, and dependency changes."
         - "Retirement requires evidence."
-      questions:
+      questions: &a24
         - "How often are technical risks reviewed?"
         - "What triggers an out-of-cycle risk review?"
         - "Who participates in risk reviews?"
@@ -757,17 +864,20 @@ document:
         - "When is a risk transferred to Operations Risk Management?"
     - id: "release-impact"
       title: "Release Impact"
-      intent: "Define how technical risks affect release readiness, release gates, rollback decisions, sign-off, accepted risk, and downstream release management."
+      intent: "Define how technical risks affect release readiness, release gates, rollback decisions, sign-off, accepted
+        risk, and downstream release management."
       required: true
       outputGuidance:
-        - "Map risks to release blockers, release warnings, monitoring-only risks, post-release follow-ups, and accepted-risk requirements."
-        - "Tie release-impacting risks to Acceptance Criteria, Testing Strategy, Deployment, Observability, and Release Management."
+        - "Map risks to release blockers, release warnings, monitoring-only risks, post-release follow-ups, and
+          accepted-risk requirements."
+        - "Tie release-impacting risks to Acceptance Criteria, Testing Strategy, Deployment, Observability, and Release
+          Management."
         - "State retest and verification requirements after mitigation."
       qualityChecks:
         - "Release impact is explicit for each major risk."
         - "Risk mitigation changes release gates where needed."
         - "Accepted release risk requires authority and evidence."
-      questions:
+      questions: &a25
         - "Which technical risks block release?"
         - "Which risks require release warning, monitoring, or post-release follow-up?"
         - "Which risks require accepted-risk approval?"
@@ -775,17 +885,19 @@ document:
         - "How are mitigated risks retested before release?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what Operations, Release, Support, Incident Response, and Risk Management documents must inherit from Technical Risks and what they must not assume."
+      intent: "Define what Operations, Release, Support, Incident Response, and Risk Management documents must inherit from
+        Technical Risks and what they must not assume."
       required: true
       outputGuidance:
         - "Use handoff records for material transferred risks."
         - "Route risks to the correct downstream documents."
-        - "Preserve context, detection signals, mitigation status, accepted-risk decisions, escalation rules, and release impact."
+        - "Preserve context, detection signals, mitigation status, accepted-risk decisions, escalation rules, and
+          release impact."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Operations documents are not allowed to invent missing risk context silently."
         - "Engineering-owned and Operations-owned risks are clearly distinguished."
-      questions:
+      questions: &a26
         - "What should GTM not promise because of unresolved technical risk?"
         - "What should Operating Model inherit from Technical Risks?"
         - "What should Maintenance Plan inherit?"
@@ -794,3 +906,354 @@ document:
         - "What should Incident Response inherit?"
         - "What should Operations Risk Management inherit?"
         - "What unresolved risks must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain technical risks. What technical risks could make the system difficult, expensive, unsafe,
+      unstable, unmaintainable, unreleasable, or unviable, and how will they be detected, reduced, accepted, or
+      escalated?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "risk-objective"
+        label: "Risk Objective"
+        required: true
+        description: "Define why this technical risk register exists, what outcomes it protects, how risk decisions affect
+          release readiness, and how it differs from operational risk management."
+        evaluationHint: "Look for concrete answers addressing: Why does this technical risk register exist?; What outcomes does
+          it protect?; How do risks affect release readiness?."
+        sourceQuestions: *a1
+        targetSections: &a27
+          - "Risk Objective"
+      - id: "risk-taxonomy"
+        label: "Risk Taxonomy"
+        required: true
+        description: "Define risk categories, states, severity classes, release impact classes, confidence levels, escalation
+          labels, and accepted-risk labels used throughout the register."
+        evaluationHint: "Look for concrete answers addressing: What risk categories are used?; What risk statuses exist?; What
+          severity and release impact classes exist?."
+        sourceQuestions: *a2
+        targetSections: &a28
+          - "Risk Taxonomy"
+      - id: "risk-scoring-model"
+        label: "Risk Scoring Model"
+        required: true
+        description: "Define how risks are scored, prioritized, compared, escalated, and reviewed based on likelihood, impact,
+          confidence, detectability, reversibility, blast radius, and release impact."
+        evaluationHint: "Look for concrete answers addressing: How are likelihood and impact scored?; How is confidence scored?;
+          How do detectability, reversibility, blast radius, cost, schedule, user impact, security/privacy impact, and
+          operational impact influence priority?."
+        sourceQuestions: *a3
+        targetSections: &a29
+          - "Risk Scoring Model"
+      - id: "risk-register"
+        label: "Risk Register"
+        required: true
+        description: "Maintain the master register of technical risks with source, category, cause, impact, detection signal,
+          mitigation, contingency, owner, review date, status, and release impact."
+        evaluationHint: "Look for concrete answers addressing: What is the complete technical risk register?; What is the source
+          of each risk?; What caused or could cause each risk?."
+        sourceQuestions: *a4
+        targetSections: &a30
+          - "Risk Register"
+      - id: "architecture-risks"
+        label: "Architecture Risks"
+        required: true
+        description: "Identify architecture decisions and assumptions that could create coupling, boundary erosion, runtime
+          fragility, deployment difficulty, or hard-to-reverse consequences."
+        evaluationHint: "Look for concrete answers addressing: What architecture decisions carry the most risk?; Which
+          architectural assumptions are least validated?; Where could boundaries erode or coupling appear?."
+        sourceQuestions: *a5
+        targetSections: &a31
+          - "Architecture Risks"
+      - id: "stack-risks"
+        label: "Stack Risks"
+        required: true
+        description: "Identify risks from selected technologies, versions, dependencies, licenses, ecosystem maturity, upgrades,
+          package health, and maintenance burden."
+        evaluationHint: "Look for concrete answers addressing: What stack choices are riskiest?; What technologies are immature,
+          experimental, unsupported, abandoned, vulnerable, costly, or hard to replace?; What dependency, license,
+          security, package health, or upgrade risks exist?."
+        sourceQuestions: *a6
+        targetSections: &a32
+          - "Stack Risks"
+      - id: "domain-risks"
+        label: "Domain Risks"
+        required: true
+        description: "Identify risks from ambiguous language, hidden invariants, unstable rules, wrong aggregates, wrong bounded
+          contexts, over-modeling, under-modeling, and insufficient domain evidence."
+        evaluationHint: "Look for concrete answers addressing: What domain concepts remain ambiguous?; What hidden invariants or
+          unstable rules could break implementation?; Where could aggregate or bounded-context boundaries be wrong?."
+        sourceQuestions: *a7
+        targetSections: &a33
+          - "Domain Risks"
+      - id: "data-risks"
+        label: "Data Risks"
+        required: true
+        description: "Identify risks in storage, constraints, indexes, migrations, retention, sensitivity, backup/restore,
+          auditability, data consistency, and query performance."
+        evaluationHint: "Look for concrete answers addressing: What data modelling or storage decisions could cause problems?;
+          What data consistency or integrity risks exist?; Where could migrations, backfills, indexes, constraints, or
+          query patterns fail?."
+        sourceQuestions: *a8
+        targetSections: &a34
+          - "Data Risks"
+      - id: "api-risks"
+        label: "API Risks"
+        required: true
+        description: "Identify risks in API contracts, schemas, auth/authz, errors, idempotency, versioning, pagination, rate
+          limits, realtime/webhooks, and contract tests."
+        evaluationHint: "Look for concrete answers addressing: What API contracts are most likely to change or break consumers?;
+          Where are schema, nullability, error, pagination, idempotency, rate-limit, or versioning risks?; Where could
+          authorization or object-level access be wrong?."
+        sourceQuestions: *a9
+        targetSections: &a35
+          - "API Risks"
+      - id: "integration-risks"
+        label: "Integration Risks"
+        required: true
+        description: "Identify risks from external services, provider APIs, webhooks, event streams, credentials, rate limits,
+          retries, malformed data, provider outages, and provider deprecations."
+        evaluationHint: "Look for concrete answers addressing: What external integrations carry the most risk?; What happens if
+          a critical integration fails permanently?; Where could provider auth, rate limits, retries, malformed data,
+          duplicate events, or deprecations break the system?."
+        sourceQuestions: *a10
+        targetSections: &a36
+          - "Integration Risks"
+      - id: "security-and-privacy-risks"
+        label: "Security and Privacy Risks"
+        required: true
+        description: "Identify technical risks related to access control, sensitive data, secrets, unsafe logging, third-party
+          exposure, abuse, vulnerability handling, and incident readiness."
+        evaluationHint: "Look for concrete answers addressing: What unresolved security risks exist?; What unresolved privacy
+          risks exist?; What attack surfaces are most exposed?."
+        sourceQuestions: *a11
+        targetSections: &a37
+          - "Security and Privacy Risks"
+      - id: "sync-and-state-risks"
+        label: "Sync and State Risks"
+        required: true
+        description: "Identify risks in source of truth, local/remote state, cache, derived state, hydration, offline behavior,
+          queues, sync protocol, conflicts, idempotency, ordering, and recovery."
+        evaluationHint: "Look for concrete answers addressing: What sync-related risks exist?; Where could data loss,
+          divergence, conflict storms, stale data, duplicate side effects, or invalid replay occur?; How is sync
+          correctness verified under adverse conditions?."
+        sourceQuestions: *a12
+        targetSections: &a38
+          - "Sync and State Risks"
+      - id: "testing-risks"
+        label: "Testing Risks"
+        required: true
+        description: "Identify risks that the test strategy could produce false confidence, miss critical behavior, normalize
+          flaky tests, over-mock dependencies, or fail to catch release blockers."
+        evaluationHint: "Look for concrete answers addressing: Where could tests create false confidence?; What critical
+          requirements, NFRs, migrations, integrations, security controls, sync flows, or recovery paths lack coverage?;
+          Where could mocks or fixtures drift from reality?."
+        sourceQuestions: *a13
+        targetSections: &a39
+          - "Testing Risks"
+      - id: "observability-risks"
+        label: "Observability Risks"
+        required: true
+        description: "Identify risks that failures cannot be diagnosed, alerts are noisy or absent, dashboards rot, traces do
+          not correlate, telemetry leaks sensitive data, or observability costs become unsustainable."
+        evaluationHint: "Look for concrete answers addressing: Where could failures be invisible or hard to diagnose?; Where
+          could alerts be noisy, missing, delayed, or unactionable?; Where could logs, metrics, traces, audit events, or
+          telemetry leak sensitive data?."
+        sourceQuestions: *a14
+        targetSections: &a40
+          - "Observability Risks"
+      - id: "deployment-risks"
+        label: "Deployment Risks"
+        required: true
+        description: "Identify risks in environments, configuration, secrets, builds, artifacts, CI/CD, migrations, promotion,
+          feature flags, rollback, smoke tests, and post-deploy monitoring."
+        evaluationHint: "Look for concrete answers addressing: What deployment risks exist?; Where could environment drift, bad
+          config, leaked secrets, broken artifacts, failed migrations, bad flags, or rollback failure occur?; What is
+          the blast radius of deployment failure?."
+        sourceQuestions: *a15
+        targetSections: &a41
+          - "Deployment Risks"
+      - id: "performance-and-scalability-risks"
+        label: "Performance and Scalability Risks"
+        required: true
+        description: "Identify bottlenecks, untested load profiles, scaling limits, resource exhaustion, slow queries, sync lag,
+          job backlog, integration latency, frontend degradation, and cost scaling risks."
+        evaluationHint: "Look for concrete answers addressing: What are the performance risks?; What bottlenecks, scaling
+          limits, resource exhaustion, sync lag, queue backlogs, slow queries, or integration latency risks exist?; What
+          frontend performance risks exist?."
+        sourceQuestions: *a16
+        targetSections: &a42
+          - "Performance and Scalability Risks"
+      - id: "vendor-and-dependency-risks"
+        label: "Vendor and Dependency Risks"
+        required: true
+        description: "Identify pricing, outage, deprecation, API change, license, supply-chain, dependency abandonment, data
+          portability, and substitution risks."
+        evaluationHint: "Look for concrete answers addressing: What vendor-related risks exist?; What pricing, deprecation,
+          outage, API change, license, supply-chain, or data portability risks exist?; What dependency abandonment or
+          ecosystem risks exist?."
+        sourceQuestions: *a17
+        targetSections: &a43
+          - "Vendor and Dependency Risks"
+      - id: "maintenance-risks"
+        label: "Maintenance Risks"
+        required: true
+        description: "Identify risks that the system becomes hard to maintain due to complexity, documentation drift, knowledge
+          silos, standards drift, dependency debt, migration debt, review bottlenecks, or operational burden."
+        evaluationHint: "Look for concrete answers addressing: What parts of the system will be hardest to maintain?; What
+          complexity could accumulate into technical debt?; What knowledge silos or single points of failure could
+          exist?."
+        sourceQuestions: *a18
+        targetSections: &a44
+          - "Maintenance Risks"
+      - id: "operational-readiness-risks"
+        label: "Operational Readiness Risks"
+        required: true
+        description: "Identify risks that engineering output is technically built but not operable, supportable, recoverable,
+          observable, or releasable."
+        evaluationHint: "Look for concrete answers addressing: What could make the system built but not operable?; What support,
+          incident, release, restore, runbook, monitoring, ownership, or escalation gaps exist?; What operational
+          readiness risks block production release?."
+        sourceQuestions: *a19
+        targetSections: &a45
+          - "Operational Readiness Risks"
+      - id: "required-technical-spikes"
+        label: "Required Technical Spikes"
+        required: true
+        description: "Identify unknowns requiring dedicated technical investigation before committing to architecture, stack,
+          data, sync, integration, security, performance, or deployment decisions."
+        evaluationHint: "Look for concrete answers addressing: What unknowns require dedicated spikes before committing to an
+          approach?; What risk does each spike reduce?; What is the spike hypothesis and scope?."
+        sourceQuestions: *a20
+        targetSections: &a46
+          - "Required Technical Spikes"
+      - id: "risk-mitigation-plan"
+        label: "Risk Mitigation Plan"
+        required: true
+        description: "Define the overall mitigation approach, including avoidance, reduction, transfer, acceptance, contingency,
+          testing, monitoring, spikes, standards, architecture changes, and release gates."
+        evaluationHint: "Look for concrete answers addressing: What is the overall risk mitigation approach?; Which risks are
+          avoided, reduced, transferred, accepted, monitored, tested, spiked, automated, documented, gated, replaced, or
+          escalated?; What evidence is required to downgrade or close each risk?."
+        sourceQuestions: *a21
+        targetSections: &a47
+          - "Risk Mitigation Plan"
+      - id: "accepted-risks"
+        label: "Accepted Risks"
+        required: true
+        description: "Define risks that are intentionally accepted, who approved them, why, what residual risk remains, and when
+          acceptance expires or must be reviewed."
+        evaluationHint: "Look for concrete answers addressing: What technical risks are intentionally accepted?; Who accepts
+          each risk?; What is the rationale for acceptance?."
+        sourceQuestions: *a22
+        targetSections: &a48
+          - "Accepted Risks"
+      - id: "risk-escalation"
+        label: "Risk Escalation"
+        required: true
+        description: "Define when technical risks must be escalated, to whom, with what context, what decision is required, and
+          what release consequence applies."
+        evaluationHint: "Look for concrete answers addressing: When is a technical risk escalated?; Who receives escalation?;
+          What information must be included?."
+        sourceQuestions: *a23
+        targetSections: &a49
+          - "Risk Escalation"
+      - id: "risk-review-cadence"
+        label: "Risk Review Cadence"
+        required: true
+        description: "Define how technical risks are reviewed, updated, retired, escalated, transferred, and handed off over time."
+        evaluationHint: "Look for concrete answers addressing: How often are technical risks reviewed?; What triggers an
+          out-of-cycle risk review?; Who participates in risk reviews?."
+        sourceQuestions: *a24
+        targetSections: &a50
+          - "Risk Review Cadence"
+      - id: "release-impact"
+        label: "Release Impact"
+        required: true
+        description: "Define how technical risks affect release readiness, release gates, rollback decisions, sign-off, accepted
+          risk, and downstream release management."
+        evaluationHint: "Look for concrete answers addressing: Which technical risks block release?; Which risks require release
+          warning, monitoring, or post-release follow-up?; Which risks require accepted-risk approval?."
+        sourceQuestions: *a25
+        targetSections: &a51
+          - "Release Impact"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what Operations, Release, Support, Incident Response, and Risk Management documents must inherit
+          from Technical Risks and what they must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should GTM not promise because of unresolved technical
+          risk?; What should Operating Model inherit from Technical Risks?; What should Maintenance Plan inherit?."
+        sourceQuestions: *a26
+        targetSections: &a52
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      risk-objective:
+        targetSections: *a27
+      risk-taxonomy:
+        targetSections: *a28
+      risk-scoring-model:
+        targetSections: *a29
+      risk-register:
+        targetSections: *a30
+      architecture-risks:
+        targetSections: *a31
+      stack-risks:
+        targetSections: *a32
+      domain-risks:
+        targetSections: *a33
+      data-risks:
+        targetSections: *a34
+      api-risks:
+        targetSections: *a35
+      integration-risks:
+        targetSections: *a36
+      security-and-privacy-risks:
+        targetSections: *a37
+      sync-and-state-risks:
+        targetSections: *a38
+      testing-risks:
+        targetSections: *a39
+      observability-risks:
+        targetSections: *a40
+      deployment-risks:
+        targetSections: *a41
+      performance-and-scalability-risks:
+        targetSections: *a42
+      vendor-and-dependency-risks:
+        targetSections: *a43
+      maintenance-risks:
+        targetSections: *a44
+      operational-readiness-risks:
+        targetSections: *a45
+      required-technical-spikes:
+        targetSections: *a46
+      risk-mitigation-plan:
+        targetSections: *a47
+      accepted-risks:
+        targetSections: *a48
+      risk-escalation:
+        targetSections: *a49
+      risk-review-cadence:
+        targetSections: *a50
+      release-impact:
+        targetSections: *a51
+      downstream-handoff:
+        targetSections: *a52
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.407Z"
+      totalSourceQuestions: 137
+      reviewRequired: false

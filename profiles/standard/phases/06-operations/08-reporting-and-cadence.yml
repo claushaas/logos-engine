@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 8
   type: "reporting_cadence"
-  purpose: "Define how operational information is reviewed, reported, escalated, converted into decisions, documented, and handed off across daily, weekly, monthly, quarterly, launch-window, release, incident, support, customer success, financial, privacy, risk, and process cadences."
-  centralQuestion: "When do we review which operational signals, who reviews them, what decisions are made, what artifacts are produced, what thresholds trigger escalation, and how are decisions followed through?"
+  purpose: "Define how operational information is reviewed, reported, escalated, converted into decisions, documented, and
+    handed off across daily, weekly, monthly, quarterly, launch-window, release, incident, support, customer success,
+    financial, privacy, risk, and process cadences."
+  centralQuestion: "When do we review which operational signals, who reviews them, what decisions are made, what artifacts
+    are produced, what thresholds trigger escalation, and how are decisions followed through?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,11 @@ document:
       - id: "operations.reporting_cadence_calendar"
         format: "html"
         path: "outcomes/html/06-operations/reporting-and-cadence-calendar.html"
-        purpose: "Provide a founder-facing reporting cadence calendar covering reporting objective, report inventory, daily checks, weekly reviews, monthly reviews, quarterly reviews, launch-window reviews, release reviews, incident reviews, support reviews, customer success reviews, financial reviews, data/privacy reviews, risk reviews, process review cadence, dashboards, decision meetings, artifacts, responsibilities, escalation triggers, data quality, cadence risks, and downstream handoff."
+        purpose: "Provide a founder-facing reporting cadence calendar covering reporting objective, report inventory, daily
+          checks, weekly reviews, monthly reviews, quarterly reviews, launch-window reviews, release reviews, incident
+          reviews, support reviews, customer success reviews, financial reviews, data/privacy reviews, risk reviews,
+          process review cadence, dashboards, decision meetings, artifacts, responsibilities, escalation triggers, data
+          quality, cadence risks, and downstream handoff."
         audience: "founder"
         includes:
           - "reporting objective"
@@ -49,7 +56,9 @@ document:
       - id: "operations.reporting_cadence_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/reporting-and-cadence-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether operational reporting cadence is complete, decision-useful, owner-assigned, artifact-backed, threshold-aware, data-quality-aware, escalation-ready, and aligned with operational metrics and downstream Operations documents."
+        purpose: "Provide compact context for agents reviewing whether operational reporting cadence is complete,
+          decision-useful, owner-assigned, artifact-backed, threshold-aware, data-quality-aware, escalation-ready, and
+          aligned with operational metrics and downstream Operations documents."
         agentRole: "reviewer"
         includes:
           - "canonical reporting and cadence model"
@@ -94,268 +103,324 @@ document:
     - id: "operations-brief"
       type: "context"
       required: false
-      description: "Operations objective, operational success criteria, service expectations, support expectations, incident expectations, maintenance expectations, release expectations, data/privacy operations, cost/capacity constraints, and operational risks."
+      description: "Operations objective, operational success criteria, service expectations, support expectations, incident
+        expectations, maintenance expectations, release expectations, data/privacy operations, cost/capacity
+        constraints, and operational risks."
     - id: "operating-model"
       type: "context"
       required: false
-      description: "Operating cadences, standard workflows, decision rights, escalation paths, operating metrics, constraints, risks, and downstream handoffs."
+      description: "Operating cadences, standard workflows, decision rights, escalation paths, operating metrics, constraints,
+        risks, and downstream handoffs."
     - id: "team-and-responsibilities"
       type: "context"
       required: false
-      description: "Report owners, backup owners, decision authority, escalation owners, handoff rules, responsibility gaps, and responsibility risks."
+      description: "Report owners, backup owners, decision authority, escalation owners, handoff rules, responsibility gaps,
+        and responsibility risks."
     - id: "customer-support"
       type: "context"
       required: false
-      description: "Support metrics, support risks, ticket review needs, known issue handling, bug flow, escalation rules, and support feedback loop."
+      description: "Support metrics, support risks, ticket review needs, known issue handling, bug flow, escalation rules, and
+        support feedback loop."
     - id: "customer-success"
       type: "context"
       required: false
-      description: "Customer success cadences, customer success metrics, health signals, retention actions, churn analysis, feedback loops, and risks."
+      description: "Customer success cadences, customer success metrics, health signals, retention actions, churn analysis,
+        feedback loops, and risks."
     - id: "business-processes"
       type: "context"
       required: false
-      description: "Process review cadence, process metrics, process controls, process risks, financial-sensitive processes, privacy-sensitive processes, and process handoffs."
+      description: "Process review cadence, process metrics, process controls, process risks, financial-sensitive processes,
+        privacy-sensitive processes, and process handoffs."
     - id: "operational-metrics"
       type: "context"
       required: false
-      description: "Metric taxonomy, metric inventory, health scorecard, domain metrics, SLO/SLA metrics, guardrail metrics, thresholds, reporting cadence, alert rules, data quality checks, and metric risks."
+      description: "Metric taxonomy, metric inventory, health scorecard, domain metrics, SLO/SLA metrics, guardrail metrics,
+        thresholds, reporting cadence, alert rules, data quality checks, and metric risks."
     - id: "engineering-observability-context"
       type: "context"
       required: false
-      description: "Observability sources, dashboards, alerting constraints, deployment environments, reliability metrics, incident signals, data quality constraints, and technical risks."
+      description: "Observability sources, dashboards, alerting constraints, deployment environments, reliability metrics,
+        incident signals, data quality constraints, and technical risks."
     - id: "reporting-notes"
       type: "manual_note"
       required: false
-      description: "Preferred meeting cadence, report examples, dashboard ideas, escalation thresholds, stakeholders, reporting artifacts, ownership assumptions, cadence pain points, and unresolved reporting questions."
+      description: "Preferred meeting cadence, report examples, dashboard ideas, escalation thresholds, stakeholders,
+        reporting artifacts, ownership assumptions, cadence pain points, and unresolved reporting questions."
   completionCriteria:
-    - "The central question is answered through a complete reporting and cadence model with reports, review rhythms, dashboards, meetings, owners, artifacts, thresholds, escalation, data quality, risks, and downstream handoff."
-    - "Reporting objective defines what reporting protects: operational awareness, decision quality, accountability, customer trust, supportability, release safety, risk visibility, financial correctness, data/privacy safety, and continuous improvement."
-    - "Reporting principles define how reports should remain decision-useful, lightweight, timely, accurate, owner-assigned, threshold-aware, and action-oriented."
-    - "Cadence taxonomy defines reporting types, review types, cadence frequency, trigger-based reviews, domain reviews, decision meetings, escalation reviews, and artifact expectations."
-    - "Report inventory lists report name, purpose, audience, owner, backup owner, cadence, data source, metrics included, decisions supported, artifact produced, distribution method, escalation trigger, and status."
-    - "Daily checks define which signals are checked daily, owner, source, expected review time, threshold, action, escalation, evidence, and what is intentionally not checked daily."
-    - "Weekly review defines scope, participants, owner, inputs, dashboard, required decisions, action item tracking, artifact, escalation path, and unresolved questions."
-    - "Monthly review defines scope, participants, owner, operating trends, financial/process/support/customer success/release/maintenance/risk review, planning implications, artifact, and downstream action."
-    - "Quarterly review defines strategic operational review scope, participants, operating model changes, capacity changes, risk review, cost review, process maturity review, service expectations review, and planning outputs."
-    - "Launch-window cadence defines temporary high-frequency checks, readiness gates, support readiness, analytics readiness, issue review, go/no-go signals, customer feedback, escalation, and pause/rollback review."
-    - "Release review cadence defines pre-release readiness review, release-day monitoring, post-release review, release quality metrics, rollback/pause signals, support handoff, and release artifact."
-    - "Incident review cadence defines incident-triggered reporting, severity review, live updates, post-incident review, action item tracking, recurrence review, communication review, and Risk Management handoff."
-    - "Support review cadence defines ticket volume, backlog, response, resolution, escalation, bugs, known issues, refunds/billing, macros/docs, support burden, and feedback loop review."
-    - "Customer success review cadence defines onboarding, activation, health, at-risk customers, retention, churn, expansion, satisfaction, feedback, and intervention review."
-    - "Financial review cadence defines revenue operations, billing, failed payments, refunds, invoices/receipts, discounts, chargebacks, cost, vendor/tooling spend, and financial risk review."
-    - "Data and privacy review cadence defines access review, data request review, export/deletion handling, telemetry/logging review, retention/deletion controls, privacy incidents, and privacy risk review."
-    - "Risk review cadence defines operational risks, GTM risks handed off to operations, accepted risks, mitigation status, escalation triggers, residual risks, and risk register updates."
-    - "Process review cadence defines which business processes are reviewed, what metrics/controls are checked, how exceptions/rework/manual burden are reviewed, and how process improvements are decided."
-    - "Metrics dashboard defines dashboard inventory, purpose, audience, access, owner, data sources, refresh cadence, QA process, caveats, maintenance, and retirement/update triggers."
-    - "Decision meetings define recurring decision forums, decision categories, required inputs, participants, decision owner, decision log, follow-up owner, escalation rule, and artifact."
-    - "Review artifacts define reports, scorecards, meeting notes, decision logs, action registers, risk updates, incident reports, release reports, support summaries, financial summaries, and where/how they are stored."
-    - "Reporting responsibilities define report owner, backup owner, data owner, dashboard owner, QA owner, meeting owner, decision owner, action owner, escalation owner, and responsibility gaps."
-    - "Escalation triggers define metric thresholds, missed cadence, stale dashboard, data quality failure, incident signal, support overload, privacy issue, financial anomaly, release issue, cost spike, and risk threshold triggers."
-    - "Data quality and caveats define how reporting data is validated, which reports depend on manual inputs, what caveats apply, when reports are not decision-safe, and who owns remediation."
-    - "Cadence risks identify reporting overload, stale dashboards, ignored reports, owner gaps, bad data, no action follow-through, decision latency, meeting bloat, alert fatigue, hidden risks, and review theater."
-    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+    - "The central question is answered through a complete reporting and cadence model with reports, review rhythms,
+      dashboards, meetings, owners, artifacts, thresholds, escalation, data quality, risks, and downstream handoff."
+    - "Reporting objective defines what reporting protects: operational awareness, decision quality, accountability,
+      customer trust, supportability, release safety, risk visibility, financial correctness, data/privacy safety, and
+      continuous improvement."
+    - "Reporting principles define how reports should remain decision-useful, lightweight, timely, accurate,
+      owner-assigned, threshold-aware, and action-oriented."
+    - "Cadence taxonomy defines reporting types, review types, cadence frequency, trigger-based reviews, domain reviews,
+      decision meetings, escalation reviews, and artifact expectations."
+    - "Report inventory lists report name, purpose, audience, owner, backup owner, cadence, data source, metrics
+      included, decisions supported, artifact produced, distribution method, escalation trigger, and status."
+    - "Daily checks define which signals are checked daily, owner, source, expected review time, threshold, action,
+      escalation, evidence, and what is intentionally not checked daily."
+    - "Weekly review defines scope, participants, owner, inputs, dashboard, required decisions, action item tracking,
+      artifact, escalation path, and unresolved questions."
+    - "Monthly review defines scope, participants, owner, operating trends, financial/process/support/customer
+      success/release/maintenance/risk review, planning implications, artifact, and downstream action."
+    - "Quarterly review defines strategic operational review scope, participants, operating model changes, capacity
+      changes, risk review, cost review, process maturity review, service expectations review, and planning outputs."
+    - "Launch-window cadence defines temporary high-frequency checks, readiness gates, support readiness, analytics
+      readiness, issue review, go/no-go signals, customer feedback, escalation, and pause/rollback review."
+    - "Release review cadence defines pre-release readiness review, release-day monitoring, post-release review, release
+      quality metrics, rollback/pause signals, support handoff, and release artifact."
+    - "Incident review cadence defines incident-triggered reporting, severity review, live updates, post-incident
+      review, action item tracking, recurrence review, communication review, and Risk Management handoff."
+    - "Support review cadence defines ticket volume, backlog, response, resolution, escalation, bugs, known issues,
+      refunds/billing, macros/docs, support burden, and feedback loop review."
+    - "Customer success review cadence defines onboarding, activation, health, at-risk customers, retention, churn,
+      expansion, satisfaction, feedback, and intervention review."
+    - "Financial review cadence defines revenue operations, billing, failed payments, refunds, invoices/receipts,
+      discounts, chargebacks, cost, vendor/tooling spend, and financial risk review."
+    - "Data and privacy review cadence defines access review, data request review, export/deletion handling,
+      telemetry/logging review, retention/deletion controls, privacy incidents, and privacy risk review."
+    - "Risk review cadence defines operational risks, GTM risks handed off to operations, accepted risks, mitigation
+      status, escalation triggers, residual risks, and risk register updates."
+    - "Process review cadence defines which business processes are reviewed, what metrics/controls are checked, how
+      exceptions/rework/manual burden are reviewed, and how process improvements are decided."
+    - "Metrics dashboard defines dashboard inventory, purpose, audience, access, owner, data sources, refresh cadence,
+      QA process, caveats, maintenance, and retirement/update triggers."
+    - "Decision meetings define recurring decision forums, decision categories, required inputs, participants, decision
+      owner, decision log, follow-up owner, escalation rule, and artifact."
+    - "Review artifacts define reports, scorecards, meeting notes, decision logs, action registers, risk updates,
+      incident reports, release reports, support summaries, financial summaries, and where/how they are stored."
+    - "Reporting responsibilities define report owner, backup owner, data owner, dashboard owner, QA owner, meeting
+      owner, decision owner, action owner, escalation owner, and responsibility gaps."
+    - "Escalation triggers define metric thresholds, missed cadence, stale dashboard, data quality failure, incident
+      signal, support overload, privacy issue, financial anomaly, release issue, cost spike, and risk threshold
+      triggers."
+    - "Data quality and caveats define how reporting data is validated, which reports depend on manual inputs, what
+      caveats apply, when reports are not decision-safe, and who owns remediation."
+    - "Cadence risks identify reporting overload, stale dashboards, ignored reports, owner gaps, bad data, no action
+      follow-through, decision latency, meeting bloat, alert fatigue, hidden risks, and review theater."
+    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy
+      Operations, Financial Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid reporting theater: reports, dashboards, or meetings without owner, audience, source, decision, threshold, artifact, action tracking, and escalation path."
+    - "Avoid reporting theater: reports, dashboards, or meetings without owner, audience, source, decision, threshold,
+      artifact, action tracking, and escalation path."
     - "Avoid cadences that exist only to create meetings without decisions, outputs, or risk reduction."
     - "Avoid daily reporting for signals that do not change daily or do not support daily decisions."
-    - "Avoid monthly or quarterly reviews that are too slow for operationally volatile risks, incidents, support overload, payment failures, or privacy issues."
+    - "Avoid monthly or quarterly reviews that are too slow for operationally volatile risks, incidents, support
+      overload, payment failures, or privacy issues."
     - "Avoid dashboards without data ownership, QA, refresh cadence, caveats, and maintenance trigger."
     - "Avoid reports that combine internal targets and customer-facing commitments without distinction."
-    - "Avoid report-driven escalation without explicit threshold, owner, backup, response expectation, and communication rule."
+    - "Avoid report-driven escalation without explicit threshold, owner, backup, response expectation, and communication
+      rule."
     - "Avoid action items without owner, due trigger/date, status, follow-up cadence, and closure evidence."
     - "Avoid reporting sensitive customer, billing, privacy, or security data to audiences that do not need access."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent report consumers, staffing coverage, dashboard readiness, alert reliability, data source availability, baselines, thresholds, SLAs/SLOs, or meeting cadences as facts."
-    - "Reporting and cadence must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
+    - "Do not invent report consumers, staffing coverage, dashboard readiness, alert reliability, data source
+      availability, baselines, thresholds, SLAs/SLOs, or meeting cadences as facts."
+    - "Reporting and cadence must preserve Foundation boundaries, product truth, technical truth, pricing truth,
+      privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate report, cadence, dashboard, meeting, metric, threshold, artifact, owner, action, escalation, caveat, risk, and handoff."
-    - "Tie reporting rules to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Observability, Launch Plan, Pricing, GTM Risks, Technical Risks, or Decision Record where possible."
-    - "Classify reports and cadences as current, required, deferred, manual, automated, dashboard-backed, meeting-based, trigger-based, internal-only, customer-facing, privacy-sensitive, financial-sensitive, launch-critical, post-launch, blocked, review-needed, or downstream-owned where useful."
-    - "State whether reporting is automated, manually compiled, dashboard-backed, meeting-based, async, trigger-based, or unavailable."
+    - "Separate report, cadence, dashboard, meeting, metric, threshold, artifact, owner, action, escalation, caveat,
+      risk, and handoff."
+    - "Tie reporting rules to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer
+      Success, Business Processes, Operational Metrics, Observability, Launch Plan, Pricing, GTM Risks, Technical Risks,
+      or Decision Record where possible."
+    - "Classify reports and cadences as current, required, deferred, manual, automated, dashboard-backed, meeting-based,
+      trigger-based, internal-only, customer-facing, privacy-sensitive, financial-sensitive, launch-critical,
+      post-launch, blocked, review-needed, or downstream-owned where useful."
+    - "State whether reporting is automated, manually compiled, dashboard-backed, meeting-based, async, trigger-based,
+      or unavailable."
     - "Route detailed maintenance, release, incident, data/privacy, financial, and risk procedures downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Security/Privacy, Observability, Deployment, Technical Risks, Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision Record."
-    - "Flag reports without owner, backup owner, audience, source, cadence, metrics, decision use, artifact, and escalation trigger."
-    - "Flag meetings without decision categories, required inputs, decision owner, artifact, action tracking, and follow-up rule."
-    - "Flag dashboards without owner, data source, refresh cadence, QA, access control, caveats, and maintenance trigger."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer
+      Success, Business Processes, Operational Metrics, Security/Privacy, Observability, Deployment, Technical Risks,
+      Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag reports without owner, backup owner, audience, source, cadence, metrics, decision use, artifact, and
+      escalation trigger."
+    - "Flag meetings without decision categories, required inputs, decision owner, artifact, action tracking, and
+      follow-up rule."
+    - "Flag dashboards without owner, data source, refresh cadence, QA, access control, caveats, and maintenance
+      trigger."
     - "Flag escalation triggers without threshold, owner, backup, response expectation, and downstream procedure."
     - "Flag reporting artifacts without storage location, access rule, retention/update rule, and action tracking."
     - "Flag cadences that are too frequent, too slow, duplicated, ownerless, or not tied to decisions."
     - "Flag data quality gaps that make reports unsafe for decisions."
     - "Verify that downstream Operations documents receive concrete reporting/cadence handoff inputs."
-    - "Flag content that belongs better in Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+    - "Flag content that belongs better in Maintenance Plan, Release Management, Incident Response, Data/Privacy
+      Operations, Financial Operations, or Risk Management."
   specializedFormats:
     reportFormat:
       description: "Recommended format for operational reports."
       fields:
-        - report
-        - purpose
-        - audience
-        - cadence
-        - trigger
-        - owner
-        - backupOwner
-        - dataSources
-        - metricsIncluded
-        - decisionsSupported
-        - artifactProduced
-        - distributionMethod
-        - escalationTrigger
-        - caveats
-        - status
+        - "report"
+        - "purpose"
+        - "audience"
+        - "cadence"
+        - "trigger"
+        - "owner"
+        - "backupOwner"
+        - "dataSources"
+        - "metricsIncluded"
+        - "decisionsSupported"
+        - "artifactProduced"
+        - "distributionMethod"
+        - "escalationTrigger"
+        - "caveats"
+        - "status"
     cadenceFormat:
       description: "Recommended format for review cadences."
       fields:
-        - cadence
-        - frequency
-        - purpose
-        - participants
-        - owner
-        - inputs
-        - outputs
-        - decisionsSupported
-        - actionTrackingMethod
-        - escalationCondition
-        - downstreamDocument
-        - status
+        - "cadence"
+        - "frequency"
+        - "purpose"
+        - "participants"
+        - "owner"
+        - "inputs"
+        - "outputs"
+        - "decisionsSupported"
+        - "actionTrackingMethod"
+        - "escalationCondition"
+        - "downstreamDocument"
+        - "status"
     dashboardFormat:
       description: "Recommended format for dashboards."
       fields:
-        - dashboard
-        - purpose
-        - audience
-        - owner
-        - dataSources
-        - metricsIncluded
-        - refreshCadence
-        - accessRule
-        - QAOwner
-        - caveats
-        - maintenanceTrigger
-        - retirementTrigger
-        - status
+        - "dashboard"
+        - "purpose"
+        - "audience"
+        - "owner"
+        - "dataSources"
+        - "metricsIncluded"
+        - "refreshCadence"
+        - "accessRule"
+        - "QAOwner"
+        - "caveats"
+        - "maintenanceTrigger"
+        - "retirementTrigger"
+        - "status"
     decisionMeetingFormat:
       description: "Recommended format for recurring decision meetings."
       fields:
-        - meeting
-        - purpose
-        - cadence
-        - participants
-        - requiredInputs
-        - decisionCategories
-        - decisionOwner
-        - artifactProduced
-        - actionOwner
-        - followUpRule
-        - escalationRule
-        - status
+        - "meeting"
+        - "purpose"
+        - "cadence"
+        - "participants"
+        - "requiredInputs"
+        - "decisionCategories"
+        - "decisionOwner"
+        - "artifactProduced"
+        - "actionOwner"
+        - "followUpRule"
+        - "escalationRule"
+        - "status"
     reviewArtifactFormat:
       description: "Recommended format for review artifacts."
       fields:
-        - artifact
-        - producedBy
-        - purpose
-        - owner
-        - storageLocation
-        - accessRule
-        - updateRule
-        - retentionRule
-        - linkedDecisions
-        - linkedActions
-        - downstreamUse
-        - status
+        - "artifact"
+        - "producedBy"
+        - "purpose"
+        - "owner"
+        - "storageLocation"
+        - "accessRule"
+        - "updateRule"
+        - "retentionRule"
+        - "linkedDecisions"
+        - "linkedActions"
+        - "downstreamUse"
+        - "status"
     reportingResponsibilityFormat:
       description: "Recommended format for reporting responsibilities."
       fields:
-        - reportingArea
-        - reportOwner
-        - backupOwner
-        - dataOwner
-        - dashboardOwner
-        - QAOwner
-        - meetingOwner
-        - decisionOwner
-        - actionOwner
-        - escalationOwner
-        - responsibilityGap
-        - status
+        - "reportingArea"
+        - "reportOwner"
+        - "backupOwner"
+        - "dataOwner"
+        - "dashboardOwner"
+        - "QAOwner"
+        - "meetingOwner"
+        - "decisionOwner"
+        - "actionOwner"
+        - "escalationOwner"
+        - "responsibilityGap"
+        - "status"
     escalationTriggerFormat:
       description: "Recommended format for reporting escalation triggers."
       fields:
-        - trigger
-        - triggerType
-        - sourceMetricOrEvent
-        - threshold
-        - severity
-        - owner
-        - backupOwner
-        - notificationTarget
-        - responseExpectation
-        - customerCommunicationRequired
-        - downstreamProcedure
-        - status
+        - "trigger"
+        - "triggerType"
+        - "sourceMetricOrEvent"
+        - "threshold"
+        - "severity"
+        - "owner"
+        - "backupOwner"
+        - "notificationTarget"
+        - "responseExpectation"
+        - "customerCommunicationRequired"
+        - "downstreamProcedure"
+        - "status"
     dataQualityCaveatFormat:
       description: "Recommended format for reporting data quality checks and caveats."
       fields:
-        - reportOrDashboard
-        - dataSource
-        - caveat
-        - dataQualityRisk
-        - validationMethod
-        - owner
-        - failureSignal
-        - decisionImpact
-        - remediation
-        - status
+        - "reportOrDashboard"
+        - "dataSource"
+        - "caveat"
+        - "dataQualityRisk"
+        - "validationMethod"
+        - "owner"
+        - "failureSignal"
+        - "decisionImpact"
+        - "remediation"
+        - "status"
     actionItemFormat:
       description: "Recommended format for action items created by reporting cadences."
       fields:
-        - action
-        - sourceReportOrMeeting
-        - decisionLinked
-        - owner
-        - dueDateOrTrigger
-        - status
-        - closureEvidence
-        - escalationIfBlocked
-        - downstreamDocument
+        - "action"
+        - "sourceReportOrMeeting"
+        - "decisionLinked"
+        - "owner"
+        - "dueDateOrTrigger"
+        - "status"
+        - "closureEvidence"
+        - "escalationIfBlocked"
+        - "downstreamDocument"
     cadenceRiskFormat:
       description: "Recommended format for cadence risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - affectedCadenceOrReport
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "source"
+        - "affectedCadenceOrReport"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     reportingHandoffFormat:
       description: "Recommended format for downstream reporting handoffs."
       fields:
-        - handoffTarget
-        - reportsOrCadencesToPreserve
-        - metricsOrThresholdsToPreserve
-        - ownerToPreserve
-        - artifactsToPreserve
-        - requiredAction
-        - timing
-        - unresolvedQuestion
-        - riskOrConstraint
-        - status
+        - "handoffTarget"
+        - "reportsOrCadencesToPreserve"
+        - "metricsOrThresholdsToPreserve"
+        - "ownerToPreserve"
+        - "artifactsToPreserve"
+        - "requiredAction"
+        - "timing"
+        - "unresolvedQuestion"
+        - "riskOrConstraint"
+        - "status"
   sections:
     - id: "reporting-objective"
       title: "Reporting Objective"
-      intent: "Define the purpose of operational reporting and how it supports decisions, accountability, escalation, learning, and risk management."
+      intent: "Define the purpose of operational reporting and how it supports decisions, accountability, escalation,
+        learning, and risk management."
       required: true
       outputGuidance:
         - "Open with the operational reporting purpose in one concise paragraph."
@@ -365,24 +430,26 @@ document:
         - "Objective is decision-oriented."
         - "Objective connects reporting to operational health and accountability."
         - "Reporting bloat is explicitly discouraged."
-      questions:
+      questions: &a1
         - "What is the purpose of operational reporting?"
         - "Who consumes operational reports?"
         - "What decisions should reports support?"
         - "What should reporting intentionally avoid?"
     - id: "reporting-principles"
       title: "Reporting Principles"
-      intent: "Define principles that keep reporting lightweight, accurate, timely, decision-useful, privacy-safe, and action-oriented."
+      intent: "Define principles that keep reporting lightweight, accurate, timely, decision-useful, privacy-safe, and
+        action-oriented."
       required: true
       outputGuidance:
         - "Define practical principles for report design and review rhythm."
-        - "Include rules for action tracking, data caveats, threshold-based escalation, and privacy-sensitive information."
+        - "Include rules for action tracking, data caveats, threshold-based escalation, and privacy-sensitive
+          information."
         - "Tie principles to Foundation and Operations Brief."
       qualityChecks:
         - "Principles are actionable."
         - "Principles prevent reporting theater."
         - "Privacy and action ownership are included."
-      questions:
+      questions: &a2
         - "What principles guide operational reporting?"
         - "How should reports stay lightweight and decision-useful?"
         - "How should data caveats be handled?"
@@ -392,20 +459,23 @@ document:
       intent: "Define review cadence types and labels used throughout the reporting system."
       required: true
       outputGuidance:
-        - "Define daily, weekly, monthly, quarterly, launch-window, release, incident, support, customer success, financial, data/privacy, risk, and process review cadences."
-        - "Define statuses such as current, required, deferred, manual, automated, dashboard-backed, meeting-based, trigger-based, blocked, and review-needed."
+        - "Define daily, weekly, monthly, quarterly, launch-window, release, incident, support, customer success,
+          financial, data/privacy, risk, and process review cadences."
+        - "Define statuses such as current, required, deferred, manual, automated, dashboard-backed, meeting-based,
+          trigger-based, blocked, and review-needed."
         - "Clarify difference between report, dashboard, review, meeting, alert, escalation, and artifact."
       qualityChecks:
         - "Taxonomy prevents cadence ambiguity."
         - "Reports, dashboards, meetings, alerts, and artifacts are not conflated."
         - "Cadence statuses have operational meaning."
-      questions:
+      questions: &a3
         - "What cadence types exist?"
         - "What reporting statuses are used?"
         - "How are report, dashboard, review, meeting, alert, escalation, and artifact different?"
     - id: "report-inventory"
       title: "Report Inventory"
-      intent: "List every recurring or trigger-based operational report with purpose, audience, cadence, owner, source, metrics, decisions, artifact, escalation, and caveats."
+      intent: "List every recurring or trigger-based operational report with purpose, audience, cadence, owner, source,
+        metrics, decisions, artifact, escalation, and caveats."
       required: true
       outputGuidance:
         - "Use report records for every material report."
@@ -415,7 +485,7 @@ document:
         - "Every report supports decisions or escalation."
         - "Every report has owner, audience, data source, cadence, artifact, and caveats."
         - "Reports do not duplicate each other without purpose."
-      questions:
+      questions: &a4
         - "What reports exist or must exist?"
         - "What is each report for?"
         - "Who receives each report?"
@@ -424,7 +494,8 @@ document:
         - "What decisions or escalations does each report support?"
     - id: "daily-checks"
       title: "Daily Checks"
-      intent: "Define which operational signals are checked daily, by whom, from which source, and what actions or escalations they trigger."
+      intent: "Define which operational signals are checked daily, by whom, from which source, and what actions or escalations
+        they trigger."
       required: true
       outputGuidance:
         - "Use cadence or report records where useful."
@@ -434,7 +505,7 @@ document:
         - "Daily checks are actionable."
         - "Daily review load is realistic."
         - "Every daily check has threshold and owner."
-      questions:
+      questions: &a5
         - "What metrics and signals are checked daily?"
         - "Who performs daily checks?"
         - "What source is checked?"
@@ -447,13 +518,14 @@ document:
       required: true
       outputGuidance:
         - "Use cadence records."
-        - "Include support, customer success, reliability, incidents, releases, process metrics, costs, and risks where relevant."
+        - "Include support, customer success, reliability, incidents, releases, process metrics, costs, and risks where
+          relevant."
         - "Keep weekly review decision-oriented."
       qualityChecks:
         - "Weekly review has decisions and action tracking."
         - "Participants and owner are explicit."
         - "Review scope matches weekly volatility."
-      questions:
+      questions: &a6
         - "What is reviewed weekly?"
         - "Who participates?"
         - "What inputs and dashboards are used?"
@@ -462,17 +534,19 @@ document:
         - "How are action items tracked?"
     - id: "monthly-review"
       title: "Monthly Review"
-      intent: "Define the monthly operational review scope and how it feeds planning, process improvements, financial review, and risk review."
+      intent: "Define the monthly operational review scope and how it feeds planning, process improvements, financial review,
+        and risk review."
       required: true
       outputGuidance:
         - "Use cadence records."
-        - "Include trend review, planning implications, cost/capacity, process health, support/customer success, release/maintenance, and risks."
+        - "Include trend review, planning implications, cost/capacity, process health, support/customer success,
+          release/maintenance, and risks."
         - "Tie to operational planning."
       qualityChecks:
         - "Monthly review identifies trends and planning decisions."
         - "Financial/process/risk dimensions are included."
         - "Review produces documented outputs."
-      questions:
+      questions: &a7
         - "What is reviewed monthly?"
         - "How does monthly review feed operational planning?"
         - "What trends are reviewed?"
@@ -480,20 +554,23 @@ document:
         - "What artifact is produced?"
     - id: "quarterly-review"
       title: "Quarterly Review"
-      intent: "Define the quarterly review scope and how it connects operational reality to strategic planning, capacity, cost, risk, and operating model changes."
+      intent: "Define the quarterly review scope and how it connects operational reality to strategic planning, capacity,
+        cost, risk, and operating model changes."
       required: true
       outputGuidance:
         - "Use cadence records."
-        - "Include operating model, team capacity, costs, risk posture, service expectations, process maturity, customer trust, and strategic adjustments."
+        - "Include operating model, team capacity, costs, risk posture, service expectations, process maturity, customer
+          trust, and strategic adjustments."
         - "Avoid turning quarterly review into a generic business retrospective."
       qualityChecks:
         - "Quarterly review connects operations to strategy."
         - "Capacity and risk are reviewed."
         - "Review outputs affect planning."
-      questions:
+      questions: &a8
         - "What is reviewed quarterly?"
         - "How does quarterly review connect to strategic planning?"
-        - "What operating model, capacity, cost, risk, process maturity, service expectation, and customer trust questions are reviewed?"
+        - "What operating model, capacity, cost, risk, process maturity, service expectation, and customer trust questions are
+          reviewed?"
         - "What decisions or planning outputs result?"
     - id: "launch-window-cadence"
       title: "Launch-Window Cadence"
@@ -501,13 +578,14 @@ document:
       required: true
       outputGuidance:
         - "Tie to Launch Plan, GTM Risks, Support, Operational Metrics, and Incident Response."
-        - "Include readiness gates, support load, customer feedback, analytics, incidents, go/no-go, and pause/rollback review."
+        - "Include readiness gates, support load, customer feedback, analytics, incidents, go/no-go, and pause/rollback
+          review."
         - "State when launch-window cadence starts and ends."
       qualityChecks:
         - "Launch cadence is temporary and threshold-based."
         - "Go/no-go and pause/rollback signals are explicit."
         - "Support and analytics readiness are included."
-      questions:
+      questions: &a9
         - "What reporting cadence applies during launch windows?"
         - "What readiness and support signals are reviewed?"
         - "What go/no-go or pause/rollback thresholds apply?"
@@ -515,17 +593,19 @@ document:
         - "When does launch-window cadence end?"
     - id: "release-review-cadence"
       title: "Release Review Cadence"
-      intent: "Define cadence for pre-release readiness, release-day monitoring, post-release review, and release quality decisions."
+      intent: "Define cadence for pre-release readiness, release-day monitoring, post-release review, and release quality
+        decisions."
       required: true
       outputGuidance:
         - "Tie to Release Management."
-        - "Include readiness, deployment, smoke checks, monitoring, support handoff, rollback signals, communication, and post-release artifact."
+        - "Include readiness, deployment, smoke checks, monitoring, support handoff, rollback signals, communication,
+          and post-release artifact."
         - "Route detailed procedure downstream."
       qualityChecks:
         - "Release review supports release safety."
         - "Rollback/pause thresholds are included."
         - "Post-release review is not skipped."
-      questions:
+      questions: &a10
         - "What reporting happens before release?"
         - "What is monitored during release?"
         - "What is reviewed after release?"
@@ -537,13 +617,14 @@ document:
       required: true
       outputGuidance:
         - "Tie to Incident Response."
-        - "Include incident updates, severity review, customer communication, post-incident review, action item tracking, recurrence review, and risk handoff."
+        - "Include incident updates, severity review, customer communication, post-incident review, action item
+          tracking, recurrence review, and risk handoff."
         - "Do not duplicate full incident runbook."
       qualityChecks:
         - "Incident reporting supports response and learning."
         - "Post-incident actions are tracked."
         - "Customer communication review is included."
-      questions:
+      questions: &a11
         - "What reporting happens during incidents?"
         - "What is reviewed after incidents?"
         - "How are post-incident actions tracked?"
@@ -551,24 +632,28 @@ document:
         - "What should Incident Response inherit?"
     - id: "support-review-cadence"
       title: "Support Review Cadence"
-      intent: "Define support reporting cadence for volume, backlog, response, resolution, escalations, bugs, known issues, billing/refund issues, and support risks."
+      intent: "Define support reporting cadence for volume, backlog, response, resolution, escalations, bugs, known issues,
+        billing/refund issues, and support risks."
       required: true
       outputGuidance:
         - "Tie to Customer Support."
-        - "Include support metrics, support risks, known issue updates, macro/docs updates, support burden, and feedback loop."
+        - "Include support metrics, support risks, known issue updates, macro/docs updates, support burden, and feedback
+          loop."
         - "State daily/weekly/monthly split where relevant."
       qualityChecks:
         - "Support review detects overload and quality issues."
         - "Support feedback turns into action."
         - "Billing/refund and bug signals are included."
-      questions:
+      questions: &a12
         - "What support data is reviewed daily, weekly, or monthly?"
-        - "How are support volume, backlog, response, resolution, escalation, bugs, known issues, and billing/refund issues reviewed?"
+        - "How are support volume, backlog, response, resolution, escalation, bugs, known issues, and billing/refund issues
+          reviewed?"
         - "What support risks trigger escalation?"
         - "What actions can support review create?"
     - id: "customer-success-review-cadence"
       title: "Customer Success Review Cadence"
-      intent: "Define reporting cadence for onboarding, activation, health, at-risk customers, retention, expansion, satisfaction, feedback, and churn."
+      intent: "Define reporting cadence for onboarding, activation, health, at-risk customers, retention, expansion,
+        satisfaction, feedback, and churn."
       required: true
       outputGuidance:
         - "Tie to Customer Success and Growth Metrics."
@@ -578,80 +663,92 @@ document:
         - "Customer success review is proactive and value-based."
         - "Health and churn signals are reviewed with actions."
         - "Expansion is reviewed through customer benefit lens."
-      questions:
+      questions: &a13
         - "What customer success data is reviewed daily, weekly, or monthly?"
-        - "How are onboarding, activation, health, at-risk customers, retention, expansion, satisfaction, feedback, and churn reviewed?"
+        - "How are onboarding, activation, health, at-risk customers, retention, expansion, satisfaction, feedback, and churn
+          reviewed?"
         - "What actions can customer success review create?"
     - id: "financial-review-cadence"
       title: "Financial Review Cadence"
-      intent: "Define reporting cadence for billing, payments, refunds, invoices, discounts, chargebacks, revenue operations, cost, and finance risks."
+      intent: "Define reporting cadence for billing, payments, refunds, invoices, discounts, chargebacks, revenue operations,
+        cost, and finance risks."
       required: true
       outputGuidance:
         - "Tie to Pricing and Financial Operations."
-        - "Include failed payments, refunds, discounts, invoices/receipts, chargebacks, costs, vendor spend, support burden, and finance-sensitive exceptions."
+        - "Include failed payments, refunds, discounts, invoices/receipts, chargebacks, costs, vendor spend, support
+          burden, and finance-sensitive exceptions."
         - "Mark accounting/legal review needs where relevant."
       qualityChecks:
         - "Financial review protects correctness and customer trust."
         - "Exceptions and anomalies have escalation."
         - "Cost and revenue operations are both included."
-      questions:
+      questions: &a14
         - "What financial data is reviewed daily, weekly, monthly, or quarterly?"
-        - "How are billing, payment failures, refunds, invoices, discounts, chargebacks, revenue operations, costs, and financial risks reviewed?"
+        - "How are billing, payment failures, refunds, invoices, discounts, chargebacks, revenue operations, costs, and
+          financial risks reviewed?"
         - "What triggers financial escalation?"
     - id: "data-and-privacy-review-cadence"
       title: "Data and Privacy Review Cadence"
-      intent: "Define reporting cadence for data access, privacy requests, retention/deletion controls, telemetry/logging review, and privacy incidents."
+      intent: "Define reporting cadence for data access, privacy requests, retention/deletion controls, telemetry/logging
+        review, and privacy incidents."
       required: true
       outputGuidance:
         - "Tie to Data and Privacy Operations."
-        - "Include access reviews, data export/deletion requests, verification failures, telemetry/log reviews, retention/deletion control health, and privacy incidents."
+        - "Include access reviews, data export/deletion requests, verification failures, telemetry/log reviews,
+          retention/deletion control health, and privacy incidents."
         - "State privacy-sensitive access rules for reports."
       qualityChecks:
         - "Privacy reporting minimizes sensitive data exposure."
         - "Access/review ownership is explicit."
         - "Privacy incident escalation is included."
-      questions:
+      questions: &a15
         - "What data/privacy information is reviewed and how often?"
-        - "How are access reviews, privacy requests, export/deletion handling, telemetry/logging review, retention/deletion controls, and privacy incidents reviewed?"
+        - "How are access reviews, privacy requests, export/deletion handling, telemetry/logging review, retention/deletion
+          controls, and privacy incidents reviewed?"
         - "Who may access these reports?"
         - "What triggers privacy escalation?"
     - id: "risk-review-cadence"
       title: "Risk Review Cadence"
-      intent: "Define cadence for reviewing operational risks, accepted risks, mitigation progress, residual risk, escalation, and risk register updates."
+      intent: "Define cadence for reviewing operational risks, accepted risks, mitigation progress, residual risk, escalation,
+        and risk register updates."
       required: true
       outputGuidance:
         - "Tie to GTM Risks and Risk Management."
-        - "Include risk status, accepted risks, mitigation progress, residual risk, new risk detection, retired risks, and escalation."
+        - "Include risk status, accepted risks, mitigation progress, residual risk, new risk detection, retired risks,
+          and escalation."
         - "Define out-of-cycle risk review triggers."
       qualityChecks:
         - "Risk review is living and actionable."
         - "Accepted risks are reviewed."
         - "Mitigation progress is tracked."
-      questions:
+      questions: &a16
         - "How often are operational and handed-off GTM risks reviewed?"
         - "How are accepted risks and mitigation progress reviewed?"
         - "What triggers out-of-cycle risk review?"
         - "What should Risk Management inherit?"
     - id: "process-review-cadence"
       title: "Process Review Cadence"
-      intent: "Define cadence for reviewing recurring business process health, controls, exceptions, manual burden, automation reliability, and improvements."
+      intent: "Define cadence for reviewing recurring business process health, controls, exceptions, manual burden, automation
+        reliability, and improvements."
       required: true
       outputGuidance:
         - "Tie to Business Processes."
-        - "Include process metrics, controls, exceptions, rework, manual effort, automation reliability, and documentation updates."
+        - "Include process metrics, controls, exceptions, rework, manual effort, automation reliability, and
+          documentation updates."
         - "State how process improvements are prioritized."
       qualityChecks:
         - "Process review creates improvements or explicit no-action decisions."
         - "Control failures and manual burden are reviewed."
         - "Documentation updates are included."
-      questions:
+      questions: &a17
         - "How often are business processes reviewed?"
         - "What process metrics and controls are reviewed?"
         - "How are exceptions, rework, manual burden, and automation reliability reviewed?"
         - "How are process improvements prioritized and documented?"
     - id: "metrics-dashboard"
       title: "Metrics Dashboard"
-      intent: "Define operational dashboards, access controls, data sources, refresh cadence, QA, caveats, maintenance, and retirement/update triggers."
+      intent: "Define operational dashboards, access controls, data sources, refresh cadence, QA, caveats, maintenance, and
+        retirement/update triggers."
       required: true
       outputGuidance:
         - "Use dashboard records."
@@ -661,7 +758,7 @@ document:
         - "Dashboards have owner, data source, refresh cadence, QA, caveats, and access rule."
         - "Dashboards are maintained or retired when stale."
         - "Sensitive dashboards have restricted access."
-      questions:
+      questions: &a18
         - "What dashboards exist for operational metrics?"
         - "Who has access?"
         - "What data sources and metrics are included?"
@@ -670,7 +767,8 @@ document:
         - "When are dashboards updated or retired?"
     - id: "decision-meetings"
       title: "Decision Meetings"
-      intent: "Define recurring meetings dedicated to operational decisions, required inputs, participants, decision owner, artifacts, action tracking, and follow-up."
+      intent: "Define recurring meetings dedicated to operational decisions, required inputs, participants, decision owner,
+        artifacts, action tracking, and follow-up."
       required: true
       outputGuidance:
         - "Use decision meeting records."
@@ -680,7 +778,7 @@ document:
         - "Meetings are decision-oriented."
         - "Decision owner and action owner are explicit."
         - "Artifacts and follow-up rules are included."
-      questions:
+      questions: &a19
         - "What recurring meetings are dedicated to operational decisions?"
         - "What decisions are made in each meeting?"
         - "What inputs are required?"
@@ -689,17 +787,19 @@ document:
         - "How are actions followed up?"
     - id: "review-artifacts"
       title: "Review Artifacts"
-      intent: "Define artifacts produced by each review cadence and how they are stored, shared, updated, retained, and linked to decisions/actions."
+      intent: "Define artifacts produced by each review cadence and how they are stored, shared, updated, retained, and linked
+        to decisions/actions."
       required: true
       outputGuidance:
         - "Use review artifact records."
-        - "Include storage location, access rule, update rule, retention rule, linked decisions, linked actions, and downstream use."
+        - "Include storage location, access rule, update rule, retention rule, linked decisions, linked actions, and
+          downstream use."
         - "Do not leave artifacts as informal notes only."
       qualityChecks:
         - "Artifacts are retrievable and useful."
         - "Access and retention are considered."
         - "Artifacts link to decisions and actions."
-      questions:
+      questions: &a20
         - "What artifacts are produced by each review cadence?"
         - "How are artifacts stored and shared?"
         - "Who owns each artifact?"
@@ -711,13 +811,14 @@ document:
       required: true
       outputGuidance:
         - "Use reporting responsibility records."
-        - "Separate report owner, data owner, dashboard owner, QA owner, meeting owner, decision owner, action owner, and escalation owner."
+        - "Separate report owner, data owner, dashboard owner, QA owner, meeting owner, decision owner, action owner,
+          and escalation owner."
         - "Flag owner gaps and backup gaps."
       qualityChecks:
         - "Reporting responsibilities are complete."
         - "Action ownership is not confused with report production."
         - "Backup owners are explicit for critical reporting."
-      questions:
+      questions: &a21
         - "Who is responsible for producing each report?"
         - "Who owns the data source?"
         - "Who validates reporting quality?"
@@ -726,7 +827,8 @@ document:
         - "What responsibility gaps remain?"
     - id: "escalation-triggers"
       title: "Escalation Triggers"
-      intent: "Define metric thresholds, events, missed cadences, data failures, incidents, support overload, financial anomalies, privacy issues, and risk thresholds that trigger out-of-cycle escalation."
+      intent: "Define metric thresholds, events, missed cadences, data failures, incidents, support overload, financial
+        anomalies, privacy issues, and risk thresholds that trigger out-of-cycle escalation."
       required: true
       outputGuidance:
         - "Use escalation trigger records."
@@ -736,7 +838,7 @@ document:
         - "Escalation triggers are concrete."
         - "Every trigger has owner, backup, severity, and downstream procedure."
         - "Customer communication is considered when relevant."
-      questions:
+      questions: &a22
         - "What metric thresholds or events trigger out-of-cycle escalation?"
         - "Who is notified when an escalation trigger fires?"
         - "What severity and response expectation applies?"
@@ -748,13 +850,14 @@ document:
       required: true
       outputGuidance:
         - "Use data quality caveat records."
-        - "Identify manual inputs, missing data, stale data, inconsistent data, privacy constraints, and metrics not safe for decisions."
+        - "Identify manual inputs, missing data, stale data, inconsistent data, privacy constraints, and metrics not
+          safe for decisions."
         - "Define remediation owner."
       qualityChecks:
         - "Data caveats are visible in reports."
         - "Unsafe reports do not silently drive decisions."
         - "Remediation ownership is explicit."
-      questions:
+      questions: &a23
         - "How is reporting data validated?"
         - "Which reports depend on manual inputs or incomplete sources?"
         - "What caveats must be shown with each report?"
@@ -762,7 +865,8 @@ document:
         - "Who remediates data quality issues?"
     - id: "action-item-tracking"
       title: "Action Item Tracking"
-      intent: "Define how decisions and action items produced by reporting cadences are assigned, tracked, escalated, and closed."
+      intent: "Define how decisions and action items produced by reporting cadences are assigned, tracked, escalated, and
+        closed."
       required: true
       outputGuidance:
         - "Use action item records."
@@ -772,7 +876,7 @@ document:
         - "Actions do not disappear after meetings."
         - "Closure requires evidence."
         - "Blocked actions have escalation path."
-      questions:
+      questions: &a24
         - "How are action items created from reports and meetings?"
         - "Who owns each action?"
         - "How are due dates or due triggers set?"
@@ -780,35 +884,41 @@ document:
         - "What happens when an action is blocked?"
     - id: "cadence-risks"
       title: "Cadence Risks"
-      intent: "Identify failure modes of the reporting cadence and how cadence risks are detected, mitigated, escalated, or handed off."
+      intent: "Identify failure modes of the reporting cadence and how cadence risks are detected, mitigated, escalated, or
+        handed off."
       required: true
       outputGuidance:
         - "Use cadence risk records."
-        - "Include reporting overload, stale dashboards, ignored reports, owner gaps, bad data, no action follow-through, decision latency, meeting bloat, alert fatigue, hidden risks, and review theater."
+        - "Include reporting overload, stale dashboards, ignored reports, owner gaps, bad data, no action
+          follow-through, decision latency, meeting bloat, alert fatigue, hidden risks, and review theater."
         - "Route risks to Risk Management where needed."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a25
         - "What could cause the review cadence to fail?"
-        - "Where could reporting become stale, ignored, ownerless, noisy, too frequent, too slow, or disconnected from action?"
+        - "Where could reporting become stale, ignored, ownerless, noisy, too frequent, too slow, or disconnected from
+          action?"
         - "How are cadence risks detected?"
         - "How are cadence risks mitigated?"
         - "What should Risk Management inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Operations documents must inherit from Reporting and Cadence and what they must not assume."
+      intent: "Define what downstream Operations documents must inherit from Reporting and Cadence and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Use reporting handoff records."
-        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
-        - "Preserve reports, cadences, metrics, thresholds, owners, artifacts, escalation triggers, caveats, unresolved questions, and cadence risks."
+        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial
+          Operations, and Risk Management."
+        - "Preserve reports, cadences, metrics, thresholds, owners, artifacts, escalation triggers, caveats, unresolved
+          questions, and cadence risks."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing reporting assumptions silently."
         - "Reporting and Cadence remains rhythm architecture; detailed procedures remain downstream."
-      questions:
+      questions: &a26
         - "What should Maintenance Plan inherit?"
         - "What should Release Management inherit?"
         - "What should Incident Response inherit?"
@@ -816,3 +926,342 @@ document:
         - "What should Financial Operations inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved reporting and cadence questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain reporting and cadence. When do we review which operational signals, who reviews them, what
+      decisions are made, what artifacts are produced, what thresholds trigger escalation, and how are decisions
+      followed through?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "reporting-objective"
+        label: "Reporting Objective"
+        required: true
+        description: "Define the purpose of operational reporting and how it supports decisions, accountability, escalation,
+          learning, and risk management."
+        evaluationHint: "Look for concrete answers addressing: What is the purpose of operational reporting?; Who consumes
+          operational reports?; What decisions should reports support?."
+        sourceQuestions: *a1
+        targetSections: &a27
+          - "Reporting Objective"
+      - id: "reporting-principles"
+        label: "Reporting Principles"
+        required: true
+        description: "Define principles that keep reporting lightweight, accurate, timely, decision-useful, privacy-safe, and
+          action-oriented."
+        evaluationHint: "Look for concrete answers addressing: What principles guide operational reporting?; How should reports
+          stay lightweight and decision-useful?; How should data caveats be handled?."
+        sourceQuestions: *a2
+        targetSections: &a28
+          - "Reporting Principles"
+      - id: "cadence-taxonomy"
+        label: "Cadence Taxonomy"
+        required: true
+        description: "Define review cadence types and labels used throughout the reporting system."
+        evaluationHint: "Look for concrete answers addressing: What cadence types exist?; What reporting statuses are used?; How
+          are report, dashboard, review, meeting, alert, escalation, and artifact different?."
+        sourceQuestions: *a3
+        targetSections: &a29
+          - "Cadence Taxonomy"
+      - id: "report-inventory"
+        label: "Report Inventory"
+        required: true
+        description: "List every recurring or trigger-based operational report with purpose, audience, cadence, owner, source,
+          metrics, decisions, artifact, escalation, and caveats."
+        evaluationHint: "Look for concrete answers addressing: What reports exist or must exist?; What is each report for?; Who
+          receives each report?."
+        sourceQuestions: *a4
+        targetSections: &a30
+          - "Report Inventory"
+      - id: "daily-checks"
+        label: "Daily Checks"
+        required: true
+        description: "Define which operational signals are checked daily, by whom, from which source, and what actions or
+          escalations they trigger."
+        evaluationHint: "Look for concrete answers addressing: What metrics and signals are checked daily?; Who performs daily
+          checks?; What source is checked?."
+        sourceQuestions: *a5
+        targetSections: &a31
+          - "Daily Checks"
+      - id: "weekly-review"
+        label: "Weekly Review"
+        required: true
+        description: "Define the weekly operational review scope, inputs, decisions, participants, artifact, and action tracking."
+        evaluationHint: "Look for concrete answers addressing: What is reviewed weekly?; Who participates?; What inputs and
+          dashboards are used?."
+        sourceQuestions: *a6
+        targetSections: &a32
+          - "Weekly Review"
+      - id: "monthly-review"
+        label: "Monthly Review"
+        required: true
+        description: "Define the monthly operational review scope and how it feeds planning, process improvements, financial
+          review, and risk review."
+        evaluationHint: "Look for concrete answers addressing: What is reviewed monthly?; How does monthly review feed
+          operational planning?; What trends are reviewed?."
+        sourceQuestions: *a7
+        targetSections: &a33
+          - "Monthly Review"
+      - id: "quarterly-review"
+        label: "Quarterly Review"
+        required: true
+        description: "Define the quarterly review scope and how it connects operational reality to strategic planning, capacity,
+          cost, risk, and operating model changes."
+        evaluationHint: "Look for concrete answers addressing: What is reviewed quarterly?; How does quarterly review connect to
+          strategic planning?; What operating model, capacity, cost, risk, process maturity, service expectation, and
+          customer trust questions are reviewed?."
+        sourceQuestions: *a8
+        targetSections: &a34
+          - "Quarterly Review"
+      - id: "launch-window-cadence"
+        label: "Launch-Window Cadence"
+        required: true
+        description: "Define temporary high-frequency reporting during launch windows and cohort expansions."
+        evaluationHint: "Look for concrete answers addressing: What reporting cadence applies during launch windows?; What
+          readiness and support signals are reviewed?; What go/no-go or pause/rollback thresholds apply?."
+        sourceQuestions: *a9
+        targetSections: &a35
+          - "Launch-Window Cadence"
+      - id: "release-review-cadence"
+        label: "Release Review Cadence"
+        required: true
+        description: "Define cadence for pre-release readiness, release-day monitoring, post-release review, and release quality
+          decisions."
+        evaluationHint: "Look for concrete answers addressing: What reporting happens before release?; What is monitored during
+          release?; What is reviewed after release?."
+        sourceQuestions: *a10
+        targetSections: &a36
+          - "Release Review Cadence"
+      - id: "incident-review-cadence"
+        label: "Incident Review Cadence"
+        required: true
+        description: "Define reporting and review cadence during and after incidents."
+        evaluationHint: "Look for concrete answers addressing: What reporting happens during incidents?; What is reviewed after
+          incidents?; How are post-incident actions tracked?."
+        sourceQuestions: *a11
+        targetSections: &a37
+          - "Incident Review Cadence"
+      - id: "support-review-cadence"
+        label: "Support Review Cadence"
+        required: true
+        description: "Define support reporting cadence for volume, backlog, response, resolution, escalations, bugs, known
+          issues, billing/refund issues, and support risks."
+        evaluationHint: "Look for concrete answers addressing: What support data is reviewed daily, weekly, or monthly?; How are
+          support volume, backlog, response, resolution, escalation, bugs, known issues, and billing/refund issues
+          reviewed?; What support risks trigger escalation?."
+        sourceQuestions: *a12
+        targetSections: &a38
+          - "Support Review Cadence"
+      - id: "customer-success-review-cadence"
+        label: "Customer Success Review Cadence"
+        required: true
+        description: "Define reporting cadence for onboarding, activation, health, at-risk customers, retention, expansion,
+          satisfaction, feedback, and churn."
+        evaluationHint: "Look for concrete answers addressing: What customer success data is reviewed daily, weekly, or
+          monthly?; How are onboarding, activation, health, at-risk customers, retention, expansion, satisfaction,
+          feedback, and churn reviewed?; What actions can customer success review create?."
+        sourceQuestions: *a13
+        targetSections: &a39
+          - "Customer Success Review Cadence"
+      - id: "financial-review-cadence"
+        label: "Financial Review Cadence"
+        required: true
+        description: "Define reporting cadence for billing, payments, refunds, invoices, discounts, chargebacks, revenue
+          operations, cost, and finance risks."
+        evaluationHint: "Look for concrete answers addressing: What financial data is reviewed daily, weekly, monthly, or
+          quarterly?; How are billing, payment failures, refunds, invoices, discounts, chargebacks, revenue operations,
+          costs, and financial risks reviewed?; What triggers financial escalation?."
+        sourceQuestions: *a14
+        targetSections: &a40
+          - "Financial Review Cadence"
+      - id: "data-and-privacy-review-cadence"
+        label: "Data and Privacy Review Cadence"
+        required: true
+        description: "Define reporting cadence for data access, privacy requests, retention/deletion controls, telemetry/logging
+          review, and privacy incidents."
+        evaluationHint: "Look for concrete answers addressing: What data/privacy information is reviewed and how often?; How are
+          access reviews, privacy requests, export/deletion handling, telemetry/logging review, retention/deletion
+          controls, and privacy incidents reviewed?; Who may access these reports?."
+        sourceQuestions: *a15
+        targetSections: &a41
+          - "Data and Privacy Review Cadence"
+      - id: "risk-review-cadence"
+        label: "Risk Review Cadence"
+        required: true
+        description: "Define cadence for reviewing operational risks, accepted risks, mitigation progress, residual risk,
+          escalation, and risk register updates."
+        evaluationHint: "Look for concrete answers addressing: How often are operational and handed-off GTM risks reviewed?; How
+          are accepted risks and mitigation progress reviewed?; What triggers out-of-cycle risk review?."
+        sourceQuestions: *a16
+        targetSections: &a42
+          - "Risk Review Cadence"
+      - id: "process-review-cadence"
+        label: "Process Review Cadence"
+        required: true
+        description: "Define cadence for reviewing recurring business process health, controls, exceptions, manual burden,
+          automation reliability, and improvements."
+        evaluationHint: "Look for concrete answers addressing: How often are business processes reviewed?; What process metrics
+          and controls are reviewed?; How are exceptions, rework, manual burden, and automation reliability reviewed?."
+        sourceQuestions: *a17
+        targetSections: &a43
+          - "Process Review Cadence"
+      - id: "metrics-dashboard"
+        label: "Metrics Dashboard"
+        required: true
+        description: "Define operational dashboards, access controls, data sources, refresh cadence, QA, caveats, maintenance,
+          and retirement/update triggers."
+        evaluationHint: "Look for concrete answers addressing: What dashboards exist for operational metrics?; Who has access?;
+          What data sources and metrics are included?."
+        sourceQuestions: *a18
+        targetSections: &a44
+          - "Metrics Dashboard"
+      - id: "decision-meetings"
+        label: "Decision Meetings"
+        required: true
+        description: "Define recurring meetings dedicated to operational decisions, required inputs, participants, decision
+          owner, artifacts, action tracking, and follow-up."
+        evaluationHint: "Look for concrete answers addressing: What recurring meetings are dedicated to operational decisions?;
+          What decisions are made in each meeting?; What inputs are required?."
+        sourceQuestions: *a19
+        targetSections: &a45
+          - "Decision Meetings"
+      - id: "review-artifacts"
+        label: "Review Artifacts"
+        required: true
+        description: "Define artifacts produced by each review cadence and how they are stored, shared, updated, retained, and
+          linked to decisions/actions."
+        evaluationHint: "Look for concrete answers addressing: What artifacts are produced by each review cadence?; How are
+          artifacts stored and shared?; Who owns each artifact?."
+        sourceQuestions: *a20
+        targetSections: &a46
+          - "Review Artifacts"
+      - id: "reporting-responsibilities"
+        label: "Reporting Responsibilities"
+        required: true
+        description: "Assign responsibility for producing, validating, presenting, reviewing, acting on, and escalating reports."
+        evaluationHint: "Look for concrete answers addressing: Who is responsible for producing each report?; Who owns the data
+          source?; Who validates reporting quality?."
+        sourceQuestions: *a21
+        targetSections: &a47
+          - "Reporting Responsibilities"
+      - id: "escalation-triggers"
+        label: "Escalation Triggers"
+        required: true
+        description: "Define metric thresholds, events, missed cadences, data failures, incidents, support overload, financial
+          anomalies, privacy issues, and risk thresholds that trigger out-of-cycle escalation."
+        evaluationHint: "Look for concrete answers addressing: What metric thresholds or events trigger out-of-cycle
+          escalation?; Who is notified when an escalation trigger fires?; What severity and response expectation
+          applies?."
+        sourceQuestions: *a22
+        targetSections: &a48
+          - "Escalation Triggers"
+      - id: "data-quality-and-caveats"
+        label: "Data Quality and Caveats"
+        required: true
+        description: "Define how reporting data is validated, caveated, repaired, and marked unsafe for decisions when needed."
+        evaluationHint: "Look for concrete answers addressing: How is reporting data validated?; Which reports depend on manual
+          inputs or incomplete sources?; What caveats must be shown with each report?."
+        sourceQuestions: *a23
+        targetSections: &a49
+          - "Data Quality and Caveats"
+      - id: "action-item-tracking"
+        label: "Action Item Tracking"
+        required: true
+        description: "Define how decisions and action items produced by reporting cadences are assigned, tracked, escalated, and
+          closed."
+        evaluationHint: "Look for concrete answers addressing: How are action items created from reports and meetings?; Who owns
+          each action?; How are due dates or due triggers set?."
+        sourceQuestions: *a24
+        targetSections: &a50
+          - "Action Item Tracking"
+      - id: "cadence-risks"
+        label: "Cadence Risks"
+        required: true
+        description: "Identify failure modes of the reporting cadence and how cadence risks are detected, mitigated, escalated,
+          or handed off."
+        evaluationHint: "Look for concrete answers addressing: What could cause the review cadence to fail?; Where could
+          reporting become stale, ignored, ownerless, noisy, too frequent, too slow, or disconnected from action?; How
+          are cadence risks detected?."
+        sourceQuestions: *a25
+        targetSections: &a51
+          - "Cadence Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Operations documents must inherit from Reporting and Cadence and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Maintenance Plan inherit?; What should Release
+          Management inherit?; What should Incident Response inherit?."
+        sourceQuestions: *a26
+        targetSections: &a52
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      reporting-objective:
+        targetSections: *a27
+      reporting-principles:
+        targetSections: *a28
+      cadence-taxonomy:
+        targetSections: *a29
+      report-inventory:
+        targetSections: *a30
+      daily-checks:
+        targetSections: *a31
+      weekly-review:
+        targetSections: *a32
+      monthly-review:
+        targetSections: *a33
+      quarterly-review:
+        targetSections: *a34
+      launch-window-cadence:
+        targetSections: *a35
+      release-review-cadence:
+        targetSections: *a36
+      incident-review-cadence:
+        targetSections: *a37
+      support-review-cadence:
+        targetSections: *a38
+      customer-success-review-cadence:
+        targetSections: *a39
+      financial-review-cadence:
+        targetSections: *a40
+      data-and-privacy-review-cadence:
+        targetSections: *a41
+      risk-review-cadence:
+        targetSections: *a42
+      process-review-cadence:
+        targetSections: *a43
+      metrics-dashboard:
+        targetSections: *a44
+      decision-meetings:
+        targetSections: *a45
+      review-artifacts:
+        targetSections: *a46
+      reporting-responsibilities:
+        targetSections: *a47
+      escalation-triggers:
+        targetSections: *a48
+      data-quality-and-caveats:
+        targetSections: *a49
+      action-item-tracking:
+        targetSections: *a50
+      cadence-risks:
+        targetSections: *a51
+      downstream-handoff:
+        targetSections: *a52
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.523Z"
+      totalSourceQuestions: 125
+      reviewRequired: false

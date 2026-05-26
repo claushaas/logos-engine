@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 7
   type: "glossary"
-  purpose: "Provide canonical semantic control over key project terminology, preventing ambiguous or conflicting meanings across foundation documents."
+  purpose: "Provide canonical semantic control over key project terminology, preventing ambiguous or conflicting meanings
+    across foundation documents."
   centralQuestion: "When we use an important word, exactly what does it mean in this project?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "foundation.glossary_index"
         format: "html"
         path: "outcomes/html/01-foundation/glossary-index.html"
-        purpose: "Provide a navigable semantic index of canonical terms, definitions, aliases, usage contexts, distinctions, and unresolved terminology issues."
+        purpose: "Provide a navigable semantic index of canonical terms, definitions, aliases, usage contexts, distinctions, and
+          unresolved terminology issues."
         audience: "founder"
         includes:
           - "canonical terms"
@@ -31,7 +33,8 @@ document:
       - id: "foundation.glossary_review_prompt"
         format: "markdown"
         path: "outcomes/agents/01-foundation/glossary-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing terminology consistency across foundation documents and downstream outputs."
+        purpose: "Provide compact context for agents reviewing terminology consistency across foundation documents and
+          downstream outputs."
         agentRole: "reviewer"
         includes:
           - "canonical glossary"
@@ -57,7 +60,8 @@ document:
     - id: "foundation-documents"
       type: "context"
       required: false
-      description: "Generated or drafted Foundation documents from which key terms, ambiguous terms, and recurring terminology should be extracted."
+      description: "Generated or drafted Foundation documents from which key terms, ambiguous terms, and recurring terminology
+        should be extracted."
     - id: "preferred-terminology"
       type: "manual_note"
       required: false
@@ -68,7 +72,8 @@ document:
       description: "Terms that appear overloaded, unclear, duplicated, or likely to create misunderstanding."
   completionCriteria:
     - "The central question is answered by defining every fundamental Foundation term in project-specific language."
-    - "Every recurring or decision-critical term from Foundation documents is either defined or explicitly marked as excluded."
+    - "Every recurring or decision-critical term from Foundation documents is either defined or explicitly marked as
+      excluded."
     - "Each term has a definition that constrains meaning rather than merely describing it."
     - "Each term identifies where it is used or expected to be used."
     - "Each term names at least one distinction, non-equivalent term, or possible confusion when relevant."
@@ -80,7 +85,8 @@ document:
     - "Every term must have a definition that constrains its meaning."
     - "Do not define a term using another undefined term."
     - "Do not allow multiple canonical terms for the same concept unless the distinction is explicit."
-    - "Do not introduce new conceptual claims that belong in Thesis, Problem, Audience, Principles, Boundaries, or Success Definition."
+    - "Do not introduce new conceptual claims that belong in Thesis, Problem, Audience, Principles, Boundaries, or
+      Success Definition."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
@@ -101,29 +107,30 @@ document:
     glossaryFormat:
       description: "Required format for each glossary term."
       fields:
-        - term
-        - status
-        - definition
-        - usedIn
-        - aliases
-        - discouragedTerms
-        - notToBeConfusedWith
-        - decisionRelevance
-        - relatedTerms
-        - notes
+        - "term"
+        - "status"
+        - "definition"
+        - "usedIn"
+        - "aliases"
+        - "discouragedTerms"
+        - "notToBeConfusedWith"
+        - "decisionRelevance"
+        - "relatedTerms"
+        - "notes"
     terminologyIssueFormat:
       description: "Recommended format for unresolved terminology issues."
       fields:
-        - issue
-        - affectedTerms
-        - description
-        - risk
-        - proposedResolution
-        - status
+        - "issue"
+        - "affectedTerms"
+        - "description"
+        - "risk"
+        - "proposedResolution"
+        - "status"
   sections:
     - id: "canonical-terms"
       title: "Canonical Terms"
-      intent: "Define each fundamental term with its project-specific meaning, usage context, distinctions, aliases, and decision relevance."
+      intent: "Define each fundamental term with its project-specific meaning, usage context, distinctions, aliases, and
+        decision relevance."
       required: true
       outputGuidance:
         - "Define terms as constraints on meaning, not as generic descriptions."
@@ -135,7 +142,7 @@ document:
         - "Each definition can be understood without circular references."
         - "Each term is useful enough to affect reading, generation, review, or decision-making."
         - "No term exists merely because it sounds conceptually elegant."
-      questions:
+      questions: &a1
         - "What are the fundamental terms?"
         - "What is the exact definition of each term in project context?"
         - "What is the status of each term: canonical, provisional, deprecated, or excluded?"
@@ -146,7 +153,8 @@ document:
         - "Why does this term matter for decisions, generation, or review?"
     - id: "required-foundation-terms"
       title: "Required Foundation Terms"
-      intent: "Ensure all foundational concepts used across the Foundation phase are explicitly defined or intentionally excluded."
+      intent: "Ensure all foundational concepts used across the Foundation phase are explicitly defined or intentionally
+        excluded."
       required: true
       outputGuidance:
         - "Extract recurring terms from Thesis, Problem, Audience, Principles, Boundaries, and Success Definition."
@@ -156,7 +164,7 @@ document:
         - "Decision-critical Foundation terms are not left undefined."
         - "Ordinary language is not over-modeled unnecessarily."
         - "Missing terms are surfaced as review items instead of silently omitted."
-      questions:
+      questions: &a2
         - "Which terms recur across Foundation documents?"
         - "Which terms are decision-critical?"
         - "Which terms are used before being defined?"
@@ -173,31 +181,34 @@ document:
         - "Distinctions are useful, not ornamental."
         - "The distinction changes how a reader, agent, or contributor should interpret the project."
         - "No distinction contradicts established Foundation documents."
-      questions:
+      questions: &a3
         - "Which terms are likely to be confused?"
         - "What is the practical distinction between them?"
         - "Why does this distinction matter?"
         - "Which downstream documents depend on this distinction?"
     - id: "aliases-and-discouraged-terms"
       title: "Aliases and Discouraged Terms"
-      intent: "Record acceptable aliases, discouraged phrases, deprecated terms, and terms that should not be used because they distort project meaning."
+      intent: "Record acceptable aliases, discouraged phrases, deprecated terms, and terms that should not be used because
+        they distort project meaning."
       required: true
       outputGuidance:
         - "List acceptable aliases only when they do not create semantic drift."
         - "Mark discouraged terms with a reason."
-        - "Explain whether a discouraged term is wrong, imprecise, overloaded, too generic, or belongs to another context."
+        - "Explain whether a discouraged term is wrong, imprecise, overloaded, too generic, or belongs to another
+          context."
       qualityChecks:
         - "Discouraged terms are not rejected for taste alone."
         - "Aliases do not create hidden conceptual differences."
         - "Deprecated terminology includes a preferred replacement when possible."
-      questions:
+      questions: &a4
         - "Which aliases are acceptable?"
         - "Which terms should be discouraged or deprecated?"
         - "Why should each discouraged term be avoided?"
         - "What canonical term should replace each discouraged term?"
     - id: "unresolved-terminology-issues"
       title: "Unresolved Terminology Issues"
-      intent: "Surface ambiguous, unstable, duplicated, or disputed terminology that requires review before downstream documents rely on it."
+      intent: "Surface ambiguous, unstable, duplicated, or disputed terminology that requires review before downstream
+        documents rely on it."
       required: true
       outputGuidance:
         - "List unresolved terminology problems explicitly."
@@ -207,9 +218,93 @@ document:
         - "Terminology uncertainty is not hidden."
         - "Each issue includes an interpretation risk."
         - "Provisional resolutions are clearly marked as provisional."
-      questions:
+      questions: &a5
         - "Which terms remain ambiguous?"
         - "Which terms are overloaded or duplicated?"
         - "Which definitions still depend on unresolved project decisions?"
         - "What risks could these unresolved terms create downstream?"
         - "What provisional resolution should be used until the issue is settled?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain glossary of terms. When we use an important word, exactly what does it mean in this project?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "canonical-terms"
+        label: "Canonical Terms"
+        required: true
+        description: "Define each fundamental term with its project-specific meaning, usage context, distinctions, aliases, and
+          decision relevance."
+        evaluationHint: "Look for concrete answers addressing: What are the fundamental terms?; What is the exact definition of
+          each term in project context?; What is the status of each term: canonical, provisional, deprecated, or
+          excluded?."
+        sourceQuestions: *a1
+        targetSections: &a6
+          - "Canonical Terms"
+      - id: "required-foundation-terms"
+        label: "Required Foundation Terms"
+        required: true
+        description: "Ensure all foundational concepts used across the Foundation phase are explicitly defined or intentionally
+          excluded."
+        evaluationHint: "Look for concrete answers addressing: Which terms recur across Foundation documents?; Which terms are
+          decision-critical?; Which terms are used before being defined?."
+        sourceQuestions: *a2
+        targetSections: &a7
+          - "Required Foundation Terms"
+      - id: "semantic-distinctions"
+        label: "Semantic Distinctions"
+        required: true
+        description: "Clarify terms that are close enough to be confused but must remain distinct for the project to stay coherent."
+        evaluationHint: "Look for concrete answers addressing: Which terms are likely to be confused?; What is the practical
+          distinction between them?; Why does this distinction matter?."
+        sourceQuestions: *a3
+        targetSections: &a8
+          - "Semantic Distinctions"
+      - id: "aliases-and-discouraged-terms"
+        label: "Aliases and Discouraged Terms"
+        required: true
+        description: "Record acceptable aliases, discouraged phrases, deprecated terms, and terms that should not be used
+          because they distort project meaning."
+        evaluationHint: "Look for concrete answers addressing: Which aliases are acceptable?; Which terms should be discouraged
+          or deprecated?; Why should each discouraged term be avoided?."
+        sourceQuestions: *a4
+        targetSections: &a9
+          - "Aliases and Discouraged Terms"
+      - id: "unresolved-terminology-issues"
+        label: "Unresolved Terminology Issues"
+        required: true
+        description: "Surface ambiguous, unstable, duplicated, or disputed terminology that requires review before downstream
+          documents rely on it."
+        evaluationHint: "Look for concrete answers addressing: Which terms remain ambiguous?; Which terms are overloaded or
+          duplicated?; Which definitions still depend on unresolved project decisions?."
+        sourceQuestions: *a5
+        targetSections: &a10
+          - "Unresolved Terminology Issues"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      canonical-terms:
+        targetSections: *a6
+      required-foundation-terms:
+        targetSections: *a7
+      semantic-distinctions:
+        targetSections: *a8
+      aliases-and-discouraged-terms:
+        targetSections: *a9
+      unresolved-terminology-issues:
+        targetSections: *a10
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.237Z"
+      totalSourceQuestions: 25
+      reviewRequired: false

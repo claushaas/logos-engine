@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 6
   type: "business_processes"
-  purpose: "Define the recurring operational and business processes that must run repeatably, safely, measurably, and accountably across onboarding, billing, cancellation, refunds, feature requests, bug triage, release communication, vendor management, data requests, process review, and continuous improvement."
-  centralQuestion: "What recurring business processes must happen, what triggers them, who owns them, what steps and controls apply, and how are they measured, improved, escalated, and handed off?"
+  purpose: "Define the recurring operational and business processes that must run repeatably, safely, measurably, and
+    accountably across onboarding, billing, cancellation, refunds, feature requests, bug triage, release communication,
+    vendor management, data requests, process review, and continuous improvement."
+  centralQuestion: "What recurring business processes must happen, what triggers them, who owns them, what steps and
+    controls apply, and how are they measured, improved, escalated, and handed off?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,8 @@ document:
       - id: "operations.business_process_catalog"
         format: "html"
         path: "outcomes/html/06-operations/business-process-catalog.html"
-        purpose: "Provide a founder-facing business process catalog covering process inventory, triggers, owners, inputs, steps, outputs, controls, SLAs/internal targets, exceptions, metrics, risks, and downstream handoff."
+        purpose: "Provide a founder-facing business process catalog covering process inventory, triggers, owners, inputs, steps,
+          outputs, controls, SLAs/internal targets, exceptions, metrics, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "process objective"
@@ -46,7 +50,9 @@ document:
       - id: "operations.business_processes_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/business-processes-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether recurring business processes are complete, repeatable, owner-assigned, controlled, measurable, exception-aware, privacy-safe, financially safe, and properly handed off downstream."
+        purpose: "Provide compact context for agents reviewing whether recurring business processes are complete, repeatable,
+          owner-assigned, controlled, measurable, exception-aware, privacy-safe, financially safe, and properly handed
+          off downstream."
         agentRole: "reviewer"
         includes:
           - "canonical business processes"
@@ -97,227 +103,286 @@ document:
     - id: "operations-brief"
       type: "context"
       required: false
-      description: "Operations objective, product/service context, critical operational functions, service expectations, support expectations, incident expectations, maintenance expectations, release expectations, data/privacy operations, cost/capacity constraints, operational success criteria, and operational risks."
+      description: "Operations objective, product/service context, critical operational functions, service expectations,
+        support expectations, incident expectations, maintenance expectations, release expectations, data/privacy
+        operations, cost/capacity constraints, operational success criteria, and operational risks."
     - id: "operating-model"
       type: "context"
       required: false
-      description: "Operating scope, ownership model, roles, cadences, workflows, manual operations, automated operations, dependencies, decision rights, escalation paths, metrics, constraints, and operating model risks."
+      description: "Operating scope, ownership model, roles, cadences, workflows, manual operations, automated operations,
+        dependencies, decision rights, escalation paths, metrics, constraints, and operating model risks."
     - id: "team-and-responsibilities"
       type: "context"
       required: false
-      description: "Process owners, backup owners, decision authority, handoff rules, escalation rules, responsibility gaps, future hiring needs, and responsibility risks."
+      description: "Process owners, backup owners, decision authority, handoff rules, escalation rules, responsibility gaps,
+        future hiring needs, and responsibility risks."
     - id: "customer-support"
       type: "context"
       required: false
-      description: "Support intake, ticket categories, priority levels, triage rules, escalation rules, bug reporting flow, known issue handling, refund/billing support, privacy/data requests, support metrics, and support risks."
+      description: "Support intake, ticket categories, priority levels, triage rules, escalation rules, bug reporting flow,
+        known issue handling, refund/billing support, privacy/data requests, support metrics, and support risks."
     - id: "customer-success"
       type: "context"
       required: false
-      description: "Onboarding model, activation milestones, customer health signals, retention actions, expansion opportunities, satisfaction measurement, feedback loops, churn analysis, cadences, metrics, and customer success risks."
+      description: "Onboarding model, activation milestones, customer health signals, retention actions, expansion
+        opportunities, satisfaction measurement, feedback loops, churn analysis, cadences, metrics, and customer success
+        risks."
     - id: "pricing-and-packaging"
       type: "context"
       required: false
-      description: "Pricing model, plans, payment flow, subscription terms, billing terms, failed payment handling, cancellation logic, refund policy, discounts, upgrade/downgrade logic, and pricing risks."
+      description: "Pricing model, plans, payment flow, subscription terms, billing terms, failed payment handling,
+        cancellation logic, refund policy, discounts, upgrade/downgrade logic, and pricing risks."
     - id: "product-and-engineering-context"
       type: "context"
       required: false
-      description: "Product scope, acceptance criteria, data model, security/privacy constraints, observability, deployment, technical risks, bug lifecycle constraints, and automation/integration constraints."
+      description: "Product scope, acceptance criteria, data model, security/privacy constraints, observability, deployment,
+        technical risks, bug lifecycle constraints, and automation/integration constraints."
     - id: "business-process-notes"
       type: "manual_note"
       required: false
-      description: "Known recurring processes, manual process notes, automation ideas, process pain points, approval rules, exceptions, metrics, process owners, bottlenecks, and unresolved process questions."
+      description: "Known recurring processes, manual process notes, automation ideas, process pain points, approval rules,
+        exceptions, metrics, process owners, bottlenecks, and unresolved process questions."
   completionCriteria:
-    - "The central question is answered through a complete business process catalog with triggers, owners, inputs, steps, outputs, controls, exceptions, targets, metrics, risks, reviews, and handoffs."
-    - "Process objective defines what business processes protect: repeatability, customer trust, financial correctness, product learning, supportability, privacy, accountability, and operational sustainability."
-    - "Process taxonomy classifies processes by domain, criticality, frequency, customer visibility, privacy sensitivity, financial sensitivity, automation level, owner, and downstream dependency."
-    - "Process inventory lists all recurring processes with purpose, trigger, owner, backup owner, frequency, customer impact, business impact, inputs, outputs, controls, metrics, risks, and downstream document."
-    - "Process prioritization identifies launch-critical, revenue-critical, trust-critical, privacy-critical, support-critical, manual-heavy, automation-candidate, deferred, and post-launch processes."
-    - "Process ownership defines accountable owner, executor, reviewer, approver, backup, escalation owner, decision authority, and responsibility gaps for each material process."
-    - "Process trigger model defines event-based, scheduled, customer-requested, system-triggered, support-triggered, billing-triggered, release-triggered, incident-triggered, privacy-triggered, and review-triggered processes."
-    - "Standard process format defines required fields for every process: process name, purpose, trigger, owner, inputs, steps, outputs, internal target/SLA, controls, exceptions, escalation, metrics, risks, and downstream handoff."
-    - "User onboarding process defines the end-to-end process from signup or purchase to activation, including customer steps, system steps, manual steps, educational assets, stuck signals, support fallback, and success evidence."
-    - "Billing process defines how charges are calculated, generated, collected, recorded, reconciled, communicated, failed, retried, escalated, and handed off to Financial Operations."
-    - "Payment failure process defines failed payment detection, customer communication, retry logic, grace period, access rules, support handoff, financial handoff, and cancellation or suspension conditions."
-    - "Cancellation process defines customer cancellation path, access timing, data/export options, feedback capture, billing consequences, support escalation, retention-safe boundaries, and downstream handoff."
-    - "Refund process defines eligibility, intake, verification, approval, exception handling, processor action, customer communication, recording, abuse prevention, and Financial Operations handoff."
-    - "Feature request process defines intake, classification, deduplication, evidence capture, prioritization, product review, roadmap linkage, customer follow-up, and closure/no-action rules."
-    - "Bug triage process defines intake, reproduction, severity, priority, affected users, privacy constraints, engineering routing, backlog linkage, customer communication, release linkage, and closure criteria."
-    - "Release communication process defines internal and external release notices, audience, timing, owner, content, support readiness, known issues, rollback/pause message, and release artifact requirements."
-    - "Vendor management process defines vendor selection, onboarding, access, billing, monitoring, review, renewal, security/privacy review, fallback, replacement, and offboarding."
-    - "Data export and deletion process defines request intake, identity/authority verification, allowed/prohibited support action, data scope, fulfillment, deletion/export evidence, timeline assumptions, customer communication, logging, and Data/Privacy Operations handoff."
-    - "Process controls define checks, approvals, evidence, logs, audit trail, privacy safeguards, financial safeguards, access safeguards, and quality gates for sensitive or critical processes."
-    - "Process metrics define completion time, backlog, failure rate, exception rate, rework, customer impact, manual effort, automation reliability, financial error, privacy risk, and process health metrics."
-    - "Process review cadence defines when processes are reviewed, who participates, what inputs are reviewed, what outputs are expected, how improvements are prioritized, and how changes are documented."
-    - "Process risks identify process gaps, manual overload, missed handoff, unclear ownership, financial error, privacy mishandling, stale process docs, automation failure, vendor failure, support overload, and customer trust risks."
-    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+    - "The central question is answered through a complete business process catalog with triggers, owners, inputs,
+      steps, outputs, controls, exceptions, targets, metrics, risks, reviews, and handoffs."
+    - "Process objective defines what business processes protect: repeatability, customer trust, financial correctness,
+      product learning, supportability, privacy, accountability, and operational sustainability."
+    - "Process taxonomy classifies processes by domain, criticality, frequency, customer visibility, privacy
+      sensitivity, financial sensitivity, automation level, owner, and downstream dependency."
+    - "Process inventory lists all recurring processes with purpose, trigger, owner, backup owner, frequency, customer
+      impact, business impact, inputs, outputs, controls, metrics, risks, and downstream document."
+    - "Process prioritization identifies launch-critical, revenue-critical, trust-critical, privacy-critical,
+      support-critical, manual-heavy, automation-candidate, deferred, and post-launch processes."
+    - "Process ownership defines accountable owner, executor, reviewer, approver, backup, escalation owner, decision
+      authority, and responsibility gaps for each material process."
+    - "Process trigger model defines event-based, scheduled, customer-requested, system-triggered, support-triggered,
+      billing-triggered, release-triggered, incident-triggered, privacy-triggered, and review-triggered processes."
+    - "Standard process format defines required fields for every process: process name, purpose, trigger, owner, inputs,
+      steps, outputs, internal target/SLA, controls, exceptions, escalation, metrics, risks, and downstream handoff."
+    - "User onboarding process defines the end-to-end process from signup or purchase to activation, including customer
+      steps, system steps, manual steps, educational assets, stuck signals, support fallback, and success evidence."
+    - "Billing process defines how charges are calculated, generated, collected, recorded, reconciled, communicated,
+      failed, retried, escalated, and handed off to Financial Operations."
+    - "Payment failure process defines failed payment detection, customer communication, retry logic, grace period,
+      access rules, support handoff, financial handoff, and cancellation or suspension conditions."
+    - "Cancellation process defines customer cancellation path, access timing, data/export options, feedback capture,
+      billing consequences, support escalation, retention-safe boundaries, and downstream handoff."
+    - "Refund process defines eligibility, intake, verification, approval, exception handling, processor action,
+      customer communication, recording, abuse prevention, and Financial Operations handoff."
+    - "Feature request process defines intake, classification, deduplication, evidence capture, prioritization, product
+      review, roadmap linkage, customer follow-up, and closure/no-action rules."
+    - "Bug triage process defines intake, reproduction, severity, priority, affected users, privacy constraints,
+      engineering routing, backlog linkage, customer communication, release linkage, and closure criteria."
+    - "Release communication process defines internal and external release notices, audience, timing, owner, content,
+      support readiness, known issues, rollback/pause message, and release artifact requirements."
+    - "Vendor management process defines vendor selection, onboarding, access, billing, monitoring, review, renewal,
+      security/privacy review, fallback, replacement, and offboarding."
+    - "Data export and deletion process defines request intake, identity/authority verification, allowed/prohibited
+      support action, data scope, fulfillment, deletion/export evidence, timeline assumptions, customer communication,
+      logging, and Data/Privacy Operations handoff."
+    - "Process controls define checks, approvals, evidence, logs, audit trail, privacy safeguards, financial safeguards,
+      access safeguards, and quality gates for sensitive or critical processes."
+    - "Process metrics define completion time, backlog, failure rate, exception rate, rework, customer impact, manual
+      effort, automation reliability, financial error, privacy risk, and process health metrics."
+    - "Process review cadence defines when processes are reviewed, who participates, what inputs are reviewed, what
+      outputs are expected, how improvements are prioritized, and how changes are documented."
+    - "Process risks identify process gaps, manual overload, missed handoff, unclear ownership, financial error, privacy
+      mishandling, stale process docs, automation failure, vendor failure, support overload, and customer trust risks."
+    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy
+      Operations, Financial Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid process theater: process names without trigger, owner, inputs, steps, outputs, control, exception path, metric, risk, and downstream handoff."
-    - "Avoid duplicating detailed runbooks better owned by Support, Maintenance, Release, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+    - "Avoid process theater: process names without trigger, owner, inputs, steps, outputs, control, exception path,
+      metric, risk, and downstream handoff."
+    - "Avoid duplicating detailed runbooks better owned by Support, Maintenance, Release, Incident Response,
+      Data/Privacy Operations, Financial Operations, or Risk Management."
     - "Avoid treating manual processes as free, invisible, or infinitely scalable."
-    - "Avoid automating a process before the trigger, inputs, owner, exception path, and success evidence are clear, unless automation is required for safety, privacy, billing correctness, or reliability."
-    - "Avoid billing, refund, cancellation, invoice, failed payment, or discount processes without authority rules, customer communication, processor behavior, and Financial Operations handoff."
-    - "Avoid data export/deletion processes without verification, privacy review, evidence, logging, prohibited actions, and Data/Privacy Operations handoff."
-    - "Avoid bug and feature request processes that bypass product/engineering triage, customer communication, prioritization, and closure/no-action rules."
-    - "Avoid release communications that ignore support readiness, known issues, rollback/pause messaging, and customer-facing claim boundaries."
-    - "Avoid vendor management without access, billing, security/privacy, monitoring, fallback, and offboarding responsibilities."
+    - "Avoid automating a process before the trigger, inputs, owner, exception path, and success evidence are clear,
+      unless automation is required for safety, privacy, billing correctness, or reliability."
+    - "Avoid billing, refund, cancellation, invoice, failed payment, or discount processes without authority rules,
+      customer communication, processor behavior, and Financial Operations handoff."
+    - "Avoid data export/deletion processes without verification, privacy review, evidence, logging, prohibited actions,
+      and Data/Privacy Operations handoff."
+    - "Avoid bug and feature request processes that bypass product/engineering triage, customer communication,
+      prioritization, and closure/no-action rules."
+    - "Avoid release communications that ignore support readiness, known issues, rollback/pause messaging, and
+      customer-facing claim boundaries."
+    - "Avoid vendor management without access, billing, security/privacy, monitoring, fallback, and offboarding
+      responsibilities."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent support staffing, processor behavior, legal timelines, tax/accounting obligations, vendor guarantees, automation readiness, SLA guarantees, or compliance status."
-    - "Business processes must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, financial correctness, support capacity, and operational sustainability."
+    - "Do not invent support staffing, processor behavior, legal timelines, tax/accounting obligations, vendor
+      guarantees, automation readiness, SLA guarantees, or compliance status."
+    - "Business processes must preserve Foundation boundaries, product truth, technical truth, pricing truth,
+      privacy/security constraints, customer trust, financial correctness, support capacity, and operational
+      sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate process, trigger, owner, input, step, output, control, exception, approval, metric, risk, review cadence, and handoff."
-    - "Tie business processes to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Product, Engineering, Pricing and Packaging, Growth Metrics, GTM Risks, Technical Risks, or Decision Record where possible."
-    - "Classify processes as current, required, deferred, manual, automated, automation-candidate, customer-facing, internal-only, financial-sensitive, privacy-sensitive, launch-critical, post-launch, blocked, review-needed, or downstream-owned where useful."
-    - "State whether each process is manual, automated, hybrid, self-serve, support-assisted, customer-success-assisted, engineering-assisted, finance-assisted, or privacy-review-required."
-    - "Route detailed execution procedures to downstream Operations documents when they exceed this process catalog's scope."
+    - "Separate process, trigger, owner, input, step, output, control, exception, approval, metric, risk, review
+      cadence, and handoff."
+    - "Tie business processes to Operations Brief, Operating Model, Team and Responsibilities, Customer Support,
+      Customer Success, Product, Engineering, Pricing and Packaging, Growth Metrics, GTM Risks, Technical Risks, or
+      Decision Record where possible."
+    - "Classify processes as current, required, deferred, manual, automated, automation-candidate, customer-facing,
+      internal-only, financial-sensitive, privacy-sensitive, launch-critical, post-launch, blocked, review-needed, or
+      downstream-owned where useful."
+    - "State whether each process is manual, automated, hybrid, self-serve, support-assisted, customer-success-assisted,
+      engineering-assisted, finance-assisted, or privacy-review-required."
+    - "Route detailed execution procedures to downstream Operations documents when they exceed this process catalog's
+      scope."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Product, Acceptance Criteria, Security/Privacy, Observability, Deployment, Technical Risks, Launch Plan, Conversion Funnel, Pricing and Packaging, Growth Metrics, GTM Risks, or Decision Record."
-    - "Flag processes without trigger, accountable owner, backup owner, input, steps, output, control, exception path, metric, risk, and downstream handoff."
-    - "Flag financial-sensitive processes without authority, evidence, customer communication, exception handling, and Financial Operations handoff."
-    - "Flag privacy-sensitive processes without verification, prohibited actions, logging/evidence, escalation, and Data/Privacy Operations handoff."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer
+      Success, Product, Acceptance Criteria, Security/Privacy, Observability, Deployment, Technical Risks, Launch Plan,
+      Conversion Funnel, Pricing and Packaging, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag processes without trigger, accountable owner, backup owner, input, steps, output, control, exception path,
+      metric, risk, and downstream handoff."
+    - "Flag financial-sensitive processes without authority, evidence, customer communication, exception handling, and
+      Financial Operations handoff."
+    - "Flag privacy-sensitive processes without verification, prohibited actions, logging/evidence, escalation, and
+      Data/Privacy Operations handoff."
     - "Flag manual-heavy processes without capacity risk, error risk, review cadence, and automation-candidate status."
-    - "Flag automations without owner, monitored signal, failure signal, fallback, privacy/security review, and review cadence."
+    - "Flag automations without owner, monitored signal, failure signal, fallback, privacy/security review, and review
+      cadence."
     - "Flag process metrics without source, owner, threshold, cadence, and decision implication."
     - "Verify that downstream Operations documents receive concrete process handoff inputs."
-    - "Flag content that belongs better in Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+    - "Flag content that belongs better in Maintenance Plan, Release Management, Incident Response, Data/Privacy
+      Operations, Financial Operations, or Risk Management."
   specializedFormats:
     processFormat:
       description: "Recommended format for recurring business processes."
       fields:
-        - process
-        - domain
-        - purpose
-        - trigger
-        - frequency
-        - customerFacing
-        - financialSensitive
-        - privacySensitive
-        - primaryOwner
-        - backupOwner
-        - inputs
-        - steps
-        - outputs
-        - internalTargetOrSLA
-        - controls
-        - exceptionPath
-        - escalationPath
-        - metrics
-        - risks
-        - downstreamDocument
-        - status
+        - "process"
+        - "domain"
+        - "purpose"
+        - "trigger"
+        - "frequency"
+        - "customerFacing"
+        - "financialSensitive"
+        - "privacySensitive"
+        - "primaryOwner"
+        - "backupOwner"
+        - "inputs"
+        - "steps"
+        - "outputs"
+        - "internalTargetOrSLA"
+        - "controls"
+        - "exceptionPath"
+        - "escalationPath"
+        - "metrics"
+        - "risks"
+        - "downstreamDocument"
+        - "status"
     processOwnershipFormat:
       description: "Recommended format for process ownership."
       fields:
-        - process
-        - accountableOwner
-        - executor
-        - reviewer
-        - approver
-        - backupOwner
-        - escalationOwner
-        - decisionAuthority
-        - responsibilityGap
-        - downstreamDocument
-        - status
+        - "process"
+        - "accountableOwner"
+        - "executor"
+        - "reviewer"
+        - "approver"
+        - "backupOwner"
+        - "escalationOwner"
+        - "decisionAuthority"
+        - "responsibilityGap"
+        - "downstreamDocument"
+        - "status"
     processTriggerFormat:
       description: "Recommended format for process triggers."
       fields:
-        - trigger
-        - triggerType
-        - source
-        - processStarted
-        - requiredContext
-        - acknowledgementRequired
-        - priorityRule
-        - owner
-        - escalationIfMissed
-        - status
+        - "trigger"
+        - "triggerType"
+        - "source"
+        - "processStarted"
+        - "requiredContext"
+        - "acknowledgementRequired"
+        - "priorityRule"
+        - "owner"
+        - "escalationIfMissed"
+        - "status"
     processStepFormat:
       description: "Recommended format for process steps when step-level detail is useful."
       fields:
-        - step
-        - sequence
-        - owner
-        - input
-        - action
-        - output
-        - evidenceRequired
-        - controlOrCheck
-        - exceptionPath
-        - status
+        - "step"
+        - "sequence"
+        - "owner"
+        - "input"
+        - "action"
+        - "output"
+        - "evidenceRequired"
+        - "controlOrCheck"
+        - "exceptionPath"
+        - "status"
     processControlFormat:
       description: "Recommended format for process controls."
       fields:
-        - control
-        - process
-        - controlType
-        - riskPrevented
-        - owner
-        - evidenceRequired
-        - reviewCadence
-        - failureSignal
-        - escalationPath
-        - status
+        - "control"
+        - "process"
+        - "controlType"
+        - "riskPrevented"
+        - "owner"
+        - "evidenceRequired"
+        - "reviewCadence"
+        - "failureSignal"
+        - "escalationPath"
+        - "status"
     processMetricFormat:
       description: "Recommended format for process metrics."
       fields:
-        - metric
-        - process
-        - metricType
-        - purpose
-        - formulaOrMeasurement
-        - source
-        - threshold
-        - cadence
-        - owner
-        - decisionImplication
-        - downstreamDocument
-        - status
+        - "metric"
+        - "process"
+        - "metricType"
+        - "purpose"
+        - "formulaOrMeasurement"
+        - "source"
+        - "threshold"
+        - "cadence"
+        - "owner"
+        - "decisionImplication"
+        - "downstreamDocument"
+        - "status"
     processReviewFormat:
       description: "Recommended format for process review cadences."
       fields:
-        - review
-        - processOrDomain
-        - cadence
-        - participants
-        - inputs
-        - outputs
-        - improvementDecision
-        - owner
-        - documentationUpdateRequired
-        - downstreamDocument
-        - status
+        - "review"
+        - "processOrDomain"
+        - "cadence"
+        - "participants"
+        - "inputs"
+        - "outputs"
+        - "improvementDecision"
+        - "owner"
+        - "documentationUpdateRequired"
+        - "downstreamDocument"
+        - "status"
     processRiskFormat:
       description: "Recommended format for process risks."
       fields:
-        - risk
-        - riskType
-        - process
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "process"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     processHandoffFormat:
       description: "Recommended format for downstream process handoffs."
       fields:
-        - handoffTarget
-        - processContext
-        - contextToPreserve
-        - requiredAction
-        - owner
-        - timing
-        - unresolvedQuestion
-        - riskOrConstraint
-        - status
+        - "handoffTarget"
+        - "processContext"
+        - "contextToPreserve"
+        - "requiredAction"
+        - "owner"
+        - "timing"
+        - "unresolvedQuestion"
+        - "riskOrConstraint"
+        - "status"
   sections:
     - id: "process-objective"
       title: "Process Objective"
@@ -325,13 +390,14 @@ document:
       required: true
       outputGuidance:
         - "Open with the purpose of the business process catalog."
-        - "State what repeatable processes protect: customer trust, financial correctness, privacy, supportability, product learning, accountability, and sustainability."
+        - "State what repeatable processes protect: customer trust, financial correctness, privacy, supportability,
+          product learning, accountability, and sustainability."
         - "Clarify that detailed runbooks may live downstream."
       qualityChecks:
         - "Objective is tied to Operations Brief and Operating Model."
         - "The boundary between process catalog and detailed runbook is clear."
         - "Repeatability and accountability are explicit goals."
-      questions:
+      questions: &a1
         - "Why must recurring business processes be documented?"
         - "What operational outcomes do they protect?"
         - "What should this process catalog define versus route downstream?"
@@ -341,19 +407,22 @@ document:
       required: true
       outputGuidance:
         - "Define process categories and statuses."
-        - "Include sensitivity labels for customer-facing, financial-sensitive, privacy-sensitive, support-critical, launch-critical, and automation-candidate processes."
+        - "Include sensitivity labels for customer-facing, financial-sensitive, privacy-sensitive, support-critical,
+          launch-critical, and automation-candidate processes."
         - "Define current, required, deferred, manual, automated, hybrid, blocked, and review-needed statuses."
       qualityChecks:
         - "Taxonomy helps route, prioritize, and review processes."
         - "Sensitive processes are distinguishable."
         - "Status labels have operational meaning."
-      questions:
+      questions: &a2
         - "How are business processes categorized?"
         - "What process statuses exist?"
-        - "Which labels indicate customer-facing, financial-sensitive, privacy-sensitive, support-critical, launch-critical, or automation-candidate processes?"
+        - "Which labels indicate customer-facing, financial-sensitive, privacy-sensitive, support-critical, launch-critical,
+          or automation-candidate processes?"
     - id: "process-inventory"
       title: "Process Inventory"
-      intent: "Provide the complete list of recurring business processes with categorization, prioritization, owner, trigger, and downstream dependency."
+      intent: "Provide the complete list of recurring business processes with categorization, prioritization, owner, trigger,
+        and downstream dependency."
       required: true
       outputGuidance:
         - "Use process records for every material process."
@@ -363,7 +432,7 @@ document:
         - "Every process has purpose, trigger, owner, and downstream document."
         - "Sensitive and launch-critical processes are flagged."
         - "The list is not just a process wishlist."
-      questions:
+      questions: &a3
         - "What is the complete list of recurring business processes?"
         - "How is each process categorized and prioritized?"
         - "Who owns each process?"
@@ -371,17 +440,19 @@ document:
         - "What downstream document owns detailed execution?"
     - id: "process-prioritization"
       title: "Process Prioritization"
-      intent: "Rank processes by launch criticality, customer impact, financial impact, privacy impact, support impact, manual burden, risk, and automation need."
+      intent: "Rank processes by launch criticality, customer impact, financial impact, privacy impact, support impact, manual
+        burden, risk, and automation need."
       required: true
       outputGuidance:
-        - "Classify processes as launch-critical, revenue-critical, trust-critical, privacy-critical, support-critical, manual-heavy, automation-candidate, deferred, or post-launch."
+        - "Classify processes as launch-critical, revenue-critical, trust-critical, privacy-critical, support-critical,
+          manual-heavy, automation-candidate, deferred, or post-launch."
         - "State rationale for priority."
         - "Identify process blockers."
       qualityChecks:
         - "Prioritization is operationally justified."
         - "Critical sensitive processes are not deferred without risk acceptance."
         - "Manual burden is considered."
-      questions:
+      questions: &a4
         - "Which processes are launch-critical?"
         - "Which processes are revenue-critical, trust-critical, privacy-critical, or support-critical?"
         - "Which processes are manual-heavy or automation candidates?"
@@ -389,7 +460,8 @@ document:
         - "What is the risk if a process is missing or immature?"
     - id: "process-ownership"
       title: "Process Ownership"
-      intent: "Assign accountable owners, executors, reviewers, approvers, backups, escalation owners, and decision authority for recurring processes."
+      intent: "Assign accountable owners, executors, reviewers, approvers, backups, escalation owners, and decision authority
+        for recurring processes."
       required: true
       outputGuidance:
         - "Use process ownership records."
@@ -399,7 +471,7 @@ document:
         - "No critical process is ownerless."
         - "Financial/privacy-sensitive processes have approval and escalation rules."
         - "Backup ownership is explicit or flagged."
-      questions:
+      questions: &a5
         - "Who owns each business process?"
         - "Who executes, reviews, and approves each process?"
         - "Who is backup owner?"
@@ -412,15 +484,17 @@ document:
       required: true
       outputGuidance:
         - "Use process trigger records for material triggers."
-        - "Classify triggers as event-based, scheduled, customer-requested, system-triggered, support-triggered, billing-triggered, release-triggered, incident-triggered, privacy-triggered, or review-triggered."
+        - "Classify triggers as event-based, scheduled, customer-requested, system-triggered, support-triggered,
+          billing-triggered, release-triggered, incident-triggered, privacy-triggered, or review-triggered."
         - "Define escalation if a trigger is missed."
       qualityChecks:
         - "Triggers are observable."
         - "Required context is explicit."
         - "Missed-trigger escalation is considered for critical processes."
-      questions:
+      questions: &a6
         - "What triggers each business process?"
-        - "Which triggers are customer-requested, scheduled, system-triggered, support-triggered, billing-triggered, release-triggered, incident-triggered, privacy-triggered, or review-triggered?"
+        - "Which triggers are customer-requested, scheduled, system-triggered, support-triggered, billing-triggered,
+          release-triggered, incident-triggered, privacy-triggered, or review-triggered?"
         - "What context must each trigger include?"
         - "What happens if a trigger is missed?"
     - id: "standard-process-format"
@@ -429,29 +503,32 @@ document:
       required: true
       outputGuidance:
         - "Document the standard fields required for every process."
-        - "Include trigger, owner, inputs, steps, outputs, target/SLA, controls, exceptions, escalation, metrics, risks, and handoff."
+        - "Include trigger, owner, inputs, steps, outputs, target/SLA, controls, exceptions, escalation, metrics, risks,
+          and handoff."
         - "Use this as the normalization rule for downstream process docs."
       qualityChecks:
         - "Format is complete but not overcomplicated."
         - "Fields support execution, review, and auditability."
         - "Sensitive processes have room for controls and approvals."
-      questions:
+      questions: &a7
         - "What fields must every recurring process include?"
         - "How should process steps, inputs, outputs, controls, exceptions, and metrics be represented?"
         - "What fields are mandatory for financial-sensitive or privacy-sensitive processes?"
     - id: "user-onboarding-process"
       title: "User Onboarding Process"
-      intent: "Define the end-to-end onboarding process from signup or purchase to activation with clear accountability, success evidence, and fallback."
+      intent: "Define the end-to-end onboarding process from signup or purchase to activation with clear accountability,
+        success evidence, and fallback."
       required: true
       outputGuidance:
         - "Use process and process step records where useful."
         - "Tie to Customer Success onboarding and Conversion Funnel activation."
-        - "Include customer steps, system steps, manual steps, educational assets, stuck signals, support fallback, and success evidence."
+        - "Include customer steps, system steps, manual steps, educational assets, stuck signals, support fallback, and
+          success evidence."
       qualityChecks:
         - "Onboarding process leads to meaningful activation."
         - "Manual and automated steps are explicit."
         - "Stuck signals and support fallback are defined."
-      questions:
+      questions: &a8
         - "What steps does a new user go through from signup or purchase to activation?"
         - "Which steps are customer-driven, system-driven, manual, automated, or support-assisted?"
         - "Who is responsible for each onboarding step?"
@@ -459,7 +536,8 @@ document:
         - "What happens when onboarding stalls?"
     - id: "billing-process"
       title: "Billing Process"
-      intent: "Define how recurring or one-time charges are calculated, generated, collected, recorded, reconciled, communicated, and handed off."
+      intent: "Define how recurring or one-time charges are calculated, generated, collected, recorded, reconciled,
+        communicated, and handed off."
       required: true
       outputGuidance:
         - "Tie to Pricing and Packaging and Financial Operations."
@@ -469,7 +547,7 @@ document:
         - "Billing process preserves financial correctness and customer trust."
         - "Processor/tool assumptions are explicit."
         - "Financial Operations handoff is clear."
-      questions:
+      questions: &a9
         - "How are recurring or one-time charges calculated?"
         - "How are charges generated, collected, recorded, and reconciled?"
         - "What customer communication occurs?"
@@ -477,7 +555,8 @@ document:
         - "What downstream financial process receives billing records?"
     - id: "payment-failure-process"
       title: "Payment Failure Process"
-      intent: "Define what happens when payment fails, including retry, grace period, access rule, communication, escalation, and cancellation/suspension conditions."
+      intent: "Define what happens when payment fails, including retry, grace period, access rule, communication, escalation,
+        and cancellation/suspension conditions."
       required: true
       outputGuidance:
         - "Tie to Pricing subscription terms and Financial Operations."
@@ -487,7 +566,7 @@ document:
         - "Payment failure handling is customer-safe and financially clear."
         - "Access/grace/suspension rules are explicit or marked unresolved."
         - "Support and finance handoff are included."
-      questions:
+      questions: &a10
         - "How is payment failure detected?"
         - "What retry or grace period applies?"
         - "What customer communication happens and when?"
@@ -496,7 +575,8 @@ document:
         - "When does cancellation or suspension happen?"
     - id: "cancellation-process"
       title: "Cancellation Process"
-      intent: "Define customer cancellation flow, access timing, data/export options, billing consequences, feedback capture, and safe retention boundary."
+      intent: "Define customer cancellation flow, access timing, data/export options, billing consequences, feedback capture,
+        and safe retention boundary."
       required: true
       outputGuidance:
         - "Tie to Pricing cancellation logic and Customer Success churn prevention."
@@ -506,7 +586,7 @@ document:
         - "Cancellation is clear and customer-safe."
         - "Data/export and billing consequences are considered."
         - "Retention actions are ethical and bounded."
-      questions:
+      questions: &a11
         - "How does a user cancel their subscription or account?"
         - "When does access end?"
         - "What data export or deletion option is offered?"
@@ -515,7 +595,8 @@ document:
         - "What retention action is allowed or prohibited?"
     - id: "refund-process"
       title: "Refund Process"
-      intent: "Define how refund requests are received, evaluated, approved, processed, communicated, recorded, and controlled."
+      intent: "Define how refund requests are received, evaluated, approved, processed, communicated, recorded, and
+        controlled."
       required: true
       outputGuidance:
         - "Tie to Pricing refund policy, Customer Support billing rules, and Financial Operations."
@@ -525,7 +606,7 @@ document:
         - "Refund process follows policy and authority."
         - "Exceptions and abuse prevention are included."
         - "Customer communication and financial recording are explicit."
-      questions:
+      questions: &a12
         - "How are refund requests submitted?"
         - "What information is required?"
         - "How are refund requests evaluated?"
@@ -534,7 +615,8 @@ document:
         - "How are refunds recorded and reviewed?"
     - id: "feature-request-process"
       title: "Feature Request Process"
-      intent: "Define how feature requests are submitted, deduplicated, categorized, evaluated, prioritized, linked to roadmap, answered, and closed."
+      intent: "Define how feature requests are submitted, deduplicated, categorized, evaluated, prioritized, linked to
+        roadmap, answered, and closed."
       required: true
       outputGuidance:
         - "Tie to Customer Support, Customer Success feedback loops, Product Scope, and Product roadmap ownership."
@@ -544,7 +626,7 @@ document:
         - "Feature requests are evidence, not commitments."
         - "Customer follow-up expectations are clear."
         - "Roadmap linkage and closure criteria are explicit."
-      questions:
+      questions: &a13
         - "How are feature requests submitted and captured?"
         - "How are requests deduplicated and categorized?"
         - "What evidence is captured?"
@@ -553,7 +635,8 @@ document:
         - "How are customers updated or not updated?"
     - id: "bug-triage-process"
       title: "Bug Triage Process"
-      intent: "Define the lifecycle of bug reporting, reproduction, severity, priority, backlog linkage, release linkage, customer communication, and closure."
+      intent: "Define the lifecycle of bug reporting, reproduction, severity, priority, backlog linkage, release linkage,
+        customer communication, and closure."
       required: true
       outputGuidance:
         - "Tie to Customer Support bug reporting, Engineering, Release Management, and Incident Response."
@@ -563,7 +646,7 @@ document:
         - "Bug triage produces engineering-actionable work."
         - "Severity and priority are not confused."
         - "Customer communication and closure criteria are included."
-      questions:
+      questions: &a14
         - "How are bugs reported, reproduced, triaged, and prioritized?"
         - "What severity and priority levels exist?"
         - "What diagnostic information is allowed or prohibited?"
@@ -582,7 +665,7 @@ document:
         - "Release communication supports support readiness."
         - "Customer-facing claims remain accurate."
         - "Rollback and known issue communication are considered."
-      questions:
+      questions: &a15
         - "How are releases communicated to users and internal teams?"
         - "What artifacts accompany each release?"
         - "Who drafts, reviews, approves, and sends release communications?"
@@ -590,7 +673,8 @@ document:
         - "What communication happens if a release is rolled back or paused?"
     - id: "vendor-management-process"
       title: "Vendor Management Process"
-      intent: "Define vendor selection, onboarding, access management, billing, monitoring, review, renewal, fallback, replacement, and offboarding."
+      intent: "Define vendor selection, onboarding, access management, billing, monitoring, review, renewal, fallback,
+        replacement, and offboarding."
       required: true
       outputGuidance:
         - "Tie to Operating Model third-party dependencies and Financial Operations."
@@ -600,7 +684,7 @@ document:
         - "Vendor management includes access, billing, monitoring, privacy/security, and offboarding."
         - "Critical vendor fallback is considered."
         - "Vendor assumptions are not treated as guarantees."
-      questions:
+      questions: &a16
         - "How are third-party vendors selected and onboarded?"
         - "Who owns vendor accounts, access, and billing?"
         - "How are vendors reviewed and renewed?"
@@ -609,7 +693,8 @@ document:
         - "How are vendors offboarded?"
     - id: "data-export-deletion-process"
       title: "Data Export and Deletion Process"
-      intent: "Define how users request data exports or deletion and how requests are verified, fulfilled, logged, communicated, and escalated."
+      intent: "Define how users request data exports or deletion and how requests are verified, fulfilled, logged,
+        communicated, and escalated."
       required: true
       outputGuidance:
         - "Tie to Data and Privacy Operations."
@@ -619,7 +704,7 @@ document:
         - "Verification and prohibited support actions are explicit."
         - "Evidence/logging and customer communication are included."
         - "Data/privacy handoff is clear."
-      questions:
+      questions: &a17
         - "How do users request data export or deletion?"
         - "How is identity or authority verified?"
         - "What data is included or excluded?"
@@ -632,15 +717,17 @@ document:
       required: true
       outputGuidance:
         - "Use process control records for material controls."
-        - "Include approvals, evidence, logs, audit trail, privacy safeguards, financial safeguards, access safeguards, and quality gates."
+        - "Include approvals, evidence, logs, audit trail, privacy safeguards, financial safeguards, access safeguards,
+          and quality gates."
         - "Tie controls to risks and sensitive processes."
       qualityChecks:
         - "Controls prevent specific risks."
         - "Evidence and review cadence are explicit."
         - "Controls are not bureaucratic without purpose."
-      questions:
+      questions: &a18
         - "What controls are required for sensitive or critical processes?"
-        - "What approvals, evidence, logs, audit trails, privacy safeguards, financial safeguards, access safeguards, and quality gates are needed?"
+        - "What approvals, evidence, logs, audit trails, privacy safeguards, financial safeguards, access safeguards, and
+          quality gates are needed?"
         - "What risk does each control prevent?"
         - "Who owns each control and how often is it reviewed?"
     - id: "process-metrics"
@@ -649,15 +736,17 @@ document:
       required: true
       outputGuidance:
         - "Use process metric records."
-        - "Include completion time, backlog, failure rate, exception rate, rework, customer impact, manual effort, automation reliability, financial error, privacy risk, and process health metrics where relevant."
+        - "Include completion time, backlog, failure rate, exception rate, rework, customer impact, manual effort,
+          automation reliability, financial error, privacy risk, and process health metrics where relevant."
         - "Tie metrics to decisions."
       qualityChecks:
         - "Metrics are process-specific and decision-useful."
         - "Manual effort and exception rate are measured where relevant."
         - "Metrics include owner, cadence, threshold, and source."
-      questions:
+      questions: &a19
         - "How is each process measured?"
-        - "What metrics reveal bottlenecks, failure, exceptions, rework, customer impact, manual effort, automation reliability, financial error, or privacy risk?"
+        - "What metrics reveal bottlenecks, failure, exceptions, rework, customer impact, manual effort, automation
+          reliability, financial error, or privacy risk?"
         - "What threshold triggers process improvement?"
         - "Who owns process reporting?"
     - id: "process-review-cadence"
@@ -666,13 +755,15 @@ document:
       required: true
       outputGuidance:
         - "Use process review records."
-        - "Define cadence, participants, inputs, outputs, improvement decisions, documentation updates, and downstream handoff."
-        - "Include out-of-cycle reviews for incidents, support trends, billing errors, privacy issues, and launch changes."
+        - "Define cadence, participants, inputs, outputs, improvement decisions, documentation updates, and downstream
+          handoff."
+        - "Include out-of-cycle reviews for incidents, support trends, billing errors, privacy issues, and launch
+          changes."
       qualityChecks:
         - "Process review produces decisions or updates."
         - "Documentation updates are required when process changes."
         - "Out-of-cycle review triggers are defined."
-      questions:
+      questions: &a20
         - "How often are business processes reviewed?"
         - "Who participates?"
         - "What inputs are reviewed?"
@@ -681,19 +772,23 @@ document:
         - "How are process changes documented?"
     - id: "process-risks"
       title: "Process Risks"
-      intent: "Identify risks that recurring processes are missing, unclear, ownerless, manual-heavy, error-prone, privacy-unsafe, financially unsafe, or poorly handed off."
+      intent: "Identify risks that recurring processes are missing, unclear, ownerless, manual-heavy, error-prone,
+        privacy-unsafe, financially unsafe, or poorly handed off."
       required: true
       outputGuidance:
         - "Use process risk records."
-        - "Include process gaps, manual overload, missed handoff, unclear ownership, financial error, privacy mishandling, stale process docs, automation failure, vendor failure, support overload, and customer trust risks."
+        - "Include process gaps, manual overload, missed handoff, unclear ownership, financial error, privacy
+          mishandling, stale process docs, automation failure, vendor failure, support overload, and customer trust
+          risks."
         - "Route risks to Risk Management when appropriate."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a21
         - "What could cause business processes to fail?"
-        - "Which processes are missing, unclear, ownerless, manual-heavy, error-prone, privacy-sensitive, or financially sensitive?"
+        - "Which processes are missing, unclear, ownerless, manual-heavy, error-prone, privacy-sensitive, or financially
+          sensitive?"
         - "What early signal reveals process failure?"
         - "What mitigation and contingency apply?"
         - "What should Risk Management inherit?"
@@ -703,13 +798,15 @@ document:
       required: true
       outputGuidance:
         - "Use process handoff records."
-        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
-        - "Preserve unresolved questions, owner gaps, process controls, metrics, risks, exceptions, and sensitive process constraints."
+        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial
+          Operations, and Risk Management."
+        - "Preserve unresolved questions, owner gaps, process controls, metrics, risks, exceptions, and sensitive
+          process constraints."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing process assumptions silently."
         - "Business Processes remains process catalog; detailed runbooks remain downstream."
-      questions:
+      questions: &a22
         - "What should Maintenance Plan inherit?"
         - "What should Release Management inherit?"
         - "What should Incident Response inherit?"
@@ -717,3 +814,292 @@ document:
         - "What should Financial Operations inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved business process questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain business processes. What recurring business processes must happen, what triggers them, who
+      owns them, what steps and controls apply, and how are they measured, improved, escalated, and handed off?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "process-objective"
+        label: "Process Objective"
+        required: true
+        description: "Define why recurring business processes must be documented and what operational outcomes they protect."
+        evaluationHint: "Look for concrete answers addressing: Why must recurring business processes be documented?; What
+          operational outcomes do they protect?; What should this process catalog define versus route downstream?."
+        sourceQuestions: *a1
+        targetSections: &a23
+          - "Process Objective"
+      - id: "process-taxonomy"
+        label: "Process Taxonomy"
+        required: true
+        description: "Define how processes are categorized, prioritized, and labeled."
+        evaluationHint: "Look for concrete answers addressing: How are business processes categorized?; What process statuses
+          exist?; Which labels indicate customer-facing, financial-sensitive, privacy-sensitive, support-critical,
+          launch-critical, or automation-candidate processes?."
+        sourceQuestions: *a2
+        targetSections: &a24
+          - "Process Taxonomy"
+      - id: "process-inventory"
+        label: "Process Inventory"
+        required: true
+        description: "Provide the complete list of recurring business processes with categorization, prioritization, owner,
+          trigger, and downstream dependency."
+        evaluationHint: "Look for concrete answers addressing: What is the complete list of recurring business processes?; How
+          is each process categorized and prioritized?; Who owns each process?."
+        sourceQuestions: *a3
+        targetSections: &a25
+          - "Process Inventory"
+      - id: "process-prioritization"
+        label: "Process Prioritization"
+        required: true
+        description: "Rank processes by launch criticality, customer impact, financial impact, privacy impact, support impact,
+          manual burden, risk, and automation need."
+        evaluationHint: "Look for concrete answers addressing: Which processes are launch-critical?; Which processes are
+          revenue-critical, trust-critical, privacy-critical, or support-critical?; Which processes are manual-heavy or
+          automation candidates?."
+        sourceQuestions: *a4
+        targetSections: &a26
+          - "Process Prioritization"
+      - id: "process-ownership"
+        label: "Process Ownership"
+        required: true
+        description: "Assign accountable owners, executors, reviewers, approvers, backups, escalation owners, and decision
+          authority for recurring processes."
+        evaluationHint: "Look for concrete answers addressing: Who owns each business process?; Who executes, reviews, and
+          approves each process?; Who is backup owner?."
+        sourceQuestions: *a5
+        targetSections: &a27
+          - "Process Ownership"
+      - id: "process-trigger-model"
+        label: "Process Trigger Model"
+        required: true
+        description: "Define how recurring processes start and what context each trigger must provide."
+        evaluationHint: "Look for concrete answers addressing: What triggers each business process?; Which triggers are
+          customer-requested, scheduled, system-triggered, support-triggered, billing-triggered, release-triggered,
+          incident-triggered, privacy-triggered, or review-triggered?; What context must each trigger include?."
+        sourceQuestions: *a6
+        targetSections: &a28
+          - "Process Trigger Model"
+      - id: "standard-process-format"
+        label: "Standard Process Format"
+        required: true
+        description: "Define the required structure used to document any recurring process."
+        evaluationHint: "Look for concrete answers addressing: What fields must every recurring process include?; How should
+          process steps, inputs, outputs, controls, exceptions, and metrics be represented?; What fields are mandatory
+          for financial-sensitive or privacy-sensitive processes?."
+        sourceQuestions: *a7
+        targetSections: &a29
+          - "Standard Process Format"
+      - id: "user-onboarding-process"
+        label: "User Onboarding Process"
+        required: true
+        description: "Define the end-to-end onboarding process from signup or purchase to activation with clear accountability,
+          success evidence, and fallback."
+        evaluationHint: "Look for concrete answers addressing: What steps does a new user go through from signup or purchase to
+          activation?; Which steps are customer-driven, system-driven, manual, automated, or support-assisted?; Who is
+          responsible for each onboarding step?."
+        sourceQuestions: *a8
+        targetSections: &a30
+          - "User Onboarding Process"
+      - id: "billing-process"
+        label: "Billing Process"
+        required: true
+        description: "Define how recurring or one-time charges are calculated, generated, collected, recorded, reconciled,
+          communicated, and handed off."
+        evaluationHint: "Look for concrete answers addressing: How are recurring or one-time charges calculated?; How are
+          charges generated, collected, recorded, and reconciled?; What customer communication occurs?."
+        sourceQuestions: *a9
+        targetSections: &a31
+          - "Billing Process"
+      - id: "payment-failure-process"
+        label: "Payment Failure Process"
+        required: true
+        description: "Define what happens when payment fails, including retry, grace period, access rule, communication,
+          escalation, and cancellation/suspension conditions."
+        evaluationHint: "Look for concrete answers addressing: How is payment failure detected?; What retry or grace period
+          applies?; What customer communication happens and when?."
+        sourceQuestions: *a10
+        targetSections: &a32
+          - "Payment Failure Process"
+      - id: "cancellation-process"
+        label: "Cancellation Process"
+        required: true
+        description: "Define customer cancellation flow, access timing, data/export options, billing consequences, feedback
+          capture, and safe retention boundary."
+        evaluationHint: "Look for concrete answers addressing: How does a user cancel their subscription or account?; When does
+          access end?; What data export or deletion option is offered?."
+        sourceQuestions: *a11
+        targetSections: &a33
+          - "Cancellation Process"
+      - id: "refund-process"
+        label: "Refund Process"
+        required: true
+        description: "Define how refund requests are received, evaluated, approved, processed, communicated, recorded, and
+          controlled."
+        evaluationHint: "Look for concrete answers addressing: How are refund requests submitted?; What information is
+          required?; How are refund requests evaluated?."
+        sourceQuestions: *a12
+        targetSections: &a34
+          - "Refund Process"
+      - id: "feature-request-process"
+        label: "Feature Request Process"
+        required: true
+        description: "Define how feature requests are submitted, deduplicated, categorized, evaluated, prioritized, linked to
+          roadmap, answered, and closed."
+        evaluationHint: "Look for concrete answers addressing: How are feature requests submitted and captured?; How are
+          requests deduplicated and categorized?; What evidence is captured?."
+        sourceQuestions: *a13
+        targetSections: &a35
+          - "Feature Request Process"
+      - id: "bug-triage-process"
+        label: "Bug Triage Process"
+        required: true
+        description: "Define the lifecycle of bug reporting, reproduction, severity, priority, backlog linkage, release linkage,
+          customer communication, and closure."
+        evaluationHint: "Look for concrete answers addressing: How are bugs reported, reproduced, triaged, and prioritized?;
+          What severity and priority levels exist?; What diagnostic information is allowed or prohibited?."
+        sourceQuestions: *a14
+        targetSections: &a36
+          - "Bug Triage Process"
+      - id: "release-communication-process"
+        label: "Release Communication Process"
+        required: true
+        description: "Define how release information is prepared, approved, communicated, monitored, corrected, and archived."
+        evaluationHint: "Look for concrete answers addressing: How are releases communicated to users and internal teams?; What
+          artifacts accompany each release?; Who drafts, reviews, approves, and sends release communications?."
+        sourceQuestions: *a15
+        targetSections: &a37
+          - "Release Communication Process"
+      - id: "vendor-management-process"
+        label: "Vendor Management Process"
+        required: true
+        description: "Define vendor selection, onboarding, access management, billing, monitoring, review, renewal, fallback,
+          replacement, and offboarding."
+        evaluationHint: "Look for concrete answers addressing: How are third-party vendors selected and onboarded?; Who owns
+          vendor accounts, access, and billing?; How are vendors reviewed and renewed?."
+        sourceQuestions: *a16
+        targetSections: &a38
+          - "Vendor Management Process"
+      - id: "data-export-deletion-process"
+        label: "Data Export and Deletion Process"
+        required: true
+        description: "Define how users request data exports or deletion and how requests are verified, fulfilled, logged,
+          communicated, and escalated."
+        evaluationHint: "Look for concrete answers addressing: How do users request data export or deletion?; How is identity or
+          authority verified?; What data is included or excluded?."
+        sourceQuestions: *a17
+        targetSections: &a39
+          - "Data Export and Deletion Process"
+      - id: "process-controls"
+        label: "Process Controls"
+        required: true
+        description: "Define controls that prevent financial, privacy, support, release, customer trust, and operational failures."
+        evaluationHint: "Look for concrete answers addressing: What controls are required for sensitive or critical processes?;
+          What approvals, evidence, logs, audit trails, privacy safeguards, financial safeguards, access safeguards, and
+          quality gates are needed?; What risk does each control prevent?."
+        sourceQuestions: *a18
+        targetSections: &a40
+          - "Process Controls"
+      - id: "process-metrics"
+        label: "Process Metrics"
+        required: true
+        description: "Define metrics used to measure process health, failure, cost, effort, quality, and improvement opportunities."
+        evaluationHint: "Look for concrete answers addressing: How is each process measured?; What metrics reveal bottlenecks,
+          failure, exceptions, rework, customer impact, manual effort, automation reliability, financial error, or
+          privacy risk?; What threshold triggers process improvement?."
+        sourceQuestions: *a19
+        targetSections: &a41
+          - "Process Metrics"
+      - id: "process-review-cadence"
+        label: "Process Review Cadence"
+        required: true
+        description: "Define how processes are reviewed, improved, updated, retired, automated, or transferred downstream."
+        evaluationHint: "Look for concrete answers addressing: How often are business processes reviewed?; Who participates?;
+          What inputs are reviewed?."
+        sourceQuestions: *a20
+        targetSections: &a42
+          - "Process Review Cadence"
+      - id: "process-risks"
+        label: "Process Risks"
+        required: true
+        description: "Identify risks that recurring processes are missing, unclear, ownerless, manual-heavy, error-prone,
+          privacy-unsafe, financially unsafe, or poorly handed off."
+        evaluationHint: "Look for concrete answers addressing: What could cause business processes to fail?; Which processes are
+          missing, unclear, ownerless, manual-heavy, error-prone, privacy-sensitive, or financially sensitive?; What
+          early signal reveals process failure?."
+        sourceQuestions: *a21
+        targetSections: &a43
+          - "Process Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Operations documents must inherit from Business Processes and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Maintenance Plan inherit?; What should Release
+          Management inherit?; What should Incident Response inherit?."
+        sourceQuestions: *a22
+        targetSections: &a44
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      process-objective:
+        targetSections: *a23
+      process-taxonomy:
+        targetSections: *a24
+      process-inventory:
+        targetSections: *a25
+      process-prioritization:
+        targetSections: *a26
+      process-ownership:
+        targetSections: *a27
+      process-trigger-model:
+        targetSections: *a28
+      standard-process-format:
+        targetSections: *a29
+      user-onboarding-process:
+        targetSections: *a30
+      billing-process:
+        targetSections: *a31
+      payment-failure-process:
+        targetSections: *a32
+      cancellation-process:
+        targetSections: *a33
+      refund-process:
+        targetSections: *a34
+      feature-request-process:
+        targetSections: *a35
+      bug-triage-process:
+        targetSections: *a36
+      release-communication-process:
+        targetSections: *a37
+      vendor-management-process:
+        targetSections: *a38
+      data-export-deletion-process:
+        targetSections: *a39
+      process-controls:
+        targetSections: *a40
+      process-metrics:
+        targetSections: *a41
+      process-review-cadence:
+        targetSections: *a42
+      process-risks:
+        targetSections: *a43
+      downstream-handoff:
+        targetSections: *a44
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.509Z"
+      totalSourceQuestions: 112
+      reviewRequired: false

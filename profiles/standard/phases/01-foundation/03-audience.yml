@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 3
   type: "audience"
-  purpose: "Define who should recognize this project as useful, necessary, or inevitable based on the founding thesis and problem definition."
+  purpose: "Define who should recognize this project as useful, necessary, or inevitable based on the founding thesis and
+    problem definition."
   centralQuestion: "Who should recognize this project as useful, necessary, or inevitable?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "foundation.audience_map"
         format: "html"
         path: "outcomes/html/01-foundation/audience-map.html"
-        purpose: "Provide a navigable representation of the primary audience, context of use, capabilities, constraints, motivations, risks, and excluded audiences."
+        purpose: "Provide a navigable representation of the primary audience, context of use, capabilities, constraints,
+          motivations, risks, and excluded audiences."
         audience: "founder"
         includes:
           - "primary audience"
@@ -31,7 +33,8 @@ document:
       - id: "foundation.audience_review_prompt"
         format: "markdown"
         path: "outcomes/agents/01-foundation/audience-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the audience definition is specific, behaviorally grounded, and aligned with the thesis and problem."
+        purpose: "Provide compact context for agents reviewing whether the audience definition is specific, behaviorally
+          grounded, and aligned with the thesis and problem."
         agentRole: "reviewer"
         includes:
           - "canonical audience definition"
@@ -56,14 +59,16 @@ document:
     - id: "research-notes"
       type: "context"
       required: false
-      description: "Interviews, transcripts, survey notes, analytics, support logs, or other evidence that can clarify who the project serves."
+      description: "Interviews, transcripts, survey notes, analytics, support logs, or other evidence that can clarify who the
+        project serves."
     - id: "excluded-user-notes"
       type: "manual_note"
       required: false
       description: "Notes about plausible but intentionally excluded audiences, contexts, or use cases."
   completionCriteria:
     - "The central question is answered explicitly in the Primary Audience section."
-    - "The primary audience is described through situation, behavior, constraints, capabilities, and values rather than shallow demographics."
+    - "The primary audience is described through situation, behavior, constraints, capabilities, and values rather than
+      shallow demographics."
     - "The audience definition is specific enough to exclude plausible but wrong audiences."
     - "User capabilities and constraints are explicit enough to guide Product and UX decisions."
     - "Excluded audiences and out-of-scope use cases are justified by the thesis and problem definition."
@@ -121,7 +126,7 @@ document:
       qualityChecks:
         - "The context explains product constraints without becoming a product specification."
         - "The section makes clear which contexts are primary versus secondary."
-      questions:
+      questions: &a1
         - "In what environment or situation will the project be used?"
         - "When does the need usually arise?"
         - "What constraints does the context impose?"
@@ -137,7 +142,7 @@ document:
       qualityChecks:
         - "Assumed capabilities are plausible for the primary audience."
         - "The section does not silently assume expert behavior unless the audience definition supports it."
-      questions:
+      questions: &a2
         - "What skills or knowledge are assumed?"
         - "What habits or workflows do users already have?"
         - "What tools or infrastructure do users already have?"
@@ -149,11 +154,12 @@ document:
       required: true
       outputGuidance:
         - "Name practical constraints before emotional or aspirational descriptions."
-        - "Include constraints related to time, attention, money, energy, knowledge, trust, access, and environment where relevant."
+        - "Include constraints related to time, attention, money, energy, knowledge, trust, access, and environment
+          where relevant."
       qualityChecks:
         - "Constraints are specific enough to inform UX and product boundaries."
         - "The section does not blame users for constraints created by context or systems."
-      questions:
+      questions: &a3
         - "What limitations do users operate under?"
         - "What resources are scarce for the user?"
         - "What constraints make existing alternatives insufficient?"
@@ -169,7 +175,7 @@ document:
       qualityChecks:
         - "Motivations are connected to the problem definition."
         - "The section avoids generic motivations that could apply to any product."
-      questions:
+      questions: &a4
         - "What drives the user to seek a solution?"
         - "What outcomes does the user value?"
         - "What pain are they trying to reduce or avoid?"
@@ -181,11 +187,12 @@ document:
       required: true
       outputGuidance:
         - "Describe user-level downside clearly."
-        - "Include risks created by bad advice, false confidence, cognitive overload, privacy exposure, or workflow disruption where relevant."
+        - "Include risks created by bad advice, false confidence, cognitive overload, privacy exposure, or workflow
+          disruption where relevant."
       qualityChecks:
         - "Risks are specific to the audience and context of use."
         - "The section identifies trust and failure risks without turning into Engineering or Security documentation."
-      questions:
+      questions: &a5
         - "What happens to the user if the solution fails?"
         - "What is the user's tolerance for friction or complexity?"
         - "What would make the user lose trust?"
@@ -193,7 +200,8 @@ document:
         - "What must the project avoid doing to this audience?"
     - id: "excluded-audiences"
       title: "Excluded Audiences"
-      intent: "Identify who is explicitly not the target and which use cases are out of scope for the initial audience definition."
+      intent: "Identify who is explicitly not the target and which use cases are out of scope for the initial audience
+        definition."
       required: true
       outputGuidance:
         - "Name plausible but excluded audiences explicitly."
@@ -202,9 +210,142 @@ document:
       qualityChecks:
         - "Excluded audiences are not dismissed as invalid; they are excluded for strategic reasons."
         - "The exclusions protect focus without blocking future validated expansion."
-      questions:
+      questions: &a6
         - "Who is explicitly not the target audience?"
         - "What use cases are out of scope for the initial audience?"
         - "Which adjacent audiences may become relevant later?"
         - "Why are these audiences excluded now?"
         - "Which exclusions should be expanded later in the Boundaries document?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain audience definition. Who should recognize this project as useful, necessary, or inevitable?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "primary-audience_1"
+        label: "Primary Audience (1/3)"
+        required: true
+        description: "Describe the primary user in terms of situation, behavior, capabilities, constraints, and values."
+        evaluationHint: "Look for concrete answers addressing: Who is the primary user?; What situation are they in?; What have
+          they already tried?."
+        sourceQuestions:
+          - "Who is the primary user?"
+          - "What situation are they in?"
+          - "What have they already tried?"
+        targetSections: &a7
+          - "Primary Audience"
+      - id: "primary-audience_2"
+        label: "Primary Audience (2/3)"
+        required: true
+        description: "Describe the primary user in terms of situation, behavior, capabilities, constraints, and values."
+        evaluationHint: "Look for concrete answers addressing: What capabilities do they have?; What limitations do they have?;
+          What do they value?."
+        sourceQuestions:
+          - "What capabilities do they have?"
+          - "What limitations do they have?"
+          - "What do they value?"
+        targetSections: &a8
+          - "Primary Audience"
+      - id: "primary-audience_3"
+        label: "Primary Audience (3/3)"
+        required: true
+        description: "Describe the primary user in terms of situation, behavior, capabilities, constraints, and values."
+        evaluationHint: "Look for concrete answers addressing: Why should this audience be served first?; What should the
+          project not presume about them?; Which claims about this audience are observed, assumed, or still unknown?."
+        sourceQuestions:
+          - "Why should this audience be served first?"
+          - "What should the project not presume about them?"
+          - "Which claims about this audience are observed, assumed, or still unknown?"
+        targetSections: &a9
+          - "Primary Audience"
+      - id: "context-of-use"
+        label: "Context of Use"
+        required: true
+        description: "Describe the environment, timing, constraints, and operating conditions in which the project will be used."
+        evaluationHint: "Look for concrete answers addressing: In what environment or situation will the project be used?; When
+          does the need usually arise?; What constraints does the context impose?."
+        sourceQuestions: *a1
+        targetSections: &a10
+          - "Context of Use"
+      - id: "user-capabilities"
+        label: "User Capabilities"
+        required: true
+        description: "Specify the skills, knowledge, habits, tools, and infrastructure users are assumed to have."
+        evaluationHint: "Look for concrete answers addressing: What skills or knowledge are assumed?; What habits or workflows
+          do users already have?; What tools or infrastructure do users already have?."
+        sourceQuestions: *a2
+        targetSections: &a11
+          - "User Capabilities"
+      - id: "user-constraints"
+        label: "User Constraints"
+        required: true
+        description: "Identify limitations, scarce resources, and conditions that shape how users can engage with the project."
+        evaluationHint: "Look for concrete answers addressing: What limitations do users operate under?; What resources are
+          scarce for the user?; What constraints make existing alternatives insufficient?."
+        sourceQuestions: *a3
+        targetSections: &a12
+          - "User Constraints"
+      - id: "user-motivations"
+        label: "User Motivations"
+        required: true
+        description: "Clarify what drives users to seek a solution and what outcomes they value."
+        evaluationHint: "Look for concrete answers addressing: What drives the user to seek a solution?; What outcomes does the
+          user value?; What pain are they trying to reduce or avoid?."
+        sourceQuestions: *a4
+        targetSections: &a13
+          - "User Motivations"
+      - id: "user-risks"
+        label: "User Risks"
+        required: true
+        description: "Assess what happens to users if the solution fails, misleads them, adds friction, or creates misplaced trust."
+        evaluationHint: "Look for concrete answers addressing: What happens to the user if the solution fails?; What is the
+          user's tolerance for friction or complexity?; What would make the user lose trust?."
+        sourceQuestions: *a5
+        targetSections: &a14
+          - "User Risks"
+      - id: "excluded-audiences"
+        label: "Excluded Audiences"
+        required: true
+        description: "Identify who is explicitly not the target and which use cases are out of scope for the initial audience
+          definition."
+        evaluationHint: "Look for concrete answers addressing: Who is explicitly not the target audience?; What use cases are
+          out of scope for the initial audience?; Which adjacent audiences may become relevant later?."
+        sourceQuestions: *a6
+        targetSections: &a15
+          - "Excluded Audiences"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      primary-audience_1:
+        targetSections: *a7
+      primary-audience_2:
+        targetSections: *a8
+      primary-audience_3:
+        targetSections: *a9
+      context-of-use:
+        targetSections: *a10
+      user-capabilities:
+        targetSections: *a11
+      user-constraints:
+        targetSections: *a12
+      user-motivations:
+        targetSections: *a13
+      user-risks:
+        targetSections: *a14
+      excluded-audiences:
+        targetSections: *a15
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.226Z"
+      totalSourceQuestions: 39
+      reviewRequired: false

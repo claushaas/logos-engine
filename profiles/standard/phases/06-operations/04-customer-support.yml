@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 4
   type: "customer_support"
-  purpose: "Define how reactive customer questions, problems, complaints, bug reports, billing issues, refund requests, unsupported requests, and escalations are handled in a way that protects customer trust, product truth, operational capacity, and downstream learning."
-  centralQuestion: "How are customer questions, problems, complaints, bugs, billing issues, refund requests, and unsupported requests received, triaged, answered, escalated, resolved, measured, and learned from?"
+  purpose: "Define how reactive customer questions, problems, complaints, bug reports, billing issues, refund requests,
+    unsupported requests, and escalations are handled in a way that protects customer trust, product truth, operational
+    capacity, and downstream learning."
+  centralQuestion: "How are customer questions, problems, complaints, bugs, billing issues, refund requests, and
+    unsupported requests received, triaged, answered, escalated, resolved, measured, and learned from?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "operations.customer_support_playbook"
         format: "html"
         path: "outcomes/html/06-operations/customer-support-playbook.html"
-        purpose: "Provide a founder-facing support playbook covering support objective, channels, scope, intake, ticketing, triage, categories, priorities, response targets, escalation, bug reporting, billing/refunds, macros, unsupported requests, metrics, risks, and downstream handoff."
+        purpose: "Provide a founder-facing support playbook covering support objective, channels, scope, intake, ticketing,
+          triage, categories, priorities, response targets, escalation, bug reporting, billing/refunds, macros,
+          unsupported requests, metrics, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "support objective"
@@ -47,7 +52,9 @@ document:
       - id: "operations.customer_support_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/customer-support-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the support model is scoped, owner-aware, response-aware, escalation-ready, billing/privacy-safe, incident-aware, measurable, and aligned with Operations, Product, Engineering, GTM, and Risk Management."
+        purpose: "Provide compact context for agents reviewing whether the support model is scoped, owner-aware, response-aware,
+          escalation-ready, billing/privacy-safe, incident-aware, measurable, and aligned with Operations, Product,
+          Engineering, GTM, and Risk Management."
         agentRole: "reviewer"
         includes:
           - "canonical customer support model"
@@ -94,302 +101,365 @@ document:
     - id: "operations-brief"
       type: "context"
       required: false
-      description: "Operations objective, service expectations, support expectations, incident expectations, data/privacy operations, cost/capacity constraints, operational risks, and downstream handoffs."
+      description: "Operations objective, service expectations, support expectations, incident expectations, data/privacy
+        operations, cost/capacity constraints, operational risks, and downstream handoffs."
     - id: "operating-model"
       type: "context"
       required: false
-      description: "Operating scope, ownership model, roles, cadences, workflows, manual operations, automated operations, dependencies, decision rights, escalation paths, metrics, constraints, and risks."
+      description: "Operating scope, ownership model, roles, cadences, workflows, manual operations, automated operations,
+        dependencies, decision rights, escalation paths, metrics, constraints, and risks."
     - id: "team-and-responsibilities"
       type: "context"
       required: false
-      description: "Support owner, backup owner, escalation owner, decision authority, handoff rules, responsibility gaps, future hiring needs, and responsibility risks."
+      description: "Support owner, backup owner, escalation owner, decision authority, handoff rules, responsibility gaps,
+        future hiring needs, and responsibility risks."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Personas, user journeys, product scope, functional requirements, NFRs, acceptance criteria, supported capabilities, known limitations, deferred features, and product-support feedback implications."
+      description: "Personas, user journeys, product scope, functional requirements, NFRs, acceptance criteria, supported
+        capabilities, known limitations, deferred features, and product-support feedback implications."
     - id: "engineering-context"
       type: "context"
       required: false
-      description: "Security/privacy constraints, testing strategy, observability, deployment/environments, technical risks, bug handling constraints, diagnostic data, incident thresholds, and engineering escalation rules."
+      description: "Security/privacy constraints, testing strategy, observability, deployment/environments, technical risks,
+        bug handling constraints, diagnostic data, incident thresholds, and engineering escalation rules."
     - id: "gtm-context"
       type: "context"
       required: false
-      description: "Messaging claim boundaries, launch cohorts, launch support readiness, pricing and packaging, billing/payment/refund rules, growth metrics, GTM risks, and customer-facing promises."
+      description: "Messaging claim boundaries, launch cohorts, launch support readiness, pricing and packaging,
+        billing/payment/refund rules, growth metrics, GTM risks, and customer-facing promises."
     - id: "support-notes"
       type: "manual_note"
       required: false
-      description: "Support channel ideas, expected support load, known issue examples, ticket categories, response targets, macro drafts, refund/billing concerns, unsupported request types, escalation concerns, and unresolved support questions."
+      description: "Support channel ideas, expected support load, known issue examples, ticket categories, response targets,
+        macro drafts, refund/billing concerns, unsupported request types, escalation concerns, and unresolved support
+        questions."
   completionCriteria:
-    - "The central question is answered through a support model that defines intake, scope, triage, categories, priorities, response expectations, escalation, bug flow, billing/refunds, privacy/data requests, macros, unsupported requests, metrics, risks, and downstream handoff."
-    - "Support objective defines what customer support protects: customer trust, issue resolution, product truth, safe expectations, feedback capture, operational capacity, and escalation discipline."
-    - "Support principles define how support communicates, sets boundaries, avoids overpromising, preserves privacy, escalates risk, and routes product/engineering/financial/privacy issues."
-    - "Support scope defines what is in scope, out of scope, self-service only, escalation-required, incident-triggering, privacy-sensitive, billing-sensitive, or product-feedback-only."
-    - "Support channels define available channels, intended use, owner, operating hours or coverage assumption, response expectation, privacy suitability, escalation suitability, and launch/post-launch status."
-    - "Support intake defines how requests are received, what information is required, what should not be collected, consent/privacy concerns, duplicate handling, acknowledgement behavior, and routing."
-    - "Ticketing model defines ticket lifecycle, statuses, ownership, assignment, reassignment, duplicates, reopening, closure, evidence required, internal notes, customer-visible notes, and reporting."
-    - "Ticket categories define issue taxonomy, examples, routing, owner, priority default, escalation path, required information, and downstream document."
-    - "Priority levels define urgency/impact levels, customer impact, business impact, security/privacy impact, billing impact, incident threshold, first response target, resolution expectation, and escalation trigger."
-    - "Triage rules define who triages, when triage happens, what information is checked, how priority/category are assigned, what gets escalated, and what becomes an incident candidate."
-    - "Response time targets define first-response targets, update cadence, resolution expectations, caveats, operating hours, priority differences, and whether targets are internal or customer-facing."
-    - "Resolution expectations define what resolution means by category: answer given, workaround provided, bug filed, bug fixed, refund processed, request denied, escalation completed, incident closed, or product feedback logged."
-    - "Escalation rules define escalation triggers, target owner, backup owner, severity, required context, expected response, customer communication, and downstream procedure."
-    - "Bug reporting flow defines how support-reported bugs are validated, reproduced, categorized, prioritized, linked to engineering backlog, tracked, communicated, and closed."
-    - "Known issue handling defines how known issues are documented, exposed internally/externally, linked to tickets, updated, communicated, and retired."
-    - "Incident handoff defines when support issues become incidents, what severity applies, who is notified, what customer communication is required, and what Incident Response must inherit."
-    - "Refund and billing support defines billing question handling, failed payment handling, refund eligibility, exception authority, invoice/receipt handling, discount questions, subscription questions, escalation path, and Financial Operations handoff."
-    - "Privacy and data requests define support handling for access, deletion, export, correction, privacy complaints, sensitive-data exposure, telemetry/logging questions, and Data/Privacy Operations escalation."
-    - "Support macros/templates define reusable responses, allowed use, claim boundaries, personalization rules, review owner, update trigger, risk if stale, and maintenance cadence."
-    - "Unsupported requests define unsupported issue types, reason unsupported, safe response, redirect path, escalation exception, and documentation/feature feedback capture where relevant."
-    - "Support feedback loop defines how support signals are converted into product feedback, bug trends, documentation updates, macro updates, pricing/billing learnings, GTM claim corrections, risk signals, and maintenance/release work."
-    - "Support metrics define volume, response, resolution, backlog, reopen rate, escalation rate, bug rate, billing/refund rate, support burden, satisfaction/quality, known issue volume, and incident handoff metrics."
-    - "Support risks identify overload, slow response, poor triage, wrong priority, overpromising, privacy leak, billing/refund mishandling, stale macros, weak escalation, unresolved bugs, unsupported requests, and customer trust risks."
-    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+    - "The central question is answered through a support model that defines intake, scope, triage, categories,
+      priorities, response expectations, escalation, bug flow, billing/refunds, privacy/data requests, macros,
+      unsupported requests, metrics, risks, and downstream handoff."
+    - "Support objective defines what customer support protects: customer trust, issue resolution, product truth, safe
+      expectations, feedback capture, operational capacity, and escalation discipline."
+    - "Support principles define how support communicates, sets boundaries, avoids overpromising, preserves privacy,
+      escalates risk, and routes product/engineering/financial/privacy issues."
+    - "Support scope defines what is in scope, out of scope, self-service only, escalation-required,
+      incident-triggering, privacy-sensitive, billing-sensitive, or product-feedback-only."
+    - "Support channels define available channels, intended use, owner, operating hours or coverage assumption, response
+      expectation, privacy suitability, escalation suitability, and launch/post-launch status."
+    - "Support intake defines how requests are received, what information is required, what should not be collected,
+      consent/privacy concerns, duplicate handling, acknowledgement behavior, and routing."
+    - "Ticketing model defines ticket lifecycle, statuses, ownership, assignment, reassignment, duplicates, reopening,
+      closure, evidence required, internal notes, customer-visible notes, and reporting."
+    - "Ticket categories define issue taxonomy, examples, routing, owner, priority default, escalation path, required
+      information, and downstream document."
+    - "Priority levels define urgency/impact levels, customer impact, business impact, security/privacy impact, billing
+      impact, incident threshold, first response target, resolution expectation, and escalation trigger."
+    - "Triage rules define who triages, when triage happens, what information is checked, how priority/category are
+      assigned, what gets escalated, and what becomes an incident candidate."
+    - "Response time targets define first-response targets, update cadence, resolution expectations, caveats, operating
+      hours, priority differences, and whether targets are internal or customer-facing."
+    - "Resolution expectations define what resolution means by category: answer given, workaround provided, bug filed,
+      bug fixed, refund processed, request denied, escalation completed, incident closed, or product feedback logged."
+    - "Escalation rules define escalation triggers, target owner, backup owner, severity, required context, expected
+      response, customer communication, and downstream procedure."
+    - "Bug reporting flow defines how support-reported bugs are validated, reproduced, categorized, prioritized, linked
+      to engineering backlog, tracked, communicated, and closed."
+    - "Known issue handling defines how known issues are documented, exposed internally/externally, linked to tickets,
+      updated, communicated, and retired."
+    - "Incident handoff defines when support issues become incidents, what severity applies, who is notified, what
+      customer communication is required, and what Incident Response must inherit."
+    - "Refund and billing support defines billing question handling, failed payment handling, refund eligibility,
+      exception authority, invoice/receipt handling, discount questions, subscription questions, escalation path, and
+      Financial Operations handoff."
+    - "Privacy and data requests define support handling for access, deletion, export, correction, privacy complaints,
+      sensitive-data exposure, telemetry/logging questions, and Data/Privacy Operations escalation."
+    - "Support macros/templates define reusable responses, allowed use, claim boundaries, personalization rules, review
+      owner, update trigger, risk if stale, and maintenance cadence."
+    - "Unsupported requests define unsupported issue types, reason unsupported, safe response, redirect path, escalation
+      exception, and documentation/feature feedback capture where relevant."
+    - "Support feedback loop defines how support signals are converted into product feedback, bug trends, documentation
+      updates, macro updates, pricing/billing learnings, GTM claim corrections, risk signals, and maintenance/release
+      work."
+    - "Support metrics define volume, response, resolution, backlog, reopen rate, escalation rate, bug rate,
+      billing/refund rate, support burden, satisfaction/quality, known issue volume, and incident handoff metrics."
+    - "Support risks identify overload, slow response, poor triage, wrong priority, overpromising, privacy leak,
+      billing/refund mishandling, stale macros, weak escalation, unresolved bugs, unsupported requests, and customer
+      trust risks."
+    - "Downstream handoff clarifies what Maintenance Plan, Release Management, Incident Response, Data/Privacy
+      Operations, Financial Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid support theater: channels and SLAs without owner, scope, triage, categories, priority rules, escalation, response caveats, metrics, and risk handling."
-    - "Avoid customer-facing response promises that exceed current team capacity, operating hours, support tooling, product readiness, or incident process."
-    - "Avoid treating support as customer success; support handles reactive issues while customer success handles proactive adoption/retention where applicable."
+    - "Avoid support theater: channels and SLAs without owner, scope, triage, categories, priority rules, escalation,
+      response caveats, metrics, and risk handling."
+    - "Avoid customer-facing response promises that exceed current team capacity, operating hours, support tooling,
+      product readiness, or incident process."
+    - "Avoid treating support as customer success; support handles reactive issues while customer success handles
+      proactive adoption/retention where applicable."
     - "Avoid collecting unnecessary personal, financial, health, sensitive, or diagnostic data during support intake."
-    - "Avoid macros that make unsupported claims, contradict pricing/refund policy, expose technical uncertainty, or become stale."
-    - "Avoid support responses that overpromise fixes, timelines, refunds, data deletion, compliance, uptime, or engineering action."
+    - "Avoid macros that make unsupported claims, contradict pricing/refund policy, expose technical uncertainty, or
+      become stale."
+    - "Avoid support responses that overpromise fixes, timelines, refunds, data deletion, compliance, uptime, or
+      engineering action."
     - "Avoid bug reporting flows that bypass triage, reproduction, priority, ownership, and customer communication."
-    - "Avoid refund/billing procedures without authorization rules, escalation, customer communication, and Financial Operations handoff."
+    - "Avoid refund/billing procedures without authorization rules, escalation, customer communication, and Financial
+      Operations handoff."
     - "Avoid privacy/data request handling without Data/Privacy Operations escalation and review."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent support hours, support staffing, SLA guarantees, refund authority, legal/compliance status, billing capabilities, engineering response times, or support tooling readiness."
-    - "Customer support must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, and operational sustainability."
+    - "Do not invent support hours, support staffing, SLA guarantees, refund authority, legal/compliance status, billing
+      capabilities, engineering response times, or support tooling readiness."
+    - "Customer support must preserve Foundation boundaries, product truth, technical truth, pricing truth,
+      privacy/security constraints, customer trust, support capacity, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate support scope, channel, intake rule, ticket category, priority, triage rule, response target, escalation, bug flow, billing/refund rule, macro, unsupported request, metric, risk, and handoff."
-    - "Tie support rules to Operations Brief, Operating Model, Team and Responsibilities, Product Scope, Acceptance Criteria, Security/Privacy, Observability, Technical Risks, Messaging, Launch Plan, Pricing and Packaging, Growth Metrics, GTM Risks, or Decision Record where possible."
-    - "Classify support items as current, required, deferred, internal-only, customer-facing, escalation-required, incident-triggering, privacy-sensitive, billing-sensitive, launch-critical, post-launch, blocked, or review-needed where useful."
+    - "Separate support scope, channel, intake rule, ticket category, priority, triage rule, response target,
+      escalation, bug flow, billing/refund rule, macro, unsupported request, metric, risk, and handoff."
+    - "Tie support rules to Operations Brief, Operating Model, Team and Responsibilities, Product Scope, Acceptance
+      Criteria, Security/Privacy, Observability, Technical Risks, Messaging, Launch Plan, Pricing and Packaging, Growth
+      Metrics, GTM Risks, or Decision Record where possible."
+    - "Classify support items as current, required, deferred, internal-only, customer-facing, escalation-required,
+      incident-triggering, privacy-sensitive, billing-sensitive, launch-critical, post-launch, blocked, or review-needed
+      where useful."
     - "State whether response targets are internal targets or customer-facing commitments."
-    - "Route detailed incident procedures, data/privacy procedures, financial procedures, maintenance work, release fixes, and risk ownership downstream."
+    - "Route detailed incident procedures, data/privacy procedures, financial procedures, maintenance work, release
+      fixes, and risk ownership downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Foundation, Product, Acceptance Criteria, NFRs, Security/Privacy, Observability, Deployment, Technical Risks, Messaging, Launch Plan, Pricing and Packaging, Growth Metrics, GTM Risks, or Decision Record."
-    - "Flag support channels without owner, use case, operating coverage, response expectation, privacy suitability, and escalation suitability."
-    - "Flag support scope that omits out-of-scope, unsupported, escalation-required, incident-triggering, privacy-sensitive, or billing-sensitive issues."
-    - "Flag priority levels without impact definition, triage rule, response target, resolution expectation, and escalation trigger."
-    - "Flag escalation rules without target owner, backup owner, required context, expected response, and customer communication rule."
-    - "Flag bug flows without reproduction, backlog linkage, priority, engineering owner, customer update rule, and closure condition."
-    - "Flag billing/refund flows without authorization, exception handling, financial handoff, and customer communication."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Foundation, Product,
+      Acceptance Criteria, NFRs, Security/Privacy, Observability, Deployment, Technical Risks, Messaging, Launch Plan,
+      Pricing and Packaging, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag support channels without owner, use case, operating coverage, response expectation, privacy suitability, and
+      escalation suitability."
+    - "Flag support scope that omits out-of-scope, unsupported, escalation-required, incident-triggering,
+      privacy-sensitive, or billing-sensitive issues."
+    - "Flag priority levels without impact definition, triage rule, response target, resolution expectation, and
+      escalation trigger."
+    - "Flag escalation rules without target owner, backup owner, required context, expected response, and customer
+      communication rule."
+    - "Flag bug flows without reproduction, backlog linkage, priority, engineering owner, customer update rule, and
+      closure condition."
+    - "Flag billing/refund flows without authorization, exception handling, financial handoff, and customer
+      communication."
     - "Flag privacy/data request handling without downstream Data/Privacy Operations handoff."
     - "Flag support metrics without formula/source, owner, cadence, threshold, and decision implication."
     - "Verify that downstream Operations documents receive concrete support handoff inputs."
-    - "Flag content that belongs better in Customer Success, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+    - "Flag content that belongs better in Customer Success, Maintenance Plan, Release Management, Incident Response,
+      Data/Privacy Operations, Financial Operations, or Risk Management."
   specializedFormats:
     supportChannelFormat:
       description: "Recommended format for support channels."
       fields:
-        - channel
-        - intendedUse
-        - customerFacing
-        - owner
-        - backupOwner
-        - operatingCoverage
-        - responseExpectation
-        - privacySuitability
-        - escalationSuitability
-        - tooling
-        - status
+        - "channel"
+        - "intendedUse"
+        - "customerFacing"
+        - "owner"
+        - "backupOwner"
+        - "operatingCoverage"
+        - "responseExpectation"
+        - "privacySuitability"
+        - "escalationSuitability"
+        - "tooling"
+        - "status"
     ticketCategoryFormat:
       description: "Recommended format for ticket categories."
       fields:
-        - category
-        - description
-        - examples
-        - defaultPriority
-        - requiredInformation
-        - routingOwner
-        - escalationPath
-        - downstreamDocument
-        - customerVisibleLanguage
-        - status
+        - "category"
+        - "description"
+        - "examples"
+        - "defaultPriority"
+        - "requiredInformation"
+        - "routingOwner"
+        - "escalationPath"
+        - "downstreamDocument"
+        - "customerVisibleLanguage"
+        - "status"
     priorityLevelFormat:
       description: "Recommended format for support priority levels."
       fields:
-        - priority
-        - definition
-        - customerImpact
-        - businessImpact
-        - securityOrPrivacyImpact
-        - billingImpact
-        - incidentThreshold
-        - firstResponseTarget
-        - updateCadence
-        - resolutionExpectation
-        - escalationTrigger
-        - status
+        - "priority"
+        - "definition"
+        - "customerImpact"
+        - "businessImpact"
+        - "securityOrPrivacyImpact"
+        - "billingImpact"
+        - "incidentThreshold"
+        - "firstResponseTarget"
+        - "updateCadence"
+        - "resolutionExpectation"
+        - "escalationTrigger"
+        - "status"
     triageRuleFormat:
       description: "Recommended format for support triage rules."
       fields:
-        - rule
-        - trigger
-        - checks
-        - categoryAssignment
-        - priorityAssignment
-        - owner
-        - escalationCondition
-        - incidentCandidate
-        - evidenceRequired
-        - status
+        - "rule"
+        - "trigger"
+        - "checks"
+        - "categoryAssignment"
+        - "priorityAssignment"
+        - "owner"
+        - "escalationCondition"
+        - "incidentCandidate"
+        - "evidenceRequired"
+        - "status"
     escalationRuleFormat:
       description: "Recommended format for support escalation rules."
       fields:
-        - escalationType
-        - trigger
-        - severity
-        - targetOwner
-        - backupOwner
-        - requiredContext
-        - expectedResponse
-        - customerCommunication
-        - downstreamProcedure
-        - status
+        - "escalationType"
+        - "trigger"
+        - "severity"
+        - "targetOwner"
+        - "backupOwner"
+        - "requiredContext"
+        - "expectedResponse"
+        - "customerCommunication"
+        - "downstreamProcedure"
+        - "status"
     bugReportFormat:
       description: "Recommended format for support-reported bugs."
       fields:
-        - bugType
-        - intakeSource
-        - reproductionRequired
-        - diagnosticInformation
-        - privacyConstraints
-        - priorityRule
-        - engineeringBacklogTarget
-        - customerUpdateRule
-        - closureCondition
-        - downstreamDocument
-        - status
+        - "bugType"
+        - "intakeSource"
+        - "reproductionRequired"
+        - "diagnosticInformation"
+        - "privacyConstraints"
+        - "priorityRule"
+        - "engineeringBacklogTarget"
+        - "customerUpdateRule"
+        - "closureCondition"
+        - "downstreamDocument"
+        - "status"
     knownIssueFormat:
       description: "Recommended format for known issues."
       fields:
-        - issue
-        - affectedUsers
-        - symptoms
-        - workaround
-        - customerVisible
-        - supportMacro
-        - owner
-        - updateCadence
-        - retirementCondition
-        - linkedReleaseOrIncident
-        - status
+        - "issue"
+        - "affectedUsers"
+        - "symptoms"
+        - "workaround"
+        - "customerVisible"
+        - "supportMacro"
+        - "owner"
+        - "updateCadence"
+        - "retirementCondition"
+        - "linkedReleaseOrIncident"
+        - "status"
     billingSupportFormat:
       description: "Recommended format for billing and refund support rules."
       fields:
-        - issueType
-        - policyReference
-        - requiredInformation
-        - supportAction
-        - authorizationRequired
-        - exceptionPath
-        - customerCommunication
-        - financialOperationsHandoff
-        - risk
-        - status
+        - "issueType"
+        - "policyReference"
+        - "requiredInformation"
+        - "supportAction"
+        - "authorizationRequired"
+        - "exceptionPath"
+        - "customerCommunication"
+        - "financialOperationsHandoff"
+        - "risk"
+        - "status"
     privacyRequestFormat:
       description: "Recommended format for support-handled privacy/data requests."
       fields:
-        - requestType
-        - customerLanguage
-        - requiredVerification
-        - supportAction
-        - prohibitedSupportAction
-        - escalationTarget
-        - responseExpectation
-        - documentationRequired
-        - downstreamDocument
-        - status
+        - "requestType"
+        - "customerLanguage"
+        - "requiredVerification"
+        - "supportAction"
+        - "prohibitedSupportAction"
+        - "escalationTarget"
+        - "responseExpectation"
+        - "documentationRequired"
+        - "downstreamDocument"
+        - "status"
     supportMacroFormat:
       description: "Recommended format for support macros and templates."
       fields:
-        - macro
-        - useCase
-        - allowedUse
-        - prohibitedUse
-        - coreResponse
-        - claimBoundary
-        - personalizationRequired
-        - owner
-        - reviewCadence
-        - updateTrigger
-        - riskIfStale
-        - status
+        - "macro"
+        - "useCase"
+        - "allowedUse"
+        - "prohibitedUse"
+        - "coreResponse"
+        - "claimBoundary"
+        - "personalizationRequired"
+        - "owner"
+        - "reviewCadence"
+        - "updateTrigger"
+        - "riskIfStale"
+        - "status"
     unsupportedRequestFormat:
       description: "Recommended format for unsupported requests."
       fields:
-        - requestType
-        - reasonUnsupported
-        - safeResponse
-        - redirectPath
-        - escalationException
-        - productFeedbackCapture
-        - customerExpectationRisk
-        - status
+        - "requestType"
+        - "reasonUnsupported"
+        - "safeResponse"
+        - "redirectPath"
+        - "escalationException"
+        - "productFeedbackCapture"
+        - "customerExpectationRisk"
+        - "status"
     supportMetricFormat:
       description: "Recommended format for support metrics."
       fields:
-        - metric
-        - metricType
-        - purpose
-        - formulaOrMeasurement
-        - source
-        - threshold
-        - cadence
-        - owner
-        - decisionImplication
-        - downstreamDocument
-        - status
+        - "metric"
+        - "metricType"
+        - "purpose"
+        - "formulaOrMeasurement"
+        - "source"
+        - "threshold"
+        - "cadence"
+        - "owner"
+        - "decisionImplication"
+        - "downstreamDocument"
+        - "status"
     supportRiskFormat:
       description: "Recommended format for support risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - affectedArea
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "source"
+        - "affectedArea"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     supportHandoffFormat:
       description: "Recommended format for downstream support handoffs."
       fields:
-        - handoffTarget
-        - contextToPreserve
-        - requiredAction
-        - owner
-        - timing
-        - unresolvedQuestion
-        - riskOrConstraint
-        - status
+        - "handoffTarget"
+        - "contextToPreserve"
+        - "requiredAction"
+        - "owner"
+        - "timing"
+        - "unresolvedQuestion"
+        - "riskOrConstraint"
+        - "status"
   sections:
     - id: "support-objective"
       title: "Support Objective"
-      intent: "Define the goal of customer support and how it differs from customer success, product feedback, incident response, and general operations."
+      intent: "Define the goal of customer support and how it differs from customer success, product feedback, incident
+        response, and general operations."
       required: true
       outputGuidance:
         - "Open with the customer support purpose in one concise paragraph."
-        - "Explain that support handles reactive customer issues while customer success handles proactive adoption/retention where applicable."
-        - "State what support protects: trust, clarity, safe expectations, issue resolution, escalation, and feedback capture."
+        - "Explain that support handles reactive customer issues while customer success handles proactive
+          adoption/retention where applicable."
+        - "State what support protects: trust, clarity, safe expectations, issue resolution, escalation, and feedback
+          capture."
       qualityChecks:
         - "Support objective is not confused with customer success."
         - "Objective is grounded in Operations Brief and Team Responsibilities."
         - "Scope boundary is visible."
-      questions:
+      questions: &a1
         - "What is the goal of the customer support function?"
         - "How does support differ from customer success?"
         - "How does support differ from incident response?"
         - "What should support protect?"
     - id: "support-principles"
       title: "Support Principles"
-      intent: "Define how support communicates and makes trade-offs under uncertainty, risk, customer frustration, or unclear ownership."
+      intent: "Define how support communicates and makes trade-offs under uncertainty, risk, customer frustration, or unclear
+        ownership."
       required: true
       outputGuidance:
         - "Define principles for clarity, honesty, privacy, escalation, boundaries, and customer trust."
@@ -399,14 +469,15 @@ document:
         - "Principles are actionable."
         - "Support truthfulness and boundaries are explicit."
         - "Privacy and escalation principles are included."
-      questions:
+      questions: &a2
         - "What principles guide support communication?"
         - "How should support behave when the answer is unknown?"
         - "How should support avoid overpromising?"
         - "How should support protect privacy and customer trust?"
     - id: "support-scope"
       title: "Support Scope"
-      intent: "Define which issue types are in scope, out of scope, self-service only, escalation-required, incident-triggering, privacy-sensitive, billing-sensitive, or product-feedback-only."
+      intent: "Define which issue types are in scope, out of scope, self-service only, escalation-required,
+        incident-triggering, privacy-sensitive, billing-sensitive, or product-feedback-only."
       required: true
       outputGuidance:
         - "Classify issue types clearly."
@@ -416,7 +487,7 @@ document:
         - "Scope prevents expectation drift."
         - "Unsupported and escalation-required areas are explicit."
         - "Support does not promise what Product/Engineering/Finance/Privacy cannot sustain."
-      questions:
+      questions: &a3
         - "What types of issues are in scope for support?"
         - "What is explicitly out of scope?"
         - "What should be self-service only?"
@@ -424,7 +495,8 @@ document:
         - "What issues trigger incident, privacy, billing, or product feedback workflows?"
     - id: "support-channels"
       title: "Support Channels"
-      intent: "List available support channels with purpose, owner, coverage, response expectations, privacy suitability, tooling, and escalation suitability."
+      intent: "List available support channels with purpose, owner, coverage, response expectations, privacy suitability,
+        tooling, and escalation suitability."
       required: true
       outputGuidance:
         - "Use support channel records."
@@ -434,7 +506,7 @@ document:
         - "Each channel has owner and intended use."
         - "Operating coverage and response expectations are not invented."
         - "Privacy suitability is considered."
-      questions:
+      questions: &a4
         - "Which channels are available for users to request support?"
         - "What is each channel for?"
         - "Who owns each channel?"
@@ -453,7 +525,7 @@ document:
         - "Intake collects enough information without overcollecting."
         - "Sensitive data handling is considered."
         - "Routing and acknowledgement are clear."
-      questions:
+      questions: &a5
         - "How are support requests received?"
         - "What information is required at intake?"
         - "What information must support avoid collecting?"
@@ -462,17 +534,19 @@ document:
         - "How is the request routed after intake?"
     - id: "ticketing-model"
       title: "Ticketing Model"
-      intent: "Define ticket lifecycle, statuses, ownership, reassignment, duplicate handling, reopening, closure, evidence, notes, and reporting."
+      intent: "Define ticket lifecycle, statuses, ownership, reassignment, duplicate handling, reopening, closure, evidence,
+        notes, and reporting."
       required: true
       outputGuidance:
-        - "Define lifecycle states such as new, triaged, waiting on customer, waiting on internal, escalated, known issue, resolved, closed, reopened, or duplicate where useful."
+        - "Define lifecycle states such as new, triaged, waiting on customer, waiting on internal, escalated, known
+          issue, resolved, closed, reopened, or duplicate where useful."
         - "State owner and evidence rules."
         - "Do not assume a specific tool unless known."
       qualityChecks:
         - "Ticket lifecycle is operationally clear."
         - "Ownership and closure rules are explicit."
         - "Internal notes and customer-visible notes are distinguished."
-      questions:
+      questions: &a6
         - "What is the lifecycle of a support ticket?"
         - "What ticket statuses exist?"
         - "Who owns a ticket at each stage?"
@@ -485,13 +559,14 @@ document:
       required: true
       outputGuidance:
         - "Use ticket category records."
-        - "Include examples, default priority, required information, routing owner, escalation path, and downstream document."
+        - "Include examples, default priority, required information, routing owner, escalation path, and downstream
+          document."
         - "Avoid excessive taxonomy before support volume justifies it."
       qualityChecks:
         - "Categories are specific enough to route."
         - "Default priority and required info are explicit."
         - "Category taxonomy is not overcomplicated."
-      questions:
+      questions: &a7
         - "What categories are used to classify support tickets?"
         - "What examples belong in each category?"
         - "What default priority applies?"
@@ -499,7 +574,8 @@ document:
         - "How are tickets routed based on category?"
     - id: "priority-levels"
       title: "Priority Levels"
-      intent: "Define support priority levels, impact definitions, escalation thresholds, and response/update/resolution expectations."
+      intent: "Define support priority levels, impact definitions, escalation thresholds, and response/update/resolution
+        expectations."
       required: true
       outputGuidance:
         - "Use priority level records."
@@ -509,7 +585,7 @@ document:
         - "Priority levels are decision-useful."
         - "Incident and escalation thresholds are clear."
         - "Response targets are marked internal or customer-facing."
-      questions:
+      questions: &a8
         - "What priority levels exist and how are they defined?"
         - "How is customer impact considered?"
         - "How is business impact considered?"
@@ -517,7 +593,8 @@ document:
         - "How is priority assigned at triage?"
     - id: "triage-rules"
       title: "Triage Rules"
-      intent: "Define how tickets are reviewed, categorized, prioritized, escalated, and converted into incident candidates, bugs, billing cases, privacy requests, or product feedback."
+      intent: "Define how tickets are reviewed, categorized, prioritized, escalated, and converted into incident candidates,
+        bugs, billing cases, privacy requests, or product feedback."
       required: true
       outputGuidance:
         - "Use triage rule records."
@@ -527,7 +604,7 @@ document:
         - "Triage rules are executable."
         - "Privacy, billing, and incident cases are routed correctly."
         - "Triage does not depend on informal judgment only."
-      questions:
+      questions: &a9
         - "Who triages support tickets?"
         - "When does triage happen?"
         - "What checks are performed during triage?"
@@ -546,7 +623,7 @@ document:
         - "Targets are realistic for staffing and coverage."
         - "Targets do not imply guarantees unless explicitly supportable."
         - "Update cadence is included, not only first response."
-      questions:
+      questions: &a10
         - "What are the first-response time targets per priority?"
         - "What update cadence applies per priority?"
         - "What are the resolution expectations per priority?"
@@ -558,13 +635,14 @@ document:
       required: true
       outputGuidance:
         - "Define resolution by category."
-        - "Include answer given, workaround provided, bug filed, bug fixed, refund processed, request denied, escalation completed, incident closed, or feedback logged."
+        - "Include answer given, workaround provided, bug filed, bug fixed, refund processed, request denied, escalation
+          completed, incident closed, or feedback logged."
         - "State customer update requirements."
       qualityChecks:
         - "Resolution is not confused with acknowledgement."
         - "Bug filing is not treated as bug fixing unless stated."
         - "Customer communication is explicit."
-      questions:
+      questions: &a11
         - "What counts as resolving a support ticket?"
         - "How does resolution differ by category?"
         - "When is workaround enough?"
@@ -572,7 +650,8 @@ document:
         - "When must the customer be updated before closure?"
     - id: "escalation-rules"
       title: "Escalation Rules"
-      intent: "Define when tickets should be escalated and who receives escalated tickets by category, severity, and risk type."
+      intent: "Define when tickets should be escalated and who receives escalated tickets by category, severity, and risk
+        type."
       required: true
       outputGuidance:
         - "Use escalation rule records."
@@ -582,7 +661,7 @@ document:
         - "Escalation targets are owner-specific."
         - "Required context prevents bad handoffs."
         - "Customer communication rules are included."
-      questions:
+      questions: &a12
         - "When should a support ticket be escalated?"
         - "Who receives escalated tickets by category?"
         - "Who is backup owner?"
@@ -595,13 +674,14 @@ document:
       required: true
       outputGuidance:
         - "Use bug report records."
-        - "Include reproduction, diagnostic information, privacy constraints, priority rule, backlog target, customer update rule, and closure condition."
+        - "Include reproduction, diagnostic information, privacy constraints, priority rule, backlog target, customer
+          update rule, and closure condition."
         - "Distinguish bug, feature request, user error, known issue, and incident."
       qualityChecks:
         - "Bug flow creates engineering-actionable reports."
         - "Privacy constraints are respected."
         - "Customer updates are defined."
-      questions:
+      questions: &a13
         - "How do support-reported bugs enter the engineering backlog?"
         - "What reproduction or diagnostic information is required?"
         - "What data must not be collected or exposed?"
@@ -620,7 +700,7 @@ document:
         - "Known issues reduce duplicate support burden."
         - "Customer-visible language is safe and accurate."
         - "Retirement conditions are defined."
-      questions:
+      questions: &a14
         - "How are known issues documented?"
         - "How are tickets linked to known issues?"
         - "When is a known issue customer-visible?"
@@ -639,7 +719,7 @@ document:
         - "Incident threshold is clear."
         - "Support knows what to do when severity rises."
         - "Incident Response receives enough context."
-      questions:
+      questions: &a15
         - "When does a support issue become an incident candidate?"
         - "What severity applies?"
         - "Who is notified?"
@@ -648,7 +728,8 @@ document:
         - "What should Incident Response inherit?"
     - id: "refund-and-billing-support"
       title: "Refund and Billing Support"
-      intent: "Define billing question and refund handling procedures, policies, authorization rules, exception paths, and Financial Operations handoff."
+      intent: "Define billing question and refund handling procedures, policies, authorization rules, exception paths, and
+        Financial Operations handoff."
       required: true
       outputGuidance:
         - "Use billing support records."
@@ -658,7 +739,7 @@ document:
         - "Refund and billing support follows policy and authority."
         - "Exceptions have escalation path."
         - "Financial Operations handoff is explicit."
-      questions:
+      questions: &a16
         - "How are billing questions handled?"
         - "How are refund requests handled?"
         - "What refund policy applies?"
@@ -667,7 +748,8 @@ document:
         - "What should Financial Operations inherit?"
     - id: "privacy-and-data-requests"
       title: "Privacy and Data Requests"
-      intent: "Define how support handles access, deletion, export, correction, privacy complaints, sensitive-data exposure, and telemetry/logging questions."
+      intent: "Define how support handles access, deletion, export, correction, privacy complaints, sensitive-data exposure,
+        and telemetry/logging questions."
       required: true
       outputGuidance:
         - "Use privacy request records."
@@ -677,7 +759,7 @@ document:
         - "Support does not improvise privacy handling."
         - "Verification, documentation, and escalation are explicit."
         - "Sensitive requests are routed safely."
-      questions:
+      questions: &a17
         - "What privacy or data requests can support receive?"
         - "How is identity or authority verified?"
         - "What can support do directly?"
@@ -690,13 +772,14 @@ document:
       required: true
       outputGuidance:
         - "Use support macro records."
-        - "Include allowed/prohibited use, claim boundaries, personalization, owner, review cadence, update trigger, and stale-risk."
+        - "Include allowed/prohibited use, claim boundaries, personalization, owner, review cadence, update trigger, and
+          stale-risk."
         - "Tie macro language to Messaging and Pricing claim boundaries."
       qualityChecks:
         - "Macros are safe, accurate, and bounded."
         - "Macros do not replace judgment for sensitive cases."
         - "Macro maintenance is owned."
-      questions:
+      questions: &a18
         - "What templated responses exist for common issues?"
         - "When may each macro be used?"
         - "When must each macro not be used?"
@@ -705,7 +788,8 @@ document:
         - "How are macros maintained and improved?"
     - id: "unsupported-requests"
       title: "Unsupported Requests"
-      intent: "Define explicitly unsupported request types, safe responses, redirect paths, escalation exceptions, and product feedback capture."
+      intent: "Define explicitly unsupported request types, safe responses, redirect paths, escalation exceptions, and product
+        feedback capture."
       required: true
       outputGuidance:
         - "Use unsupported request records."
@@ -715,7 +799,7 @@ document:
         - "Unsupported requests are handled respectfully and clearly."
         - "Support boundaries prevent expectation drift."
         - "Feature feedback is captured where useful."
-      questions:
+      questions: &a19
         - "What types of requests are explicitly unsupported?"
         - "Why are they unsupported?"
         - "How are users redirected when they make unsupported requests?"
@@ -723,7 +807,8 @@ document:
         - "How is product feedback captured?"
     - id: "support-feedback-loop"
       title: "Support Feedback Loop"
-      intent: "Define how support learnings become product fixes, documentation updates, macro improvements, GTM corrections, pricing learnings, release work, maintenance work, and risk signals."
+      intent: "Define how support learnings become product fixes, documentation updates, macro improvements, GTM corrections,
+        pricing learnings, release work, maintenance work, and risk signals."
       required: true
       outputGuidance:
         - "Define feedback destinations by signal type."
@@ -733,7 +818,7 @@ document:
         - "Support feedback leads to action or explicit no-action decision."
         - "Product, engineering, GTM, pricing, and risk loops are included."
         - "Cadence and ownership are clear."
-      questions:
+      questions: &a20
         - "How are recurring support issues reviewed?"
         - "How does support feed Product?"
         - "How does support feed Engineering?"
@@ -741,19 +826,22 @@ document:
         - "What cadence and evidence are required?"
     - id: "support-metrics"
       title: "Support Metrics"
-      intent: "Define metrics that show whether support is responsive, accurate, overloaded, escalating properly, and protecting customer trust."
+      intent: "Define metrics that show whether support is responsive, accurate, overloaded, escalating properly, and
+        protecting customer trust."
       required: true
       outputGuidance:
         - "Use support metric records."
-        - "Include volume, first response, resolution, update cadence, backlog, reopen rate, escalation rate, bug rate, refund/billing rate, support burden, satisfaction/quality, known issues, and incident handoff metrics."
+        - "Include volume, first response, resolution, update cadence, backlog, reopen rate, escalation rate, bug rate,
+          refund/billing rate, support burden, satisfaction/quality, known issues, and incident handoff metrics."
         - "Tie metrics to Growth Metrics and Operating Model where useful."
       qualityChecks:
         - "Metrics are decision-useful."
         - "Metrics include quality and burden, not only speed."
         - "Thresholds and owners are explicit."
-      questions:
+      questions: &a21
         - "What metrics show support health?"
-        - "How are support volume, response time, resolution time, backlog, reopen rate, escalation rate, bug rate, billing/refund rate, known issue volume, and incident handoffs measured?"
+        - "How are support volume, response time, resolution time, backlog, reopen rate, escalation rate, bug rate,
+          billing/refund rate, known issue volume, and incident handoffs measured?"
         - "How is support quality or satisfaction measured?"
         - "What threshold indicates overload or risk?"
         - "Who owns support reporting?"
@@ -763,13 +851,14 @@ document:
       required: true
       outputGuidance:
         - "Use support risk records."
-        - "Include overload, slow response, poor triage, wrong priority, overpromising, privacy leak, billing/refund mishandling, stale macros, weak escalation, unresolved bugs, unsupported requests, and trust risks."
+        - "Include overload, slow response, poor triage, wrong priority, overpromising, privacy leak, billing/refund
+          mishandling, stale macros, weak escalation, unresolved bugs, unsupported requests, and trust risks."
         - "Route risks to Risk Management where needed."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a22
         - "What could cause the support function to fail?"
         - "Where could support overload occur?"
         - "Where could support overpromise or mishandle sensitive issues?"
@@ -782,13 +871,15 @@ document:
       required: true
       outputGuidance:
         - "Use support handoff records."
-        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
-        - "Preserve unresolved questions, owner gaps, escalation rules, metrics, risks, support constraints, and known issue context."
+        - "Route context to Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial
+          Operations, and Risk Management."
+        - "Preserve unresolved questions, owner gaps, escalation rules, metrics, risks, support constraints, and known
+          issue context."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing support assumptions silently."
         - "Customer Support remains reactive-support architecture; detailed downstream procedures remain downstream."
-      questions:
+      questions: &a23
         - "What should Maintenance Plan inherit?"
         - "What should Release Management inherit?"
         - "What should Incident Response inherit?"
@@ -796,3 +887,297 @@ document:
         - "What should Financial Operations inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved support questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain customer support. How are customer questions, problems, complaints, bugs, billing issues,
+      refund requests, and unsupported requests received, triaged, answered, escalated, resolved, measured, and learned
+      from?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "support-objective"
+        label: "Support Objective"
+        required: true
+        description: "Define the goal of customer support and how it differs from customer success, product feedback, incident
+          response, and general operations."
+        evaluationHint: "Look for concrete answers addressing: What is the goal of the customer support function?; How does
+          support differ from customer success?; How does support differ from incident response?."
+        sourceQuestions: *a1
+        targetSections: &a24
+          - "Support Objective"
+      - id: "support-principles"
+        label: "Support Principles"
+        required: true
+        description: "Define how support communicates and makes trade-offs under uncertainty, risk, customer frustration, or
+          unclear ownership."
+        evaluationHint: "Look for concrete answers addressing: What principles guide support communication?; How should support
+          behave when the answer is unknown?; How should support avoid overpromising?."
+        sourceQuestions: *a2
+        targetSections: &a25
+          - "Support Principles"
+      - id: "support-scope"
+        label: "Support Scope"
+        required: true
+        description: "Define which issue types are in scope, out of scope, self-service only, escalation-required,
+          incident-triggering, privacy-sensitive, billing-sensitive, or product-feedback-only."
+        evaluationHint: "Look for concrete answers addressing: What types of issues are in scope for support?; What is
+          explicitly out of scope?; What should be self-service only?."
+        sourceQuestions: *a3
+        targetSections: &a26
+          - "Support Scope"
+      - id: "support-channels"
+        label: "Support Channels"
+        required: true
+        description: "List available support channels with purpose, owner, coverage, response expectations, privacy suitability,
+          tooling, and escalation suitability."
+        evaluationHint: "Look for concrete answers addressing: Which channels are available for users to request support?; What
+          is each channel for?; Who owns each channel?."
+        sourceQuestions: *a4
+        targetSections: &a27
+          - "Support Channels"
+      - id: "support-intake"
+        label: "Support Intake"
+        required: true
+        description: "Define how support requests are received, acknowledged, deduplicated, enriched, routed, and privacy-screened."
+        evaluationHint: "Look for concrete answers addressing: How are support requests received?; What information is required
+          at intake?; What information must support avoid collecting?."
+        sourceQuestions: *a5
+        targetSections: &a28
+          - "Support Intake"
+      - id: "ticketing-model"
+        label: "Ticketing Model"
+        required: true
+        description: "Define ticket lifecycle, statuses, ownership, reassignment, duplicate handling, reopening, closure,
+          evidence, notes, and reporting."
+        evaluationHint: "Look for concrete answers addressing: What is the lifecycle of a support ticket?; What ticket statuses
+          exist?; Who owns a ticket at each stage?."
+        sourceQuestions: *a6
+        targetSections: &a29
+          - "Ticketing Model"
+      - id: "ticket-categories"
+        label: "Ticket Categories"
+        required: true
+        description: "Define ticket classification categories and routing rules based on category."
+        evaluationHint: "Look for concrete answers addressing: What categories are used to classify support tickets?; What
+          examples belong in each category?; What default priority applies?."
+        sourceQuestions: *a7
+        targetSections: &a30
+          - "Ticket Categories"
+      - id: "priority-levels"
+        label: "Priority Levels"
+        required: true
+        description: "Define support priority levels, impact definitions, escalation thresholds, and response/update/resolution
+          expectations."
+        evaluationHint: "Look for concrete answers addressing: What priority levels exist and how are they defined?; How is
+          customer impact considered?; How is business impact considered?."
+        sourceQuestions: *a8
+        targetSections: &a31
+          - "Priority Levels"
+      - id: "triage-rules"
+        label: "Triage Rules"
+        required: true
+        description: "Define how tickets are reviewed, categorized, prioritized, escalated, and converted into incident
+          candidates, bugs, billing cases, privacy requests, or product feedback."
+        evaluationHint: "Look for concrete answers addressing: Who triages support tickets?; When does triage happen?; What
+          checks are performed during triage?."
+        sourceQuestions: *a9
+        targetSections: &a32
+          - "Triage Rules"
+      - id: "response-time-targets"
+        label: "Response Time Targets"
+        required: true
+        description: "Set first-response, update cadence, and resolution expectations per priority level and support channel."
+        evaluationHint: "Look for concrete answers addressing: What are the first-response time targets per priority?; What
+          update cadence applies per priority?; What are the resolution expectations per priority?."
+        sourceQuestions: *a10
+        targetSections: &a33
+          - "Response Time Targets"
+      - id: "resolution-expectations"
+        label: "Resolution Expectations"
+        required: true
+        description: "Define what counts as resolution for each category and what does not count as resolution."
+        evaluationHint: "Look for concrete answers addressing: What counts as resolving a support ticket?; How does resolution
+          differ by category?; When is workaround enough?."
+        sourceQuestions: *a11
+        targetSections: &a34
+          - "Resolution Expectations"
+      - id: "escalation-rules"
+        label: "Escalation Rules"
+        required: true
+        description: "Define when tickets should be escalated and who receives escalated tickets by category, severity, and risk
+          type."
+        evaluationHint: "Look for concrete answers addressing: When should a support ticket be escalated?; Who receives
+          escalated tickets by category?; Who is backup owner?."
+        sourceQuestions: *a12
+        targetSections: &a35
+          - "Escalation Rules"
+      - id: "bug-reporting-flow"
+        label: "Bug Reporting Flow"
+        required: true
+        description: "Define how support-reported bugs enter the engineering backlog and how reporters are notified."
+        evaluationHint: "Look for concrete answers addressing: How do support-reported bugs enter the engineering backlog?; What
+          reproduction or diagnostic information is required?; What data must not be collected or exposed?."
+        sourceQuestions: *a13
+        targetSections: &a36
+          - "Bug Reporting Flow"
+      - id: "known-issue-handling"
+        label: "Known Issue Handling"
+        required: true
+        description: "Define how known issues are documented, linked to tickets, communicated, updated, and retired."
+        evaluationHint: "Look for concrete answers addressing: How are known issues documented?; How are tickets linked to known
+          issues?; When is a known issue customer-visible?."
+        sourceQuestions: *a14
+        targetSections: &a37
+          - "Known Issue Handling"
+      - id: "incident-handoff"
+        label: "Incident Handoff"
+        required: true
+        description: "Define when support issues become incidents and what must be handed to Incident Response."
+        evaluationHint: "Look for concrete answers addressing: When does a support issue become an incident candidate?; What
+          severity applies?; Who is notified?."
+        sourceQuestions: *a15
+        targetSections: &a38
+          - "Incident Handoff"
+      - id: "refund-and-billing-support"
+        label: "Refund and Billing Support"
+        required: true
+        description: "Define billing question and refund handling procedures, policies, authorization rules, exception paths,
+          and Financial Operations handoff."
+        evaluationHint: "Look for concrete answers addressing: How are billing questions handled?; How are refund requests
+          handled?; What refund policy applies?."
+        sourceQuestions: *a16
+        targetSections: &a39
+          - "Refund and Billing Support"
+      - id: "privacy-and-data-requests"
+        label: "Privacy and Data Requests"
+        required: true
+        description: "Define how support handles access, deletion, export, correction, privacy complaints, sensitive-data
+          exposure, and telemetry/logging questions."
+        evaluationHint: "Look for concrete answers addressing: What privacy or data requests can support receive?; How is
+          identity or authority verified?; What can support do directly?."
+        sourceQuestions: *a17
+        targetSections: &a40
+          - "Privacy and Data Requests"
+      - id: "support-macros-templates"
+        label: "Support Macros/Templates"
+        required: true
+        description: "Document templated responses for common issues and the maintenance process for macros."
+        evaluationHint: "Look for concrete answers addressing: What templated responses exist for common issues?; When may each
+          macro be used?; When must each macro not be used?."
+        sourceQuestions: *a18
+        targetSections: &a41
+          - "Support Macros/Templates"
+      - id: "unsupported-requests"
+        label: "Unsupported Requests"
+        required: true
+        description: "Define explicitly unsupported request types, safe responses, redirect paths, escalation exceptions, and
+          product feedback capture."
+        evaluationHint: "Look for concrete answers addressing: What types of requests are explicitly unsupported?; Why are they
+          unsupported?; How are users redirected when they make unsupported requests?."
+        sourceQuestions: *a19
+        targetSections: &a42
+          - "Unsupported Requests"
+      - id: "support-feedback-loop"
+        label: "Support Feedback Loop"
+        required: true
+        description: "Define how support learnings become product fixes, documentation updates, macro improvements, GTM
+          corrections, pricing learnings, release work, maintenance work, and risk signals."
+        evaluationHint: "Look for concrete answers addressing: How are recurring support issues reviewed?; How does support feed
+          Product?; How does support feed Engineering?."
+        sourceQuestions: *a20
+        targetSections: &a43
+          - "Support Feedback Loop"
+      - id: "support-metrics"
+        label: "Support Metrics"
+        required: true
+        description: "Define metrics that show whether support is responsive, accurate, overloaded, escalating properly, and
+          protecting customer trust."
+        evaluationHint: "Look for concrete answers addressing: What metrics show support health?; How are support volume,
+          response time, resolution time, backlog, reopen rate, escalation rate, bug rate, billing/refund rate, known
+          issue volume, and incident handoffs measured?; How is support quality or satisfaction measured?."
+        sourceQuestions: *a21
+        targetSections: &a44
+          - "Support Metrics"
+      - id: "support-risks"
+        label: "Support Risks"
+        required: true
+        description: "Identify failure modes of the support function and how they are detected, mitigated, escalated, or handed
+          off."
+        evaluationHint: "Look for concrete answers addressing: What could cause the support function to fail?; Where could
+          support overload occur?; Where could support overpromise or mishandle sensitive issues?."
+        sourceQuestions: *a22
+        targetSections: &a45
+          - "Support Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Operations documents must inherit from Customer Support and what they must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Maintenance Plan inherit?; What should Release
+          Management inherit?; What should Incident Response inherit?."
+        sourceQuestions: *a23
+        targetSections: &a46
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      support-objective:
+        targetSections: *a24
+      support-principles:
+        targetSections: *a25
+      support-scope:
+        targetSections: *a26
+      support-channels:
+        targetSections: *a27
+      support-intake:
+        targetSections: *a28
+      ticketing-model:
+        targetSections: *a29
+      ticket-categories:
+        targetSections: *a30
+      priority-levels:
+        targetSections: *a31
+      triage-rules:
+        targetSections: *a32
+      response-time-targets:
+        targetSections: *a33
+      resolution-expectations:
+        targetSections: *a34
+      escalation-rules:
+        targetSections: *a35
+      bug-reporting-flow:
+        targetSections: *a36
+      known-issue-handling:
+        targetSections: *a37
+      incident-handoff:
+        targetSections: *a38
+      refund-and-billing-support:
+        targetSections: *a39
+      privacy-and-data-requests:
+        targetSections: *a40
+      support-macros-templates:
+        targetSections: *a41
+      unsupported-requests:
+        targetSections: *a42
+      support-feedback-loop:
+        targetSections: *a43
+      support-metrics:
+        targetSections: *a44
+      support-risks:
+        targetSections: *a45
+      downstream-handoff:
+        targetSections: *a46
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.499Z"
+      totalSourceQuestions: 127
+      reviewRequired: false

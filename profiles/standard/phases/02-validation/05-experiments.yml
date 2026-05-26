@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 5
   type: "experiments"
-  purpose: "Register concrete validation experiments with pre-defined hypotheses, methods, success criteria, failure criteria, data capture, results, and decision implications."
+  purpose: "Register concrete validation experiments with pre-defined hypotheses, methods, success criteria, failure
+    criteria, data capture, results, and decision implications."
   centralQuestion: "What experiments will be run, and what decisions will their results inform?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "validation.experiment_dashboard"
         format: "html"
         path: "outcomes/html/02-validation/experiment-dashboard.html"
-        purpose: "Provide a navigable dashboard of planned, active, completed, inconclusive, and invalidated experiments with linked hypotheses, criteria, results, and decisions."
+        purpose: "Provide a navigable dashboard of planned, active, completed, inconclusive, and invalidated experiments with
+          linked hypotheses, criteria, results, and decisions."
         audience: "founder"
         includes:
           - "experiment register"
@@ -32,7 +34,8 @@ document:
       - id: "validation.experiments_review_prompt"
         format: "markdown"
         path: "outcomes/agents/02-validation/experiments-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether experiments are ethical, testable, pre-registered, evidence-oriented, and linked to hypotheses and decisions."
+        purpose: "Provide compact context for agents reviewing whether experiments are ethical, testable, pre-registered,
+          evidence-oriented, and linked to hypotheses and decisions."
         agentRole: "reviewer"
         includes:
           - "canonical experiment register"
@@ -64,25 +67,30 @@ document:
     - id: "validation-strategy"
       type: "context"
       required: false
-      description: "Evidence standards, invalidating conditions, validation priorities, and decision gates that experiments must respect."
+      description: "Evidence standards, invalidating conditions, validation priorities, and decision gates that experiments
+        must respect."
     - id: "research-plan"
       type: "context"
       required: false
-      description: "Research plan outputs that inform experiment design, participant criteria, observation criteria, and evidence capture."
+      description: "Research plan outputs that inform experiment design, participant criteria, observation criteria, and
+        evidence capture."
     - id: "experiment-constraints"
       type: "manual_note"
       required: false
-      description: "Constraints on tooling, user access, instrumentation, sample size, budget, timeline, ethics, or implementation effort."
+      description: "Constraints on tooling, user access, instrumentation, sample size, budget, timeline, ethics, or
+        implementation effort."
     - id: "available-evidence"
       type: "context"
       required: false
       description: "Existing evidence that may inform experiment priority, design, baseline, or stopping conditions."
   completionCriteria:
     - "The central question is answered by a concrete experiment register linked to hypotheses and decisions."
-    - "Each experiment has a linked hypothesis, method, target audience, data collected, success criteria, failure criteria, stopping criteria, and decision implication."
+    - "Each experiment has a linked hypothesis, method, target audience, data collected, success criteria, failure
+      criteria, stopping criteria, and decision implication."
     - "Success and failure criteria are defined before results are known."
     - "Each experiment states what evidence would support, refute, or make the linked hypothesis inconclusive."
-    - "Active and planned experiments include dependencies, owners or responsibility model, expected timeline, and readiness requirements."
+    - "Active and planned experiments include dependencies, owners or responsibility model, expected timeline, and
+      readiness requirements."
     - "Completed experiments distinguish raw result, interpretation, confidence, limitations, and decision."
     - "Experiment outputs have a clear handoff to Evidence Log, Decision Record, and Validation Report."
   qualityChecks:
@@ -93,7 +101,8 @@ document:
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
     - "Do not invent experiment results, sample sizes, benchmarks, metrics, or user behavior."
-    - "Do not run solution experiments before upstream problem, audience, or behavior risks are sufficiently addressed unless explicitly justified."
+    - "Do not run solution experiments before upstream problem, audience, or behavior risks are sufficiently addressed
+      unless explicitly justified."
     - "Respect ethical, privacy, consent, and user responsibility boundaries."
   generationRules:
     - "Use concise but complete prose."
@@ -106,73 +115,76 @@ document:
     - "Plan for inconclusive results explicitly."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation documents, Validation Strategy, Core Assumptions, Hypotheses, or Research Plan."
+    - "Flag contradictions with Foundation documents, Validation Strategy, Core Assumptions, Hypotheses, or Research
+      Plan."
     - "Flag experiments that do not test a hypothesis or inform a decision."
     - "Flag metrics that are vanity metrics or weak proxies."
     - "Verify that success, failure, and stopping criteria are pre-defined."
     - "Verify that data capture is sufficient for Evidence Log and Decision Record."
     - "Flag ethical, privacy, consent, or user responsibility boundary issues."
-    - "Flag content that belongs better in Research Plan, Economic Model, Business Model, Evidence Log, Decision Record, or Validation Report."
+    - "Flag content that belongs better in Research Plan, Economic Model, Business Model, Evidence Log, Decision Record,
+      or Validation Report."
   specializedFormats:
     experimentFormat:
       description: "Required format for each experiment entry."
       fields:
-        - id
-        - title
-        - status
-        - linkedHypotheses
-        - linkedAssumptions
-        - decisionGate
-        - method
-        - targetAudience
-        - participantCriteria
-        - protocol
-        - successCriteria
-        - failureCriteria
-        - stoppingCriteria
-        - dataCollected
-        - instrumentation
-        - ethicsAndConsent
-        - expectedDuration
-        - owner
-        - dependencies
-        - result
-        - interpretation
-        - confidence
-        - limitations
-        - decision
-        - evidenceLogRefs
-        - decisionRecordRefs
-        - notes
+        - "id"
+        - "title"
+        - "status"
+        - "linkedHypotheses"
+        - "linkedAssumptions"
+        - "decisionGate"
+        - "method"
+        - "targetAudience"
+        - "participantCriteria"
+        - "protocol"
+        - "successCriteria"
+        - "failureCriteria"
+        - "stoppingCriteria"
+        - "dataCollected"
+        - "instrumentation"
+        - "ethicsAndConsent"
+        - "expectedDuration"
+        - "owner"
+        - "dependencies"
+        - "result"
+        - "interpretation"
+        - "confidence"
+        - "limitations"
+        - "decision"
+        - "evidenceLogRefs"
+        - "decisionRecordRefs"
+        - "notes"
     experimentTemplateFormat:
       description: "Recommended format for reusable experiment templates."
       fields:
-        - templateName
-        - purpose
-        - bestFor
-        - notFor
-        - requiredInputs
-        - protocolSteps
-        - dataCaptured
-        - successCriteriaPattern
-        - failureCriteriaPattern
-        - commonBiasRisks
-        - outputArtifacts
+        - "templateName"
+        - "purpose"
+        - "bestFor"
+        - "notFor"
+        - "requiredInputs"
+        - "protocolSteps"
+        - "dataCaptured"
+        - "successCriteriaPattern"
+        - "failureCriteriaPattern"
+        - "commonBiasRisks"
+        - "outputArtifacts"
     resultSummaryFormat:
       description: "Recommended format for aggregate experiment results."
       fields:
-        - hypothesis
-        - experimentsRun
-        - aggregateResult
-        - evidenceStrength
-        - confidence
-        - contradictions
-        - decisionImplication
-        - followUpNeeded
+        - "hypothesis"
+        - "experimentsRun"
+        - "aggregateResult"
+        - "evidenceStrength"
+        - "confidence"
+        - "contradictions"
+        - "decisionImplication"
+        - "followUpNeeded"
   sections:
     - id: "experiment-register"
       title: "Experiment Register"
-      intent: "Maintain the master list of experiments with linked hypotheses, status, protocols, criteria, outcomes, and decisions."
+      intent: "Maintain the master list of experiments with linked hypotheses, status, protocols, criteria, outcomes, and
+        decisions."
       required: true
       outputGuidance:
         - "List experiments as validation protocols, not vague activity ideas."
@@ -181,8 +193,9 @@ document:
       qualityChecks:
         - "Each experiment has a clear hypothesis and decision implication."
         - "Each experiment can produce support, refutation, or inconclusive evidence."
-        - "The register distinguishes planned, active, paused, completed, inconclusive, invalidated, and cancelled experiments."
-      questions:
+        - "The register distinguishes planned, active, paused, completed, inconclusive, invalidated, and cancelled
+          experiments."
+      questions: &a1
         - "What is the complete list of experiments?"
         - "Which hypothesis does each experiment test?"
         - "Which experiments are planned, active, paused, completed, inconclusive, invalidated, or cancelled?"
@@ -201,7 +214,7 @@ document:
         - "Active experiments have pre-defined criteria and data capture."
         - "Status updates distinguish execution progress from validation results."
         - "Interim signals are not overclaimed."
-      questions:
+      questions: &a2
         - "Which experiments are currently running?"
         - "What is the current status of each active experiment?"
         - "What evidence is being collected?"
@@ -210,7 +223,8 @@ document:
         - "What decision gate will each active experiment feed?"
     - id: "planned-experiments"
       title: "Planned Experiments"
-      intent: "Identify experiments not yet started, their priority order, dependencies, readiness requirements, and reason for sequencing."
+      intent: "Identify experiments not yet started, their priority order, dependencies, readiness requirements, and reason
+        for sequencing."
       required: true
       outputGuidance:
         - "Prioritize experiments by risk reduction, dependency order, and decision urgency."
@@ -220,7 +234,7 @@ document:
         - "Planned experiments are not merely ideas; they have a reason, hypothesis, and readiness path."
         - "Priority order is justified by validation strategy, not convenience alone."
         - "Dependencies are explicit enough to prevent premature execution."
-      questions:
+      questions: &a3
         - "Which experiments are planned but not yet started?"
         - "What is the priority order for planned experiments?"
         - "What dependencies must be resolved before each experiment can start?"
@@ -240,7 +254,7 @@ document:
         - "Results are not overstated beyond the collected evidence."
         - "Limitations are explicit."
         - "Decisions follow from evidence and criteria, not preference."
-      questions:
+      questions: &a4
         - "Which experiments have been completed?"
         - "What were the raw results of each completed experiment?"
         - "What interpretation was made from those results?"
@@ -250,7 +264,8 @@ document:
         - "What decisions were made based on each result?"
     - id: "experiment-protocols"
       title: "Experiment Protocols"
-      intent: "Define the standard execution protocol for each experiment type, including steps, controls, data capture, and ethical safeguards."
+      intent: "Define the standard execution protocol for each experiment type, including steps, controls, data capture, and
+        ethical safeguards."
       required: true
       outputGuidance:
         - "Describe repeatable execution steps."
@@ -260,7 +275,7 @@ document:
         - "Protocols are specific enough for repeatable execution."
         - "Protocols protect against avoidable bias and inconsistent execution."
         - "Ethical and privacy safeguards are explicit where relevant."
-      questions:
+      questions: &a5
         - "What protocol will each experiment follow?"
         - "What steps must be executed consistently?"
         - "What controls or comparison conditions are needed?"
@@ -279,7 +294,7 @@ document:
         - "Templates reduce ambiguity without hiding experiment-specific assumptions."
         - "Templates include success and failure criteria patterns."
         - "Templates are not used to force every validation into the same method."
-      questions:
+      questions: &a6
         - "What reusable experiment templates exist?"
         - "When should each template be used?"
         - "When should each template not be used?"
@@ -288,7 +303,8 @@ document:
         - "What artifacts should each template produce?"
     - id: "data-and-instrumentation"
       title: "Data and Instrumentation"
-      intent: "Define what data will be collected, how it will be captured, how privacy will be protected, and how evidence will be linked downstream."
+      intent: "Define what data will be collected, how it will be captured, how privacy will be protected, and how evidence
+        will be linked downstream."
       required: true
       outputGuidance:
         - "Specify event, observation, survey, interview, behavioral, or usage data as appropriate."
@@ -298,7 +314,7 @@ document:
         - "Data collected is sufficient to evaluate success and failure criteria."
         - "Instrumentation does not collect unnecessary or unsafe data."
         - "Evidence can be traced to hypotheses and decisions."
-      questions:
+      questions: &a7
         - "What data will be collected for each experiment?"
         - "How will data be captured or instrumented?"
         - "What data is required versus optional?"
@@ -307,7 +323,8 @@ document:
         - "What data quality risks exist?"
     - id: "experiment-results-summary"
       title: "Experiment Results Summary"
-      intent: "Provide an aggregate view of experiment outcomes, evidence strength, supported or refuted hypotheses, contradictions, and overall confidence."
+      intent: "Provide an aggregate view of experiment outcomes, evidence strength, supported or refuted hypotheses,
+        contradictions, and overall confidence."
       required: true
       outputGuidance:
         - "Summarize results at the hypothesis level, not only the experiment level."
@@ -317,10 +334,131 @@ document:
         - "Aggregate conclusions do not hide conflicting evidence."
         - "Confidence level is justified by evidence strength."
         - "The summary supports Validation Report without replacing it."
-      questions:
+      questions: &a8
         - "What is the aggregate outcome across all experiments?"
         - "Which hypotheses have been supported, refuted, or left inconclusive?"
         - "What contradictions exist across experiment results?"
         - "What is the overall confidence level in the validation results?"
         - "What follow-up experiments or research are needed?"
         - "What should be escalated to the Validation Report?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain experiments. What experiments will be run, and what decisions will their results inform?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "experiment-register"
+        label: "Experiment Register"
+        required: true
+        description: "Maintain the master list of experiments with linked hypotheses, status, protocols, criteria, outcomes, and
+          decisions."
+        evaluationHint: "Look for concrete answers addressing: What is the complete list of experiments?; Which hypothesis does
+          each experiment test?; Which experiments are planned, active, paused, completed, inconclusive, invalidated, or
+          cancelled?."
+        sourceQuestions: *a1
+        targetSections: &a9
+          - "Experiment Register"
+      - id: "active-experiments"
+        label: "Active Experiments"
+        required: true
+        description: "Track currently running experiments, execution status, expected outputs, risks, and decision timeline."
+        evaluationHint: "Look for concrete answers addressing: Which experiments are currently running?; What is the current
+          status of each active experiment?; What evidence is being collected?."
+        sourceQuestions: *a2
+        targetSections: &a10
+          - "Active Experiments"
+      - id: "planned-experiments"
+        label: "Planned Experiments"
+        required: true
+        description: "Identify experiments not yet started, their priority order, dependencies, readiness requirements, and
+          reason for sequencing."
+        evaluationHint: "Look for concrete answers addressing: Which experiments are planned but not yet started?; What is the
+          priority order for planned experiments?; What dependencies must be resolved before each experiment can
+          start?."
+        sourceQuestions: *a3
+        targetSections: &a11
+          - "Planned Experiments"
+      - id: "completed-experiments"
+        label: "Completed Experiments"
+        required: true
+        description: "Summarize completed experiments, raw results, interpretation, limitations, confidence, and resulting
+          decisions."
+        evaluationHint: "Look for concrete answers addressing: Which experiments have been completed?; What were the raw results
+          of each completed experiment?; What interpretation was made from those results?."
+        sourceQuestions: *a4
+        targetSections: &a12
+          - "Completed Experiments"
+      - id: "experiment-protocols"
+        label: "Experiment Protocols"
+        required: true
+        description: "Define the standard execution protocol for each experiment type, including steps, controls, data capture,
+          and ethical safeguards."
+        evaluationHint: "Look for concrete answers addressing: What protocol will each experiment follow?; What steps must be
+          executed consistently?; What controls or comparison conditions are needed?."
+        sourceQuestions: *a5
+        targetSections: &a13
+          - "Experiment Protocols"
+      - id: "experiment-templates"
+        label: "Experiment Templates"
+        required: true
+        description: "Define reusable experiment templates and standard documentation patterns for future experiments."
+        evaluationHint: "Look for concrete answers addressing: What reusable experiment templates exist?; When should each
+          template be used?; When should each template not be used?."
+        sourceQuestions: *a6
+        targetSections: &a14
+          - "Experiment Templates"
+      - id: "data-and-instrumentation"
+        label: "Data and Instrumentation"
+        required: true
+        description: "Define what data will be collected, how it will be captured, how privacy will be protected, and how
+          evidence will be linked downstream."
+        evaluationHint: "Look for concrete answers addressing: What data will be collected for each experiment?; How will data
+          be captured or instrumented?; What data is required versus optional?."
+        sourceQuestions: *a7
+        targetSections: &a15
+          - "Data and Instrumentation"
+      - id: "experiment-results-summary"
+        label: "Experiment Results Summary"
+        required: true
+        description: "Provide an aggregate view of experiment outcomes, evidence strength, supported or refuted hypotheses,
+          contradictions, and overall confidence."
+        evaluationHint: "Look for concrete answers addressing: What is the aggregate outcome across all experiments?; Which
+          hypotheses have been supported, refuted, or left inconclusive?; What contradictions exist across experiment
+          results?."
+        sourceQuestions: *a8
+        targetSections: &a16
+          - "Experiment Results Summary"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      experiment-register:
+        targetSections: *a9
+      active-experiments:
+        targetSections: *a10
+      planned-experiments:
+        targetSections: *a11
+      completed-experiments:
+        targetSections: *a12
+      experiment-protocols:
+        targetSections: *a13
+      experiment-templates:
+        targetSections: *a14
+      data-and-instrumentation:
+        targetSections: *a15
+      experiment-results-summary:
+        targetSections: *a16
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.256Z"
+      totalSourceQuestions: 49
+      reviewRequired: false

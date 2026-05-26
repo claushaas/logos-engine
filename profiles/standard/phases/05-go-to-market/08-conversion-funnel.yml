@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 8
   type: "conversion_funnel"
-  purpose: "Define the measurable path from first contact to qualified activation, conversion, retention, referral, and expansion, including stages, events, metrics, drop-off risks, instrumentation, ownership, and decision thresholds."
-  centralQuestion: "How does a qualified person move from first awareness to meaningful value, conversion, retention, and referral, and how will we know where the funnel is working or failing?"
+  purpose: "Define the measurable path from first contact to qualified activation, conversion, retention, referral, and
+    expansion, including stages, events, metrics, drop-off risks, instrumentation, ownership, and decision thresholds."
+  centralQuestion: "How does a qualified person move from first awareness to meaningful value, conversion, retention, and
+    referral, and how will we know where the funnel is working or failing?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,9 @@ document:
       - id: "gtm.conversion_funnel_map"
         format: "html"
         path: "outcomes/html/05-go-to-market/conversion-funnel-map.html"
-        purpose: "Provide a founder-facing funnel map covering funnel objective, stages, events, metrics, activation, conversion, retention, referral, drop-offs, experiments, instrumentation, attribution, cohorts, risks, and downstream handoff."
+        purpose: "Provide a founder-facing funnel map covering funnel objective, stages, events, metrics, activation,
+          conversion, retention, referral, drop-offs, experiments, instrumentation, attribution, cohorts, risks, and
+          downstream handoff."
         audience: "founder"
         includes:
           - "funnel objective"
@@ -46,7 +50,8 @@ document:
       - id: "gtm.conversion_funnel_review_prompt"
         format: "markdown"
         path: "outcomes/agents/05-go-to-market/conversion-funnel-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the conversion funnel is measurable, segment-aligned, channel-aware, event-safe, analytics-ready, experiment-ready, and realistic for the launch stage."
+        purpose: "Provide compact context for agents reviewing whether the conversion funnel is measurable, segment-aligned,
+          channel-aware, event-safe, analytics-ready, experiment-ready, and realistic for the launch stage."
         agentRole: "reviewer"
         includes:
           - "canonical conversion funnel"
@@ -100,216 +105,264 @@ document:
     - id: "go-to-market-brief"
       type: "context"
       required: false
-      description: "GTM objective, market-entry thesis, primary customer, primary use case, launch strategy, revenue motion, success criteria, constraints, and GTM risks."
+      description: "GTM objective, market-entry thesis, primary customer, primary use case, launch strategy, revenue motion,
+        success criteria, constraints, and GTM risks."
     - id: "customer-segments"
       type: "context"
       required: false
-      description: "ICP, primary segment, early adopters, role map, qualification/disqualification signals, segment needs, segment-specific messaging, channels, exclusions, expansion triggers, and segment risks."
+      description: "ICP, primary segment, early adopters, role map, qualification/disqualification signals, segment needs,
+        segment-specific messaging, channels, exclusions, expansion triggers, and segment risks."
     - id: "channel-strategy"
       type: "context"
       required: false
-      description: "Primary channel, secondary channels, segment-channel fit, message-channel fit, channel assets, channel experiments, metrics, constraints, fallback strategy, and channel risks."
+      description: "Primary channel, secondary channels, segment-channel fit, message-channel fit, channel assets, channel
+        experiments, metrics, constraints, fallback strategy, and channel risks."
     - id: "launch-plan"
       type: "context"
       required: false
-      description: "Launch objective, launch type, cohorts, readiness gates, timeline, launch assets, communications, support readiness, analytics readiness, go/no-go criteria, success criteria, contingencies, and launch risks."
+      description: "Launch objective, launch type, cohorts, readiness gates, timeline, launch assets, communications, support
+        readiness, analytics readiness, go/no-go criteria, success criteria, contingencies, and launch risks."
     - id: "messaging"
       type: "context"
       required: false
-      description: "Core message, one-liner, descriptions, audience variants, channel variants, pain messages, outcome messages, objection responses, proof points, claim boundaries, and forbidden claims."
+      description: "Core message, one-liner, descriptions, audience variants, channel variants, pain messages, outcome
+        messages, objection responses, proof points, claim boundaries, and forbidden claims."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Product journeys, product scope, requirements, acceptance criteria, onboarding path, activation moment, retention behavior, and supported conversion actions."
+      description: "Product journeys, product scope, requirements, acceptance criteria, onboarding path, activation moment,
+        retention behavior, and supported conversion actions."
     - id: "engineering-analytics-context"
       type: "context"
       required: false
-      description: "Testing, observability, deployment, analytics instrumentation constraints, event tracking readiness, data quality risks, privacy constraints, and technical risks."
+      description: "Testing, observability, deployment, analytics instrumentation constraints, event tracking readiness, data
+        quality risks, privacy constraints, and technical risks."
     - id: "funnel-notes"
       type: "manual_note"
       required: false
-      description: "Candidate funnel stages, event names, conversion goals, activation ideas, payment/trial ideas, retention assumptions, referral ideas, attribution needs, drop-off concerns, and unresolved funnel questions."
+      description: "Candidate funnel stages, event names, conversion goals, activation ideas, payment/trial ideas, retention
+        assumptions, referral ideas, attribution needs, drop-off concerns, and unresolved funnel questions."
   completionCriteria:
-    - "The central question is answered through explicit funnel model, stages, events, metrics, activation, conversion, retention, referral, attribution, cohorts, drop-off risks, experiments, instrumentation, ownership, and downstream handoff."
-    - "Funnel objective defines the primary funnel decision to support now and identifies the single most important funnel metric for the current GTM stage."
-    - "Funnel model states whether the funnel is waitlist-led, self-serve, product-led, sales-assisted, founder-led, trial-led, subscription-led, marketplace-led, community-led, partner-led, or hybrid."
-    - "Stage definitions specify entry event, exit event, success condition, failure condition, owner, metric, and downstream implication for every stage."
-    - "Awareness stage defines how qualified prospects first encounter the product, what message/channel creates awareness, and what counts as meaningful awareness rather than vanity reach."
-    - "Acquisition stage defines how qualified prospects enter owned surfaces, lead capture, signup, demo request, waitlist, download, install, or another controlled funnel entry."
-    - "Qualification stage defines fit, intent, urgency, role, segment, source, and disqualification signals before treating a person as a meaningful lead or user."
-    - "Signup or lead capture stage defines the form/action, required fields, friction, consent, privacy constraints, confirmation behavior, failure states, and success event."
-    - "Onboarding stage defines what must happen for a new user/customer to be oriented enough to reach value without excessive support."
-    - "Activation stage defines the first meaningful value event, why it matters, how it is instrumented, what qualifies as false activation, and what activation threshold matters."
-    - "Engagement stage defines meaningful repeated behavior, frequency, depth, quality, session/use-case completion, and what distinguishes healthy use from idle account activity."
-    - "Conversion stage defines the business conversion event such as trial start, payment, subscription, purchase, booked call, qualified opportunity, accepted invite, or other revenue/commitment action."
-    - "Retention stage defines what retained means by cohort, timeframe, behavior, payment status, value recurrence, and warning signs for churn or abandonment."
-    - "Referral stage defines what makes a customer/user willing to invite, recommend, share, review, publish, contribute, or otherwise become a growth source."
-    - "Expansion stage defines when a retained user/customer expands usage, seats, plan, volume, feature adoption, referral network, account scope, or segment use case where relevant."
-    - "Funnel events define event name, stage, trigger, actor, properties, source, privacy sensitivity, owner, validation rule, analytics destination, and status."
-    - "Funnel metrics define metric type, stage, formula, data source, baseline, target, threshold, timeframe, segment/cohort breakdown, decision implication, and owner."
-    - "Cohorts define how users/leads/customers are grouped by launch cohort, channel, segment, message, pricing, date, activation behavior, or experiment."
-    - "Attribution defines source tracking, channel attribution, campaign attribution, referral attribution, partner attribution, first-touch/last-touch/multi-touch assumptions, and known limitations."
-    - "Drop-off risks identify expected friction points, source, early signal, metric affected, likely cause, mitigation, experiment, support implication, and owner."
-    - "Funnel experiments define hypothesis, stage, segment, channel/message/offer change, metric, threshold, timeframe, instrumentation, owner, and next decision."
-    - "Instrumentation ownership defines who owns event definition, implementation, QA, dashboard, data quality, privacy review, documentation, and downstream analytics handoff."
-    - "Downstream handoff clarifies what Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks, Support, Release, and Operations must inherit."
+    - "The central question is answered through explicit funnel model, stages, events, metrics, activation, conversion,
+      retention, referral, attribution, cohorts, drop-off risks, experiments, instrumentation, ownership, and downstream
+      handoff."
+    - "Funnel objective defines the primary funnel decision to support now and identifies the single most important
+      funnel metric for the current GTM stage."
+    - "Funnel model states whether the funnel is waitlist-led, self-serve, product-led, sales-assisted, founder-led,
+      trial-led, subscription-led, marketplace-led, community-led, partner-led, or hybrid."
+    - "Stage definitions specify entry event, exit event, success condition, failure condition, owner, metric, and
+      downstream implication for every stage."
+    - "Awareness stage defines how qualified prospects first encounter the product, what message/channel creates
+      awareness, and what counts as meaningful awareness rather than vanity reach."
+    - "Acquisition stage defines how qualified prospects enter owned surfaces, lead capture, signup, demo request,
+      waitlist, download, install, or another controlled funnel entry."
+    - "Qualification stage defines fit, intent, urgency, role, segment, source, and disqualification signals before
+      treating a person as a meaningful lead or user."
+    - "Signup or lead capture stage defines the form/action, required fields, friction, consent, privacy constraints,
+      confirmation behavior, failure states, and success event."
+    - "Onboarding stage defines what must happen for a new user/customer to be oriented enough to reach value without
+      excessive support."
+    - "Activation stage defines the first meaningful value event, why it matters, how it is instrumented, what qualifies
+      as false activation, and what activation threshold matters."
+    - "Engagement stage defines meaningful repeated behavior, frequency, depth, quality, session/use-case completion,
+      and what distinguishes healthy use from idle account activity."
+    - "Conversion stage defines the business conversion event such as trial start, payment, subscription, purchase,
+      booked call, qualified opportunity, accepted invite, or other revenue/commitment action."
+    - "Retention stage defines what retained means by cohort, timeframe, behavior, payment status, value recurrence, and
+      warning signs for churn or abandonment."
+    - "Referral stage defines what makes a customer/user willing to invite, recommend, share, review, publish,
+      contribute, or otherwise become a growth source."
+    - "Expansion stage defines when a retained user/customer expands usage, seats, plan, volume, feature adoption,
+      referral network, account scope, or segment use case where relevant."
+    - "Funnel events define event name, stage, trigger, actor, properties, source, privacy sensitivity, owner,
+      validation rule, analytics destination, and status."
+    - "Funnel metrics define metric type, stage, formula, data source, baseline, target, threshold, timeframe,
+      segment/cohort breakdown, decision implication, and owner."
+    - "Cohorts define how users/leads/customers are grouped by launch cohort, channel, segment, message, pricing, date,
+      activation behavior, or experiment."
+    - "Attribution defines source tracking, channel attribution, campaign attribution, referral attribution, partner
+      attribution, first-touch/last-touch/multi-touch assumptions, and known limitations."
+    - "Drop-off risks identify expected friction points, source, early signal, metric affected, likely cause,
+      mitigation, experiment, support implication, and owner."
+    - "Funnel experiments define hypothesis, stage, segment, channel/message/offer change, metric, threshold, timeframe,
+      instrumentation, owner, and next decision."
+    - "Instrumentation ownership defines who owns event definition, implementation, QA, dashboard, data quality, privacy
+      review, documentation, and downstream analytics handoff."
+    - "Downstream handoff clarifies what Pricing, Content, Sales, Partnerships, Experiments, Analytics, GTM Risks,
+      Support, Release, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid funnel theater: stage names without entry/exit events, metrics, ownership, instrumentation, drop-off risks, and decision thresholds."
-    - "Avoid vanity metrics that measure volume without quality, segment fit, activation, conversion, retention, or learning."
+    - "Avoid funnel theater: stage names without entry/exit events, metrics, ownership, instrumentation, drop-off risks,
+      and decision thresholds."
+    - "Avoid vanity metrics that measure volume without quality, segment fit, activation, conversion, retention, or
+      learning."
     - "Avoid treating signup as activation unless it clearly represents first meaningful value."
-    - "Avoid treating account creation, page view, install, or email open as meaningful conversion unless the GTM objective explicitly justifies it."
+    - "Avoid treating account creation, page view, install, or email open as meaningful conversion unless the GTM
+      objective explicitly justifies it."
     - "Avoid target conversion rates without baseline, evidence, benchmark, assumption label, and decision implication."
     - "Avoid funnel events that collect unnecessary personal data or violate privacy/consent boundaries."
-    - "Avoid instrumentation plans without QA, owner, analytics destination, data-quality check, and privacy sensitivity classification."
+    - "Avoid instrumentation plans without QA, owner, analytics destination, data-quality check, and privacy sensitivity
+      classification."
     - "Avoid attribution precision claims when tracking limitations are unresolved."
     - "Avoid optimizing later funnel stages before the launch objective and primary funnel bottleneck are known."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent conversion rates, benchmarks, baselines, attribution accuracy, retention behavior, referral behavior, or revenue performance."
-    - "Conversion funnel must preserve segment focus, channel strategy, launch plan, messaging claim boundaries, product truth, privacy constraints, analytics readiness, and support capacity."
+    - "Do not invent conversion rates, benchmarks, baselines, attribution accuracy, retention behavior, referral
+      behavior, or revenue performance."
+    - "Conversion funnel must preserve segment focus, channel strategy, launch plan, messaging claim boundaries, product
+      truth, privacy constraints, analytics readiness, and support capacity."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate stage, event, metric, threshold, assumption, cohort, attribution rule, drop-off risk, experiment, and owner."
-    - "Tie funnel definitions to GTM Brief, Customer Segments, Channel Strategy, Launch Plan, Messaging, Product Journeys, Acceptance Criteria, Observability, Deployment, Technical Risks, or Decision Record where possible."
-    - "Classify stages, events, and metrics as required, optional, deferred, launch-ready, blocked, review-needed, experiment-only, dashboard-ready, or privacy-review-needed where useful."
+    - "Separate stage, event, metric, threshold, assumption, cohort, attribution rule, drop-off risk, experiment, and
+      owner."
+    - "Tie funnel definitions to GTM Brief, Customer Segments, Channel Strategy, Launch Plan, Messaging, Product
+      Journeys, Acceptance Criteria, Observability, Deployment, Technical Risks, or Decision Record where possible."
+    - "Classify stages, events, and metrics as required, optional, deferred, launch-ready, blocked, review-needed,
+      experiment-only, dashboard-ready, or privacy-review-needed where useful."
     - "State what decision each metric supports."
-    - "Route detailed analytics implementation, dashboard buildout, pricing tests, content experiments, sales process, partner attribution, support workflows, and operational reporting downstream."
+    - "Route detailed analytics implementation, dashboard buildout, pricing tests, content experiments, sales process,
+      partner attribution, support workflows, and operational reporting downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Observability, Deployment, Technical Risks, GTM Brief, Messaging, Customer Segments, Channel Strategy, Launch Plan, or Decision Record."
-    - "Flag stages without entry event, exit event, success condition, failure condition, metric, owner, or decision implication."
+    - "Flag contradictions with Foundation, Validation, Product, Acceptance Criteria, Observability, Deployment,
+      Technical Risks, GTM Brief, Messaging, Customer Segments, Channel Strategy, Launch Plan, or Decision Record."
+    - "Flag stages without entry event, exit event, success condition, failure condition, metric, owner, or decision
+      implication."
     - "Flag activation definitions that are too shallow, not value-based, or not tied to the primary use case."
     - "Flag conversion definitions that confuse attention, signup, activation, payment, commitment, and retention."
-    - "Flag metrics without formula, data source, timeframe, baseline/target/threshold handling, segment breakdown, and decision implication."
-    - "Flag events without trigger, actor, properties, privacy sensitivity, owner, QA rule, analytics destination, and status."
+    - "Flag metrics without formula, data source, timeframe, baseline/target/threshold handling, segment breakdown, and
+      decision implication."
+    - "Flag events without trigger, actor, properties, privacy sensitivity, owner, QA rule, analytics destination, and
+      status."
     - "Flag attribution assumptions that overclaim precision or ignore channel limitations."
     - "Flag drop-off risks without early signal, likely cause, mitigation, and experiment or owner."
     - "Verify that downstream GTM and Operations documents receive concrete funnel handoff inputs."
-    - "Flag content that belongs better in Pricing, Content Strategy, Sales Motion, Partnerships, Growth Experiments, GTM Analytics, GTM Risks, Support Model, Release Management, or Operations."
+    - "Flag content that belongs better in Pricing, Content Strategy, Sales Motion, Partnerships, Growth Experiments,
+      GTM Analytics, GTM Risks, Support Model, Release Management, or Operations."
   specializedFormats:
     funnelStageFormat:
       description: "Recommended format for funnel stage definitions."
       fields:
-        - stage
-        - purpose
-        - entryEvent
-        - exitEvent
-        - successCondition
-        - failureCondition
-        - primaryMetric
-        - secondaryMetrics
-        - owner
-        - downstreamImplication
-        - status
+        - "stage"
+        - "purpose"
+        - "entryEvent"
+        - "exitEvent"
+        - "successCondition"
+        - "failureCondition"
+        - "primaryMetric"
+        - "secondaryMetrics"
+        - "owner"
+        - "downstreamImplication"
+        - "status"
     funnelEventFormat:
       description: "Recommended format for funnel events."
       fields:
-        - eventName
-        - stage
-        - trigger
-        - actor
-        - requiredProperties
-        - optionalProperties
-        - source
-        - privacySensitivity
-        - validationRule
-        - analyticsDestination
-        - owner
-        - status
+        - "eventName"
+        - "stage"
+        - "trigger"
+        - "actor"
+        - "requiredProperties"
+        - "optionalProperties"
+        - "source"
+        - "privacySensitivity"
+        - "validationRule"
+        - "analyticsDestination"
+        - "owner"
+        - "status"
     funnelMetricFormat:
       description: "Recommended format for funnel metrics."
       fields:
-        - metric
-        - stage
-        - metricType
-        - formula
-        - dataSource
-        - baseline
-        - target
-        - threshold
-        - timeframe
-        - segmentOrCohortBreakdown
-        - decisionImplication
-        - owner
-        - status
+        - "metric"
+        - "stage"
+        - "metricType"
+        - "formula"
+        - "dataSource"
+        - "baseline"
+        - "target"
+        - "threshold"
+        - "timeframe"
+        - "segmentOrCohortBreakdown"
+        - "decisionImplication"
+        - "owner"
+        - "status"
     cohortFormat:
       description: "Recommended format for funnel cohorts."
       fields:
-        - cohort
-        - cohortType
-        - definition
-        - inclusionRule
-        - exclusionRule
-        - startDateOrTrigger
-        - primarySegment
-        - channel
-        - messageOrOffer
-        - metricsTracked
-        - decisionUse
-        - status
+        - "cohort"
+        - "cohortType"
+        - "definition"
+        - "inclusionRule"
+        - "exclusionRule"
+        - "startDateOrTrigger"
+        - "primarySegment"
+        - "channel"
+        - "messageOrOffer"
+        - "metricsTracked"
+        - "decisionUse"
+        - "status"
     attributionRuleFormat:
       description: "Recommended format for attribution rules."
       fields:
-        - attributionArea
-        - sourceTracked
-        - trackingMethod
-        - attributionModel
-        - requiredParameters
-        - knownLimitations
-        - privacyConstraint
-        - dataQualityCheck
-        - owner
-        - status
+        - "attributionArea"
+        - "sourceTracked"
+        - "trackingMethod"
+        - "attributionModel"
+        - "requiredParameters"
+        - "knownLimitations"
+        - "privacyConstraint"
+        - "dataQualityCheck"
+        - "owner"
+        - "status"
     dropOffRiskFormat:
       description: "Recommended format for drop-off risks."
       fields:
-        - risk
-        - stage
-        - likelyCause
-        - affectedMetric
-        - earlySignal
-        - mitigation
-        - experiment
-        - supportImplication
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "stage"
+        - "likelyCause"
+        - "affectedMetric"
+        - "earlySignal"
+        - "mitigation"
+        - "experiment"
+        - "supportImplication"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     funnelExperimentFormat:
       description: "Recommended format for funnel experiments."
       fields:
-        - experiment
-        - hypothesis
-        - stage
-        - targetSegment
-        - changeType
-        - changeDescription
-        - metric
-        - successThreshold
-        - failureThreshold
-        - timeframe
-        - instrumentation
-        - owner
-        - nextDecision
-        - status
+        - "experiment"
+        - "hypothesis"
+        - "stage"
+        - "targetSegment"
+        - "changeType"
+        - "changeDescription"
+        - "metric"
+        - "successThreshold"
+        - "failureThreshold"
+        - "timeframe"
+        - "instrumentation"
+        - "owner"
+        - "nextDecision"
+        - "status"
     instrumentationOwnershipFormat:
       description: "Recommended format for instrumentation ownership."
       fields:
-        - area
-        - eventOwner
-        - implementationOwner
-        - QAOwner
-        - dashboardOwner
-        - dataQualityOwner
-        - privacyReviewer
-        - documentationOwner
-        - downstreamDocument
-        - status
+        - "area"
+        - "eventOwner"
+        - "implementationOwner"
+        - "QAOwner"
+        - "dashboardOwner"
+        - "dataQualityOwner"
+        - "privacyReviewer"
+        - "documentationOwner"
+        - "downstreamDocument"
+        - "status"
   sections:
     - id: "funnel-objective"
       title: "Funnel Objective"
-      intent: "Define the purpose of the funnel, the current GTM decision it supports, and the single most important funnel metric right now."
+      intent: "Define the purpose of the funnel, the current GTM decision it supports, and the single most important funnel
+        metric right now."
       required: true
       outputGuidance:
         - "State the current purpose of the funnel."
@@ -319,7 +372,7 @@ document:
         - "Objective is tied to launch stage and GTM objective."
         - "Primary metric is decision-useful."
         - "The funnel does not try to optimize every stage prematurely."
-      questions:
+      questions: &a1
         - "What is the purpose of defining the conversion funnel?"
         - "What current GTM decision must the funnel support?"
         - "What single funnel metric matters most right now?"
@@ -336,14 +389,16 @@ document:
         - "Funnel model matches Channel Strategy and Launch Plan."
         - "Revenue/conversion motion is not assumed if Pricing is unresolved."
         - "Hybrid models explain each path clearly."
-      questions:
-        - "What type of funnel is this: waitlist-led, self-serve, product-led, sales-assisted, founder-led, trial-led, subscription-led, marketplace-led, community-led, partner-led, or hybrid?"
+      questions: &a2
+        - "What type of funnel is this: waitlist-led, self-serve, product-led, sales-assisted, founder-led, trial-led,
+          subscription-led, marketplace-led, community-led, partner-led, or hybrid?"
         - "Why does this funnel model fit the GTM motion?"
         - "What paths exist through the funnel?"
         - "What parts of the model are provisional or unresolved?"
     - id: "stage-definitions"
       title: "Stage Definitions"
-      intent: "Define all funnel stages with entry events, exit events, success/failure conditions, metrics, owners, and downstream implications."
+      intent: "Define all funnel stages with entry events, exit events, success/failure conditions, metrics, owners, and
+        downstream implications."
       required: true
       outputGuidance:
         - "Use funnel stage records for every stage."
@@ -353,7 +408,7 @@ document:
         - "Every stage is measurable."
         - "Entry and exit events are clear."
         - "Stages do not overlap ambiguously."
-      questions:
+      questions: &a3
         - "What stages exist in the funnel?"
         - "What event enters each stage?"
         - "What event exits each stage?"
@@ -372,7 +427,7 @@ document:
         - "Awareness is qualified by target segment where possible."
         - "Awareness source is measurable or limitation is explicit."
         - "Message/channel context is included."
-      questions:
+      questions: &a4
         - "How do qualified people first learn about the product?"
         - "What channels create awareness?"
         - "What message creates awareness?"
@@ -390,9 +445,10 @@ document:
         - "Acquisition action is specific."
         - "Acquisition does not equal activation."
         - "Friction and failure conditions are visible."
-      questions:
+      questions: &a5
         - "How does someone move from awareness to entering the funnel?"
-        - "What is the controlled entry point: visit landing page, join waitlist, sign up, book demo, install, download, request access, start trial, or another action?"
+        - "What is the controlled entry point: visit landing page, join waitlist, sign up, book demo, install, download,
+          request access, start trial, or another action?"
         - "What friction exists at this step?"
         - "What event marks successful acquisition?"
         - "What failure signal shows acquisition is not working?"
@@ -408,7 +464,7 @@ document:
         - "Qualification uses observable signals."
         - "Unsupported prospects are not treated as success."
         - "Qualification affects downstream metrics and decisions."
-      questions:
+      questions: &a6
         - "How does the funnel identify qualified prospects or users?"
         - "What fit, role, urgency, intent, source, or behavior signals matter?"
         - "What disqualifies someone?"
@@ -416,7 +472,8 @@ document:
         - "How are qualified and unqualified users separated in metrics?"
     - id: "signup-or-lead-capture"
       title: "Signup or Lead Capture"
-      intent: "Define the capture action, required data, consent/privacy constraints, confirmation behavior, and success/failure events."
+      intent: "Define the capture action, required data, consent/privacy constraints, confirmation behavior, and
+        success/failure events."
       required: true
       outputGuidance:
         - "Specify the capture mechanism based on funnel model."
@@ -426,7 +483,7 @@ document:
         - "Capture step collects only useful and allowed data."
         - "Consent/privacy constraints are explicit."
         - "Success and failure events are instrumented."
-      questions:
+      questions: &a7
         - "What signup or lead capture action exists?"
         - "What fields or data are collected?"
         - "What data is required versus optional?"
@@ -445,7 +502,7 @@ document:
         - "Onboarding leads to activation."
         - "Onboarding does not create unnecessary friction."
         - "Support needs are explicit."
-      questions:
+      questions: &a8
         - "What must the user understand before reaching value?"
         - "What steps must they complete?"
         - "What can be skipped or deferred?"
@@ -463,7 +520,7 @@ document:
         - "Activation represents meaningful value."
         - "Activation event is instrumentable."
         - "False activation is explicitly excluded."
-      questions:
+      questions: &a9
         - "What is the first meaningful action or outcome that shows the user received value?"
         - "Why does this action matter?"
         - "What event measures activation?"
@@ -481,7 +538,7 @@ document:
         - "Engagement is not reduced to logins or page views unless justified."
         - "Healthy usage and idle usage are distinguishable."
         - "Frequency and timeframe are explicit or unresolved."
-      questions:
+      questions: &a10
         - "What behavior indicates sustained use?"
         - "What frequency and depth matter?"
         - "What is healthy engagement versus idle account activity?"
@@ -499,15 +556,17 @@ document:
         - "Conversion event is business-meaningful."
         - "Conversion is not confused with signup or activation."
         - "Payment/trial/sales assumptions are explicit."
-      questions:
+      questions: &a11
         - "What is the conversion event?"
-        - "Is conversion trial start, paid subscription, purchase, booked call, qualified opportunity, accepted invite, completed setup, or another commitment?"
+        - "Is conversion trial start, paid subscription, purchase, booked call, qualified opportunity, accepted invite,
+          completed setup, or another commitment?"
         - "What must happen before conversion?"
         - "What event measures conversion?"
         - "What conversion assumptions depend on Pricing and Packaging or Sales Motion?"
     - id: "retention"
       title: "Retention"
-      intent: "Define what retained means for users/customers by cohort, timeframe, behavior, payment status, and value recurrence."
+      intent: "Define what retained means for users/customers by cohort, timeframe, behavior, payment status, and value
+        recurrence."
       required: true
       outputGuidance:
         - "Define retention by meaningful return or recurring value."
@@ -517,9 +576,10 @@ document:
         - "Retention definition matches product value cycle."
         - "Retention is not just account existence."
         - "Churn or abandonment signals are explicit."
-      questions:
+      questions: &a12
         - "What indicates a retained user or customer?"
-        - "What retention timeframe matters first: day 1, day 7, day 30, first billing cycle, monthly usage, or another timeframe?"
+        - "What retention timeframe matters first: day 1, day 7, day 30, first billing cycle, monthly usage, or another
+          timeframe?"
         - "What retained behavior matters?"
         - "How does payment status affect retention definition?"
         - "What warning signs predict churn or abandonment?"
@@ -529,13 +589,14 @@ document:
       required: true
       outputGuidance:
         - "Define referral behavior based on actual user motivation."
-        - "Include share, invite, recommendation, review, public mention, contribution, affiliate, partner, or word-of-mouth where relevant."
+        - "Include share, invite, recommendation, review, public mention, contribution, affiliate, partner, or
+          word-of-mouth where relevant."
         - "State whether referral is MVP, post-launch, or deferred."
       qualityChecks:
         - "Referral path is realistic for current product and audience."
         - "Referral does not assume advocacy before value is proven."
         - "Referral tracking is defined or limitation is explicit."
-      questions:
+      questions: &a13
         - "What turns a customer or user into a growth engine?"
         - "What referral behavior is realistic?"
         - "What is the referral path?"
@@ -553,15 +614,17 @@ document:
         - "Expansion is not assumed before retention exists."
         - "Expansion path matches product and pricing model."
         - "Deferred expansion is explicit."
-      questions:
+      questions: &a14
         - "What does expansion mean for this product?"
-        - "Is expansion usage, plan upgrade, seats, volume, additional feature adoption, account scope, referrals, or another behavior?"
+        - "Is expansion usage, plan upgrade, seats, volume, additional feature adoption, account scope, referrals, or another
+          behavior?"
         - "What triggers expansion?"
         - "What metric measures expansion?"
         - "Is expansion launch-relevant or deferred?"
     - id: "funnel-events"
       title: "Funnel Events"
-      intent: "Define the specific events that must be instrumented at each stage with properties, privacy sensitivity, owner, QA, and destination."
+      intent: "Define the specific events that must be instrumented at each stage with properties, privacy sensitivity, owner,
+        QA, and destination."
       required: true
       outputGuidance:
         - "Use funnel event records for material events."
@@ -571,7 +634,7 @@ document:
         - "Events are sufficient to reconstruct stage movement."
         - "Events avoid unnecessary personal data."
         - "Each event has owner and validation rule."
-      questions:
+      questions: &a15
         - "What specific events must be instrumented at each stage?"
         - "What triggers each event?"
         - "Who or what is the actor?"
@@ -581,7 +644,8 @@ document:
         - "Who owns event instrumentation and QA?"
     - id: "funnel-metrics"
       title: "Funnel Metrics"
-      intent: "Define metrics, formulas, targets, thresholds, baselines, timeframes, segment/cohort breakdowns, and decision implications."
+      intent: "Define metrics, formulas, targets, thresholds, baselines, timeframes, segment/cohort breakdowns, and decision
+        implications."
       required: true
       outputGuidance:
         - "Use funnel metric records for material metrics."
@@ -591,7 +655,7 @@ document:
         - "Metrics are formula-defined and source-defined."
         - "Targets are not invented without labeling assumptions."
         - "Every metric has a decision implication."
-      questions:
+      questions: &a16
         - "What metrics measure each funnel stage?"
         - "What is the formula for each metric?"
         - "What is the baseline, if known?"
@@ -611,7 +675,7 @@ document:
         - "Cohorts make funnel analysis more decision-useful."
         - "Cohort rules are explicit."
         - "Cohorts align with Launch Plan and GTM Analytics."
-      questions:
+      questions: &a17
         - "What cohorts matter for funnel analysis?"
         - "How are cohorts defined?"
         - "What inclusion and exclusion rules apply?"
@@ -619,7 +683,8 @@ document:
         - "What decisions does cohort analysis support?"
     - id: "attribution"
       title: "Attribution"
-      intent: "Define how sources, channels, campaigns, partners, referrals, and experiments are attributed without overstating precision."
+      intent: "Define how sources, channels, campaigns, partners, referrals, and experiments are attributed without
+        overstating precision."
       required: true
       outputGuidance:
         - "Use attribution rule records for material attribution areas."
@@ -629,7 +694,7 @@ document:
         - "Attribution rules are realistic."
         - "Known limitations are explicit."
         - "Privacy and consent constraints are respected."
-      questions:
+      questions: &a18
         - "How are sources, channels, campaigns, partners, referrals, and experiments attributed?"
         - "What attribution model is used?"
         - "What tracking parameters are required?"
@@ -638,7 +703,8 @@ document:
         - "How is attribution data quality checked?"
     - id: "drop-off-risks"
       title: "Drop-off Risks"
-      intent: "Identify expected stage drop-offs, likely causes, affected metrics, early signals, mitigations, experiments, support implications, and owners."
+      intent: "Identify expected stage drop-offs, likely causes, affected metrics, early signals, mitigations, experiments,
+        support implications, and owners."
       required: true
       outputGuidance:
         - "Use drop-off risk records for material risks."
@@ -648,7 +714,7 @@ document:
         - "Drop-off risks are stage-specific and measurable."
         - "Likely cause and early signal are explicit."
         - "Mitigation or experiment is actionable."
-      questions:
+      questions: &a19
         - "Where is the biggest expected drop-off?"
         - "What likely causes each drop-off?"
         - "What metric reveals the drop-off?"
@@ -668,7 +734,7 @@ document:
         - "Experiments are tied to a funnel bottleneck or assumption."
         - "Instrumentation is ready before experiment starts."
         - "Each experiment produces a decision."
-      questions:
+      questions: &a20
         - "What funnel experiments are planned?"
         - "What stage does each experiment target?"
         - "What hypothesis does each experiment test?"
@@ -677,7 +743,8 @@ document:
         - "What is the next decision after the experiment?"
     - id: "instrumentation-ownership"
       title: "Instrumentation Ownership"
-      intent: "Define who owns event definitions, implementation, QA, dashboards, data quality, privacy review, documentation, and downstream analytics handoff."
+      intent: "Define who owns event definitions, implementation, QA, dashboards, data quality, privacy review, documentation,
+        and downstream analytics handoff."
       required: true
       outputGuidance:
         - "Use instrumentation ownership records."
@@ -687,7 +754,7 @@ document:
         - "No critical event or metric is ownerless."
         - "Privacy and data quality are owned."
         - "Instrumentation handoff to GTM Analytics is explicit."
-      questions:
+      questions: &a21
         - "Who owns event definitions?"
         - "Who implements instrumentation?"
         - "Who performs QA?"
@@ -697,7 +764,8 @@ document:
         - "What must GTM Analytics inherit?"
     - id: "funnel-risks"
       title: "Funnel Risks"
-      intent: "Identify risks that the funnel is misdefined, unmeasurable, misleading, privacy-unsafe, over-optimized, or disconnected from real customer value."
+      intent: "Identify risks that the funnel is misdefined, unmeasurable, misleading, privacy-unsafe, over-optimized, or
+        disconnected from real customer value."
       required: true
       outputGuidance:
         - "Use drop-off risk records or risk-style entries for material funnel risks."
@@ -707,7 +775,7 @@ document:
         - "Risks are concrete and monitorable."
         - "Misleading metrics and false activation are considered."
         - "Privacy and support implications are explicit."
-      questions:
+      questions: &a22
         - "What could make the funnel misleading?"
         - "Where could metrics incentivize the wrong behavior?"
         - "Where could activation be falsely measured?"
@@ -716,17 +784,19 @@ document:
         - "What downstream mitigations are required?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream GTM and Operations documents must inherit from Conversion Funnel and what they must not assume."
+      intent: "Define what downstream GTM and Operations documents must inherit from Conversion Funnel and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Route funnel outputs to the correct downstream documents."
-        - "Separate pricing, content, sales, partnerships, experiments, analytics, risk, support, release, and operations implications."
+        - "Separate pricing, content, sales, partnerships, experiments, analytics, risk, support, release, and
+          operations implications."
         - "Preserve unresolved funnel questions, event gaps, and measurement limitations."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing funnel assumptions silently."
         - "Funnel strategy and downstream analytics implementation remain distinct."
-      questions:
+      questions: &a23
         - "What should Pricing and Packaging inherit?"
         - "What should Content Strategy inherit?"
         - "What should Sales Motion inherit?"
@@ -735,3 +805,298 @@ document:
         - "What should GTM Analytics inherit?"
         - "What should GTM Risks, Support Model, Release Management, Operating Model, and Risk Management inherit?"
         - "What unresolved funnel questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain conversion funnel. How does a qualified person move from first awareness to meaningful
+      value, conversion, retention, and referral, and how will we know where the funnel is working or failing?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "funnel-objective"
+        label: "Funnel Objective"
+        required: true
+        description: "Define the purpose of the funnel, the current GTM decision it supports, and the single most important
+          funnel metric right now."
+        evaluationHint: "Look for concrete answers addressing: What is the purpose of defining the conversion funnel?; What
+          current GTM decision must the funnel support?; What single funnel metric matters most right now?."
+        sourceQuestions: *a1
+        targetSections: &a24
+          - "Funnel Objective"
+      - id: "funnel-model"
+        label: "Funnel Model"
+        required: true
+        description: "Define the overall funnel type and how it reflects GTM, channel, product, pricing, and launch strategy."
+        evaluationHint: "Look for concrete answers addressing: What type of funnel is this: waitlist-led, self-serve,
+          product-led, sales-assisted, founder-led, trial-led, subscription-led, marketplace-led, community-led,
+          partner-led, or hybrid?; Why does this funnel model fit the GTM motion?; What paths exist through the
+          funnel?."
+        sourceQuestions: *a2
+        targetSections: &a25
+          - "Funnel Model"
+      - id: "stage-definitions"
+        label: "Stage Definitions"
+        required: true
+        description: "Define all funnel stages with entry events, exit events, success/failure conditions, metrics, owners, and
+          downstream implications."
+        evaluationHint: "Look for concrete answers addressing: What stages exist in the funnel?; What event enters each stage?;
+          What event exits each stage?."
+        sourceQuestions: *a3
+        targetSections: &a26
+          - "Stage Definitions"
+      - id: "awareness"
+        label: "Awareness"
+        required: true
+        description: "Define how qualified people first encounter the product and what counts as meaningful awareness."
+        evaluationHint: "Look for concrete answers addressing: How do qualified people first learn about the product?; What
+          channels create awareness?; What message creates awareness?."
+        sourceQuestions: *a4
+        targetSections: &a27
+          - "Awareness"
+      - id: "acquisition"
+        label: "Acquisition"
+        required: true
+        description: "Define how a qualified prospect moves from awareness into a controlled funnel entry point."
+        evaluationHint: "Look for concrete answers addressing: How does someone move from awareness to entering the funnel?;
+          What is the controlled entry point: visit landing page, join waitlist, sign up, book demo, install, download,
+          request access, start trial, or another action?; What friction exists at this step?."
+        sourceQuestions: *a5
+        targetSections: &a28
+          - "Acquisition"
+      - id: "qualification"
+        label: "Qualification"
+        required: true
+        description: "Define how the funnel distinguishes qualified prospects/users from unqualified or unsupported ones."
+        evaluationHint: "Look for concrete answers addressing: How does the funnel identify qualified prospects or users?; What
+          fit, role, urgency, intent, source, or behavior signals matter?; What disqualifies someone?."
+        sourceQuestions: *a6
+        targetSections: &a29
+          - "Qualification"
+      - id: "signup-or-lead-capture"
+        label: "Signup or Lead Capture"
+        required: true
+        description: "Define the capture action, required data, consent/privacy constraints, confirmation behavior, and
+          success/failure events."
+        evaluationHint: "Look for concrete answers addressing: What signup or lead capture action exists?; What fields or data
+          are collected?; What data is required versus optional?."
+        sourceQuestions: *a7
+        targetSections: &a30
+          - "Signup or Lead Capture"
+      - id: "onboarding"
+        label: "Onboarding"
+        required: true
+        description: "Define what a new user/customer must understand and complete before reaching value."
+        evaluationHint: "Look for concrete answers addressing: What must the user understand before reaching value?; What steps
+          must they complete?; What can be skipped or deferred?."
+        sourceQuestions: *a8
+        targetSections: &a31
+          - "Onboarding"
+      - id: "activation"
+        label: "Activation"
+        required: true
+        description: "Define the first meaningful value event and how it is measured."
+        evaluationHint: "Look for concrete answers addressing: What is the first meaningful action or outcome that shows the
+          user received value?; Why does this action matter?; What event measures activation?."
+        sourceQuestions: *a9
+        targetSections: &a32
+          - "Activation"
+      - id: "engagement"
+        label: "Engagement"
+        required: true
+        description: "Define meaningful repeated behavior indicating ongoing value rather than idle activity."
+        evaluationHint: "Look for concrete answers addressing: What behavior indicates sustained use?; What frequency and depth
+          matter?; What is healthy engagement versus idle account activity?."
+        sourceQuestions: *a10
+        targetSections: &a33
+          - "Engagement"
+      - id: "conversion"
+        label: "Conversion"
+        required: true
+        description: "Define the business conversion event and distinguish it from acquisition, activation, and retention."
+        evaluationHint: "Look for concrete answers addressing: What is the conversion event?; Is conversion trial start, paid
+          subscription, purchase, booked call, qualified opportunity, accepted invite, completed setup, or another
+          commitment?; What must happen before conversion?."
+        sourceQuestions: *a11
+        targetSections: &a34
+          - "Conversion"
+      - id: "retention"
+        label: "Retention"
+        required: true
+        description: "Define what retained means for users/customers by cohort, timeframe, behavior, payment status, and value
+          recurrence."
+        evaluationHint: "Look for concrete answers addressing: What indicates a retained user or customer?; What retention
+          timeframe matters first: day 1, day 7, day 30, first billing cycle, monthly usage, or another timeframe?; What
+          retained behavior matters?."
+        sourceQuestions: *a12
+        targetSections: &a35
+          - "Retention"
+      - id: "referral"
+        label: "Referral"
+        required: true
+        description: "Define what turns a user/customer into a growth source and how referral behavior is captured."
+        evaluationHint: "Look for concrete answers addressing: What turns a customer or user into a growth engine?; What
+          referral behavior is realistic?; What is the referral path?."
+        sourceQuestions: *a13
+        targetSections: &a36
+          - "Referral"
+      - id: "expansion"
+        label: "Expansion"
+        required: true
+        description: "Define when a retained user/customer expands usage, plan, seats, volume, scope, or segment use case."
+        evaluationHint: "Look for concrete answers addressing: What does expansion mean for this product?; Is expansion usage,
+          plan upgrade, seats, volume, additional feature adoption, account scope, referrals, or another behavior?; What
+          triggers expansion?."
+        sourceQuestions: *a14
+        targetSections: &a37
+          - "Expansion"
+      - id: "funnel-events"
+        label: "Funnel Events"
+        required: true
+        description: "Define the specific events that must be instrumented at each stage with properties, privacy sensitivity,
+          owner, QA, and destination."
+        evaluationHint: "Look for concrete answers addressing: What specific events must be instrumented at each stage?; What
+          triggers each event?; Who or what is the actor?."
+        sourceQuestions: *a15
+        targetSections: &a38
+          - "Funnel Events"
+      - id: "funnel-metrics"
+        label: "Funnel Metrics"
+        required: true
+        description: "Define metrics, formulas, targets, thresholds, baselines, timeframes, segment/cohort breakdowns, and
+          decision implications."
+        evaluationHint: "Look for concrete answers addressing: What metrics measure each funnel stage?; What is the formula for
+          each metric?; What is the baseline, if known?."
+        sourceQuestions: *a16
+        targetSections: &a39
+          - "Funnel Metrics"
+      - id: "cohorts"
+        label: "Cohorts"
+        required: true
+        description: "Define how people are grouped for funnel analysis and decision-making."
+        evaluationHint: "Look for concrete answers addressing: What cohorts matter for funnel analysis?; How are cohorts
+          defined?; What inclusion and exclusion rules apply?."
+        sourceQuestions: *a17
+        targetSections: &a40
+          - "Cohorts"
+      - id: "attribution"
+        label: "Attribution"
+        required: true
+        description: "Define how sources, channels, campaigns, partners, referrals, and experiments are attributed without
+          overstating precision."
+        evaluationHint: "Look for concrete answers addressing: How are sources, channels, campaigns, partners, referrals, and
+          experiments attributed?; What attribution model is used?; What tracking parameters are required?."
+        sourceQuestions: *a18
+        targetSections: &a41
+          - "Attribution"
+      - id: "drop-off-risks"
+        label: "Drop-off Risks"
+        required: true
+        description: "Identify expected stage drop-offs, likely causes, affected metrics, early signals, mitigations,
+          experiments, support implications, and owners."
+        evaluationHint: "Look for concrete answers addressing: Where is the biggest expected drop-off?; What likely causes each
+          drop-off?; What metric reveals the drop-off?."
+        sourceQuestions: *a19
+        targetSections: &a42
+          - "Drop-off Risks"
+      - id: "funnel-experiments"
+        label: "Funnel Experiments"
+        required: true
+        description: "Define experiments to improve or validate specific funnel stages."
+        evaluationHint: "Look for concrete answers addressing: What funnel experiments are planned?; What stage does each
+          experiment target?; What hypothesis does each experiment test?."
+        sourceQuestions: *a20
+        targetSections: &a43
+          - "Funnel Experiments"
+      - id: "instrumentation-ownership"
+        label: "Instrumentation Ownership"
+        required: true
+        description: "Define who owns event definitions, implementation, QA, dashboards, data quality, privacy review,
+          documentation, and downstream analytics handoff."
+        evaluationHint: "Look for concrete answers addressing: Who owns event definitions?; Who implements instrumentation?; Who
+          performs QA?."
+        sourceQuestions: *a21
+        targetSections: &a44
+          - "Instrumentation Ownership"
+      - id: "funnel-risks"
+        label: "Funnel Risks"
+        required: true
+        description: "Identify risks that the funnel is misdefined, unmeasurable, misleading, privacy-unsafe, over-optimized, or
+          disconnected from real customer value."
+        evaluationHint: "Look for concrete answers addressing: What could make the funnel misleading?; Where could metrics
+          incentivize the wrong behavior?; Where could activation be falsely measured?."
+        sourceQuestions: *a22
+        targetSections: &a45
+          - "Funnel Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream GTM and Operations documents must inherit from Conversion Funnel and what they must
+          not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Pricing and Packaging inherit?; What should Content
+          Strategy inherit?; What should Sales Motion inherit?."
+        sourceQuestions: *a23
+        targetSections: &a46
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      funnel-objective:
+        targetSections: *a24
+      funnel-model:
+        targetSections: *a25
+      stage-definitions:
+        targetSections: *a26
+      awareness:
+        targetSections: *a27
+      acquisition:
+        targetSections: *a28
+      qualification:
+        targetSections: *a29
+      signup-or-lead-capture:
+        targetSections: *a30
+      onboarding:
+        targetSections: *a31
+      activation:
+        targetSections: *a32
+      engagement:
+        targetSections: *a33
+      conversion:
+        targetSections: *a34
+      retention:
+        targetSections: *a35
+      referral:
+        targetSections: *a36
+      expansion:
+        targetSections: *a37
+      funnel-events:
+        targetSections: *a38
+      funnel-metrics:
+        targetSections: *a39
+      cohorts:
+        targetSections: *a40
+      attribution:
+        targetSections: *a41
+      drop-off-risks:
+        targetSections: *a42
+      funnel-experiments:
+        targetSections: *a43
+      instrumentation-ownership:
+        targetSections: *a44
+      funnel-risks:
+        targetSections: *a45
+      downstream-handoff:
+        targetSections: *a46
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.448Z"
+      totalSourceQuestions: 129
+      reviewRequired: false

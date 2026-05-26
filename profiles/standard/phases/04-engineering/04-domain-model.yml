@@ -5,7 +5,9 @@ document:
   status: "not_started"
   order: 4
   type: "domain_model"
-  purpose: "Define the core domain concepts, ubiquitous language, entities, value objects, aggregates, commands, events, invariants, business rules, state machines, bounded contexts, and modelling risks that must remain stable across implementation details."
+  purpose: "Define the core domain concepts, ubiquitous language, entities, value objects, aggregates, commands, events,
+    invariants, business rules, state machines, bounded contexts, and modelling risks that must remain stable across
+    implementation details."
   centralQuestion: "What domain concepts, rules, invariants, lifecycle states, and boundaries define the system's core behavior?"
   outputs:
     canonical:
@@ -16,7 +18,9 @@ document:
       - id: "engineering.domain_model_map"
         format: "html"
         path: "outcomes/html/04-engineering/domain-model-map.html"
-        purpose: "Provide a navigable domain model map covering ubiquitous language, entities, value objects, aggregates, commands, events, invariants, business rules, state machines, bounded contexts, domain services, policies, risks, and downstream handoff."
+        purpose: "Provide a navigable domain model map covering ubiquitous language, entities, value objects, aggregates,
+          commands, events, invariants, business rules, state machines, bounded contexts, domain services, policies,
+          risks, and downstream handoff."
         audience: "founder"
         includes:
           - "domain overview"
@@ -39,7 +43,8 @@ document:
       - id: "engineering.domain_model_review_prompt"
         format: "markdown"
         path: "outcomes/agents/04-engineering/domain-model-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the domain model is coherent, invariant-safe, bounded, implementation-independent, and ready to feed data model, API contracts, tests, and application architecture."
+        purpose: "Provide compact context for agents reviewing whether the domain model is coherent, invariant-safe, bounded,
+          implementation-independent, and ready to feed data model, API contracts, tests, and application architecture."
         agentRole: "reviewer"
         includes:
           - "canonical domain model"
@@ -81,46 +86,68 @@ document:
     - id: "information-architecture"
       type: "context"
       required: false
-      description: "Product objects, relationships, lifecycle, visibility, ownership, naming, and IA risks that may map to domain concepts or remain product-facing abstractions."
+      description: "Product objects, relationships, lifecycle, visibility, ownership, naming, and IA risks that may map to
+        domain concepts or remain product-facing abstractions."
     - id: "product-architecture"
       type: "context"
       required: false
-      description: "Product modules, capabilities, boundaries, dependencies, ownership, and product architecture risks that shape bounded contexts and domain boundaries."
+      description: "Product modules, capabilities, boundaries, dependencies, ownership, and product architecture risks that
+        shape bounded contexts and domain boundaries."
     - id: "functional-requirements"
       type: "context"
       required: false
-      description: "User actions, system requirements, data requirements, business rules, commands, state transitions, and traceability that the domain model must support."
+      description: "User actions, system requirements, data requirements, business rules, commands, state transitions, and
+        traceability that the domain model must support."
     - id: "system-architecture"
       type: "context"
       required: false
-      description: "Application layers, module boundaries, dependency rules, data flow, runtime behavior, and architectural constraints that influence domain isolation and interfaces."
+      description: "Application layers, module boundaries, dependency rules, data flow, runtime behavior, and architectural
+        constraints that influence domain isolation and interfaces."
     - id: "technical-stack"
       type: "context"
       required: false
-      description: "Language, runtime, persistence, eventing, validation, and testing stack decisions that may constrain implementation but should not distort domain semantics."
+      description: "Language, runtime, persistence, eventing, validation, and testing stack decisions that may constrain
+        implementation but should not distort domain semantics."
     - id: "domain-notes"
       type: "manual_note"
       required: false
-      description: "Candidate domain terms, rules, entities, events, invariants, workflows, state machines, edge cases, and unresolved modelling questions."
+      description: "Candidate domain terms, rules, entities, events, invariants, workflows, state machines, edge cases, and
+        unresolved modelling questions."
   completionCriteria:
-    - "The central question is answered through explicit domain concepts, language, entities, value objects, aggregates, commands, events, invariants, business rules, state machines, bounded contexts, and risks."
-    - "Ubiquitous language defines canonical terms, aliases, forbidden terms, ambiguity notes, and relationship to Foundation Glossary and Product IA."
-    - "Core entities include identity, lifecycle, ownership, references, allowed operations, persistence relevance, and downstream data/API implications."
-    - "Value objects include equality rules, validation rules, immutability expectations, normalization, formatting, and serialization implications."
-    - "Aggregates define roots, boundaries, consistency rules, transactional scope, invariants, allowed mutations, emitted events, and forbidden cross-aggregate mutations."
-    - "Domain services are defined only when behavior does not naturally belong to an entity, value object, or aggregate."
-    - "Policies and specifications define reusable domain decisions, predicates, eligibility checks, constraints, and rule composition."
-    - "Commands include actor, intent, target aggregate, preconditions, validation, authorization relevance, state changes, emitted events, idempotency, and failure behavior."
-    - "Domain events include meaning, trigger, source aggregate, payload, metadata, consumers, ordering, idempotency, replay relevance, privacy/security concerns, and downstream integration implications."
-    - "Invariants distinguish aggregate-level, cross-aggregate, temporal, business, security/privacy, and data integrity invariants, with enforcement location and failure behavior."
-    - "Business rules include source, rationale, precedence, versioning, configurability, auditability, and conflict handling."
-    - "State machines define states, transitions, triggers, guards, side effects, invalid transitions, terminal states, recovery transitions, and emitted events."
-    - "Bounded contexts distinguish core domain, supporting domain, generic subdomain, external systems, anti-corruption layers, shared kernel, and integration contracts where relevant."
-    - "Domain risks identify ambiguous language, unstable rules, hidden invariants, cross-context leakage, over-modeling, anemic modeling, persistence leakage, and insufficient domain evidence."
-    - "Downstream handoff clarifies what Data Model, API Contracts, Security, Integration, Frontend, Tests, Observability, and Operations must inherit."
+    - "The central question is answered through explicit domain concepts, language, entities, value objects, aggregates,
+      commands, events, invariants, business rules, state machines, bounded contexts, and risks."
+    - "Ubiquitous language defines canonical terms, aliases, forbidden terms, ambiguity notes, and relationship to
+      Foundation Glossary and Product IA."
+    - "Core entities include identity, lifecycle, ownership, references, allowed operations, persistence relevance, and
+      downstream data/API implications."
+    - "Value objects include equality rules, validation rules, immutability expectations, normalization, formatting, and
+      serialization implications."
+    - "Aggregates define roots, boundaries, consistency rules, transactional scope, invariants, allowed mutations,
+      emitted events, and forbidden cross-aggregate mutations."
+    - "Domain services are defined only when behavior does not naturally belong to an entity, value object, or
+      aggregate."
+    - "Policies and specifications define reusable domain decisions, predicates, eligibility checks, constraints, and
+      rule composition."
+    - "Commands include actor, intent, target aggregate, preconditions, validation, authorization relevance, state
+      changes, emitted events, idempotency, and failure behavior."
+    - "Domain events include meaning, trigger, source aggregate, payload, metadata, consumers, ordering, idempotency,
+      replay relevance, privacy/security concerns, and downstream integration implications."
+    - "Invariants distinguish aggregate-level, cross-aggregate, temporal, business, security/privacy, and data integrity
+      invariants, with enforcement location and failure behavior."
+    - "Business rules include source, rationale, precedence, versioning, configurability, auditability, and conflict
+      handling."
+    - "State machines define states, transitions, triggers, guards, side effects, invalid transitions, terminal states,
+      recovery transitions, and emitted events."
+    - "Bounded contexts distinguish core domain, supporting domain, generic subdomain, external systems, anti-corruption
+      layers, shared kernel, and integration contracts where relevant."
+    - "Domain risks identify ambiguous language, unstable rules, hidden invariants, cross-context leakage,
+      over-modeling, anemic modeling, persistence leakage, and insufficient domain evidence."
+    - "Downstream handoff clarifies what Data Model, API Contracts, Security, Integration, Frontend, Tests,
+      Observability, and Operations must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid domain-model theater: object lists without identity, lifecycle, invariants, commands, events, or consistency rules."
+    - "Avoid domain-model theater: object lists without identity, lifecycle, invariants, commands, events, or
+      consistency rules."
     - "Avoid turning product-facing IA objects directly into domain entities without validating semantic fit."
     - "Avoid persistence-first modelling unless the domain concept genuinely follows from the domain."
     - "Avoid leaking database, API, UI, infrastructure, or framework concerns into domain semantics."
@@ -128,168 +155,179 @@ document:
     - "Avoid over-modeling speculative concepts that are not required by scope, requirements, or known domain rules."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent domain rules, legal rules, financial rules, compliance obligations, business policies, or user behavior."
-    - "Domain model must preserve Product boundaries, Foundation Glossary, Functional Requirements, System Architecture dependency rules, and Acceptance Criteria."
+    - "Do not invent domain rules, legal rules, financial rules, compliance obligations, business policies, or user
+      behavior."
+    - "Domain model must preserve Product boundaries, Foundation Glossary, Functional Requirements, System Architecture
+      dependency rules, and Acceptance Criteria."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate domain concept, product-facing concept, implementation construct, persistence model, API contract, and UI representation."
-    - "Tie domain concepts and rules to Information Architecture, Product Architecture, Functional Requirements, System Architecture, Acceptance Criteria, Decision Record, or Foundation Glossary where possible."
-    - "Classify concepts as core domain, supporting domain, generic subdomain, integration concept, implementation-only, product-facing-only, provisional, deprecated, or rejected where useful."
+    - "Separate domain concept, product-facing concept, implementation construct, persistence model, API contract, and
+      UI representation."
+    - "Tie domain concepts and rules to Information Architecture, Product Architecture, Functional Requirements, System
+      Architecture, Acceptance Criteria, Decision Record, or Foundation Glossary where possible."
+    - "Classify concepts as core domain, supporting domain, generic subdomain, integration concept, implementation-only,
+      product-facing-only, provisional, deprecated, or rejected where useful."
     - "Define invariants before deriving data model or API payloads."
     - "State enforcement location for each rule or invariant at conceptual level."
     - "Keep schema, endpoint, component, infrastructure, and storage details in downstream Engineering documents."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Foundation Glossary, Product IA, Product Architecture, Functional Requirements, Acceptance Criteria, System Architecture, Technical Stack, or Foundation Boundaries."
+    - "Flag contradictions with Foundation Glossary, Product IA, Product Architecture, Functional Requirements,
+      Acceptance Criteria, System Architecture, Technical Stack, or Foundation Boundaries."
     - "Flag entities without identity, lifecycle, ownership, operations, or invariant relevance."
     - "Flag value objects without equality, validation, or immutability rules."
     - "Flag aggregates without root, boundary, consistency rules, or transactional rationale."
-    - "Flag commands without preconditions, validation, target aggregate, state change, event output, or failure behavior."
-    - "Flag events that are actually commands, integration messages, audit logs, or UI notifications unless explicitly classified."
+    - "Flag commands without preconditions, validation, target aggregate, state change, event output, or failure
+      behavior."
+    - "Flag events that are actually commands, integration messages, audit logs, or UI notifications unless explicitly
+      classified."
     - "Flag invariants without enforcement location or failure behavior."
     - "Flag bounded contexts with unclear language, ownership, dependency direction, or anti-corruption needs."
-    - "Verify that downstream Data Model, API Contracts, Security, Integration, Tests, and Observability implications are explicit."
-    - "Flag content that belongs better in Data Model, API Contracts, Security Architecture, Integration Architecture, Frontend Architecture, Infrastructure, or Operations."
+    - "Verify that downstream Data Model, API Contracts, Security, Integration, Tests, and Observability implications
+      are explicit."
+    - "Flag content that belongs better in Data Model, API Contracts, Security Architecture, Integration Architecture,
+      Frontend Architecture, Infrastructure, or Operations."
   specializedFormats:
     termFormat:
       description: "Recommended format for ubiquitous language terms."
       fields:
-        - term
-        - definition
-        - classification
-        - aliases
-        - forbiddenSynonyms
-        - relatedTerms
-        - source
-        - ambiguityNotes
-        - downstreamImplications
-        - status
+        - "term"
+        - "definition"
+        - "classification"
+        - "aliases"
+        - "forbiddenSynonyms"
+        - "relatedTerms"
+        - "source"
+        - "ambiguityNotes"
+        - "downstreamImplications"
+        - "status"
     entityFormat:
       description: "Recommended format for domain entities."
       fields:
-        - id
-        - name
-        - definition
-        - identityRule
-        - lifecycle
-        - ownership
-        - references
-        - allowedOperations
-        - forbiddenOperations
-        - invariants
-        - emittedEvents
-        - persistenceRelevance
-        - downstreamImplications
-        - status
+        - "id"
+        - "name"
+        - "definition"
+        - "identityRule"
+        - "lifecycle"
+        - "ownership"
+        - "references"
+        - "allowedOperations"
+        - "forbiddenOperations"
+        - "invariants"
+        - "emittedEvents"
+        - "persistenceRelevance"
+        - "downstreamImplications"
+        - "status"
     valueObjectFormat:
       description: "Recommended format for value objects."
       fields:
-        - name
-        - definition
-        - fields
-        - equalityRule
-        - validationRules
-        - normalizationRules
-        - formattingRules
-        - immutabilityExpectation
-        - serializationImplications
-        - downstreamImplications
-        - status
+        - "name"
+        - "definition"
+        - "fields"
+        - "equalityRule"
+        - "validationRules"
+        - "normalizationRules"
+        - "formattingRules"
+        - "immutabilityExpectation"
+        - "serializationImplications"
+        - "downstreamImplications"
+        - "status"
     aggregateFormat:
       description: "Recommended format for aggregates."
       fields:
-        - name
-        - rootEntity
-        - boundary
-        - ownedEntities
-        - valueObjects
-        - consistencyRules
-        - transactionalScope
-        - allowedMutations
-        - forbiddenMutations
-        - invariants
-        - emittedEvents
-        - externalReferences
-        - downstreamImplications
-        - status
+        - "name"
+        - "rootEntity"
+        - "boundary"
+        - "ownedEntities"
+        - "valueObjects"
+        - "consistencyRules"
+        - "transactionalScope"
+        - "allowedMutations"
+        - "forbiddenMutations"
+        - "invariants"
+        - "emittedEvents"
+        - "externalReferences"
+        - "downstreamImplications"
+        - "status"
     commandFormat:
       description: "Recommended format for domain commands."
       fields:
-        - command
-        - actor
-        - intent
-        - targetAggregate
-        - inputs
-        - preconditions
-        - validationRules
-        - authorizationRelevance
-        - idempotencyRule
-        - stateChanges
-        - emittedEvents
-        - failureBehavior
-        - auditability
-        - downstreamImplications
+        - "command"
+        - "actor"
+        - "intent"
+        - "targetAggregate"
+        - "inputs"
+        - "preconditions"
+        - "validationRules"
+        - "authorizationRelevance"
+        - "idempotencyRule"
+        - "stateChanges"
+        - "emittedEvents"
+        - "failureBehavior"
+        - "auditability"
+        - "downstreamImplications"
     eventFormat:
       description: "Recommended format for domain events."
       fields:
-        - event
-        - meaning
-        - trigger
-        - sourceAggregate
-        - payload
-        - metadata
-        - orderingRules
-        - idempotencyRule
-        - consumers
-        - replayRelevance
-        - privacySecurityConcerns
-        - downstreamImplications
+        - "event"
+        - "meaning"
+        - "trigger"
+        - "sourceAggregate"
+        - "payload"
+        - "metadata"
+        - "orderingRules"
+        - "idempotencyRule"
+        - "consumers"
+        - "replayRelevance"
+        - "privacySecurityConcerns"
+        - "downstreamImplications"
     invariantFormat:
       description: "Recommended format for invariants."
       fields:
-        - invariant
-        - appliesTo
-        - invariantType
-        - rationale
-        - enforcementLocation
-        - violationBehavior
-        - testImplication
-        - downstreamImplications
-        - status
+        - "invariant"
+        - "appliesTo"
+        - "invariantType"
+        - "rationale"
+        - "enforcementLocation"
+        - "violationBehavior"
+        - "testImplication"
+        - "downstreamImplications"
+        - "status"
     stateMachineFormat:
       description: "Recommended format for state machines."
       fields:
-        - subject
-        - states
-        - initialState
-        - terminalStates
-        - transitions
-        - guards
-        - sideEffects
-        - invalidTransitions
-        - recoveryTransitions
-        - emittedEvents
-        - testImplications
+        - "subject"
+        - "states"
+        - "initialState"
+        - "terminalStates"
+        - "transitions"
+        - "guards"
+        - "sideEffects"
+        - "invalidTransitions"
+        - "recoveryTransitions"
+        - "emittedEvents"
+        - "testImplications"
     boundedContextFormat:
       description: "Recommended format for bounded contexts."
       fields:
-        - context
-        - classification
-        - responsibility
-        - language
-        - ownedConcepts
-        - externalConcepts
-        - upstreamContexts
-        - downstreamContexts
-        - integrationPattern
-        - antiCorruptionNeeds
-        - sharedKernel
-        - risks
+        - "context"
+        - "classification"
+        - "responsibility"
+        - "language"
+        - "ownedConcepts"
+        - "externalConcepts"
+        - "upstreamContexts"
+        - "downstreamContexts"
+        - "integrationPattern"
+        - "antiCorruptionNeeds"
+        - "sharedKernel"
+        - "risks"
   sections:
     - id: "domain-overview"
       title: "Domain Overview"
-      intent: "Define the domain, real-world behavior being modelled, core domain problem, modelling scope, and what is intentionally outside the domain."
+      intent: "Define the domain, real-world behavior being modelled, core domain problem, modelling scope, and what is
+        intentionally outside the domain."
       required: true
       outputGuidance:
         - "Describe the domain independently from implementation details."
@@ -299,7 +337,7 @@ document:
         - "The overview identifies the core domain problem."
         - "Domain scope does not exceed Product Scope without explicit rationale."
         - "Implementation concerns are not mistaken for domain concepts."
-      questions:
+      questions: &a1
         - "What is the domain?"
         - "What real-world behavior, process, decision, or constraint does the system model?"
         - "What is the core domain problem?"
@@ -308,7 +346,8 @@ document:
         - "What concepts are product-facing only, implementation-only, or integration-only?"
     - id: "ubiquitous-language"
       title: "Ubiquitous Language"
-      intent: "Define canonical domain terminology, semantic distinctions, aliases, forbidden terms, ambiguous terms, and relationship to Foundation Glossary and Product IA."
+      intent: "Define canonical domain terminology, semantic distinctions, aliases, forbidden terms, ambiguous terms, and
+        relationship to Foundation Glossary and Product IA."
       required: true
       outputGuidance:
         - "Use Foundation Glossary as the upstream terminology source where relevant."
@@ -318,7 +357,7 @@ document:
         - "Terms are precise enough to prevent inconsistent modelling."
         - "Ambiguous terms are explicitly resolved or marked unresolved."
         - "Product-facing labels and domain terms are distinguished where they differ."
-      questions:
+      questions: &a2
         - "What is the ubiquitous language for this domain?"
         - "What terms are canonical?"
         - "What terms are aliases, discouraged, forbidden, or ambiguous?"
@@ -327,7 +366,8 @@ document:
         - "What terminology questions remain unresolved?"
     - id: "core-entities"
       title: "Core Entities"
-      intent: "Identify domain entities with identity, lifecycle, ownership, operations, references, invariants, and downstream implications."
+      intent: "Identify domain entities with identity, lifecycle, ownership, operations, references, invariants, and
+        downstream implications."
       required: true
       outputGuidance:
         - "Define entities by identity and lifecycle, not by persistence table needs."
@@ -337,7 +377,7 @@ document:
         - "Every entity has a stable identity rule."
         - "Lifecycle and ownership are explicit."
         - "Entities are not merely value objects or UI records mislabeled as entities."
-      questions:
+      questions: &a3
         - "What are the primary entities with identity and lifecycle?"
         - "How is each entity identified and referenced?"
         - "Who or what owns each entity?"
@@ -347,7 +387,8 @@ document:
         - "What downstream Data Model or API implications exist?"
     - id: "value-objects"
       title: "Value Objects"
-      intent: "Define immutable descriptive concepts without identity, including equality, validation, normalization, formatting, and serialization rules."
+      intent: "Define immutable descriptive concepts without identity, including equality, validation, normalization,
+        formatting, and serialization rules."
       required: true
       outputGuidance:
         - "Define value objects by meaning and equality, not by storage convenience."
@@ -357,7 +398,7 @@ document:
         - "Each value object has equality rules."
         - "Value objects are immutable unless explicitly justified."
         - "Formatting and serialization do not override domain meaning."
-      questions:
+      questions: &a4
         - "What value objects describe properties without identity?"
         - "How is equality defined for each value object?"
         - "What validation rules apply?"
@@ -366,7 +407,8 @@ document:
         - "What serialization implications should Data Model and API Contracts inherit?"
     - id: "aggregates"
       title: "Aggregates"
-      intent: "Define aggregate roots, aggregate boundaries, transactional consistency, owned objects, allowed mutations, and invariant enforcement."
+      intent: "Define aggregate roots, aggregate boundaries, transactional consistency, owned objects, allowed mutations, and
+        invariant enforcement."
       required: true
       outputGuidance:
         - "Define aggregates around consistency boundaries, not object grouping convenience."
@@ -376,7 +418,7 @@ document:
         - "Every aggregate has a root."
         - "Aggregate boundary is justified by invariants and consistency needs."
         - "Cross-aggregate mutation rules are explicit."
-      questions:
+      questions: &a5
         - "What are the aggregate roots and boundaries?"
         - "What entities and value objects are contained inside each aggregate?"
         - "What consistency rules apply within each aggregate?"
@@ -395,7 +437,7 @@ document:
         - "Domain services represent domain behavior, not technical orchestration."
         - "Services do not become a dumping ground for anemic domain logic."
         - "Side effects and dependencies are explicit."
-      questions:
+      questions: &a6
         - "What domain behaviors do not naturally belong to a single entity, value object, or aggregate?"
         - "Why should each behavior be represented as a domain service?"
         - "What inputs and outputs does each domain service have?"
@@ -413,7 +455,7 @@ document:
         - "Policies are not confused with invariants unless they must always hold."
         - "Reusable rules are not duplicated across commands."
         - "Configurable policies include ownership and versioning implications."
-      questions:
+      questions: &a7
         - "What reusable domain policies or specifications exist?"
         - "What eligibility, validation, filtering, or decision rules are composable?"
         - "Which policies are configurable versus fixed?"
@@ -421,7 +463,8 @@ document:
         - "How are policies versioned or audited as rules evolve?"
     - id: "commands"
       title: "Commands"
-      intent: "Define domain commands, actors, intent, target aggregates, inputs, validation, preconditions, authorization relevance, state changes, emitted events, and failure behavior."
+      intent: "Define domain commands, actors, intent, target aggregates, inputs, validation, preconditions, authorization
+        relevance, state changes, emitted events, and failure behavior."
       required: true
       outputGuidance:
         - "Write commands as intentions to change domain state."
@@ -431,7 +474,7 @@ document:
         - "Each command has a clear target and intent."
         - "Commands do not bypass aggregate boundaries."
         - "Commands include failure behavior and event implications."
-      questions:
+      questions: &a8
         - "What commands can be issued against the domain model?"
         - "Who or what can issue each command?"
         - "What aggregate does each command target?"
@@ -441,7 +484,8 @@ document:
         - "What happens when a command fails or is duplicated?"
     - id: "domain-events"
       title: "Domain Events"
-      intent: "Define meaningful domain state changes, event payloads, metadata, ordering, idempotency, consumers, replay relevance, and downstream implications."
+      intent: "Define meaningful domain state changes, event payloads, metadata, ordering, idempotency, consumers, replay
+        relevance, and downstream implications."
       required: true
       outputGuidance:
         - "Name events in past tense as facts that occurred."
@@ -451,7 +495,7 @@ document:
         - "Events represent meaningful domain changes."
         - "Event payloads do not leak sensitive data unnecessarily."
         - "Ordering, idempotency, and consumer implications are considered where relevant."
-      questions:
+      questions: &a9
         - "What domain events signal meaningful state changes?"
         - "What triggers each event?"
         - "What payload and metadata does each event carry?"
@@ -460,7 +504,8 @@ document:
         - "Which events should become integration events or observability events downstream?"
     - id: "invariants"
       title: "Invariants"
-      intent: "Enumerate conditions that must always hold for the domain to remain valid and define enforcement location, violation behavior, and test implications."
+      intent: "Enumerate conditions that must always hold for the domain to remain valid and define enforcement location,
+        violation behavior, and test implications."
       required: true
       outputGuidance:
         - "State invariants as always-true conditions, not preferences."
@@ -470,26 +515,29 @@ document:
         - "Each invariant is testable or reviewable."
         - "Enforcement location is explicit."
         - "Cross-aggregate or temporal invariants include consistency trade-offs."
-      questions:
+      questions: &a10
         - "What conditions must always hold true for the system to be valid?"
-        - "Which invariants apply at entity, aggregate, bounded context, cross-context, temporal, security/privacy, or data integrity level?"
+        - "Which invariants apply at entity, aggregate, bounded context, cross-context, temporal, security/privacy, or data
+          integrity level?"
         - "Where is each invariant enforced?"
         - "What happens when an invariant is violated?"
         - "Which invariants are hard, eventual, temporal, or policy-dependent?"
         - "What tests should prove each invariant?"
     - id: "business-rules"
       title: "Business Rules"
-      intent: "Document explicit business rules governing domain behavior, state transitions, decisions, constraints, precedence, auditability, and versioning."
+      intent: "Document explicit business rules governing domain behavior, state transitions, decisions, constraints,
+        precedence, auditability, and versioning."
       required: true
       outputGuidance:
-        - "Separate business rules from invariants, policies, UI rules, validation rules, and infrastructure constraints."
+        - "Separate business rules from invariants, policies, UI rules, validation rules, and infrastructure
+          constraints."
         - "State source, rationale, precedence, configurability, conflict handling, versioning, and auditability."
         - "Mark uncertain rules as assumptions or review-needed."
       qualityChecks:
         - "Rules are explicit, enforceable, and traceable."
         - "Rule conflicts include precedence or resolution logic."
         - "Rule versioning is addressed where rules may evolve."
-      questions:
+      questions: &a11
         - "What explicit business rules govern domain behavior?"
         - "What rules govern state transitions or domain decisions?"
         - "Which rules are configurable versus fixed?"
@@ -502,13 +550,14 @@ document:
       required: true
       outputGuidance:
         - "Use state machines only for concepts with meaningful lifecycle states."
-        - "Define states, transitions, triggers, guards, side effects, invalid transitions, terminal states, and recovery transitions."
+        - "Define states, transitions, triggers, guards, side effects, invalid transitions, terminal states, and
+          recovery transitions."
         - "Connect transitions to commands and events."
       qualityChecks:
         - "State machines are not invented for concepts without lifecycle complexity."
         - "Invalid transitions and guards are explicit."
         - "State machines include recovery and terminal states where relevant."
-      questions:
+      questions: &a12
         - "What entities, aggregates, workflows, or domain processes have formal state machines?"
         - "What are the valid states for each?"
         - "What are the valid transitions for each?"
@@ -518,17 +567,19 @@ document:
         - "What events are emitted by state transitions?"
     - id: "bounded-contexts"
       title: "Bounded Contexts"
-      intent: "Clarify domain boundaries, context ownership, language boundaries, upstream/downstream relationships, anti-corruption needs, and integration patterns."
+      intent: "Clarify domain boundaries, context ownership, language boundaries, upstream/downstream relationships,
+        anti-corruption needs, and integration patterns."
       required: true
       outputGuidance:
         - "Define bounded contexts only where language, rules, ownership, or integration boundaries justify them."
-        - "Distinguish core domain, supporting domain, generic subdomain, external systems, and implementation-only boundaries."
+        - "Distinguish core domain, supporting domain, generic subdomain, external systems, and implementation-only
+          boundaries."
         - "State context map relationships and anti-corruption requirements."
       qualityChecks:
         - "Contexts have clear language and ownership boundaries."
         - "External system concepts are not imported directly without anti-corruption consideration."
         - "Context boundaries align with System Architecture module boundaries or explain divergence."
-      questions:
+      questions: &a13
         - "Where does the core domain end and supporting or infrastructure logic begin?"
         - "What bounded contexts exist?"
         - "Which contexts are core domain, supporting domain, generic subdomain, external, or implementation-only?"
@@ -538,17 +589,19 @@ document:
         - "What is the bounded context map?"
     - id: "domain-risks"
       title: "Domain Risks"
-      intent: "Identify modelling risks, ambiguous concepts, unstable rules, hidden invariants, boundary leakage, over-modeling, under-modeling, and areas needing deeper domain exploration."
+      intent: "Identify modelling risks, ambiguous concepts, unstable rules, hidden invariants, boundary leakage,
+        over-modeling, under-modeling, and areas needing deeper domain exploration."
       required: true
       outputGuidance:
         - "Describe risks as concrete domain-modelling failure modes."
-        - "Tie risks to terms, entities, aggregates, rules, invariants, state machines, bounded contexts, or downstream documents."
+        - "Tie risks to terms, entities, aggregates, rules, invariants, state machines, bounded contexts, or downstream
+          documents."
         - "Include mitigation, evidence needed, and target document."
       qualityChecks:
         - "Risks are specific enough to guide review or further discovery."
         - "Ambiguous language and unstable rules are not hidden."
         - "Modelling risks include downstream impact on data, API, tests, security, and operations."
-      questions:
+      questions: &a14
         - "What domain complexities could cause modelling mistakes?"
         - "What terms, rules, entities, or boundaries are ambiguous?"
         - "Where could hidden invariants or lifecycle rules be missed?"
@@ -558,17 +611,19 @@ document:
         - "What downstream documents are most affected by each domain risk?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Engineering and Operations documents must inherit from the Domain Model and what they must not assume."
+      intent: "Define what downstream Engineering and Operations documents must inherit from the Domain Model and what they
+        must not assume."
       required: true
       outputGuidance:
         - "Route domain outputs to the correct downstream documents."
-        - "Separate data, security, API, integration, frontend, testing, observability, deployment, support, and operations implications."
+        - "Separate data, security, API, integration, frontend, testing, observability, deployment, support, and
+          operations implications."
         - "Preserve unresolved domain questions and risky assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing domain rules silently."
         - "Domain semantics and implementation responsibilities remain distinct."
-      questions:
+      questions: &a15
         - "What should Data Model inherit from Domain Model?"
         - "What should API Contracts inherit?"
         - "What should Security Architecture inherit?"
@@ -577,3 +632,211 @@ document:
         - "What should Test Strategy and Observability Plan inherit?"
         - "What should Support Model, Risk Management, and Operations inherit?"
         - "What unresolved domain questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain domain model. What domain concepts, rules, invariants, lifecycle states, and boundaries
+      define the system's core behavior?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "domain-overview"
+        label: "Domain Overview"
+        required: true
+        description: "Define the domain, real-world behavior being modelled, core domain problem, modelling scope, and what is
+          intentionally outside the domain."
+        evaluationHint: "Look for concrete answers addressing: What is the domain?; What real-world behavior, process, decision,
+          or constraint does the system model?; What is the core domain problem?."
+        sourceQuestions: *a1
+        targetSections: &a16
+          - "Domain Overview"
+      - id: "ubiquitous-language"
+        label: "Ubiquitous Language"
+        required: true
+        description: "Define canonical domain terminology, semantic distinctions, aliases, forbidden terms, ambiguous terms, and
+          relationship to Foundation Glossary and Product IA."
+        evaluationHint: "Look for concrete answers addressing: What is the ubiquitous language for this domain?; What terms are
+          canonical?; What terms are aliases, discouraged, forbidden, or ambiguous?."
+        sourceQuestions: *a2
+        targetSections: &a17
+          - "Ubiquitous Language"
+      - id: "core-entities"
+        label: "Core Entities"
+        required: true
+        description: "Identify domain entities with identity, lifecycle, ownership, operations, references, invariants, and
+          downstream implications."
+        evaluationHint: "Look for concrete answers addressing: What are the primary entities with identity and lifecycle?; How
+          is each entity identified and referenced?; Who or what owns each entity?."
+        sourceQuestions: *a3
+        targetSections: &a18
+          - "Core Entities"
+      - id: "value-objects"
+        label: "Value Objects"
+        required: true
+        description: "Define immutable descriptive concepts without identity, including equality, validation, normalization,
+          formatting, and serialization rules."
+        evaluationHint: "Look for concrete answers addressing: What value objects describe properties without identity?; How is
+          equality defined for each value object?; What validation rules apply?."
+        sourceQuestions: *a4
+        targetSections: &a19
+          - "Value Objects"
+      - id: "aggregates"
+        label: "Aggregates"
+        required: true
+        description: "Define aggregate roots, aggregate boundaries, transactional consistency, owned objects, allowed mutations,
+          and invariant enforcement."
+        evaluationHint: "Look for concrete answers addressing: What are the aggregate roots and boundaries?; What entities and
+          value objects are contained inside each aggregate?; What consistency rules apply within each aggregate?."
+        sourceQuestions: *a5
+        targetSections: &a20
+          - "Aggregates"
+      - id: "domain-services"
+        label: "Domain Services"
+        required: true
+        description: "Define domain behavior that does not naturally belong to a single entity, value object, or aggregate."
+        evaluationHint: "Look for concrete answers addressing: What domain behaviors do not naturally belong to a single entity,
+          value object, or aggregate?; Why should each behavior be represented as a domain service?; What inputs and
+          outputs does each domain service have?."
+        sourceQuestions: *a6
+        targetSections: &a21
+          - "Domain Services"
+      - id: "policies-and-specifications"
+        label: "Policies and Specifications"
+        required: true
+        description: "Define reusable domain policies, predicates, eligibility checks, rule compositions, and decision logic."
+        evaluationHint: "Look for concrete answers addressing: What reusable domain policies or specifications exist?; What
+          eligibility, validation, filtering, or decision rules are composable?; Which policies are configurable versus
+          fixed?."
+        sourceQuestions: *a7
+        targetSections: &a22
+          - "Policies and Specifications"
+      - id: "commands"
+        label: "Commands"
+        required: true
+        description: "Define domain commands, actors, intent, target aggregates, inputs, validation, preconditions,
+          authorization relevance, state changes, emitted events, and failure behavior."
+        evaluationHint: "Look for concrete answers addressing: What commands can be issued against the domain model?; Who or
+          what can issue each command?; What aggregate does each command target?."
+        sourceQuestions: *a8
+        targetSections: &a23
+          - "Commands"
+      - id: "domain-events"
+        label: "Domain Events"
+        required: true
+        description: "Define meaningful domain state changes, event payloads, metadata, ordering, idempotency, consumers, replay
+          relevance, and downstream implications."
+        evaluationHint: "Look for concrete answers addressing: What domain events signal meaningful state changes?; What
+          triggers each event?; What payload and metadata does each event carry?."
+        sourceQuestions: *a9
+        targetSections: &a24
+          - "Domain Events"
+      - id: "invariants"
+        label: "Invariants"
+        required: true
+        description: "Enumerate conditions that must always hold for the domain to remain valid and define enforcement location,
+          violation behavior, and test implications."
+        evaluationHint: "Look for concrete answers addressing: What conditions must always hold true for the system to be
+          valid?; Which invariants apply at entity, aggregate, bounded context, cross-context, temporal,
+          security/privacy, or data integrity level?; Where is each invariant enforced?."
+        sourceQuestions: *a10
+        targetSections: &a25
+          - "Invariants"
+      - id: "business-rules"
+        label: "Business Rules"
+        required: true
+        description: "Document explicit business rules governing domain behavior, state transitions, decisions, constraints,
+          precedence, auditability, and versioning."
+        evaluationHint: "Look for concrete answers addressing: What explicit business rules govern domain behavior?; What rules
+          govern state transitions or domain decisions?; Which rules are configurable versus fixed?."
+        sourceQuestions: *a11
+        targetSections: &a26
+          - "Business Rules"
+      - id: "state-machines"
+        label: "State Machines"
+        required: true
+        description: "Define formal lifecycle states and valid transitions for entities, aggregates, workflows, or domain
+          processes."
+        evaluationHint: "Look for concrete answers addressing: What entities, aggregates, workflows, or domain processes have
+          formal state machines?; What are the valid states for each?; What are the valid transitions for each?."
+        sourceQuestions: *a12
+        targetSections: &a27
+          - "State Machines"
+      - id: "bounded-contexts"
+        label: "Bounded Contexts"
+        required: true
+        description: "Clarify domain boundaries, context ownership, language boundaries, upstream/downstream relationships,
+          anti-corruption needs, and integration patterns."
+        evaluationHint: "Look for concrete answers addressing: Where does the core domain end and supporting or infrastructure
+          logic begin?; What bounded contexts exist?; Which contexts are core domain, supporting domain, generic
+          subdomain, external, or implementation-only?."
+        sourceQuestions: *a13
+        targetSections: &a28
+          - "Bounded Contexts"
+      - id: "domain-risks"
+        label: "Domain Risks"
+        required: true
+        description: "Identify modelling risks, ambiguous concepts, unstable rules, hidden invariants, boundary leakage,
+          over-modeling, under-modeling, and areas needing deeper domain exploration."
+        evaluationHint: "Look for concrete answers addressing: What domain complexities could cause modelling mistakes?; What
+          terms, rules, entities, or boundaries are ambiguous?; Where could hidden invariants or lifecycle rules be
+          missed?."
+        sourceQuestions: *a14
+        targetSections: &a29
+          - "Domain Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Engineering and Operations documents must inherit from the Domain Model and what
+          they must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Data Model inherit from Domain Model?; What should
+          API Contracts inherit?; What should Security Architecture inherit?."
+        sourceQuestions: *a15
+        targetSections: &a30
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      domain-overview:
+        targetSections: *a16
+      ubiquitous-language:
+        targetSections: *a17
+      core-entities:
+        targetSections: *a18
+      value-objects:
+        targetSections: *a19
+      aggregates:
+        targetSections: *a20
+      domain-services:
+        targetSections: *a21
+      policies-and-specifications:
+        targetSections: *a22
+      commands:
+        targetSections: *a23
+      domain-events:
+        targetSections: *a24
+      invariants:
+        targetSections: *a25
+      business-rules:
+        targetSections: *a26
+      state-machines:
+        targetSections: *a27
+      bounded-contexts:
+        targetSections: *a28
+      domain-risks:
+        targetSections: *a29
+      downstream-handoff:
+        targetSections: *a30
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.345Z"
+      totalSourceQuestions: 95
+      reviewRequired: false

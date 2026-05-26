@@ -5,7 +5,9 @@ document:
   status: "not_started"
   order: 5
   type: "data_model"
-  purpose: "Define how domain concepts, product objects, events, records, relationships, constraints, indexes, lifecycle rules, sensitivity classifications, retention policies, migrations, and local/remote data stores are represented and governed in storage."
+  purpose: "Define how domain concepts, product objects, events, records, relationships, constraints, indexes, lifecycle
+    rules, sensitivity classifications, retention policies, migrations, and local/remote data stores are represented and
+    governed in storage."
   centralQuestion: "How is data represented, related, constrained, stored, synchronized, migrated, protected, retained, and recovered?"
   outputs:
     canonical:
@@ -16,7 +18,9 @@ document:
       - id: "engineering.data_model_map"
         format: "html"
         path: "outcomes/html/04-engineering/data-model-map.html"
-        purpose: "Provide a navigable data model map covering storage strategy, entities, tables, fields, constraints, indexes, local/remote data, events, migrations, retention, sensitivity, backup/restore, lineage, risks, and downstream handoff."
+        purpose: "Provide a navigable data model map covering storage strategy, entities, tables, fields, constraints, indexes,
+          local/remote data, events, migrations, retention, sensitivity, backup/restore, lineage, risks, and downstream
+          handoff."
         audience: "founder"
         includes:
           - "data model overview"
@@ -43,7 +47,9 @@ document:
       - id: "engineering.data_model_review_prompt"
         format: "markdown"
         path: "outcomes/agents/04-engineering/data-model-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the data model is domain-aligned, constraint-safe, query-aware, migration-safe, privacy-aware, sync-aware, and ready to feed API, security, infrastructure, tests, and observability."
+        purpose: "Provide compact context for agents reviewing whether the data model is domain-aligned, constraint-safe,
+          query-aware, migration-safe, privacy-aware, sync-aware, and ready to feed API, security, infrastructure,
+          tests, and observability."
         agentRole: "reviewer"
         includes:
           - "canonical data model"
@@ -88,239 +94,286 @@ document:
     - id: "domain-model"
       type: "context"
       required: false
-      description: "Entities, value objects, aggregates, commands, events, invariants, business rules, state machines, bounded contexts, and domain risks that the data model must represent without distorting domain semantics."
+      description: "Entities, value objects, aggregates, commands, events, invariants, business rules, state machines, bounded
+        contexts, and domain risks that the data model must represent without distorting domain semantics."
     - id: "information-architecture"
       type: "context"
       required: false
-      description: "Product-facing objects, relationships, lifecycle, ownership, visibility, naming, retrieval, and IA risks that may map to persisted data structures."
+      description: "Product-facing objects, relationships, lifecycle, ownership, visibility, naming, retrieval, and IA risks
+        that may map to persisted data structures."
     - id: "functional-requirements"
       type: "context"
       required: false
-      description: "User, system, admin, integration, data, and business-rule requirements that imply storage, querying, persistence, retention, export, import, sync, or auditability."
+      description: "User, system, admin, integration, data, and business-rule requirements that imply storage, querying,
+        persistence, retention, export, import, sync, or auditability."
     - id: "non-functional-requirements"
       type: "context"
       required: false
-      description: "Performance, privacy, security, reliability, availability, scalability, compatibility, observability, compliance, and operational constraints that affect data design."
+      description: "Performance, privacy, security, reliability, availability, scalability, compatibility, observability,
+        compliance, and operational constraints that affect data design."
     - id: "system-architecture"
       type: "context"
       required: false
-      description: "System boundaries, layers, module boundaries, data flow, deployment topology, runtime architecture, security/privacy hooks, observability hooks, and failure modes."
+      description: "System boundaries, layers, module boundaries, data flow, deployment topology, runtime architecture,
+        security/privacy hooks, observability hooks, and failure modes."
     - id: "technical-stack"
       type: "context"
       required: false
-      description: "Selected database, storage, runtime, migration, testing, deployment, monitoring, and local development technologies."
+      description: "Selected database, storage, runtime, migration, testing, deployment, monitoring, and local development
+        technologies."
     - id: "data-notes"
       type: "manual_note"
       required: false
-      description: "Candidate tables, fields, records, events, sync rules, retention needs, indexes, migrations, sensitive fields, import/export needs, and unresolved data modelling questions."
+      description: "Candidate tables, fields, records, events, sync rules, retention needs, indexes, migrations, sensitive
+        fields, import/export needs, and unresolved data modelling questions."
   completionCriteria:
-    - "The central question is answered through explicit data representation, relationships, constraints, indexes, storage partitioning, sync rules, migration strategy, protection, retention, recovery, and risks."
-    - "Domain-to-data mapping distinguishes domain entities, value objects, aggregates, events, product-facing IA objects, implementation records, and denormalized read models."
-    - "Entity relationship overview includes entities, relationships, cardinality, optionality, ownership, lifecycle dependency, deletion/archive behavior, and integrity constraints."
-    - "Tables and collections include purpose, owning module/context, source domain concept, storage engine, lifecycle, access pattern, sensitivity, retention class, and downstream API/security implications."
-    - "Fields include type, nullability, default, validation, derived status, uniqueness, sensitivity, encryption/masking needs, indexing relevance, migration notes, and API exposure implications."
-    - "Constraints include primary keys, foreign keys, unique constraints, check constraints, exclusion constraints, domain invariants, application-level constraints, database-level constraints, and eventual consistency constraints."
-    - "Indexes are justified by query patterns, cardinality, selectivity, sorting, filtering, pagination, uniqueness, performance requirements, and write-cost trade-offs."
-    - "Local data and remote data rules define what lives where, why, how it is structured, cached, synchronized, invalidated, encrypted, migrated, and recovered."
-    - "Synchronization model defines source of truth, conflict detection, conflict resolution, idempotency, cursors/checkpoints, retry, offline behavior, reconciliation, and failure recovery where relevant."
-    - "Event sourcing considerations define event envelope, payload schema, event type/version, idempotency key, ordering, causation/correlation metadata, actor metadata, conflict metadata, schema evolution, replay, projection, retention, and privacy implications."
-    - "Migration strategy defines authoring, testing, application, rollback, forward-only policy, data backfills, compatibility, zero-downtime constraints, local migrations, remote migrations, and recovery from failed migrations."
-    - "Retention and deletion rules include soft delete, hard delete, archival, legal hold, user-requested deletion, cascade behavior, anonymization, export, restore window, and operational constraints."
-    - "Sensitivity classification covers PII, sensitive data, credentials/secrets, financial data, behavioral data, telemetry, audit data, derived data, and data requiring encryption, masking, minimization, or restricted access."
-    - "Backup and restore rules define backup scope, frequency, retention, RPO, RTO, restore testing, local backup implications, disaster recovery, and restore authorization."
-    - "Data lineage and auditability define created/updated/deleted metadata, actor, source, version, import/export lineage, audit events, mutation history, and traceability to commands/events where relevant."
+    - "The central question is answered through explicit data representation, relationships, constraints, indexes,
+      storage partitioning, sync rules, migration strategy, protection, retention, recovery, and risks."
+    - "Domain-to-data mapping distinguishes domain entities, value objects, aggregates, events, product-facing IA
+      objects, implementation records, and denormalized read models."
+    - "Entity relationship overview includes entities, relationships, cardinality, optionality, ownership, lifecycle
+      dependency, deletion/archive behavior, and integrity constraints."
+    - "Tables and collections include purpose, owning module/context, source domain concept, storage engine, lifecycle,
+      access pattern, sensitivity, retention class, and downstream API/security implications."
+    - "Fields include type, nullability, default, validation, derived status, uniqueness, sensitivity,
+      encryption/masking needs, indexing relevance, migration notes, and API exposure implications."
+    - "Constraints include primary keys, foreign keys, unique constraints, check constraints, exclusion constraints,
+      domain invariants, application-level constraints, database-level constraints, and eventual consistency
+      constraints."
+    - "Indexes are justified by query patterns, cardinality, selectivity, sorting, filtering, pagination, uniqueness,
+      performance requirements, and write-cost trade-offs."
+    - "Local data and remote data rules define what lives where, why, how it is structured, cached, synchronized,
+      invalidated, encrypted, migrated, and recovered."
+    - "Synchronization model defines source of truth, conflict detection, conflict resolution, idempotency,
+      cursors/checkpoints, retry, offline behavior, reconciliation, and failure recovery where relevant."
+    - "Event sourcing considerations define event envelope, payload schema, event type/version, idempotency key,
+      ordering, causation/correlation metadata, actor metadata, conflict metadata, schema evolution, replay, projection,
+      retention, and privacy implications."
+    - "Migration strategy defines authoring, testing, application, rollback, forward-only policy, data backfills,
+      compatibility, zero-downtime constraints, local migrations, remote migrations, and recovery from failed
+      migrations."
+    - "Retention and deletion rules include soft delete, hard delete, archival, legal hold, user-requested deletion,
+      cascade behavior, anonymization, export, restore window, and operational constraints."
+    - "Sensitivity classification covers PII, sensitive data, credentials/secrets, financial data, behavioral data,
+      telemetry, audit data, derived data, and data requiring encryption, masking, minimization, or restricted access."
+    - "Backup and restore rules define backup scope, frequency, retention, RPO, RTO, restore testing, local backup
+      implications, disaster recovery, and restore authorization."
+    - "Data lineage and auditability define created/updated/deleted metadata, actor, source, version, import/export
+      lineage, audit events, mutation history, and traceability to commands/events where relevant."
     - "Data model risks are concrete, source-linked, impact-aware, and routed to mitigation or downstream documents."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid data-model theater: table lists without constraints, lifecycle, query patterns, migrations, sensitivity, or recovery behavior."
+    - "Avoid data-model theater: table lists without constraints, lifecycle, query patterns, migrations, sensitivity, or
+      recovery behavior."
     - "Avoid persistence-first modelling that distorts Domain Model semantics."
-    - "Avoid hiding domain invariants in UI, API, or application code when they require database or aggregate enforcement."
+    - "Avoid hiding domain invariants in UI, API, or application code when they require database or aggregate
+      enforcement."
     - "Avoid adding fields, tables, collections, events, or indexes without source, purpose, or access pattern."
     - "Avoid over-indexing without query justification and write-cost awareness."
     - "Avoid inventing legal retention obligations, encryption guarantees, backup guarantees, or compliance status."
-    - "Avoid treating local and remote data consistency as trivial when sync, offline, cache, or conflict behavior exists."
+    - "Avoid treating local and remote data consistency as trivial when sync, offline, cache, or conflict behavior
+      exists."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not move endpoint payload contracts, frontend state shape, infrastructure topology, or security implementation details into this document beyond data implications."
-    - "Data model must preserve Domain Model invariants, System Architecture boundaries, NFRs, Acceptance Criteria, privacy expectations, and operational recoverability."
+    - "Do not move endpoint payload contracts, frontend state shape, infrastructure topology, or security implementation
+      details into this document beyond data implications."
+    - "Data model must preserve Domain Model invariants, System Architecture boundaries, NFRs, Acceptance Criteria,
+      privacy expectations, and operational recoverability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate domain model, logical data model, physical data model, read models, event model, cache model, local store, remote store, and API representation."
-    - "Tie data structures to Domain Model, Information Architecture, Functional Requirements, NFRs, System Architecture, Technical Stack, Acceptance Criteria, or Decision Record where possible."
-    - "Classify data structures as canonical, derived, cached, denormalized, local-only, remote-only, replicated, event, audit, telemetry, temporary, or implementation-only where useful."
-    - "State enforcement location for each material constraint or invariant: database, domain, application, API, client, job, or external system."
+    - "Separate domain model, logical data model, physical data model, read models, event model, cache model, local
+      store, remote store, and API representation."
+    - "Tie data structures to Domain Model, Information Architecture, Functional Requirements, NFRs, System
+      Architecture, Technical Stack, Acceptance Criteria, or Decision Record where possible."
+    - "Classify data structures as canonical, derived, cached, denormalized, local-only, remote-only, replicated, event,
+      audit, telemetry, temporary, or implementation-only where useful."
+    - "State enforcement location for each material constraint or invariant: database, domain, application, API, client,
+      job, or external system."
     - "State how schema changes are versioned, migrated, tested, and rolled back or rolled forward."
-    - "Keep exact DDL optional unless explicitly needed; when included, it must remain consistent with the conceptual model."
+    - "Keep exact DDL optional unless explicitly needed; when included, it must remain consistent with the conceptual
+      model."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Domain Model, Information Architecture, Functional Requirements, NFRs, System Architecture, Technical Stack, Acceptance Criteria, Decision Record, or Foundation Boundaries."
-    - "Flag tables or collections without source concept, owner, lifecycle, access pattern, retention class, or sensitivity classification."
+    - "Flag contradictions with Domain Model, Information Architecture, Functional Requirements, NFRs, System
+      Architecture, Technical Stack, Acceptance Criteria, Decision Record, or Foundation Boundaries."
+    - "Flag tables or collections without source concept, owner, lifecycle, access pattern, retention class, or
+      sensitivity classification."
     - "Flag fields without type, nullability, default, validation, sensitivity, or migration implication where relevant."
     - "Flag constraints that duplicate, contradict, or fail to enforce domain invariants."
     - "Flag indexes without query-pattern justification or write-cost trade-off."
-    - "Flag sync/event designs without idempotency, conflict handling, ordering, checkpointing, replay, or schema versioning where relevant."
-    - "Flag migration strategy missing testing, rollback/roll-forward, backfill, local/remote compatibility, or failed-migration recovery."
-    - "Verify that privacy, security, retention, backup, restore, auditability, and observability implications are routed downstream."
-    - "Flag content that belongs better in Domain Model, Security Architecture, API Contracts, Integration Architecture, Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or Operations."
+    - "Flag sync/event designs without idempotency, conflict handling, ordering, checkpointing, replay, or schema
+      versioning where relevant."
+    - "Flag migration strategy missing testing, rollback/roll-forward, backfill, local/remote compatibility, or
+      failed-migration recovery."
+    - "Verify that privacy, security, retention, backup, restore, auditability, and observability implications are
+      routed downstream."
+    - "Flag content that belongs better in Domain Model, Security Architecture, API Contracts, Integration Architecture,
+      Frontend Architecture, Infrastructure Architecture, Test Strategy, Observability Plan, Deployment Plan, or
+      Operations."
   specializedFormats:
     tableFormat:
       description: "Recommended format for tables, collections, or persisted records."
       fields:
-        - name
-        - storageType
-        - storageEngine
-        - purpose
-        - sourceConcept
-        - owningModuleOrContext
-        - classification
-        - lifecycle
-        - accessPatterns
-        - relationships
-        - constraints
-        - indexes
-        - sensitivityClass
-        - retentionClass
-        - migrationNotes
-        - downstreamImplications
-        - status
+        - "name"
+        - "storageType"
+        - "storageEngine"
+        - "purpose"
+        - "sourceConcept"
+        - "owningModuleOrContext"
+        - "classification"
+        - "lifecycle"
+        - "accessPatterns"
+        - "relationships"
+        - "constraints"
+        - "indexes"
+        - "sensitivityClass"
+        - "retentionClass"
+        - "migrationNotes"
+        - "downstreamImplications"
+        - "status"
     fieldFormat:
       description: "Recommended format for fields or persisted attributes."
       fields:
-        - tableOrCollection
-        - field
-        - type
-        - nullable
-        - default
-        - derived
-        - validationRules
-        - uniqueness
-        - sensitivityClass
-        - encryptionOrMasking
-        - indexed
-        - apiExposure
-        - migrationNotes
-        - notes
+        - "tableOrCollection"
+        - "field"
+        - "type"
+        - "nullable"
+        - "default"
+        - "derived"
+        - "validationRules"
+        - "uniqueness"
+        - "sensitivityClass"
+        - "encryptionOrMasking"
+        - "indexed"
+        - "apiExposure"
+        - "migrationNotes"
+        - "notes"
     relationshipFormat:
       description: "Recommended format for data relationships."
       fields:
-        - source
-        - target
-        - relationshipName
-        - cardinality
-        - optionality
-        - ownership
-        - integrityConstraint
-        - deleteBehavior
-        - archiveBehavior
-        - cascadeBehavior
-        - queryImplications
-        - migrationImplications
+        - "source"
+        - "target"
+        - "relationshipName"
+        - "cardinality"
+        - "optionality"
+        - "ownership"
+        - "integrityConstraint"
+        - "deleteBehavior"
+        - "archiveBehavior"
+        - "cascadeBehavior"
+        - "queryImplications"
+        - "migrationImplications"
     constraintFormat:
       description: "Recommended format for constraints and invariant enforcement."
       fields:
-        - constraint
-        - appliesTo
-        - constraintType
-        - sourceInvariantOrRule
-        - enforcementLocation
-        - violationBehavior
-        - consistencyModel
-        - testImplication
-        - downstreamImplications
+        - "constraint"
+        - "appliesTo"
+        - "constraintType"
+        - "sourceInvariantOrRule"
+        - "enforcementLocation"
+        - "violationBehavior"
+        - "consistencyModel"
+        - "testImplication"
+        - "downstreamImplications"
     indexFormat:
       description: "Recommended format for indexes."
       fields:
-        - index
-        - appliesTo
-        - indexType
-        - fields
-        - queryPatterns
-        - uniqueness
-        - sortOrder
-        - selectivityAssumption
-        - writeCost
-        - maintenanceRisk
-        - status
+        - "index"
+        - "appliesTo"
+        - "indexType"
+        - "fields"
+        - "queryPatterns"
+        - "uniqueness"
+        - "sortOrder"
+        - "selectivityAssumption"
+        - "writeCost"
+        - "maintenanceRisk"
+        - "status"
     eventEnvelopeFormat:
       description: "Recommended format for event envelopes."
       fields:
-        - eventId
-        - eventType
-        - eventVersion
-        - aggregateId
-        - aggregateType
-        - actorId
-        - causationId
-        - correlationId
-        - idempotencyKey
-        - occurredAt
-        - recordedAt
-        - payload
-        - metadata
-        - schemaVersion
-        - conflictMetadata
-        - privacyClassification
+        - "eventId"
+        - "eventType"
+        - "eventVersion"
+        - "aggregateId"
+        - "aggregateType"
+        - "actorId"
+        - "causationId"
+        - "correlationId"
+        - "idempotencyKey"
+        - "occurredAt"
+        - "recordedAt"
+        - "payload"
+        - "metadata"
+        - "schemaVersion"
+        - "conflictMetadata"
+        - "privacyClassification"
     migrationFormat:
       description: "Recommended format for migration records."
       fields:
-        - id
-        - name
-        - migrationType
-        - scope
-        - reason
-        - forwardPlan
-        - rollbackOrRollForwardPlan
-        - dataBackfillPlan
-        - compatibilityRisk
-        - testPlan
-        - releaseImpact
-        - status
+        - "id"
+        - "name"
+        - "migrationType"
+        - "scope"
+        - "reason"
+        - "forwardPlan"
+        - "rollbackOrRollForwardPlan"
+        - "dataBackfillPlan"
+        - "compatibilityRisk"
+        - "testPlan"
+        - "releaseImpact"
+        - "status"
     dataRiskFormat:
       description: "Recommended format for data model risks."
       fields:
-        - risk
-        - affectedDataStructure
-        - riskType
-        - source
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - targetDocument
-        - releaseImpact
+        - "risk"
+        - "affectedDataStructure"
+        - "riskType"
+        - "source"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "targetDocument"
+        - "releaseImpact"
   sections:
     - id: "data-model-overview"
       title: "Data Model Overview"
-      intent: "Summarize the data model shape, storage posture, source of truth, major data categories, and highest-impact data decisions."
+      intent: "Summarize the data model shape, storage posture, source of truth, major data categories, and highest-impact
+        data decisions."
       required: true
       outputGuidance:
         - "Open with a concise overview of how data is represented and where it lives."
-        - "State the source of truth model and the relationship between domain, storage, events, local data, remote data, and read models."
+        - "State the source of truth model and the relationship between domain, storage, events, local data, remote
+          data, and read models."
         - "Identify the most consequential data decisions and open questions."
       qualityChecks:
         - "Overview is understandable without reading all tables."
         - "Source of truth is explicit or marked unresolved."
         - "Major data risks are not hidden."
-      questions:
+      questions: &a1
         - "What is the overall data model shape?"
         - "What is the source of truth for each major data category?"
-        - "What data is canonical, derived, cached, denormalized, local-only, remote-only, event-based, audit-based, or temporary?"
+        - "What data is canonical, derived, cached, denormalized, local-only, remote-only, event-based, audit-based, or
+          temporary?"
         - "What data decisions are most consequential?"
         - "What data model questions remain unresolved?"
     - id: "data-storage-strategy"
       title: "Data Storage Strategy"
-      intent: "Specify storage engines, persistence roles, local/remote partitioning, canonical stores, derived stores, cache stores, event stores, and storage trade-offs."
+      intent: "Specify storage engines, persistence roles, local/remote partitioning, canonical stores, derived stores, cache
+        stores, event stores, and storage trade-offs."
       required: true
       outputGuidance:
         - "State which storage engines are used and why."
-        - "Separate canonical persistence, local persistence, cache, event store, audit store, telemetry store, search index, and temporary storage where relevant."
+        - "Separate canonical persistence, local persistence, cache, event store, audit store, telemetry store, search
+          index, and temporary storage where relevant."
         - "Explain trade-offs created by storage partitioning."
       qualityChecks:
         - "Storage choices align with Technical Stack, System Architecture, Functional Requirements, and NFRs."
         - "Local/remote partitioning is justified."
         - "Storage trade-offs and failure implications are explicit."
-      questions:
+      questions: &a2
         - "What storage engines are used and why?"
         - "Which store is canonical for each major data category?"
         - "How is local and remote data partitioned?"
@@ -329,17 +382,19 @@ document:
         - "What storage decisions require further review?"
     - id: "domain-to-data-mapping"
       title: "Domain-to-Data Mapping"
-      intent: "Map domain concepts, IA objects, aggregates, value objects, commands, events, and invariants to storage structures without distorting domain semantics."
+      intent: "Map domain concepts, IA objects, aggregates, value objects, commands, events, and invariants to storage
+        structures without distorting domain semantics."
       required: true
       outputGuidance:
-        - "Map each persisted data structure back to a domain concept, product object, event, audit need, or implementation need."
+        - "Map each persisted data structure back to a domain concept, product object, event, audit need, or
+          implementation need."
         - "Identify concepts intentionally not persisted."
         - "Identify denormalized or derived structures and their source."
       qualityChecks:
         - "Data structures do not invent domain meaning."
         - "Domain invariants remain enforceable after mapping."
         - "Implementation-only records are labeled as such."
-      questions:
+      questions: &a3
         - "How do domain entities map to persisted data structures?"
         - "How do value objects map to fields or embedded structures?"
         - "How do aggregates map to tables, collections, records, or documents?"
@@ -349,7 +404,8 @@ document:
         - "What concepts are intentionally not persisted?"
     - id: "entity-relationship-overview"
       title: "Entity Relationship Overview"
-      intent: "Describe primary data entities, relationships, cardinality, optionality, ownership, lifecycle dependency, and integrity rules."
+      intent: "Describe primary data entities, relationships, cardinality, optionality, ownership, lifecycle dependency, and
+        integrity rules."
       required: true
       outputGuidance:
         - "Describe relationships before listing fields."
@@ -359,7 +415,7 @@ document:
         - "Relationships align with Domain Model and Information Architecture."
         - "Cardinality and optionality are explicit."
         - "Deletion and archival implications are not omitted."
-      questions:
+      questions: &a4
         - "What are the primary data entities and their relationships?"
         - "What is the cardinality of each relationship?"
         - "Which relationships are optional versus required?"
@@ -368,17 +424,20 @@ document:
         - "Which relationships are logical only versus physically enforced?"
     - id: "tables-collections"
       title: "Tables / Collections"
-      intent: "List all tables, collections, records, documents, event logs, read models, caches, and temporary structures with purpose and ownership."
+      intent: "List all tables, collections, records, documents, event logs, read models, caches, and temporary structures
+        with purpose and ownership."
       required: true
       outputGuidance:
         - "Use the table format for each structure."
-        - "Classify each structure as canonical, derived, cached, denormalized, local-only, remote-only, replicated, event, audit, telemetry, temporary, or implementation-only."
+        - "Classify each structure as canonical, derived, cached, denormalized, local-only, remote-only, replicated,
+          event, audit, telemetry, temporary, or implementation-only."
         - "State owning module/context and source concept."
       qualityChecks:
-        - "Every table or collection has purpose, owner, source concept, access pattern, sensitivity class, and retention class."
+        - "Every table or collection has purpose, owner, source concept, access pattern, sensitivity class, and
+          retention class."
         - "Derived structures identify source and refresh rules."
         - "Temporary or implementation-only structures are labeled."
-      questions:
+      questions: &a5
         - "What tables, collections, records, documents, event logs, read models, caches, or temporary structures exist?"
         - "What is the purpose of each structure?"
         - "What domain concept, product object, event, audit need, or implementation need does each structure represent?"
@@ -387,17 +446,19 @@ document:
         - "Which structures are MVP, post-MVP, deferred, or review-needed?"
     - id: "fields"
       title: "Fields"
-      intent: "Define fields on each table or collection, including type, nullability, defaults, validation, derivation, sensitivity, indexing relevance, and migration implications."
+      intent: "Define fields on each table or collection, including type, nullability, defaults, validation, derivation,
+        sensitivity, indexing relevance, and migration implications."
       required: true
       outputGuidance:
         - "Use the field format for material fields."
         - "Group fields by table/collection."
-        - "Identify derived fields, sensitive fields, encrypted/masked fields, API-exposed fields, and migration-sensitive fields."
+        - "Identify derived fields, sensitive fields, encrypted/masked fields, API-exposed fields, and
+          migration-sensitive fields."
       qualityChecks:
         - "Fields have types, nullability, defaults, and validation rules where relevant."
         - "Sensitive and derived fields are explicitly marked."
         - "Field definitions do not contradict Domain Model value objects or invariants."
-      questions:
+      questions: &a6
         - "What fields exist on each table or collection?"
         - "What are the data types, nullability, defaults, and validation rules for each field?"
         - "Which fields are derived, calculated, normalized, or denormalized?"
@@ -407,7 +468,8 @@ document:
         - "What migration implications exist for each material field?"
     - id: "constraints"
       title: "Constraints"
-      intent: "Document primary key, unique, foreign key, check, exclusion, domain invariant, application-level, and eventual consistency constraints."
+      intent: "Document primary key, unique, foreign key, check, exclusion, domain invariant, application-level, and eventual
+        consistency constraints."
       required: true
       outputGuidance:
         - "Use the constraint format for material constraints."
@@ -417,16 +479,18 @@ document:
         - "Constraints are tied to a rule, invariant, or data integrity need."
         - "Database-level and application-level enforcement are distinguished."
         - "Eventual consistency constraints include reconciliation or detection behavior."
-      questions:
+      questions: &a7
         - "What primary key, unique, foreign key, check, exclusion, and integrity constraints apply?"
         - "What domain invariants must be enforced by the data model?"
-        - "Which constraints are enforced by the database, domain layer, application layer, API, client, job, or external system?"
+        - "Which constraints are enforced by the database, domain layer, application layer, API, client, job, or external
+          system?"
         - "What happens when a constraint would be violated?"
         - "What constraints are eventually consistent rather than immediately enforced?"
         - "How are constraints tested and monitored?"
     - id: "indexes"
       title: "Indexes"
-      intent: "Define indexes required for query performance, uniqueness, sorting, filtering, pagination, lookup, sync, and constraint enforcement."
+      intent: "Define indexes required for query performance, uniqueness, sorting, filtering, pagination, lookup, sync, and
+        constraint enforcement."
       required: true
       outputGuidance:
         - "Use the index format for each index."
@@ -436,7 +500,7 @@ document:
         - "Every index has a query or constraint justification."
         - "Indexes consider read/write trade-offs."
         - "Index assumptions are explicit and revisitable."
-      questions:
+      questions: &a8
         - "What indexes are required for query performance?"
         - "What are the expected query patterns driving index design?"
         - "What indexes support uniqueness, sorting, filtering, pagination, lookup, or sync?"
@@ -445,17 +509,19 @@ document:
         - "What indexes are provisional or review-needed?"
     - id: "local-data"
       title: "Local Data"
-      intent: "Specify what data lives locally on clients, how it is structured, cached, encrypted, migrated, synchronized, invalidated, and recovered."
+      intent: "Specify what data lives locally on clients, how it is structured, cached, encrypted, migrated, synchronized,
+        invalidated, and recovered."
       required: true
       outputGuidance:
-        - "Separate durable local data, cache, queue, preferences, credentials, temporary data, drafts, and offline data."
+        - "Separate durable local data, cache, queue, preferences, credentials, temporary data, drafts, and offline
+          data."
         - "State source of truth and invalidation rules."
         - "Include local migration, corruption, reset, and recovery behavior."
       qualityChecks:
         - "Local data supports offline/cache requirements without violating privacy/security expectations."
         - "Local source-of-truth assumptions are explicit."
         - "Local migration and corruption recovery are not omitted."
-      questions:
+      questions: &a9
         - "What data lives locally on the client?"
         - "How is local data structured, encrypted, cached, invalidated, and synchronized?"
         - "What local data is durable versus temporary?"
@@ -464,17 +530,19 @@ document:
         - "What happens if local data is corrupted, stale, partial, or out of sync?"
     - id: "remote-data"
       title: "Remote Data"
-      intent: "Specify what data lives remotely, how it is accessed, cached, protected, replicated, backed up, restored, and governed."
+      intent: "Specify what data lives remotely, how it is accessed, cached, protected, replicated, backed up, restored, and
+        governed."
       required: true
       outputGuidance:
-        - "Separate canonical remote data, derived remote data, analytics data, audit data, telemetry data, and integration data."
+        - "Separate canonical remote data, derived remote data, analytics data, audit data, telemetry data, and
+          integration data."
         - "State access patterns, ownership, caching, replication, backup, retention, and restore implications."
         - "Identify data residency or compliance review needs where relevant."
       qualityChecks:
         - "Remote data ownership and access patterns are explicit."
         - "Backup, restore, retention, and security implications are not hidden."
         - "Remote data model aligns with API and Infrastructure needs."
-      questions:
+      questions: &a10
         - "What data lives on the remote server or service?"
         - "How is remote data accessed and cached?"
         - "What remote data is canonical, derived, audit-only, analytics-only, telemetry-only, or integration-owned?"
@@ -482,7 +550,8 @@ document:
         - "What data residency, compliance, or operational questions require review?"
     - id: "synchronization-model"
       title: "Synchronization Model"
-      intent: "Define how local and remote data reconcile, including source of truth, sync direction, checkpoints, conflicts, retries, idempotency, offline behavior, and recovery."
+      intent: "Define how local and remote data reconcile, including source of truth, sync direction, checkpoints, conflicts,
+        retries, idempotency, offline behavior, and recovery."
       required: true
       outputGuidance:
         - "Define sync rules only if sync, offline, local cache, event replay, or distributed writes exist."
@@ -492,7 +561,7 @@ document:
         - "Sync model defines source of truth and conflict handling."
         - "Idempotency, ordering, checkpointing, and retry behavior are explicit where relevant."
         - "Offline and partial sync behavior is not hidden."
-      questions:
+      questions: &a11
         - "What data synchronizes between local and remote stores?"
         - "What is the source of truth for each synchronized data type?"
         - "Is sync one-way, two-way, pull-based, push-based, event-based, or hybrid?"
@@ -502,7 +571,8 @@ document:
         - "What happens when sync is interrupted, delayed, partial, or corrupted?"
     - id: "event-sourcing-considerations"
       title: "Event Sourcing Considerations"
-      intent: "Define event storage requirements, event envelope, payload schema, versioning, idempotency, ordering, conflict metadata, replay, projections, retention, and privacy constraints."
+      intent: "Define event storage requirements, event envelope, payload schema, versioning, idempotency, ordering, conflict
+        metadata, replay, projections, retention, and privacy constraints."
       required: true
       outputGuidance:
         - "Use event sourcing only when justified by product, domain, sync, audit, or operational needs."
@@ -512,7 +582,7 @@ document:
         - "Event model aligns with Domain Model events and System Architecture runtime."
         - "Envelope, versioning, idempotency, ordering, and replay are not omitted."
         - "Privacy-sensitive event payloads are minimized or protected."
-      questions:
+      questions: &a12
         - "Is event sourcing required, optional, deferred, or explicitly not used?"
         - "What is the event envelope structure?"
         - "What does the event payload schema look like?"
@@ -523,26 +593,31 @@ document:
         - "How are events replayed, projected, retained, redacted, or deleted?"
     - id: "migration-strategy"
       title: "Migration Strategy"
-      intent: "Describe how schema, data, local, remote, event, and backfill migrations are authored, tested, applied, monitored, failed, and recovered."
+      intent: "Describe how schema, data, local, remote, event, and backfill migrations are authored, tested, applied,
+        monitored, failed, and recovered."
       required: true
       outputGuidance:
-        - "Distinguish schema migrations, data migrations, local migrations, remote migrations, event migrations, and backfills."
-        - "State whether migrations are reversible, forward-only, backward-compatible, zero-downtime, or release-blocking."
+        - "Distinguish schema migrations, data migrations, local migrations, remote migrations, event migrations, and
+          backfills."
+        - "State whether migrations are reversible, forward-only, backward-compatible, zero-downtime, or
+          release-blocking."
         - "Include failed migration recovery."
       qualityChecks:
         - "Migration strategy includes testing and recovery."
         - "Local and remote migrations are both considered where relevant."
         - "Backfills and compatibility windows are explicit."
-      questions:
+      questions: &a13
         - "How are schema migrations authored, tested, reviewed, and applied?"
         - "How are local and remote migrations handled?"
         - "How are data backfills and event migrations handled?"
         - "What is the rollback or roll-forward strategy for failed migrations?"
-        - "What compatibility requirements exist across app versions, API versions, local stores, remote stores, and event versions?"
+        - "What compatibility requirements exist across app versions, API versions, local stores, remote stores, and event
+          versions?"
         - "What migrations are release-blocking or require maintenance windows?"
     - id: "data-retention"
       title: "Data Retention"
-      intent: "Define retention periods, archival policy, soft-delete, hard-delete, anonymization, legal hold, export, restore window, cascade, and operational rules."
+      intent: "Define retention periods, archival policy, soft-delete, hard-delete, anonymization, legal hold, export, restore
+        window, cascade, and operational rules."
       required: true
       outputGuidance:
         - "Separate product retention decisions from legal/compliance obligations requiring review."
@@ -552,7 +627,7 @@ document:
         - "Retention rules are explicit or marked unresolved."
         - "Deletion behavior does not contradict relationships or auditability needs."
         - "Legal/compliance assumptions are not invented."
-      questions:
+      questions: &a14
         - "How long is each data category retained?"
         - "What is the archival policy?"
         - "What data is soft-deleted versus hard-deleted?"
@@ -562,35 +637,41 @@ document:
         - "What retention questions require legal, security, or operations review?"
     - id: "data-sensitivity"
       title: "Data Sensitivity"
-      intent: "Classify data sensitivity and define protection expectations for PII, sensitive data, secrets, credentials, behavioral data, telemetry, audit data, and derived data."
+      intent: "Classify data sensitivity and define protection expectations for PII, sensitive data, secrets, credentials,
+        behavioral data, telemetry, audit data, and derived data."
       required: true
       outputGuidance:
-        - "Classify sensitivity by data category, table, field, event payload, log, telemetry, export, and backup where relevant."
-        - "State encryption, masking, minimization, access restriction, redaction, logging, export, and deletion implications."
+        - "Classify sensitivity by data category, table, field, event payload, log, telemetry, export, and backup where
+          relevant."
+        - "State encryption, masking, minimization, access restriction, redaction, logging, export, and deletion
+          implications."
         - "Route control implementation to Security Architecture."
       qualityChecks:
         - "Sensitive data is identified before API, logging, analytics, and export decisions."
         - "Protection expectations are clear but not overstated as implemented controls."
         - "Secrets and credentials are separated from ordinary user data."
-      questions:
-        - "What data is classified as sensitive, PII, secret, credential, financial, behavioral, telemetry, audit, or derived data?"
+      questions: &a15
+        - "What data is classified as sensitive, PII, secret, credential, financial, behavioral, telemetry, audit, or derived
+          data?"
         - "How is sensitive data protected at rest and in transit?"
         - "What data must be encrypted, masked, redacted, minimized, access-restricted, or excluded from logs?"
         - "What sensitivity rules apply to exports, imports, backups, telemetry, analytics, events, and audit records?"
         - "What should Security Architecture inherit?"
     - id: "backup-and-restore"
       title: "Backup and Restore"
-      intent: "Define backup scope, frequency, retention, RPO, RTO, restore testing, disaster recovery expectations, authorization, and local/remote recovery implications."
+      intent: "Define backup scope, frequency, retention, RPO, RTO, restore testing, disaster recovery expectations,
+        authorization, and local/remote recovery implications."
       required: true
       outputGuidance:
-        - "Separate local recovery, remote backup, remote restore, disaster recovery, user-level restore, and operator-level restore."
+        - "Separate local recovery, remote backup, remote restore, disaster recovery, user-level restore, and
+          operator-level restore."
         - "Tie backup and restore to Reliability, Availability, Data Retention, and Operations."
         - "State what cannot be restored or is intentionally excluded."
       qualityChecks:
         - "Backup and restore strategy supports NFRs and Acceptance Criteria."
         - "Restore testing is considered."
         - "Authorization and privacy implications are not hidden."
-      questions:
+      questions: &a16
         - "What data is backed up and what is excluded?"
         - "How often are backups created and how long are they retained?"
         - "What RPO and RTO apply?"
@@ -600,17 +681,19 @@ document:
         - "What should Infrastructure, Deployment, Support, and Operations inherit?"
     - id: "data-lineage-and-auditability"
       title: "Data Lineage and Auditability"
-      intent: "Define how data changes are traced to actors, commands, events, imports, exports, integrations, migrations, versions, and audit records."
+      intent: "Define how data changes are traced to actors, commands, events, imports, exports, integrations, migrations,
+        versions, and audit records."
       required: true
       outputGuidance:
         - "Define auditability based on product, security, privacy, support, and operational needs."
-        - "Separate audit trail, mutation history, event history, import/export lineage, migration history, and telemetry."
+        - "Separate audit trail, mutation history, event history, import/export lineage, migration history, and
+          telemetry."
         - "State what is visible to users, admins, operators, support, or only internal diagnostics."
       qualityChecks:
         - "Auditability supports sensitive actions and support needs without over-collecting data."
         - "Lineage includes actor, source, time, reason, and version where relevant."
         - "Audit data sensitivity and retention are explicit."
-      questions:
+      questions: &a17
         - "What data changes must be auditable?"
         - "What actor, source, timestamp, command, event, import/export, integration, or migration metadata is recorded?"
         - "What mutation history must be preserved?"
@@ -619,17 +702,20 @@ document:
         - "What should Observability Plan and Security Architecture inherit?"
     - id: "data-model-risks"
       title: "Data Model Risks"
-      intent: "Identify risks of the chosen data model, including bottlenecks, integrity gaps, migration hazards, retention conflicts, sensitivity exposure, sync conflicts, and operational recovery gaps."
+      intent: "Identify risks of the chosen data model, including bottlenecks, integrity gaps, migration hazards, retention
+        conflicts, sensitivity exposure, sync conflicts, and operational recovery gaps."
       required: true
       outputGuidance:
         - "Describe risks as concrete data failure modes."
-        - "Tie risks to data structures, relationships, constraints, indexes, migrations, sync, sensitivity, retention, backup, or downstream documents."
+        - "Tie risks to data structures, relationships, constraints, indexes, migrations, sync, sensitivity, retention,
+          backup, or downstream documents."
         - "Include early signal, mitigation, target document, and release impact."
       qualityChecks:
         - "Risks are specific enough to test, monitor, mitigate, or route downstream."
-        - "Performance, integrity, privacy, security, migration, sync, retention, backup, and operational risks are considered."
+        - "Performance, integrity, privacy, security, migration, sync, retention, backup, and operational risks are
+          considered."
         - "Query bottlenecks and write bottlenecks are both considered."
-      questions:
+      questions: &a18
         - "What are the risks of the chosen data model?"
         - "What query patterns could become bottlenecks?"
         - "What write patterns, migrations, constraints, or indexes could create bottlenecks?"
@@ -638,17 +724,19 @@ document:
         - "What mitigations or downstream reviews are required?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Engineering and Operations documents must inherit from the Data Model and what they must not assume."
+      intent: "Define what downstream Engineering and Operations documents must inherit from the Data Model and what they must
+        not assume."
       required: true
       outputGuidance:
         - "Route data model outputs to the correct downstream documents."
-        - "Separate security, API, integration, frontend, infrastructure, testing, observability, deployment, support, release, and operations implications."
+        - "Separate security, API, integration, frontend, infrastructure, testing, observability, deployment, support,
+          release, and operations implications."
         - "Preserve unresolved data questions and risky assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing data rules silently."
         - "Logical data model and downstream implementation responsibilities remain distinct."
-      questions:
+      questions: &a19
         - "What should Security Architecture inherit from Data Model?"
         - "What should API Contracts inherit?"
         - "What should Integration Architecture and Frontend Architecture inherit?"
@@ -656,3 +744,268 @@ document:
         - "What should Test Strategy and Observability Plan inherit?"
         - "What should Support Model, Risk Management, and Operations inherit?"
         - "What unresolved data model questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain data model. How is data represented, related, constrained, stored, synchronized, migrated,
+      protected, retained, and recovered?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "data-model-overview"
+        label: "Data Model Overview"
+        required: true
+        description: "Summarize the data model shape, storage posture, source of truth, major data categories, and
+          highest-impact data decisions."
+        evaluationHint: "Look for concrete answers addressing: What is the overall data model shape?; What is the source of
+          truth for each major data category?; What data is canonical, derived, cached, denormalized, local-only,
+          remote-only, event-based, audit-based, or temporary?."
+        sourceQuestions: *a1
+        targetSections: &a20
+          - "Data Model Overview"
+      - id: "data-storage-strategy"
+        label: "Data Storage Strategy"
+        required: true
+        description: "Specify storage engines, persistence roles, local/remote partitioning, canonical stores, derived stores,
+          cache stores, event stores, and storage trade-offs."
+        evaluationHint: "Look for concrete answers addressing: What storage engines are used and why?; Which store is canonical
+          for each major data category?; How is local and remote data partitioned?."
+        sourceQuestions: *a2
+        targetSections: &a21
+          - "Data Storage Strategy"
+      - id: "domain-to-data-mapping"
+        label: "Domain-to-Data Mapping"
+        required: true
+        description: "Map domain concepts, IA objects, aggregates, value objects, commands, events, and invariants to storage
+          structures without distorting domain semantics."
+        evaluationHint: "Look for concrete answers addressing: How do domain entities map to persisted data structures?; How do
+          value objects map to fields or embedded structures?; How do aggregates map to tables, collections, records, or
+          documents?."
+        sourceQuestions: *a3
+        targetSections: &a22
+          - "Domain-to-Data Mapping"
+      - id: "entity-relationship-overview"
+        label: "Entity Relationship Overview"
+        required: true
+        description: "Describe primary data entities, relationships, cardinality, optionality, ownership, lifecycle dependency,
+          and integrity rules."
+        evaluationHint: "Look for concrete answers addressing: What are the primary data entities and their relationships?; What
+          is the cardinality of each relationship?; Which relationships are optional versus required?."
+        sourceQuestions: *a4
+        targetSections: &a23
+          - "Entity Relationship Overview"
+      - id: "tables-collections"
+        label: "Tables / Collections"
+        required: true
+        description: "List all tables, collections, records, documents, event logs, read models, caches, and temporary
+          structures with purpose and ownership."
+        evaluationHint: "Look for concrete answers addressing: What tables, collections, records, documents, event logs, read
+          models, caches, or temporary structures exist?; What is the purpose of each structure?; What domain concept,
+          product object, event, audit need, or implementation need does each structure represent?."
+        sourceQuestions: *a5
+        targetSections: &a24
+          - "Tables / Collections"
+      - id: "fields"
+        label: "Fields"
+        required: true
+        description: "Define fields on each table or collection, including type, nullability, defaults, validation, derivation,
+          sensitivity, indexing relevance, and migration implications."
+        evaluationHint: "Look for concrete answers addressing: What fields exist on each table or collection?; What are the data
+          types, nullability, defaults, and validation rules for each field?; Which fields are derived, calculated,
+          normalized, or denormalized?."
+        sourceQuestions: *a6
+        targetSections: &a25
+          - "Fields"
+      - id: "constraints"
+        label: "Constraints"
+        required: true
+        description: "Document primary key, unique, foreign key, check, exclusion, domain invariant, application-level, and
+          eventual consistency constraints."
+        evaluationHint: "Look for concrete answers addressing: What primary key, unique, foreign key, check, exclusion, and
+          integrity constraints apply?; What domain invariants must be enforced by the data model?; Which constraints
+          are enforced by the database, domain layer, application layer, API, client, job, or external system?."
+        sourceQuestions: *a7
+        targetSections: &a26
+          - "Constraints"
+      - id: "indexes"
+        label: "Indexes"
+        required: true
+        description: "Define indexes required for query performance, uniqueness, sorting, filtering, pagination, lookup, sync,
+          and constraint enforcement."
+        evaluationHint: "Look for concrete answers addressing: What indexes are required for query performance?; What are the
+          expected query patterns driving index design?; What indexes support uniqueness, sorting, filtering,
+          pagination, lookup, or sync?."
+        sourceQuestions: *a8
+        targetSections: &a27
+          - "Indexes"
+      - id: "local-data"
+        label: "Local Data"
+        required: true
+        description: "Specify what data lives locally on clients, how it is structured, cached, encrypted, migrated,
+          synchronized, invalidated, and recovered."
+        evaluationHint: "Look for concrete answers addressing: What data lives locally on the client?; How is local data
+          structured, encrypted, cached, invalidated, and synchronized?; What local data is durable versus temporary?."
+        sourceQuestions: *a9
+        targetSections: &a28
+          - "Local Data"
+      - id: "remote-data"
+        label: "Remote Data"
+        required: true
+        description: "Specify what data lives remotely, how it is accessed, cached, protected, replicated, backed up, restored,
+          and governed."
+        evaluationHint: "Look for concrete answers addressing: What data lives on the remote server or service?; How is remote
+          data accessed and cached?; What remote data is canonical, derived, audit-only, analytics-only, telemetry-only,
+          or integration-owned?."
+        sourceQuestions: *a10
+        targetSections: &a29
+          - "Remote Data"
+      - id: "synchronization-model"
+        label: "Synchronization Model"
+        required: true
+        description: "Define how local and remote data reconcile, including source of truth, sync direction, checkpoints,
+          conflicts, retries, idempotency, offline behavior, and recovery."
+        evaluationHint: "Look for concrete answers addressing: What data synchronizes between local and remote stores?; What is
+          the source of truth for each synchronized data type?; Is sync one-way, two-way, pull-based, push-based,
+          event-based, or hybrid?."
+        sourceQuestions: *a11
+        targetSections: &a30
+          - "Synchronization Model"
+      - id: "event-sourcing-considerations"
+        label: "Event Sourcing Considerations"
+        required: true
+        description: "Define event storage requirements, event envelope, payload schema, versioning, idempotency, ordering,
+          conflict metadata, replay, projections, retention, and privacy constraints."
+        evaluationHint: "Look for concrete answers addressing: Is event sourcing required, optional, deferred, or explicitly not
+          used?; What is the event envelope structure?; What does the event payload schema look like?."
+        sourceQuestions: *a12
+        targetSections: &a31
+          - "Event Sourcing Considerations"
+      - id: "migration-strategy"
+        label: "Migration Strategy"
+        required: true
+        description: "Describe how schema, data, local, remote, event, and backfill migrations are authored, tested, applied,
+          monitored, failed, and recovered."
+        evaluationHint: "Look for concrete answers addressing: How are schema migrations authored, tested, reviewed, and
+          applied?; How are local and remote migrations handled?; How are data backfills and event migrations handled?."
+        sourceQuestions: *a13
+        targetSections: &a32
+          - "Migration Strategy"
+      - id: "data-retention"
+        label: "Data Retention"
+        required: true
+        description: "Define retention periods, archival policy, soft-delete, hard-delete, anonymization, legal hold, export,
+          restore window, cascade, and operational rules."
+        evaluationHint: "Look for concrete answers addressing: How long is each data category retained?; What is the archival
+          policy?; What data is soft-deleted versus hard-deleted?."
+        sourceQuestions: *a14
+        targetSections: &a33
+          - "Data Retention"
+      - id: "data-sensitivity"
+        label: "Data Sensitivity"
+        required: true
+        description: "Classify data sensitivity and define protection expectations for PII, sensitive data, secrets,
+          credentials, behavioral data, telemetry, audit data, and derived data."
+        evaluationHint: "Look for concrete answers addressing: What data is classified as sensitive, PII, secret, credential,
+          financial, behavioral, telemetry, audit, or derived data?; How is sensitive data protected at rest and in
+          transit?; What data must be encrypted, masked, redacted, minimized, access-restricted, or excluded from
+          logs?."
+        sourceQuestions: *a15
+        targetSections: &a34
+          - "Data Sensitivity"
+      - id: "backup-and-restore"
+        label: "Backup and Restore"
+        required: true
+        description: "Define backup scope, frequency, retention, RPO, RTO, restore testing, disaster recovery expectations,
+          authorization, and local/remote recovery implications."
+        evaluationHint: "Look for concrete answers addressing: What data is backed up and what is excluded?; How often are
+          backups created and how long are they retained?; What RPO and RTO apply?."
+        sourceQuestions: *a16
+        targetSections: &a35
+          - "Backup and Restore"
+      - id: "data-lineage-and-auditability"
+        label: "Data Lineage and Auditability"
+        required: true
+        description: "Define how data changes are traced to actors, commands, events, imports, exports, integrations,
+          migrations, versions, and audit records."
+        evaluationHint: "Look for concrete answers addressing: What data changes must be auditable?; What actor, source,
+          timestamp, command, event, import/export, integration, or migration metadata is recorded?; What mutation
+          history must be preserved?."
+        sourceQuestions: *a17
+        targetSections: &a36
+          - "Data Lineage and Auditability"
+      - id: "data-model-risks"
+        label: "Data Model Risks"
+        required: true
+        description: "Identify risks of the chosen data model, including bottlenecks, integrity gaps, migration hazards,
+          retention conflicts, sensitivity exposure, sync conflicts, and operational recovery gaps."
+        evaluationHint: "Look for concrete answers addressing: What are the risks of the chosen data model?; What query patterns
+          could become bottlenecks?; What write patterns, migrations, constraints, or indexes could create
+          bottlenecks?."
+        sourceQuestions: *a18
+        targetSections: &a37
+          - "Data Model Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Engineering and Operations documents must inherit from the Data Model and what they
+          must not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Security Architecture inherit from Data Model?; What
+          should API Contracts inherit?; What should Integration Architecture and Frontend Architecture inherit?."
+        sourceQuestions: *a19
+        targetSections: &a38
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      data-model-overview:
+        targetSections: *a20
+      data-storage-strategy:
+        targetSections: *a21
+      domain-to-data-mapping:
+        targetSections: *a22
+      entity-relationship-overview:
+        targetSections: *a23
+      tables-collections:
+        targetSections: *a24
+      fields:
+        targetSections: *a25
+      constraints:
+        targetSections: *a26
+      indexes:
+        targetSections: *a27
+      local-data:
+        targetSections: *a28
+      remote-data:
+        targetSections: *a29
+      synchronization-model:
+        targetSections: *a30
+      event-sourcing-considerations:
+        targetSections: *a31
+      migration-strategy:
+        targetSections: *a32
+      data-retention:
+        targetSections: *a33
+      data-sensitivity:
+        targetSections: *a34
+      backup-and-restore:
+        targetSections: *a35
+      data-lineage-and-auditability:
+        targetSections: *a36
+      data-model-risks:
+        targetSections: *a37
+      downstream-handoff:
+        targetSections: *a38
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.352Z"
+      totalSourceQuestions: 119
+      reviewRequired: false

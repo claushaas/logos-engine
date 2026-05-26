@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 2
   type: "operating_model"
-  purpose: "Define how the project operates day to day, including ownership, responsibilities, rhythms, workflows, manual operations, automated operations, third-party dependencies, decisions, escalation, metrics, constraints, risks, and downstream operational handoffs."
-  centralQuestion: "How does the project function day to day in a way that is reliable, supportable, maintainable, accountable, and sustainable?"
+  purpose: "Define how the project operates day to day, including ownership, responsibilities, rhythms, workflows, manual
+    operations, automated operations, third-party dependencies, decisions, escalation, metrics, constraints, risks, and
+    downstream operational handoffs."
+  centralQuestion: "How does the project function day to day in a way that is reliable, supportable, maintainable,
+    accountable, and sustainable?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "operations.operating_model_map"
         format: "html"
         path: "outcomes/html/06-operations/operating-model-map.html"
-        purpose: "Provide a founder-facing operating model map covering operating principles, ownership, functions, cadences, workflows, manual operations, automation, dependencies, decisions, escalation, metrics, constraints, risks, and downstream handoff."
+        purpose: "Provide a founder-facing operating model map covering operating principles, ownership, functions, cadences,
+          workflows, manual operations, automation, dependencies, decisions, escalation, metrics, constraints, risks,
+          and downstream handoff."
         audience: "founder"
         includes:
           - "operating objective"
@@ -41,7 +46,9 @@ document:
       - id: "operations.operating_model_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/operating-model-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the operating model is executable, owner-aware, cadence-aware, risk-aware, automation-aware, supportable, and properly handed off to downstream Operations documents."
+        purpose: "Provide compact context for agents reviewing whether the operating model is executable, owner-aware,
+          cadence-aware, risk-aware, automation-aware, supportable, and properly handed off to downstream Operations
+          documents."
         agentRole: "reviewer"
         includes:
           - "canonical operating model"
@@ -85,248 +92,294 @@ document:
     - id: "operations-brief"
       type: "context"
       required: false
-      description: "Operations objective, product/service context, ownership model, critical operational functions, service expectations, support expectations, incident expectations, maintenance expectations, release expectations, constraints, success criteria, and risks."
+      description: "Operations objective, product/service context, ownership model, critical operational functions, service
+        expectations, support expectations, incident expectations, maintenance expectations, release expectations,
+        constraints, success criteria, and risks."
     - id: "product-context"
       type: "context"
       required: false
-      description: "Product scope, NFRs, acceptance criteria, user-facing promises, supportable capabilities, deferred capabilities, and operational implications."
+      description: "Product scope, NFRs, acceptance criteria, user-facing promises, supportable capabilities, deferred
+        capabilities, and operational implications."
     - id: "engineering-context"
       type: "context"
       required: false
-      description: "Architecture, security/privacy model, testing strategy, observability, deployment/environments, engineering standards, technical risks, manual runbooks, automation candidates, and third-party dependencies."
+      description: "Architecture, security/privacy model, testing strategy, observability, deployment/environments,
+        engineering standards, technical risks, manual runbooks, automation candidates, and third-party dependencies."
     - id: "gtm-context"
       type: "context"
       required: false
-      description: "Launch plan, pricing and packaging, growth metrics, GTM risks, customer promises, support load, billing/payment operations, and operational burden created by GTM."
+      description: "Launch plan, pricing and packaging, growth metrics, GTM risks, customer promises, support load,
+        billing/payment operations, and operational burden created by GTM."
     - id: "operating-model-notes"
       type: "manual_note"
       required: false
-      description: "Known routines, owner assumptions, manual tasks, automation ideas, vendor dependencies, decision bottlenecks, escalation preferences, cadence preferences, tooling, and unresolved operating model questions."
+      description: "Known routines, owner assumptions, manual tasks, automation ideas, vendor dependencies, decision
+        bottlenecks, escalation preferences, cadence preferences, tooling, and unresolved operating model questions."
   completionCriteria:
-    - "The central question is answered through an executable day-to-day operating model with ownership, roles, cadences, workflows, decisions, escalation, metrics, constraints, risks, and handoffs."
-    - "Operating objective defines what day-to-day operation must preserve: reliability, supportability, maintainability, accountability, service quality, data/privacy, release safety, cost discipline, and sustainability."
-    - "Operating principles define how operational trade-offs are resolved across speed, quality, cost, safety, privacy, customer trust, automation, manual work, and sustainability."
-    - "Operating scope defines what the operating model covers, what is shared with Product/Engineering/GTM, what is out of scope, what is deferred, and what is explicitly unknown."
-    - "Ownership model defines primary owners, backup owners, escalation owners, decision rights, responsibility boundaries, owner gaps, and transition rules."
-    - "Roles and responsibilities define operational roles, recurring responsibilities, authority, interfaces, expected outputs, and handoff rules."
-    - "Operating cadences define daily, weekly, monthly, release-cycle, launch-window, incident-triggered, risk-review, maintenance, support, and financial review rhythms where relevant."
-    - "Core operational functions define each recurring operational function, purpose, cadence, owner, backup, trigger, health signal, failure signal, required tools, fallback, and downstream document."
-    - "Manual operations define human-run tasks, trigger, steps, owner, checklist/runbook, expected evidence, error risk, fallback, automation candidate status, and review cadence."
-    - "Automated operations define scripts, jobs, integrations, monitors, alerts, syncs, reports, billing/payment automations, support automations, and deployment automations, including owner, trigger, failure signal, and fallback."
-    - "Third-party dependencies define vendors/platforms/tools, operational purpose, criticality, owner, failure mode, blast radius, monitoring, fallback, cost/capacity concern, and exit/replacement consideration."
-    - "Standard workflows define recurring workflows with trigger, input, steps, owner, tool, output, SLA/internal target, quality check, escalation rule, and downstream handoff."
-    - "Decision rights define which operational decisions are automatic, owner-decided, escalation-required, founder-required, product-required, engineering-required, legal/compliance-review-needed, or risk-acceptance-required."
-    - "Escalation paths define escalation levels, triggers, severity, communication channel, owner, decision required, response expectation, customer communication, and downstream procedure."
-    - "Operational metrics define operating health, support load, release quality, incident trend, maintenance freshness, automation reliability, cost/capacity, privacy/security, and risk indicators."
-    - "Operating constraints define staffing, budget, tooling, vendors, technical, compliance/legal, privacy, security, process, knowledge, manual work, support, and time constraints."
-    - "Operating model risks define failure modes such as owner gaps, manual-process overload, automation failure, vendor failure, weak escalation, poor documentation, support overload, release bottlenecks, data/privacy drift, and cost/capacity overload."
-    - "Downstream handoff clarifies what Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+    - "The central question is answered through an executable day-to-day operating model with ownership, roles,
+      cadences, workflows, decisions, escalation, metrics, constraints, risks, and handoffs."
+    - "Operating objective defines what day-to-day operation must preserve: reliability, supportability,
+      maintainability, accountability, service quality, data/privacy, release safety, cost discipline, and
+      sustainability."
+    - "Operating principles define how operational trade-offs are resolved across speed, quality, cost, safety, privacy,
+      customer trust, automation, manual work, and sustainability."
+    - "Operating scope defines what the operating model covers, what is shared with Product/Engineering/GTM, what is out
+      of scope, what is deferred, and what is explicitly unknown."
+    - "Ownership model defines primary owners, backup owners, escalation owners, decision rights, responsibility
+      boundaries, owner gaps, and transition rules."
+    - "Roles and responsibilities define operational roles, recurring responsibilities, authority, interfaces, expected
+      outputs, and handoff rules."
+    - "Operating cadences define daily, weekly, monthly, release-cycle, launch-window, incident-triggered, risk-review,
+      maintenance, support, and financial review rhythms where relevant."
+    - "Core operational functions define each recurring operational function, purpose, cadence, owner, backup, trigger,
+      health signal, failure signal, required tools, fallback, and downstream document."
+    - "Manual operations define human-run tasks, trigger, steps, owner, checklist/runbook, expected evidence, error
+      risk, fallback, automation candidate status, and review cadence."
+    - "Automated operations define scripts, jobs, integrations, monitors, alerts, syncs, reports, billing/payment
+      automations, support automations, and deployment automations, including owner, trigger, failure signal, and
+      fallback."
+    - "Third-party dependencies define vendors/platforms/tools, operational purpose, criticality, owner, failure mode,
+      blast radius, monitoring, fallback, cost/capacity concern, and exit/replacement consideration."
+    - "Standard workflows define recurring workflows with trigger, input, steps, owner, tool, output, SLA/internal
+      target, quality check, escalation rule, and downstream handoff."
+    - "Decision rights define which operational decisions are automatic, owner-decided, escalation-required,
+      founder-required, product-required, engineering-required, legal/compliance-review-needed, or
+      risk-acceptance-required."
+    - "Escalation paths define escalation levels, triggers, severity, communication channel, owner, decision required,
+      response expectation, customer communication, and downstream procedure."
+    - "Operational metrics define operating health, support load, release quality, incident trend, maintenance
+      freshness, automation reliability, cost/capacity, privacy/security, and risk indicators."
+    - "Operating constraints define staffing, budget, tooling, vendors, technical, compliance/legal, privacy, security,
+      process, knowledge, manual work, support, and time constraints."
+    - "Operating model risks define failure modes such as owner gaps, manual-process overload, automation failure,
+      vendor failure, weak escalation, poor documentation, support overload, release bottlenecks, data/privacy drift,
+      and cost/capacity overload."
+    - "Downstream handoff clarifies what Customer Success, Support Model, Maintenance Plan, Release Management, Incident
+      Response, Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid operating-model theater: role names, cadences, or workflows without owner, trigger, expected output, signal, tool, fallback, escalation, and downstream handoff."
-    - "Avoid ownerless functions, ownerless manual tasks, ownerless automations, ownerless vendor dependencies, ownerless metrics, and ownerless escalation paths."
+    - "Avoid operating-model theater: role names, cadences, or workflows without owner, trigger, expected output,
+      signal, tool, fallback, escalation, and downstream handoff."
+    - "Avoid ownerless functions, ownerless manual tasks, ownerless automations, ownerless vendor dependencies,
+      ownerless metrics, and ownerless escalation paths."
     - "Avoid treating manual work as free, invisible, or infinitely scalable."
-    - "Avoid automating before the manual workflow is understood, unless automation is required for safety, reliability, privacy, or scale."
-    - "Avoid promising operational response times, uptime, support expectations, privacy handling, or release cadence that the current team, tooling, architecture, or budget cannot sustain."
-    - "Avoid hiding third-party dependency risk, vendor lock-in, cost exposure, data access, privacy constraints, or platform limitations."
-    - "Avoid duplicating detailed procedures that belong in Support, Maintenance, Release, Incident Response, Data/Privacy, Financial Operations, or Risk Management."
+    - "Avoid automating before the manual workflow is understood, unless automation is required for safety, reliability,
+      privacy, or scale."
+    - "Avoid promising operational response times, uptime, support expectations, privacy handling, or release cadence
+      that the current team, tooling, architecture, or budget cannot sustain."
+    - "Avoid hiding third-party dependency risk, vendor lock-in, cost exposure, data access, privacy constraints, or
+      platform limitations."
+    - "Avoid duplicating detailed procedures that belong in Support, Maintenance, Release, Incident Response,
+      Data/Privacy, Financial Operations, or Risk Management."
     - "Avoid importing unresolved assumptions from Operations Brief, Engineering, GTM, or Product as operational facts."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent team capacity, vendor guarantees, automation reliability, support SLAs, escalation coverage, cost numbers, or compliance status."
-    - "Operating model must preserve Foundation boundaries, product truth, technical truth, GTM promises, privacy/security constraints, support capacity, cost discipline, and sustainability."
+    - "Do not invent team capacity, vendor guarantees, automation reliability, support SLAs, escalation coverage, cost
+      numbers, or compliance status."
+    - "Operating model must preserve Foundation boundaries, product truth, technical truth, GTM promises,
+      privacy/security constraints, support capacity, cost discipline, and sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate role, owner, function, cadence, workflow, manual step, automation, dependency, decision, escalation, metric, constraint, risk, and handoff."
-    - "Tie operating model claims to Operations Brief, Product, Engineering, GTM, Technical Risks, GTM Risks, Observability, Deployment, Pricing, Launch Plan, Growth Metrics, or Decision Record where possible."
-    - "Classify operational items as current, required, deferred, manual, automated, automation-candidate, blocked, review-needed, launch-critical, post-launch, or downstream-owned where useful."
+    - "Separate role, owner, function, cadence, workflow, manual step, automation, dependency, decision, escalation,
+      metric, constraint, risk, and handoff."
+    - "Tie operating model claims to Operations Brief, Product, Engineering, GTM, Technical Risks, GTM Risks,
+      Observability, Deployment, Pricing, Launch Plan, Growth Metrics, or Decision Record where possible."
+    - "Classify operational items as current, required, deferred, manual, automated, automation-candidate, blocked,
+      review-needed, launch-critical, post-launch, or downstream-owned where useful."
     - "State where detailed procedure belongs downstream instead of overloading this document."
     - "Flag every unresolved owner, cadence, tool, threshold, or escalation rule as an operating gap."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Operations Brief, Foundation, Product, Acceptance Criteria, NFRs, Security/Privacy, Testing, Observability, Deployment, Technical Risks, Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision Record."
-    - "Flag operational functions without owner, cadence, trigger, health signal, failure signal, fallback, and downstream document."
+    - "Flag contradictions with Operations Brief, Foundation, Product, Acceptance Criteria, NFRs, Security/Privacy,
+      Testing, Observability, Deployment, Technical Risks, Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision
+      Record."
+    - "Flag operational functions without owner, cadence, trigger, health signal, failure signal, fallback, and
+      downstream document."
     - "Flag workflows without input, output, owner, tool, quality check, escalation rule, and handoff."
-    - "Flag manual operations without documentation, expected evidence, error risk, fallback, and automation-candidate status."
+    - "Flag manual operations without documentation, expected evidence, error risk, fallback, and automation-candidate
+      status."
     - "Flag automations without owner, trigger, failure signal, monitoring, fallback, and review cadence."
-    - "Flag third-party dependencies without criticality, failure mode, blast radius, monitoring, fallback, and exit/replacement consideration."
-    - "Flag decision rights that leave approval ambiguous for operational, product, engineering, risk, compliance/legal, support, or customer-facing decisions."
+    - "Flag third-party dependencies without criticality, failure mode, blast radius, monitoring, fallback, and
+      exit/replacement consideration."
+    - "Flag decision rights that leave approval ambiguous for operational, product, engineering, risk, compliance/legal,
+      support, or customer-facing decisions."
     - "Verify that downstream Operations documents receive concrete handoff inputs."
-    - "Flag content that belongs better in Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
+    - "Flag content that belongs better in Customer Success, Support Model, Maintenance Plan, Release Management,
+      Incident Response, Data/Privacy Operations, Financial Operations, or Risk Management."
   specializedFormats:
     operatingFunctionFormat:
       description: "Recommended format for core operational functions."
       fields:
-        - function
-        - purpose
-        - cadence
-        - trigger
-        - primaryOwner
-        - backupOwner
-        - requiredTools
-        - healthSignal
-        - failureSignal
-        - fallback
-        - escalationPath
-        - downstreamDocument
-        - status
+        - "function"
+        - "purpose"
+        - "cadence"
+        - "trigger"
+        - "primaryOwner"
+        - "backupOwner"
+        - "requiredTools"
+        - "healthSignal"
+        - "failureSignal"
+        - "fallback"
+        - "escalationPath"
+        - "downstreamDocument"
+        - "status"
     roleResponsibilityFormat:
       description: "Recommended format for operational roles and responsibilities."
       fields:
-        - role
-        - purpose
-        - responsibilities
-        - decisionRights
-        - recurringOutputs
-        - interfaces
-        - backupRole
-        - escalationRole
-        - unresolvedGaps
-        - status
+        - "role"
+        - "purpose"
+        - "responsibilities"
+        - "decisionRights"
+        - "recurringOutputs"
+        - "interfaces"
+        - "backupRole"
+        - "escalationRole"
+        - "unresolvedGaps"
+        - "status"
     cadenceFormat:
       description: "Recommended format for operating cadences."
       fields:
-        - cadence
-        - frequency
-        - purpose
-        - participants
-        - inputs
-        - outputs
-        - owner
-        - escalationCondition
-        - downstreamDocument
-        - status
+        - "cadence"
+        - "frequency"
+        - "purpose"
+        - "participants"
+        - "inputs"
+        - "outputs"
+        - "owner"
+        - "escalationCondition"
+        - "downstreamDocument"
+        - "status"
     workflowFormat:
       description: "Recommended format for standard operational workflows."
       fields:
-        - workflow
-        - purpose
-        - trigger
-        - inputs
-        - steps
-        - owner
-        - tools
-        - expectedOutput
-        - qualityCheck
-        - internalTargetOrSLA
-        - escalationRule
-        - downstreamHandoff
-        - status
+        - "workflow"
+        - "purpose"
+        - "trigger"
+        - "inputs"
+        - "steps"
+        - "owner"
+        - "tools"
+        - "expectedOutput"
+        - "qualityCheck"
+        - "internalTargetOrSLA"
+        - "escalationRule"
+        - "downstreamHandoff"
+        - "status"
     manualOperationFormat:
       description: "Recommended format for manual operations."
       fields:
-        - operation
-        - purpose
-        - trigger
-        - stepsReference
-        - owner
-        - expectedEvidence
-        - frequency
-        - errorRisk
-        - fallback
-        - automationCandidate
-        - reviewCadence
-        - downstreamDocument
-        - status
+        - "operation"
+        - "purpose"
+        - "trigger"
+        - "stepsReference"
+        - "owner"
+        - "expectedEvidence"
+        - "frequency"
+        - "errorRisk"
+        - "fallback"
+        - "automationCandidate"
+        - "reviewCadence"
+        - "downstreamDocument"
+        - "status"
     automationFormat:
       description: "Recommended format for automated operations."
       fields:
-        - automation
-        - purpose
-        - toolOrSystem
-        - trigger
-        - schedule
-        - owner
-        - monitoredSignal
-        - failureSignal
-        - fallback
-        - dataTouched
-        - privacyOrSecurityConcern
-        - reviewCadence
-        - status
+        - "automation"
+        - "purpose"
+        - "toolOrSystem"
+        - "trigger"
+        - "schedule"
+        - "owner"
+        - "monitoredSignal"
+        - "failureSignal"
+        - "fallback"
+        - "dataTouched"
+        - "privacyOrSecurityConcern"
+        - "reviewCadence"
+        - "status"
     dependencyFormat:
       description: "Recommended format for third-party dependencies."
       fields:
-        - dependency
-        - dependencyType
-        - operationalPurpose
-        - criticality
-        - owner
-        - failureMode
-        - blastRadius
-        - monitoringMethod
-        - fallback
-        - costOrCapacityConcern
-        - dataOrPrivacyConcern
-        - exitOrReplacementConsideration
-        - status
+        - "dependency"
+        - "dependencyType"
+        - "operationalPurpose"
+        - "criticality"
+        - "owner"
+        - "failureMode"
+        - "blastRadius"
+        - "monitoringMethod"
+        - "fallback"
+        - "costOrCapacityConcern"
+        - "dataOrPrivacyConcern"
+        - "exitOrReplacementConsideration"
+        - "status"
     decisionRightFormat:
       description: "Recommended format for operational decision rights."
       fields:
-        - decisionCategory
-        - decisionExamples
-        - defaultOwner
-        - approvalRequired
-        - escalationRequired
-        - riskAcceptanceRequired
-        - documentationRequired
-        - downstreamDocument
-        - status
+        - "decisionCategory"
+        - "decisionExamples"
+        - "defaultOwner"
+        - "approvalRequired"
+        - "escalationRequired"
+        - "riskAcceptanceRequired"
+        - "documentationRequired"
+        - "downstreamDocument"
+        - "status"
     escalationPathFormat:
       description: "Recommended format for escalation paths."
       fields:
-        - escalationLevel
-        - trigger
-        - severity
-        - owner
-        - backupOwner
-        - communicationChannel
-        - responseExpectation
-        - decisionRequired
-        - customerCommunicationRequired
-        - downstreamProcedure
-        - status
+        - "escalationLevel"
+        - "trigger"
+        - "severity"
+        - "owner"
+        - "backupOwner"
+        - "communicationChannel"
+        - "responseExpectation"
+        - "decisionRequired"
+        - "customerCommunicationRequired"
+        - "downstreamProcedure"
+        - "status"
     operatingMetricFormat:
       description: "Recommended format for operating model metrics."
       fields:
-        - metric
-        - metricType
-        - purpose
-        - formulaOrMeasurement
-        - source
-        - threshold
-        - cadence
-        - owner
-        - decisionImplication
-        - downstreamDocument
-        - status
+        - "metric"
+        - "metricType"
+        - "purpose"
+        - "formulaOrMeasurement"
+        - "source"
+        - "threshold"
+        - "cadence"
+        - "owner"
+        - "decisionImplication"
+        - "downstreamDocument"
+        - "status"
     operatingRiskFormat:
       description: "Recommended format for operating model risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - affectedArea
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "source"
+        - "affectedArea"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     operatingHandoffFormat:
       description: "Recommended format for downstream operating handoffs."
       fields:
-        - handoffTarget
-        - contextToPreserve
-        - requiredAction
-        - owner
-        - timing
-        - unresolvedQuestion
-        - riskOrConstraint
-        - status
+        - "handoffTarget"
+        - "contextToPreserve"
+        - "requiredAction"
+        - "owner"
+        - "timing"
+        - "unresolvedQuestion"
+        - "riskOrConstraint"
+        - "status"
   sections:
     - id: "operating-objective"
       title: "Operating Objective"
@@ -334,13 +387,14 @@ document:
       required: true
       outputGuidance:
         - "Open with the operating objective in one concise paragraph."
-        - "Connect day-to-day operation to reliability, supportability, maintainability, accountability, cost discipline, data/privacy, and customer trust."
+        - "Connect day-to-day operation to reliability, supportability, maintainability, accountability, cost
+          discipline, data/privacy, and customer trust."
         - "State what this operating model intentionally does not cover in detail."
       qualityChecks:
         - "Objective is specific enough to guide roles, cadences, and workflows."
         - "Objective is grounded in Operations Brief."
         - "Detailed procedures are routed downstream."
-      questions:
+      questions: &a1
         - "What must the operating model preserve day to day?"
         - "What does reliable and sustainable daily operation mean for this project?"
         - "What should this document intentionally not detail?"
@@ -350,13 +404,14 @@ document:
       required: true
       outputGuidance:
         - "Define practical operating principles."
-        - "Explain how trade-offs are resolved across speed, cost, quality, safety, privacy, customer trust, and sustainability."
+        - "Explain how trade-offs are resolved across speed, cost, quality, safety, privacy, customer trust, and
+          sustainability."
         - "Tie principles to Foundation and Operations Brief."
       qualityChecks:
         - "Principles are actionable, not slogans."
         - "Trade-off rules are explicit."
         - "Principles constrain operational behavior."
-      questions:
+      questions: &a2
         - "What principles guide day-to-day operational decisions?"
         - "How are trade-offs between speed, cost, quality, safety, privacy, customer trust, and sustainability resolved?"
         - "What operational behaviors are explicitly discouraged?"
@@ -372,14 +427,16 @@ document:
         - "Scope prevents ambiguity."
         - "Shared ownership areas are visible."
         - "Deferred areas are explicit."
-      questions:
+      questions: &a3
         - "What does the operating model cover?"
         - "What is explicitly outside this operating model?"
-        - "What responsibilities are shared with Product, Engineering, GTM, Support, Customer Success, Finance, or Risk Management?"
+        - "What responsibilities are shared with Product, Engineering, GTM, Support, Customer Success, Finance, or Risk
+          Management?"
         - "What is deferred or unresolved?"
     - id: "ownership-model"
       title: "Ownership Model"
-      intent: "Define primary ownership, backup ownership, escalation ownership, decision rights, and ownership gaps across operational areas."
+      intent: "Define primary ownership, backup ownership, escalation ownership, decision rights, and ownership gaps across
+        operational areas."
       required: true
       outputGuidance:
         - "Use ownership records where useful."
@@ -389,7 +446,7 @@ document:
         - "Critical areas are not ownerless."
         - "Backup and escalation ownership are considered."
         - "Decision rights are connected to ownership."
-      questions:
+      questions: &a4
         - "Who owns each operational area?"
         - "Who is backup owner?"
         - "Who owns escalation?"
@@ -407,7 +464,7 @@ document:
         - "Roles are functional, not merely titles."
         - "Responsibilities and outputs are explicit."
         - "Temporary role consolidation is clear."
-      questions:
+      questions: &a5
         - "What operational roles exist?"
         - "What responsibilities does each role hold?"
         - "What decisions can each role make?"
@@ -419,31 +476,35 @@ document:
       required: true
       outputGuidance:
         - "Use cadence records for material cadences."
-        - "Include daily, weekly, monthly, release-cycle, launch-window, maintenance, support, incident-triggered, risk-review, and financial cadences where relevant."
+        - "Include daily, weekly, monthly, release-cycle, launch-window, maintenance, support, incident-triggered,
+          risk-review, and financial cadences where relevant."
         - "State participants, inputs, outputs, owner, and escalation condition."
       qualityChecks:
         - "Cadences produce decisions or outputs."
         - "Cadences are not ritual overhead without purpose."
         - "Escalation triggers are explicit."
-      questions:
-        - "What daily, weekly, monthly, release, launch-window, maintenance, support, incident, risk-review, or financial cadences exist?"
+      questions: &a6
+        - "What daily, weekly, monthly, release, launch-window, maintenance, support, incident, risk-review, or financial
+          cadences exist?"
         - "Who participates?"
         - "What inputs and outputs are expected?"
         - "Who owns each cadence?"
         - "What triggers escalation outside the cadence?"
     - id: "core-operational-functions"
       title: "Core Operational Functions"
-      intent: "Enumerate functions performed daily, weekly, monthly, or event-triggered with clear accountability and health/failure signals."
+      intent: "Enumerate functions performed daily, weekly, monthly, or event-triggered with clear accountability and
+        health/failure signals."
       required: true
       outputGuidance:
         - "Use operating function records for material functions."
-        - "Include cadence, trigger, owner, backup, tools, health signal, failure signal, fallback, escalation, and downstream document."
+        - "Include cadence, trigger, owner, backup, tools, health signal, failure signal, fallback, escalation, and
+          downstream document."
         - "Group functions by area where useful."
       qualityChecks:
         - "Each function is operationally specific."
         - "Accountability and fallback are explicit."
         - "Health and failure are observable."
-      questions:
+      questions: &a7
         - "Which functions must be performed daily, weekly, monthly, or event-triggered?"
         - "Who is accountable for each function?"
         - "What tools are required?"
@@ -452,17 +513,19 @@ document:
         - "What fallback or escalation exists?"
     - id: "manual-operations"
       title: "Manual Operations"
-      intent: "Identify operations requiring human intervention, how they are documented, how they are executed, and whether they should eventually be automated."
+      intent: "Identify operations requiring human intervention, how they are documented, how they are executed, and whether
+        they should eventually be automated."
       required: true
       outputGuidance:
         - "Use manual operation records."
-        - "Include trigger, steps reference, owner, expected evidence, frequency, error risk, fallback, automation candidate status, review cadence, and downstream document."
+        - "Include trigger, steps reference, owner, expected evidence, frequency, error risk, fallback, automation
+          candidate status, review cadence, and downstream document."
         - "Do not hide manual work."
       qualityChecks:
         - "Manual operations are documented enough to execute."
         - "Error risk and fallback are explicit."
         - "Automation candidacy is considered but not forced."
-      questions:
+      questions: &a8
         - "Which operations require human intervention?"
         - "What triggers each manual operation?"
         - "Where are manual steps documented?"
@@ -472,17 +535,19 @@ document:
         - "Should any manual step become automated later?"
     - id: "automated-operations"
       title: "Automated Operations"
-      intent: "Identify automated operations, candidate automations, tools, triggers, monitoring, failure signals, fallback, and review cadence."
+      intent: "Identify automated operations, candidate automations, tools, triggers, monitoring, failure signals, fallback,
+        and review cadence."
       required: true
       outputGuidance:
         - "Use automation records."
-        - "Include scripts, scheduled jobs, integrations, alerts, syncs, reports, deployments, billing/payment automations, support automations, and data/privacy automations where relevant."
+        - "Include scripts, scheduled jobs, integrations, alerts, syncs, reports, deployments, billing/payment
+          automations, support automations, and data/privacy automations where relevant."
         - "State what is automated now versus automation candidate."
       qualityChecks:
         - "Automations have owner and monitoring."
         - "Failure signals and fallbacks are explicit."
         - "Automations touching data/privacy are flagged."
-      questions:
+      questions: &a9
         - "Which operations are automated?"
         - "Which operations should be automated later?"
         - "What tools, scripts, jobs, integrations, or platforms run them?"
@@ -491,17 +556,19 @@ document:
         - "What fallback exists when automation fails?"
     - id: "third-party-dependencies"
       title: "Third-Party Dependencies"
-      intent: "List critical third-party services and the operational impact of each dependency being degraded, unavailable, expensive, or replaced."
+      intent: "List critical third-party services and the operational impact of each dependency being degraded, unavailable,
+        expensive, or replaced."
       required: true
       outputGuidance:
         - "Use dependency records for material dependencies."
-        - "Include operational purpose, criticality, owner, failure mode, blast radius, monitoring, fallback, cost/capacity concern, data/privacy concern, and exit/replacement consideration."
+        - "Include operational purpose, criticality, owner, failure mode, blast radius, monitoring, fallback,
+          cost/capacity concern, data/privacy concern, and exit/replacement consideration."
         - "Do not treat vendor availability as guaranteed."
       qualityChecks:
         - "Dependency criticality is explicit."
         - "Failure mode and fallback are defined."
         - "Cost, data, privacy, and replacement concerns are considered."
-      questions:
+      questions: &a10
         - "Which third-party services are critical to daily operations?"
         - "What operational purpose does each dependency serve?"
         - "What happens when each dependency is unavailable or degraded?"
@@ -510,17 +577,19 @@ document:
         - "What fallback or replacement path exists?"
     - id: "standard-workflows"
       title: "Standard Workflows"
-      intent: "Define standard workflows for recurring operational tasks and how they are triggered, tracked, executed, quality-checked, escalated, and handed off."
+      intent: "Define standard workflows for recurring operational tasks and how they are triggered, tracked, executed,
+        quality-checked, escalated, and handed off."
       required: true
       outputGuidance:
         - "Use workflow records for recurring workflows."
-        - "Include trigger, input, steps, owner, tools, expected output, quality check, internal target/SLA, escalation rule, and downstream handoff."
+        - "Include trigger, input, steps, owner, tools, expected output, quality check, internal target/SLA, escalation
+          rule, and downstream handoff."
         - "Keep detailed runbooks in downstream docs where appropriate."
       qualityChecks:
         - "Workflows are executable."
         - "Input/output and owner are explicit."
         - "Escalation and quality checks are included."
-      questions:
+      questions: &a11
         - "What are the standard workflows for recurring operational tasks?"
         - "How are workflows triggered?"
         - "What inputs and outputs exist?"
@@ -533,13 +602,15 @@ document:
       required: true
       outputGuidance:
         - "Use decision right records."
-        - "Separate automatic decisions, owner decisions, escalation-required decisions, founder-required decisions, product/engineering-required decisions, legal/compliance-review-needed decisions, and risk-acceptance-required decisions."
+        - "Separate automatic decisions, owner decisions, escalation-required decisions, founder-required decisions,
+          product/engineering-required decisions, legal/compliance-review-needed decisions, and risk-acceptance-required
+          decisions."
         - "State documentation requirement."
       qualityChecks:
         - "Decision authority is explicit."
         - "Risky decisions have escalation or acceptance path."
         - "Documentation requirements are clear."
-      questions:
+      questions: &a12
         - "Which operational decisions require approval?"
         - "Who has authority to make each category of decision?"
         - "Which decisions require escalation?"
@@ -552,13 +623,14 @@ document:
       required: true
       outputGuidance:
         - "Use escalation path records."
-        - "Define severity, trigger, owner, backup, communication channel, response expectation, decision required, customer communication, and downstream procedure."
+        - "Define severity, trigger, owner, backup, communication channel, response expectation, decision required,
+          customer communication, and downstream procedure."
         - "Route detailed incident procedure to Incident Response."
       qualityChecks:
         - "Escalation paths are concrete and actionable."
         - "Customer communication triggers are visible."
         - "Escalation is not dependent on informal memory."
-      questions:
+      questions: &a13
         - "How do operational issues escalate?"
         - "What is the chain of communication for each escalation level?"
         - "What trigger or severity applies?"
@@ -567,25 +639,29 @@ document:
         - "When is customer communication required?"
     - id: "operational-metrics"
       title: "Operational Metrics"
-      intent: "Define metrics that indicate whether the operating model is healthy, overloaded, stale, ownerless, risky, or failing."
+      intent: "Define metrics that indicate whether the operating model is healthy, overloaded, stale, ownerless, risky, or
+        failing."
       required: true
       outputGuidance:
         - "Use operating metric records."
-        - "Include support, release, incident, maintenance, automation, dependency, cost/capacity, documentation, data/privacy, and risk indicators where relevant."
+        - "Include support, release, incident, maintenance, automation, dependency, cost/capacity, documentation,
+          data/privacy, and risk indicators where relevant."
         - "Tie metrics to thresholds and decisions."
       qualityChecks:
         - "Metrics are decision-useful."
         - "Metrics have owner, threshold, source, and cadence."
         - "Operational sustainability is measured, not assumed."
-      questions:
+      questions: &a14
         - "What metrics show the operating model is healthy?"
         - "What metrics show overload or failure?"
-        - "What support, release, incident, maintenance, automation, dependency, cost/capacity, documentation, data/privacy, and risk metrics matter?"
+        - "What support, release, incident, maintenance, automation, dependency, cost/capacity, documentation, data/privacy,
+          and risk metrics matter?"
         - "Who owns each metric?"
         - "What threshold triggers action?"
     - id: "operating-constraints"
       title: "Operating Constraints"
-      intent: "Catalog budget, tooling, staffing, compliance, contractual, vendor, technical, privacy, support, process, and knowledge constraints on operations."
+      intent: "Catalog budget, tooling, staffing, compliance, contractual, vendor, technical, privacy, support, process, and
+        knowledge constraints on operations."
       required: true
       outputGuidance:
         - "Classify constraints by type and affected area."
@@ -595,8 +671,9 @@ document:
         - "Constraints are connected to operational impact."
         - "Constraints are not confused with risks, though they may create risks."
         - "Review-needed constraints are explicit."
-      questions:
-        - "What budget, tooling, staffing, compliance, contractual, vendor, technical, privacy, support, process, or knowledge constraints limit operations?"
+      questions: &a15
+        - "What budget, tooling, staffing, compliance, contractual, vendor, technical, privacy, support, process, or
+          knowledge constraints limit operations?"
         - "What area does each constraint affect?"
         - "What is the operational impact?"
         - "What mitigation exists?"
@@ -607,26 +684,32 @@ document:
       required: true
       outputGuidance:
         - "Use operating risk records."
-        - "Include owner gaps, manual overload, automation failure, vendor failure, weak escalation, documentation drift, support overload, release bottlenecks, data/privacy drift, cost/capacity overload, and handoff failure."
+        - "Include owner gaps, manual overload, automation failure, vendor failure, weak escalation, documentation
+          drift, support overload, release bottlenecks, data/privacy drift, cost/capacity overload, and handoff
+          failure."
         - "Route risks to Risk Management where needed."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a16
         - "What could cause the operating model to fail?"
-        - "What owner, workflow, manual-process, automation, dependency, escalation, documentation, support, release, data/privacy, cost, or handoff risks exist?"
+        - "What owner, workflow, manual-process, automation, dependency, escalation, documentation, support, release,
+          data/privacy, cost, or handoff risks exist?"
         - "How are operating model risks detected?"
         - "What mitigation and contingency apply?"
         - "What should Risk Management inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Operations documents must inherit from the Operating Model and what they must not assume."
+      intent: "Define what downstream Operations documents must inherit from the Operating Model and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Use operating handoff records for material handoffs."
-        - "Route context to Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response, Data/Privacy Operations, Financial Operations, and Risk Management."
-        - "Preserve unresolved questions, owner gaps, workflows, automations, dependencies, metrics, constraints, and risks."
+        - "Route context to Customer Success, Support Model, Maintenance Plan, Release Management, Incident Response,
+          Data/Privacy Operations, Financial Operations, and Risk Management."
+        - "Preserve unresolved questions, owner gaps, workflows, automations, dependencies, metrics, constraints, and
+          risks."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing operating assumptions silently."
@@ -641,3 +724,266 @@ document:
         - "What should Financial Operations inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved operating model questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain operating model. How does the project function day to day in a way that is reliable,
+      supportable, maintainable, accountable, and sustainable?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "operating-objective"
+        label: "Operating Objective"
+        required: true
+        description: "Define what the day-to-day operating model must preserve and optimize."
+        evaluationHint: "Look for concrete answers addressing: What must the operating model preserve day to day?; What does
+          reliable and sustainable daily operation mean for this project?; What should this document intentionally not
+          detail?."
+        sourceQuestions: *a1
+        targetSections: &a17
+          - "Operating Objective"
+      - id: "operating-principles"
+        label: "Operating Principles"
+        required: true
+        description: "Establish principles that guide day-to-day operational decisions and trade-off resolution."
+        evaluationHint: "Look for concrete answers addressing: What principles guide day-to-day operational decisions?; How are
+          trade-offs between speed, cost, quality, safety, privacy, customer trust, and sustainability resolved?; What
+          operational behaviors are explicitly discouraged?."
+        sourceQuestions: *a2
+        targetSections: &a18
+          - "Operating Principles"
+      - id: "operating-scope"
+        label: "Operating Scope"
+        required: true
+        description: "Define what this operating model covers, excludes, shares, defers, or hands off downstream."
+        evaluationHint: "Look for concrete answers addressing: What does the operating model cover?; What is explicitly outside
+          this operating model?; What responsibilities are shared with Product, Engineering, GTM, Support, Customer
+          Success, Finance, or Risk Management?."
+        sourceQuestions: *a3
+        targetSections: &a19
+          - "Operating Scope"
+      - id: "ownership-model"
+        label: "Ownership Model"
+        required: true
+        description: "Define primary ownership, backup ownership, escalation ownership, decision rights, and ownership gaps
+          across operational areas."
+        evaluationHint: "Look for concrete answers addressing: Who owns each operational area?; Who is backup owner?; Who owns
+          escalation?."
+        sourceQuestions: *a4
+        targetSections: &a20
+          - "Ownership Model"
+      - id: "roles-and-responsibilities"
+        label: "Roles and Responsibilities"
+        required: true
+        description: "Define operational roles, recurring responsibilities, authority, outputs, interfaces, and handoff
+          expectations."
+        evaluationHint: "Look for concrete answers addressing: What operational roles exist?; What responsibilities does each
+          role hold?; What decisions can each role make?."
+        sourceQuestions: *a5
+        targetSections: &a21
+          - "Roles and Responsibilities"
+      - id: "operating-cadences"
+        label: "Operating Cadences"
+        required: true
+        description: "Define the rhythms by which operations are reviewed, executed, adjusted, and escalated."
+        evaluationHint: "Look for concrete answers addressing: What daily, weekly, monthly, release, launch-window, maintenance,
+          support, incident, risk-review, or financial cadences exist?; Who participates?; What inputs and outputs are
+          expected?."
+        sourceQuestions: *a6
+        targetSections: &a22
+          - "Operating Cadences"
+      - id: "core-operational-functions"
+        label: "Core Operational Functions"
+        required: true
+        description: "Enumerate functions performed daily, weekly, monthly, or event-triggered with clear accountability and
+          health/failure signals."
+        evaluationHint: "Look for concrete answers addressing: Which functions must be performed daily, weekly, monthly, or
+          event-triggered?; Who is accountable for each function?; What tools are required?."
+        sourceQuestions: *a7
+        targetSections: &a23
+          - "Core Operational Functions"
+      - id: "manual-operations"
+        label: "Manual Operations"
+        required: true
+        description: "Identify operations requiring human intervention, how they are documented, how they are executed, and
+          whether they should eventually be automated."
+        evaluationHint: "Look for concrete answers addressing: Which operations require human intervention?; What triggers each
+          manual operation?; Where are manual steps documented?."
+        sourceQuestions: *a8
+        targetSections: &a24
+          - "Manual Operations"
+      - id: "automated-operations"
+        label: "Automated Operations"
+        required: true
+        description: "Identify automated operations, candidate automations, tools, triggers, monitoring, failure signals,
+          fallback, and review cadence."
+        evaluationHint: "Look for concrete answers addressing: Which operations are automated?; Which operations should be
+          automated later?; What tools, scripts, jobs, integrations, or platforms run them?."
+        sourceQuestions: *a9
+        targetSections: &a25
+          - "Automated Operations"
+      - id: "third-party-dependencies"
+        label: "Third-Party Dependencies"
+        required: true
+        description: "List critical third-party services and the operational impact of each dependency being degraded,
+          unavailable, expensive, or replaced."
+        evaluationHint: "Look for concrete answers addressing: Which third-party services are critical to daily operations?;
+          What operational purpose does each dependency serve?; What happens when each dependency is unavailable or
+          degraded?."
+        sourceQuestions: *a10
+        targetSections: &a26
+          - "Third-Party Dependencies"
+      - id: "standard-workflows"
+        label: "Standard Workflows"
+        required: true
+        description: "Define standard workflows for recurring operational tasks and how they are triggered, tracked, executed,
+          quality-checked, escalated, and handed off."
+        evaluationHint: "Look for concrete answers addressing: What are the standard workflows for recurring operational tasks?;
+          How are workflows triggered?; What inputs and outputs exist?."
+        sourceQuestions: *a11
+        targetSections: &a27
+          - "Standard Workflows"
+      - id: "decision-rights"
+        label: "Decision Rights"
+        required: true
+        description: "Identify operational decisions requiring approval and who holds decision authority by category."
+        evaluationHint: "Look for concrete answers addressing: Which operational decisions require approval?; Who has authority
+          to make each category of decision?; Which decisions require escalation?."
+        sourceQuestions: *a12
+        targetSections: &a28
+          - "Decision Rights"
+      - id: "escalation-paths"
+        label: "Escalation Paths"
+        required: true
+        description: "Define how operational issues escalate and the chain of communication per escalation level."
+        evaluationHint: "Look for concrete answers addressing: How do operational issues escalate?; What is the chain of
+          communication for each escalation level?; What trigger or severity applies?."
+        sourceQuestions: *a13
+        targetSections: &a29
+          - "Escalation Paths"
+      - id: "operational-metrics"
+        label: "Operational Metrics"
+        required: true
+        description: "Define metrics that indicate whether the operating model is healthy, overloaded, stale, ownerless, risky,
+          or failing."
+        evaluationHint: "Look for concrete answers addressing: What metrics show the operating model is healthy?; What metrics
+          show overload or failure?; What support, release, incident, maintenance, automation, dependency,
+          cost/capacity, documentation, data/privacy, and risk metrics matter?."
+        sourceQuestions: *a14
+        targetSections: &a30
+          - "Operational Metrics"
+      - id: "operating-constraints"
+        label: "Operating Constraints"
+        required: true
+        description: "Catalog budget, tooling, staffing, compliance, contractual, vendor, technical, privacy, support, process,
+          and knowledge constraints on operations."
+        evaluationHint: "Look for concrete answers addressing: What budget, tooling, staffing, compliance, contractual, vendor,
+          technical, privacy, support, process, or knowledge constraints limit operations?; What area does each
+          constraint affect?; What is the operational impact?."
+        sourceQuestions: *a15
+        targetSections: &a31
+          - "Operating Constraints"
+      - id: "operating-model-risks"
+        label: "Operating Model Risks"
+        required: true
+        description: "Identify failure modes of the operating model and how they are detected, mitigated, escalated, or handed off."
+        evaluationHint: "Look for concrete answers addressing: What could cause the operating model to fail?; What owner,
+          workflow, manual-process, automation, dependency, escalation, documentation, support, release, data/privacy,
+          cost, or handoff risks exist?; How are operating model risks detected?."
+        sourceQuestions: *a16
+        targetSections: &a32
+          - "Operating Model Risks"
+      - id: "downstream-handoff_1"
+        label: "Downstream Handoff (1/3)"
+        required: true
+        description: "Define what downstream Operations documents must inherit from the Operating Model and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Customer Success inherit?; What should Support Model
+          inherit?; What should Maintenance Plan inherit?."
+        sourceQuestions:
+          - "What should Customer Success inherit?"
+          - "What should Support Model inherit?"
+          - "What should Maintenance Plan inherit?"
+        targetSections: &a33
+          - "Downstream Handoff"
+      - id: "downstream-handoff_2"
+        label: "Downstream Handoff (2/3)"
+        required: true
+        description: "Define what downstream Operations documents must inherit from the Operating Model and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Release Management inherit?; What should Incident
+          Response inherit?; What should Data and Privacy Operations inherit?."
+        sourceQuestions:
+          - "What should Release Management inherit?"
+          - "What should Incident Response inherit?"
+          - "What should Data and Privacy Operations inherit?"
+        targetSections: &a34
+          - "Downstream Handoff"
+      - id: "downstream-handoff_3"
+        label: "Downstream Handoff (3/3)"
+        required: true
+        description: "Define what downstream Operations documents must inherit from the Operating Model and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Financial Operations inherit?; What should Risk
+          Management inherit?; What unresolved operating model questions must be carried forward?."
+        sourceQuestions:
+          - "What should Financial Operations inherit?"
+          - "What should Risk Management inherit?"
+          - "What unresolved operating model questions must be carried forward?"
+        targetSections: &a35
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      operating-objective:
+        targetSections: *a17
+      operating-principles:
+        targetSections: *a18
+      operating-scope:
+        targetSections: *a19
+      ownership-model:
+        targetSections: *a20
+      roles-and-responsibilities:
+        targetSections: *a21
+      operating-cadences:
+        targetSections: *a22
+      core-operational-functions:
+        targetSections: *a23
+      manual-operations:
+        targetSections: *a24
+      automated-operations:
+        targetSections: *a25
+      third-party-dependencies:
+        targetSections: *a26
+      standard-workflows:
+        targetSections: *a27
+      decision-rights:
+        targetSections: *a28
+      escalation-paths:
+        targetSections: *a29
+      operational-metrics:
+        targetSections: *a30
+      operating-constraints:
+        targetSections: *a31
+      operating-model-risks:
+        targetSections: *a32
+      downstream-handoff_1:
+        targetSections: *a33
+      downstream-handoff_2:
+        targetSections: *a34
+      downstream-handoff_3:
+        targetSections: *a35
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.487Z"
+      totalSourceQuestions: 92
+      reviewRequired: false

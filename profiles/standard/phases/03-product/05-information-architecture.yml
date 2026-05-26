@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 5
   type: "information_architecture"
-  purpose: "Define the product's object model, navigation structure, content hierarchy, retrieval model, terminology, empty states, density rules, and IA risks so users can understand where they are, what exists, and what they can do next."
-  centralQuestion: "What objects exist in the product, how do they relate, and how does the user find, understand, and move through them?"
+  purpose: "Define the product's object model, navigation structure, content hierarchy, retrieval model, terminology,
+    empty states, density rules, and IA risks so users can understand where they are, what exists, and what they can do
+    next."
+  centralQuestion: "What objects exist in the product, how do they relate, and how does the user find, understand, and
+    move through them?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,8 @@ document:
       - id: "product.information_architecture_map"
         format: "html"
         path: "outcomes/html/03-product/information-architecture-map.html"
-        purpose: "Provide a navigable IA map covering objects, relationships, navigation, hierarchy, naming, search, empty states, density rules, risks, and downstream handoff."
+        purpose: "Provide a navigable IA map covering objects, relationships, navigation, hierarchy, naming, search, empty
+          states, density rules, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "IA thesis"
@@ -35,7 +39,8 @@ document:
       - id: "product.information_architecture_review_prompt"
         format: "markdown"
         path: "outcomes/agents/03-product/information-architecture-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether the information architecture is coherent, navigable, scalable, terminologically consistent, and aligned with product scope, journeys, and UX model."
+        purpose: "Provide compact context for agents reviewing whether the information architecture is coherent, navigable,
+          scalable, terminologically consistent, and aligned with product scope, journeys, and UX model."
         agentRole: "reviewer"
         includes:
           - "canonical information architecture"
@@ -79,11 +84,13 @@ document:
     - id: "user-journeys"
       type: "context"
       required: false
-      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys that IA must support."
+      description: "Primary, secondary, onboarding, first-value, repeat-use, failure, recovery, exit, and re-entry journeys
+        that IA must support."
     - id: "ux-model"
       type: "context"
       required: false
-      description: "UX thesis, mental model, cognitive load rules, guidance, feedback, trust, and recovery models that shape IA decisions."
+      description: "UX thesis, mental model, cognitive load rules, guidance, feedback, trust, and recovery models that shape
+        IA decisions."
     - id: "glossary"
       type: "context"
       required: false
@@ -91,16 +98,23 @@ document:
     - id: "ia-notes"
       type: "manual_note"
       required: false
-      description: "Candidate objects, relationships, views, navigation ideas, naming issues, search needs, empty state ideas, and IA concerns."
+      description: "Candidate objects, relationships, views, navigation ideas, naming issues, search needs, empty state ideas,
+        and IA concerns."
   completionCriteria:
-    - "The central question is answered through an explicit object model, relationship model, navigation structure, content hierarchy, naming system, retrieval model, empty state model, density model, and IA risk assessment."
-    - "Every core object includes purpose, user-facing meaning, properties, lifecycle, ownership, visibility, permissions relevance, and downstream implications."
-    - "Object relationships include cardinality, visibility, lifecycle behavior, deletion/archive behavior, and whether the relationship is user-facing or implementation-only."
-    - "Navigation structure supports the primary journey, first-value journey, repeat-use journey, recovery, and re-entry without relying on hidden knowledge."
+    - "The central question is answered through an explicit object model, relationship model, navigation structure,
+      content hierarchy, naming system, retrieval model, empty state model, density model, and IA risk assessment."
+    - "Every core object includes purpose, user-facing meaning, properties, lifecycle, ownership, visibility,
+      permissions relevance, and downstream implications."
+    - "Object relationships include cardinality, visibility, lifecycle behavior, deletion/archive behavior, and whether
+      the relationship is user-facing or implementation-only."
+    - "Navigation structure supports the primary journey, first-value journey, repeat-use journey, recovery, and
+      re-entry without relying on hidden knowledge."
     - "Content hierarchy distinguishes primary, secondary, contextual, advanced, hidden, and risk-critical information."
     - "Naming rules align with the Foundation Glossary and avoid overloaded or misleading terminology."
-    - "Search and retrieval define browsing, filtering, sorting, lookup, zero-results handling, and result relevance expectations."
-    - "Empty states distinguish new-user empty, zero-results, permission-empty, error-empty, loading-empty, and filtered-empty states where relevant."
+    - "Search and retrieval define browsing, filtering, sorting, lookup, zero-results handling, and result relevance
+      expectations."
+    - "Empty states distinguish new-user empty, zero-results, permission-empty, error-empty, loading-empty, and
+      filtered-empty states where relevant."
     - "Information density rules are specific enough to guide UI Model, Interaction Model, and Feature Specification."
     - "IA risks are concrete enough to become review checks or acceptance criteria."
   qualityChecks:
@@ -108,7 +122,8 @@ document:
     - "Avoid IA theater: elegant object maps that do not support real journeys or decisions."
     - "Avoid naming objects after implementation details when users need conceptual clarity."
     - "Avoid introducing objects, views, or navigation paths outside product scope unless marked deferred or post-MVP."
-    - "Avoid hiding critical risk, uncertainty, permissions, ownership, or destructive consequences in low-visibility places."
+    - "Avoid hiding critical risk, uncertainty, permissions, ownership, or destructive consequences in low-visibility
+      places."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
     - "Do not invent user behavior, validated evidence, platform capabilities, data model constraints, or permissions."
@@ -118,80 +133,87 @@ document:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
     - "Separate conceptual IA from implementation data model."
-    - "Tie IA decisions to Product Brief, Product Scope, User Journeys, UX Model, Glossary, or validation evidence where possible."
-    - "Classify objects and views as MVP, post-MVP, deferred, excluded, user-facing, system-facing, or implementation-only where useful."
+    - "Tie IA decisions to Product Brief, Product Scope, User Journeys, UX Model, Glossary, or validation evidence where
+      possible."
+    - "Classify objects and views as MVP, post-MVP, deferred, excluded, user-facing, system-facing, or
+      implementation-only where useful."
     - "State lifecycle and visibility rules for core objects before deriving views or navigation."
-    - "Keep this document at IA level; detailed UI components belong in UI Model, interaction mechanics in Interaction Model, and storage schema in Engineering Data Model."
+    - "Keep this document at IA level; detailed UI components belong in UI Model, interaction mechanics in Interaction
+      Model, and storage schema in Engineering Data Model."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Product Brief, Product Scope, User Journeys, UX Model, Foundation Glossary, or Foundation Boundaries."
+    - "Flag contradictions with Product Brief, Product Scope, User Journeys, UX Model, Foundation Glossary, or
+      Foundation Boundaries."
     - "Flag objects or views not supported by scope, journeys, or explicit assumptions."
     - "Flag relationship rules missing cardinality, lifecycle behavior, or visibility."
-    - "Flag navigation structures that break primary, onboarding, first-value, repeat-use, failure, recovery, or re-entry journeys."
+    - "Flag navigation structures that break primary, onboarding, first-value, repeat-use, failure, recovery, or
+      re-entry journeys."
     - "Flag terminology that conflicts with the Glossary or introduces ambiguous aliases."
-    - "Verify that search, empty states, and density rules are sufficient for UI, Interaction, Feature Spec, State Model, Permissions, and Acceptance Criteria."
-    - "Flag content that belongs better in UI Model, Interaction Model, Content Model, State Model, Permission Model, Feature Specification, Engineering Data Model, or Operations."
+    - "Verify that search, empty states, and density rules are sufficient for UI, Interaction, Feature Spec, State
+      Model, Permissions, and Acceptance Criteria."
+    - "Flag content that belongs better in UI Model, Interaction Model, Content Model, State Model, Permission Model,
+      Feature Specification, Engineering Data Model, or Operations."
   specializedFormats:
     objectFormat:
       description: "Recommended format for each core object."
       fields:
-        - id
-        - name
-        - userFacingDefinition
-        - purpose
-        - classification
-        - keyProperties
-        - lifecycleStates
-        - ownership
-        - visibility
-        - permissionsRelevance
-        - createdBy
-        - modifiedBy
-        - archivedOrDeletedBy
-        - relatedObjects
-        - evidenceBasis
-        - downstreamImplications
-        - openQuestions
+        - "id"
+        - "name"
+        - "userFacingDefinition"
+        - "purpose"
+        - "classification"
+        - "keyProperties"
+        - "lifecycleStates"
+        - "ownership"
+        - "visibility"
+        - "permissionsRelevance"
+        - "createdBy"
+        - "modifiedBy"
+        - "archivedOrDeletedBy"
+        - "relatedObjects"
+        - "evidenceBasis"
+        - "downstreamImplications"
+        - "openQuestions"
     relationshipFormat:
       description: "Recommended format for object relationships."
       fields:
-        - id
-        - sourceObject
-        - targetObject
-        - relationshipName
-        - cardinality
-        - userVisible
-        - implementationOnly
-        - lifecycleBehavior
-        - deletionBehavior
-        - archiveBehavior
-        - permissionImplications
-        - ambiguity
-        - notes
+        - "id"
+        - "sourceObject"
+        - "targetObject"
+        - "relationshipName"
+        - "cardinality"
+        - "userVisible"
+        - "implementationOnly"
+        - "lifecycleBehavior"
+        - "deletionBehavior"
+        - "archiveBehavior"
+        - "permissionImplications"
+        - "ambiguity"
+        - "notes"
     navigationItemFormat:
       description: "Recommended format for navigation items and views."
       fields:
-        - id
-        - label
-        - purpose
-        - entryPoints
-        - destination
-        - userGoal
-        - associatedObjects
-        - visibleWhen
-        - hiddenWhen
-        - emptyState
-        - risks
+        - "id"
+        - "label"
+        - "purpose"
+        - "entryPoints"
+        - "destination"
+        - "userGoal"
+        - "associatedObjects"
+        - "visibleWhen"
+        - "hiddenWhen"
+        - "emptyState"
+        - "risks"
     iaRiskFormat:
       description: "Recommended format for IA risks."
       fields:
-        - risk
-        - affectedObjectOrView
-        - riskType
-        - userImpact
-        - earlySignal
-        - mitigation
-        - targetDocument
+        - "risk"
+        - "affectedObjectOrView"
+        - "riskType"
+        - "userImpact"
+        - "earlySignal"
+        - "mitigation"
+        - "targetDocument"
   sections:
     - id: "ia-thesis"
       title: "IA Thesis"
@@ -205,7 +227,7 @@ document:
         - "The thesis is specific to the product's objects and journeys."
         - "The thesis aligns with the UX mental model."
         - "The thesis guides actual IA decisions rather than sounding like generic structure language."
-      questions:
+      questions: &a1
         - "What is the organizing logic of the product's information architecture?"
         - "What mental model does the IA reinforce?"
         - "What should users always be able to understand about where they are and what exists?"
@@ -213,7 +235,8 @@ document:
         - "What should the IA avoid becoming?"
     - id: "core-objects"
       title: "Core Objects"
-      intent: "Identify and describe all primary and supporting objects users create, view, manage, resume, relate, archive, or act on."
+      intent: "Identify and describe all primary and supporting objects users create, view, manage, resume, relate, archive,
+        or act on."
       required: true
       outputGuidance:
         - "Define objects from the user's conceptual model before implementation details."
@@ -223,7 +246,7 @@ document:
         - "Each core object has a user-facing meaning and purpose."
         - "Objects are not introduced merely because they are convenient for implementation."
         - "Object lifecycle and visibility are explicit enough to feed State Model and Permission Model."
-      questions:
+      questions: &a2
         - "What are the primary objects users create, view, manage, resume, archive, or act on?"
         - "What are the secondary or supporting objects?"
         - "Which objects are user-facing, system-facing, generated, configuration, or implementation-only?"
@@ -234,7 +257,8 @@ document:
         - "Which object assumptions remain unresolved?"
     - id: "object-relationships"
       title: "Object Relationships"
-      intent: "Define how objects relate, including cardinality, visibility, hierarchy, dependency, containment, references, and lifecycle behavior."
+      intent: "Define how objects relate, including cardinality, visibility, hierarchy, dependency, containment, references,
+        and lifecycle behavior."
       required: true
       outputGuidance:
         - "Describe relationships in user-facing language before implementation relationships."
@@ -244,7 +268,7 @@ document:
         - "Relationships are clear enough to guide navigation, state, permissions, and data model work."
         - "Parent-child relationships define deletion and archive behavior."
         - "Implementation-only relationships are not exposed as user concepts without need."
-      questions:
+      questions: &a3
         - "How do core objects relate to each other?"
         - "What are the cardinality rules for each relationship?"
         - "Which relationships are hierarchical, referential, contextual, temporal, generated, or dependency-based?"
@@ -254,7 +278,8 @@ document:
         - "What relationship ambiguities need resolution?"
     - id: "navigation-structure"
       title: "Navigation Structure"
-      intent: "Define the product's top-level navigation model, movement patterns, orientation cues, entry points, and return paths."
+      intent: "Define the product's top-level navigation model, movement patterns, orientation cues, entry points, and return
+        paths."
       required: true
       outputGuidance:
         - "Design navigation around user goals and journeys, not internal modules alone."
@@ -264,17 +289,19 @@ document:
         - "Navigation supports primary, onboarding, first-value, repeat-use, failure, recovery, and re-entry journeys."
         - "Users can understand where they are and what they can do next."
         - "Navigation does not expose post-MVP or out-of-scope complexity."
-      questions:
+      questions: &a4
         - "What is the top-level navigation model?"
         - "How does the user move between objects and views?"
         - "What are the primary entry points into the product?"
-        - "What navigation patterns are used: hierarchy, search, recents, related links, tabs, drill-down, command, conversation, or another pattern?"
+        - "What navigation patterns are used: hierarchy, search, recents, related links, tabs, drill-down, command,
+          conversation, or another pattern?"
         - "How is the user's current location communicated?"
         - "How does the user return to previous context or resume unfinished work?"
         - "What navigation paths are intentionally blocked, deferred, or hidden?"
     - id: "content-hierarchy"
       title: "Content Hierarchy"
-      intent: "Define how content is organized, prioritized, grouped, revealed, hidden, summarized, and escalated within each view or object context."
+      intent: "Define how content is organized, prioritized, grouped, revealed, hidden, summarized, and escalated within each
+        view or object context."
       required: true
       outputGuidance:
         - "Separate primary, secondary, contextual, advanced, hidden, and risk-critical content."
@@ -284,7 +311,7 @@ document:
         - "Hierarchy supports user decisions and reduces cognitive load."
         - "Critical state, risk, uncertainty, permission, and destructive consequences remain visible when needed."
         - "The hierarchy can handle empty, small, normal, large, and overloaded content volumes."
-      questions:
+      questions: &a5
         - "How is content organized within each view or object context?"
         - "What is primary, secondary, contextual, advanced, hidden, or risk-critical content?"
         - "How is content prioritized when space is limited?"
@@ -294,7 +321,8 @@ document:
         - "What hierarchy decisions should UI Model inherit?"
     - id: "naming-rules"
       title: "Naming Rules"
-      intent: "Establish consistent product terminology for objects, actions, states, navigation, errors, permissions, and generated content."
+      intent: "Establish consistent product terminology for objects, actions, states, navigation, errors, permissions, and
+        generated content."
       required: true
       outputGuidance:
         - "Use Foundation Glossary terms as the default source of truth."
@@ -304,7 +332,7 @@ document:
         - "Naming rules reduce ambiguity rather than adding conceptual ornament."
         - "Product terms do not conflict with Foundation Glossary."
         - "Terms are user-facing unless explicitly marked internal."
-      questions:
+      questions: &a6
         - "What consistent terminology is used across the product?"
         - "How are objects, actions, states, permissions, errors, and generated outputs named?"
         - "Which terms come directly from the Foundation Glossary?"
@@ -324,7 +352,7 @@ document:
         - "Retrieval supports primary and repeat-use journeys."
         - "Search results are understandable, actionable, and scoped."
         - "Zero-results and no-access states are not confused."
-      questions:
+      questions: &a7
         - "How does the user find objects and content?"
         - "What search capabilities are provided?"
         - "What browsing, filtering, sorting, recents, saved, or related-item options exist?"
@@ -337,14 +365,15 @@ document:
       intent: "Define how the product behaves when content, access, results, permissions, data, or state are absent."
       required: true
       outputGuidance:
-        - "Distinguish new-user empty states from zero-results, filtered-empty, permission-empty, loading-empty, error-empty, and intentionally-empty states."
+        - "Distinguish new-user empty states from zero-results, filtered-empty, permission-empty, loading-empty,
+          error-empty, and intentionally-empty states."
         - "Connect each empty state to a useful next action or explanation."
         - "Avoid fake positivity when absence indicates risk, error, or missing permission."
       qualityChecks:
         - "Each empty state explains what is absent and what the user can do next."
         - "Empty states do not misrepresent error, loading, or permission problems as normal emptiness."
         - "Tone and action match the user's context and journey state."
-      questions:
+      questions: &a8
         - "What does each view look like when there is no content?"
         - "How does the product prompt useful first action in empty states?"
         - "How do new-user empty states differ from zero-results states?"
@@ -354,7 +383,8 @@ document:
         - "Which empty states should become acceptance criteria?"
     - id: "information-density-rules"
       title: "Information Density Rules"
-      intent: "Define how much information is shown at each level, when detail is inline or separate, and how density adapts to expertise, device, state, and volume."
+      intent: "Define how much information is shown at each level, when detail is inline or separate, and how density adapts
+        to expertise, device, state, and volume."
       required: true
       outputGuidance:
         - "Define density by hierarchy level, user expertise, journey state, device constraints, and risk."
@@ -364,7 +394,7 @@ document:
         - "Density rules support cognitive load principles from UX Model."
         - "Important risk, state, and permission information is not hidden for density alone."
         - "Hard numeric limits are justified or marked provisional."
-      questions:
+      questions: &a9
         - "How much information is shown at each level of the hierarchy?"
         - "When is detail shown inline versus on a separate view?"
         - "When should information be summarized, collapsed, paginated, grouped, or split into a new view?"
@@ -374,7 +404,8 @@ document:
         - "Which density assumptions are provisional?"
     - id: "ia-risks"
       title: "IA Risks"
-      intent: "Identify high-risk IA decisions, including object ambiguity, naming conflicts, scale failures, navigation traps, hidden state, permission confusion, and retrieval failure."
+      intent: "Identify high-risk IA decisions, including object ambiguity, naming conflicts, scale failures, navigation
+        traps, hidden state, permission confusion, and retrieval failure."
       required: true
       outputGuidance:
         - "List risks as concrete failure modes tied to objects, views, navigation, naming, or retrieval."
@@ -384,7 +415,7 @@ document:
         - "Risks are specific enough to review or test."
         - "Scale, ambiguity, naming, navigation, state, permission, and retrieval risks are considered."
         - "Mitigations are actionable or routed downstream."
-      questions:
+      questions: &a10
         - "What information architecture decisions carry the most risk?"
         - "Where is the IA most likely to fail with scale?"
         - "What naming or organizational choices could confuse users?"
@@ -394,17 +425,19 @@ document:
         - "Which IA risks should become acceptance criteria or engineering constraints?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Product and Engineering documents must inherit from the IA and what they must not assume."
+      intent: "Define what downstream Product and Engineering documents must inherit from the IA and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Route IA outputs to the correct downstream documents."
-        - "Separate UI, interaction, content, state, permission, feature, acceptance, and engineering data-model implications."
+        - "Separate UI, interaction, content, state, permission, feature, acceptance, and engineering data-model
+          implications."
         - "Preserve unresolved IA questions and risky assumptions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing IA rules silently."
         - "Object, relationship, lifecycle, naming, retrieval, empty state, and density implications are included."
-      questions:
+      questions: &a11
         - "What should UI Model inherit from the IA?"
         - "What should Interaction Model inherit?"
         - "What should Content Model inherit?"
@@ -412,3 +445,165 @@ document:
         - "What should Feature Specification and Acceptance Criteria inherit?"
         - "What should Engineering Data Model inherit?"
         - "What unresolved IA questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain information architecture. What objects exist in the product, how do they relate, and how
+      does the user find, understand, and move through them?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "ia-thesis"
+        label: "IA Thesis"
+        required: true
+        description: "State the organizing logic of the product's information architecture and the mental model it reinforces."
+        evaluationHint: "Look for concrete answers addressing: What is the organizing logic of the product's information
+          architecture?; What mental model does the IA reinforce?; What should users always be able to understand about
+          where they are and what exists?."
+        sourceQuestions: *a1
+        targetSections: &a12
+          - "IA Thesis"
+      - id: "core-objects"
+        label: "Core Objects"
+        required: true
+        description: "Identify and describe all primary and supporting objects users create, view, manage, resume, relate,
+          archive, or act on."
+        evaluationHint: "Look for concrete answers addressing: What are the primary objects users create, view, manage, resume,
+          archive, or act on?; What are the secondary or supporting objects?; Which objects are user-facing,
+          system-facing, generated, configuration, or implementation-only?."
+        sourceQuestions: *a2
+        targetSections: &a13
+          - "Core Objects"
+      - id: "object-relationships"
+        label: "Object Relationships"
+        required: true
+        description: "Define how objects relate, including cardinality, visibility, hierarchy, dependency, containment,
+          references, and lifecycle behavior."
+        evaluationHint: "Look for concrete answers addressing: How do core objects relate to each other?; What are the
+          cardinality rules for each relationship?; Which relationships are hierarchical, referential, contextual,
+          temporal, generated, or dependency-based?."
+        sourceQuestions: *a3
+        targetSections: &a14
+          - "Object Relationships"
+      - id: "navigation-structure"
+        label: "Navigation Structure"
+        required: true
+        description: "Define the product's top-level navigation model, movement patterns, orientation cues, entry points, and
+          return paths."
+        evaluationHint: "Look for concrete answers addressing: What is the top-level navigation model?; How does the user move
+          between objects and views?; What are the primary entry points into the product?."
+        sourceQuestions: *a4
+        targetSections: &a15
+          - "Navigation Structure"
+      - id: "content-hierarchy"
+        label: "Content Hierarchy"
+        required: true
+        description: "Define how content is organized, prioritized, grouped, revealed, hidden, summarized, and escalated within
+          each view or object context."
+        evaluationHint: "Look for concrete answers addressing: How is content organized within each view or object context?;
+          What is primary, secondary, contextual, advanced, hidden, or risk-critical content?; How is content
+          prioritized when space is limited?."
+        sourceQuestions: *a5
+        targetSections: &a16
+          - "Content Hierarchy"
+      - id: "naming-rules"
+        label: "Naming Rules"
+        required: true
+        description: "Establish consistent product terminology for objects, actions, states, navigation, errors, permissions,
+          and generated content."
+        evaluationHint: "Look for concrete answers addressing: What consistent terminology is used across the product?; How are
+          objects, actions, states, permissions, errors, and generated outputs named?; Which terms come directly from
+          the Foundation Glossary?."
+        sourceQuestions: *a6
+        targetSections: &a17
+          - "Naming Rules"
+      - id: "search-and-retrieval"
+        label: "Search and Retrieval"
+        required: true
+        description: "Define how users find, filter, sort, browse, recover, resume, and retrieve objects or content."
+        evaluationHint: "Look for concrete answers addressing: How does the user find objects and content?; What search
+          capabilities are provided?; What browsing, filtering, sorting, recents, saved, or related-item options
+          exist?."
+        sourceQuestions: *a7
+        targetSections: &a18
+          - "Search and Retrieval"
+      - id: "empty-states"
+        label: "Empty States"
+        required: true
+        description: "Define how the product behaves when content, access, results, permissions, data, or state are absent."
+        evaluationHint: "Look for concrete answers addressing: What does each view look like when there is no content?; How does
+          the product prompt useful first action in empty states?; How do new-user empty states differ from zero-results
+          states?."
+        sourceQuestions: *a8
+        targetSections: &a19
+          - "Empty States"
+      - id: "information-density-rules"
+        label: "Information Density Rules"
+        required: true
+        description: "Define how much information is shown at each level, when detail is inline or separate, and how density
+          adapts to expertise, device, state, and volume."
+        evaluationHint: "Look for concrete answers addressing: How much information is shown at each level of the hierarchy?;
+          When is detail shown inline versus on a separate view?; When should information be summarized, collapsed,
+          paginated, grouped, or split into a new view?."
+        sourceQuestions: *a9
+        targetSections: &a20
+          - "Information Density Rules"
+      - id: "ia-risks"
+        label: "IA Risks"
+        required: true
+        description: "Identify high-risk IA decisions, including object ambiguity, naming conflicts, scale failures, navigation
+          traps, hidden state, permission confusion, and retrieval failure."
+        evaluationHint: "Look for concrete answers addressing: What information architecture decisions carry the most risk?;
+          Where is the IA most likely to fail with scale?; What naming or organizational choices could confuse users?."
+        sourceQuestions: *a10
+        targetSections: &a21
+          - "IA Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Product and Engineering documents must inherit from the IA and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should UI Model inherit from the IA?; What should
+          Interaction Model inherit?; What should Content Model inherit?."
+        sourceQuestions: *a11
+        targetSections: &a22
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      ia-thesis:
+        targetSections: *a12
+      core-objects:
+        targetSections: *a13
+      object-relationships:
+        targetSections: *a14
+      navigation-structure:
+        targetSections: *a15
+      content-hierarchy:
+        targetSections: *a16
+      naming-rules:
+        targetSections: *a17
+      search-and-retrieval:
+        targetSections: *a18
+      empty-states:
+        targetSections: *a19
+      information-density-rules:
+        targetSections: *a20
+      ia-risks:
+        targetSections: *a21
+      downstream-handoff:
+        targetSections: *a22
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.293Z"
+      totalSourceQuestions: 76
+      reviewRequired: false

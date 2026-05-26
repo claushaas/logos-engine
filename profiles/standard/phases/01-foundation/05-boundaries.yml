@@ -5,7 +5,8 @@ document:
   status: "not_started"
   order: 5
   type: "boundaries"
-  purpose: "Define what the project is not, what it does not promise, which temptations it must resist, and which responsibilities remain outside the system."
+  purpose: "Define what the project is not, what it does not promise, which temptations it must resist, and which
+    responsibilities remain outside the system."
   centralQuestion: "What temptations should this project resist?"
   outputs:
     canonical:
@@ -16,7 +17,8 @@ document:
       - id: "foundation.boundaries_map"
         format: "html"
         path: "outcomes/html/01-foundation/boundaries-map.html"
-        purpose: "Provide a navigable map of exclusions, anti-patterns, ethical boundaries, product boundaries, user responsibility boundaries, and future temptations."
+        purpose: "Provide a navigable map of exclusions, anti-patterns, ethical boundaries, product boundaries, user
+          responsibility boundaries, and future temptations."
         audience: "founder"
         includes:
           - "what this project is not"
@@ -31,7 +33,8 @@ document:
       - id: "foundation.boundaries_review_prompt"
         format: "markdown"
         path: "outcomes/agents/01-foundation/boundaries-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether proposed scope, features, claims, or automations violate project boundaries."
+        purpose: "Provide compact context for agents reviewing whether proposed scope, features, claims, or automations violate
+          project boundaries."
         agentRole: "reviewer"
         includes:
           - "canonical boundaries"
@@ -57,11 +60,13 @@ document:
     - id: "excluded-ideas"
       type: "manual_note"
       required: false
-      description: "Ideas, features, audiences, promises, or business directions that seem attractive but may violate the thesis or principles."
+      description: "Ideas, features, audiences, promises, or business directions that seem attractive but may violate the
+        thesis or principles."
     - id: "ethical-concerns"
       type: "manual_note"
       required: false
-      description: "Potential harms, misuse cases, surveillance risks, data risks, or responsibility boundaries that must be considered."
+      description: "Potential harms, misuse cases, surveillance risks, data risks, or responsibility boundaries that must be
+        considered."
     - id: "project-context"
       type: "context"
       required: false
@@ -78,35 +83,39 @@ document:
     - "Avoid false precision."
     - "Prefer decision-useful statements."
     - "Boundaries must be stated as explicit exclusions, constraints, or responsibility limits."
-    - "Do not use boundaries to avoid unresolved strategic decisions; label unresolved items as deferred or pending validation."
+    - "Do not use boundaries to avoid unresolved strategic decisions; label unresolved items as deferred or pending
+      validation."
     - "Do not confuse out-of-scope with never allowed."
     - "Do not define boundaries so broadly that they block legitimate future evolution."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
     - "Each boundary should reference the thesis, problem, audience, principle, or risk it protects."
-    - "Classify each exclusion as prohibited, out of scope, deferred, future candidate, or user-owned responsibility where possible."
+    - "Classify each exclusion as prohibited, out of scope, deferred, future candidate, or user-owned responsibility
+      where possible."
     - "State boundaries without moralizing users or adjacent products."
-    - "Do not invent legal, regulatory, or ethical constraints; label uncertain constraints as assumptions or review needs."
+    - "Do not invent legal, regulatory, or ethical constraints; label uncertain constraints as assumptions or review
+      needs."
   reviewRules:
     - "Check whether each section answers its intended question."
     - "Flag contradictions with the Founding Thesis, Problem Definition, Audience Definition, or Design Principles."
     - "Verify that excluded items are genuinely excluded and not merely deferred."
     - "Verify that deferred items are not presented as permanent boundaries."
     - "Flag boundaries that are too vague to guide product, engineering, roadmap, or agent decisions."
-    - "Flag content that belongs better in Product, Engineering, Go-to-market, Operations, or Legal/Compliance artifacts."
+    - "Flag content that belongs better in Product, Engineering, Go-to-market, Operations, or Legal/Compliance
+      artifacts."
   specializedFormats:
     boundaryFormat:
       description: "Recommended format for explicit boundaries when a section lists individual boundaries."
       fields:
-        - name
-        - classification
-        - description
-        - protectedPrincipleOrClaim
-        - rationale
-        - violationExample
-        - reviewSignal
-        - status
+        - "name"
+        - "classification"
+        - "description"
+        - "protectedPrincipleOrClaim"
+        - "rationale"
+        - "violationExample"
+        - "reviewSignal"
+        - "status"
   sections:
     - id: "what-this-project-is-not"
       title: "What This Project Is Not"
@@ -120,7 +129,7 @@ document:
         - "The section clarifies identity without duplicating every detailed boundary below."
         - "Exclusions are not phrased as vague branding statements."
         - "The section helps reject incompatible project directions."
-      questions:
+      questions: &a1
         - "What is this project explicitly not?"
         - "What types of solutions seem attractive but violate the thesis?"
         - "What promises should the project not make?"
@@ -129,7 +138,8 @@ document:
         - "Which identity boundaries protect the project from becoming generic?"
     - id: "out-of-scope"
       title: "Out of Scope"
-      intent: "List features, capabilities, audiences, or problem areas that are outside the current scope and classify whether they are temporary, permanent, or pending validation."
+      intent: "List features, capabilities, audiences, or problem areas that are outside the current scope and classify
+        whether they are temporary, permanent, or pending validation."
       required: true
       outputGuidance:
         - "Separate permanent exclusions from MVP exclusions and deferred possibilities."
@@ -139,7 +149,7 @@ document:
         - "Each exclusion has a classification or rationale."
         - "The section distinguishes 'not now' from 'never'."
         - "The exclusions are specific enough to guide roadmap decisions."
-      questions:
+      questions: &a2
         - "What features or capabilities are explicitly excluded from the current scope?"
         - "Which exclusions are permanent?"
         - "Which exclusions are temporary or deferred?"
@@ -157,7 +167,7 @@ document:
         - "Anti-patterns are specific enough to identify during review."
         - "Each anti-pattern explains why it is harmful in this project context."
         - "The section does not reject patterns merely because they are unfashionable or personally disliked."
-      questions:
+      questions: &a3
         - "What solution patterns should be actively avoided?"
         - "What approaches would undermine the project's intent?"
         - "Which principles would each anti-pattern violate?"
@@ -165,7 +175,8 @@ document:
         - "What early warning signals indicate that an anti-pattern is emerging?"
     - id: "ethical-boundaries"
       title: "Ethical Boundaries"
-      intent: "Define prohibited uses, manipulative behaviors, data patterns, surveillance patterns, and user harms the project must not enable."
+      intent: "Define prohibited uses, manipulative behaviors, data patterns, surveillance patterns, and user harms the
+        project must not enable."
       required: true
       outputGuidance:
         - "State ethical boundaries as concrete prohibitions or safeguards."
@@ -175,7 +186,7 @@ document:
         - "Ethical boundaries are specific enough to inform product and agent behavior."
         - "The section distinguishes ethical concerns from technical security implementation."
         - "The section avoids unsupported legal claims unless explicitly marked as requiring legal review."
-      questions:
+      questions: &a4
         - "What uses of the project would be unethical?"
         - "What data or surveillance patterns are prohibited?"
         - "What forms of manipulation, coercion, overreach, or misplaced authority must be avoided?"
@@ -183,7 +194,8 @@ document:
         - "Which ethical concerns require later legal, compliance, or security review?"
     - id: "product-boundaries"
       title: "Product Boundaries"
-      intent: "Specify adjacent products, market segments, product surfaces, and capability expansions that should not be pursued without explicit validation."
+      intent: "Specify adjacent products, market segments, product surfaces, and capability expansions that should not be
+        pursued without explicit validation."
       required: true
       outputGuidance:
         - "Name adjacent product directions that could dilute the thesis."
@@ -193,7 +205,7 @@ document:
         - "The section does not become a roadmap."
         - "Product boundaries are grounded in thesis, audience, problem, or principles."
         - "Adjacent products are excluded for strategic reasons, not dismissed as invalid."
-      questions:
+      questions: &a5
         - "What market segments are not targeted?"
         - "What adjacent products should not be built from this codebase?"
         - "What product expansions would dilute the core thesis?"
@@ -201,7 +213,8 @@ document:
         - "Which product boundaries should later be reflected in Product Scope?"
     - id: "user-responsibility-boundaries"
       title: "User Responsibility Boundaries"
-      intent: "Identify decisions, judgments, commitments, and responsibilities that remain with the user and must not be silently automated."
+      intent: "Identify decisions, judgments, commitments, and responsibilities that remain with the user and must not be
+        silently automated."
       required: true
       outputGuidance:
         - "Name user-owned decisions explicitly."
@@ -211,7 +224,7 @@ document:
         - "The section protects user agency without making the system useless."
         - "Responsibilities are specific enough to guide agent behavior."
         - "The section identifies where explicit confirmation or consent is required."
-      questions:
+      questions: &a6
         - "What decisions remain the user's responsibility?"
         - "What will the project never automate or decide on behalf of the user?"
         - "What may the system suggest but not decide?"
@@ -219,7 +232,8 @@ document:
         - "What would count as inappropriate transfer of agency from user to system?"
     - id: "future-temptations-to-resist"
       title: "Future Temptations to Resist"
-      intent: "Anticipate seductive but misaligned feature requests, automation paths, growth paths, monetization paths, and platform expansions."
+      intent: "Anticipate seductive but misaligned feature requests, automation paths, growth paths, monetization paths, and
+        platform expansions."
       required: true
       outputGuidance:
         - "List future temptations as realistic scenarios, not abstract warnings."
@@ -229,10 +243,117 @@ document:
         - "Temptations are concrete enough to use in roadmap review."
         - "The section does not block future learning; it defines conditions for reconsideration."
         - "Each temptation is connected to a thesis, principle, audience risk, or operational risk."
-      questions:
+      questions: &a7
         - "What feature requests would be seductive but misaligned?"
         - "What growth paths would dilute the core thesis?"
         - "What monetization paths would distort the project?"
         - "What automation paths would create inappropriate authority or risk?"
         - "Why would each temptation be attractive?"
         - "What evidence, governance, or explicit decision would be required to reconsider it?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain project boundaries. What temptations should this project resist?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "what-this-project-is-not"
+        label: "What This Project Is Not"
+        required: true
+        description: "State the major identity boundaries that prevent the project from being misunderstood."
+        evaluationHint: "Look for concrete answers addressing: What is this project explicitly not?; What types of solutions
+          seem attractive but violate the thesis?; What promises should the project not make?."
+        sourceQuestions: *a1
+        targetSections: &a8
+          - "What This Project Is Not"
+      - id: "out-of-scope"
+        label: "Out of Scope"
+        required: true
+        description: "List features, capabilities, audiences, or problem areas that are outside the current scope and classify
+          whether they are temporary, permanent, or pending validation."
+        evaluationHint: "Look for concrete answers addressing: What features or capabilities are explicitly excluded from the
+          current scope?; Which exclusions are permanent?; Which exclusions are temporary or deferred?."
+        sourceQuestions: *a2
+        targetSections: &a9
+          - "Out of Scope"
+      - id: "anti-patterns"
+        label: "Anti-Patterns"
+        required: true
+        description: "Identify solution patterns that would undermine the project's intent, principles, or trust model."
+        evaluationHint: "Look for concrete answers addressing: What solution patterns should be actively avoided?; What
+          approaches would undermine the project's intent?; Which principles would each anti-pattern violate?."
+        sourceQuestions: *a3
+        targetSections: &a10
+          - "Anti-Patterns"
+      - id: "ethical-boundaries"
+        label: "Ethical Boundaries"
+        required: true
+        description: "Define prohibited uses, manipulative behaviors, data patterns, surveillance patterns, and user harms the
+          project must not enable."
+        evaluationHint: "Look for concrete answers addressing: What uses of the project would be unethical?; What data or
+          surveillance patterns are prohibited?; What forms of manipulation, coercion, overreach, or misplaced authority
+          must be avoided?."
+        sourceQuestions: *a4
+        targetSections: &a11
+          - "Ethical Boundaries"
+      - id: "product-boundaries"
+        label: "Product Boundaries"
+        required: true
+        description: "Specify adjacent products, market segments, product surfaces, and capability expansions that should not be
+          pursued without explicit validation."
+        evaluationHint: "Look for concrete answers addressing: What market segments are not targeted?; What adjacent products
+          should not be built from this codebase?; What product expansions would dilute the core thesis?."
+        sourceQuestions: *a5
+        targetSections: &a12
+          - "Product Boundaries"
+      - id: "user-responsibility-boundaries"
+        label: "User Responsibility Boundaries"
+        required: true
+        description: "Identify decisions, judgments, commitments, and responsibilities that remain with the user and must not be
+          silently automated."
+        evaluationHint: "Look for concrete answers addressing: What decisions remain the user's responsibility?; What will the
+          project never automate or decide on behalf of the user?; What may the system suggest but not decide?."
+        sourceQuestions: *a6
+        targetSections: &a13
+          - "User Responsibility Boundaries"
+      - id: "future-temptations-to-resist"
+        label: "Future Temptations to Resist"
+        required: true
+        description: "Anticipate seductive but misaligned feature requests, automation paths, growth paths, monetization paths,
+          and platform expansions."
+        evaluationHint: "Look for concrete answers addressing: What feature requests would be seductive but misaligned?; What
+          growth paths would dilute the core thesis?; What monetization paths would distort the project?."
+        sourceQuestions: *a7
+        targetSections: &a14
+          - "Future Temptations to Resist"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      what-this-project-is-not:
+        targetSections: *a8
+      out-of-scope:
+        targetSections: *a9
+      anti-patterns:
+        targetSections: *a10
+      ethical-boundaries:
+        targetSections: *a11
+      product-boundaries:
+        targetSections: *a12
+      user-responsibility-boundaries:
+        targetSections: *a13
+      future-temptations-to-resist:
+        targetSections: *a14
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.232Z"
+      totalSourceQuestions: 37
+      reviewRequired: false

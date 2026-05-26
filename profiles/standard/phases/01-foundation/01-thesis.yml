@@ -63,7 +63,8 @@ document:
     - "Avoid marketing language."
     - "Prefer decision-useful statements."
     - "The thesis must be falsifiable."
-    - "The document must not describe features, roadmap items, or implementation details unless they are necessary to clarify the thesis."
+    - "The document must not describe features, roadmap items, or implementation details unless they are necessary to
+      clarify the thesis."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
@@ -87,7 +88,7 @@ document:
       qualityChecks:
         - "The thesis can be understood without reading downstream documents."
         - "The thesis is specific enough to reject incompatible product directions."
-      questions:
+      questions: &a1
         - "What is the central thesis?"
         - "What change in the world, market, or human behavior makes this relevant?"
         - "What tension does the project try to resolve?"
@@ -103,7 +104,7 @@ document:
       qualityChecks:
         - "The context supports the thesis without turning into market analysis."
         - "Claims about trends, timing, or behavior are framed as facts, assumptions, or hypotheses."
-      questions:
+      questions: &a2
         - "What broader conditions surround this thesis?"
         - "What timing or trends make the thesis urgent now?"
         - "Which contextual claims are facts, assumptions, or hypotheses?"
@@ -117,13 +118,14 @@ document:
       qualityChecks:
         - "The tension is specific enough to guide product and validation decisions."
         - "The section does not collapse the tension into a feature request."
-      questions:
+      questions: &a3
         - "What two or more forces are in conflict?"
         - "Why has this tension gone unresolved?"
         - "What happens if this tension remains unresolved?"
     - id: "foundational-claim"
       title: "Foundational Claim"
-      intent: "Reduce the thesis to a single defensible claim with supporting evidence, assumptions, and falsification criteria."
+      intent: "Reduce the thesis to a single defensible claim with supporting evidence, assumptions, and falsification
+        criteria."
       required: true
       outputGuidance:
         - "State the claim as one sentence."
@@ -133,7 +135,7 @@ document:
         - "The claim is defensible but not inflated."
         - "The claim can be challenged by future evidence."
         - "The section does not rely on invented data."
-      questions:
+      questions: &a4
         - "What is the single sentence that captures the project's assertion?"
         - "What evidence supports this claim?"
         - "What assumptions remain unproven?"
@@ -149,7 +151,7 @@ document:
       qualityChecks:
         - "The possibilities follow logically from the thesis."
         - "The section does not overpromise outcomes that require separate validation."
-      questions:
+      questions: &a5
         - "What becomes possible that was not possible before?"
         - "What changes downstream if the thesis holds?"
         - "Which downstream possibilities remain hypotheses?"
@@ -163,7 +165,99 @@ document:
       qualityChecks:
         - "The exclusions clarify the thesis rather than narrowing the product prematurely."
         - "The section does not duplicate the full Boundaries document."
-      questions:
+      questions: &a6
         - "What misinterpretations of the thesis should be preempted?"
         - "What adjacent ideas are out of scope for this conviction?"
         - "Which exclusions should be expanded later in the Boundaries document?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain founding thesis. What truth, hypothesis, or conviction justifies this project's existence?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "core-thesis"
+        label: "Core Thesis"
+        required: true
+        description: "State the central thesis and its essential supporting elements."
+        evaluationHint: "Look for concrete answers addressing: What is the central thesis?; What change in the world, market, or
+          human behavior makes this relevant?; What tension does the project try to resolve?."
+        sourceQuestions: *a1
+        targetSections: &a7
+          - "Core Thesis"
+      - id: "context"
+        label: "Context"
+        required: true
+        description: "Describe the broader conditions that make the thesis relevant."
+        evaluationHint: "Look for concrete answers addressing: What broader conditions surround this thesis?; What timing or
+          trends make the thesis urgent now?; Which contextual claims are facts, assumptions, or hypotheses?."
+        sourceQuestions: *a2
+        targetSections: &a8
+          - "Context"
+      - id: "central-tension"
+        label: "Central Tension"
+        required: true
+        description: "Clarify the unresolved tension the project addresses."
+        evaluationHint: "Look for concrete answers addressing: What two or more forces are in conflict?; Why has this tension
+          gone unresolved?; What happens if this tension remains unresolved?."
+        sourceQuestions: *a3
+        targetSections: &a9
+          - "Central Tension"
+      - id: "foundational-claim"
+        label: "Foundational Claim"
+        required: true
+        description: "Reduce the thesis to a single defensible claim with supporting evidence, assumptions, and falsification
+          criteria."
+        evaluationHint: "Look for concrete answers addressing: What is the single sentence that captures the project's
+          assertion?; What evidence supports this claim?; What assumptions remain unproven?."
+        sourceQuestions: *a4
+        targetSections: &a10
+          - "Foundational Claim"
+      - id: "what-this-project-makes-possible"
+        label: "What This Project Makes Possible"
+        required: true
+        description: "Describe what becomes achievable if the thesis holds."
+        evaluationHint: "Look for concrete answers addressing: What becomes possible that was not possible before?; What changes
+          downstream if the thesis holds?; Which downstream possibilities remain hypotheses?."
+        sourceQuestions: *a5
+        targetSections: &a11
+          - "What This Project Makes Possible"
+      - id: "what-this-project-is-not"
+        label: "What This Project Is Not"
+        required: true
+        description: "Preempt common misinterpretations of the thesis without replacing the dedicated boundaries document."
+        evaluationHint: "Look for concrete answers addressing: What misinterpretations of the thesis should be preempted?; What
+          adjacent ideas are out of scope for this conviction?; Which exclusions should be expanded later in the
+          Boundaries document?."
+        sourceQuestions: *a6
+        targetSections: &a12
+          - "What This Project Is Not"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      core-thesis:
+        targetSections: *a7
+      context:
+        targetSections: *a8
+      central-tension:
+        targetSections: *a9
+      foundational-claim:
+        targetSections: *a10
+      what-this-project-makes-possible:
+        targetSections: *a11
+      what-this-project-is-not:
+        targetSections: *a12
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.212Z"
+      totalSourceQuestions: 22
+      reviewRequired: false

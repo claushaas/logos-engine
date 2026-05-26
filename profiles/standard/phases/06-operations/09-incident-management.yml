@@ -5,8 +5,11 @@ document:
   status: "not_started"
   order: 9
   type: "incident_management"
-  purpose: "Define how incidents are detected, declared, classified, assigned, coordinated, communicated, mitigated, resolved, reviewed, archived, and converted into corrective actions that reduce future operational risk."
-  centralQuestion: "When something materially degrades customer trust, product availability, data safety, billing correctness, security/privacy, or operational continuity, how do we detect it, declare it, respond, communicate, recover, learn, and prevent recurrence?"
+  purpose: "Define how incidents are detected, declared, classified, assigned, coordinated, communicated, mitigated,
+    resolved, reviewed, archived, and converted into corrective actions that reduce future operational risk."
+  centralQuestion: "When something materially degrades customer trust, product availability, data safety, billing
+    correctness, security/privacy, or operational continuity, how do we detect it, declare it, respond, communicate,
+    recover, learn, and prevent recurrence?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +19,9 @@ document:
       - id: "operations.incident_management_runbook"
         format: "html"
         path: "outcomes/html/06-operations/incident-management-runbook.html"
-        purpose: "Provide a founder-facing incident management runbook covering incident definition, severity, declaration, roles, detection, triage, response, communication, mitigation, rollback, resolution, postmortem, corrective actions, archive, metrics, risks, and downstream handoff."
+        purpose: "Provide a founder-facing incident management runbook covering incident definition, severity, declaration,
+          roles, detection, triage, response, communication, mitigation, rollback, resolution, postmortem, corrective
+          actions, archive, metrics, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "incident objective"
@@ -50,7 +55,9 @@ document:
       - id: "operations.incident_management_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/incident-management-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether incident management is severity-aware, role-assigned, escalation-ready, communication-safe, privacy-aware, measurable, postmortem-driven, and connected to release, support, data/privacy, financial operations, and risk management."
+        purpose: "Provide compact context for agents reviewing whether incident management is severity-aware, role-assigned,
+          escalation-ready, communication-safe, privacy-aware, measurable, postmortem-driven, and connected to release,
+          support, data/privacy, financial operations, and risk management."
         agentRole: "reviewer"
         includes:
           - "canonical incident management"
@@ -95,298 +102,367 @@ document:
     - id: "operations-brief"
       type: "context"
       required: false
-      description: "Operations objective, service expectations, incident expectations, critical operational functions, data/privacy operations, cost/capacity constraints, operational success criteria, and operational risks."
+      description: "Operations objective, service expectations, incident expectations, critical operational functions,
+        data/privacy operations, cost/capacity constraints, operational success criteria, and operational risks."
     - id: "operating-model"
       type: "context"
       required: false
-      description: "Operating scope, ownership model, roles, standard workflows, decision rights, escalation paths, manual/automated operations, dependencies, operating metrics, constraints, and risks."
+      description: "Operating scope, ownership model, roles, standard workflows, decision rights, escalation paths,
+        manual/automated operations, dependencies, operating metrics, constraints, and risks."
     - id: "team-and-responsibilities"
       type: "context"
       required: false
-      description: "Incident commander, technical responder, support owner, customer communication owner, escalation owner, backup owners, decision authority, handoff rules, responsibility gaps, and responsibility risks."
+      description: "Incident commander, technical responder, support owner, customer communication owner, escalation owner,
+        backup owners, decision authority, handoff rules, responsibility gaps, and responsibility risks."
     - id: "customer-support"
       type: "context"
       required: false
-      description: "Support channels, ticket categories, priority levels, triage rules, escalation rules, known issue handling, incident handoff, customer communication expectations, support metrics, and support risks."
+      description: "Support channels, ticket categories, priority levels, triage rules, escalation rules, known issue
+        handling, incident handoff, customer communication expectations, support metrics, and support risks."
     - id: "business-processes"
       type: "context"
       required: false
-      description: "Bug triage process, release communication process, billing process, refund process, data export/deletion process, process controls, process metrics, and sensitive process risks."
+      description: "Bug triage process, release communication process, billing process, refund process, data export/deletion
+        process, process controls, process metrics, and sensitive process risks."
     - id: "operational-metrics"
       type: "context"
       required: false
-      description: "Reliability metrics, incident metrics, release metrics, support metrics, SLA/SLO metrics, guardrail metrics, thresholds, alert rules, data quality checks, and metric risks."
+      description: "Reliability metrics, incident metrics, release metrics, support metrics, SLA/SLO metrics, guardrail
+        metrics, thresholds, alert rules, data quality checks, and metric risks."
     - id: "reporting-and-cadence"
       type: "context"
       required: false
-      description: "Incident review cadence, escalation triggers, reporting artifacts, action item tracking, dashboard/reporting responsibilities, data quality caveats, and cadence risks."
+      description: "Incident review cadence, escalation triggers, reporting artifacts, action item tracking,
+        dashboard/reporting responsibilities, data quality caveats, and cadence risks."
     - id: "engineering-observability-context"
       type: "context"
       required: false
-      description: "Observability sources, alerts, dashboards, logs, traces, metrics, deployment environments, rollback mechanisms, feature flags, release health, technical risks, and operational diagnostics."
+      description: "Observability sources, alerts, dashboards, logs, traces, metrics, deployment environments, rollback
+        mechanisms, feature flags, release health, technical risks, and operational diagnostics."
     - id: "incident-notes"
       type: "manual_note"
       required: false
-      description: "Known incident scenarios, severity ideas, responder assumptions, communication preferences, status page/tooling ideas, postmortem preferences, rollback concerns, privacy/security incident concerns, and unresolved incident management questions."
+      description: "Known incident scenarios, severity ideas, responder assumptions, communication preferences, status
+        page/tooling ideas, postmortem preferences, rollback concerns, privacy/security incident concerns, and
+        unresolved incident management questions."
   completionCriteria:
-    - "The central question is answered through a complete incident management model covering detection, declaration, severity, roles, triage, response, communication, mitigation, rollback, resolution, postmortem, corrective actions, metrics, archive, risks, and handoff."
-    - "Incident objective defines what incident management protects: customer trust, safety, availability, data integrity, privacy/security, billing correctness, operational continuity, recovery speed, and learning."
-    - "Incident principles define how incidents are handled: fast ownership, truthful communication, customer protection, privacy minimization, clear authority, evidence preservation, blameless learning, and recurrence reduction."
-    - "Incident scope defines what is in scope, out of scope, support-only, bug-only, privacy/security incident, billing/payment incident, release incident, operational incident, vendor incident, or GTM/customer-communication incident."
-    - "Incident definition distinguishes incident, bug, support ticket, known issue, feature request, maintenance task, release issue, privacy request, security event, billing issue, and operational risk."
-    - "Incident taxonomy classifies incidents by domain, severity, customer impact, business impact, data/privacy impact, security impact, financial impact, operational impact, detection source, and status."
-    - "Severity levels define SEV-1 through SEV-4 or an equivalent scale with impact, examples, response expectation, escalation requirement, communication requirement, incident commander requirement, and resolution expectation."
-    - "Incident declaration defines who can declare an incident, what evidence is required, how severity is initially assigned, who is notified, how incident record is created, and how false positives are handled."
-    - "Incident roles define incident commander, technical responder, support coordinator, communications owner, customer communication owner, subject matter expert, scribe, decision owner, escalation owner, and backup roles."
-    - "Detection sources define monitoring alerts, support reports, customer reports, internal discovery, release monitoring, vendor alerts, billing anomalies, privacy/security signals, and manual checks."
-    - "Triage and classification define how an incident candidate is assessed, severity assigned, impact determined, duplicates linked, ownership assigned, and escalation started."
-    - "Response process defines acknowledgement, role assignment, situation assessment, containment, investigation, mitigation, communication, verification, resolution, monitoring, and handoff."
-    - "Coordination rules define incident channel, source of truth, meeting/bridge rules, status cadence, decision logging, evidence logging, handoff, and communication boundaries."
-    - "Mitigation and containment define how impact is reduced before root cause is fully known, including feature disablement, rollback, traffic reduction, account-level containment, manual workaround, vendor escalation, and customer guidance."
-    - "Rollback and pause rules define when to rollback releases, pause rollout, pause GTM, disable feature, pause billing action, pause automation, or block risky customer action."
-    - "Communication rules define internal communication, support communication, customer communication, status page/public communication if any, privacy/security-sensitive communication, billing-sensitive communication, and post-resolution communication."
-    - "Status updates define update cadence by severity, audience, owner, required content, channel, source of truth, skipped-update rules, and update closure."
-    - "Customer communication defines what customers are told, when, by whom, through which channel, with what caveats, and how unsupported or uncertain information is avoided."
-    - "Privacy and security incidents define special handling, escalation, evidence preservation, data minimization, access restrictions, legal/compliance review needs, notification uncertainty, and Data/Privacy Operations handoff."
-    - "Billing and payment incidents define special handling for payment failures, incorrect charges, refunds, entitlement errors, subscription state errors, processor issues, customer communication, and Financial Operations handoff."
-    - "Incident resolution defines conditions for resolution, verification, monitoring period, customer update, support update, known issue update, release note update, and archive/update requirements."
-    - "Postmortem process defines when postmortem is required, timeline, participants, artifact, blameless analysis, root cause, contributing factors, customer impact, timeline, decisions, corrective actions, and follow-up review."
-    - "Corrective actions define action creation, owner, priority, due trigger/date, verification evidence, risk linkage, release/maintenance linkage, tracking, escalation if overdue, and closure criteria."
-    - "Incident metrics define incident count, severity distribution, detection time, acknowledgement time, mitigation time, resolution time, recurrence, postmortem completion, corrective action completion, communication timeliness, and customer impact."
-    - "Incident archive defines storage location, access rules, retention rules, searchability, link to decisions/actions, privacy redaction, lessons learned, and review cadence."
-    - "Incident risks identify delayed detection, unclear severity, owner gaps, weak escalation, poor communication, privacy mishandling, billing mishandling, failed rollback, repeated incidents, action item decay, and postmortem theater."
-    - "Downstream handoff clarifies what Data/Privacy Operations, Financial Operations, and Risk Management must inherit."
+    - "The central question is answered through a complete incident management model covering detection, declaration,
+      severity, roles, triage, response, communication, mitigation, rollback, resolution, postmortem, corrective
+      actions, metrics, archive, risks, and handoff."
+    - "Incident objective defines what incident management protects: customer trust, safety, availability, data
+      integrity, privacy/security, billing correctness, operational continuity, recovery speed, and learning."
+    - "Incident principles define how incidents are handled: fast ownership, truthful communication, customer
+      protection, privacy minimization, clear authority, evidence preservation, blameless learning, and recurrence
+      reduction."
+    - "Incident scope defines what is in scope, out of scope, support-only, bug-only, privacy/security incident,
+      billing/payment incident, release incident, operational incident, vendor incident, or GTM/customer-communication
+      incident."
+    - "Incident definition distinguishes incident, bug, support ticket, known issue, feature request, maintenance task,
+      release issue, privacy request, security event, billing issue, and operational risk."
+    - "Incident taxonomy classifies incidents by domain, severity, customer impact, business impact, data/privacy
+      impact, security impact, financial impact, operational impact, detection source, and status."
+    - "Severity levels define SEV-1 through SEV-4 or an equivalent scale with impact, examples, response expectation,
+      escalation requirement, communication requirement, incident commander requirement, and resolution expectation."
+    - "Incident declaration defines who can declare an incident, what evidence is required, how severity is initially
+      assigned, who is notified, how incident record is created, and how false positives are handled."
+    - "Incident roles define incident commander, technical responder, support coordinator, communications owner,
+      customer communication owner, subject matter expert, scribe, decision owner, escalation owner, and backup roles."
+    - "Detection sources define monitoring alerts, support reports, customer reports, internal discovery, release
+      monitoring, vendor alerts, billing anomalies, privacy/security signals, and manual checks."
+    - "Triage and classification define how an incident candidate is assessed, severity assigned, impact determined,
+      duplicates linked, ownership assigned, and escalation started."
+    - "Response process defines acknowledgement, role assignment, situation assessment, containment, investigation,
+      mitigation, communication, verification, resolution, monitoring, and handoff."
+    - "Coordination rules define incident channel, source of truth, meeting/bridge rules, status cadence, decision
+      logging, evidence logging, handoff, and communication boundaries."
+    - "Mitigation and containment define how impact is reduced before root cause is fully known, including feature
+      disablement, rollback, traffic reduction, account-level containment, manual workaround, vendor escalation, and
+      customer guidance."
+    - "Rollback and pause rules define when to rollback releases, pause rollout, pause GTM, disable feature, pause
+      billing action, pause automation, or block risky customer action."
+    - "Communication rules define internal communication, support communication, customer communication, status
+      page/public communication if any, privacy/security-sensitive communication, billing-sensitive communication, and
+      post-resolution communication."
+    - "Status updates define update cadence by severity, audience, owner, required content, channel, source of truth,
+      skipped-update rules, and update closure."
+    - "Customer communication defines what customers are told, when, by whom, through which channel, with what caveats,
+      and how unsupported or uncertain information is avoided."
+    - "Privacy and security incidents define special handling, escalation, evidence preservation, data minimization,
+      access restrictions, legal/compliance review needs, notification uncertainty, and Data/Privacy Operations
+      handoff."
+    - "Billing and payment incidents define special handling for payment failures, incorrect charges, refunds,
+      entitlement errors, subscription state errors, processor issues, customer communication, and Financial Operations
+      handoff."
+    - "Incident resolution defines conditions for resolution, verification, monitoring period, customer update, support
+      update, known issue update, release note update, and archive/update requirements."
+    - "Postmortem process defines when postmortem is required, timeline, participants, artifact, blameless analysis,
+      root cause, contributing factors, customer impact, timeline, decisions, corrective actions, and follow-up review."
+    - "Corrective actions define action creation, owner, priority, due trigger/date, verification evidence, risk
+      linkage, release/maintenance linkage, tracking, escalation if overdue, and closure criteria."
+    - "Incident metrics define incident count, severity distribution, detection time, acknowledgement time, mitigation
+      time, resolution time, recurrence, postmortem completion, corrective action completion, communication timeliness,
+      and customer impact."
+    - "Incident archive defines storage location, access rules, retention rules, searchability, link to
+      decisions/actions, privacy redaction, lessons learned, and review cadence."
+    - "Incident risks identify delayed detection, unclear severity, owner gaps, weak escalation, poor communication,
+      privacy mishandling, billing mishandling, failed rollback, repeated incidents, action item decay, and postmortem
+      theater."
+    - "Downstream handoff clarifies what Data/Privacy Operations, Financial Operations, and Risk Management must
+      inherit."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid incident-management theater: severity tables and postmortems without declaration rules, roles, authority, response steps, communication cadence, mitigation, resolution criteria, metrics, corrective actions, and risk handoff."
-    - "Avoid incident response that depends on informal memory, unnamed owners, unavailable coverage, or unspecified tools."
-    - "Avoid severity levels without customer impact, business impact, privacy/security impact, financial impact, response expectation, escalation rule, and communication requirement."
-    - "Avoid customer communication that overstates certainty, hides impact, blames customers, exposes sensitive details, or promises timelines not controlled by the team."
-    - "Avoid privacy/security incident handling without data minimization, evidence preservation, access restriction, review/escalation, and Data/Privacy Operations handoff."
-    - "Avoid billing/payment incident handling without Financial Operations handoff, customer communication, entitlement review, and correction evidence."
+    - "Avoid incident-management theater: severity tables and postmortems without declaration rules, roles, authority,
+      response steps, communication cadence, mitigation, resolution criteria, metrics, corrective actions, and risk
+      handoff."
+    - "Avoid incident response that depends on informal memory, unnamed owners, unavailable coverage, or unspecified
+      tools."
+    - "Avoid severity levels without customer impact, business impact, privacy/security impact, financial impact,
+      response expectation, escalation rule, and communication requirement."
+    - "Avoid customer communication that overstates certainty, hides impact, blames customers, exposes sensitive
+      details, or promises timelines not controlled by the team."
+    - "Avoid privacy/security incident handling without data minimization, evidence preservation, access restriction,
+      review/escalation, and Data/Privacy Operations handoff."
+    - "Avoid billing/payment incident handling without Financial Operations handoff, customer communication, entitlement
+      review, and correction evidence."
     - "Avoid declaring resolution before mitigation is validated and monitoring confirms stability."
-    - "Avoid postmortems that focus on blame instead of timeline, contributing factors, decision points, prevention, and corrective actions."
-    - "Avoid corrective actions without owner, due trigger/date, verification evidence, escalation if overdue, and closure criteria."
+    - "Avoid postmortems that focus on blame instead of timeline, contributing factors, decision points, prevention, and
+      corrective actions."
+    - "Avoid corrective actions without owner, due trigger/date, verification evidence, escalation if overdue, and
+      closure criteria."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent staffing coverage, on-call rotations, response time guarantees, public status page availability, legal/compliance conclusions, breach notification obligations, vendor guarantees, or rollback capability."
-    - "Incident management must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
+    - "Do not invent staffing coverage, on-call rotations, response time guarantees, public status page availability,
+      legal/compliance conclusions, breach notification obligations, vendor guarantees, or rollback capability."
+    - "Incident management must preserve Foundation boundaries, product truth, technical truth, pricing truth,
+      privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate incident, severity, role, detection source, triage rule, response step, mitigation, communication, status update, resolution condition, postmortem, corrective action, metric, risk, and handoff."
-    - "Tie incident rules to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Business Processes, Operational Metrics, Reporting and Cadence, Observability, Deployment, Security/Privacy, Technical Risks, Pricing, GTM Risks, or Decision Record where possible."
-    - "Classify incident items as current, required, deferred, manual, automated, customer-facing, internal-only, privacy-sensitive, security-sensitive, billing-sensitive, release-related, vendor-related, launch-critical, blocked, review-needed, or downstream-owned where useful."
+    - "Separate incident, severity, role, detection source, triage rule, response step, mitigation, communication,
+      status update, resolution condition, postmortem, corrective action, metric, risk, and handoff."
+    - "Tie incident rules to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Business
+      Processes, Operational Metrics, Reporting and Cadence, Observability, Deployment, Security/Privacy, Technical
+      Risks, Pricing, GTM Risks, or Decision Record where possible."
+    - "Classify incident items as current, required, deferred, manual, automated, customer-facing, internal-only,
+      privacy-sensitive, security-sensitive, billing-sensitive, release-related, vendor-related, launch-critical,
+      blocked, review-needed, or downstream-owned where useful."
     - "State where incident handling is internal policy versus customer-facing commitment."
     - "Route detailed data/privacy, financial, and risk governance procedures downstream."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Business Processes, Operational Metrics, Reporting and Cadence, Product NFRs, Acceptance Criteria, Security/Privacy, Observability, Deployment, Technical Risks, Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision Record."
-    - "Flag incident definitions that blur bug, support ticket, known issue, feature request, privacy request, security event, billing issue, and incident."
-    - "Flag severity levels without impact definition, examples, response expectation, escalation requirement, communication requirement, and resolution expectation."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Business
+      Processes, Operational Metrics, Reporting and Cadence, Product NFRs, Acceptance Criteria, Security/Privacy,
+      Observability, Deployment, Technical Risks, Launch Plan, Pricing, Growth Metrics, GTM Risks, or Decision Record."
+    - "Flag incident definitions that blur bug, support ticket, known issue, feature request, privacy request, security
+      event, billing issue, and incident."
+    - "Flag severity levels without impact definition, examples, response expectation, escalation requirement,
+      communication requirement, and resolution expectation."
     - "Flag incident roles without owner, backup owner, authority, handoff rule, and escalation path."
-    - "Flag response process without acknowledgement, triage, containment, mitigation, communication, verification, resolution, and monitoring."
-    - "Flag communication rules without audience, owner, channel, cadence, required content, caveats, and customer communication trigger."
+    - "Flag response process without acknowledgement, triage, containment, mitigation, communication, verification,
+      resolution, and monitoring."
+    - "Flag communication rules without audience, owner, channel, cadence, required content, caveats, and customer
+      communication trigger."
     - "Flag privacy/security or billing/payment incidents without downstream handoff."
-    - "Flag postmortems without timeline, contributing factors, customer impact, decisions, corrective actions, owner, and follow-up review."
+    - "Flag postmortems without timeline, contributing factors, customer impact, decisions, corrective actions, owner,
+      and follow-up review."
     - "Verify that downstream Operations documents receive concrete incident handoff inputs."
     - "Flag content that belongs better in Data/Privacy Operations, Financial Operations, or Risk Management."
   specializedFormats:
     severityFormat:
       description: "Recommended format for incident severity levels."
       fields:
-        - severity
-        - definition
-        - customerImpact
-        - businessImpact
-        - privacyOrSecurityImpact
-        - financialImpact
-        - examples
-        - responseExpectation
-        - updateCadence
-        - escalationRequirement
-        - customerCommunicationRequirement
-        - resolutionExpectation
-        - status
+        - "severity"
+        - "definition"
+        - "customerImpact"
+        - "businessImpact"
+        - "privacyOrSecurityImpact"
+        - "financialImpact"
+        - "examples"
+        - "responseExpectation"
+        - "updateCadence"
+        - "escalationRequirement"
+        - "customerCommunicationRequirement"
+        - "resolutionExpectation"
+        - "status"
     incidentRoleFormat:
       description: "Recommended format for incident roles."
       fields:
-        - role
-        - purpose
-        - responsibilities
-        - authority
-        - assignedBy
-        - backupRole
-        - handoffRule
-        - escalationPath
-        - requiredArtifacts
-        - status
+        - "role"
+        - "purpose"
+        - "responsibilities"
+        - "authority"
+        - "assignedBy"
+        - "backupRole"
+        - "handoffRule"
+        - "escalationPath"
+        - "requiredArtifacts"
+        - "status"
     detectionSourceFormat:
       description: "Recommended format for incident detection sources."
       fields:
-        - source
-        - sourceType
-        - signal
-        - owner
-        - monitoredAutomatically
-        - alertChannel
-        - falsePositiveRisk
-        - incidentCandidateRule
-        - downstreamProcedure
-        - status
+        - "source"
+        - "sourceType"
+        - "signal"
+        - "owner"
+        - "monitoredAutomatically"
+        - "alertChannel"
+        - "falsePositiveRisk"
+        - "incidentCandidateRule"
+        - "downstreamProcedure"
+        - "status"
     triageRuleFormat:
       description: "Recommended format for incident triage rules."
       fields:
-        - rule
-        - trigger
-        - checks
-        - severityAssignment
-        - impactAssessment
-        - owner
-        - escalationCondition
-        - evidenceRequired
-        - customerCommunicationConsideration
-        - status
+        - "rule"
+        - "trigger"
+        - "checks"
+        - "severityAssignment"
+        - "impactAssessment"
+        - "owner"
+        - "escalationCondition"
+        - "evidenceRequired"
+        - "customerCommunicationConsideration"
+        - "status"
     responseStepFormat:
       description: "Recommended format for incident response steps."
       fields:
-        - step
-        - sequence
-        - purpose
-        - owner
-        - input
-        - action
-        - output
-        - evidenceRequired
-        - escalationIfBlocked
-        - customerImpactConsideration
-        - status
+        - "step"
+        - "sequence"
+        - "purpose"
+        - "owner"
+        - "input"
+        - "action"
+        - "output"
+        - "evidenceRequired"
+        - "escalationIfBlocked"
+        - "customerImpactConsideration"
+        - "status"
     communicationRuleFormat:
       description: "Recommended format for incident communication rules."
       fields:
-        - audience
-        - channel
-        - owner
-        - trigger
-        - cadence
-        - requiredContent
-        - prohibitedContent
-        - approvalRequired
-        - caveats
-        - closureUpdateRequired
-        - status
+        - "audience"
+        - "channel"
+        - "owner"
+        - "trigger"
+        - "cadence"
+        - "requiredContent"
+        - "prohibitedContent"
+        - "approvalRequired"
+        - "caveats"
+        - "closureUpdateRequired"
+        - "status"
     mitigationFormat:
       description: "Recommended format for incident mitigation and containment actions."
       fields:
-        - mitigation
-        - incidentType
-        - trigger
-        - owner
-        - action
-        - validationMethod
-        - customerImpact
-        - rollbackOrPauseNeeded
-        - riskCreated
-        - downstreamDocument
-        - status
+        - "mitigation"
+        - "incidentType"
+        - "trigger"
+        - "owner"
+        - "action"
+        - "validationMethod"
+        - "customerImpact"
+        - "rollbackOrPauseNeeded"
+        - "riskCreated"
+        - "downstreamDocument"
+        - "status"
     rollbackPauseFormat:
       description: "Recommended format for rollback and pause rules."
       fields:
-        - action
-        - trigger
-        - decisionOwner
-        - approvalRequired
-        - executionOwner
-        - validationMethod
-        - communicationRequired
-        - riskIfDelayed
-        - downstreamDocument
-        - status
+        - "action"
+        - "trigger"
+        - "decisionOwner"
+        - "approvalRequired"
+        - "executionOwner"
+        - "validationMethod"
+        - "communicationRequired"
+        - "riskIfDelayed"
+        - "downstreamDocument"
+        - "status"
     resolutionCriteriaFormat:
       description: "Recommended format for incident resolution criteria."
       fields:
-        - incidentType
-        - resolutionCondition
-        - verificationMethod
-        - monitoringPeriod
-        - customerUpdateRequired
-        - supportUpdateRequired
-        - knownIssueUpdateRequired
-        - archiveRequired
-        - owner
-        - status
+        - "incidentType"
+        - "resolutionCondition"
+        - "verificationMethod"
+        - "monitoringPeriod"
+        - "customerUpdateRequired"
+        - "supportUpdateRequired"
+        - "knownIssueUpdateRequired"
+        - "archiveRequired"
+        - "owner"
+        - "status"
     postmortemFormat:
       description: "Recommended format for incident postmortems."
       fields:
-        - incidentId
-        - required
-        - dueTriggerOrDate
-        - facilitator
-        - participants
-        - timelineRequired
-        - customerImpactRequired
-        - rootCauseRequired
-        - contributingFactorsRequired
-        - correctiveActionsRequired
-        - artifactLocation
-        - followUpReview
-        - status
+        - "incidentId"
+        - "required"
+        - "dueTriggerOrDate"
+        - "facilitator"
+        - "participants"
+        - "timelineRequired"
+        - "customerImpactRequired"
+        - "rootCauseRequired"
+        - "contributingFactorsRequired"
+        - "correctiveActionsRequired"
+        - "artifactLocation"
+        - "followUpReview"
+        - "status"
     correctiveActionFormat:
       description: "Recommended format for corrective actions."
       fields:
-        - action
-        - sourceIncident
-        - actionType
-        - owner
-        - priority
-        - dueDateOrTrigger
-        - verificationEvidence
-        - linkedRisk
-        - linkedReleaseOrMaintenanceWork
-        - escalationIfOverdue
-        - closureCriteria
-        - status
+        - "action"
+        - "sourceIncident"
+        - "actionType"
+        - "owner"
+        - "priority"
+        - "dueDateOrTrigger"
+        - "verificationEvidence"
+        - "linkedRisk"
+        - "linkedReleaseOrMaintenanceWork"
+        - "escalationIfOverdue"
+        - "closureCriteria"
+        - "status"
     incidentMetricFormat:
       description: "Recommended format for incident metrics."
       fields:
-        - metric
-        - metricType
-        - purpose
-        - formulaOrMeasurement
-        - source
-        - threshold
-        - cadence
-        - owner
-        - decisionImplication
-        - downstreamDocument
-        - status
+        - "metric"
+        - "metricType"
+        - "purpose"
+        - "formulaOrMeasurement"
+        - "source"
+        - "threshold"
+        - "cadence"
+        - "owner"
+        - "decisionImplication"
+        - "downstreamDocument"
+        - "status"
     incidentRiskFormat:
       description: "Recommended format for incident management risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - affectedArea
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "source"
+        - "affectedArea"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     incidentHandoffFormat:
       description: "Recommended format for downstream incident handoffs."
       fields:
-        - handoffTarget
-        - incidentContext
-        - contextToPreserve
-        - requiredAction
-        - owner
-        - timing
-        - unresolvedQuestion
-        - riskOrConstraint
-        - status
+        - "handoffTarget"
+        - "incidentContext"
+        - "contextToPreserve"
+        - "requiredAction"
+        - "owner"
+        - "timing"
+        - "unresolvedQuestion"
+        - "riskOrConstraint"
+        - "status"
   sections:
     - id: "incident-objective"
       title: "Incident Objective"
@@ -394,13 +470,14 @@ document:
       required: true
       outputGuidance:
         - "Open with the incident management purpose in one concise paragraph."
-        - "State what incident management protects: customer trust, safety, availability, data integrity, privacy/security, billing correctness, continuity, recovery speed, and learning."
+        - "State what incident management protects: customer trust, safety, availability, data integrity,
+          privacy/security, billing correctness, continuity, recovery speed, and learning."
         - "Clarify that incident management is for material degradation, not every bug or support ticket."
       qualityChecks:
         - "Objective is tied to Operations Brief and Operational Metrics."
         - "Incident management is distinguished from routine support and bug triage."
         - "Learning and recurrence reduction are explicit."
-      questions:
+      questions: &a1
         - "Why does incident management exist?"
         - "What operational outcomes does it protect?"
         - "What should not be treated as an incident?"
@@ -409,37 +486,42 @@ document:
       intent: "Define behavioral rules for incident response, communication, evidence, authority, privacy, and learning."
       required: true
       outputGuidance:
-        - "Define principles for fast ownership, truthful communication, customer protection, data minimization, evidence preservation, clear authority, blameless learning, and recurrence reduction."
+        - "Define principles for fast ownership, truthful communication, customer protection, data minimization,
+          evidence preservation, clear authority, blameless learning, and recurrence reduction."
         - "State what responders must not do during incidents."
         - "Tie principles to Foundation boundaries and customer trust."
       qualityChecks:
         - "Principles are actionable."
         - "Privacy and communication discipline are included."
         - "Principles prevent blame-oriented or opaque response."
-      questions:
+      questions: &a2
         - "What principles guide incident response?"
         - "How should responders behave under uncertainty?"
         - "How are customer trust, privacy, and evidence protected?"
         - "What behaviors are explicitly prohibited during incidents?"
     - id: "incident-scope"
       title: "Incident Scope"
-      intent: "Define what incident management covers and what should remain in support, bug triage, maintenance, release management, data/privacy, financial operations, or risk management."
+      intent: "Define what incident management covers and what should remain in support, bug triage, maintenance, release
+        management, data/privacy, financial operations, or risk management."
       required: true
       outputGuidance:
-        - "Separate in-scope, out-of-scope, support-only, bug-only, privacy/security incident, billing/payment incident, release incident, operational incident, vendor incident, and downstream-owned areas."
+        - "Separate in-scope, out-of-scope, support-only, bug-only, privacy/security incident, billing/payment incident,
+          release incident, operational incident, vendor incident, and downstream-owned areas."
         - "Preserve escalation boundary for ambiguous cases."
         - "Route detailed domain-specific procedures downstream."
       qualityChecks:
         - "Scope prevents incident inflation and under-declaration."
         - "Sensitive categories are explicit."
         - "Ambiguous cases have escalation path."
-      questions:
+      questions: &a3
         - "What is in scope for incident management?"
-        - "What remains a support ticket, bug, known issue, maintenance task, release issue, data/privacy matter, financial matter, or risk item?"
+        - "What remains a support ticket, bug, known issue, maintenance task, release issue, data/privacy matter, financial
+          matter, or risk item?"
         - "What ambiguous cases require escalation?"
     - id: "incident-definition"
       title: "Incident Definition"
-      intent: "Define what constitutes an incident versus a bug, support ticket, known issue, feature request, maintenance task, release issue, security/privacy event, billing issue, or operational risk."
+      intent: "Define what constitutes an incident versus a bug, support ticket, known issue, feature request, maintenance
+        task, release issue, security/privacy event, billing issue, or operational risk."
       required: true
       outputGuidance:
         - "Give a precise definition of incident."
@@ -449,7 +531,7 @@ document:
         - "Definition is operationally testable."
         - "Incident threshold is not vague."
         - "Adjacent categories are distinguished."
-      questions:
+      questions: &a4
         - "What constitutes an incident versus a bug or support ticket?"
         - "What is a known issue rather than an incident?"
         - "What privacy/security or billing event becomes an incident?"
@@ -460,19 +542,22 @@ document:
       required: true
       outputGuidance:
         - "Define incident domains and statuses."
-        - "Include customer impact, business impact, privacy/security impact, financial impact, operational impact, vendor impact, release impact, and data integrity impact."
-        - "Define statuses such as suspected, declared, triaged, mitigating, monitoring, resolved, postmortem-required, action-tracking, closed, or false positive."
+        - "Include customer impact, business impact, privacy/security impact, financial impact, operational impact,
+          vendor impact, release impact, and data integrity impact."
+        - "Define statuses such as suspected, declared, triaged, mitigating, monitoring, resolved, postmortem-required,
+          action-tracking, closed, or false positive."
       qualityChecks:
         - "Taxonomy helps triage and reporting."
         - "Sensitive incidents are distinguishable."
         - "Statuses are not ambiguous."
-      questions:
+      questions: &a5
         - "What incident types and domains exist?"
         - "What statuses can an incident have?"
         - "What impact dimensions are assessed?"
     - id: "severity-levels"
       title: "Severity Levels"
-      intent: "Define severity levels with impact, examples, response expectations, escalation, communication, and resolution expectations."
+      intent: "Define severity levels with impact, examples, response expectations, escalation, communication, and resolution
+        expectations."
       required: true
       outputGuidance:
         - "Use severity records."
@@ -482,13 +567,14 @@ document:
         - "Severity levels are actionable."
         - "Impact and communication requirements are explicit."
         - "Response expectations do not invent staffing coverage."
-      questions:
+      questions: &a6
         - "How are SEV-1, SEV-2, SEV-3, and SEV-4 defined?"
         - "What customer, business, privacy/security, and financial impact applies to each severity?"
         - "What response, update, escalation, communication, and resolution expectations apply?"
     - id: "incident-declaration"
       title: "Incident Declaration"
-      intent: "Define who can declare an incident, how initial severity is assigned, who is notified, and how the incident record is created."
+      intent: "Define who can declare an incident, how initial severity is assigned, who is notified, and how the incident
+        record is created."
       required: true
       outputGuidance:
         - "Define declaration authority and request-for-declaration path."
@@ -498,7 +584,7 @@ document:
         - "Declaration path is fast and clear."
         - "Under-declaration risk is considered."
         - "Incident record creation is explicit."
-      questions:
+      questions: &a7
         - "Who can declare an incident?"
         - "Who can request incident declaration?"
         - "What evidence is needed to declare?"
@@ -510,13 +596,15 @@ document:
       required: true
       outputGuidance:
         - "Use incident role records."
-        - "Include incident commander, technical responder, support coordinator, communications owner, customer communication owner, subject matter expert, scribe, decision owner, escalation owner, and backup roles where relevant."
+        - "Include incident commander, technical responder, support coordinator, communications owner, customer
+          communication owner, subject matter expert, scribe, decision owner, escalation owner, and backup roles where
+          relevant."
         - "Define authority and handoff rules."
       qualityChecks:
         - "Roles include authority and backup."
         - "Communication and decision roles are explicit."
         - "Incident ownership is not distributed vaguely."
-      questions:
+      questions: &a8
         - "What roles are activated during an incident?"
         - "Who assigns roles?"
         - "What authority does each role have?"
@@ -528,13 +616,14 @@ document:
       required: true
       outputGuidance:
         - "Use detection source records."
-        - "Include monitoring, alerts, support reports, customer reports, internal discovery, release monitoring, vendor alerts, billing anomalies, privacy/security signals, and manual checks."
+        - "Include monitoring, alerts, support reports, customer reports, internal discovery, release monitoring, vendor
+          alerts, billing anomalies, privacy/security signals, and manual checks."
         - "State false-positive risk and incident-candidate rule."
       qualityChecks:
         - "Detection sources have owners."
         - "Automated versus manual detection is explicit."
         - "False-positive and missed-detection risks are considered."
-      questions:
+      questions: &a9
         - "How are incidents detected?"
         - "What automated alerting exists?"
         - "What manual checks or human reports can trigger incident review?"
@@ -545,13 +634,14 @@ document:
       required: true
       outputGuidance:
         - "Use triage rule records."
-        - "Include impact assessment, severity assignment, evidence, affected users, affected systems, privacy/security/financial sensitivity, and escalation condition."
+        - "Include impact assessment, severity assignment, evidence, affected users, affected systems,
+          privacy/security/financial sensitivity, and escalation condition."
         - "Include false-positive closure path."
       qualityChecks:
         - "Triage is fast and evidence-aware."
         - "Sensitive incidents escalate correctly."
         - "Classification informs response."
-      questions:
+      questions: &a10
         - "How is an incident candidate triaged?"
         - "What checks determine severity and impact?"
         - "How are affected users/systems identified?"
@@ -563,13 +653,14 @@ document:
       required: true
       outputGuidance:
         - "Use response step records."
-        - "Include acknowledge, assign roles, assess, contain, investigate, mitigate, communicate, verify, resolve, monitor, and hand off."
+        - "Include acknowledge, assign roles, assess, contain, investigate, mitigate, communicate, verify, resolve,
+          monitor, and hand off."
         - "Keep response generic enough to apply across incident types while allowing downstream specialization."
       qualityChecks:
         - "Response process is executable."
         - "Each step has owner and output."
         - "Communication and verification are included."
-      questions:
+      questions: &a11
         - "What is the step-by-step incident response process?"
         - "Who owns each response step?"
         - "What evidence or output is required at each step?"
@@ -579,14 +670,15 @@ document:
       intent: "Define how incident work is coordinated, documented, handed off, and kept aligned under pressure."
       required: true
       outputGuidance:
-        - "Define incident channel, source of truth, meeting/bridge rules, decision logging, evidence logging, status cadence, handoff rules, and communication boundaries."
+        - "Define incident channel, source of truth, meeting/bridge rules, decision logging, evidence logging, status
+          cadence, handoff rules, and communication boundaries."
         - "State where incident records live."
         - "Include rules for long-running incidents."
       qualityChecks:
         - "Coordination avoids fragmented response."
         - "Decision and evidence logging are explicit."
         - "Long-running incidents have handoff rules."
-      questions:
+      questions: &a12
         - "What is the source of truth during an incident?"
         - "What channels or bridge are used?"
         - "How are decisions and evidence logged?"
@@ -598,20 +690,22 @@ document:
       required: true
       outputGuidance:
         - "Use mitigation records."
-        - "Include feature disablement, rollback, traffic reduction, account containment, manual workaround, vendor escalation, customer guidance, and support workaround where relevant."
+        - "Include feature disablement, rollback, traffic reduction, account containment, manual workaround, vendor
+          escalation, customer guidance, and support workaround where relevant."
         - "Define validation method and risk created by mitigation."
       qualityChecks:
         - "Mitigation reduces impact without pretending root cause is solved."
         - "Validation is explicit."
         - "Mitigation side effects are considered."
-      questions:
+      questions: &a13
         - "What mitigation or containment steps apply to common incident types?"
         - "Who can authorize mitigation?"
         - "How is mitigation validated?"
         - "What risks can mitigation create?"
     - id: "rollback-and-pause-rules"
       title: "Rollback and Pause Rules"
-      intent: "Define when to rollback, pause rollout, pause GTM, disable feature, pause billing action, pause automation, or block risky customer action."
+      intent: "Define when to rollback, pause rollout, pause GTM, disable feature, pause billing action, pause automation, or
+        block risky customer action."
       required: true
       outputGuidance:
         - "Use rollback/pause records."
@@ -621,14 +715,15 @@ document:
         - "Rollback/pause decisions have authority and trigger."
         - "Customer/support communication is considered."
         - "Delayed rollback risk is explicit."
-      questions:
+      questions: &a14
         - "When should a release be rolled back?"
         - "When should rollout, GTM, billing action, automation, or feature access be paused?"
         - "Who decides and who executes?"
         - "How is rollback or pause validated and communicated?"
     - id: "communication-rules"
       title: "Communication Rules"
-      intent: "Define internal, support, customer, public, privacy-sensitive, security-sensitive, and billing-sensitive incident communication rules."
+      intent: "Define internal, support, customer, public, privacy-sensitive, security-sensitive, and billing-sensitive
+        incident communication rules."
       required: true
       outputGuidance:
         - "Use communication rule records."
@@ -638,7 +733,7 @@ document:
         - "Communication is truthful, bounded, and role-owned."
         - "Sensitive information is protected."
         - "Customer communication triggers are clear."
-      questions:
+      questions: &a15
         - "What communication channels are used during an incident?"
         - "Who communicates internally and externally?"
         - "What content is required or prohibited?"
@@ -655,7 +750,7 @@ document:
         - "Status update cadence matches severity."
         - "No-update updates are handled honestly."
         - "Closure update is required when appropriate."
-      questions:
+      questions: &a16
         - "How often are status updates provided during an incident?"
         - "Where are status updates published?"
         - "Who owns each update?"
@@ -673,7 +768,7 @@ document:
         - "Customer communication is accurate and safe."
         - "Affected audience and channel are explicit."
         - "Uncertainty is communicated without overpromising."
-      questions:
+      questions: &a17
         - "When are users notified of incidents?"
         - "Which users are notified?"
         - "What channel is used?"
@@ -681,7 +776,8 @@ document:
         - "How is uncertainty communicated safely?"
     - id: "privacy-and-security-incidents"
       title: "Privacy and Security Incidents"
-      intent: "Define special handling for privacy/security-sensitive incidents and what must be handed off to Data and Privacy Operations."
+      intent: "Define special handling for privacy/security-sensitive incidents and what must be handed off to Data and
+        Privacy Operations."
       required: true
       outputGuidance:
         - "State special escalation, evidence preservation, data minimization, access restriction, and review needs."
@@ -691,7 +787,7 @@ document:
         - "Privacy/security incidents receive higher control."
         - "Legal/compliance uncertainty is marked review-needed."
         - "Sensitive details are protected."
-      questions:
+      questions: &a18
         - "What incident types require privacy/security handling?"
         - "Who must be escalated to?"
         - "What evidence must be preserved?"
@@ -700,7 +796,8 @@ document:
         - "What should Data and Privacy Operations inherit?"
     - id: "billing-and-payment-incidents"
       title: "Billing and Payment Incidents"
-      intent: "Define special handling for payment, billing, refund, entitlement, subscription, invoice, discount, and processor incidents."
+      intent: "Define special handling for payment, billing, refund, entitlement, subscription, invoice, discount, and
+        processor incidents."
       required: true
       outputGuidance:
         - "Tie to Pricing, Customer Support, Business Processes, and Financial Operations."
@@ -710,7 +807,7 @@ document:
         - "Financial/customer trust impact is explicit."
         - "Financial correction evidence is required."
         - "Support and Financial Operations handoff are explicit."
-      questions:
+      questions: &a19
         - "What billing or payment events become incidents?"
         - "How are incorrect charges, failed payments, refund errors, entitlement errors, and processor issues handled?"
         - "Who communicates with affected customers?"
@@ -718,24 +815,27 @@ document:
         - "What should Financial Operations inherit?"
     - id: "incident-resolution"
       title: "Incident Resolution"
-      intent: "Define the conditions required to mark an incident resolved and what monitoring, communication, and documentation must follow."
+      intent: "Define the conditions required to mark an incident resolved and what monitoring, communication, and
+        documentation must follow."
       required: true
       outputGuidance:
         - "Use resolution criteria records."
-        - "Define verification, monitoring period, customer/support updates, known issue update, and archive requirements."
+        - "Define verification, monitoring period, customer/support updates, known issue update, and archive
+          requirements."
         - "Separate mitigation from resolution."
       qualityChecks:
         - "Resolution is evidence-based."
         - "Monitoring and communication follow resolution."
         - "Mitigated is not confused with resolved."
-      questions:
+      questions: &a20
         - "What conditions must be met before an incident is marked resolved?"
         - "How is resolution verified?"
         - "What monitoring period applies?"
         - "What customer, support, known issue, or archive update is required?"
     - id: "postmortem-process"
       title: "Postmortem Process"
-      intent: "Define when postmortems are required, who participates, what artifact is produced, and how learning is captured."
+      intent: "Define when postmortems are required, who participates, what artifact is produced, and how learning is
+        captured."
       required: true
       outputGuidance:
         - "Use postmortem records where useful."
@@ -745,25 +845,27 @@ document:
         - "Postmortem produces learning and action."
         - "Blame is avoided."
         - "Corrective actions are not optional when recurrence risk exists."
-      questions:
+      questions: &a21
         - "What is the postmortem process after an incident is resolved?"
         - "Which incidents require postmortem?"
         - "Who participates?"
         - "What artifact is produced?"
-        - "What timeline, customer impact, root cause, contributing factors, decisions, and corrective actions must be captured?"
+        - "What timeline, customer impact, root cause, contributing factors, decisions, and corrective actions must be
+          captured?"
     - id: "corrective-actions"
       title: "Corrective Actions"
       intent: "Define how corrective actions are identified, assigned, tracked, verified, escalated, and closed."
       required: true
       outputGuidance:
         - "Use corrective action records."
-        - "Tie actions to release, maintenance, support, data/privacy, financial operations, or risk management where relevant."
+        - "Tie actions to release, maintenance, support, data/privacy, financial operations, or risk management where
+          relevant."
         - "Define overdue escalation and closure evidence."
       qualityChecks:
         - "Corrective actions have owner, priority, due trigger/date, evidence, and closure criteria."
         - "Actions reduce recurrence risk."
         - "Overdue actions escalate."
-      questions:
+      questions: &a22
         - "How are corrective actions identified, assigned, and tracked?"
         - "Who owns each action?"
         - "How is completion verified?"
@@ -771,7 +873,8 @@ document:
         - "How are actions linked to risks, releases, or maintenance work?"
     - id: "incident-metrics"
       title: "Incident Metrics"
-      intent: "Define metrics that measure incident detection, response, mitigation, resolution, communication, recurrence, and learning."
+      intent: "Define metrics that measure incident detection, response, mitigation, resolution, communication, recurrence,
+        and learning."
       required: true
       outputGuidance:
         - "Use incident metric records."
@@ -781,23 +884,26 @@ document:
         - "Incident metrics improve response and prevention."
         - "Metrics have source, owner, cadence, and threshold."
         - "Metrics do not incentivize hiding incidents."
-      questions:
+      questions: &a23
         - "What incident metrics are tracked?"
-        - "How are detection time, acknowledgement time, mitigation time, resolution time, recurrence, postmortem completion, corrective action completion, communication timeliness, and customer impact measured?"
+        - "How are detection time, acknowledgement time, mitigation time, resolution time, recurrence, postmortem completion,
+          corrective action completion, communication timeliness, and customer impact measured?"
         - "What thresholds trigger review?"
     - id: "incident-archive"
       title: "Incident Archive"
-      intent: "Define where incident records and postmortems are stored and how they are accessed, retained, searched, reviewed, and used for learning."
+      intent: "Define where incident records and postmortems are stored and how they are accessed, retained, searched,
+        reviewed, and used for learning."
       required: true
       outputGuidance:
-        - "Define archive location, access rules, retention rules, privacy redaction, searchability, linked decisions/actions, and review cadence."
+        - "Define archive location, access rules, retention rules, privacy redaction, searchability, linked
+          decisions/actions, and review cadence."
         - "Mark sensitive incidents with restricted access."
         - "Tie archive to Risk Management and Reporting."
       qualityChecks:
         - "Archive is useful for learning."
         - "Access and privacy redaction are considered."
         - "Incident records link to actions and risks."
-      questions:
+      questions: &a24
         - "Where are incident records and postmortems stored?"
         - "Who can access incident records?"
         - "How are sensitive details redacted or restricted?"
@@ -809,13 +915,15 @@ document:
       required: true
       outputGuidance:
         - "Use incident risk records."
-        - "Include delayed detection, unclear severity, owner gaps, weak escalation, poor communication, privacy mishandling, billing mishandling, failed rollback, repeated incidents, action item decay, and postmortem theater."
+        - "Include delayed detection, unclear severity, owner gaps, weak escalation, poor communication, privacy
+          mishandling, billing mishandling, failed rollback, repeated incidents, action item decay, and postmortem
+          theater."
         - "Route risks to Risk Management where needed."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a25
         - "What could cause incident management to fail?"
         - "Where could detection, triage, communication, mitigation, resolution, postmortem, or corrective actions fail?"
         - "How are incident management risks detected?"
@@ -823,18 +931,351 @@ document:
         - "What should Risk Management inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Operations documents must inherit from Incident Management and what they must not assume."
+      intent: "Define what downstream Operations documents must inherit from Incident Management and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Use incident handoff records."
         - "Route context to Data/Privacy Operations, Financial Operations, and Risk Management."
-        - "Preserve incident categories, severity rules, roles, communication rules, postmortem requirements, corrective actions, metrics, risks, and unresolved questions."
+        - "Preserve incident categories, severity rules, roles, communication rules, postmortem requirements, corrective
+          actions, metrics, risks, and unresolved questions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing incident assumptions silently."
         - "Incident Management remains response architecture; domain-specific governance remains downstream."
-      questions:
+      questions: &a26
         - "What should Data and Privacy Operations inherit?"
         - "What should Financial Operations inherit?"
         - "What should Risk Management inherit?"
         - "What unresolved incident management questions must be carried forward?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain incident management. When something materially degrades customer trust, product
+      availability, data safety, billing correctness, security/privacy, or operational continuity, how do we detect it,
+      declare it, respond, communicate, recover, learn, and prevent recurrence?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "incident-objective"
+        label: "Incident Objective"
+        required: true
+        description: "Define why incident management exists and what operational outcomes it protects."
+        evaluationHint: "Look for concrete answers addressing: Why does incident management exist?; What operational outcomes
+          does it protect?; What should not be treated as an incident?."
+        sourceQuestions: *a1
+        targetSections: &a27
+          - "Incident Objective"
+      - id: "incident-principles"
+        label: "Incident Principles"
+        required: true
+        description: "Define behavioral rules for incident response, communication, evidence, authority, privacy, and learning."
+        evaluationHint: "Look for concrete answers addressing: What principles guide incident response?; How should responders
+          behave under uncertainty?; How are customer trust, privacy, and evidence protected?."
+        sourceQuestions: *a2
+        targetSections: &a28
+          - "Incident Principles"
+      - id: "incident-scope"
+        label: "Incident Scope"
+        required: true
+        description: "Define what incident management covers and what should remain in support, bug triage, maintenance, release
+          management, data/privacy, financial operations, or risk management."
+        evaluationHint: "Look for concrete answers addressing: What is in scope for incident management?; What remains a support
+          ticket, bug, known issue, maintenance task, release issue, data/privacy matter, financial matter, or risk
+          item?; What ambiguous cases require escalation?."
+        sourceQuestions: *a3
+        targetSections: &a29
+          - "Incident Scope"
+      - id: "incident-definition"
+        label: "Incident Definition"
+        required: true
+        description: "Define what constitutes an incident versus a bug, support ticket, known issue, feature request,
+          maintenance task, release issue, security/privacy event, billing issue, or operational risk."
+        evaluationHint: "Look for concrete answers addressing: What constitutes an incident versus a bug or support ticket?;
+          What is a known issue rather than an incident?; What privacy/security or billing event becomes an incident?."
+        sourceQuestions: *a4
+        targetSections: &a30
+          - "Incident Definition"
+      - id: "incident-taxonomy"
+        label: "Incident Taxonomy"
+        required: true
+        description: "Classify incident types, statuses, domains, sensitivities, and impact dimensions."
+        evaluationHint: "Look for concrete answers addressing: What incident types and domains exist?; What statuses can an
+          incident have?; What impact dimensions are assessed?."
+        sourceQuestions: *a5
+        targetSections: &a31
+          - "Incident Taxonomy"
+      - id: "severity-levels"
+        label: "Severity Levels"
+        required: true
+        description: "Define severity levels with impact, examples, response expectations, escalation, communication, and
+          resolution expectations."
+        evaluationHint: "Look for concrete answers addressing: How are SEV-1, SEV-2, SEV-3, and SEV-4 defined?; What customer,
+          business, privacy/security, and financial impact applies to each severity?; What response, update, escalation,
+          communication, and resolution expectations apply?."
+        sourceQuestions: *a6
+        targetSections: &a32
+          - "Severity Levels"
+      - id: "incident-declaration"
+        label: "Incident Declaration"
+        required: true
+        description: "Define who can declare an incident, how initial severity is assigned, who is notified, and how the
+          incident record is created."
+        evaluationHint: "Look for concrete answers addressing: Who can declare an incident?; Who can request incident
+          declaration?; What evidence is needed to declare?."
+        sourceQuestions: *a7
+        targetSections: &a33
+          - "Incident Declaration"
+      - id: "incident-roles"
+        label: "Incident Roles"
+        required: true
+        description: "Define roles activated during an incident and how they are assigned, authorized, backed up, and handed off."
+        evaluationHint: "Look for concrete answers addressing: What roles are activated during an incident?; Who assigns roles?;
+          What authority does each role have?."
+        sourceQuestions: *a8
+        targetSections: &a34
+          - "Incident Roles"
+      - id: "detection-sources"
+        label: "Detection Sources"
+        required: true
+        description: "Define how incidents are detected and which signals create incident candidates."
+        evaluationHint: "Look for concrete answers addressing: How are incidents detected?; What automated alerting exists?;
+          What manual checks or human reports can trigger incident review?."
+        sourceQuestions: *a9
+        targetSections: &a35
+          - "Detection Sources"
+      - id: "triage-and-classification"
+        label: "Triage and Classification"
+        required: true
+        description: "Define how incident candidates are assessed, classified, assigned, escalated, and either declared or
+          rejected."
+        evaluationHint: "Look for concrete answers addressing: How is an incident candidate triaged?; What checks determine
+          severity and impact?; How are affected users/systems identified?."
+        sourceQuestions: *a10
+        targetSections: &a36
+          - "Triage and Classification"
+      - id: "response-process"
+        label: "Response Process"
+        required: true
+        description: "Define the step-by-step incident response process and how work is coordinated across responders."
+        evaluationHint: "Look for concrete answers addressing: What is the step-by-step incident response process?; Who owns
+          each response step?; What evidence or output is required at each step?."
+        sourceQuestions: *a11
+        targetSections: &a37
+          - "Response Process"
+      - id: "coordination-rules"
+        label: "Coordination Rules"
+        required: true
+        description: "Define how incident work is coordinated, documented, handed off, and kept aligned under pressure."
+        evaluationHint: "Look for concrete answers addressing: What is the source of truth during an incident?; What channels or
+          bridge are used?; How are decisions and evidence logged?."
+        sourceQuestions: *a12
+        targetSections: &a38
+          - "Coordination Rules"
+      - id: "mitigation-and-containment"
+        label: "Mitigation and Containment"
+        required: true
+        description: "Define how incident impact is reduced before full root cause is known and how mitigation is validated."
+        evaluationHint: "Look for concrete answers addressing: What mitigation or containment steps apply to common incident
+          types?; Who can authorize mitigation?; How is mitigation validated?."
+        sourceQuestions: *a13
+        targetSections: &a39
+          - "Mitigation and Containment"
+      - id: "rollback-and-pause-rules"
+        label: "Rollback and Pause Rules"
+        required: true
+        description: "Define when to rollback, pause rollout, pause GTM, disable feature, pause billing action, pause
+          automation, or block risky customer action."
+        evaluationHint: "Look for concrete answers addressing: When should a release be rolled back?; When should rollout, GTM,
+          billing action, automation, or feature access be paused?; Who decides and who executes?."
+        sourceQuestions: *a14
+        targetSections: &a40
+          - "Rollback and Pause Rules"
+      - id: "communication-rules"
+        label: "Communication Rules"
+        required: true
+        description: "Define internal, support, customer, public, privacy-sensitive, security-sensitive, and billing-sensitive
+          incident communication rules."
+        evaluationHint: "Look for concrete answers addressing: What communication channels are used during an incident?; Who
+          communicates internally and externally?; What content is required or prohibited?."
+        sourceQuestions: *a15
+        targetSections: &a41
+          - "Communication Rules"
+      - id: "status-updates"
+        label: "Status Updates"
+        required: true
+        description: "Define frequency, content, owner, audience, and closure of status updates during incidents."
+        evaluationHint: "Look for concrete answers addressing: How often are status updates provided during an incident?; Where
+          are status updates published?; Who owns each update?."
+        sourceQuestions: *a16
+        targetSections: &a42
+          - "Status Updates"
+      - id: "customer-communication"
+        label: "Customer Communication"
+        required: true
+        description: "Define how and when affected customers are notified, updated, and given resolution or workaround guidance."
+        evaluationHint: "Look for concrete answers addressing: When are users notified of incidents?; Which users are notified?;
+          What channel is used?."
+        sourceQuestions: *a17
+        targetSections: &a43
+          - "Customer Communication"
+      - id: "privacy-and-security-incidents"
+        label: "Privacy and Security Incidents"
+        required: true
+        description: "Define special handling for privacy/security-sensitive incidents and what must be handed off to Data and
+          Privacy Operations."
+        evaluationHint: "Look for concrete answers addressing: What incident types require privacy/security handling?; Who must
+          be escalated to?; What evidence must be preserved?."
+        sourceQuestions: *a18
+        targetSections: &a44
+          - "Privacy and Security Incidents"
+      - id: "billing-and-payment-incidents"
+        label: "Billing and Payment Incidents"
+        required: true
+        description: "Define special handling for payment, billing, refund, entitlement, subscription, invoice, discount, and
+          processor incidents."
+        evaluationHint: "Look for concrete answers addressing: What billing or payment events become incidents?; How are
+          incorrect charges, failed payments, refund errors, entitlement errors, and processor issues handled?; Who
+          communicates with affected customers?."
+        sourceQuestions: *a19
+        targetSections: &a45
+          - "Billing and Payment Incidents"
+      - id: "incident-resolution"
+        label: "Incident Resolution"
+        required: true
+        description: "Define the conditions required to mark an incident resolved and what monitoring, communication, and
+          documentation must follow."
+        evaluationHint: "Look for concrete answers addressing: What conditions must be met before an incident is marked
+          resolved?; How is resolution verified?; What monitoring period applies?."
+        sourceQuestions: *a20
+        targetSections: &a46
+          - "Incident Resolution"
+      - id: "postmortem-process"
+        label: "Postmortem Process"
+        required: true
+        description: "Define when postmortems are required, who participates, what artifact is produced, and how learning is
+          captured."
+        evaluationHint: "Look for concrete answers addressing: What is the postmortem process after an incident is resolved?;
+          Which incidents require postmortem?; Who participates?."
+        sourceQuestions: *a21
+        targetSections: &a47
+          - "Postmortem Process"
+      - id: "corrective-actions"
+        label: "Corrective Actions"
+        required: true
+        description: "Define how corrective actions are identified, assigned, tracked, verified, escalated, and closed."
+        evaluationHint: "Look for concrete answers addressing: How are corrective actions identified, assigned, and tracked?;
+          Who owns each action?; How is completion verified?."
+        sourceQuestions: *a22
+        targetSections: &a48
+          - "Corrective Actions"
+      - id: "incident-metrics"
+        label: "Incident Metrics"
+        required: true
+        description: "Define metrics that measure incident detection, response, mitigation, resolution, communication,
+          recurrence, and learning."
+        evaluationHint: "Look for concrete answers addressing: What incident metrics are tracked?; How are detection time,
+          acknowledgement time, mitigation time, resolution time, recurrence, postmortem completion, corrective action
+          completion, communication timeliness, and customer impact measured?; What thresholds trigger review?."
+        sourceQuestions: *a23
+        targetSections: &a49
+          - "Incident Metrics"
+      - id: "incident-archive"
+        label: "Incident Archive"
+        required: true
+        description: "Define where incident records and postmortems are stored and how they are accessed, retained, searched,
+          reviewed, and used for learning."
+        evaluationHint: "Look for concrete answers addressing: Where are incident records and postmortems stored?; Who can
+          access incident records?; How are sensitive details redacted or restricted?."
+        sourceQuestions: *a24
+        targetSections: &a50
+          - "Incident Archive"
+      - id: "incident-risks"
+        label: "Incident Risks"
+        required: true
+        description: "Identify failure modes of incident management and how they are detected, mitigated, escalated, or handed off."
+        evaluationHint: "Look for concrete answers addressing: What could cause incident management to fail?; Where could
+          detection, triage, communication, mitigation, resolution, postmortem, or corrective actions fail?; How are
+          incident management risks detected?."
+        sourceQuestions: *a25
+        targetSections: &a51
+          - "Incident Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Operations documents must inherit from Incident Management and what they must not
+          assume."
+        evaluationHint: "Look for concrete answers addressing: What should Data and Privacy Operations inherit?; What should
+          Financial Operations inherit?; What should Risk Management inherit?."
+        sourceQuestions: *a26
+        targetSections: &a52
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      incident-objective:
+        targetSections: *a27
+      incident-principles:
+        targetSections: *a28
+      incident-scope:
+        targetSections: *a29
+      incident-definition:
+        targetSections: *a30
+      incident-taxonomy:
+        targetSections: *a31
+      severity-levels:
+        targetSections: *a32
+      incident-declaration:
+        targetSections: *a33
+      incident-roles:
+        targetSections: *a34
+      detection-sources:
+        targetSections: *a35
+      triage-and-classification:
+        targetSections: *a36
+      response-process:
+        targetSections: *a37
+      coordination-rules:
+        targetSections: *a38
+      mitigation-and-containment:
+        targetSections: *a39
+      rollback-and-pause-rules:
+        targetSections: *a40
+      communication-rules:
+        targetSections: *a41
+      status-updates:
+        targetSections: *a42
+      customer-communication:
+        targetSections: *a43
+      privacy-and-security-incidents:
+        targetSections: *a44
+      billing-and-payment-incidents:
+        targetSections: *a45
+      incident-resolution:
+        targetSections: *a46
+      postmortem-process:
+        targetSections: *a47
+      corrective-actions:
+        targetSections: *a48
+      incident-metrics:
+        targetSections: *a49
+      incident-archive:
+        targetSections: *a50
+      incident-risks:
+        targetSections: *a51
+      downstream-handoff:
+        targetSections: *a52
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.530Z"
+      totalSourceQuestions: 112
+      reviewRequired: false

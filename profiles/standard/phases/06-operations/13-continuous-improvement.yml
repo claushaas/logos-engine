@@ -5,8 +5,10 @@ document:
   status: "not_started"
   order: 13
   type: "continuous_improvement"
-  purpose: "Define how the operational system improves continuously without becoming chaotic, unstable, over-optimized, noisy, risky, or detached from customer value, operational truth, cost discipline, and strategic intent."
-  centralQuestion: "How does the operational system improve deliberately, safely, measurably, and sustainably without creating chaos, instability, unnecessary complexity, or hidden risk?"
+  purpose: "Define how the operational system improves continuously without becoming chaotic, unstable, over-optimized,
+    noisy, risky, or detached from customer value, operational truth, cost discipline, and strategic intent."
+  centralQuestion: "How does the operational system improve deliberately, safely, measurably, and sustainably without
+    creating chaos, instability, unnecessary complexity, or hidden risk?"
   outputs:
     canonical:
       format: "markdown"
@@ -16,7 +18,10 @@ document:
       - id: "operations.continuous_improvement_system"
         format: "html"
         path: "outcomes/html/06-operations/continuous-improvement-system.html"
-        purpose: "Provide a founder-facing continuous improvement system covering improvement objective, principles, feedback sources, improvement backlog, prioritization, experiments, process review, automation, quality, cost reduction, churn learning, incident learning, metric review, guardrails, change control, adoption, improvement cadence, metrics, risks, and downstream handoff."
+        purpose: "Provide a founder-facing continuous improvement system covering improvement objective, principles, feedback
+          sources, improvement backlog, prioritization, experiments, process review, automation, quality, cost
+          reduction, churn learning, incident learning, metric review, guardrails, change control, adoption, improvement
+          cadence, metrics, risks, and downstream handoff."
         audience: "founder"
         includes:
           - "improvement objective"
@@ -50,7 +55,9 @@ document:
       - id: "operations.continuous_improvement_review_prompt"
         format: "markdown"
         path: "outcomes/agents/06-operations/continuous-improvement-review-prompt.md"
-        purpose: "Provide compact context for agents reviewing whether continuous improvement is feedback-driven, stable, measurable, prioritized, owner-assigned, experiment-aware, guardrail-aware, change-controlled, and risk-aware."
+        purpose: "Provide compact context for agents reviewing whether continuous improvement is feedback-driven, stable,
+          measurable, prioritized, owner-assigned, experiment-aware, guardrail-aware, change-controlled, and
+          risk-aware."
         agentRole: "reviewer"
         includes:
           - "canonical continuous improvement model"
@@ -106,328 +113,400 @@ document:
     - id: "operations-context"
       type: "context"
       required: false
-      description: "Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk/Compliance, Financial Operations, and Knowledge Management outputs."
+      description: "Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business
+        Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk/Compliance, Financial
+        Operations, and Knowledge Management outputs."
     - id: "product-engineering-context"
       type: "context"
       required: false
-      description: "Product scope, requirements, acceptance criteria, NFRs, security/privacy constraints, observability, deployment, testing, engineering standards, technical risks, release quality, and technical improvement opportunities."
+      description: "Product scope, requirements, acceptance criteria, NFRs, security/privacy constraints, observability,
+        deployment, testing, engineering standards, technical risks, release quality, and technical improvement
+        opportunities."
     - id: "customer-market-context"
       type: "context"
       required: false
-      description: "Launch signals, pricing signals, growth metrics, GTM risks, support patterns, customer success signals, churn reasons, customer feedback, segment learnings, and customer trust concerns."
+      description: "Launch signals, pricing signals, growth metrics, GTM risks, support patterns, customer success signals,
+        churn reasons, customer feedback, segment learnings, and customer trust concerns."
     - id: "risk-finance-knowledge-context"
       type: "context"
       required: false
-      description: "Risk/compliance obligations, financial metrics, cost/margin signals, vendor costs, documentation freshness, incident learnings, accepted risks, knowledge risks, and professional-review constraints."
+      description: "Risk/compliance obligations, financial metrics, cost/margin signals, vendor costs, documentation
+        freshness, incident learnings, accepted risks, knowledge risks, and professional-review constraints."
     - id: "continuous-improvement-notes"
       type: "manual_note"
       required: false
-      description: "Known improvement ideas, backlog notes, automation ideas, quality concerns, cost concerns, process pain points, customer feedback, churn learnings, incident learnings, dashboard ideas, and unresolved continuous improvement questions."
+      description: "Known improvement ideas, backlog notes, automation ideas, quality concerns, cost concerns, process pain
+        points, customer feedback, churn learnings, incident learnings, dashboard ideas, and unresolved continuous
+        improvement questions."
   completionCriteria:
-    - "The central question is answered through a continuous improvement model with feedback sources, intake, backlog, prioritization, experiments, process review, automation, quality, cost, churn, support, incident, release, metric, knowledge, risk, change control, adoption, metrics, guardrails, risks, and handoff."
-    - "Improvement objective defines what improvement protects: stability, customer value, operational reliability, quality, cost discipline, supportability, maintainability, learning, risk reduction, and strategic alignment."
-    - "Improvement principles define how improvements are deliberate, evidence-based, small enough to control, reversible when possible, owner-assigned, measurable, customer-safe, privacy-safe, financially safe, and not pursued for novelty alone."
-    - "Improvement scope defines what continuous improvement covers, what belongs to Product/Engineering/GTM/Support/Finance/Risk/Compliance, what is downstream-owned, and what is explicitly out of scope."
-    - "Feedback sources define all signal sources including support, customer success, churn, incidents, releases, business processes, operational metrics, financial metrics, risk reviews, compliance reviews, knowledge reviews, user research, market feedback, and team observations."
-    - "Improvement intake defines how ideas are submitted, enriched, deduplicated, categorized, assigned, rejected, deferred, or accepted into the improvement backlog."
-    - "Improvement backlog defines owner, status, source signal, problem statement, hypothesis, expected benefit, affected area, risk, cost, effort, priority, dependency, decision, and review cadence."
-    - "Prioritization rules define how improvements are ranked by customer impact, operational risk reduction, reliability, support burden, cost, revenue protection, privacy/security, compliance, effort, reversibility, urgency, strategic alignment, and opportunity cost."
-    - "Improvement experiment model defines how improvements are validated through pilots, A/B tests when appropriate, manual trials, limited rollouts, reversible changes, control metrics, success criteria, stop criteria, and rollback criteria."
-    - "Process review defines how existing processes are reviewed for bottlenecks, defects, rework, manual burden, control failure, customer impact, financial risk, privacy risk, and improvement opportunities."
-    - "Automation candidates define how manual work is evaluated for automation, including frequency, error risk, privacy/security impact, cost, effort, stability, observability, fallback, owner, and maintenance burden."
-    - "Quality improvement defines how operational quality is improved through defect reduction, review loops, QA checks, acceptance criteria, support feedback, testing, documentation, monitoring, and control improvements."
-    - "Cost reduction defines how cost opportunities are identified, validated, measured, and constrained so cost savings do not degrade customer trust, reliability, security/privacy, support quality, or strategic capacity."
-    - "Customer success and churn learning define how activation, health, retention, churn, satisfaction, expansion, and feedback signals become operational improvements."
-    - "Support learning defines how support tickets, known issues, macros, bugs, escalations, refunds/billing issues, unsupported requests, and customer language become improvements."
-    - "Incident learning defines how postmortems, corrective actions, recurring incident patterns, detection gaps, communication gaps, rollback gaps, and unresolved risks become improvement work."
-    - "Release learning defines how release quality, rollback, hotfix, post-release incident, release communication, readiness, and support handoff signals become improvements."
-    - "Metric and dashboard learning defines how metric caveats, bad data, missing instrumentation, alert fatigue, misleading thresholds, and dashboard staleness become improvement work."
-    - "Knowledge improvement defines how stale docs, missing runbooks, poor discoverability, duplicate truth, ownerless docs, and documentation gaps become improvement work."
-    - "Risk reduction defines how accepted risks, operational risks, GTM risks, compliance risks, financial risks, knowledge risks, and technical risks are converted into mitigation work."
-    - "Change control defines how improvements are approved, scheduled, communicated, implemented, monitored, reversed, documented, and handed off."
-    - "Adoption and rollout define how process/tooling/documentation changes are introduced, trained, adopted, verified, and measured."
-    - "Improvement cadence defines daily/weekly/monthly/quarterly/event-triggered review rhythms, participants, inputs, outputs, decision owners, and action tracking."
-    - "Improvement metrics define backlog health, cycle time, completion rate, impact realized, rollback rate, adoption, cost savings, defect reduction, support reduction, incident recurrence reduction, process maturity, and risk reduction."
-    - "Improvement guardrails define limits that prevent churn in process, excessive automation, cost-cutting harm, release instability, privacy risk, support overload, team overload, metric gaming, and uncontrolled scope expansion."
-    - "Improvement risks identify chaotic change, over-automation, local optimization, novelty bias, weak validation, no adoption, owner gaps, unmeasured impact, hidden risk, process churn, documentation drift, and improvement backlog rot."
+    - "The central question is answered through a continuous improvement model with feedback sources, intake, backlog,
+      prioritization, experiments, process review, automation, quality, cost, churn, support, incident, release, metric,
+      knowledge, risk, change control, adoption, metrics, guardrails, risks, and handoff."
+    - "Improvement objective defines what improvement protects: stability, customer value, operational reliability,
+      quality, cost discipline, supportability, maintainability, learning, risk reduction, and strategic alignment."
+    - "Improvement principles define how improvements are deliberate, evidence-based, small enough to control,
+      reversible when possible, owner-assigned, measurable, customer-safe, privacy-safe, financially safe, and not
+      pursued for novelty alone."
+    - "Improvement scope defines what continuous improvement covers, what belongs to
+      Product/Engineering/GTM/Support/Finance/Risk/Compliance, what is downstream-owned, and what is explicitly out of
+      scope."
+    - "Feedback sources define all signal sources including support, customer success, churn, incidents, releases,
+      business processes, operational metrics, financial metrics, risk reviews, compliance reviews, knowledge reviews,
+      user research, market feedback, and team observations."
+    - "Improvement intake defines how ideas are submitted, enriched, deduplicated, categorized, assigned, rejected,
+      deferred, or accepted into the improvement backlog."
+    - "Improvement backlog defines owner, status, source signal, problem statement, hypothesis, expected benefit,
+      affected area, risk, cost, effort, priority, dependency, decision, and review cadence."
+    - "Prioritization rules define how improvements are ranked by customer impact, operational risk reduction,
+      reliability, support burden, cost, revenue protection, privacy/security, compliance, effort, reversibility,
+      urgency, strategic alignment, and opportunity cost."
+    - "Improvement experiment model defines how improvements are validated through pilots, A/B tests when appropriate,
+      manual trials, limited rollouts, reversible changes, control metrics, success criteria, stop criteria, and
+      rollback criteria."
+    - "Process review defines how existing processes are reviewed for bottlenecks, defects, rework, manual burden,
+      control failure, customer impact, financial risk, privacy risk, and improvement opportunities."
+    - "Automation candidates define how manual work is evaluated for automation, including frequency, error risk,
+      privacy/security impact, cost, effort, stability, observability, fallback, owner, and maintenance burden."
+    - "Quality improvement defines how operational quality is improved through defect reduction, review loops, QA
+      checks, acceptance criteria, support feedback, testing, documentation, monitoring, and control improvements."
+    - "Cost reduction defines how cost opportunities are identified, validated, measured, and constrained so cost
+      savings do not degrade customer trust, reliability, security/privacy, support quality, or strategic capacity."
+    - "Customer success and churn learning define how activation, health, retention, churn, satisfaction, expansion, and
+      feedback signals become operational improvements."
+    - "Support learning defines how support tickets, known issues, macros, bugs, escalations, refunds/billing issues,
+      unsupported requests, and customer language become improvements."
+    - "Incident learning defines how postmortems, corrective actions, recurring incident patterns, detection gaps,
+      communication gaps, rollback gaps, and unresolved risks become improvement work."
+    - "Release learning defines how release quality, rollback, hotfix, post-release incident, release communication,
+      readiness, and support handoff signals become improvements."
+    - "Metric and dashboard learning defines how metric caveats, bad data, missing instrumentation, alert fatigue,
+      misleading thresholds, and dashboard staleness become improvement work."
+    - "Knowledge improvement defines how stale docs, missing runbooks, poor discoverability, duplicate truth, ownerless
+      docs, and documentation gaps become improvement work."
+    - "Risk reduction defines how accepted risks, operational risks, GTM risks, compliance risks, financial risks,
+      knowledge risks, and technical risks are converted into mitigation work."
+    - "Change control defines how improvements are approved, scheduled, communicated, implemented, monitored, reversed,
+      documented, and handed off."
+    - "Adoption and rollout define how process/tooling/documentation changes are introduced, trained, adopted, verified,
+      and measured."
+    - "Improvement cadence defines daily/weekly/monthly/quarterly/event-triggered review rhythms, participants, inputs,
+      outputs, decision owners, and action tracking."
+    - "Improvement metrics define backlog health, cycle time, completion rate, impact realized, rollback rate, adoption,
+      cost savings, defect reduction, support reduction, incident recurrence reduction, process maturity, and risk
+      reduction."
+    - "Improvement guardrails define limits that prevent churn in process, excessive automation, cost-cutting harm,
+      release instability, privacy risk, support overload, team overload, metric gaming, and uncontrolled scope
+      expansion."
+    - "Improvement risks identify chaotic change, over-automation, local optimization, novelty bias, weak validation, no
+      adoption, owner gaps, unmeasured impact, hidden risk, process churn, documentation drift, and improvement backlog
+      rot."
     - "Downstream handoff clarifies what Risk Management must inherit from Continuous Improvement."
   qualityChecks:
     - "Avoid vague claims."
-    - "Avoid improvement theater: improvement ideas without source signal, problem statement, owner, hypothesis, expected impact, prioritization, validation method, guardrail, metric, adoption plan, and review cadence."
-    - "Avoid constant change that creates instability, documentation drift, team overload, support confusion, or customer-facing inconsistency."
-    - "Avoid optimizing local metrics while degrading customer value, reliability, privacy/security, support quality, financial correctness, or strategic direction."
-    - "Avoid automation before the manual process, failure mode, fallback, observability, maintenance burden, and privacy/security implications are understood."
-    - "Avoid cost reduction that hides cost elsewhere or degrades service, reliability, trust, privacy, support, compliance, or future flexibility."
+    - "Avoid improvement theater: improvement ideas without source signal, problem statement, owner, hypothesis,
+      expected impact, prioritization, validation method, guardrail, metric, adoption plan, and review cadence."
+    - "Avoid constant change that creates instability, documentation drift, team overload, support confusion, or
+      customer-facing inconsistency."
+    - "Avoid optimizing local metrics while degrading customer value, reliability, privacy/security, support quality,
+      financial correctness, or strategic direction."
+    - "Avoid automation before the manual process, failure mode, fallback, observability, maintenance burden, and
+      privacy/security implications are understood."
+    - "Avoid cost reduction that hides cost elsewhere or degrades service, reliability, trust, privacy, support,
+      compliance, or future flexibility."
     - "Avoid treating incident corrective actions as optional improvement ideas when they reduce recurrence risk."
-    - "Avoid churn learning that blames customers instead of identifying onboarding, product, pricing, support, segment-fit, or expectation-setting issues."
-    - "Avoid metrics that reward activity, backlog growth, shipped changes, or process churn instead of realized operational improvement."
-    - "Avoid improvement backlogs that accumulate stale ideas without review, rejection, deferral, ownership, or closure."
+    - "Avoid churn learning that blames customers instead of identifying onboarding, product, pricing, support,
+      segment-fit, or expectation-setting issues."
+    - "Avoid metrics that reward activity, backlog growth, shipped changes, or process churn instead of realized
+      operational improvement."
+    - "Avoid improvement backlogs that accumulate stale ideas without review, rejection, deferral, ownership, or
+      closure."
     - "Prefer decision-useful statements."
     - "Make assumptions explicit."
-    - "Do not invent improvement capacity, automation readiness, cost savings, impact estimates, statistical validity, customer feedback volume, metric baselines, or adoption certainty."
-    - "Continuous Improvement must preserve Foundation boundaries, product truth, technical truth, pricing truth, privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
+    - "Do not invent improvement capacity, automation readiness, cost savings, impact estimates, statistical validity,
+      customer feedback volume, metric baselines, or adoption certainty."
+    - "Continuous Improvement must preserve Foundation boundaries, product truth, technical truth, pricing truth,
+      privacy/security constraints, customer trust, support capacity, cost discipline, and operational sustainability."
   generationRules:
     - "Use concise but complete prose."
     - "Surface unresolved questions explicitly."
-    - "Separate feedback signal, improvement idea, problem, hypothesis, owner, priority, experiment, change, rollout, metric, guardrail, risk, and handoff."
-    - "Tie improvement claims to Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance, Financial Operations, Knowledge Management, Product, Engineering, GTM, or Decision Record where possible."
-    - "Classify improvement items as current, proposed, accepted, rejected, deferred, blocked, experiment, pilot, rollout, adopted, reversed, stale, review-needed, launch-critical, post-launch, risk-reduction, cost-reduction, quality-improvement, automation-candidate, customer-facing, internal-only, privacy-sensitive, financial-sensitive, or downstream-owned where useful."
-    - "State whether each improvement is manual, automated, process-only, tooling-based, product-dependent, engineering-dependent, support-dependent, finance-dependent, compliance-dependent, documentation-dependent, or risk-dependent."
+    - "Separate feedback signal, improvement idea, problem, hypothesis, owner, priority, experiment, change, rollout,
+      metric, guardrail, risk, and handoff."
+    - "Tie improvement claims to Operations Brief, Operating Model, Team and Responsibilities, Customer Support,
+      Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and
+      Compliance, Financial Operations, Knowledge Management, Product, Engineering, GTM, or Decision Record where
+      possible."
+    - "Classify improvement items as current, proposed, accepted, rejected, deferred, blocked, experiment, pilot,
+      rollout, adopted, reversed, stale, review-needed, launch-critical, post-launch, risk-reduction, cost-reduction,
+      quality-improvement, automation-candidate, customer-facing, internal-only, privacy-sensitive, financial-sensitive,
+      or downstream-owned where useful."
+    - "State whether each improvement is manual, automated, process-only, tooling-based, product-dependent,
+      engineering-dependent, support-dependent, finance-dependent, compliance-dependent, documentation-dependent, or
+      risk-dependent."
     - "Route enterprise risk governance downstream to Risk Management."
   reviewRules:
     - "Check whether each section answers its intended question."
-    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance, Financial Operations, Knowledge Management, Product Scope, Acceptance Criteria, Security/Privacy, Pricing, GTM Risks, Technical Risks, or Decision Record."
-    - "Flag improvement items without source signal, owner, problem statement, hypothesis, expected impact, priority, validation method, success criteria, guardrail, and adoption plan."
-    - "Flag automation candidates without manual-process clarity, failure mode, fallback, observability, maintenance burden, privacy/security review, and owner."
-    - "Flag cost reductions without service-quality validation, risk review, customer impact review, and post-change monitoring."
-    - "Flag process changes without change control, communication, documentation update, adoption check, and rollback/reversal plan where relevant."
+    - "Flag contradictions with Operations Brief, Operating Model, Team and Responsibilities, Customer Support, Customer
+      Success, Business Processes, Operational Metrics, Reporting and Cadence, Incident Management, Risk and Compliance,
+      Financial Operations, Knowledge Management, Product Scope, Acceptance Criteria, Security/Privacy, Pricing, GTM
+      Risks, Technical Risks, or Decision Record."
+    - "Flag improvement items without source signal, owner, problem statement, hypothesis, expected impact, priority,
+      validation method, success criteria, guardrail, and adoption plan."
+    - "Flag automation candidates without manual-process clarity, failure mode, fallback, observability, maintenance
+      burden, privacy/security review, and owner."
+    - "Flag cost reductions without service-quality validation, risk review, customer impact review, and post-change
+      monitoring."
+    - "Flag process changes without change control, communication, documentation update, adoption check, and
+      rollback/reversal plan where relevant."
     - "Flag incident learnings or corrective actions that are not tracked as mandatory risk-reduction work."
     - "Flag improvement metrics that measure shipped changes instead of realized benefit."
-    - "Flag improvement backlog items that are stale, ownerless, duplicated, unprioritized, or not tied to operational signals."
+    - "Flag improvement backlog items that are stale, ownerless, duplicated, unprioritized, or not tied to operational
+      signals."
     - "Verify that Risk Management receives concrete improvement-risk handoff inputs."
   specializedFormats:
     feedbackSourceFormat:
       description: "Recommended format for feedback sources that drive improvement."
       fields:
-        - source
-        - sourceType
-        - signalCaptured
-        - collectionMethod
-        - owner
-        - cadence
-        - categorizationRule
-        - qualityCaveat
-        - downstreamUse
-        - status
+        - "source"
+        - "sourceType"
+        - "signalCaptured"
+        - "collectionMethod"
+        - "owner"
+        - "cadence"
+        - "categorizationRule"
+        - "qualityCaveat"
+        - "downstreamUse"
+        - "status"
     improvementItemFormat:
       description: "Recommended format for improvement backlog items."
       fields:
-        - improvement
-        - sourceSignal
-        - problemStatement
-        - hypothesis
-        - affectedArea
-        - expectedBenefit
-        - effortEstimate
-        - costEstimate
-        - riskReduced
-        - riskCreated
-        - owner
-        - priority
-        - validationMethod
-        - successCriteria
-        - guardrails
-        - status
+        - "improvement"
+        - "sourceSignal"
+        - "problemStatement"
+        - "hypothesis"
+        - "affectedArea"
+        - "expectedBenefit"
+        - "effortEstimate"
+        - "costEstimate"
+        - "riskReduced"
+        - "riskCreated"
+        - "owner"
+        - "priority"
+        - "validationMethod"
+        - "successCriteria"
+        - "guardrails"
+        - "status"
     prioritizationFormat:
       description: "Recommended format for improvement prioritization."
       fields:
-        - criterion
-        - weightOrImportance
-        - rationale
-        - positiveSignal
-        - negativeSignal
-        - decisionRule
-        - tieBreaker
-        - owner
-        - status
+        - "criterion"
+        - "weightOrImportance"
+        - "rationale"
+        - "positiveSignal"
+        - "negativeSignal"
+        - "decisionRule"
+        - "tieBreaker"
+        - "owner"
+        - "status"
     experimentFormat:
       description: "Recommended format for improvement experiments."
       fields:
-        - experiment
-        - hypothesis
-        - scope
-        - targetSegmentOrProcess
-        - startTrigger
-        - durationOrStopCondition
-        - successMetric
-        - guardrailMetric
-        - rollbackOrReversalRule
-        - owner
-        - decisionAfterExperiment
-        - status
+        - "experiment"
+        - "hypothesis"
+        - "scope"
+        - "targetSegmentOrProcess"
+        - "startTrigger"
+        - "durationOrStopCondition"
+        - "successMetric"
+        - "guardrailMetric"
+        - "rollbackOrReversalRule"
+        - "owner"
+        - "decisionAfterExperiment"
+        - "status"
     processImprovementFormat:
       description: "Recommended format for process improvement records."
       fields:
-        - process
-        - issueDetected
-        - sourceSignal
-        - bottleneckOrDefect
-        - improvementOption
-        - owner
-        - controlAffected
-        - metricAffected
-        - riskAffected
-        - rolloutPlan
-        - status
+        - "process"
+        - "issueDetected"
+        - "sourceSignal"
+        - "bottleneckOrDefect"
+        - "improvementOption"
+        - "owner"
+        - "controlAffected"
+        - "metricAffected"
+        - "riskAffected"
+        - "rolloutPlan"
+        - "status"
     automationCandidateFormat:
       description: "Recommended format for automation candidates."
       fields:
-        - operation
-        - manualFrequency
-        - manualEffort
-        - errorRisk
-        - privacyOrSecurityImpact
-        - financialImpact
-        - automationBenefit
-        - automationRisk
-        - fallbackRequired
-        - observabilityRequired
-        - maintenanceOwner
-        - implementationOwner
-        - priority
-        - status
+        - "operation"
+        - "manualFrequency"
+        - "manualEffort"
+        - "errorRisk"
+        - "privacyOrSecurityImpact"
+        - "financialImpact"
+        - "automationBenefit"
+        - "automationRisk"
+        - "fallbackRequired"
+        - "observabilityRequired"
+        - "maintenanceOwner"
+        - "implementationOwner"
+        - "priority"
+        - "status"
     qualityImprovementFormat:
       description: "Recommended format for quality improvement initiatives."
       fields:
-        - initiative
-        - qualityIssue
-        - sourceSignal
-        - affectedArea
-        - defectType
-        - proposedChange
-        - owner
-        - qualityMetric
-        - validationMethod
-        - guardrail
-        - downstreamDocument
-        - status
+        - "initiative"
+        - "qualityIssue"
+        - "sourceSignal"
+        - "affectedArea"
+        - "defectType"
+        - "proposedChange"
+        - "owner"
+        - "qualityMetric"
+        - "validationMethod"
+        - "guardrail"
+        - "downstreamDocument"
+        - "status"
     costReductionFormat:
       description: "Recommended format for cost reduction initiatives."
       fields:
-        - initiative
-        - costArea
-        - sourceSignal
-        - currentCostDriver
-        - proposedReduction
-        - estimatedSavings
-        - serviceQualityRisk
-        - validationMethod
-        - guardrailMetric
-        - owner
-        - reviewAfterChange
-        - status
+        - "initiative"
+        - "costArea"
+        - "sourceSignal"
+        - "currentCostDriver"
+        - "proposedReduction"
+        - "estimatedSavings"
+        - "serviceQualityRisk"
+        - "validationMethod"
+        - "guardrailMetric"
+        - "owner"
+        - "reviewAfterChange"
+        - "status"
     learningLoopFormat:
       description: "Recommended format for learning loops from support, churn, incidents, releases, metrics, knowledge, and risk."
       fields:
-        - learningSource
-        - signal
-        - insight
-        - affectedArea
-        - improvementCreated
-        - owner
-        - evidence
-        - reviewCadence
-        - downstreamDocument
-        - status
+        - "learningSource"
+        - "signal"
+        - "insight"
+        - "affectedArea"
+        - "improvementCreated"
+        - "owner"
+        - "evidence"
+        - "reviewCadence"
+        - "downstreamDocument"
+        - "status"
     changeControlFormat:
       description: "Recommended format for improvement change control."
       fields:
-        - change
-        - changeType
-        - reason
-        - proposer
-        - reviewer
-        - approver
-        - rolloutScope
-        - communicationRequired
-        - documentationUpdateRequired
-        - monitoringRequired
-        - rollbackOrReversalRule
-        - status
+        - "change"
+        - "changeType"
+        - "reason"
+        - "proposer"
+        - "reviewer"
+        - "approver"
+        - "rolloutScope"
+        - "communicationRequired"
+        - "documentationUpdateRequired"
+        - "monitoringRequired"
+        - "rollbackOrReversalRule"
+        - "status"
     adoptionFormat:
       description: "Recommended format for rollout and adoption tracking."
       fields:
-        - improvement
-        - affectedAudience
-        - rolloutPlan
-        - trainingOrEnablement
-        - communication
-        - adoptionSignal
-        - adoptionOwner
-        - supportFallback
-        - resistanceOrConfusionSignal
-        - completionCriteria
-        - status
+        - "improvement"
+        - "affectedAudience"
+        - "rolloutPlan"
+        - "trainingOrEnablement"
+        - "communication"
+        - "adoptionSignal"
+        - "adoptionOwner"
+        - "supportFallback"
+        - "resistanceOrConfusionSignal"
+        - "completionCriteria"
+        - "status"
     improvementCadenceFormat:
       description: "Recommended format for continuous improvement review cadences."
       fields:
-        - cadence
-        - frequency
-        - purpose
-        - participants
-        - inputs
-        - outputs
-        - decisionOwner
-        - actionTrackingMethod
-        - escalationCondition
-        - status
+        - "cadence"
+        - "frequency"
+        - "purpose"
+        - "participants"
+        - "inputs"
+        - "outputs"
+        - "decisionOwner"
+        - "actionTrackingMethod"
+        - "escalationCondition"
+        - "status"
     improvementMetricFormat:
       description: "Recommended format for continuous improvement metrics."
       fields:
-        - metric
-        - metricType
-        - purpose
-        - formulaOrMeasurement
-        - source
-        - threshold
-        - cadence
-        - owner
-        - decisionImplication
-        - caveat
-        - status
+        - "metric"
+        - "metricType"
+        - "purpose"
+        - "formulaOrMeasurement"
+        - "source"
+        - "threshold"
+        - "cadence"
+        - "owner"
+        - "decisionImplication"
+        - "caveat"
+        - "status"
     improvementGuardrailFormat:
       description: "Recommended format for improvement guardrails."
       fields:
-        - guardrail
-        - protectsAgainst
-        - metricOrSignal
-        - threshold
-        - owner
-        - escalationRule
-        - stopOrRollbackCondition
-        - downstreamAction
-        - status
+        - "guardrail"
+        - "protectsAgainst"
+        - "metricOrSignal"
+        - "threshold"
+        - "owner"
+        - "escalationRule"
+        - "stopOrRollbackCondition"
+        - "downstreamAction"
+        - "status"
     improvementRiskFormat:
       description: "Recommended format for continuous improvement risks."
       fields:
-        - risk
-        - riskType
-        - source
-        - affectedArea
-        - likelihood
-        - impact
-        - earlySignal
-        - mitigation
-        - contingency
-        - owner
-        - downstreamDocument
-        - status
+        - "risk"
+        - "riskType"
+        - "source"
+        - "affectedArea"
+        - "likelihood"
+        - "impact"
+        - "earlySignal"
+        - "mitigation"
+        - "contingency"
+        - "owner"
+        - "downstreamDocument"
+        - "status"
     improvementHandoffFormat:
       description: "Recommended format for downstream improvement handoffs."
       fields:
-        - handoffTarget
-        - improvementContext
-        - signalsToPreserve
-        - risksToPreserve
-        - ownersToPreserve
-        - requiredAction
-        - timing
-        - unresolvedQuestion
-        - status
+        - "handoffTarget"
+        - "improvementContext"
+        - "signalsToPreserve"
+        - "risksToPreserve"
+        - "ownersToPreserve"
+        - "requiredAction"
+        - "timing"
+        - "unresolvedQuestion"
+        - "status"
   sections:
     - id: "improvement-objective"
       title: "Improvement Objective"
-      intent: "Define the goal of continuous operational improvement and how it is balanced against stability, simplicity, risk, and capacity."
+      intent: "Define the goal of continuous operational improvement and how it is balanced against stability, simplicity,
+        risk, and capacity."
       required: true
       outputGuidance:
         - "Open with the purpose of continuous improvement in one concise paragraph."
         - "Define what improvement protects and what it must not destabilize."
-        - "Explain the balance between improvement, stability, simplicity, risk reduction, cost discipline, and customer value."
+        - "Explain the balance between improvement, stability, simplicity, risk reduction, cost discipline, and customer
+          value."
       qualityChecks:
         - "Objective is not generic optimization language."
         - "Stability and capacity constraints are explicit."
         - "Improvement is tied to evidence and operational truth."
-      questions:
+      questions: &a1
         - "What is the goal of continuous operational improvement?"
         - "How is improvement balanced against stability, simplicity, and capacity?"
         - "What kinds of improvement are valuable?"
@@ -437,14 +516,15 @@ document:
       intent: "Define rules that keep improvement deliberate, safe, measurable, reversible, and aligned with customer value."
       required: true
       outputGuidance:
-        - "Define principles for evidence, ownership, reversibility, small changes, measurement, guardrails, privacy, customer trust, and cost discipline."
+        - "Define principles for evidence, ownership, reversibility, small changes, measurement, guardrails, privacy,
+          customer trust, and cost discipline."
         - "State what continuous improvement must not do."
         - "Tie principles to Foundation and Operations boundaries."
       qualityChecks:
         - "Principles constrain behavior."
         - "Guardrails and reversibility are explicit."
         - "Novelty-driven change is discouraged."
-      questions:
+      questions: &a2
         - "What principles guide continuous improvement?"
         - "How should improvements be validated before rollout?"
         - "How should improvements avoid unnecessary complexity?"
@@ -455,46 +535,53 @@ document:
       required: true
       outputGuidance:
         - "Separate in-scope, out-of-scope, shared, downstream-owned, and review-needed improvement areas."
-        - "Clarify relationships with Product, Engineering, GTM, Support, Finance, Risk/Compliance, Knowledge Management, and Risk Management."
+        - "Clarify relationships with Product, Engineering, GTM, Support, Finance, Risk/Compliance, Knowledge
+          Management, and Risk Management."
         - "Preserve unresolved scope questions."
       qualityChecks:
         - "Scope prevents every change from being treated as continuous improvement."
         - "Shared ownership and handoff rules are visible."
         - "Risk-sensitive improvements are routed correctly."
-      questions:
+      questions: &a3
         - "What kinds of improvements belong in this document?"
-        - "What improvements belong to Product, Engineering, GTM, Support, Finance, Risk/Compliance, or Knowledge Management instead?"
+        - "What improvements belong to Product, Engineering, GTM, Support, Finance, Risk/Compliance, or Knowledge Management
+          instead?"
         - "What improvement areas require downstream handoff or review?"
     - id: "feedback-sources"
       title: "Feedback Sources"
-      intent: "Identify all sources of feedback that drive operational improvements and define collection, categorization, quality caveats, and downstream use."
+      intent: "Identify all sources of feedback that drive operational improvements and define collection, categorization,
+        quality caveats, and downstream use."
       required: true
       outputGuidance:
         - "Use feedback source records."
-        - "Include support, customer success, churn, incidents, releases, business processes, operational metrics, financial metrics, risk reviews, compliance reviews, knowledge reviews, user research, market feedback, and team observations."
+        - "Include support, customer success, churn, incidents, releases, business processes, operational metrics,
+          financial metrics, risk reviews, compliance reviews, knowledge reviews, user research, market feedback, and
+          team observations."
         - "State signal quality and caveats."
       qualityChecks:
         - "Feedback sources are broad but not noisy."
         - "Signals have collection method and owner."
         - "Weak signals are caveated."
-      questions:
+      questions: &a4
         - "What sources of feedback drive operational improvements?"
         - "How is each feedback source collected?"
         - "How is feedback categorized and routed?"
         - "What caveats apply to each feedback source?"
     - id: "improvement-intake"
       title: "Improvement Intake"
-      intent: "Define how improvement ideas enter the system and how they are enriched, deduplicated, accepted, rejected, deferred, or escalated."
+      intent: "Define how improvement ideas enter the system and how they are enriched, deduplicated, accepted, rejected,
+        deferred, or escalated."
       required: true
       outputGuidance:
         - "Define intake sources, required fields, owner, triage cadence, rejection/defer rules, and escalation."
-        - "Separate improvement idea from bug, feature request, incident corrective action, risk mitigation, and process change."
+        - "Separate improvement idea from bug, feature request, incident corrective action, risk mitigation, and process
+          change."
         - "Require problem statement and source signal."
       qualityChecks:
         - "Intake prevents vague improvement ideas."
         - "Deduplication and rejection are explicit."
         - "Mandatory corrective actions are not treated as optional."
-      questions:
+      questions: &a5
         - "How are improvement ideas submitted?"
         - "What information is required before an idea enters the backlog?"
         - "How are duplicates handled?"
@@ -505,13 +592,14 @@ document:
       required: true
       outputGuidance:
         - "Use improvement item records."
-        - "Include source signal, problem statement, hypothesis, expected benefit, risk reduced/created, owner, priority, validation, success criteria, guardrails, and status."
+        - "Include source signal, problem statement, hypothesis, expected benefit, risk reduced/created, owner,
+          priority, validation, success criteria, guardrails, and status."
         - "Define stale backlog cleanup."
       qualityChecks:
         - "Backlog items are actionable."
         - "Backlog has owner and review cadence."
         - "Stale or duplicated items are cleaned up."
-      questions:
+      questions: &a6
         - "How is the operational improvement backlog maintained?"
         - "Who can propose improvements and how are they evaluated?"
         - "What statuses exist for improvement items?"
@@ -522,30 +610,33 @@ document:
       required: true
       outputGuidance:
         - "Use prioritization records."
-        - "Include customer impact, operational risk reduction, reliability, support burden, cost, revenue protection, privacy/security, compliance, effort, reversibility, urgency, strategic alignment, and opportunity cost."
+        - "Include customer impact, operational risk reduction, reliability, support burden, cost, revenue protection,
+          privacy/security, compliance, effort, reversibility, urgency, strategic alignment, and opportunity cost."
         - "Define tie-breakers."
       qualityChecks:
         - "Prioritization is explicit and decision-useful."
         - "Risk reduction and customer impact are considered."
         - "Effort and opportunity cost are not ignored."
-      questions:
+      questions: &a7
         - "How are improvement ideas prioritized?"
         - "What criteria determine which improvements are implemented first?"
         - "How are urgent risk-reduction improvements handled?"
         - "What tie-breaker rules apply?"
     - id: "improvement-experiment-model"
       title: "Improvement Experiment Model"
-      intent: "Define how improvements are tested before full rollout and how success, failure, rollback, and adoption are decided."
+      intent: "Define how improvements are tested before full rollout and how success, failure, rollback, and adoption are
+        decided."
       required: true
       outputGuidance:
         - "Use experiment records."
-        - "Include pilot scope, target process/segment, duration/stop condition, success metric, guardrail metric, rollback rule, owner, and decision after experiment."
+        - "Include pilot scope, target process/segment, duration/stop condition, success metric, guardrail metric,
+          rollback rule, owner, and decision after experiment."
         - "State when experimentation is unnecessary or unsafe."
       qualityChecks:
         - "Experiments are bounded and measurable."
         - "Guardrails and rollback are explicit."
         - "Experiment design does not overstate statistical certainty."
-      questions:
+      questions: &a8
         - "How are improvements validated before full rollout?"
         - "When should an improvement be piloted or tested?"
         - "What success and stop criteria apply?"
@@ -557,12 +648,13 @@ document:
       outputGuidance:
         - "Use process improvement records."
         - "Tie to Business Processes, Process Metrics, Process Controls, and Reporting Cadence."
-        - "Include bottlenecks, defects, manual burden, rework, control failure, customer impact, financial risk, and privacy risk."
+        - "Include bottlenecks, defects, manual burden, rework, control failure, customer impact, financial risk, and
+          privacy risk."
       qualityChecks:
         - "Process review is grounded in signals."
         - "Redesign triggers are explicit."
         - "Control and risk impact are considered."
-      questions:
+      questions: &a9
         - "How are existing processes reviewed for improvement opportunities?"
         - "What triggers a process redesign?"
         - "How are bottlenecks, defects, rework, manual burden, and control failures detected?"
@@ -572,102 +664,114 @@ document:
       required: true
       outputGuidance:
         - "Use automation candidate records."
-        - "Include frequency, manual effort, error risk, privacy/security impact, financial impact, automation benefit/risk, fallback, observability, maintenance owner, and priority."
+        - "Include frequency, manual effort, error risk, privacy/security impact, financial impact, automation
+          benefit/risk, fallback, observability, maintenance owner, and priority."
         - "Tie to Operating Model manual/automated operations."
       qualityChecks:
         - "Automation candidates are evaluated rigorously."
         - "Fallback and observability are required."
         - "Maintenance burden is considered."
-      questions:
+      questions: &a10
         - "How are manual operations evaluated for automation?"
         - "What makes an operation a good automation candidate?"
         - "What risks can automation introduce?"
         - "What fallback, observability, and maintenance ownership are required?"
     - id: "quality-improvement"
       title: "Quality Improvement"
-      intent: "Define how operational quality is systematically improved through defect reduction, review loops, QA, testing, documentation, monitoring, and controls."
+      intent: "Define how operational quality is systematically improved through defect reduction, review loops, QA, testing,
+        documentation, monitoring, and controls."
       required: true
       outputGuidance:
         - "Use quality improvement records."
-        - "Tie quality work to support signals, incidents, tests, acceptance criteria, monitoring, process controls, and documentation."
+        - "Tie quality work to support signals, incidents, tests, acceptance criteria, monitoring, process controls, and
+          documentation."
         - "Include validation method and guardrail."
       qualityChecks:
         - "Quality improvement is measurable."
         - "Quality is not sacrificed for speed or cost."
         - "Defect types and affected areas are explicit."
-      questions:
+      questions: &a11
         - "How is operational quality systematically improved?"
         - "What defect types are targeted?"
         - "What QA, testing, monitoring, support feedback, and control improvements are used?"
         - "How is quality improvement validated?"
     - id: "cost-reduction"
       title: "Cost Reduction"
-      intent: "Define how cost reduction opportunities are identified and validated without degrading service, trust, reliability, privacy, or future flexibility."
+      intent: "Define how cost reduction opportunities are identified and validated without degrading service, trust,
+        reliability, privacy, or future flexibility."
       required: true
       outputGuidance:
         - "Use cost reduction records."
-        - "Tie to Financial Operations, Cost Monitoring, Margin Monitoring, Vendor Cost Management, and Operational Metrics."
+        - "Tie to Financial Operations, Cost Monitoring, Margin Monitoring, Vendor Cost Management, and Operational
+          Metrics."
         - "Include estimated savings, service-quality risk, validation method, guardrail, owner, and post-change review."
       qualityChecks:
         - "Cost reductions are validated against service quality."
         - "Hidden cost transfer is considered."
         - "Guardrails prevent damaging customer trust."
-      questions:
+      questions: &a12
         - "How are operational cost reduction opportunities identified?"
         - "How are cost reductions validated to avoid degrading service?"
         - "What cost reductions are prohibited or high-risk?"
         - "How are savings and side effects measured after change?"
     - id: "customer-success-and-churn-learning"
       title: "Customer Success and Churn Learning"
-      intent: "Define how customer success, activation, retention, satisfaction, expansion, and churn signals become operational improvements."
+      intent: "Define how customer success, activation, retention, satisfaction, expansion, and churn signals become
+        operational improvements."
       required: true
       outputGuidance:
         - "Use learning loop records."
-        - "Tie to Customer Success health signals, churn analysis, retention actions, satisfaction measurement, expansion rules, and feedback loops."
+        - "Tie to Customer Success health signals, churn analysis, retention actions, satisfaction measurement,
+          expansion rules, and feedback loops."
         - "Separate product, process, support, pricing, and expectation-setting causes."
       qualityChecks:
         - "Churn learning identifies root-cause hypotheses."
         - "Customers are not blamed as default explanation."
         - "Learning creates action or explicit no-action decision."
-      questions:
+      questions: &a13
         - "How is churn analyzed to identify operational improvements?"
         - "How do activation, health, retention, satisfaction, and expansion signals feed improvement?"
         - "What feedback loop exists between churn analysis and process changes?"
     - id: "support-learning"
       title: "Support Learning"
-      intent: "Define how support tickets, known issues, macros, bugs, escalations, billing/refund issues, unsupported requests, and customer language create improvements."
+      intent: "Define how support tickets, known issues, macros, bugs, escalations, billing/refund issues, unsupported
+        requests, and customer language create improvements."
       required: true
       outputGuidance:
         - "Use learning loop records."
-        - "Tie to Customer Support feedback loop, ticket categories, known issues, bug reporting, billing support, macros, and support risks."
+        - "Tie to Customer Support feedback loop, ticket categories, known issues, bug reporting, billing support,
+          macros, and support risks."
         - "Route learnings to product, process, docs, finance, privacy, or risk as appropriate."
       qualityChecks:
         - "Support learning reduces repeated issues."
         - "Support trends produce concrete improvements."
         - "Customer language informs documentation and messaging safely."
-      questions:
+      questions: &a14
         - "How do support patterns become improvement work?"
         - "How are known issues, bugs, escalations, and support macros improved over time?"
         - "How do billing/refund and unsupported request patterns feed improvement?"
     - id: "incident-learning"
       title: "Incident Learning"
-      intent: "Define how incident postmortems, corrective actions, recurring incident patterns, detection gaps, communication gaps, and rollback gaps become improvements."
+      intent: "Define how incident postmortems, corrective actions, recurring incident patterns, detection gaps, communication
+        gaps, and rollback gaps become improvements."
       required: true
       outputGuidance:
         - "Use learning loop records."
         - "Tie to Incident Management postmortems and corrective actions."
-        - "Treat recurrence-reducing corrective actions as mandatory risk-reduction work, not optional improvement ideas."
+        - "Treat recurrence-reducing corrective actions as mandatory risk-reduction work, not optional improvement
+          ideas."
       qualityChecks:
         - "Incident learning reduces recurrence risk."
         - "Corrective action completion is tracked."
         - "Postmortem theater is avoided."
-      questions:
+      questions: &a15
         - "How do incident postmortems feed into operational improvements?"
         - "How is the completion of incident corrective actions tracked?"
         - "How are repeated incident patterns, detection gaps, communication gaps, and rollback gaps addressed?"
     - id: "release-learning"
       title: "Release Learning"
-      intent: "Define how release quality, rollout, rollback, hotfix, support handoff, communication, and post-release signals become improvements."
+      intent: "Define how release quality, rollout, rollback, hotfix, support handoff, communication, and post-release signals
+        become improvements."
       required: true
       outputGuidance:
         - "Use learning loop records."
@@ -677,13 +781,14 @@ document:
         - "Release learning improves safety and speed without hiding failures."
         - "Rollback and hotfix patterns are reviewed."
         - "Support handoff is included."
-      questions:
+      questions: &a16
         - "How do release outcomes become improvement work?"
         - "How are rollback, hotfix, post-release incident, support handoff, and release communication patterns reviewed?"
         - "What release process improvements are triggered by post-release signals?"
     - id: "metric-and-dashboard-learning"
       title: "Metric and Dashboard Learning"
-      intent: "Define how metric caveats, bad data, missing instrumentation, alert fatigue, misleading thresholds, and dashboard staleness become improvements."
+      intent: "Define how metric caveats, bad data, missing instrumentation, alert fatigue, misleading thresholds, and
+        dashboard staleness become improvements."
       required: true
       outputGuidance:
         - "Use learning loop records."
@@ -693,29 +798,32 @@ document:
         - "Measurement system improves when it misleads or fails."
         - "Alert fatigue and bad data create improvement items."
         - "Metrics remain decision-safe."
-      questions:
+      questions: &a17
         - "How are operational metrics and dashboards improved over time?"
         - "How are bad data, missing instrumentation, misleading thresholds, and alert fatigue handled?"
         - "When does dashboard staleness trigger improvement work?"
     - id: "knowledge-improvement"
       title: "Knowledge Improvement"
-      intent: "Define how stale docs, missing runbooks, poor discoverability, duplicate truth, ownerless docs, and documentation gaps become improvements."
+      intent: "Define how stale docs, missing runbooks, poor discoverability, duplicate truth, ownerless docs, and
+        documentation gaps become improvements."
       required: true
       outputGuidance:
         - "Use learning loop or quality improvement records."
-        - "Tie to Knowledge Management freshness rules, search/discoverability, runbooks, decision records, and support KB."
+        - "Tie to Knowledge Management freshness rules, search/discoverability, runbooks, decision records, and support
+          KB."
         - "Include documentation update and archival actions."
       qualityChecks:
         - "Documentation gaps become actionable improvements."
         - "Duplicate truth and stale docs are addressed."
         - "Knowledge improvements reduce operational risk."
-      questions:
+      questions: &a18
         - "How does knowledge management feed continuous improvement?"
         - "How are stale docs, missing runbooks, duplicate truth, and poor discoverability corrected?"
         - "How are documentation improvements prioritized?"
     - id: "risk-reduction"
       title: "Risk Reduction"
-      intent: "Define how accepted risks, operational risks, GTM risks, compliance risks, financial risks, knowledge risks, and technical risks become mitigation work."
+      intent: "Define how accepted risks, operational risks, GTM risks, compliance risks, financial risks, knowledge risks,
+        and technical risks become mitigation work."
       required: true
       outputGuidance:
         - "Use learning loop or improvement item records."
@@ -725,47 +833,52 @@ document:
         - "Risk reduction is prioritized deliberately."
         - "Accepted risks stay visible."
         - "Mitigation work has owner and evidence."
-      questions:
+      questions: &a19
         - "How are risks converted into improvement or mitigation work?"
         - "How are accepted risks reviewed and reduced over time?"
         - "What risk signals trigger immediate improvement work?"
     - id: "change-control"
       title: "Change Control"
-      intent: "Define how improvements are approved, scheduled, communicated, implemented, monitored, reversed, documented, and handed off."
+      intent: "Define how improvements are approved, scheduled, communicated, implemented, monitored, reversed, documented,
+        and handed off."
       required: true
       outputGuidance:
         - "Use change control records."
-        - "Include proposer, reviewer, approver, rollout scope, communication, documentation update, monitoring, and rollback/reversal rule."
+        - "Include proposer, reviewer, approver, rollout scope, communication, documentation update, monitoring, and
+          rollback/reversal rule."
         - "Tie to Knowledge Management versioning and Business Processes."
       qualityChecks:
         - "Changes are controlled without becoming bureaucratic."
         - "Documentation and communication are included."
         - "Rollback/reversal exists where relevant."
-      questions:
+      questions: &a20
         - "How are improvement changes approved and scheduled?"
         - "Who reviews and approves changes?"
         - "What communication and documentation updates are required?"
         - "How are changes monitored and reversed if harmful?"
     - id: "adoption-and-rollout"
       title: "Adoption and Rollout"
-      intent: "Define how operational improvements are introduced to affected people, systems, workflows, docs, support, customers, or vendors."
+      intent: "Define how operational improvements are introduced to affected people, systems, workflows, docs, support,
+        customers, or vendors."
       required: true
       outputGuidance:
         - "Use adoption records."
-        - "Include rollout plan, training/enablement, communication, adoption signal, support fallback, confusion/resistance signal, and completion criteria."
+        - "Include rollout plan, training/enablement, communication, adoption signal, support fallback,
+          confusion/resistance signal, and completion criteria."
         - "State when a change is considered adopted."
       qualityChecks:
         - "Rollout does not end at implementation."
         - "Adoption is verified."
         - "Support fallback is included."
-      questions:
+      questions: &a21
         - "How are improvements rolled out?"
         - "Who needs to know or change behavior?"
         - "What training, enablement, or communication is required?"
         - "How is adoption verified?"
     - id: "improvement-cadence"
       title: "Improvement Cadence"
-      intent: "Define how often improvement initiatives are reviewed, who participates, what decisions are made, and how action is tracked."
+      intent: "Define how often improvement initiatives are reviewed, who participates, what decisions are made, and how
+        action is tracked."
       required: true
       outputGuidance:
         - "Use improvement cadence records."
@@ -775,7 +888,7 @@ document:
         - "Cadence creates decisions and actions."
         - "Review frequency matches risk and volatility."
         - "Action tracking is explicit."
-      questions:
+      questions: &a22
         - "How often are improvement initiatives reviewed?"
         - "Who is accountable for driving continuous improvement?"
         - "What inputs and outputs are expected?"
@@ -786,61 +899,409 @@ document:
       required: true
       outputGuidance:
         - "Use improvement metric records."
-        - "Include backlog health, cycle time, completion rate, impact realized, rollback rate, adoption, cost savings, defect reduction, support reduction, incident recurrence reduction, process maturity, and risk reduction."
+        - "Include backlog health, cycle time, completion rate, impact realized, rollback rate, adoption, cost savings,
+          defect reduction, support reduction, incident recurrence reduction, process maturity, and risk reduction."
         - "Include caveats against vanity improvement metrics."
       qualityChecks:
         - "Metrics measure realized benefit, not just shipped changes."
         - "Metrics have owner, source, cadence, threshold, and decision implication."
         - "Metrics do not incentivize process churn."
-      questions:
+      questions: &a23
         - "How is continuous improvement effectiveness measured?"
-        - "How are backlog health, cycle time, adoption, impact realized, rollback, cost savings, defect reduction, support reduction, incident recurrence reduction, and risk reduction measured?"
+        - "How are backlog health, cycle time, adoption, impact realized, rollback, cost savings, defect reduction, support
+          reduction, incident recurrence reduction, and risk reduction measured?"
         - "What metrics should be avoided?"
     - id: "improvement-guardrails"
       title: "Improvement Guardrails"
-      intent: "Define limits that prevent improvement work from harming stability, customer trust, privacy, financial correctness, support capacity, or team capacity."
+      intent: "Define limits that prevent improvement work from harming stability, customer trust, privacy, financial
+        correctness, support capacity, or team capacity."
       required: true
       outputGuidance:
         - "Use improvement guardrail records."
-        - "Include guardrails against process churn, over-automation, cost-cutting harm, release instability, privacy risk, support overload, team overload, metric gaming, and uncontrolled scope expansion."
+        - "Include guardrails against process churn, over-automation, cost-cutting harm, release instability, privacy
+          risk, support overload, team overload, metric gaming, and uncontrolled scope expansion."
         - "Define stop or rollback conditions."
       qualityChecks:
         - "Guardrails are measurable or observable."
         - "Guardrails have owner and escalation rule."
         - "Stop/rollback conditions are explicit."
-      questions:
+      questions: &a24
         - "What guardrails prevent improvement from creating harm?"
         - "What signals indicate an improvement should stop or roll back?"
         - "Who owns guardrail monitoring?"
     - id: "improvement-risks"
       title: "Improvement Risks"
-      intent: "Identify failure modes of continuous improvement and how they are detected, mitigated, escalated, or handed off."
+      intent: "Identify failure modes of continuous improvement and how they are detected, mitigated, escalated, or handed
+        off."
       required: true
       outputGuidance:
         - "Use improvement risk records."
-        - "Include chaotic change, over-automation, local optimization, novelty bias, weak validation, no adoption, owner gaps, unmeasured impact, hidden risk, process churn, documentation drift, and improvement backlog rot."
+        - "Include chaotic change, over-automation, local optimization, novelty bias, weak validation, no adoption,
+          owner gaps, unmeasured impact, hidden risk, process churn, documentation drift, and improvement backlog rot."
         - "Route risks to Risk Management where needed."
       qualityChecks:
         - "Risks are concrete and monitorable."
         - "Mitigation and contingency are distinct."
         - "High-impact risks have owner and downstream handoff."
-      questions:
+      questions: &a25
         - "What could cause continuous improvement to fail or create chaos?"
         - "Where could improvement create hidden risk?"
         - "How are improvement risks detected and mitigated?"
         - "What should Risk Management inherit?"
     - id: "downstream-handoff"
       title: "Downstream Handoff"
-      intent: "Define what downstream Operations documents must inherit from Continuous Improvement and what they must not assume."
+      intent: "Define what downstream Operations documents must inherit from Continuous Improvement and what they must not
+        assume."
       required: true
       outputGuidance:
         - "Use improvement handoff records."
         - "Route context to Risk Management."
-        - "Preserve improvement signals, backlog risks, guardrails, change-control rules, metrics, risks, owners, and unresolved questions."
+        - "Preserve improvement signals, backlog risks, guardrails, change-control rules, metrics, risks, owners, and
+          unresolved questions."
       qualityChecks:
         - "Handoff items are concrete and document-targeted."
         - "Downstream documents are not allowed to invent missing improvement assumptions silently."
         - "Continuous Improvement remains improvement architecture; enterprise risk governance remains downstream."
-      questions:
+      questions: &a26
         - "What should Risk Management inherit?"
         - "What improvement signals, guardrails, risks, metrics, owners, and unresolved questions must be preserved?"
+  interview:
+    mode: "canonical_question_with_coverage"
+    canonicalQuestion: "Explain continuous improvement. How does the operational system improve deliberately, safely,
+      measurably, and sustainably without creating chaos, instability, unnecessary complexity, or hidden risk?"
+    expectedAnswerShape:
+      style: "freeform_structured"
+      allowBullets: true
+      allowNarrative: true
+      preferredDepth: "medium"
+    coverageTopics:
+      - id: "improvement-objective"
+        label: "Improvement Objective"
+        required: true
+        description: "Define the goal of continuous operational improvement and how it is balanced against stability,
+          simplicity, risk, and capacity."
+        evaluationHint: "Look for concrete answers addressing: What is the goal of continuous operational improvement?; How is
+          improvement balanced against stability, simplicity, and capacity?; What kinds of improvement are valuable?."
+        sourceQuestions: *a1
+        targetSections: &a27
+          - "Improvement Objective"
+      - id: "improvement-principles"
+        label: "Improvement Principles"
+        required: true
+        description: "Define rules that keep improvement deliberate, safe, measurable, reversible, and aligned with customer value."
+        evaluationHint: "Look for concrete answers addressing: What principles guide continuous improvement?; How should
+          improvements be validated before rollout?; How should improvements avoid unnecessary complexity?."
+        sourceQuestions: *a2
+        targetSections: &a28
+          - "Improvement Principles"
+      - id: "improvement-scope"
+        label: "Improvement Scope"
+        required: true
+        description: "Define what continuous improvement covers, shares, excludes, escalates, or hands off downstream."
+        evaluationHint: "Look for concrete answers addressing: What kinds of improvements belong in this document?; What
+          improvements belong to Product, Engineering, GTM, Support, Finance, Risk/Compliance, or Knowledge Management
+          instead?; What improvement areas require downstream handoff or review?."
+        sourceQuestions: *a3
+        targetSections: &a29
+          - "Improvement Scope"
+      - id: "feedback-sources"
+        label: "Feedback Sources"
+        required: true
+        description: "Identify all sources of feedback that drive operational improvements and define collection,
+          categorization, quality caveats, and downstream use."
+        evaluationHint: "Look for concrete answers addressing: What sources of feedback drive operational improvements?; How is
+          each feedback source collected?; How is feedback categorized and routed?."
+        sourceQuestions: *a4
+        targetSections: &a30
+          - "Feedback Sources"
+      - id: "improvement-intake"
+        label: "Improvement Intake"
+        required: true
+        description: "Define how improvement ideas enter the system and how they are enriched, deduplicated, accepted, rejected,
+          deferred, or escalated."
+        evaluationHint: "Look for concrete answers addressing: How are improvement ideas submitted?; What information is
+          required before an idea enters the backlog?; How are duplicates handled?."
+        sourceQuestions: *a5
+        targetSections: &a31
+          - "Improvement Intake"
+      - id: "improvement-backlog"
+        label: "Improvement Backlog"
+        required: true
+        description: "Define how the improvement backlog is maintained, reviewed, prioritized, cleaned, and connected to action."
+        evaluationHint: "Look for concrete answers addressing: How is the operational improvement backlog maintained?; Who can
+          propose improvements and how are they evaluated?; What statuses exist for improvement items?."
+        sourceQuestions: *a6
+        targetSections: &a32
+          - "Improvement Backlog"
+      - id: "prioritization-rules"
+        label: "Prioritization Rules"
+        required: true
+        description: "Define how improvement ideas are prioritized and what criteria determine implementation order."
+        evaluationHint: "Look for concrete answers addressing: How are improvement ideas prioritized?; What criteria determine
+          which improvements are implemented first?; How are urgent risk-reduction improvements handled?."
+        sourceQuestions: *a7
+        targetSections: &a33
+          - "Prioritization Rules"
+      - id: "improvement-experiment-model"
+        label: "Improvement Experiment Model"
+        required: true
+        description: "Define how improvements are tested before full rollout and how success, failure, rollback, and adoption
+          are decided."
+        evaluationHint: "Look for concrete answers addressing: How are improvements validated before full rollout?; When should
+          an improvement be piloted or tested?; What success and stop criteria apply?."
+        sourceQuestions: *a8
+        targetSections: &a34
+          - "Improvement Experiment Model"
+      - id: "process-review"
+        label: "Process Review"
+        required: true
+        description: "Define how existing processes are reviewed for improvement opportunities and what triggers redesign."
+        evaluationHint: "Look for concrete answers addressing: How are existing processes reviewed for improvement
+          opportunities?; What triggers a process redesign?; How are bottlenecks, defects, rework, manual burden, and
+          control failures detected?."
+        sourceQuestions: *a9
+        targetSections: &a35
+          - "Process Review"
+      - id: "automation-candidates"
+        label: "Automation Candidates"
+        required: true
+        description: "Define how manual operations are evaluated for automation and how automation is implemented safely."
+        evaluationHint: "Look for concrete answers addressing: How are manual operations evaluated for automation?; What makes
+          an operation a good automation candidate?; What risks can automation introduce?."
+        sourceQuestions: *a10
+        targetSections: &a36
+          - "Automation Candidates"
+      - id: "quality-improvement"
+        label: "Quality Improvement"
+        required: true
+        description: "Define how operational quality is systematically improved through defect reduction, review loops, QA,
+          testing, documentation, monitoring, and controls."
+        evaluationHint: "Look for concrete answers addressing: How is operational quality systematically improved?; What defect
+          types are targeted?; What QA, testing, monitoring, support feedback, and control improvements are used?."
+        sourceQuestions: *a11
+        targetSections: &a37
+          - "Quality Improvement"
+      - id: "cost-reduction"
+        label: "Cost Reduction"
+        required: true
+        description: "Define how cost reduction opportunities are identified and validated without degrading service, trust,
+          reliability, privacy, or future flexibility."
+        evaluationHint: "Look for concrete answers addressing: How are operational cost reduction opportunities identified?; How
+          are cost reductions validated to avoid degrading service?; What cost reductions are prohibited or high-risk?."
+        sourceQuestions: *a12
+        targetSections: &a38
+          - "Cost Reduction"
+      - id: "customer-success-and-churn-learning"
+        label: "Customer Success and Churn Learning"
+        required: true
+        description: "Define how customer success, activation, retention, satisfaction, expansion, and churn signals become
+          operational improvements."
+        evaluationHint: "Look for concrete answers addressing: How is churn analyzed to identify operational improvements?; How
+          do activation, health, retention, satisfaction, and expansion signals feed improvement?; What feedback loop
+          exists between churn analysis and process changes?."
+        sourceQuestions: *a13
+        targetSections: &a39
+          - "Customer Success and Churn Learning"
+      - id: "support-learning"
+        label: "Support Learning"
+        required: true
+        description: "Define how support tickets, known issues, macros, bugs, escalations, billing/refund issues, unsupported
+          requests, and customer language create improvements."
+        evaluationHint: "Look for concrete answers addressing: How do support patterns become improvement work?; How are known
+          issues, bugs, escalations, and support macros improved over time?; How do billing/refund and unsupported
+          request patterns feed improvement?."
+        sourceQuestions: *a14
+        targetSections: &a40
+          - "Support Learning"
+      - id: "incident-learning"
+        label: "Incident Learning"
+        required: true
+        description: "Define how incident postmortems, corrective actions, recurring incident patterns, detection gaps,
+          communication gaps, and rollback gaps become improvements."
+        evaluationHint: "Look for concrete answers addressing: How do incident postmortems feed into operational improvements?;
+          How is the completion of incident corrective actions tracked?; How are repeated incident patterns, detection
+          gaps, communication gaps, and rollback gaps addressed?."
+        sourceQuestions: *a15
+        targetSections: &a41
+          - "Incident Learning"
+      - id: "release-learning"
+        label: "Release Learning"
+        required: true
+        description: "Define how release quality, rollout, rollback, hotfix, support handoff, communication, and post-release
+          signals become improvements."
+        evaluationHint: "Look for concrete answers addressing: How do release outcomes become improvement work?; How are
+          rollback, hotfix, post-release incident, support handoff, and release communication patterns reviewed?; What
+          release process improvements are triggered by post-release signals?."
+        sourceQuestions: *a16
+        targetSections: &a42
+          - "Release Learning"
+      - id: "metric-and-dashboard-learning"
+        label: "Metric and Dashboard Learning"
+        required: true
+        description: "Define how metric caveats, bad data, missing instrumentation, alert fatigue, misleading thresholds, and
+          dashboard staleness become improvements."
+        evaluationHint: "Look for concrete answers addressing: How are operational metrics and dashboards improved over time?;
+          How are bad data, missing instrumentation, misleading thresholds, and alert fatigue handled?; When does
+          dashboard staleness trigger improvement work?."
+        sourceQuestions: *a17
+        targetSections: &a43
+          - "Metric and Dashboard Learning"
+      - id: "knowledge-improvement"
+        label: "Knowledge Improvement"
+        required: true
+        description: "Define how stale docs, missing runbooks, poor discoverability, duplicate truth, ownerless docs, and
+          documentation gaps become improvements."
+        evaluationHint: "Look for concrete answers addressing: How does knowledge management feed continuous improvement?; How
+          are stale docs, missing runbooks, duplicate truth, and poor discoverability corrected?; How are documentation
+          improvements prioritized?."
+        sourceQuestions: *a18
+        targetSections: &a44
+          - "Knowledge Improvement"
+      - id: "risk-reduction"
+        label: "Risk Reduction"
+        required: true
+        description: "Define how accepted risks, operational risks, GTM risks, compliance risks, financial risks, knowledge
+          risks, and technical risks become mitigation work."
+        evaluationHint: "Look for concrete answers addressing: How are risks converted into improvement or mitigation work?; How
+          are accepted risks reviewed and reduced over time?; What risk signals trigger immediate improvement work?."
+        sourceQuestions: *a19
+        targetSections: &a45
+          - "Risk Reduction"
+      - id: "change-control"
+        label: "Change Control"
+        required: true
+        description: "Define how improvements are approved, scheduled, communicated, implemented, monitored, reversed,
+          documented, and handed off."
+        evaluationHint: "Look for concrete answers addressing: How are improvement changes approved and scheduled?; Who reviews
+          and approves changes?; What communication and documentation updates are required?."
+        sourceQuestions: *a20
+        targetSections: &a46
+          - "Change Control"
+      - id: "adoption-and-rollout"
+        label: "Adoption and Rollout"
+        required: true
+        description: "Define how operational improvements are introduced to affected people, systems, workflows, docs, support,
+          customers, or vendors."
+        evaluationHint: "Look for concrete answers addressing: How are improvements rolled out?; Who needs to know or change
+          behavior?; What training, enablement, or communication is required?."
+        sourceQuestions: *a21
+        targetSections: &a47
+          - "Adoption and Rollout"
+      - id: "improvement-cadence"
+        label: "Improvement Cadence"
+        required: true
+        description: "Define how often improvement initiatives are reviewed, who participates, what decisions are made, and how
+          action is tracked."
+        evaluationHint: "Look for concrete answers addressing: How often are improvement initiatives reviewed?; Who is
+          accountable for driving continuous improvement?; What inputs and outputs are expected?."
+        sourceQuestions: *a22
+        targetSections: &a48
+          - "Improvement Cadence"
+      - id: "improvement-metrics"
+        label: "Improvement Metrics"
+        required: true
+        description: "Define how the effectiveness of continuous improvement is measured without rewarding activity for its own
+          sake."
+        evaluationHint: "Look for concrete answers addressing: How is continuous improvement effectiveness measured?; How are
+          backlog health, cycle time, adoption, impact realized, rollback, cost savings, defect reduction, support
+          reduction, incident recurrence reduction, and risk reduction measured?; What metrics should be avoided?."
+        sourceQuestions: *a23
+        targetSections: &a49
+          - "Improvement Metrics"
+      - id: "improvement-guardrails"
+        label: "Improvement Guardrails"
+        required: true
+        description: "Define limits that prevent improvement work from harming stability, customer trust, privacy, financial
+          correctness, support capacity, or team capacity."
+        evaluationHint: "Look for concrete answers addressing: What guardrails prevent improvement from creating harm?; What
+          signals indicate an improvement should stop or roll back?; Who owns guardrail monitoring?."
+        sourceQuestions: *a24
+        targetSections: &a50
+          - "Improvement Guardrails"
+      - id: "improvement-risks"
+        label: "Improvement Risks"
+        required: true
+        description: "Identify failure modes of continuous improvement and how they are detected, mitigated, escalated, or
+          handed off."
+        evaluationHint: "Look for concrete answers addressing: What could cause continuous improvement to fail or create chaos?;
+          Where could improvement create hidden risk?; How are improvement risks detected and mitigated?."
+        sourceQuestions: *a25
+        targetSections: &a51
+          - "Improvement Risks"
+      - id: "downstream-handoff"
+        label: "Downstream Handoff"
+        required: true
+        description: "Define what downstream Operations documents must inherit from Continuous Improvement and what they must
+          not assume."
+        evaluationHint: "Look for concrete answers addressing: What should Risk Management inherit?; What improvement signals,
+          guardrails, risks, metrics, owners, and unresolved questions must be preserved?."
+        sourceQuestions: *a26
+        targetSections: &a52
+          - "Downstream Handoff"
+    sufficiency:
+      requiredTopicsMustBeCovered: true
+      requiredCoverageRatio: 0.8
+      maxFollowUps: 3
+      allowPartialGeneration: true
+    followUpPolicy:
+      askOnlyAboutMissingTopics: true
+      maxMissingTopicsPerFollowUp: 3
+      groupRelatedTopics: true
+      allowPartialGenerationAfterMaxFollowUps: true
+    generationMapping:
+      improvement-objective:
+        targetSections: *a27
+      improvement-principles:
+        targetSections: *a28
+      improvement-scope:
+        targetSections: *a29
+      feedback-sources:
+        targetSections: *a30
+      improvement-intake:
+        targetSections: *a31
+      improvement-backlog:
+        targetSections: *a32
+      prioritization-rules:
+        targetSections: *a33
+      improvement-experiment-model:
+        targetSections: *a34
+      process-review:
+        targetSections: *a35
+      automation-candidates:
+        targetSections: *a36
+      quality-improvement:
+        targetSections: *a37
+      cost-reduction:
+        targetSections: *a38
+      customer-success-and-churn-learning:
+        targetSections: *a39
+      support-learning:
+        targetSections: *a40
+      incident-learning:
+        targetSections: *a41
+      release-learning:
+        targetSections: *a42
+      metric-and-dashboard-learning:
+        targetSections: *a43
+      knowledge-improvement:
+        targetSections: *a44
+      risk-reduction:
+        targetSections: *a45
+      change-control:
+        targetSections: *a46
+      adoption-and-rollout:
+        targetSections: *a47
+      improvement-cadence:
+        targetSections: *a48
+      improvement-metrics:
+        targetSections: *a49
+      improvement-guardrails:
+        targetSections: *a50
+      improvement-risks:
+        targetSections: *a51
+      downstream-handoff:
+        targetSections: *a52
+    _meta:
+      migratedAt: "2026-05-26T00:20:47.558Z"
+      totalSourceQuestions: 91
+      reviewRequired: false
