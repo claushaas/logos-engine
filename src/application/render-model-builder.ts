@@ -294,6 +294,28 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 		return { actions };
 	}
 
+	// ── Document preview mode: regenerate, export, close ───────────────
+
+	if (snapshot.mode === 'document_preview' && snapshot.mainPanel.kind === 'document_preview') {
+		actions.push({
+			enabled: true,
+			id: 'regenerate_document',
+			label: '[Regenerate]',
+		});
+		actions.push({
+			enabled: snapshot.mainPanel.exportEligible,
+			id: 'export_document',
+			label: '[Export]',
+		});
+		actions.push({
+			enabled: true,
+			id: 'close_document_preview',
+			label: '[Close]',
+		});
+
+		return { actions };
+	}
+
 	// ── Node-focused mode: map allowed node actions ─────────────────────
 
 	if (snapshot.activeNodeState !== null) {

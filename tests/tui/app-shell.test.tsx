@@ -10,6 +10,7 @@ import { render } from 'ink-testing-library';
 
 import type {
 	DocumentId,
+	DocumentPreviewPanel,
 	IdlePanel,
 	NodeConversationPanel,
 	ProfilePanel,
@@ -1072,5 +1073,82 @@ describe('AppShell — sidebar collapse/expand (Step 9.1)', () => {
 		const reexpanded = lastFrame() ?? '';
 		expect(reexpanded).toContain('▾ Doc 1');
 		expect(reexpanded).toContain('Core Thesis');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Document preview — missing node navigation via digit keys (Step 12.2)
+// ═══════════════════════════════════════════════════════════════════════════
+
+function documentPreviewSnapshot(): TuiRenderSnapshot {
+	return {
+		actionBar: {
+			actions: [
+				{ enabled: true, id: 'regenerate_document', label: '[Regenerate]' },
+				{ enabled: false, id: 'export_document', label: '[Export]' },
+				{ enabled: true, id: 'close_document_preview', label: '[Close]' },
+			],
+		},
+		diagnostics: [],
+		input: {
+			enabled: false,
+			reasonIfDisabled: 'Text input is not available while previewing a document.',
+		},
+		mainPanel: {
+			content: '# Test\n\nSome text.\n\nCompleteness: 0/0',
+			documentId: 'doc-1' as DocumentId,
+			exportEligible: false,
+			kind: 'document_preview',
+			missingNodeIds: ['n1' as NodeId, 'n2' as NodeId],
+			staleNodeIds: [],
+			title: 'Test Document',
+		} as DocumentPreviewPanel,
+		mode: 'document_preview',
+		sidebar: {
+			activeNodeId: null,
+			phases: [],
+		},
+	};
+}
+
+describe('AppShell — document preview missing node selection', () => {
+	it('dispatches NODE_SELECTED when digit key selects a missing node', () => {
+		const dispatch = vi.fn();
+		const snap = documentPreviewSnapshot();
+		const { stdin } = renderShell(snap, dispatch);
+
+		// Press '1' to select the first missing node (n1)
+		stdin.write('1');
+		return new Promise<void>((resolve) => {
+			setTimeout(() => {
+				expect(dispatch).toHaveBeenCalledWith(
+					expect.objectContaining({
+						nodeId: 'n1',
+						type: 'NODE_SELECTED',
+					}),
+				);
+				resolve();
+			}, 10);
+		});
+	});
+
+	it('dispatches NODE_SELECTED with correct nodeId for second missing node', () => {
+		const dispatch = vi.fn();
+		const snap = documentPreviewSnapshot();
+		const { stdin } = renderShell(snap, dispatch);
+
+		// Press '2' to select the second missing node (n2)
+		stdin.write('2');
+		return new Promise<void>((resolve) => {
+			setTimeout(() => {
+				expect(dispatch).toHaveBeenCalledWith(
+					expect.objectContaining({
+						nodeId: 'n2',
+						type: 'NODE_SELECTED',
+					}),
+				);
+				resolve();
+			}, 10);
+		});
 	});
 });

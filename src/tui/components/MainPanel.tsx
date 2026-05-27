@@ -14,6 +14,7 @@ import type {
 } from '../../contracts/index.js';
 import type { FocusRegion } from '../hooks/use-focus.js';
 import { ConversationPanel } from './ConversationPanel.js';
+import { DocumentPreview } from './DocumentPreview.js';
 import { ActionBar } from './ActionBar.js';
 
 // ─── MainPanel props ────────────────────────────────────────────────────────
@@ -27,6 +28,8 @@ export type MainPanelProps = {
 	readonly onSelectAction?: (actionId: string) => void;
 	/** Current input buffer value (ephemeral TUI state). */
 	readonly inputValue: string | undefined;
+	/** Callback when user navigates to a missing node from document preview. */
+	readonly onSelectMissingNode?: ((nodeId: string) => void) | undefined;
 };
 
 // ─── MainPanel ──────────────────────────────────────────────────────────────
@@ -39,6 +42,7 @@ export function MainPanel({
 	inputValue,
 	mainPanel,
 	onSelectAction,
+	onSelectMissingNode,
 }: MainPanelProps) {
 	switch (mainPanel.kind) {
 		// ── Idle ─────────────────────────────────────────────────────────
@@ -120,47 +124,15 @@ export function MainPanel({
 
 		case 'document_preview':
 			return (
-				<Box flexDirection="column" flexGrow={1} paddingX={2}>
-					<Box marginBottom={1}>
-						<Text bold={true}>
-							Document: {mainPanel.title}
-						</Text>
-					</Box>
-					{mainPanel.content !== null ? (
-						<Box marginBottom={1}>
-							<Text>{mainPanel.content}</Text>
-						</Box>
-					) : (
-						<Box marginBottom={1}>
-							<Text dimColor={true}>
-								Document not yet generated.
-							</Text>
-						</Box>
-					)}
-					{mainPanel.missingNodeIds.length > 0 && (
-						<Box marginBottom={1}>
-							<Text color="yellow">
-								Missing nodes:{' '}
-								{mainPanel.missingNodeIds.join(', ')}
-							</Text>
-						</Box>
-					)}
-					{mainPanel.staleNodeIds.length > 0 && (
-						<Box marginBottom={1}>
-							<Text color="yellow">
-								Stale nodes:{' '}
-								{mainPanel.staleNodeIds.join(', ')}
-							</Text>
-						</Box>
-					)}
-					<Box>
-						<Text dimColor={true}>
-							{mainPanel.exportEligible
-								? 'Document is ready for export.'
-								: 'Document is not yet export-eligible.'}
-						</Text>
-					</Box>
-				</Box>
+				<DocumentPreview
+					actionBar={actionBar}
+					focusedActionIndex={focusedActionIndex}
+					focusedRegion={focusedRegion}
+					input={input}
+					panel={mainPanel}
+					onSelectAction={onSelectAction}
+					onSelectMissingNode={onSelectMissingNode}
+				/>
 			);
 
 		// ── Export ───────────────────────────────────────────────────────

@@ -13,6 +13,7 @@ import { describe, expect, it } from 'vitest';
 
 import type {
 	ActionBarRenderAction,
+	DocumentPreviewPanel,
 	IdlePanel,
 	LogosProfile,
 	MainPanelRenderModel,
@@ -1057,5 +1058,102 @@ describe('buildRenderSnapshot — action labels match Appendix A', () => {
 
 		const render = buildRenderSnapshot(snap, profile);
 		expect(render.actionBar.actions).toEqual([]);
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Document preview mode — action bar rendering
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('buildRenderSnapshot — document preview', () => {
+	function docPreviewSnapshot(
+		profile: LogosProfile,
+		exportEligible: boolean,
+	): StateEngineSnapshot {
+		return {
+			activeNodeId: 'n1' as NodeId,
+			activeNodeState: null,
+			allowedActions: [],
+			diagnostics: [],
+			mainPanel: {
+				content: '# Foundation Thesis\n\nCompleteness: 2/2 sections accepted',
+				documentId: 'doc-1' as DocumentId,
+				exportEligible,
+				kind: 'document_preview',
+				missingNodeIds: [],
+				staleNodeIds: [],
+				title: 'Foundation Thesis',
+			} as DocumentPreviewPanel,
+			mode: 'document_preview',
+			selectedProfileId: profile.id,
+			sidebar: {
+				activeNodeId: 'n1' as NodeId,
+				phases: [
+					{
+						documents: [
+							{
+								documentId: 'doc-1' as DocumentId,
+								nodes: [
+									{
+										disabled: false,
+										nodeId: 'n1' as NodeId,
+										selected: true,
+										statusSymbol: '✓',
+										title: 'Core Thesis',
+									},
+								],
+								title: 'Doc 1',
+							},
+						],
+						phaseId: 'phase-1',
+						title: 'Foundation',
+					},
+				],
+				profileTitle: profile.title,
+			},
+		};
+	}
+
+	it('renders document preview actions when mode is document_preview', () => {
+		const profile = testProfile();
+		const snap = docPreviewSnapshot(profile, false);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		expect(render.actionBar.actions.length).toBe(3);
+
+		const labels = render.actionBar.actions.map((a) => a.label);
+		expect(labels).toEqual([
+			'[Regenerate]',
+			'[Export]',
+			'[Close]',
+		]);
+	});
+
+	it('disables export when document is not export-eligible', () => {
+		const profile = testProfile();
+		const snap = docPreviewSnapshot(profile, false);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		const exportAction = render.actionBar.actions.find(
+			(a) => a.id === 'export_document',
+		);
+		expect(exportAction).toBeDefined();
+		expect(exportAction?.enabled).toBe(false);
+	});
+
+	it('enables export when document is export-eligible', () => {
+		const profile = testProfile();
+		const snap = docPreviewSnapshot(profile, true);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		const exportAction = render.actionBar.actions.find(
+			(a) => a.id === 'export_document',
+		);
+		expect(exportAction).toBeDefined();
+		expect(exportAction?.enabled).toBe(true);
+		expect(exportAction?.label).toBe('[Export]');
 	});
 });

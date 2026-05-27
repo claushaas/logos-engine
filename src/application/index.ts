@@ -50,6 +50,12 @@ export {
 	skipNodeUseCase,
 } from './use-cases/skip-node.js';
 export {
+	type OpenDocumentPreviewOptions,
+	type OpenDocumentPreviewResult,
+	openDocumentPreviewUseCase,
+	closeDocumentPreviewUseCase,
+} from './use-cases/open-document-preview.js';
+export {
 	type SubmitUserMessageOptions,
 	type SubmitUserMessageResult,
 	submitUserMessageUseCase,

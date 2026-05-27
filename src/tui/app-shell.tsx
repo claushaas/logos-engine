@@ -472,6 +472,9 @@ export function AppShell() {
 					input={snapshot.input}
 					inputValue={inputBuffer}
 					mainPanel={snapshot.mainPanel}
+					onSelectMissingNode={(nodeId: string) => {
+						dispatch?.({ nodeId: nodeId as NodeId, type: 'NODE_SELECTED' });
+					}}
 				/>
 			</Box>
 
