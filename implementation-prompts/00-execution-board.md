@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 4.2 - Implement canonical answer management
+Step 6.2 - Implement repair prompt generation
 
 ## Status Legend
 
@@ -61,7 +61,7 @@ Step 4.2 - Implement canonical answer management
 | Phase 5 | 5.1 | Implement prompt registry | ✅ | `phase-05/step-5.1-implement-prompt-registry.md` | `feat/step-5-1-prompt-registry` | `feat(prompt-orchestration): implement prompt registry` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Centralized prompt store with fallbacks |
 | Phase 5 | 5.2 | Implement prompt selection by node state | ✅ | `phase-05/step-5.2-implement-prompt-selection-by-node-state.md` | `feat/step-5-2-prompt-selection` | `feat(prompt-orchestration): implement prompt selection by state` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Maps lifecycle to prompt state |
 | Phase 5 | 5.3 | Implement prompt assembly and context injection | ✅ | `phase-05/step-5.3-implement-prompt-assembly-and-context-injection.md` | `feat/step-5-3-prompt-assembly` | `feat(prompt-orchestration): implement prompt assembly and context injection` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Builds final LLM request; checkpoint Phase 5 |
-| Phase 6 | 6.1 | Define AgentTurnOutput validation schema | ⏳ | `phase-06/step-6.1-define-agentturnoutput-validation-schema.md` | `feat/step-6-1-agent-turn-validator` | `feat(validation): implement AgentTurnOutput validator` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Gatekeeper preventing LLM state corruption |
+| Phase 6 | 6.1 | Define AgentTurnOutput validation schema | ✅ | `phase-06/step-6.1-define-agentturnoutput-validation-schema.md` | `feat/step-6-1-agent-turn-validator` | `feat(validation): implement AgentTurnOutput validator` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Gatekeeper preventing LLM state corruption |
 | Phase 6 | 6.2 | Implement repair prompt generation | ⏳ | `phase-06/step-6.2-implement-repair-prompt-generation.md` | `feat/step-6-2-repair-prompt` | `feat(validation): implement repair prompt generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Recovery loop for invalid LLM output |
 | Phase 6 | 6.3 | Implement AgentTurnOutput application to state | ⏳ | `phase-06/step-6.3-implement-agentturnoutput-application-to-state.md` | `feat/step-6-3-apply-agent-turn` | `feat(application): implement AgentTurnOutput application` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Translates LLM output to state changes; checkpoint Phase 6 |
 | Phase 7 | 7.1 | Implement MockLlmProvider with fixture-based responses | ⏳ | `phase-07/step-7.1-implement-mockllmprovider-with-fixture-based-responses.md` | `feat/step-7-1-mock-provider` | `feat(llm): implement MockLlmProvider with fixtures` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Enables full testing without real LLM |
