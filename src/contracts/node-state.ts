@@ -120,6 +120,22 @@ export type NodeRuntimeState = {
 	 */
 	readonly conversation: NodeConversationEntry[];
 
+	/**
+	 * ID of the most recent user message, or `undefined` if none.
+	 *
+	 * Maintained by the conversation runtime on `appendUserMessage`.
+	 * Allows O(1) access to the last user turn without scanning
+	 * the full conversation array.
+	 */
+	readonly lastUserMessageId?: string;
+
+	/**
+	 * ID of the most recent assistant message, or `undefined` if none.
+	 *
+	 * Maintained by the conversation runtime on `appendAssistantMessage`.
+	 */
+	readonly lastAssistantMessageId?: string;
+
 	/** The canonical answer for this node, or `null` if not yet synthesized. */
 	readonly canonicalAnswer: CanonicalAnswer | null;
 

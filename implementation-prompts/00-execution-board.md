@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 4.1 - Implement message management for node conversations
+Step 4.2 - Implement canonical answer management
 
 ## Status Legend
 
@@ -55,7 +55,7 @@ Step 4.1 - Implement message management for node conversations
 | Phase 3 | 3.6 | Implement completeness evaluation | ✅ | `phase-03/step-3.6-implement-completeness-evaluation.md` | `feat/step-3-6-completeness` | `feat(state-engine): implement completeness evaluation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Gates synthesis readiness |
 | Phase 3 | 3.7 | Implement document readiness computation | ✅ | `phase-03/step-3.7-implement-document-readiness-computation.md` | `feat/step-3-7-document-readiness` | `feat(state-engine): implement document readiness computation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Gates materialization and export |
 | Phase 3 | 3.8 | Implement state engine event dispatch and snapshot generation | ✅ | `phase-03/step-3.8-implement-state-engine-event-dispatch-and-snapshot-generation.md` | `feat/step-3-8-dispatch-snapshot` | `feat(state-engine): implement event dispatch and snapshot generation` | `pnpm typecheck`, `pnpm test`, `pnpm check` | yes | yes — `@juicesharp/rpiv-advisor` | Wires all state engine modules; checkpoint Phase 3 |
-| Phase 4 | 4.1 | Implement message management for node conversations | ⏳ | `phase-04/step-4.1-implement-message-management-for-node-conversations.md` | `feat/step-4-1-message-management` | `feat(conversation-runtime): implement message management` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Core data container for turns |
+| Phase 4 | 4.1 | Implement message management for node conversations | ✅ | `phase-04/step-4.1-implement-message-management-for-node-conversations.md` | `feat/step-4-1-message-management` | `feat(conversation-runtime): implement message management` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Core data container for turns |
 | Phase 4 | 4.2 | Implement canonical answer management | ⏳ | `phase-04/step-4.2-implement-canonical-answer-management.md` | `feat/step-4-2-canonical-answers` | `feat(conversation-runtime): implement canonical answer management` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Clean output of node conversation |
 | Phase 4 | 4.3 | Implement conversation summary generation | ⏳ | `phase-04/step-4.3-implement-conversation-summary-generation.md` | `feat/step-4-3-summarizer` | `feat(conversation-runtime): implement conversation summarizer` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Token budget management; checkpoint Phase 4 |
 | Phase 5 | 5.1 | Implement prompt registry | ⏳ | `phase-05/step-5.1-implement-prompt-registry.md` | `feat/step-5-1-prompt-registry` | `feat(prompt-orchestration): implement prompt registry` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Centralized prompt store with fallbacks |
