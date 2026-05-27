@@ -61,6 +61,8 @@ const DIAG_UNKNOWN_EVENT = 'LOGOS_DISPATCH_UNKNOWN_EVENT';
 const DIAG_SESSION_EVENT_NOT_IMPL =
 	'LOGOS_DISPATCH_SESSION_EVENT_NOT_IMPLEMENTED';
 const DIAG_PROFILE_MISMATCH = 'LOGOS_DISPATCH_PROFILE_MISMATCH';
+const DIAG_CANNOT_ANSWER_IN_LIFECYCLE =
+	'LOGOS_DISPATCH_CANNOT_ANSWER_IN_LIFECYCLE';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // State patch helper (pure — returns new object)
@@ -508,33 +510,79 @@ function handleUserMessage(
 		role: 'user' as NodeMessageRole,
 	};
 
-	// Determine the next lifecycle
+	// Guard: answer is only allowed in specific lifecycles.
+	// blocked, deferred, ready_for_synthesis, synthesized, and accepted
+	// cannot accept new user messages.
+	const answerAllowed: ReadonlySet<NodeLifecycle> = new Set([
+		'not_started',
+		'active',
+		'answered',
+		'needs_clarification',
+		'needs_refinement',
+	]);
+
+	if (!answerAllowed.has(existingNode.lifecycle)) {
+		return stateErr(`Cannot answer in "${existingNode.lifecycle}" lifecycle`, [
+			diagnostic(
+				DIAG_CANNOT_ANSWER_IN_LIFECYCLE,
+				`Node "${targetNodeId}" is in "${existingNode.lifecycle}" lifecycle and cannot accept new answers. ` +
+					'Allowed lifecycles: not_started, active, answered, needs_clarification, needs_refinement.',
+				'error',
+				targetNodeId,
+			),
+		]);
+	}
+
+	// Determine the next lifecycle.
+	// Only invariant-safe transitions — the toggle answered↔active is removed
+	// because answered→active is not a valid lifecycle transition per Step 3.4.
 	const currentLifecycle = existingNode.lifecycle;
 	let nextLifecycle: NodeLifecycle;
 	let nextPromptState: PromptState;
 
-	if (currentLifecycle === 'not_started') {
-		nextLifecycle = 'active';
-		nextPromptState = lifecycleToPromptState('active');
-	} else if (currentLifecycle === 'active' || currentLifecycle === 'answered') {
-		// Stay in active — completeness evaluation may trigger a transition later
-		nextLifecycle = currentLifecycle === 'active' ? 'answered' : 'active';
-		nextPromptState = lifecycleToPromptState(nextLifecycle);
-	} else if (
-		currentLifecycle === 'needs_clarification' ||
-		currentLifecycle === 'needs_refinement'
-	) {
-		// User responded to clarification/refinement — go back to active
-		nextLifecycle = 'active';
-		nextPromptState = lifecycleToPromptState('active');
-	} else if (currentLifecycle === 'blocked') {
-		// User messages during blocked state don't change lifecycle
-		nextLifecycle = 'blocked';
-		nextPromptState = existingNode.promptState;
-	} else {
-		// deferred, synthesized, accepted — preserve current lifecycle
-		nextLifecycle = currentLifecycle;
-		nextPromptState = existingNode.promptState;
+	switch (currentLifecycle) {
+		case 'not_started':
+			nextLifecycle = 'active';
+			nextPromptState = lifecycleToPromptState('active');
+			break;
+
+		case 'needs_clarification':
+		case 'needs_refinement':
+			// User responded to clarification/refinement — go back to active.
+			nextLifecycle = 'active';
+			nextPromptState = lifecycleToPromptState('active');
+			break;
+
+		case 'active':
+		case 'answered':
+			// Preserve current lifecycle — no automatic toggle.
+			// The LLM (Phase 6 AgentTurnOutput) drives lifecycle changes.
+			nextLifecycle = currentLifecycle;
+			nextPromptState = existingNode.promptState;
+			break;
+
+		default:
+			// Exhaustive: allowed set above guarantees we only see
+			// not_started|active|answered|needs_clarification|needs_refinement.
+			nextLifecycle = currentLifecycle;
+			nextPromptState = existingNode.promptState;
+	}
+
+	// Validate that any lifecycle change is a valid transition.
+	if (nextLifecycle !== currentLifecycle) {
+		if (!isValidTransition(currentLifecycle, nextLifecycle)) {
+			return stateErr(
+				`Invalid lifecycle transition from user message: ${currentLifecycle} → ${nextLifecycle}`,
+				[
+					diagnostic(
+						DIAG_INVALID_TRANSITION,
+						`User message on node "${targetNodeId}" would cause invalid transition from "${currentLifecycle}" to "${nextLifecycle}".`,
+						'error',
+						targetNodeId,
+					),
+				],
+			);
+		}
 	}
 
 	// Compute allowed actions for the new lifecycle

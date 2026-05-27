@@ -75,7 +75,6 @@ function extractImportPath(line: string): string | null {
 	const match = afterFrom.match(/^['"]([^'"]+)['"]/);
 	if (!match) return null;
 
-	// biome-ignore lint/style/noNonNullAssertion: regex guaranteed capture group
 	return match[1]!;
 }
 

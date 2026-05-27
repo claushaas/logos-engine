@@ -707,6 +707,224 @@ describe('dispatch USER_MESSAGE', () => {
 
 		expect(result.error).toContain('profile');
 	});
+
+	it('preserves answered lifecycle on additional message', () => {
+		const profile = minimalProfile();
+		const state = idleSession();
+
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'test-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{ nodeId: 'node-1' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{
+				content: 'First answer.',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		).state!;
+
+		// Transition to answered via lifecycle change
+		s = dispatch(
+			s,
+			{
+				nodeId: 'node-1' as NodeId,
+				to: 'answered',
+				type: 'NODE_LIFECYCLE_CHANGED',
+			},
+			profile,
+		).state!;
+		expect(s.nodeStates['node-1' as NodeId]?.lifecycle).toBe('answered');
+
+		// Send another user message — lifecycle should stay answered
+		const r = dispatch(
+			s,
+			{
+				content: 'Additional thoughts.',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+
+		expect(r.ok).toBe(true);
+		if (!r.ok) throw new Error('Expected ok');
+
+		expect(r.state.nodeStates['node-1' as NodeId]?.lifecycle).toBe('answered');
+		expect(r.state.nodeStates['node-1' as NodeId]?.conversation.length).toBe(2);
+	});
+
+	it('rejects message when node is in blocked lifecycle', () => {
+		const profile = multiNodeProfile();
+		const state = idleSession();
+
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'multi-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{ nodeId: 'node-b' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		expect(s.nodeStates['node-b' as NodeId]?.lifecycle).toBe('blocked');
+
+		const r = dispatch(
+			s,
+			{
+				content: 'Hello',
+				nodeId: 'node-b' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+
+		expect(r.ok).toBe(false);
+		if (r.ok) throw new Error('Expected error');
+
+		expect(r.error).toContain('Cannot answer');
+		expect(r.diagnostics[0]?.code).toBe(
+			'LOGOS_DISPATCH_CANNOT_ANSWER_IN_LIFECYCLE',
+		);
+
+		// Conversation should NOT have been appended to
+		expect(s.nodeStates['node-b' as NodeId]?.conversation.length).toBe(0);
+	});
+
+	it('rejects message when node is in deferred lifecycle', () => {
+		const profile = minimalProfile();
+		const state = idleSession();
+
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'test-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{ nodeId: 'node-1' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+		// Send message to get to active, then defer
+		s = dispatch(
+			s,
+			{
+				content: 'test',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		).state!;
+		s = dispatch(s, { nodeId: 'node-1' as NodeId, type: 'DEFER_NODE' }, profile)
+			.state!;
+
+		expect(s.nodeStates['node-1' as NodeId]?.lifecycle).toBe('deferred');
+
+		const r = dispatch(
+			s,
+			{
+				content: 'Hello',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+
+		expect(r.ok).toBe(false);
+		if (r.ok) throw new Error('Expected error');
+
+		expect(r.error).toContain('Cannot answer');
+		expect(r.diagnostics[0]?.code).toBe(
+			'LOGOS_DISPATCH_CANNOT_ANSWER_IN_LIFECYCLE',
+		);
+	});
+
+	it('rejects message when node is in synthesized lifecycle', () => {
+		const profile = minimalProfile();
+		const state = idleSession();
+
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'test-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{ nodeId: 'node-1' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+		// Transition through: not_started → active → answered → ready_for_synthesis → synthesized
+		s = dispatch(
+			s,
+			{
+				nodeId: 'node-1' as NodeId,
+				to: 'active',
+				type: 'NODE_LIFECYCLE_CHANGED',
+			},
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{
+				nodeId: 'node-1' as NodeId,
+				to: 'answered',
+				type: 'NODE_LIFECYCLE_CHANGED',
+			},
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{
+				nodeId: 'node-1' as NodeId,
+				to: 'ready_for_synthesis',
+				type: 'NODE_LIFECYCLE_CHANGED',
+			},
+			profile,
+		).state!;
+		s = dispatch(
+			s,
+			{
+				nodeId: 'node-1' as NodeId,
+				to: 'synthesized',
+				type: 'NODE_LIFECYCLE_CHANGED',
+			},
+			profile,
+		).state!;
+
+		expect(s.nodeStates['node-1' as NodeId]?.lifecycle).toBe('synthesized');
+
+		const r = dispatch(
+			s,
+			{
+				content: 'I want to change my answer.',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+
+		expect(r.ok).toBe(false);
+		if (r.ok) throw new Error('Expected error');
+
+		expect(r.error).toContain('Cannot answer');
+		expect(r.diagnostics[0]?.code).toBe(
+			'LOGOS_DISPATCH_CANNOT_ANSWER_IN_LIFECYCLE',
+		);
+	});
 });
 
 // ─── NODE_LIFECYCLE_CHANGED ──────────────────────────────────────────────────
