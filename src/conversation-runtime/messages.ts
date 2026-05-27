@@ -195,8 +195,16 @@ export function appendUserMessage(
 		role: 'user' as NodeMessageRole,
 	};
 
+	// Mark canonical answer stale when new user info is added (spec §9).
+	// Preserve existing answer properties; only set `stale: true`.
+	const nextCanonicalAnswer =
+		existingNode.canonicalAnswer !== null
+			? { ...existingNode.canonicalAnswer, stale: true }
+			: null;
+
 	const updatedNode = {
 		...existingNode,
+		canonicalAnswer: nextCanonicalAnswer,
 		conversation: [...existingNode.conversation, message],
 		lastUserMessageId: messageId,
 		updatedAt: now,

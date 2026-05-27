@@ -35,6 +35,39 @@ import {
 	stateErr,
 	stateOk,
 } from './types.js';
+import type { CanonicalAnswer } from '../contracts/index.js';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Canonical answer staleness helper
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Compute the canonical answer after a lifecycle transition, applying
+ * staleness rules (spec §9).
+ *
+ * - `accepted → active` (reopen): mark stale.
+ * - Any → `accepted` (accept): clear stale (user explicitly accepted).
+ * - Otherwise: preserve existing answer unchanged.
+ */
+function computeNextCanonicalAnswer(
+	from: NodeLifecycle,
+	to: NodeLifecycle,
+	current: CanonicalAnswer | null,
+): CanonicalAnswer | null {
+	if (current === null) return null;
+
+	// Reopening an accepted node → mark stale.
+	if (from === 'accepted' && to === 'active') {
+		return { ...current, stale: true };
+	}
+
+	// Transitioning to accepted → clear stale (user explicitly accepted).
+	if (to === 'accepted' && current.stale) {
+		return { ...current, stale: false };
+	}
+
+	return current;
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Transition matrix — the single source of truth for valid transitions
@@ -604,9 +637,20 @@ export function applyLifecycleTransition(
 			? evaluateCompleteness(nodeState, options.nodeDef)
 			: nodeState.completeness;
 
+	// ── Staleness rule: reopening an accepted node marks the ───────
+	// canonical answer as stale (spec §9).
+	// Conversely, transitioning to `accepted` clears the stale flag
+	// because the user has explicitly accepted the answer.
+	const nextCanonicalAnswer = computeNextCanonicalAnswer(
+		from,
+		newLifecycle,
+		nodeState.canonicalAnswer,
+	);
+
 	const updatedNode: NodeRuntimeState = {
 		...nodeState,
 		allowedActions: nextAllowedActions,
+		canonicalAnswer: nextCanonicalAnswer,
 		completeness: nextCompleteness,
 		lifecycle: newLifecycle,
 		promptState: nextPromptState,

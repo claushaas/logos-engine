@@ -35,6 +35,13 @@ export type CanonicalAnswer = {
 	readonly accepted: boolean;
 
 	/**
+	 * ISO-8601 timestamp of when this answer was accepted.
+	 *
+	 * `undefined` when the answer has not been accepted yet.
+	 */
+	readonly acceptedAt?: string;
+
+	/**
 	 * Whether this answer is stale (outdated due to new information,
 	 * reopened node, or upstream dependency changes).
 	 */
