@@ -96,7 +96,11 @@ function detectLifecycle(request: LlmRequest): NodeLifecycle {
 	// ── Metadata keys ──────────────────────────────────────────────
 	const meta = request.metadata ?? {};
 
-	for (const key of ['lifecycle', 'nodeLifecycle', 'currentLifecycle'] as const) {
+	for (const key of [
+		'lifecycle',
+		'nodeLifecycle',
+		'currentLifecycle',
+	] as const) {
 		const raw = meta[key];
 		if (typeof raw === 'string') {
 			const parsed = toLifecycle(raw);
@@ -132,13 +136,15 @@ const MOCK_GENERATED_AT = '2024-01-01T00:00:00.000Z';
 /**
  * Build a {@link CanonicalAnswerDraft} suitable for synthesis fixtures.
  */
-function makeDraft(overrides: Partial<CanonicalAnswerDraft> = {}): CanonicalAnswerDraft {
+function makeDraft(
+	overrides: Partial<CanonicalAnswerDraft> = {},
+): CanonicalAnswerDraft {
 	return {
+		confidence: 'medium',
 		content: 'The answer synthesised from conversation history.',
 		format: 'markdown',
 		generatedAt: MOCK_GENERATED_AT,
 		generatedFromMessageIds: [],
-		confidence: 'medium',
 		...overrides,
 	};
 }
@@ -153,98 +159,171 @@ const DRAFT = makeDraft({ generatedAt: MOCK_GENERATED_AT });
  * {@link validateAgentTurnOutput} schema validation.
  */
 const DEFAULT_FIXTURES: Record<NodeLifecycle, AgentTurnOutput> = {
-	not_started: {
+	accepted: {
+		proposedPromptState: 'accepted',
+		suggestedActions: ['continue_next', 'reopen', 'open_document_preview'],
 		userFacingMessage:
-			'What conviction makes this project necessary? ' +
-			'What truth about the world drives the decision to build this?',
-		proposedLifecycle: 'active',
-		proposedPromptState: 'follow_up',
-		suggestedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+			'Canonical answer accepted. The next recommended node is ' +
+			'available when you are ready.',
 	},
 
 	active: {
+		proposedPromptState: 'follow_up',
+		suggestedActions: [
+			'answer',
+			'defer',
+			'mark_as_assumption',
+			'mark_as_decision',
+		],
 		userFacingMessage:
 			"That's a clear conviction. Is the tension primarily that " +
 			'the current approach is slow, unfair, or produces bad outcomes?',
-		proposedPromptState: 'follow_up',
-		suggestedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
 	},
 
 	answered: {
+		proposedPromptState: 'follow_up',
+		suggestedActions: [
+			'answer',
+			'defer',
+			'mark_as_assumption',
+			'mark_as_decision',
+		],
 		userFacingMessage:
 			'Good. Can you elaborate on how this insight translates ' +
 			'into a concrete differentiator for your project?',
-		proposedPromptState: 'follow_up',
-		suggestedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+	},
+
+	blocked: {
+		proposedPromptState: 'blocked',
+		suggestedActions: ['open_prerequisite', 'defer'],
+		userFacingMessage:
+			'This node depends on a prerequisite that has not been ' +
+			'accepted yet. Please complete the prerequisite node first.',
+	},
+
+	deferred: {
+		suggestedActions: ['resume', 'continue_next'],
+		userFacingMessage:
+			'This node has been deferred. You can resume it when ready, ' +
+			'or continue with other nodes.',
 	},
 
 	needs_clarification: {
+		proposedLifecycle: 'active',
+		proposedPromptState: 'follow_up',
+		suggestedActions: [
+			'answer',
+			'defer',
+			'mark_as_assumption',
+			'mark_as_decision',
+		],
 		userFacingMessage:
 			'I see a potential ambiguity. You mentioned both "everyone" ' +
 			'and "technical teams" — these point in different directions. ' +
 			'Who is the primary user you are building for first?',
-		proposedLifecycle: 'active',
-		proposedPromptState: 'follow_up',
-		suggestedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
 	},
 
 	needs_refinement: {
+		proposedLifecycle: 'active',
+		proposedPromptState: 'follow_up',
+		suggestedActions: [
+			'answer',
+			'defer',
+			'mark_as_assumption',
+			'mark_as_decision',
+		],
 		userFacingMessage:
 			'Your thesis is clear but could apply to any startup. ' +
 			'What makes this conviction specific to your project? ' +
 			'Is there a personal experience, dataset, or market shift ' +
 			'that only you have observed?',
+	},
+	not_started: {
 		proposedLifecycle: 'active',
 		proposedPromptState: 'follow_up',
-		suggestedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+		suggestedActions: [
+			'answer',
+			'defer',
+			'mark_as_assumption',
+			'mark_as_decision',
+		],
+		userFacingMessage:
+			'What conviction makes this project necessary? ' +
+			'What truth about the world drives the decision to build this?',
 	},
 
 	ready_for_synthesis: {
+		canonicalAnswerDraft: DRAFT,
+		proposedLifecycle: 'synthesized',
+		proposedPromptState: 'review',
+		suggestedActions: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
 		userFacingMessage:
 			'Enough information has been gathered. I will now draft a ' +
 			'canonical answer from the conversation.',
-		proposedLifecycle: 'synthesized',
-		proposedPromptState: 'review',
-		canonicalAnswerDraft: DRAFT,
-		suggestedActions: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
 	},
 
 	synthesized: {
+		canonicalAnswerDraft: DRAFT,
+		proposedPromptState: 'review',
+		suggestedActions: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
 		userFacingMessage:
 			"Here's a draft of your canonical answer. Review it and " +
 			'accept, edit, or regenerate.',
-		proposedPromptState: 'review',
-		canonicalAnswerDraft: DRAFT,
-		suggestedActions: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
-	},
-
-	blocked: {
-		userFacingMessage:
-			'This node depends on a prerequisite that has not been ' +
-			'accepted yet. Please complete the prerequisite node first.',
-		proposedPromptState: 'blocked',
-		suggestedActions: ['open_prerequisite', 'defer'],
-	},
-
-	accepted: {
-		userFacingMessage:
-			'Canonical answer accepted. The next recommended node is ' +
-			'available when you are ready.',
-		proposedPromptState: 'accepted',
-		suggestedActions: ['continue_next', 'reopen', 'open_document_preview'],
-	},
-
-	deferred: {
-		userFacingMessage:
-			'This node has been deferred. You can resume it when ready, ' +
-			'or continue with other nodes.',
-		suggestedActions: ['resume', 'continue_next'],
 	},
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
 // MockLlmProvider
 // ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Paraphrase a canonical question into a natural opening question.
+ *
+ * The mock provider never returns the canonical question verbatim.
+ * It reframes it as an opening conversational prompt.
+ */
+function paraphraseInitialQuestion(canonical: string): string {
+	const clean = canonical.trim().replace(/\?+$/, '');
+
+	// ── Pattern 1: "What is/are X?" → "To start, what is X?"
+	const whatIsRe = /^(What (?:is|are) .+)$/i;
+	const whatIsMatch = whatIsRe.exec(clean);
+	if (whatIsMatch?.[1]) {
+		return `To start, ${whatIsMatch[1].trim()}?`;
+	}
+
+	// ── Pattern 2: "What <verb> <rest>?" (e.g., "What conviction makes...")
+	//    → "To start, what <verb> <rest>?"
+	const whatVerbRe = /^(What \w.+)$/i;
+	const whatVerbMatch = whatVerbRe.exec(clean);
+	if (whatVerbMatch?.[1]) {
+		return `To start, ${whatVerbMatch[1].trim()}?`;
+	}
+
+	// ── Pattern 3: "Why X?" → "Why X? Please share your reasoning."
+	const whyRe = /^(Why .+)$/i;
+	const whyMatch = whyRe.exec(clean);
+	if (whyMatch?.[1]) {
+		return `${whyMatch[1].trim()}? Please share your reasoning.`;
+	}
+
+	// ── Pattern 4: "How X?" → "How X?"
+	const howRe = /^(How (?:do|does|would|should|could) .+)$/i;
+	const howMatch = howRe.exec(clean);
+	if (howMatch?.[1]) {
+		return `${howMatch[1].trim()}?`;
+	}
+
+	// ── Pattern 5: "Who are/is X?" → "Let's talk about X."
+	const whoRe = /^Who (?:is|are) (.+)$/i;
+	const whoMatch = whoRe.exec(clean);
+	if (whoMatch?.[1]) {
+		return `Let's talk about ${whoMatch[1].trim()}.`;
+	}
+
+	// ── Fallback: prefix to differentiate from verbatim repetition
+	return `Let's explore this: ${clean}?`;
+}
 
 /**
  * An {@link LlmProvider} that returns predetermined `AgentTurnOutput`
@@ -305,11 +384,33 @@ export class MockLlmProvider implements LlmProvider {
 	 * The lifecycle is resolved via {@link detectLifecycle}; the
 	 * returned fixture is a deep clone to prevent mutation leakage
 	 * across test cases.
+	 *
+	 * For `not_started` nodes, if `request.metadata.canonicalQuestion`
+	 * is present, the initial question paraphrases the canonical
+	 * question rather than using a static generic fixture.
 	 */
-	async generateStructuredOutput(
-		request: LlmRequest,
-	): Promise<LlmResponse> {
+	async generateStructuredOutput(request: LlmRequest): Promise<LlmResponse> {
 		const lifecycle = detectLifecycle(request);
+
+		if (lifecycle === 'not_started') {
+			const canonicalQuestion =
+				typeof request.metadata?.canonicalQuestion === 'string'
+					? request.metadata.canonicalQuestion
+					: undefined;
+
+			if (canonicalQuestion) {
+				// Paraphrase the canonical question — never return it
+				// verbatim. The paraphrase reframes the question as a
+				// natural opening conversational prompt.
+				const paraphrased = paraphraseInitialQuestion(canonicalQuestion);
+
+				return clone({
+					...this.fixtures.not_started,
+					userFacingMessage: paraphrased,
+				});
+			}
+		}
+
 		return clone(this.fixtures[lifecycle]);
 	}
 
@@ -319,10 +420,7 @@ export class MockLlmProvider implements LlmProvider {
 	 * Useful for injecting test-specific responses without
 	 * reconstructing the provider.
 	 */
-	setFixture(
-		lifecycle: NodeLifecycle,
-		output: AgentTurnOutput,
-	): void {
+	setFixture(lifecycle: NodeLifecycle, output: AgentTurnOutput): void {
 		this.fixtures[lifecycle] = output;
 	}
 }

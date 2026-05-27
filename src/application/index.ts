@@ -18,3 +18,18 @@ export {
 	buildRenderSnapshot,
 	getStatusSymbolForLifecycle,
 } from './render-model-builder.js';
+export {
+	type SelectNodeOptions,
+	type SelectNodeResult,
+	selectNodeUseCase,
+} from './use-cases/select-node.js';
+export {
+	type SkipNodeOptions,
+	type SkipNodeResult,
+	skipNodeUseCase,
+} from './use-cases/skip-node.js';
+export {
+	type SubmitUserMessageOptions,
+	type SubmitUserMessageResult,
+	submitUserMessageUseCase,
+} from './use-cases/submit-user-message.js';
