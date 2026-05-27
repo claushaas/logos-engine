@@ -1208,7 +1208,8 @@ describe('dispatch integration flow', () => {
 		const r3 = dispatch(
 			r2.state,
 			{
-				content: 'Our core thesis is that AI can transform documentation.',
+				content:
+					'Our core thesis is that AI can transform documentation because it automates repetitive writing tasks. For example, in a pilot study we reduced doc creation time by 40% compared to manual authoring.',
 				nodeId: 'node-1' as NodeId,
 				type: 'USER_MESSAGE',
 			},
@@ -1475,5 +1476,146 @@ describe('dispatch — active node removed from profile', () => {
 		// The original state's activeNodeId should not have been modified
 		// (mismatch returns before any state mutation).
 		expect(s.activeNodeId).toBe('node-a');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Step 10.2 — completeness-driven lifecycle transitions
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('Step 10.2 — completeness drives lifecycle transitions', () => {
+	/**
+	 * Profile with typical coverage topics — thesis and evidence.
+	 */
+	function qualityProfile(): LogosProfile {
+		return {
+			description: 'Quality test profile',
+			documents: [
+				{
+					id: 'doc-1' as DocumentId,
+					optionalNodeIds: [],
+					order: 1,
+					outputPath: '/dev/null',
+					phaseId: 'phase-1',
+					purpose: 'Testing',
+					requiredNodeIds: ['node-1' as NodeId],
+					title: 'Test Document',
+				},
+			],
+			id: 'quality-profile' as ProfileId,
+			materializationRules: [],
+			nodes: [
+				{
+					canonicalQuestion: 'What is the core thesis?',
+					coverageTopics: ['thesis', 'evidence'],
+					dependencies: { recommendedNodeIds: [], requiredNodeIds: [] },
+					documentId: 'doc-1' as DocumentId,
+					id: 'node-1' as NodeId,
+					order: 1,
+					phaseId: 'phase-1',
+					promptRefs: {},
+					sufficiencyCriteria: ['Thesis is specific and falsifiable'],
+					title: 'Core Thesis',
+				},
+			],
+			phases: [
+				{
+					id: 'phase-1',
+					order: 1,
+					purpose: 'Testing',
+					title: 'Phase 1',
+				},
+			],
+			title: 'Quality Test Profile',
+			version: '1.0.0',
+		};
+	}
+
+	/** Helper: select profile + node and return state with not_started node. */
+	function setupNode(profile: LogosProfile): LogosRuntimeState {
+		let s = idleSession();
+		const r1 = dispatch(
+			s,
+			{ profileId: profile.id, type: 'SELECT_PROFILE' },
+			profile,
+		);
+		if (!r1.ok) throw new Error('Expected ok');
+		s = r1.state;
+
+		const r2 = dispatch(
+			s,
+			{ nodeId: 'node-1' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		);
+		if (!r2.ok) throw new Error('Expected ok');
+		return r2.state;
+	}
+
+	it('contradictory input → needs_clarification', () => {
+		const profile = qualityProfile();
+		let s = setupNode(profile);
+
+		// Send a self-contradictory message that triggers blocking issues.
+		// "always manual" and "never require oversight" across messages
+		// trigger contradiction detection.
+
+		// First message: "always manual"
+		const r1 = dispatch(
+			s,
+			{
+				content:
+					'The core thesis is that the documentation process is always manual and requires human oversight.',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+		expect(r1.ok).toBe(true);
+		s = r1.state!;
+
+		// Second message: "never require" — crosses with "always manual" from first
+		const r2 = dispatch(
+			s,
+			{
+				content:
+					'Actually, the thesis is that documentation should never require manual oversight — it can be fully automated.',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+		expect(r2.ok).toBe(true);
+		s = r2.state!;
+
+		// Completeness should detect contradiction → needs_clarification.
+		const node = s.nodeStates['node-1' as NodeId]!;
+		expect(node.lifecycle).toBe('needs_clarification');
+		expect(node.promptState).toBe('clarification');
+		expect(node.completeness.blockingIssues.length).toBeGreaterThan(0);
+	});
+
+	it('generic weak input → needs_refinement', () => {
+		const profile = qualityProfile();
+		const s = setupNode(profile);
+
+		// Submit a message that addresses the thesis topic but is too
+		// short, vague, and lacks concrete indicators. Use a message
+		// WITHOUT ambiguous comparative terms (like "better") so the
+		// ambiguity detection doesn't fire first.
+		const r = dispatch(
+			s,
+			{
+				content: 'Our thesis is about making hiring different.',
+				nodeId: 'node-1' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			profile,
+		);
+		expect(r.ok).toBe(true);
+
+		const node = r.state!.nodeStates['node-1' as NodeId]!;
+		expect(node.lifecycle).toBe('needs_refinement');
+		expect(node.promptState).toBe('refinement');
+		expect(node.completeness.weak.length).toBeGreaterThan(0);
 	});
 });

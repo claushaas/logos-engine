@@ -217,4 +217,58 @@ describe('submitUserMessageUseCase', () => {
 		// Lifecycle should be active (not synthesized, no lifecycle override)
 		expect(node!.lifecycle).toBe('active');
 	});
+
+	// ── Step 10.2: fallback after 3+ rounds ──────────────────────────
+
+	it('mock provider returns fallback message after 3+ clarification rounds', async () => {
+		const mock = new MockLlmProvider();
+
+		// Simulate a request where the node is in needs_clarification
+		// with round >= 3.
+		const output = await mock.generateStructuredOutput({
+			systemPrompt: '',
+			messages: [],
+			schema: {},
+			metadata: {
+				lifecycle: 'needs_clarification',
+				clarificationRound: 3,
+				nodeId: 'n1',
+			},
+		});
+
+		// Fallback message should mention the round count
+		expect(output.userFacingMessage).toContain('3');
+		expect(output.userFacingMessage).toContain('ambiguity');
+
+		// Should NOT propose an invalid lifecycle transition
+		expect(output.proposedLifecycle).toBeUndefined();
+
+		// Actions should be lifecycle-compatible
+		expect(output.suggestedActions).toContain('defer');
+	});
+
+	it('mock provider returns fallback message after 3+ refinement rounds', async () => {
+		const mock = new MockLlmProvider();
+
+		const output = await mock.generateStructuredOutput({
+			systemPrompt: '',
+			messages: [],
+			schema: {},
+			metadata: {
+				lifecycle: 'needs_refinement',
+				refinementRound: 4,
+				nodeId: 'n1',
+			},
+		});
+
+		// Fallback message should mention the round count
+		expect(output.userFacingMessage).toContain('4');
+		expect(output.userFacingMessage).toContain('generic');
+
+		// Should NOT propose an invalid lifecycle transition
+		expect(output.proposedLifecycle).toBeUndefined();
+
+		// Actions should be lifecycle-compatible
+		expect(output.suggestedActions).toContain('defer');
+	});
 });

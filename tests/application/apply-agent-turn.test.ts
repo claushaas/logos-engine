@@ -118,7 +118,8 @@ function sessionWithActiveNode_Active(): {
 	const r = dispatch(
 		state,
 		{
-			content: 'My initial answer about the thesis.',
+			content:
+				'Our core thesis is that AI transforms documentation. We measured this in a pilot with 10 companies where documentation time dropped by 60%. The evidence comes from tracked metrics over a 3-month period.',
 			nodeId: 'node-1' as NodeId,
 			type: 'USER_MESSAGE',
 		},

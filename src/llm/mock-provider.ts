@@ -209,29 +209,14 @@ const DEFAULT_FIXTURES: Record<NodeLifecycle, AgentTurnOutput> = {
 	},
 
 	needs_clarification: {
-		proposedLifecycle: 'active',
-		proposedPromptState: 'follow_up',
-		suggestedActions: [
-			'answer',
-			'defer',
-			'mark_as_assumption',
-			'mark_as_decision',
-		],
+		suggestedActions: ['answer', 'defer', 'open_prerequisite'],
 		userFacingMessage:
-			'I see a potential ambiguity. You mentioned both "everyone" ' +
-			'and "technical teams" — these point in different directions. ' +
-			'Who is the primary user you are building for first?',
+			'You said hiring should be "better," but that could mean ' +
+			'faster, fairer, or more accurate. Which dimension matters most?',
 	},
 
 	needs_refinement: {
-		proposedLifecycle: 'active',
-		proposedPromptState: 'follow_up',
-		suggestedActions: [
-			'answer',
-			'defer',
-			'mark_as_assumption',
-			'mark_as_decision',
-		],
+		suggestedActions: ['answer', 'defer', 'ask_for_example'],
 		userFacingMessage:
 			'Your thesis is clear but could apply to any startup. ' +
 			'What makes this conviction specific to your project? ' +
@@ -411,7 +396,65 @@ export class MockLlmProvider implements LlmProvider {
 			}
 		}
 
-		return clone(this.fixtures[lifecycle]);
+		// ── Step 10.2: round-aware fallback language ──────────────────────
+		//
+		// When the node has been through 3+ clarification or refinement
+		// rounds, the mock agent suggests deferring or accepting as-is
+		// with low confidence instead of asking another question.
+		const base = clone(this.fixtures[lifecycle]);
+
+		if (lifecycle === 'needs_clarification') {
+			const round =
+				typeof request.metadata?.clarificationRound === 'number'
+					? request.metadata.clarificationRound
+					: 1;
+
+			if (round >= 3) {
+				return {
+					...base,
+					completenessEvaluation: {
+						blockingIssues: [],
+						complete: false,
+						coverage: {},
+						missing: [],
+						weak: [],
+					},
+					suggestedActions: ['answer', 'defer', 'open_prerequisite'],
+					userFacingMessage:
+						`After ${round} attempts to clarify, the ambiguity remains unresolved. ` +
+						'You can defer this node for now, use [Mark as Assumption] on your ' +
+						'next answer to proceed despite the ambiguity, or continue to another node.',
+				};
+			}
+		}
+
+		if (lifecycle === 'needs_refinement') {
+			const round =
+				typeof request.metadata?.refinementRound === 'number'
+					? request.metadata.refinementRound
+					: 1;
+
+			if (round >= 3) {
+				return {
+					...base,
+					completenessEvaluation: {
+						blockingIssues: [],
+						complete: false,
+						coverage: {},
+						missing: [],
+						weak: [],
+					},
+					suggestedActions: ['answer', 'defer', 'ask_for_example'],
+					userFacingMessage:
+						`After ${round} refinement attempts, the answer remains generic. ` +
+						'You can defer this node for now, accept the current answer as-is ' +
+						'(use [Mark as Assumption] on your next answer), or provide a sharper ' +
+						'response with concrete data or specifics.',
+				};
+			}
+		}
+
+		return base;
 	}
 
 	/**

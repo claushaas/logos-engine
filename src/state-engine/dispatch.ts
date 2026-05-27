@@ -35,6 +35,7 @@ import {
 	type SessionId,
 } from '../shared/index.js';
 import { getAllowedActions } from './allowed-actions.js';
+import { evaluateCompleteness } from './completeness.js';
 import { recomputeAllDocumentReadiness } from './document-readiness.js';
 import { isValidTransition } from './node-lifecycle.js';
 import { resolveSessionMode } from './session-mode.js';
@@ -540,34 +541,29 @@ function handleUserMessage(
 	// because answered→active is not a valid lifecycle transition per Step 3.4.
 	const currentLifecycle = existingNode.lifecycle;
 	let nextLifecycle: NodeLifecycle;
-	let nextPromptState: PromptState;
 
 	switch (currentLifecycle) {
 		case 'not_started':
 			nextLifecycle = 'active';
-			nextPromptState = lifecycleToPromptState('active');
 			break;
 
 		case 'needs_clarification':
 		case 'needs_refinement':
 			// User responded to clarification/refinement — go back to active.
 			nextLifecycle = 'active';
-			nextPromptState = lifecycleToPromptState('active');
 			break;
 
 		case 'active':
 		case 'answered':
 			// Preserve current lifecycle — no automatic toggle.
-			// The LLM (Phase 6 AgentTurnOutput) drives lifecycle changes.
+			// The engine will re-evaluate completeness below.
 			nextLifecycle = currentLifecycle;
-			nextPromptState = existingNode.promptState;
 			break;
 
 		default:
 			// Exhaustive: allowed set above guarantees we only see
 			// not_started|active|answered|needs_clarification|needs_refinement.
 			nextLifecycle = currentLifecycle;
-			nextPromptState = existingNode.promptState;
 	}
 
 	// Validate that any lifecycle change is a valid transition.
@@ -587,12 +583,54 @@ function handleUserMessage(
 		}
 	}
 
+	// ── Step 10.2: evaluate completeness and potentially override lifecycle ──
+	//
+	// After the user's message is appended, evaluate completeness against
+	// the node definition's coverage topics. If the answer is contradictory
+	// or ambiguously vague, the engine overrides the base lifecycle:
+	//   - blockingIssues (contradictions, ambiguity) → needs_clarification
+	//   - weak topics                              → needs_refinement
+	//   - missing topics only                      → stay active (normal follow-up)
+	//
+	// Transitions are validated against the lifecycle matrix to ensure
+	// each hop (e.g., active → needs_clarification) is permitted.
+	let completeness = existingNode.completeness;
+
+	const nodeDef = profile.nodes.find((n) => n.id === targetNodeId);
+	if (nodeDef) {
+		// Build a preview of the node with the new message appended.
+		const previewNode: NodeRuntimeState = {
+			...existingNode,
+			conversation: [...existingNode.conversation, message],
+			lifecycle: nextLifecycle,
+		};
+
+		const comp = evaluateCompleteness(previewNode, nodeDef);
+		completeness = comp;
+
+		if (comp.blockingIssues.length > 0) {
+			// Contradictions or ambiguity block synthesis.
+			if (isValidTransition(nextLifecycle, 'needs_clarification')) {
+				nextLifecycle = 'needs_clarification';
+			}
+		} else if (comp.weak.length > 0) {
+			// Weak content needs sharper answers.
+			if (isValidTransition(nextLifecycle, 'needs_refinement')) {
+				nextLifecycle = 'needs_refinement';
+			}
+		}
+		// If only missing topics → stay active for normal follow-up.
+	}
+
+	const nextPromptState = lifecycleToPromptState(nextLifecycle);
+
 	// Compute allowed actions for the new lifecycle
 	const allowedActions = getAllowedActions(nextLifecycle);
 
 	const updatedNode: NodeRuntimeState = {
 		...existingNode,
 		allowedActions,
+		completeness,
 		conversation: [...existingNode.conversation, message],
 		lifecycle: nextLifecycle,
 		promptState: nextPromptState,
@@ -612,7 +650,11 @@ function handleUserMessage(
 	const snapshot = buildSnapshot(nextState, profile, [
 		diagnostic(
 			'LOGOS_DISPATCH_USER_MESSAGE_ADDED',
-			`User message added to node "${targetNodeId}".`,
+			`User message added to node "${targetNodeId}". ` +
+				`Lifecycle: ${currentLifecycle} → ${nextLifecycle}. ` +
+				`Completeness: ${completeness.complete ? 'complete' : 'incomplete'} ` +
+				`(missing: ${completeness.missing.length}, weak: ${completeness.weak.length}, ` +
+				`blocking: ${completeness.blockingIssues.length}).`,
 			'info',
 			targetNodeId,
 		),
@@ -1078,9 +1120,7 @@ export function dispatch(
 
 			let nextState = patchState(state, {
 				activeNodeId: null,
-				lastActiveNodeId: lastStillExists
-					? state.lastActiveNodeId
-					: null,
+				lastActiveNodeId: lastStillExists ? state.lastActiveNodeId : null,
 			});
 
 			const mode = resolveSessionMode(nextState, profile);

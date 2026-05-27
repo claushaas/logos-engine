@@ -141,6 +141,26 @@ async function generateAgentTurn(
 			? nodeState.allowedActions
 			: getAllowedActions(nodeState.lifecycle);
 
+	// ── 2.5 Count clarification/refinement rounds (Step 10.2) ──────
+	//
+	// Derive round counts from assistant message metadata.
+	// These inform the LLM when it's time to offer fallback options
+	// (after 3+ rounds without resolution).
+	let clarificationRound = 0;
+	let refinementRound = 0;
+
+	for (const msg of nodeState.conversation) {
+		if (msg.role !== 'assistant') continue;
+		const ps = msg.metadata?.promptState;
+		if (ps === 'clarification') clarificationRound++;
+		if (ps === 'refinement') refinementRound++;
+	}
+
+	// If the current lifecycle is needs_clarification/needs_refinement,
+	// this turn is the next round (the engine already transitioned there).
+	if (nodeState.lifecycle === 'needs_clarification') clarificationRound++;
+	if (nodeState.lifecycle === 'needs_refinement') refinementRound++;
+
 	// ── 3. Assemble the LLM request ──────────────────────────────────
 	const request = assemblePromptRequest({
 		acceptedDependencies: acceptedDeps,
@@ -158,10 +178,12 @@ async function generateAgentTurn(
 		metadata: {
 			...(request.metadata ?? {}),
 			canonicalQuestion: nodeDef.canonicalQuestion,
+			clarificationRound,
 			lifecycle: nodeState.lifecycle,
 			nodeId,
 			nodeTitle: nodeDef.title,
 			promptState: nodeState.promptState,
+			refinementRound,
 		},
 	};
 

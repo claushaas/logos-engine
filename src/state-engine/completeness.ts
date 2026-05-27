@@ -212,6 +212,72 @@ function evaluateTopicCoverage(
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
+// Ambiguity detection
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Broad comparative / aspirational terms that signal ambiguity when used
+ * without a concrete dimension.
+ *
+ * When a user message contains one of these terms without specifying
+ * *how* or *in what way* (i.e. lacking supporting detail), it is
+ * ambiguous — the system cannot safely synthesise from it.
+ */
+const AMBIGUOUS_COMPARATIVES: readonly RegExp[] = [
+	/\bbetter\b/i,
+	/\bfaster\b/i,
+	/\bstronger\b/i,
+	/\bimprove(d|ment)?\b/i,
+	/\bmore efficient\b/i,
+	/\bmore effective\b/i,
+	/\bgame.?changing\b/i,
+];
+
+/**
+ * Detect ambiguous statements in user messages.
+ *
+ * Scans all user messages for broad comparative / aspirational terms
+ * that lack concrete dimension or specificity. When detected, the
+ * ambiguity blocks synthesis because the engine cannot determine what
+ * the user actually means.
+ *
+ * This heuristic is intentionally conservative — it only flags terms
+ * that are categorically ambiguous without qualification. More nuanced
+ * ambiguity detection is handled by the LLM completeness evaluation.
+ *
+ * @returns Human-readable blocking issues describing the ambiguity.
+ */
+function detectAmbiguity(conversation: readonly NodeMessage[]): string[] {
+	const userMessages = conversation.filter((m) => m.role === 'user');
+	const issues: string[] = [];
+
+	// Only check the most recent user message — previous messages have
+	// already been evaluated in earlier turns.
+	if (userMessages.length === 0) return issues;
+	const lastUserMsg = userMessages[userMessages.length - 1];
+	if (!lastUserMsg) return issues;
+
+	for (const re of AMBIGUOUS_COMPARATIVES) {
+		if (re.test(lastUserMsg.content)) {
+			// This term is present — check if the message is too short/vague
+			// to clarify *what* makes it better/faster/etc.
+			if (isWeakContent(lastUserMsg.content)) {
+				// The message uses a comparative term but doesn't provide
+				// enough concrete detail to resolve the ambiguity.
+				issues.push(
+					`Ambiguity detected: the most recent answer uses broad comparative language ` +
+						`("${re.source.replace(/\\b/g, '')}") without specifying what dimension or ` +
+						'how the comparison is measured. This makes the answer too vague for synthesis.',
+				);
+				break; // One ambiguity issue is enough per turn.
+			}
+		}
+	}
+
+	return issues;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // Contradiction detection
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -338,7 +404,11 @@ export function evaluateCompleteness(
 	}
 
 	// ── Detect contradictions ──────────────────────────────────────
-	const blockingIssues = detectContradictions(conversation);
+	let blockingIssues = detectContradictions(conversation);
+
+	// ── Detect ambiguity (broad comparatives without dimension) ───
+	const ambiguityIssues = detectAmbiguity(conversation);
+	blockingIssues = [...blockingIssues, ...ambiguityIssues];
 
 	// ── Determine overall completeness ─────────────────────────────
 	const allSufficient =
