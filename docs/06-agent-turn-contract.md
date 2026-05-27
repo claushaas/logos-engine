@@ -65,10 +65,9 @@ Rules:
 type CanonicalAnswerDraft = {
   content: string
   format: "markdown" | "structured"
-  sourceMessageIds: string[]
+  generatedAt: string
+  generatedFromMessageIds: string[]
   confidence: "low" | "medium" | "high"
-  assumptions: string[]
-  unresolvedIssues: string[]
 }
 ```
 
