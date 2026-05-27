@@ -261,6 +261,23 @@ export class PromptRegistry {
 		return this._get('global', {}, promptState);
 	}
 
+	// ── ID lookup ───────────────────────────────────────────────────────
+
+	/**
+	 * Look up a prompt definition by its unique `PromptId`.
+	 *
+	 * This is used when `NodePromptRefs` provide a direct prompt reference
+	 * for a specific state, bypassing the scope-based fallback chain.
+	 *
+	 * @returns The matching `PromptDefinition`, or `null` if not found.
+	 */
+	getById(id: PromptId): PromptDefinition | null {
+		for (const def of this._prompts.values()) {
+			if (def.id === id) return def;
+		}
+		return null;
+	}
+
 	// ── Filesystem loading ────────────────────────────────────────────────
 
 	/**
