@@ -14,3 +14,7 @@ export {
 	type ApplyAgentTurnOptions,
 	applyAgentTurn,
 } from './apply-agent-turn.js';
+export {
+	buildRenderSnapshot,
+	getStatusSymbolForLifecycle,
+} from './render-model-builder.js';
