@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 7.1 - Implement MockLlmProvider with fixture-based responses
+Step 8.1 - Implement render snapshot to TUI render model mapping
 
 ## Status Legend
 
@@ -65,7 +65,7 @@ Step 7.1 - Implement MockLlmProvider with fixture-based responses
 | Phase 6 | 6.2 | Implement repair prompt generation | ✅ | `phase-06/step-6.2-implement-repair-prompt-generation.md` | `feat/step-6-2-repair-prompt` | `feat(validation): implement repair prompt generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Recovery loop for invalid LLM output |
 | Phase 6 | 6.3 | Implement AgentTurnOutput application to state | ✅ | `phase-06/step-6.3-implement-agentturnoutput-application-to-state.md` | `feat/step-6-3-apply-agent-turn` | `feat(application): implement AgentTurnOutput application` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Translates LLM output to state changes; checkpoint Phase 6 |
 | Phase 7 | 7.1 | Implement MockLlmProvider with fixture-based responses | ✅ | `phase-07/step-7.1-implement-mockllmprovider-with-fixture-based-responses.md` | `feat/step-7-1-mock-provider` | `feat(llm): implement MockLlmProvider with fixtures` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Enables full testing without real LLM |
-| Phase 7 | 7.2 | Build deterministic conversation harness for end-to-end flows | ⏳ | `phase-07/step-7.2-build-deterministic-conversation-harness-for-end-to-end-flows.md` | `feat/step-7-2-conversation-harness` | `test(harness): build deterministic conversation harness` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Validates 10 prototype flows; checkpoint Phase 7 |
+| Phase 7 | 7.2 | Build deterministic conversation harness for end-to-end flows | ✅ | `phase-07/step-7.2-build-deterministic-conversation-harness-for-end-to-end-flows.md` | `feat/step-7-2-conversation-harness` | `test(harness): build deterministic conversation harness` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Validates 10 prototype flows; checkpoint Phase 7 |
 | Phase 8 | 8.1 | Implement render snapshot to TUI render model mapping | ⏳ | `phase-08/step-8.1-implement-render-snapshot-to-tui-render-model-mapping.md` | `feat/step-8-1-render-model-builder` | `feat(application): implement render model builder` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Domain-to-presentation mapping layer |
 | Phase 8 | 8.2 | Implement TUI shell and layout components | ⏳ | `phase-08/step-8.2-implement-tui-shell-and-layout-components.md` | `feat/step-8-2-tui-shell` | `feat(tui): implement shell and layout components` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Primary user interface |
 | Phase 8 | 8.3 | Implement node-focused conversational rendering | ⏳ | `phase-08/step-8.3-implement-node-focused-conversational-rendering.md` | `feat/step-8-3-conversation-rendering` | `feat(tui): implement node-focused conversational rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Core interaction surface; checkpoint Phase 8 |
