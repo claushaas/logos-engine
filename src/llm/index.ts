@@ -42,3 +42,9 @@ export {
 	type RetryConfig,
 	withRetry,
 } from './retry-policy.js';
+
+export {
+	type LlmProvider,
+	type LlmResponse,
+	MockLlmProvider,
+} from './mock-provider.js';
