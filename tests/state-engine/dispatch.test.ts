@@ -1257,3 +1257,223 @@ describe('dispatch integration flow', () => {
 		expect(r.snapshot?.allowedActions).toEqual(['open_prerequisite', 'defer']);
 	});
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// dispatch — active node removed from profile (edge case)
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('dispatch — active node removed from profile', () => {
+	it('clears activeNodeId when active node is no longer in profile nodes', () => {
+		const profile = multiNodeProfile();
+		const state = idleSession();
+
+		// Select profile and select node-a
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'multi-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+
+		s = dispatch(
+			s,
+			{ nodeId: 'node-a' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		expect(s.activeNodeId).toBe('node-a');
+
+		// Create a new profile that does NOT contain node-a.
+		const reducedProfile: LogosProfile = {
+			...profile,
+			nodes: profile.nodes.filter((n) => n.id !== 'node-a'),
+		};
+
+		// Dispatch a user message — the pre-dispatch guard should fire
+		// because node-a is no longer in the profile.
+		const r = dispatch(
+			s,
+			{
+				content: 'Hello',
+				nodeId: 'node-a' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			reducedProfile,
+		);
+
+		expect(r.ok).toBe(true);
+		if (!r.ok) throw new Error('Expected ok');
+
+		expect(r.state.activeNodeId).toBeNull();
+		expect(r.state.mode).toBe('structure_overview');
+		expect(r.snapshot).toBeDefined();
+		expect(r.snapshot?.diagnostics.length).toBeGreaterThanOrEqual(1);
+
+		const nodeRemovedDiag = r.snapshot?.diagnostics.find(
+			(d) => d.code === 'LOGOS_DISPATCH_ACTIVE_NODE_REMOVED_FROM_PROFILE',
+		);
+		expect(nodeRemovedDiag).toBeDefined();
+		expect(nodeRemovedDiag?.severity).toBe('error');
+		expect(nodeRemovedDiag?.message).toContain('node-a');
+	});
+
+	it('preserves lastActiveNodeId if still in profile after node removal', () => {
+		const profile = multiNodeProfile();
+		const state = idleSession();
+
+		// Setup: select profile, navigate node-a → node-b.
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'multi-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+
+		// Select node-a
+		s = dispatch(
+			s,
+			{ nodeId: 'node-a' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		// Navigate to node-b — lastActiveNodeId should be node-a
+		s = dispatch(
+			s,
+			{ nodeId: 'node-b' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		expect(s.lastActiveNodeId).toBe('node-a');
+
+		// Remove node-b from the profile — it's the active node.
+		const reducedProfile: LogosProfile = {
+			...profile,
+			nodes: profile.nodes.filter((n) => n.id !== 'node-b'),
+		};
+
+		const r = dispatch(
+			s,
+			{ nodeId: 'node-a' as NodeId, type: 'DESELECT_NODE' as const },
+			reducedProfile,
+		);
+
+		expect(r.ok).toBe(true);
+		if (!r.ok) throw new Error('Expected ok');
+
+		expect(r.state.activeNodeId).toBeNull();
+		// node-a still exists in reducedProfile, so lastActiveNodeId preserved
+		expect(r.state.lastActiveNodeId).toBe('node-a');
+	});
+
+	it('clears lastActiveNodeId if it was also removed from profile', () => {
+		const profile = multiNodeProfile();
+		const state = idleSession();
+
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'multi-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+
+		// Select node-a
+		s = dispatch(
+			s,
+			{ nodeId: 'node-a' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		// Navigate to node-b
+		s = dispatch(
+			s,
+			{ nodeId: 'node-b' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		expect(s.lastActiveNodeId).toBe('node-a');
+
+		// Remove both node-b AND node-a from the profile.
+		const reducedProfile: LogosProfile = {
+			...profile,
+			nodes: [],
+		};
+
+		const r = dispatch(
+			s,
+			{ nodeId: 'node-a' as NodeId, type: 'DESELECT_NODE' as const },
+			reducedProfile,
+		);
+
+		expect(r.ok).toBe(true);
+		if (!r.ok) throw new Error('Expected ok');
+
+		expect(r.state.activeNodeId).toBeNull();
+		// Both node-b (active) AND node-a (lastActive) were removed
+		expect(r.state.lastActiveNodeId).toBeNull();
+	});
+
+	it('does not trigger for CREATE_SESSION, SELECT_PROFILE, or CHANGE_PROFILE', () => {
+		// These events intrinsically reset/replace profile state, so the guard
+		// should not interfere.
+		const profile = multiNodeProfile();
+		const state = idleSession();
+
+		// SELECT_PROFILE with a full profile should work normally
+		const r = dispatch(
+			state,
+			{ profileId: 'multi-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		);
+
+		expect(r.ok).toBe(true);
+		if (!r.ok) throw new Error('Expected ok');
+		expect(r.state.selectedProfileId).toBe('multi-profile');
+	});
+
+	it('returns profile mismatch error when active node removed but profile differs', () => {
+		const profile = multiNodeProfile();
+		const state = idleSession();
+
+		// Select profile and node-a
+		let s = state;
+		s = dispatch(
+			s,
+			{ profileId: 'multi-profile' as ProfileId, type: 'SELECT_PROFILE' },
+			profile,
+		).state!;
+
+		s = dispatch(
+			s,
+			{ nodeId: 'node-a' as NodeId, type: 'SELECT_NODE' },
+			profile,
+		).state!;
+
+		expect(s.activeNodeId).toBe('node-a');
+
+		// Create a DIFFERENT profile (mismatch) that also lacks node-a.
+		const otherProfile = minimalProfile('other-profile');
+
+		// Dispatch with the wrong profile — should return profile mismatch,
+		// NOT a node-removed diagnostic, because the guard only fires
+		// when state.selectedProfileId === profile.id.
+		const r = dispatch(
+			s,
+			{
+				content: 'Hello',
+				nodeId: 'node-a' as NodeId,
+				type: 'USER_MESSAGE',
+			},
+			otherProfile,
+		);
+
+		expect(r.ok).toBe(false);
+		if (r.ok) throw new Error('Expected error');
+
+		// Profile mismatch error — the USER_MESSAGE handler should reject it.
+		expect(r.error).toContain('Profile mismatch');
+
+		// The original state's activeNodeId should not have been modified
+		// (mismatch returns before any state mutation).
+		expect(s.activeNodeId).toBe('node-a');
+	});
+});

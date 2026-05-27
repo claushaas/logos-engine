@@ -44,3 +44,8 @@ export {
 	type UseFocusOptions,
 	useFocus,
 } from './hooks/use-focus.js';
+export {
+	type NavigationControls,
+	type UseNavigationOptions,
+	useNavigation,
+} from './hooks/use-navigation.js';

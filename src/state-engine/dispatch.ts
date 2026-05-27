@@ -63,6 +63,8 @@ const DIAG_SESSION_EVENT_NOT_IMPL =
 const DIAG_PROFILE_MISMATCH = 'LOGOS_DISPATCH_PROFILE_MISMATCH';
 const DIAG_CANNOT_ANSWER_IN_LIFECYCLE =
 	'LOGOS_DISPATCH_CANNOT_ANSWER_IN_LIFECYCLE';
+const DIAG_ACTIVE_NODE_REMOVED_FROM_PROFILE =
+	'LOGOS_DISPATCH_ACTIVE_NODE_REMOVED_FROM_PROFILE';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // State patch helper (pure — returns new object)
@@ -1049,6 +1051,54 @@ export function dispatch(
 	}
 
 	const logosEvent = event as LogosEvent;
+
+	// ── Pre-dispatch guard: detect node deletion from profile ──────────
+	// If the active node was removed from the profile (e.g., profile file
+	// was edited externally), clear activeNodeId and surface a diagnostic.
+	// Only runs when the state's selected profile matches the supplied
+	// profile — profile mismatch is handled by individual event guards.
+	if (
+		state.activeNodeId !== null &&
+		state.selectedProfileId === profile.id &&
+		logosEvent.type !== 'CREATE_SESSION' &&
+		logosEvent.type !== 'SELECT_PROFILE' &&
+		logosEvent.type !== 'CHANGE_PROFILE'
+	) {
+		const nodeStillExists = profile.nodes.some(
+			(n) => n.id === state.activeNodeId,
+		);
+
+		if (!nodeStillExists) {
+			const removedNodeId = state.activeNodeId;
+
+			// Preserve lastActiveNodeId only if that node still exists.
+			const lastStillExists =
+				state.lastActiveNodeId !== null &&
+				profile.nodes.some((n) => n.id === state.lastActiveNodeId);
+
+			let nextState = patchState(state, {
+				activeNodeId: null,
+				lastActiveNodeId: lastStillExists
+					? state.lastActiveNodeId
+					: null,
+			});
+
+			const mode = resolveSessionMode(nextState, profile);
+			nextState = patchState(nextState, { mode });
+
+			const snapshot = buildSnapshot(nextState, profile, [
+				diagnostic(
+					DIAG_ACTIVE_NODE_REMOVED_FROM_PROFILE,
+					`Active node "${removedNodeId}" was removed from profile "${profile.id}". ` +
+						'Navigation has been reset to structure overview.',
+					'error',
+					removedNodeId,
+				),
+			]);
+
+			return stateOk(nextState, snapshot);
+		}
+	}
 
 	switch (logosEvent.type) {
 		// Safety: explicitly handle string unions to avoid fallthrough bugs.

@@ -72,6 +72,9 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 			convLengthABefore,
 		);
 
+		// lastActiveNodeId should point to Node A
+		expect(s.lastActiveNodeId).toBe(nodeAId);
+
 		// ── Step 3: Work on Node B ────────────────────────────────
 		const turnB1 = await simulateUserTurn(
 			s,
@@ -103,6 +106,9 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 		const nodeBAfterReturn = s.nodeStates[nodeBId]!;
 		expect(nodeBAfterReturn.conversation.length).toBeGreaterThan(0);
 		expect(nodeBAfterReturn.lifecycle).not.toBe('not_started');
+
+		// lastActiveNodeId should point to Node B after returning to A
+		expect(s.lastActiveNodeId).toBe(nodeBId);
 	});
 
 	it('deselecting node returns to structure_overview', () => {
@@ -134,5 +140,8 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 
 		// Node state still exists
 		expect(s.nodeStates[profile.nodes[0]!.id]).toBeDefined();
+
+		// lastActiveNodeId is updated
+		expect(s.lastActiveNodeId).toBe(profile.nodes[0]!.id);
 	});
 });

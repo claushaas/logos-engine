@@ -29,6 +29,7 @@ import { flattenSidebarTree } from './components/NodeTree.js';
 import { MainPanel } from './components/MainPanel.js';
 import { Sidebar } from './components/Sidebar.js';
 import { useFocus } from './hooks/use-focus.js';
+import { useNavigation } from './hooks/use-navigation.js';
 
 // ─── TUI dispatch event type ────────────────────────────────────────────────
 
@@ -150,6 +151,10 @@ function DiagnosticEntry({
  */
 export function AppShell() {
 	const { dispatch, snapshot } = useTuiApplication();
+
+	// ── Navigation coordination (debounced selection / deselection) ─────
+
+	const navigation = useNavigation(dispatch);
 
 	// ── Ephemeral input buffer (TUI-owned transient state) ───────────────
 
@@ -351,10 +356,7 @@ export function AppShell() {
 
 					// Node → select it (even if blocked)
 					if (focusedItem?.kind === 'node') {
-						dispatch?.({
-							nodeId: focusedItem.nodeId as NodeId,
-							type: 'NODE_SELECTED',
-						});
+						navigation.selectNode(focusedItem.nodeId as string);
 						return;
 					}
 
@@ -419,11 +421,11 @@ export function AppShell() {
 
 			// Escape — return from sub-mode
 			if (key.escape) {
-				dispatch?.({ type: 'ESCAPE' });
+				navigation.deselectNode();
 				return;
 			}
 		},
-		[dispatch, focus, inputBuffer, snapshot.actionBar.actions, snapshot.input.enabled, snapshot.input.submitAction, snapshot.sidebar, visibleItems, setCollapsedPhaseIds, setCollapsedDocumentIds],
+		[dispatch, focus, inputBuffer, navigation, snapshot.actionBar.actions, snapshot.input.enabled, snapshot.input.submitAction, snapshot.sidebar, visibleItems, setCollapsedPhaseIds, setCollapsedDocumentIds],
 	);
 
 	useInput(handleInput);
