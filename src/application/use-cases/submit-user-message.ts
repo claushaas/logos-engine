@@ -15,26 +15,18 @@
  *
  * @see {@link https://logos-engine/docs/13-prototypes.md §3.3, §4.1}
  */
-import type { AgentTurnOutput } from '../../contracts/agent-turn.js';
 import type {
 	LogosProfile,
 	LogosRuntimeState,
 	TuiRenderSnapshot,
 } from '../../contracts/index.js';
 import type { LlmProvider } from '../../llm/index.js';
-import {
-	assemblePromptRequest,
-	type LlmRequest,
-} from '../../prompt-orchestration/prompt-assembler.js';
 import type { PromptRegistry } from '../../prompt-orchestration/prompt-registry.js';
-import { selectPrompt } from '../../prompt-orchestration/prompt-selector.js';
 import type { NodeId } from '../../shared/index.js';
-import { getAllowedActions } from '../../state-engine/allowed-actions.js';
 import { dispatch } from '../../state-engine/dispatch.js';
 import { buildSnapshot } from '../../state-engine/snapshot-builder.js';
 import type { StateDiagnostic } from '../../state-engine/types.js';
-import { validateAgentTurnOutput } from '../../validation/agent-turn-validator.js';
-import { applyAgentTurn } from '../apply-agent-turn.js';
+import { generateAgentTurn } from '../generate-agent-turn.js';
 import { buildRenderSnapshot } from '../render-model-builder.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -76,160 +68,6 @@ export type SubmitUserMessageOptions = {
 	/** Prompt registry for prompt selection + assembly. */
 	readonly promptRegistry: PromptRegistry;
 };
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Internal helpers
-// ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Generate an agent turn after the user message has been processed.
- *
- * Builds the LLM request based on the node's current state, calls the
- * provider, validates the output, and applies it to state.
- */
-async function generateAgentTurn(
-	state: LogosRuntimeState,
-	nodeId: NodeId,
-	profile: LogosProfile,
-	llmProvider: LlmProvider,
-	promptRegistry: PromptRegistry,
-): Promise<
-	{ ok: true; state: LogosRuntimeState } | { ok: false; error: string }
-> {
-	const nodeState = state.nodeStates[nodeId];
-	if (!nodeState) {
-		return {
-			error: `Node "${nodeId}" has no runtime state.`,
-			ok: false as const,
-		};
-	}
-
-	const nodeDef = profile.nodes.find((n) => n.id === nodeId);
-	if (!nodeDef) {
-		return {
-			error: `Node "${nodeId}" not found in profile "${profile.id}".`,
-			ok: false as const,
-		};
-	}
-
-	// ── 1. Select prompt based on current lifecycle ──────────────────
-	const selectedPrompt = selectPrompt(
-		nodeState,
-		nodeDef,
-		profile,
-		promptRegistry,
-	);
-	if (!selectedPrompt) {
-		return {
-			error: `No prompt found for node "${nodeId}" in lifecycle "${nodeState.lifecycle}".`,
-			ok: false as const,
-		};
-	}
-
-	// ── Gather accepted dependency answers for context ───────────────
-	const acceptedDeps = [];
-	for (const depId of nodeState.dependencies.requiredNodeIds) {
-		const depState = state.nodeStates[depId];
-		if (depState?.canonicalAnswer && depState.lifecycle === 'accepted') {
-			acceptedDeps.push(depState.canonicalAnswer);
-		}
-	}
-
-	// ── 2. Use explicit allowed actions (consistent with select-node) ──
-	const currentActions =
-		nodeState.allowedActions.length > 0
-			? nodeState.allowedActions
-			: getAllowedActions(nodeState.lifecycle);
-
-	// ── 2.5 Count clarification/refinement rounds (Step 10.2) ──────
-	//
-	// Derive round counts from assistant message metadata.
-	// These inform the LLM when it's time to offer fallback options
-	// (after 3+ rounds without resolution).
-	let clarificationRound = 0;
-	let refinementRound = 0;
-
-	for (const msg of nodeState.conversation) {
-		if (msg.role !== 'assistant') continue;
-		const ps = msg.metadata?.promptState;
-		if (ps === 'clarification') clarificationRound++;
-		if (ps === 'refinement') refinementRound++;
-	}
-
-	// If the current lifecycle is needs_clarification/needs_refinement,
-	// this turn is the next round (the engine already transitioned there).
-	if (nodeState.lifecycle === 'needs_clarification') clarificationRound++;
-	if (nodeState.lifecycle === 'needs_refinement') refinementRound++;
-
-	// ── 3. Assemble the LLM request ──────────────────────────────────
-	const request = assemblePromptRequest({
-		acceptedDependencies: acceptedDeps,
-		allowedActions: currentActions,
-		conversationContext: nodeState.conversation,
-		globalContext: state.globalContext,
-		nodeDefinition: nodeDef,
-		nodeRuntimeState: nodeState,
-		selectedPrompt,
-	});
-
-	// ── 3. Inject node + lifecycle metadata ─────────────────────────
-	const enrichedRequest: LlmRequest = {
-		...request,
-		metadata: {
-			...(request.metadata ?? {}),
-			canonicalQuestion: nodeDef.canonicalQuestion,
-			clarificationRound,
-			lifecycle: nodeState.lifecycle,
-			nodeId,
-			nodeTitle: nodeDef.title,
-			promptState: nodeState.promptState,
-			refinementRound,
-		},
-	};
-
-	// ── 4. Call LLM ─────────────────────────────────────────────────
-	let output: AgentTurnOutput;
-	try {
-		output = await llmProvider.generateStructuredOutput(enrichedRequest);
-	} catch (e) {
-		return {
-			error: `LLM provider failed: ${e instanceof Error ? e.message : String(e)}`,
-			ok: false as const,
-		};
-	}
-
-	// ── 5. Validate ─────────────────────────────────────────────────
-	const validationResult = validateAgentTurnOutput(output, {
-		currentLifecycle: nodeState.lifecycle,
-	});
-	if (!validationResult.ok) {
-		return {
-			error: `LLM output validation failed: ${validationResult.error.map((e) => e.message).join('; ')}`,
-			ok: false as const,
-		};
-	}
-
-	// ── 6. Apply agent turn (full pipeline — lifecycle transitions
-	//    are allowed here, unlike the initial question case) ─────────
-	const applyResult = applyAgentTurn(
-		state,
-		nodeId,
-		validationResult.value,
-		profile,
-	);
-
-	if (!applyResult.ok) {
-		return {
-			error: `Failed to apply agent turn: ${applyResult.error}`,
-			ok: false as const,
-		};
-	}
-
-	return {
-		ok: true as const,
-		state: applyResult.state,
-	};
-}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Public API

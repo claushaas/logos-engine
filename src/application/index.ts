@@ -14,10 +14,31 @@ export {
 	type ApplyAgentTurnOptions,
 	applyAgentTurn,
 } from './apply-agent-turn.js';
+export { generateAgentTurn } from './generate-agent-turn.js';
 export {
 	buildRenderSnapshot,
 	getStatusSymbolForLifecycle,
 } from './render-model-builder.js';
+export {
+	type AcceptCanonicalAnswerOptions,
+	type AcceptCanonicalAnswerResult,
+	acceptCanonicalAnswerUseCase,
+} from './use-cases/accept-canonical-answer.js';
+export {
+	type EditCanonicalAnswerOptions,
+	type EditCanonicalAnswerResult,
+	editCanonicalAnswerUseCase,
+} from './use-cases/edit-canonical-answer.js';
+export {
+	type RegenerateCanonicalAnswerOptions,
+	type RegenerateCanonicalAnswerResult,
+	regenerateCanonicalAnswerUseCase,
+} from './use-cases/regenerate-canonical-answer.js';
+export {
+	type ReopenNodeOptions,
+	type ReopenNodeResult,
+	reopenNodeUseCase,
+} from './use-cases/reopen-node.js';
 export {
 	type SelectNodeOptions,
 	type SelectNodeResult,

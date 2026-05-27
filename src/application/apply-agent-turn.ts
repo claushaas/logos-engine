@@ -533,7 +533,24 @@ export function applyAgentTurn(
 	// but the storage guard fails, the apply step must reject rather
 	// than silently drop the draft.
 	if (output.canonicalAnswerDraft != null) {
-		const draft: CanonicalAnswerDraft = output.canonicalAnswerDraft;
+		let draft: CanonicalAnswerDraft = output.canonicalAnswerDraft;
+
+		// Step 10.3: If the LLM draft has an empty `generatedFromMessageIds`
+		// array, derive it from the conversation's user message IDs.
+		// This ensures traceability even when the mock provider (or a
+		// real LLM) omits the field.
+		if (draft.generatedFromMessageIds.length === 0) {
+			// Use the node's current conversation from `nextState`
+			// (after the assistant message was appended).
+			const conv = nextState.nodeStates[nodeId]?.conversation ?? [];
+			const userMsgIds = conv
+				.filter((m) => m.role === 'user')
+				.map((m) => m.id);
+			if (userMsgIds.length > 0) {
+				draft = { ...draft, generatedFromMessageIds: userMsgIds };
+			}
+		}
+
 		const draftResult = setCanonicalAnswerDraft(nextState, nodeId, draft);
 
 		if (!draftResult.ok) {

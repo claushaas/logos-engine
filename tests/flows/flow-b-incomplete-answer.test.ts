@@ -18,7 +18,6 @@ import type { LogosEvent } from '../../src/state-engine/types.js';
 import {
 	createFlowTestProfile,
 	createTestSession,
-	simulateAgentTurn,
 	simulateUserTurn,
 } from '../harness/conversation-harness.js';
 
@@ -73,9 +72,12 @@ describe('Flow B — Incomplete Answer', () => {
 		expect(s.nodeStates[nodeId]!.lifecycle).toBe('needs_refinement');
 		expect(s.nodeStates[nodeId]!.promptState).toBe('refinement');
 
-		// ── Step 3: Refinement response → active (sufficient) ────
+		// ── Step 3: Refinement response → synthesized (auto) ──
 		//
 		// Specific thesis with numbers and concrete data.
+		// Step 10.3: the engine's completeness evaluation detects
+		// sufficient coverage → ready_for_synthesis, then the agent
+		// turn pipeline produces a canonical draft → synthesized.
 		const turn3 = await simulateUserTurn(
 			s,
 			'Our thesis is supported by data: we analyzed 10,000 hires ' +
@@ -86,27 +88,7 @@ describe('Flow B — Incomplete Answer', () => {
 		expect(turn3.ok).toBe(true);
 		s = turn3.state!;
 
-		// Engine detects sufficient content → stays active.
-		expect(s.nodeStates[nodeId]!.lifecycle).toBe('active');
-
-		// ── Step 4: Force ready_for_synthesis → synthesis ──────────
-		const rfsResult = dispatch(s, {
-			nodeId,
-			to: 'ready_for_synthesis' as NodeLifecycle,
-			type: 'NODE_LIFECYCLE_CHANGED',
-		} as LogosEvent);
-		expect(rfsResult.ok).toBe(true);
-		s = rfsResult.state!;
-
-		// Apply synthesis agent turn (ready_for_synthesis → synthesized)
-		// using the harness helper so prompt orchestrator is exercised.
-		const synthResult = await simulateAgentTurn(
-			s,
-			nodeId,
-			'ready_for_synthesis',
-		);
-		expect(synthResult.ok).toBe(true);
-		s = synthResult.state!;
+		// After user turn + agent turn, node is now synthesized.
 		expect(s.nodeStates[nodeId]!.lifecycle).toBe('synthesized');
 
 		// ── Step 5: Accept ────────────────────────────────────────

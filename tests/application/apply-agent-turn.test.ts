@@ -114,12 +114,13 @@ function sessionWithActiveNode_Active(): {
 } {
 	const { profile, state } = sessionWithActiveNode();
 
-	// Transition from not_started → active via USER_MESSAGE
+	// Transition from not_started → active via USER_MESSAGE.
+	// Content deliberately avoids completeness triggers (short, no
+	// concrete indicators) so the node stays in `active` lifecycle.
 	const r = dispatch(
 		state,
 		{
-			content:
-				'Our core thesis is that AI transforms documentation. We measured this in a pilot with 10 companies where documentation time dropped by 60%. The evidence comes from tracked metrics over a 3-month period.',
+			content: 'I think documentation is important for teams.',
 			nodeId: 'node-1' as NodeId,
 			type: 'USER_MESSAGE',
 		},

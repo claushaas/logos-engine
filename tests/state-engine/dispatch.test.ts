@@ -1218,7 +1218,11 @@ describe('dispatch integration flow', () => {
 		expect(r3.ok).toBe(true);
 		if (!r3.ok) throw new Error('Expected ok');
 
-		expect(r3.state.nodeStates['node-1' as NodeId]?.lifecycle).toBe('active');
+		// Step 10.3: concrete content with topic keyword + indicators triggers
+		// completeness → ready_for_synthesis transition.
+		expect(r3.state.nodeStates['node-1' as NodeId]?.lifecycle).toBe(
+			'ready_for_synthesis',
+		);
 		expect(r3.state.nodeStates['node-1' as NodeId]?.conversation.length).toBe(
 			1,
 		);

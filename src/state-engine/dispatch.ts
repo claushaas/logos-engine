@@ -618,6 +618,14 @@ function handleUserMessage(
 			if (isValidTransition(nextLifecycle, 'needs_refinement')) {
 				nextLifecycle = 'needs_refinement';
 			}
+		} else if (comp.complete) {
+			// Step 10.3: All coverage topics are sufficient — the engine
+			// determines readiness for synthesis automatically.
+			// The LLM pipeline will pick up the `synthesis` prompt and
+			// produce a canonical answer draft.
+			if (isValidTransition(nextLifecycle, 'ready_for_synthesis')) {
+				nextLifecycle = 'ready_for_synthesis';
+			}
 		}
 		// If only missing topics → stay active for normal follow-up.
 	}
@@ -735,9 +743,12 @@ function handleNodeLifecycleChanged(
 		),
 	];
 
-	// Mark canonical answer stale if reopening from accepted
+	// Mark canonical answer stale if reopening from accepted or synthesized.
+	// Step 10.3: reopening from review (synthesized → active) must also mark
+	// the canonical answer stale, preserving the old draft for audit.
 	if (
-		existingNode.lifecycle === 'accepted' &&
+		(existingNode.lifecycle === 'accepted' ||
+			existingNode.lifecycle === 'synthesized') &&
 		nextLifecycle === 'active' &&
 		existingNode.canonicalAnswer
 	) {
