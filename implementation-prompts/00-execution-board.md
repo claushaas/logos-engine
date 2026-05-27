@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 8.1 - Implement render snapshot to TUI render model mapping
+Step 9.2 - Implement node navigation and state preservation
 
 ## Status Legend
 
@@ -69,7 +69,7 @@ Step 8.1 - Implement render snapshot to TUI render model mapping
 | Phase 8 | 8.1 | Implement render snapshot to TUI render model mapping | ✅ | `phase-08/step-8.1-implement-render-snapshot-to-tui-render-model-mapping.md` | `feat/step-8-1-render-model-builder` | `feat(application): implement render model builder` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Domain-to-presentation mapping layer |
 | Phase 8 | 8.2 | Implement TUI shell and layout components | ✅ | `phase-08/step-8.2-implement-tui-shell-and-layout-components.md` | `feat/step-8-2-tui-shell` | `feat(tui): implement shell and layout components` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Primary user interface |
 | Phase 8 | 8.3 | Implement node-focused conversational rendering | ✅ | `phase-08/step-8.3-implement-node-focused-conversational-rendering.md` | `feat/step-8-3-conversation-rendering` | `feat(tui): implement node-focused conversational rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Core interaction surface; checkpoint Phase 8 |
-| Phase 9 | 9.1 | Implement sidebar node tree with status indicators | ⏳ | `phase-09/step-9.1-implement-sidebar-node-tree-with-status-indicators.md` | `feat/step-9-1-sidebar-tree` | `feat(tui): implement sidebar node tree with status indicators` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Primary navigation mechanism |
+| Phase 9 | 9.1 | Implement sidebar node tree with status indicators | ✅ | `phase-09/step-9.1-implement-sidebar-node-tree-with-status-indicators.md` | `feat/step-9-1-sidebar-tree` | `feat(tui): implement sidebar node tree with status indicators` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Collapsible tree with status symbols, keyboard nav, active highlight ✓ |
 | Phase 9 | 9.2 | Implement node navigation and state preservation | ⏳ | `phase-09/step-9.2-implement-node-navigation-and-state-preservation.md` | `feat/step-9-2-navigation-preservation` | `feat(tui): implement node navigation and state preservation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Non-linear navigation; checkpoint Phase 9 |
 | Phase 10 | 10.1 | Implement initial question flow (not_started → active) | ⏳ | `phase-10/step-10.1-implement-initial-question-flow-not-started-to-active.md` | `feat/step-10-1-initial-question` | `feat(flows): implement initial question flow` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Entry point for every node conversation |
 | Phase 10 | 10.2 | Implement clarification and refinement flows | ⏳ | `phase-10/step-10.2-implement-clarification-and-refinement-flows.md` | `feat/step-10-2-clarification-refinement` | `feat(flows): implement clarification and refinement flows` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Quality gates for weak answers |

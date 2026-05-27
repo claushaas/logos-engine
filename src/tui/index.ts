@@ -27,11 +27,20 @@ export { CanonicalPreview } from './components/CanonicalPreview.js';
 export { ConversationPanel } from './components/ConversationPanel.js';
 export { InputArea } from './components/InputArea.js';
 export { MainPanel } from './components/MainPanel.js';
+export {
+	flattenSidebarTree,
+	NodeTree,
+	type VisibleDocument,
+	type VisibleItem,
+	type VisibleNode,
+	type VisiblePhase,
+} from './components/NodeTree.js';
 export { Sidebar } from './components/Sidebar.js';
 
 // Hooks
 export {
 	type FocusRegion,
 	type FocusState,
+	type UseFocusOptions,
 	useFocus,
 } from './hooks/use-focus.js';

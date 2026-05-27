@@ -1,74 +1,55 @@
 /**
- * Sidebar component — renders the profile header and phase/document/node tree.
+ * Sidebar component — renders the profile header and delegates the
+ * phase/document/node tree to `NodeTree`.
  *
  * The sidebar is navigational. It shows the profile structure with
  * status symbols per node, highlights the active node, and marks
- * the focused node for keyboard navigation.
+ * the focused item for keyboard navigation.
+ *
+ * Collapse state is ephemeral TUI state owned by the parent (AppShell).
+ * The sidebar never mutates state engine data.
  *
  * @see {@link https://logos-engine/docs/13-prototypes.md §2.3-2.6}
+ * @see {@link https://logos-engine/docs/08-tui-state-and-rendering-contract.md §6}
  */
 import { Box, Text } from 'ink';
 import type { SidebarRenderModel } from '../../contracts/index.js';
-import type { FocusRegion } from '../hooks/use-focus.js';
+import {
+	NodeTree,
+	type CollapsedDocumentIds,
+	type CollapsedPhaseIds,
+} from './NodeTree.js';
 
 // ─── Sidebar props ──────────────────────────────────────────────────────────
 
 export type SidebarProps = {
 	readonly sidebar: SidebarRenderModel;
-	readonly focusedRegion: FocusRegion | null;
-	readonly focusedNodeIndex: number;
-	readonly onSelectNode?: (nodeId: string) => void;
-};
-
-// ─── Node line helper (avoids passing undefined color) ──────────────────────
-
-function NodeLine({
-	isDisabled,
-	isFocused,
-	isSelected,
-	label,
-}: {
-	readonly isDisabled: boolean;
+	/** Whether the sidebar region currently has focus. */
 	readonly isFocused: boolean;
-	readonly isSelected: boolean;
-	readonly label: string;
-}) {
-	// Construct display attributes WITHOUT passing undefined color
-	if (isDisabled) {
-		return (
-			<Text color="gray" dimColor={true} bold={isSelected || isFocused} inverse={isFocused && !isSelected}>
-				{label}
-			</Text>
-		);
-	}
-
-	if (isSelected) {
-		return (
-			<Text color="green" bold={true} inverse={isFocused && !isSelected}>
-				{label}
-			</Text>
-		);
-	}
-
-	return (
-		<Text bold={isFocused} inverse={isFocused}>
-			{label}
-		</Text>
-	);
-}
+	/** Index of the focused visible item in the flattened tree, or -1. */
+	readonly focusedItemIndex: number;
+	/** Set of collapsed phase IDs. */
+	readonly collapsedPhaseIds: CollapsedPhaseIds;
+	/** Set of collapsed document IDs. */
+	readonly collapsedDocumentIds: CollapsedDocumentIds;
+};
 
 // ─── Sidebar ────────────────────────────────────────────────────────────────
 
+/**
+ * Renders the sidebar panel with profile header and collapsible node tree.
+ *
+ * The tree rendering is delegated to `NodeTree`, which handles
+ * expand/collapse indicators, status symbols, active-node highlighting,
+ * and focus visualization.
+ */
 export function Sidebar({
-	focusedNodeIndex,
-	focusedRegion,
-	onSelectNode,
+	collapsedDocumentIds,
+	collapsedPhaseIds,
+	focusedItemIndex,
+	isFocused,
 	sidebar,
 }: SidebarProps) {
-	const isSidebarFocused = focusedRegion === 'sidebar';
-
-	let globalNodeIndex = 0;
-
 	return (
 		<Box
 			borderRight={true}
@@ -80,56 +61,20 @@ export function Sidebar({
 			{/* Profile header */}
 			<Box marginBottom={1}>
 				<Text bold={true}>
-					{sidebar.profileTitle ? `Profile: ${sidebar.profileTitle}` : 'No profile'}
+					{sidebar.profileTitle
+						? `Profile: ${sidebar.profileTitle}`
+						: 'No profile'}
 				</Text>
 			</Box>
 
 			{/* Phase / Document / Node tree */}
-			{sidebar.phases.map((phase) => (
-				<Box key={phase.phaseId} flexDirection="column" marginBottom={1}>
-					<Text color="cyan" bold={true}>
-						{phase.title}
-					</Text>
-
-					{phase.documents.map((doc) => (
-						<Box
-							key={doc.documentId}
-							flexDirection="column"
-							paddingLeft={2}
-						>
-							<Text dimColor={true}>
-								{doc.title}
-							</Text>
-
-							{doc.nodes.map((node) => {
-								const nodeIdx = globalNodeIndex;
-								globalNodeIndex += 1;
-
-								const isSelected = node.selected;
-								const isFocused =
-									isSidebarFocused &&
-									focusedNodeIndex === nodeIdx;
-
-								const prefix =
-									isFocused ? '▶ ' : '  ';
-								const suffix =
-									isSelected ? ' ◀' : '';
-
-								return (
-									<Box key={node.nodeId} paddingLeft={2}>
-										<NodeLine
-											isDisabled={node.disabled}
-											isFocused={isFocused}
-											isSelected={isSelected}
-											label={`${prefix}${node.statusSymbol} ${node.title}${suffix}`}
-										/>
-									</Box>
-								);
-							})}
-						</Box>
-					))}
-				</Box>
-			))}
+			<NodeTree
+				collapsedDocumentIds={collapsedDocumentIds}
+				collapsedPhaseIds={collapsedPhaseIds}
+				focusedItemIndex={focusedItemIndex}
+				isFocused={isFocused}
+				sidebar={sidebar}
+			/>
 		</Box>
 	);
 }

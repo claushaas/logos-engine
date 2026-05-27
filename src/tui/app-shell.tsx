@@ -21,13 +21,11 @@ import {
 	useState,
 } from 'react';
 import type {
-	ActionBarRenderModel,
-	InputRenderModel,
 	RuntimeDiagnostic,
-	SidebarRenderModel,
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
 import type { NodeId } from '../shared/index.js';
+import { flattenSidebarTree } from './components/NodeTree.js';
 import { MainPanel } from './components/MainPanel.js';
 import { Sidebar } from './components/Sidebar.js';
 import { useFocus } from './hooks/use-focus.js';
@@ -157,12 +155,34 @@ export function AppShell() {
 
 	const [inputBuffer, setInputBuffer] = useState('');
 
+	// ── Collapse state (ephemeral TUI state — never persisted) ───────────
+
+	const [collapsedPhaseIds, setCollapsedPhaseIds] = useState<
+		ReadonlySet<string>
+	>(new Set());
+	const [collapsedDocumentIds, setCollapsedDocumentIds] = useState<
+		ReadonlySet<string>
+	>(new Set());
+
+	// ── Visible items (flattened tree respecting collapse state) ─────────
+
+	const visibleItems = useMemo(
+		() =>
+			flattenSidebarTree(
+				snapshot.sidebar,
+				collapsedPhaseIds,
+				collapsedDocumentIds,
+			),
+		[snapshot.sidebar, collapsedPhaseIds, collapsedDocumentIds],
+	);
+
 	// ── Focus management ─────────────────────────────────────────────────
 
 	const focus = useFocus(
 		snapshot.sidebar,
 		snapshot.actionBar,
 		snapshot.input,
+		{ totalSidebarItems: visibleItems.length },
 	);
 
 	// Reset focus and clear input buffer when snapshot changes (e.g., mode switch)
@@ -179,7 +199,7 @@ export function AppShell() {
 	// ── Keyboard handler ─────────────────────────────────────────────────
 
 	const handleInput = useCallback(
-		(input: string, key: { upArrow: boolean; downArrow: boolean; return: boolean; escape: boolean; tab: boolean; shift: boolean; backspace: boolean; delete: boolean }) => {
+		(input: string, key: { upArrow: boolean; downArrow: boolean; leftArrow: boolean; rightArrow: boolean; return: boolean; escape: boolean; tab: boolean; shift: boolean; backspace: boolean; delete: boolean }) => {
 			// ── Text input mode: append printable chars, handle special keys
 
 			if (focus.region === 'input' && snapshot.input.enabled) {
@@ -245,6 +265,70 @@ export function AppShell() {
 				return;
 			}
 
+			// Left/Right arrows — collapse/expand sidebar items
+			if (
+				focus.region === 'sidebar' &&
+				focus.focusedNodeIndex >= 0 &&
+				focus.focusedNodeIndex < visibleItems.length
+			) {
+				const item = visibleItems[focus.focusedNodeIndex]!;
+
+				if (key.leftArrow) {
+					if (item.kind === 'phase' && item.expanded) {
+						setCollapsedPhaseIds((prev) => {
+							const next = new Set(prev);
+							next.add(item.phaseId);
+							return next;
+						});
+						return;
+					}
+					if (item.kind === 'document' && item.expanded) {
+						setCollapsedDocumentIds((prev) => {
+							const next = new Set(prev);
+							next.add(item.documentId);
+							return next;
+						});
+						return;
+					}
+					// Left on a node: collapse its parent document
+					if (item.kind === 'node') {
+						// Find the parent document by scanning backwards
+						for (let i = focus.focusedNodeIndex - 1; i >= 0; i--) {
+							const prev = visibleItems[i];
+							if (prev !== undefined && prev.kind === 'document' && prev.expanded) {
+								setCollapsedDocumentIds((prevSet) => {
+									const next = new Set(prevSet);
+									next.add(prev.documentId);
+									return next;
+								});
+								return;
+							}
+						}
+					}
+					return;
+				}
+
+				if (key.rightArrow) {
+					if (item.kind === 'phase' && !item.expanded) {
+						setCollapsedPhaseIds((prev) => {
+							const next = new Set(prev);
+							next.delete(item.phaseId);
+							return next;
+						});
+						return;
+					}
+					if (item.kind === 'document' && !item.expanded) {
+						setCollapsedDocumentIds((prev) => {
+							const next = new Set(prev);
+							next.delete(item.documentId);
+							return next;
+						});
+						return;
+					}
+					return;
+				}
+			}
+
 			// Up/Down arrows — navigate within current region
 			if (key.upArrow) {
 				focus.focusUp();
@@ -259,21 +343,55 @@ export function AppShell() {
 			// Enter — select focused item
 			if (key.return) {
 				if (focus.region === 'sidebar') {
-					// Find the node at the focused index
-					let idx = 0;
-					for (const phase of snapshot.sidebar.phases) {
-						for (const doc of phase.documents) {
-							for (const node of doc.nodes) {
-								if (idx === focus.focusedNodeIndex) {
-									dispatch?.({
-										nodeId: node.nodeId,
-										type: 'NODE_SELECTED',
-									});
-									return;
-								}
-								idx++;
-							}
+					const focusedItem =
+						focus.focusedNodeIndex >= 0 &&
+						focus.focusedNodeIndex < visibleItems.length
+							? visibleItems[focus.focusedNodeIndex]
+							: undefined;
+
+					// Node → select it (even if blocked)
+					if (focusedItem?.kind === 'node') {
+						dispatch?.({
+							nodeId: focusedItem.nodeId as NodeId,
+							type: 'NODE_SELECTED',
+						});
+						return;
+					}
+
+					// Phase → toggle collapse
+					if (focusedItem?.kind === 'phase') {
+						if (focusedItem.expanded) {
+							setCollapsedPhaseIds((prev) => {
+								const next = new Set(prev);
+								next.add(focusedItem.phaseId);
+								return next;
+							});
+						} else {
+							setCollapsedPhaseIds((prev) => {
+								const next = new Set(prev);
+								next.delete(focusedItem.phaseId);
+								return next;
+							});
 						}
+						return;
+					}
+
+					// Document → toggle collapse
+					if (focusedItem?.kind === 'document') {
+						if (focusedItem.expanded) {
+							setCollapsedDocumentIds((prev) => {
+								const next = new Set(prev);
+								next.add(focusedItem.documentId);
+								return next;
+							});
+						} else {
+							setCollapsedDocumentIds((prev) => {
+								const next = new Set(prev);
+								next.delete(focusedItem.documentId);
+								return next;
+							});
+						}
+						return;
 					}
 				} else if (focus.region === 'actions') {
 					const action =
@@ -305,7 +423,7 @@ export function AppShell() {
 				return;
 			}
 		},
-		[dispatch, focus, inputBuffer, snapshot.actionBar.actions, snapshot.input.enabled, snapshot.input.submitAction, snapshot.sidebar.phases],
+		[dispatch, focus, inputBuffer, snapshot.actionBar.actions, snapshot.input.enabled, snapshot.input.submitAction, snapshot.sidebar, visibleItems, setCollapsedPhaseIds, setCollapsedDocumentIds],
 	);
 
 	useInput(handleInput);
@@ -330,11 +448,12 @@ export function AppShell() {
 			<Box flexDirection="row" flexGrow={1}>
 				{showSidebar && (
 					<Sidebar
-						focusedNodeIndex={focus.focusedNodeIndex}
-						focusedRegion={
-							focus.availableRegions.includes('sidebar')
-								? focus.region
-								: null
+						collapsedDocumentIds={collapsedDocumentIds}
+						collapsedPhaseIds={collapsedPhaseIds}
+						focusedItemIndex={focus.focusedNodeIndex}
+						isFocused={
+							focus.availableRegions.includes('sidebar') &&
+							focus.region === 'sidebar'
 						}
 						sidebar={snapshot.sidebar}
 					/>

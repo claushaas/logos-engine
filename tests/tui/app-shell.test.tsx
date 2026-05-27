@@ -319,13 +319,20 @@ describe('AppShell — node focus', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('AppShell — keyboard dispatch', () => {
-	it('dispatches NODE_SELECTED on enter when sidebar node is focused', () => {
+	it('dispatches NODE_SELECTED on enter when sidebar node is focused', async () => {
 		const dispatch = vi.fn();
 		const { stdin } = renderShell(structureOverviewSnapshot(), dispatch);
 
-		// Tab to sidebar (first available region)
-		stdin.write('\t');
-		// Now sidebar should be focused with node index 0
+		// Initial focus is on sidebar (first available region) at index 0.
+		// With the collapsible tree, focusedItemIndex 0 is the phase row.
+		// Navigate down to reach the first node:
+		//   index 0: phase "Foundation"
+		//   index 1: document "Doc 1"
+		//   index 2: node "Core Thesis" (n1)
+		stdin.write('\x1b[B'); // down to document
+		await new Promise((r) => setTimeout(r, 5));
+		stdin.write('\x1b[B'); // down to node
+		await new Promise((r) => setTimeout(r, 5));
 		// Enter to select
 		stdin.write('\r');
 
@@ -420,12 +427,16 @@ describe('AppShell — keyboard dispatch', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('AppShell — focus indicators', () => {
-	it('tab cycles through focus regions and shows focus markers', () => {
+	it('tab cycles through focus regions and shows focus markers', async () => {
 		const { lastFrame, stdin } = renderShell(nodeFocusSnapshot());
 
 		// Regions: sidebar → main → actions (input disabled in synthesized)
 		stdin.write('\t'); // main
+		// Yield to flush React state before pressing next tab
+		await new Promise((r) => setTimeout(r, 5));
 		stdin.write('\t'); // actions
+		// Yield to flush React state before checking frame
+		await new Promise((r) => setTimeout(r, 5));
 		const f1 = lastFrame() ?? '';
 		// Action should have ▶ marker
 		expect(f1).toContain('▶');
@@ -850,5 +861,216 @@ describe('Canonical answer — stale', () => {
 		const frame = lastFrame() ?? '';
 		expect(frame).toContain('STALE');
 		expect(frame).not.toContain('ACCEPTED');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Sidebar tree rendering — Step 9.1
+// ═══════════════════════════════════════════════════════════════════════════
+
+function allLifecycleSymbolsSnapshot(): TuiRenderSnapshot {
+	const allNodes: Array<{
+		nodeId: NodeId;
+		title: string;
+		statusSymbol: string;
+		selected: boolean;
+		disabled: boolean;
+		reasonIfDisabled?: string;
+	}> = [
+		{ disabled: false, nodeId: 'n-o' as NodeId, selected: false, statusSymbol: '○', title: 'Not Started' },
+		{ disabled: false, nodeId: 'n-a' as NodeId, selected: false, statusSymbol: '◐', title: 'Active' },
+		{ disabled: false, nodeId: 'n-q' as NodeId, selected: false, statusSymbol: '?', title: 'Needs Clarification' },
+		{ disabled: false, nodeId: 'n-r' as NodeId, selected: false, statusSymbol: '△', title: 'Needs Refinement' },
+		{ disabled: false, nodeId: 'n-s' as NodeId, selected: false, statusSymbol: '◆', title: 'Ready for Synthesis' },
+		{ disabled: false, nodeId: 'n-v' as NodeId, selected: true, statusSymbol: '✓', title: 'Accepted' },
+		{ disabled: false, nodeId: 'n-d' as NodeId, selected: false, statusSymbol: '⏸', title: 'Deferred' },
+		{ disabled: true, nodeId: 'n-b' as NodeId, reasonIfDisabled: 'Blocked by prerequisite.', selected: false, statusSymbol: '⚠', title: 'Blocked' },
+	];
+
+	return {
+		actionBar: { actions: [] },
+		diagnostics: [],
+		input: { enabled: false, reasonIfDisabled: 'Select a node from the sidebar.' },
+		mainPanel: {
+			availableProfileIds: ['test-profile'],
+			kind: 'profile',
+			message: 'Profile loaded.',
+		} as ProfilePanel,
+		mode: 'structure_overview',
+		sidebar: {
+			activeNodeId: 'n-v' as NodeId,
+			phases: [
+				{
+					documents: [
+						{
+							documentId: 'doc-all' as DocumentId,
+							nodes: allNodes,
+							title: 'All Status Symbols',
+						},
+					],
+					phaseId: 'phase-all',
+					title: 'Lifecycle Display',
+				},
+			],
+			profileTitle: 'Test Profile',
+		},
+	};
+}
+
+describe('AppShell — sidebar tree rendering (Step 9.1)', () => {
+	it('renders all 8 status symbols distinctly', () => {
+		const { lastFrame } = renderShell(allLifecycleSymbolsSnapshot());
+		const frame = lastFrame() ?? '';
+
+		expect(frame).toContain('○ Not Started');
+		expect(frame).toContain('◐ Active');
+		expect(frame).toContain('? Needs Clarification');
+		expect(frame).toContain('△ Needs Refinement');
+		expect(frame).toContain('◆ Ready for Synthesis');
+		expect(frame).toContain('✓ Accepted');
+		expect(frame).toContain('⏸ Deferred');
+		expect(frame).toContain('⚠ Blocked');
+	});
+
+	it('highlights the active node with ◀ marker', () => {
+		const { lastFrame } = renderShell(allLifecycleSymbolsSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('✓ Accepted ◀');
+	});
+
+	it('shows phase with ▾ expand indicator and order', () => {
+		const { lastFrame } = renderShell(allLifecycleSymbolsSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('▾ 01 Lifecycle Display');
+	});
+
+	it('shows document row', () => {
+		const { lastFrame } = renderShell(allLifecycleSymbolsSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('▾');
+		expect(frame).toContain('All Status Symbols');
+	});
+
+	it('shows blocked node with reason hint', () => {
+		const { lastFrame } = renderShell(allLifecycleSymbolsSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('⚠ Blocked');
+		// Reason hint may wrap across lines in the narrow sidebar
+		expect(frame).toContain('(Blocked by');
+		expect(frame).toContain('prerequisite.)');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Sidebar collapse/expand — Step 9.1
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('AppShell — sidebar collapse/expand (Step 9.1)', () => {
+	it('collapses a phase via left arrow', async () => {
+		const { lastFrame, stdin } = renderShell(structureOverviewSnapshot());
+
+		// Initial: phase is expanded (▾)
+		const before = lastFrame() ?? '';
+		expect(before).toContain('▾ 01 Foundation');
+		expect(before).toContain('Core Thesis');
+
+		// Focus is on phase (index 0), press left to collapse
+		stdin.write('\x1b[D');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const after = lastFrame() ?? '';
+		expect(after).toContain('▸ 01 Foundation');
+		expect(after).not.toContain('Core Thesis');
+	});
+
+	it('expands a collapsed phase via right arrow', async () => {
+		const { lastFrame, stdin } = renderShell(structureOverviewSnapshot());
+
+		// Collapse first
+		stdin.write('\x1b[D');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const collapsed = lastFrame() ?? '';
+		expect(collapsed).toContain('▸ 01 Foundation');
+
+		// Expand via right arrow
+		stdin.write('\x1b[C');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const expanded = lastFrame() ?? '';
+		expect(expanded).toContain('▾ 01 Foundation');
+		expect(expanded).toContain('Core Thesis');
+	});
+
+	it('dispatches NODE_SELECTED for a blocked node', async () => {
+		const dispatch = vi.fn();
+		const { stdin } = renderShell(
+			structureOverviewSnapshot(),
+			dispatch,
+		);
+
+		// Navigate to the blocked node (index 3: Central Tension)
+		// index 0: phase, index 1: document, index 2: n1, index 3: n2
+		stdin.write('\x1b[B'); // to doc
+		await new Promise((r) => setTimeout(r, 5));
+		stdin.write('\x1b[B'); // to n1
+		await new Promise((r) => setTimeout(r, 5));
+		stdin.write('\x1b[B'); // to n2 (blocked)
+		await new Promise((r) => setTimeout(r, 5));
+
+		stdin.write('\r');
+
+		expect(dispatch).toHaveBeenCalledWith(
+			expect.objectContaining({
+				nodeId: 'n2',
+				type: 'NODE_SELECTED',
+			}),
+		);
+	});
+
+	it('toggles collapse on phase via enter', async () => {
+		const { lastFrame, stdin } = renderShell(structureOverviewSnapshot());
+
+		// Enter on phase (index 0) toggles collapse
+		stdin.write('\r');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const after = lastFrame() ?? '';
+		expect(after).toContain('▸ 01 Foundation');
+
+		// Enter again to expand
+		stdin.write('\r');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const expanded = lastFrame() ?? '';
+		expect(expanded).toContain('▾ 01 Foundation');
+	});
+
+	it('collapses a document via left arrow (hides node rows)', async () => {
+		const { lastFrame, stdin } = renderShell(structureOverviewSnapshot());
+
+		// Navigate down to document row (index 1)
+		stdin.write('\x1b[B');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const beforeDoc = lastFrame() ?? '';
+		expect(beforeDoc).toContain('▾ Doc 1');
+		expect(beforeDoc).toContain('Core Thesis');
+
+		// Left arrow collapses the document
+		stdin.write('\x1b[D');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const after = lastFrame() ?? '';
+		expect(after).toContain('▸'); // collapsed document indicator
+		expect(after).not.toContain('Core Thesis');
+
+		// Right arrow expands again
+		stdin.write('\x1b[C');
+		await new Promise((r) => setTimeout(r, 5));
+
+		const reexpanded = lastFrame() ?? '';
+		expect(reexpanded).toContain('▾ Doc 1');
+		expect(reexpanded).toContain('Core Thesis');
 	});
 });

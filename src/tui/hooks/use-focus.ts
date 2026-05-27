@@ -7,7 +7,7 @@
  * This hook does NOT use Ink's built-in focus — it provides its own
  * focus model that the components receive as props.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type {
 	ActionBarRenderModel,
 	InputRenderModel,
@@ -24,7 +24,13 @@ export type FocusState = {
 	/** Current focus region. */
 	region: FocusRegion;
 
-	/** Currently focused node index in the sidebar (-1 = none). */
+	/**
+	 * Currently focused item index in the sidebar (-1 = none).
+	 *
+	 * When the sidebar uses collapsible tree rendering (via
+	 * `totalSidebarItems`), this indexes into the flat list of visible
+	 * items (phases, documents, and nodes), not just nodes.
+	 */
 	focusedNodeIndex: number;
 
 	/** Currently focused action index in the action bar (-1 = none). */
@@ -60,10 +66,26 @@ export type FocusState = {
 
 // ─── useFocus ───────────────────────────────────────────────────────────────
 
+/**
+ * Options for the `useFocus` hook.
+ */
+export type UseFocusOptions = {
+	/**
+	 * Override the total number of sidebar items (for collapsible trees).
+	 *
+	 * When provided, this value replaces the computed node count for
+	 * all sidebar focus operations (bounds, wrapping, region detection).
+	 * This allows hierarchical trees where visible items include phases
+	 * and documents alongside nodes.
+	 */
+	readonly totalSidebarItems?: number;
+};
+
 export function useFocus(
 	sidebar: SidebarRenderModel,
 	actionBar: ActionBarRenderModel,
 	input: InputRenderModel,
+	options?: UseFocusOptions,
 ): FocusState {
 	const totalNodes = sidebar.phases.reduce(
 		(sum, p) =>
@@ -73,12 +95,19 @@ export function useFocus(
 
 	const totalActions = actionBar.actions.length;
 
+	// ── Sidebar item count (overridable for collapsible trees) ───────────
+
+	const sidebarCount =
+		options?.totalSidebarItems !== undefined
+			? options.totalSidebarItems
+			: totalNodes;
+
 	// ── Available regions based on current snapshot state ────────────────
 
 	const availableRegions = useMemo<FocusRegion[]>(() => {
 		const regions: FocusRegion[] = [];
 
-		if (totalNodes > 0) {
+		if (sidebarCount > 0) {
 			regions.push('sidebar');
 		}
 
@@ -93,7 +122,7 @@ export function useFocus(
 		}
 
 		return regions;
-	}, [totalNodes, totalActions, input.enabled]);
+	}, [sidebarCount, totalActions, input.enabled]);
 
 	// ── Start focused on the first available region ──────────────────────
 
@@ -111,6 +140,23 @@ export function useFocus(
 		region === 'actions'
 			? Math.max(0, focusedActionIndex)
 			: focusedActionIndex;
+
+	// ── Clamp focusedNodeIndex when sidebarCount changes ─────────────────
+
+	const prevSidebarCount = useRef(sidebarCount);
+
+	useEffect(() => {
+		if (sidebarCount === 0) {
+			setFocusedNodeIndex(-1);
+		} else if (prevSidebarCount.current !== sidebarCount) {
+			setFocusedNodeIndex((prev) => {
+				// Clamp from above, and lift from below (initial -1 → 0)
+				if (prev < 0) return 0;
+				return Math.min(prev, sidebarCount - 1);
+			});
+		}
+		prevSidebarCount.current = sidebarCount;
+	}, [sidebarCount]);
 
 	// ── Region navigation ────────────────────────────────────────────────
 
@@ -140,7 +186,7 @@ export function useFocus(
 		setRegion(prevRegion);
 
 		if (prevRegion === 'sidebar') {
-			setFocusedNodeIndex(totalNodes - 1);
+			setFocusedNodeIndex(Math.max(0, sidebarCount - 1));
 			setFocusedActionIndex(-1);
 		} else if (prevRegion === 'actions') {
 			setFocusedNodeIndex(-1);
@@ -154,9 +200,9 @@ export function useFocus(
 	// ── List navigation (up/down within sidebar or actions) ──────────────
 
 	const focusUp = () => {
-		if (region === 'sidebar' && totalNodes > 0) {
+		if (region === 'sidebar' && sidebarCount > 0) {
 			setFocusedNodeIndex((prev) =>
-				prev <= 0 ? totalNodes - 1 : prev - 1,
+				prev <= 0 ? sidebarCount - 1 : prev - 1,
 			);
 		} else if (region === 'actions' && totalActions > 0) {
 			setFocusedActionIndex((prev) =>
@@ -166,9 +212,9 @@ export function useFocus(
 	};
 
 	const focusDown = () => {
-		if (region === 'sidebar' && totalNodes > 0) {
+		if (region === 'sidebar' && sidebarCount > 0) {
 			setFocusedNodeIndex((prev) =>
-				prev >= totalNodes - 1 ? 0 : prev + 1,
+				prev >= sidebarCount - 1 ? 0 : prev + 1,
 			);
 		} else if (region === 'actions' && totalActions > 0) {
 			setFocusedActionIndex((prev) =>
