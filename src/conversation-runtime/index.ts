@@ -14,16 +14,18 @@
  * - Canonical answers: `setCanonicalAnswerDraft`,
  *   `acceptCanonicalAnswer`, `markCanonicalAnswerStale`,
  *   `regenerateCanonicalAnswer`
+ * - Summarizer: `summarizeConversation`
  * - Result types: `ConversationResult`, `CanonicalAnswerResult`
  */
 
+export type { CanonicalAnswerResult } from './canonical-answers.js';
 export {
 	acceptCanonicalAnswer,
 	markCanonicalAnswerStale,
 	regenerateCanonicalAnswer,
 	setCanonicalAnswerDraft,
 } from './canonical-answers.js';
-export type { CanonicalAnswerResult } from './canonical-answers.js';
+export type { ConversationResult } from './messages.js';
 export {
 	appendAssistantMessage,
 	appendSystemMessage,
@@ -31,4 +33,4 @@ export {
 	getConversation,
 	getRecentMessages,
 } from './messages.js';
-export type { ConversationResult } from './messages.js';
+export { summarizeConversation } from './summarizer.js';
