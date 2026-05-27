@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 6.2 - Implement repair prompt generation
+Step 7.1 - Implement MockLlmProvider with fixture-based responses
 
 ## Status Legend
 
@@ -63,7 +63,7 @@ Step 6.2 - Implement repair prompt generation
 | Phase 5 | 5.3 | Implement prompt assembly and context injection | ✅ | `phase-05/step-5.3-implement-prompt-assembly-and-context-injection.md` | `feat/step-5-3-prompt-assembly` | `feat(prompt-orchestration): implement prompt assembly and context injection` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Builds final LLM request; checkpoint Phase 5 |
 | Phase 6 | 6.1 | Define AgentTurnOutput validation schema | ✅ | `phase-06/step-6.1-define-agentturnoutput-validation-schema.md` | `feat/step-6-1-agent-turn-validator` | `feat(validation): implement AgentTurnOutput validator` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Gatekeeper preventing LLM state corruption |
 | Phase 6 | 6.2 | Implement repair prompt generation | ✅ | `phase-06/step-6.2-implement-repair-prompt-generation.md` | `feat/step-6-2-repair-prompt` | `feat(validation): implement repair prompt generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Recovery loop for invalid LLM output |
-| Phase 6 | 6.3 | Implement AgentTurnOutput application to state | ⏳ | `phase-06/step-6.3-implement-agentturnoutput-application-to-state.md` | `feat/step-6-3-apply-agent-turn` | `feat(application): implement AgentTurnOutput application` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Translates LLM output to state changes; checkpoint Phase 6 |
+| Phase 6 | 6.3 | Implement AgentTurnOutput application to state | ✅ | `phase-06/step-6.3-implement-agentturnoutput-application-to-state.md` | `feat/step-6-3-apply-agent-turn` | `feat(application): implement AgentTurnOutput application` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Translates LLM output to state changes; checkpoint Phase 6 |
 | Phase 7 | 7.1 | Implement MockLlmProvider with fixture-based responses | ⏳ | `phase-07/step-7.1-implement-mockllmprovider-with-fixture-based-responses.md` | `feat/step-7-1-mock-provider` | `feat(llm): implement MockLlmProvider with fixtures` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Enables full testing without real LLM |
 | Phase 7 | 7.2 | Build deterministic conversation harness for end-to-end flows | ⏳ | `phase-07/step-7.2-build-deterministic-conversation-harness-for-end-to-end-flows.md` | `feat/step-7-2-conversation-harness` | `test(harness): build deterministic conversation harness` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Validates 10 prototype flows; checkpoint Phase 7 |
 | Phase 8 | 8.1 | Implement render snapshot to TUI render model mapping | ⏳ | `phase-08/step-8.1-implement-render-snapshot-to-tui-render-model-mapping.md` | `feat/step-8-1-render-model-builder` | `feat(application): implement render model builder` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Domain-to-presentation mapping layer |
