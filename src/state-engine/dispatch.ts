@@ -40,6 +40,7 @@ import { recomputeAllDocumentReadiness } from './document-readiness.js';
 import { isValidTransition } from './node-lifecycle.js';
 import { resolveSessionMode } from './session-mode.js';
 import { buildSnapshot } from './snapshot-builder.js';
+import { propagateStaleness } from './staleness.js';
 import {
 	diagnostic,
 	type LogosEvent,
@@ -746,6 +747,9 @@ function handleNodeLifecycleChanged(
 	// Mark canonical answer stale if reopening from accepted or synthesized.
 	// Step 10.3: reopening from review (synthesized → active) must also mark
 	// the canonical answer stale, preserving the old draft for audit.
+	//
+	// Step 11.1: when reopening from accepted, also cascade staleness to
+	// all transitive dependents so document readiness reflects the change.
 	if (
 		(existingNode.lifecycle === 'accepted' ||
 			existingNode.lifecycle === 'synthesized') &&
@@ -767,6 +771,21 @@ function handleNodeLifecycleChanged(
 			},
 		});
 		nextState = recomputeAllDocumentReadiness(nextState, profile);
+
+		// Step 11.1: cascade staleness to dependents when reopening from accepted.
+		if (existingNode.lifecycle === 'accepted') {
+			const cascade = propagateStaleness(nextState, targetNodeId, profile);
+			if (cascade.ok) {
+				nextState = cascade.state;
+				// Merge cascade diagnostics into the snapshot diagnostics.
+				if (cascade.snapshot?.diagnostics) {
+					diags.push(...cascade.snapshot.diagnostics);
+				}
+			}
+			// On error, continue with the stale-but-not-cascaded state.
+			// The node's own answer is already stale; dependents will be
+			// marked stale on the next transition.
+		}
 
 		const snapshot = buildSnapshot(nextState, profile, diags);
 		return stateOk(nextState, snapshot);

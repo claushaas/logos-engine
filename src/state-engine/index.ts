@@ -45,6 +45,7 @@ export {
 	type SessionModeResolution,
 } from './session-mode.js';
 export { buildSnapshot } from './snapshot-builder.js';
+export { propagateStaleness } from './staleness.js';
 export {
 	changeProfile,
 	createSession,

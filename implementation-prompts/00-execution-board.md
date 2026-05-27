@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 10.3 - Implement synthesis and review flow 🟡
+Step 12.1 - Implement document materializer (accepted answers → Markdown)
 
 ## Status Legend
 
@@ -74,7 +74,7 @@ Step 10.3 - Implement synthesis and review flow 🟡
 | Phase 10 | 10.1 | Implement initial question flow (not_started → active) | ✅ | `phase-10/step-10.1-implement-initial-question-flow-not-started-to-active.md` | `feat/step-10-1-initial-question` | `feat(flows): implement initial question flow` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Entry point for every node conversation |
 | Phase 10 | 10.2 | Implement clarification and refinement flows | ✅ | `phase-10/step-10.2-implement-clarification-and-refinement-flows.md` | `feat/step-10-2-clarification-refinement` | `feat(flows): implement clarification and refinement flows` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Quality gates for weak answers |
 | Phase 10 | 10.3 | Implement synthesis and review flow | ✅ | `phase-10/step-10.3-implement-synthesis-and-review-flow.md` | `feat/step-10-3-synthesis-review` | `feat(flows): implement synthesis and review flow` | `pnpm typecheck`, `pnpm test`, `pnpm check` | yes | yes — `@juicesharp/rpiv-advisor` | Core accept flow; checkpoint Phase 10. Partial: edit-prefill TUI not wired (no CLI entry yet). |
-| Phase 11 | 11.1 | Implement staleness cascade for canonical answers | ⏳ | `phase-11/step-11.1-implement-staleness-cascade-for-canonical-answers.md` | `feat/step-11-1-staleness-cascade` | `feat(state-engine): implement staleness cascade` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Document consistency; checkpoint Phase 11 |
+| Phase 11 | 11.1 | Implement staleness cascade for canonical answers | ✅ | `phase-11/step-11.1-implement-staleness-cascade-for-canonical-answers.md` | `feat/step-11-1-staleness-cascade` | `feat(state-engine): implement staleness cascade` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Document consistency; checkpoint Phase 11 |
 | Phase 12 | 12.1 | Implement document materializer (accepted answers → Markdown) | ⏳ | `phase-12/step-12.1-implement-document-materializer-accepted-answers-to-markdown.md` | `feat/step-12-1-document-materializer` | `feat(materialization): implement document materializer` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Primary output pathway |
 | Phase 12 | 12.2 | Implement document preview rendering in TUI | ⏳ | `phase-12/step-12.2-implement-document-preview-rendering-in-tui.md` | `feat/step-12-2-document-preview` | `feat(tui): implement document preview rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Output inspection surface; checkpoint Phase 12 |
 | Phase 13 | 13.1 | Implement session snapshot save and load | ⏳ | `phase-13/step-13.1-implement-session-snapshot-save-and-load.md` | `feat/step-13-1-snapshot-persistence` | `feat(persistence): implement session snapshot save and load` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Enables session continuity |

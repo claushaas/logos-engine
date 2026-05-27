@@ -58,11 +58,21 @@ function buildSidebarNode(
 ): SidebarNode {
 	const lifecycle: NodeLifecycle = nodeState?.lifecycle ?? 'not_started';
 
+	// Step 11.1: If the node is accepted but its canonical answer is stale,
+	// use a stale indicator symbol instead of the normal accepted checkmark.
+	const isAcceptedStale =
+		nodeState?.lifecycle === 'accepted' &&
+		nodeState?.canonicalAnswer?.stale === true;
+
+	const statusSymbol = isAcceptedStale
+		? '↻'
+		: STATUS_SYMBOL_MAP[lifecycle];
+
 	return {
 		disabled: false,
 		nodeId: nodeDef.id,
 		selected: activeNodeId === nodeDef.id,
-		statusSymbol: STATUS_SYMBOL_MAP[lifecycle],
+		statusSymbol,
 		title: nodeDef.title,
 	};
 }
