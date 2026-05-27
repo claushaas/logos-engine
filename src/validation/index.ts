@@ -12,3 +12,11 @@ export {
 	type ValidationError,
 	validateAgentTurnOutput,
 } from './agent-turn-validator.js';
+
+export {
+	DEFAULT_REPAIR_ATTEMPT_LIMIT,
+	type RepairAttempt,
+	type RepairFailedError,
+	buildNextRepairAttempt,
+	buildRepairPrompt,
+} from './repair-prompt.js';
