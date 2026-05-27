@@ -102,20 +102,23 @@ function nodeFocusSnapshot(): TuiRenderSnapshot {
 			actions: [
 				{ enabled: true, id: 'accept', label: '[Accept]', nodeAction: 'accept' as never },
 				{ enabled: true, id: 'edit', label: '[Edit]', nodeAction: 'edit' as never },
+				{ enabled: true, id: 'regenerate', label: '[Regenerate]', nodeAction: 'regenerate' as never },
 			],
 		},
 		diagnostics: [
 			{ code: 'TEST_INFO', message: 'Snapshot loaded.', severity: 'info' },
 		],
 		input: {
-			enabled: true,
-			placeholder: 'Type your answer…',
-			submitAction: 'answer',
+			enabled: false,
+			reasonIfDisabled: 'Review the draft answer before providing input.',
 		},
 		mainPanel: {
 			breadcrumb: 'Foundation / Doc 1 / Core Thesis',
 			canonicalAnswerAccepted: false,
+			canonicalAnswerConfidence: 'medium',
 			canonicalAnswerPreview: 'The core thesis goes here.',
+			canonicalAnswerSourceMessageCount: 8,
+			canonicalAnswerStale: false,
 			kind: 'node_conversation',
 			lifecycle: 'synthesized',
 			messages: [
@@ -290,9 +293,12 @@ describe('AppShell — node focus', () => {
 		expect(frame).toContain('[Edit]');
 	});
 
-	it('renders enabled input area', () => {
+	it('does not render enabled input area (synthesized is review mode)', () => {
+		// Synthesized state does not allow text input — only review actions.
 		const { lastFrame } = renderShell(nodeFocusSnapshot());
-		expect(lastFrame()).toContain('Type your answer…');
+		const frame = lastFrame() ?? '';
+		expect(frame).not.toContain('Type your answer…');
+		expect(frame).not.toContain('>>>');
 	});
 
 	it('renders diagnostics footer', () => {
@@ -381,6 +387,32 @@ describe('AppShell — keyboard dispatch', () => {
 
 		expect(dispatch).not.toHaveBeenCalled();
 	});
+
+	it('dispatches USER_MESSAGE when typing in input and pressing Enter', async () => {
+		const dispatch = vi.fn();
+		const { stdin } = renderShell(notStartedSnapshot(), dispatch);
+
+		// Navigate to input region
+		stdin.write('\t'); // sidebar → main
+		await new Promise((r) => setTimeout(r, 5));
+		stdin.write('\t'); // main → input
+		await new Promise((r) => setTimeout(r, 5));
+
+		// Write one character, wait, then press Enter.
+		// Ink 7 parseKeypress processes single printable characters
+		// and passes them through as `input` to useInput callback.
+		stdin.write('H');
+		await new Promise((r) => setTimeout(r, 10));
+		stdin.write('\r');
+
+		expect(dispatch).toHaveBeenCalledWith(
+			expect.objectContaining({
+				content: 'H',
+				submitAction: 'answer',
+				type: 'USER_MESSAGE',
+			}),
+		);
+	});
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -391,12 +423,432 @@ describe('AppShell — focus indicators', () => {
 	it('tab cycles through focus regions and shows focus markers', () => {
 		const { lastFrame, stdin } = renderShell(nodeFocusSnapshot());
 
-		// Tab to actions (3 tabs from default sidebar focus)
+		// Regions: sidebar → main → actions (input disabled in synthesized)
 		stdin.write('\t'); // main
-		stdin.write('\t'); // input
 		stdin.write('\t'); // actions
 		const f1 = lastFrame() ?? '';
 		// Action should have ▶ marker
 		expect(f1).toContain('▶');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Lifecycle snapshot tests — Step 8.3
+// ═══════════════════════════════════════════════════════════════════════════
+
+function notStartedSnapshot(): TuiRenderSnapshot {
+	return {
+		actionBar: {
+			actions: [
+				{ enabled: true, id: 'answer', label: '[Answer]', nodeAction: 'answer' as never },
+				{ enabled: true, id: 'skip', label: '[Skip]', nodeAction: 'skip' as never },
+				{ enabled: true, id: 'ask_for_example', label: '[Ask for example]', nodeAction: 'ask_for_example' as never },
+			],
+		},
+		diagnostics: [],
+		input: {
+			enabled: true,
+			placeholder: 'Type your answer…',
+			submitAction: 'answer',
+		},
+		mainPanel: {
+			breadcrumb: 'Foundation / Thesis / Core Thesis',
+			canonicalAnswerAccepted: false,
+			canonicalAnswerPreview: null,
+			kind: 'node_conversation',
+			lifecycle: 'not_started',
+			messages: [
+				{
+					content: 'What conviction makes this project necessary?',
+					createdAt: '2025-01-01T00:00:00.000Z',
+					id: 'msg-1',
+					role: 'assistant',
+				},
+			],
+			nodeId: 'n1' as NodeId,
+			title: 'Core Thesis',
+		} as NodeConversationPanel,
+		mode: 'node_focus',
+		sidebar: {
+			activeNodeId: 'n1' as NodeId,
+			phases: [
+				{
+					documents: [
+						{
+							documentId: 'doc-1' as DocumentId,
+							nodes: [
+								{
+									disabled: false,
+									nodeId: 'n1' as NodeId,
+									selected: true,
+									statusSymbol: '○',
+									title: 'Core Thesis',
+								},
+							],
+							title: 'Thesis',
+						},
+					],
+					phaseId: 'phase-1',
+					title: 'Foundation',
+				},
+			],
+			profileTitle: 'Startup',
+		},
+	};
+}
+
+function acceptedSnapshot(): TuiRenderSnapshot {
+	return {
+		actionBar: {
+			actions: [
+				{ enabled: true, id: 'continue_next', label: '[Continue →]', nodeAction: 'continue_next' as never },
+				{ enabled: true, id: 'reopen', label: '[Reopen]', nodeAction: 'reopen' as never },
+				{ enabled: true, id: 'open_document_preview', label: '[Preview Document]', nodeAction: 'open_document_preview' as never },
+			],
+		},
+		diagnostics: [],
+		input: { enabled: false },
+		mainPanel: {
+			breadcrumb: 'Foundation / Thesis / Core Thesis',
+			canonicalAnswerAccepted: true,
+			canonicalAnswerConfidence: 'medium',
+			canonicalAnswerPreview: 'The hiring industry evaluates credentials over competence.',
+			canonicalAnswerSourceMessageCount: 8,
+			canonicalAnswerStale: false,
+			kind: 'node_conversation',
+			lifecycle: 'accepted',
+			messages: [
+				{
+					content: 'What is your core thesis?',
+					createdAt: '2025-01-01T00:00:00.000Z',
+					id: 'msg-1',
+					role: 'assistant',
+				},
+				{
+					content: 'We believe in skill-based evaluation.',
+					createdAt: '2025-01-01T00:01:00.000Z',
+					id: 'msg-2',
+					role: 'user',
+				},
+				{
+					content: 'Core thesis accepted.',
+					createdAt: '2025-01-01T00:02:00.000Z',
+					id: 'msg-3',
+					role: 'assistant',
+				},
+			],
+			nodeId: 'n1' as NodeId,
+			title: 'Core Thesis',
+		} as NodeConversationPanel,
+		mode: 'node_focus',
+		sidebar: {
+			activeNodeId: 'n1' as NodeId,
+			phases: [
+				{
+					documents: [
+						{
+							documentId: 'doc-1' as DocumentId,
+							nodes: [
+								{
+									disabled: false,
+									nodeId: 'n1' as NodeId,
+									selected: true,
+									statusSymbol: '✓',
+									title: 'Core Thesis',
+								},
+							],
+							title: 'Thesis',
+						},
+					],
+					phaseId: 'phase-1',
+					title: 'Foundation',
+				},
+			],
+			profileTitle: 'Startup',
+		},
+	};
+}
+
+function blockedSnapshot(): TuiRenderSnapshot {
+	return {
+		actionBar: {
+			actions: [
+				{ enabled: true, id: 'open_prerequisite', label: '[Open Prerequisite]', nodeAction: 'open_prerequisite' as never },
+				{ enabled: true, id: 'defer', label: '[Defer]', nodeAction: 'defer' as never },
+			],
+		},
+		diagnostics: [],
+		input: { enabled: false },
+		mainPanel: {
+			breadcrumb: 'Validation / Core Assumptions',
+			canonicalAnswerAccepted: false,
+			canonicalAnswerPreview: null,
+			kind: 'node_conversation',
+			lifecycle: 'blocked',
+			messages: [
+				{
+					content: 'This node depends on your Core Thesis, which must be accepted first.',
+					createdAt: '2025-01-01T00:00:00.000Z',
+					id: 'msg-1',
+					role: 'assistant',
+				},
+			],
+			nodeId: 'n2' as NodeId,
+			title: 'Core Assumptions',
+		} as NodeConversationPanel,
+		mode: 'node_focus',
+		sidebar: {
+			activeNodeId: 'n2' as NodeId,
+			phases: [
+				{
+					documents: [
+						{
+							documentId: 'doc-1' as DocumentId,
+							nodes: [
+								{
+									disabled: true,
+									nodeId: 'n2' as NodeId,
+									reasonIfDisabled: 'Blocked by prerequisite.',
+									selected: true,
+									statusSymbol: '⚠',
+									title: 'Core Assumptions',
+								},
+							],
+							title: 'Doc 1',
+						},
+					],
+					phaseId: 'phase-2',
+					title: 'Validation',
+				},
+			],
+			profileTitle: 'Startup',
+		},
+	};
+}
+
+// ─── Not started lifecycle ─────────────────────────────────────────────────
+
+describe('Lifecycle: not_started', () => {
+	it('renders breadcrumb', () => {
+		const { lastFrame } = renderShell(notStartedSnapshot());
+		expect(lastFrame()).toContain('Foundation / Thesis / Core Thesis');
+	});
+
+	it('shows ○ Not started lifecycle badge', () => {
+		const { lastFrame } = renderShell(notStartedSnapshot());
+		expect(lastFrame()).toContain('○ Not started');
+	});
+
+	it('renders agent initial question prominently', () => {
+		const { lastFrame } = renderShell(notStartedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('Agent');
+		expect(frame).toContain('What conviction makes this project necessary?');
+	});
+
+	it('shows input enabled with placeholder', () => {
+		const { lastFrame } = renderShell(notStartedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('Type your answer…');
+	});
+
+	it('shows correct actions: answer, skip, ask_for_example', () => {
+		const { lastFrame } = renderShell(notStartedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('[Answer]');
+		expect(frame).toContain('[Skip]');
+		expect(frame).toContain('[Ask for example]');
+	});
+
+	it('has no canonical answer preview when none exists', () => {
+		const { lastFrame } = renderShell(notStartedSnapshot());
+		expect(lastFrame()).not.toContain('CANONICAL ANSWER');
+	});
+});
+
+// ─── Synthesized lifecycle ─────────────────────────────────────────────────
+
+describe('Lifecycle: synthesized', () => {
+	it('shows ◆ Awaiting review lifecycle badge', () => {
+		const { lastFrame } = renderShell(nodeFocusSnapshot());
+		expect(lastFrame()).toContain('◆ Awaiting review');
+	});
+
+	it('renders canonical answer preview', () => {
+		const { lastFrame } = renderShell(nodeFocusSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('CANONICAL ANSWER');
+		expect(frame).toContain('DRAFT');
+		expect(frame).toContain('The core thesis goes here.');
+	});
+
+	it('shows correct actions: accept, edit, regenerate', () => {
+		const { lastFrame } = renderShell(nodeFocusSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('[Accept]');
+		expect(frame).toContain('[Edit]');
+		expect(frame).toContain('[Regenerate]');
+	});
+
+	it('shows confidence and source message count', () => {
+		const { lastFrame } = renderShell(nodeFocusSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('Confidence: medium');
+		expect(frame).toContain('Generated from 8 messages');
+	});
+
+	it('hides input area (review mode)', () => {
+		const { lastFrame } = renderShell(nodeFocusSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).not.toContain('Type your answer…');
+		expect(frame).not.toContain('>>>');
+	});
+});
+
+// ─── Accepted lifecycle ────────────────────────────────────────────────────
+
+describe('Lifecycle: accepted', () => {
+	it('shows ✓ Accepted lifecycle badge', () => {
+		const { lastFrame } = renderShell(acceptedSnapshot());
+		expect(lastFrame()).toContain('✓ Accepted');
+	});
+
+	it('shows canonical answer preview with ACCEPTED badge', () => {
+		const { lastFrame } = renderShell(acceptedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('CANONICAL ANSWER');
+		expect(frame).toContain('ACCEPTED');
+	});
+
+	it('shows confidence and source message count', () => {
+		const { lastFrame } = renderShell(acceptedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('Confidence: medium');
+		expect(frame).toContain('Generated from 8 messages');
+	});
+
+	it('shows correct actions: continue_next, reopen, preview', () => {
+		const { lastFrame } = renderShell(acceptedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('[Continue →]');
+		expect(frame).toContain('[Reopen]');
+		expect(frame).toContain('[Preview Document]');
+	});
+
+	it('hides input when accepted', () => {
+		const { lastFrame } = renderShell(acceptedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).not.toContain('Type your answer…');
+		expect(frame).not.toContain('>>>');
+	});
+});
+
+// ─── Blocked lifecycle ─────────────────────────────────────────────────────
+
+describe('Lifecycle: blocked', () => {
+	it('shows ⚠ Blocked lifecycle badge', () => {
+		const { lastFrame } = renderShell(blockedSnapshot());
+		expect(lastFrame()).toContain('⚠ Blocked');
+	});
+
+	it('renders blocker explanation from agent message', () => {
+		const { lastFrame } = renderShell(blockedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('This node depends on your Core Thesis');
+	});
+
+	it('shows correct actions: open_prerequisite, defer', () => {
+		const { lastFrame } = renderShell(blockedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('[Open Prerequisite]');
+		expect(frame).toContain('[Defer]');
+	});
+
+	it('hides input when blocked', () => {
+		const { lastFrame } = renderShell(blockedSnapshot());
+		const frame = lastFrame() ?? '';
+		expect(frame).not.toContain('Type your answer…');
+		expect(frame).not.toContain('>>>');
+	});
+
+	it('has no canonical answer preview', () => {
+		const { lastFrame } = renderShell(blockedSnapshot());
+		expect(lastFrame()).not.toContain('CANONICAL ANSWER');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Message ordering
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('Conversation message ordering', () => {
+	it('preserves chronological order when user message follows agent', () => {
+		// Messages: agent → user. Agent is not the last message,
+		// so all messages render as plain history in order.
+		const snap = nodeFocusSnapshot();
+		const { lastFrame } = renderShell(snap);
+		const frame = lastFrame() ?? '';
+
+		// Both messages should appear, and the user message (index 1)
+		// should appear after the agent message (index 0).
+		const agentIdx = frame.indexOf('What is your core thesis?');
+		const userIdx = frame.indexOf('We believe in skill-based evaluation.');
+		expect(agentIdx).toBeGreaterThan(-1);
+		expect(userIdx).toBeGreaterThan(-1);
+		expect(agentIdx).toBeLessThan(userIdx);
+	});
+
+	it('promotes latest agent message when it is the final message', () => {
+		// Messages: user → agent. Agent IS the last message,
+		// so it should render in the prominent Agent block.
+		const snap: TuiRenderSnapshot = {
+			...notStartedSnapshot(),
+			mainPanel: {
+				...(notStartedSnapshot().mainPanel as NodeConversationPanel),
+				messages: [
+					{
+						content: 'My answer goes here.',
+						createdAt: '2025-01-01T00:00:00.000Z',
+						id: 'msg-user',
+						role: 'user' as const,
+					},
+					{
+						content: 'Follow-up question from agent.',
+						createdAt: '2025-01-01T00:01:00.000Z',
+						id: 'msg-agent',
+						role: 'assistant' as const,
+					},
+				],
+				lifecycle: 'active' as const,
+			},
+		};
+		const { lastFrame } = renderShell(snap);
+		const frame = lastFrame() ?? '';
+
+		// History section: user message appears dimmed
+		expect(frame).toContain('─── History ───');
+		// Latest agent appears in prominent Agent block
+		expect(frame).toContain('Follow-up question from agent.');
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Stale canonical answer
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('Canonical answer — stale', () => {
+	it('shows STALE badge and takes precedence over accepted', () => {
+		const snap: TuiRenderSnapshot = {
+			...acceptedSnapshot(),
+			mainPanel: {
+				...(acceptedSnapshot().mainPanel as NodeConversationPanel),
+				canonicalAnswerAccepted: true,
+				canonicalAnswerStale: true,
+			},
+		};
+		const { lastFrame } = renderShell(snap);
+		const frame = lastFrame() ?? '';
+		expect(frame).toContain('STALE');
+		expect(frame).not.toContain('ACCEPTED');
 	});
 });

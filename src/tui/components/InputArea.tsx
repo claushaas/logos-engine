@@ -2,7 +2,8 @@
  * Input Area component.
  *
  * Renders the user text input surface at the bottom of the conversation
- * panel. When disabled, shows the reason instead.
+ * panel. Visible only when `InputRenderModel.enabled` is true. Returns
+ * `null` when disabled (input hidden for blocked/accepted/review states).
  *
  * @see {@link https://logos-engine/docs/13-prototypes.md §2.7}
  */
@@ -15,22 +16,23 @@ import type { FocusRegion } from '../hooks/use-focus.js';
 export type InputAreaProps = {
 	readonly input: InputRenderModel;
 	readonly focusedRegion: FocusRegion | null;
+	/** Current input buffer value (ephemeral TUI state). */
+	readonly value: string | undefined;
 };
 
 // ─── InputArea ──────────────────────────────────────────────────────────────
 
-export function InputArea({ focusedRegion, input }: InputAreaProps) {
+export function InputArea({ focusedRegion, input, value }: InputAreaProps) {
 	const isInputFocused = focusedRegion === 'input';
 
+	// Hidden when input is not enabled (blocked, accepted, review, etc.)
 	if (!input.enabled) {
-		return (
-			<Box marginTop={1}>
-				<Text dimColor={true}>
-					{input.reasonIfDisabled ?? 'Input disabled.'}
-				</Text>
-			</Box>
-		);
+		return null;
 	}
+
+	const displayText = value !== undefined && value.length > 0
+		? value
+		: input.placeholder ?? 'Type your answer…';
 
 	if (isInputFocused) {
 		return (
@@ -41,7 +43,7 @@ export function InputArea({ focusedRegion, input }: InputAreaProps) {
 				paddingX={1}
 			>
 				<Text color="blue">
-					▸ {input.placeholder ?? 'Type your answer…'}
+					▸ {displayText}
 				</Text>
 			</Box>
 		);
@@ -55,7 +57,7 @@ export function InputArea({ focusedRegion, input }: InputAreaProps) {
 			paddingX={1}
 		>
 			<Text dimColor={true}>
-				{'>'} {input.placeholder ?? 'Type your answer…'}
+				{'>>>'} {displayText}
 			</Text>
 		</Box>
 	);

@@ -18,6 +18,7 @@ import {
 	useContext,
 	useEffect,
 	useMemo,
+	useState,
 } from 'react';
 import type {
 	ActionBarRenderModel,
@@ -42,6 +43,7 @@ import { useFocus } from './hooks/use-focus.js';
 export type TuiDispatchEvent =
 	| { readonly type: 'NODE_SELECTED'; readonly nodeId: NodeId }
 	| { readonly type: 'ACTION_SELECTED'; readonly actionId: string; readonly nodeAction?: string }
+	| { readonly type: 'USER_MESSAGE'; readonly content: string; readonly submitAction?: string }
 	| { readonly type: 'ESCAPE' };
 
 // ─── TUI application context ────────────────────────────────────────────────
@@ -151,6 +153,10 @@ function DiagnosticEntry({
 export function AppShell() {
 	const { dispatch, snapshot } = useTuiApplication();
 
+	// ── Ephemeral input buffer (TUI-owned transient state) ───────────────
+
+	const [inputBuffer, setInputBuffer] = useState('');
+
 	// ── Focus management ─────────────────────────────────────────────────
 
 	const focus = useFocus(
@@ -159,7 +165,7 @@ export function AppShell() {
 		snapshot.input,
 	);
 
-	// Reset focus when snapshot changes (e.g., mode switch)
+	// Reset focus and clear input buffer when snapshot changes (e.g., mode switch)
 	const snapshotKey = useMemo(
 		() => `${snapshot.mode}:${snapshot.sidebar.activeNodeId ?? 'none'}`,
 		[snapshot.mode, snapshot.sidebar.activeNodeId],
@@ -167,12 +173,68 @@ export function AppShell() {
 
 	useEffect(() => {
 		focus.resetFocus();
+		setInputBuffer('');
 	}, [snapshotKey]);
 
 	// ── Keyboard handler ─────────────────────────────────────────────────
 
 	const handleInput = useCallback(
-		(input: string, key: { upArrow: boolean; downArrow: boolean; return: boolean; escape: boolean; tab: boolean; shift: boolean }) => {
+		(input: string, key: { upArrow: boolean; downArrow: boolean; return: boolean; escape: boolean; tab: boolean; shift: boolean; backspace: boolean; delete: boolean }) => {
+			// ── Text input mode: append printable chars, handle special keys
+
+			if (focus.region === 'input' && snapshot.input.enabled) {
+				// Tab — cycle focus regions (must be handled before printable check)
+				if (key.tab) {
+					if (key.shift) {
+						focus.focusPreviousRegion();
+					} else {
+						focus.focusNextRegion();
+					}
+					return;
+				}
+
+				// Enter — submit the input buffer
+				if (key.return) {
+					if (inputBuffer.trim().length > 0) {
+						const event: TuiDispatchEvent =
+							snapshot.input.submitAction !== undefined
+								? {
+										content: inputBuffer,
+										submitAction: snapshot.input.submitAction,
+										type: 'USER_MESSAGE',
+								  }
+								: {
+										content: inputBuffer,
+										type: 'USER_MESSAGE',
+								  };
+						dispatch?.(event);
+						setInputBuffer('');
+					}
+					return;
+				}
+
+				// Backspace / Delete — remove last character
+				if (key.backspace || key.delete) {
+					setInputBuffer((prev) => prev.slice(0, -1));
+					return;
+				}
+
+				// Escape — clear input buffer
+				if (key.escape) {
+					setInputBuffer('');
+					return;
+				}
+
+				// Append printable characters to the buffer
+				if (input.length > 0 && !key.upArrow && !key.downArrow) {
+					setInputBuffer((prev) => prev + input);
+				}
+
+				return;
+			}
+
+			// ── Navigation mode (non-input focus or input disabled)
+
 			// Tab / Shift+Tab — cycle focus regions
 			if (key.tab) {
 				if (key.shift) {
@@ -232,8 +294,6 @@ export function AppShell() {
 								  };
 						dispatch?.(dispEvent);
 					}
-				} else if (focus.region === 'input') {
-					// Input region Enter means submit — placeholder for now
 				}
 
 				return;
@@ -245,7 +305,7 @@ export function AppShell() {
 				return;
 			}
 		},
-		[dispatch, focus, snapshot.actionBar.actions, snapshot.sidebar.phases],
+		[dispatch, focus, inputBuffer, snapshot.actionBar.actions, snapshot.input.enabled, snapshot.input.submitAction, snapshot.sidebar.phases],
 	);
 
 	useInput(handleInput);
@@ -289,6 +349,7 @@ export function AppShell() {
 							: null
 					}
 					input={snapshot.input}
+					inputValue={inputBuffer}
 					mainPanel={snapshot.mainPanel}
 				/>
 			</Box>

@@ -154,6 +154,15 @@ export type NodeConversationPanel = {
 	/** Whether the canonical answer has been accepted. */
 	readonly canonicalAnswerAccepted: boolean;
 
+	/** Confidence level of the canonical answer synthesis (low / medium / high). */
+	readonly canonicalAnswerConfidence?: 'low' | 'medium' | 'high';
+
+	/** Number of conversation messages this answer was derived from. */
+	readonly canonicalAnswerSourceMessageCount?: number;
+
+	/** Whether the canonical answer is stale (outdated). */
+	readonly canonicalAnswerStale?: boolean;
+
 	/** Completeness summary for display hints. */
 	readonly completenessSummary?: string;
 

@@ -201,9 +201,14 @@ function buildMainPanel(
 				? `${phaseDef.title} / ${docDef.title} / ${nodeDef.title}`
 				: nodeDef.title;
 
-		const canonicalAnswerPreview = nodeState.canonicalAnswer?.content ?? null;
+		const canonicalAnswer = nodeState.canonicalAnswer;
+		const canonicalAnswerPreview = canonicalAnswer?.content ?? null;
 		const canonicalAnswerAccepted =
-			nodeState.canonicalAnswer?.accepted === true;
+			canonicalAnswer?.accepted === true;
+		const canonicalAnswerConfidence = canonicalAnswer?.confidence;
+		const canonicalAnswerSourceMessageCount =
+			canonicalAnswer?.generatedFromMessageIds.length;
+		const canonicalAnswerStale = canonicalAnswer?.stale;
 
 		const messages = nodeState.conversation.map((msg) => ({
 			content: msg.content,
@@ -222,30 +227,36 @@ function buildMainPanel(
 		}
 
 		// Build NodeConversationPanel with only present optional fields
-		if (completenessSummary !== undefined) {
-			return {
-				breadcrumb,
-				canonicalAnswerAccepted,
-				canonicalAnswerPreview,
-				completenessSummary,
-				kind: 'node_conversation',
-				lifecycle: nodeState.lifecycle,
-				messages,
-				nodeId: state.activeNodeId,
-				title: nodeDef.title,
-			} as NodeConversationPanel;
-		}
-
-		return {
+		const basePanel = {
 			breadcrumb,
 			canonicalAnswerAccepted,
 			canonicalAnswerPreview,
-			kind: 'node_conversation',
+			kind: 'node_conversation' as const,
 			lifecycle: nodeState.lifecycle,
 			messages,
 			nodeId: state.activeNodeId,
 			title: nodeDef.title,
-		} as NodeConversationPanel;
+		};
+
+		// Attach canonical metadata only when a canonical answer exists
+		const basePanelWithCanonical =
+			canonicalAnswerPreview !== null
+				? {
+						...basePanel,
+						canonicalAnswerConfidence,
+						canonicalAnswerSourceMessageCount,
+						canonicalAnswerStale,
+				  }
+				: basePanel;
+
+		if (completenessSummary !== undefined) {
+			return {
+				...basePanelWithCanonical,
+				completenessSummary,
+			} as NodeConversationPanel;
+		}
+
+		return basePanelWithCanonical as NodeConversationPanel;
 	}
 
 	// Fallback for modes not yet implemented

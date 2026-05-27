@@ -25,6 +25,8 @@ export type MainPanelProps = {
 	readonly focusedRegion: FocusRegion | null;
 	readonly focusedActionIndex: number;
 	readonly onSelectAction?: (actionId: string) => void;
+	/** Current input buffer value (ephemeral TUI state). */
+	readonly inputValue: string | undefined;
 };
 
 // ─── MainPanel ──────────────────────────────────────────────────────────────
@@ -34,6 +36,7 @@ export function MainPanel({
 	focusedActionIndex,
 	focusedRegion,
 	input,
+	inputValue,
 	mainPanel,
 	onSelectAction,
 }: MainPanelProps) {
@@ -97,6 +100,7 @@ export function MainPanel({
 						focusedActionIndex,
 						focusedRegion,
 						input,
+						inputValue,
 						onSelectAction,
 						panel: mainPanel,
 				  }
@@ -105,6 +109,7 @@ export function MainPanel({
 						focusedActionIndex,
 						focusedRegion,
 						input,
+						inputValue,
 						panel: mainPanel,
 				  };
 
