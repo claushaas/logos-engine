@@ -92,6 +92,7 @@ function transitiveDependents(
 	visited.add(rootNodeId);
 
 	while (queue.length > 0) {
+		// biome-ignore lint/style/noNonNullAssertion: while loop condition ensures queue.shift() returns value
 		const current = queue.shift()!;
 		const directDependents = graph.getDependents(current);
 

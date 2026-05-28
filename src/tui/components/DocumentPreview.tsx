@@ -89,6 +89,7 @@ function parseLine(line: string): ContentLine {
 	if (missingMatch) {
 		return {
 			kind: 'missing',
+			// biome-ignore lint/style/noNonNullAssertion: regex match ensures capture group exists
 			nodeId: missingMatch[1]!,
 			text: line,
 		};
@@ -206,7 +207,7 @@ export function DocumentPreview({
 	focusedActionIndex,
 	focusedRegion,
 	panel,
-	onSelectAction,
+	onSelectAction: _onSelectAction,
 	onSelectMissingNode,
 }: DocumentPreviewProps) {
 	// ── Page state (ephemeral TUI-only) ──────────────────────────────
@@ -322,8 +323,8 @@ export function DocumentPreview({
 
 			{/* ── Content (paginated) ──────────────────────────── */}
 			<Box flexDirection="column" flexGrow={1} marginBottom={1}>
-				{visibleLines.map((line, idx) => (
-					<ContentLineComponent key={`${safePage}-${idx}`} line={line} />
+				{visibleLines.map((line, _idx) => (
+					<ContentLineComponent key={`${safePage}-${line}`} line={line} />
 				))}
 			</Box>
 

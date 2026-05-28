@@ -208,6 +208,7 @@ export function setCanonicalAnswerDraft(
 	if (nodeErr) return nodeErr;
 
 	// After guardNodeExists, we know nodeStates[nodeId] exists
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	const lcErr = guardLifecycleForDraft(existingNode.lifecycle, nodeId);
@@ -272,6 +273,7 @@ export function acceptCanonicalAnswer(
 	const nodeErr = guardNodeExists(state, nodeId);
 	if (nodeErr) return nodeErr;
 
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	const lcErr = guardLifecycleForAccept(existingNode.lifecycle, nodeId);
@@ -283,6 +285,7 @@ export function acceptCanonicalAnswer(
 	const now = nowIso();
 
 	const updatedAnswer: CanonicalAnswer = {
+		// biome-ignore lint/style/noNonNullAssertion: guarded above
 		...existingNode.canonicalAnswer!,
 		accepted: true,
 		acceptedAt: now,
@@ -335,6 +338,7 @@ export function markCanonicalAnswerStale(
 	const nodeErr = guardNodeExists(state, nodeId);
 	if (nodeErr) return nodeErr;
 
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	// Idempotent: if no canonical answer, return success unchanged.
@@ -397,6 +401,7 @@ export function regenerateCanonicalAnswer(
 	const nodeErr = guardNodeExists(state, nodeId);
 	if (nodeErr) return nodeErr;
 
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	const lcErr = guardLifecycleForAccept(existingNode.lifecycle, nodeId);

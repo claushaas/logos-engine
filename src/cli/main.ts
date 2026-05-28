@@ -123,6 +123,7 @@ async function main(): Promise<void> {
 		dispatch: typeof handleTuiDispatch,
 	): ReactNode {
 		return createElement(TuiApplicationProvider, {
+			// biome-ignore lint/correctness/noChildrenProp: TuiApplicationProviderProps requires children in props
 			children: createElement(AppShell),
 			dispatch,
 			snapshot,
@@ -131,7 +132,7 @@ async function main(): Promise<void> {
 
 	// ── Mount the TUI ─────────────────────────────────────────────────
 
-	const { rerender, unmount, waitUntilExit } = render(
+	const { rerender, waitUntilExit } = render(
 		buildElement(runtime.getSnapshot(), handleTuiDispatch),
 		{
 			exitOnCtrlC: false, // We handle signals via the runtime.

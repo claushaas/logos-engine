@@ -16,7 +16,7 @@
 import { Box, Text } from 'ink';
 import type {
 	ActionBarRenderModel,
-	ErrorPanel,
+	ErrorPanel as ErrorPanelModel,
 	InputRenderModel,
 } from '../../contracts/index.js';
 import type { FocusRegion } from '../hooks/use-focus.js';
@@ -26,7 +26,7 @@ import { ActionBar } from './ActionBar.js';
 
 export type ErrorPanelProps = {
 	/** The error panel render model from the snapshot. */
-	readonly panel: ErrorPanel;
+	readonly panel: ErrorPanelModel;
 
 	/** Action bar with recovery actions (built by the render model builder). */
 	readonly actionBar: ActionBarRenderModel;

@@ -7,7 +7,7 @@
  * This hook does NOT use Ink's built-in focus — it provides its own
  * focus model that the components receive as props.
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type {
 	ActionBarRenderModel,
 	InputRenderModel,
@@ -160,6 +160,7 @@ export function useFocus(
 	const focusNextRegion = () => {
 		const idx = availableRegions.indexOf(region);
 		const next = (idx + 1) % availableRegions.length;
+		// biome-ignore lint/style/noNonNullAssertion: guarded above
 		const nextRegion = availableRegions[next]!;
 		setRegion(nextRegion);
 
@@ -178,6 +179,7 @@ export function useFocus(
 	const focusPreviousRegion = () => {
 		const idx = availableRegions.indexOf(region);
 		const prev = (idx - 1 + availableRegions.length) % availableRegions.length;
+		// biome-ignore lint/style/noNonNullAssertion: guarded above
 		const prevRegion = availableRegions[prev]!;
 		setRegion(prevRegion);
 
@@ -224,12 +226,12 @@ export function useFocus(
 
 	// ── Reset ─────────────────────────────────────────────────────────────
 
-	const resetFocus = () => {
+	const resetFocus = useCallback(() => {
 		const first = availableRegions[0] ?? 'main';
 		setRegion(first);
 		setFocusedNodeIndex(first === 'sidebar' ? 0 : -1);
 		setFocusedActionIndex(first === 'actions' ? 0 : -1);
-	};
+	}, [availableRegions]);
 
 	return {
 		availableRegions,

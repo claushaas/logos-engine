@@ -81,6 +81,7 @@ export type CollapsedDocumentIds = ReadonlySet<string>;
  * @param collapsedDocumentIds - Set of document IDs that are collapsed.
  * @returns A flat array of visible items in tree order.
  */
+// biome-ignore lint/style/useComponentExportOnlyModules: utility function colocated with component
 export function flattenSidebarTree(
 	sidebar: SidebarRenderModel,
 	collapsedPhaseIds: CollapsedPhaseIds,
@@ -89,6 +90,7 @@ export function flattenSidebarTree(
 	const items: VisibleItem[] = [];
 
 	for (let pIdx = 0; pIdx < sidebar.phases.length; pIdx++) {
+		// biome-ignore lint/style/noNonNullAssertion: guarded above
 		const phase = sidebar.phases[pIdx]!;
 		const phaseExpanded = !collapsedPhaseIds.has(phase.phaseId);
 		const totalNodesInPhase = phase.documents.reduce(
@@ -254,6 +256,8 @@ export function NodeTree({
 								key={item.nodeId}
 							/>
 						);
+					default:
+						return null;
 				}
 			})}
 		</Box>

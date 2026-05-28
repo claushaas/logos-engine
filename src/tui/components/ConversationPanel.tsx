@@ -77,6 +77,7 @@ export function ConversationPanel({
 		// chronologically final message. If the user message comes
 		// after the agent, render everything as plain history
 		// to preserve chronological order.
+		// biome-ignore lint/style/noNonNullAssertion: msgs is non-empty when this code runs
 		const lastMessage = msgs.at(-1)!;
 		if (lastMessage.role === 'assistant') {
 			return {

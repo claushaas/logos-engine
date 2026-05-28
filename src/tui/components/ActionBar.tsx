@@ -56,7 +56,7 @@ export function ActionBar({
 	actionBar,
 	focusedActionIndex,
 	focusedRegion,
-	onSelectAction,
+	onSelectAction: _onSelectAction,
 }: ActionBarProps) {
 	if (actionBar.actions.length === 0) {
 		return null;

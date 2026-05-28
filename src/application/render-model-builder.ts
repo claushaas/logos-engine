@@ -569,6 +569,7 @@ export function buildRenderSnapshot(
 	// ── Enrich error panel with diagnostics data ────────────────────────
 
 	if (mainPanel.kind === 'error' && snapshot.diagnostics.length > 0) {
+		// biome-ignore lint/style/noNonNullAssertion: length check ensures diagnostics[0] exists
 		const firstDiag = snapshot.diagnostics[0]!;
 		const code: string = firstDiag.code;
 		const category: string | null = getCategoryFromCode(code);

@@ -94,6 +94,7 @@ export function TuiApplicationProvider({
 
 // ─── Hook ───────────────────────────────────────────────────────────────────
 
+// biome-ignore lint/style/useComponentExportOnlyModules: custom hook colocated with provider component
 export function useTuiApplication(): TuiApplicationContextValue {
 	const ctx = useContext(TuiApplicationContext);
 	if (ctx === null) {
@@ -196,15 +197,16 @@ export function AppShell() {
 	});
 
 	// Reset focus and clear input buffer when snapshot changes (e.g., mode switch)
-	const _snapshotKey = useMemo(
+	const snapshotKey = useMemo(
 		() => `${snapshot.mode}:${snapshot.sidebar.activeNodeId ?? 'none'}`,
 		[snapshot.mode, snapshot.sidebar.activeNodeId],
 	);
 
 	useEffect(() => {
+		void snapshotKey;
 		focus.resetFocus();
 		setInputBuffer('');
-	}, [focus.resetFocus]);
+	}, [snapshotKey, focus.resetFocus]);
 
 	// ── Keyboard handler ─────────────────────────────────────────────────
 
@@ -295,6 +297,7 @@ export function AppShell() {
 				focus.focusedNodeIndex >= 0 &&
 				focus.focusedNodeIndex < visibleItems.length
 			) {
+				// biome-ignore lint/style/noNonNullAssertion: focusedNodeIndex validated against visibleItems.length above
 				const item = visibleItems[focus.focusedNodeIndex]!;
 
 				if (key.leftArrow) {
@@ -508,8 +511,8 @@ export function AppShell() {
 			{/* Diagnostics footer (only when diagnostics exist) */}
 			{snapshot.diagnostics.length > 0 && (
 				<Box borderStyle="single" borderTop={true} paddingX={1}>
-					{snapshot.diagnostics.map((d: RuntimeDiagnostic, i: number) => (
-						<DiagnosticEntry diagnostic={d} key={`${d.code}-${i}`} />
+					{snapshot.diagnostics.map((d: RuntimeDiagnostic, _i: number) => (
+						<DiagnosticEntry diagnostic={d} key={d.code} />
 					))}
 				</Box>
 			)}

@@ -183,6 +183,7 @@ export function appendUserMessage(
 	if (guardErr) return guardErr;
 
 	// At this point guardAppendTarget ensures nodeStates[nodeId] exists
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	const messageId = generateId();
@@ -297,6 +298,7 @@ export function appendAssistantMessage(
 	}
 
 	// At this point guardAppendTarget ensures nodeStates[nodeId] exists
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	const messageId = generateId();
@@ -357,6 +359,7 @@ export function appendSystemMessage(
 	if (guardErr) return guardErr;
 
 	// At this point guardAppendTarget ensures nodeStates[nodeId] exists
+	// biome-ignore lint/style/noNonNullAssertion: guarded above
 	const existingNode = state.nodeStates[nodeId]!;
 
 	const messageId = generateId();
