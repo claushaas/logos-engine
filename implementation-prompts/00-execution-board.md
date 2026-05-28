@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 17.3 — Implement export panel in TUI
+Step 18.1 — Implement remaining flow tests (E-J)
 
 ## Status Legend
 
@@ -91,7 +91,7 @@ Step 17.3 — Implement export panel in TUI
 | Phase 17 | 17.1 | Implement HTML artifact generation placeholder | ✅ | `phase-17/step-17.1-implement-html-artifact-generation-placeholder.md` | `feat/step-17-1-html-export` | `feat(outputs): implement HTML artifact generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | HTML exporter added; export-manager HTML availability enabled; escape/validity tests pass |
 | Phase 17 | 17.2 | Implement Agent Pack generation placeholder | ✅ | `phase-17/step-17.2-implement-agent-pack-generation-placeholder.md` | `feat/step-17-2-agent-pack` | `feat(outputs): implement Agent Pack generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Portable context for AI agents |
 | Phase 17 | 17.3 | Implement export panel in TUI | ✅ | `phase-17/step-17.3-implement-export-panel-in-tui.md` | `feat/step-17-3-export-panel` | `feat(tui): implement export panel` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Unified export view; checkpoint Phase 17 |
-| Phase 18 | 18.1 | Implement remaining flow tests (E-J) | ⏳ | `phase-18/step-18.1-implement-remaining-flow-tests-e-j.md` | `test/step-18-1-remaining-flow-tests` | `test(flows): add remaining flow tests E-J` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Complete flow coverage |
+| Phase 18 | 18.1 | Implement remaining flow tests (E-J) | ✅ | `phase-18/step-18.1-implement-remaining-flow-tests-e-j.md` | `test/step-18-1-remaining-flow-tests` | `test(flows): add remaining flow tests E-J` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Complete flow coverage. 2 prototype deviations documented (Flow E resume, Flow F allowedActions). |
 | Phase 18 | 18.2 | Add TUI snapshot tests for all 13 states | ⏳ | `phase-18/step-18.2-add-tui-snapshot-tests-for-all-13-states.md` | `test/step-18-2-tui-snapshots` | `test(tui): add snapshot tests for all 13 states` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Visual regression prevention |
 | Phase 18 | 18.3 | Implement diagnostics panel and logging | ⏳ | `phase-18/step-18.3-implement-diagnostics-panel-and-logging.md` | `feat/step-18-3-diagnostics-panel` | `feat(tui): implement diagnostics panel and logging` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | System health visibility |
 | Phase 18 | 18.4 | Add sample profile and walkthrough documentation | ⏳ | `phase-18/step-18.4-add-sample-profile-and-walkthrough-documentation.md` | `docs/step-18-4-sample-profile-walkthrough` | `docs(project): add sample profile and walkthrough` | manual + `pnpm check` | yes | yes — `@juicesharp/rpiv-advisor` | Developer onboarding |

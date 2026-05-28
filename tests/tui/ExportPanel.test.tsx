@@ -372,9 +372,7 @@ describe('ExportPanel', () => {
 		);
 
 		const output = lastFrame();
-		expect(output).toContain(
-			'No export formats are currently available',
-		);
+		expect(output).toContain('No export formats are currently available');
 	});
 
 	// ── Action bar ──────────────────────────────────────────────────────

@@ -55,9 +55,7 @@ const FORMAT_LABEL_MAP: Readonly<Record<string, string>> = {
  * Derive export options from availableFormats when exportOptions is
  * absent or empty (legacy compat).
  */
-function deriveExportOptions(
-	panel: ExportPanelModel,
-): Array<{
+function deriveExportOptions(panel: ExportPanelModel): Array<{
 	readonly format: string;
 	readonly label: string;
 	readonly description: string;
@@ -134,9 +132,7 @@ export function ExportPanel({
 								{/* Blocked reason */}
 								{!opt.available && opt.blockedReason !== undefined && (
 									<Box>
-										<Text color="yellow">
-											Blocked: {opt.blockedReason}
-										</Text>
+										<Text color="yellow">Blocked: {opt.blockedReason}</Text>
 									</Box>
 								)}
 							</Box>
@@ -175,9 +171,7 @@ export function ExportPanel({
 			{/* Output path on success */}
 			{panel.outputPath !== undefined && (
 				<Box marginBottom={1}>
-					<Text color="green">
-						Exported to {panel.outputPath}
-					</Text>
+					<Text color="green">Exported to {panel.outputPath}</Text>
 				</Box>
 			)}
 

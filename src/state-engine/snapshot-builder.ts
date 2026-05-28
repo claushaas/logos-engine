@@ -286,20 +286,17 @@ function buildMainPanel(
 
 		const EXPORT_OPTION_DEFS = [
 			{
-				description:
-					'Canonical documentation in portable Markdown format.',
+				description: 'Canonical documentation in portable Markdown format.',
 				format: 'markdown' as const,
 				label: 'Markdown',
 			},
 			{
-				description:
-					'Styled documentation as a standalone HTML artifact.',
+				description: 'Styled documentation as a standalone HTML artifact.',
 				format: 'html' as const,
 				label: 'HTML',
 			},
 			{
-				description:
-					'Portable context package for downstream AI agents.',
+				description: 'Portable context package for downstream AI agents.',
 				format: 'agent_pack' as const,
 				label: 'Agent Pack',
 			},
@@ -340,9 +337,7 @@ function buildMainPanel(
 		});
 
 		// Collect available formats and eligible document IDs.
-		const availableFormatsSet = new Set<
-			'markdown' | 'html' | 'agent_pack'
-		>();
+		const availableFormatsSet = new Set<'markdown' | 'html' | 'agent_pack'>();
 		for (const opt of exportOptions) {
 			if (opt.available) {
 				availableFormatsSet.add(opt.format);
