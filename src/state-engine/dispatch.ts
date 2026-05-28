@@ -26,6 +26,8 @@ import type {
 	NodeRuntimeState,
 	PromptState,
 	SessionEvent,
+	SessionEventPayloadMap,
+	SessionEventType,
 } from '../contracts/index.js';
 import { buildDependencyGraph } from '../profiles/index.js';
 import {
@@ -67,6 +69,31 @@ const DIAG_CANNOT_ANSWER_IN_LIFECYCLE =
 	'LOGOS_DISPATCH_CANNOT_ANSWER_IN_LIFECYCLE';
 const DIAG_ACTIVE_NODE_REMOVED_FROM_PROFILE =
 	'LOGOS_DISPATCH_ACTIVE_NODE_REMOVED_FROM_PROFILE';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Event factory helper
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Construct a `SessionEvent` with the given type, payload, and session.
+ *
+ * Generates a unique event ID and ISO-8601 timestamp. The discriminator
+ * union requires a cast because TypeScript cannot infer the exact member
+ * from a generic `T extends SessionEventType`.
+ */
+function makeSessionEvent<T extends SessionEventType>(
+	sessionId: SessionId,
+	type: T,
+	payload: SessionEventPayloadMap[T],
+): SessionEvent {
+	return {
+		createdAt: nowIso(),
+		id: generateId(),
+		payload,
+		sessionId,
+		type,
+	} as SessionEvent;
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // State patch helper (pure — returns new object)
@@ -279,7 +306,11 @@ function handleCreateSession(
 		diagnostic('LOGOS_DISPATCH_SESSION_CREATED', 'Session created.', 'info'),
 	]);
 
-	return stateOk(newState, snapshot);
+	const event = makeSessionEvent(sessionId, 'SESSION_CREATED', {
+		createdAt: nowIso(),
+	});
+
+	return stateOk(newState, snapshot, [event]);
 }
 
 /**
@@ -321,7 +352,11 @@ function handleSelectProfile(
 
 	const snapshot = buildSnapshot(nextState, profile);
 
-	return stateOk(nextState, snapshot);
+	const sessionEvent = makeSessionEvent(state.sessionId, 'PROFILE_SELECTED', {
+		profileId: event.profileId,
+	});
+
+	return stateOk(nextState, snapshot, [sessionEvent]);
 }
 
 /**
@@ -335,11 +370,24 @@ function handleChangeProfile(
 	event: Extract<LogosEvent, { type: 'CHANGE_PROFILE' }>,
 	profile: LogosProfile,
 ): StateEngineResult {
-	return handleSelectProfile(
+	const previousProfileId = state.selectedProfileId;
+
+	// Delegate to select-profile logic (resets node/document state).
+	const result = handleSelectProfile(
 		state,
 		{ profileId: event.profileId, type: 'SELECT_PROFILE' as const },
 		profile,
 	);
+
+	if (!result.ok) return result;
+
+	// Override the event: a profile change emits PROFILE_CHANGED, not PROFILE_SELECTED.
+	const changeEvent = makeSessionEvent(state.sessionId, 'PROFILE_CHANGED', {
+		newProfileId: event.profileId,
+		previousProfileId,
+	});
+
+	return stateOk(result.state, result.snapshot, [changeEvent]);
 }
 
 /**
@@ -436,7 +484,46 @@ function handleSelectNode(
 
 	const snapshot = buildSnapshot(nextState, profile);
 
-	return stateOk(nextState, snapshot);
+	// Emit NODE_SELECTED.
+	const events: SessionEvent[] = [
+		makeSessionEvent(nextState.sessionId, 'NODE_SELECTED', {
+			nodeId: event.nodeId,
+			previousNodeId: state.activeNodeId,
+		}),
+	];
+
+	// If node lifecycle changed (e.g., blocked ↔ not_started on re-selection),
+	// emit NODE_LIFECYCLE_CHANGED.
+	const prevLifecycle = existing?.lifecycle;
+	if (
+		nextNodeState.lifecycle !== prevLifecycle &&
+		prevLifecycle !== undefined
+	) {
+		events.push(
+			makeSessionEvent(nextState.sessionId, 'NODE_LIFECYCLE_CHANGED', {
+				from: prevLifecycle,
+				nodeId: event.nodeId,
+				to: nextNodeState.lifecycle,
+			}),
+		);
+	}
+
+	// If the node is blocked (first access or re-selection), emit NODE_BLOCKED.
+	const wasBlocked = existing?.lifecycle === 'blocked';
+	if (
+		nextNodeState.lifecycle === 'blocked' &&
+		depState.blockedBy.length > 0 &&
+		!wasBlocked
+	) {
+		events.push(
+			makeSessionEvent(nextState.sessionId, 'NODE_BLOCKED', {
+				blockedBy: depState.blockedBy,
+				nodeId: event.nodeId,
+			}),
+		);
+	}
+
+	return stateOk(nextState, snapshot, events);
 }
 
 /**
@@ -656,6 +743,36 @@ function handleUserMessage(
 	// Recompute document readiness
 	nextState = recomputeAllDocumentReadiness(nextState, profile);
 
+	// Emit events.
+	const events: SessionEvent[] = [
+		makeSessionEvent(nextState.sessionId, 'USER_MESSAGE_ADDED', {
+			content: event.content,
+			messageId,
+			nodeId: targetNodeId,
+		}),
+	];
+
+	// Emit lifecycle change if it changed.
+	if (nextLifecycle !== currentLifecycle) {
+		events.push(
+			makeSessionEvent(nextState.sessionId, 'NODE_LIFECYCLE_CHANGED', {
+				from: currentLifecycle,
+				nodeId: targetNodeId,
+				to: nextLifecycle,
+			}),
+		);
+	}
+
+	// Emit completeness evaluation.
+	if (completeness !== existingNode.completeness) {
+		events.push(
+			makeSessionEvent(nextState.sessionId, 'COMPLETENESS_EVALUATED', {
+				complete: completeness.complete,
+				nodeId: targetNodeId,
+			}),
+		);
+	}
+
 	const snapshot = buildSnapshot(nextState, profile, [
 		diagnostic(
 			'LOGOS_DISPATCH_USER_MESSAGE_ADDED',
@@ -669,7 +786,7 @@ function handleUserMessage(
 		),
 	]);
 
-	return stateOk(nextState, snapshot);
+	return stateOk(nextState, snapshot, events);
 }
 
 /**
@@ -744,6 +861,28 @@ function handleNodeLifecycleChanged(
 		),
 	];
 
+	// Base event: the lifecycle transition itself.
+	const events: SessionEvent[] = [
+		makeSessionEvent(state.sessionId, 'NODE_LIFECYCLE_CHANGED', {
+			from: existingNode.lifecycle,
+			nodeId: targetNodeId,
+			to: nextLifecycle,
+		}),
+	];
+
+	// If transitioning to blocked, emit NODE_BLOCKED.
+	if (
+		nextLifecycle === 'blocked' &&
+		existingNode.dependencies.blockedBy.length > 0
+	) {
+		events.push(
+			makeSessionEvent(state.sessionId, 'NODE_BLOCKED', {
+				blockedBy: existingNode.dependencies.blockedBy,
+				nodeId: targetNodeId,
+			}),
+		);
+	}
+
 	// Mark canonical answer stale if reopening from accepted or synthesized.
 	// Step 10.3: reopening from review (synthesized → active) must also mark
 	// the canonical answer stale, preserving the old draft for audit.
@@ -787,8 +926,16 @@ function handleNodeLifecycleChanged(
 			// marked stale on the next transition.
 		}
 
+		// Emit canonical-answer-marked-stale event.
+		events.push(
+			makeSessionEvent(state.sessionId, 'CANONICAL_ANSWER_MARKED_STALE', {
+				canonicalAnswerId: targetNodeId,
+				nodeId: targetNodeId,
+			}),
+		);
+
 		const snapshot = buildSnapshot(nextState, profile, diags);
-		return stateOk(nextState, snapshot);
+		return stateOk(nextState, snapshot, events);
 	}
 
 	let nextState = patchState(state, {
@@ -801,7 +948,7 @@ function handleNodeLifecycleChanged(
 	nextState = recomputeAllDocumentReadiness(nextState, profile);
 
 	const snapshot = buildSnapshot(nextState, profile, diags);
-	return stateOk(nextState, snapshot);
+	return stateOk(nextState, snapshot, events);
 }
 
 /**
@@ -876,6 +1023,18 @@ function handleDeferNode(
 
 	nextState = recomputeAllDocumentReadiness(nextState, profile);
 
+	// Emit events: NODE_DEFERRED + NODE_LIFECYCLE_CHANGED.
+	const events: SessionEvent[] = [
+		makeSessionEvent(nextState.sessionId, 'NODE_DEFERRED', {
+			nodeId: targetNodeId,
+		}),
+		makeSessionEvent(nextState.sessionId, 'NODE_LIFECYCLE_CHANGED', {
+			from: existingNode.lifecycle,
+			nodeId: targetNodeId,
+			to: 'deferred' as NodeLifecycle,
+		}),
+	];
+
 	const snapshot = buildSnapshot(nextState, profile, [
 		diagnostic(
 			'LOGOS_DISPATCH_NODE_DEFERRED',
@@ -885,7 +1044,7 @@ function handleDeferNode(
 		),
 	]);
 
-	return stateOk(nextState, snapshot);
+	return stateOk(nextState, snapshot, events);
 }
 
 /**
@@ -963,6 +1122,15 @@ function handleResumeNode(
 
 	nextState = recomputeAllDocumentReadiness(nextState, profile);
 
+	// Emit NODE_LIFECYCLE_CHANGED.
+	const events: SessionEvent[] = [
+		makeSessionEvent(nextState.sessionId, 'NODE_LIFECYCLE_CHANGED', {
+			from: existingNode.lifecycle,
+			nodeId: targetNodeId,
+			to: nextLifecycle,
+		}),
+	];
+
 	const snapshot = buildSnapshot(nextState, profile, [
 		diagnostic(
 			'LOGOS_DISPATCH_NODE_RESUMED',
@@ -972,7 +1140,7 @@ function handleResumeNode(
 		),
 	]);
 
-	return stateOk(nextState, snapshot);
+	return stateOk(nextState, snapshot, events);
 }
 
 /**
@@ -1119,7 +1287,12 @@ export function dispatch(
 		'id' in event && 'sessionId' in event && 'createdAt' in event;
 
 	if (isSessionEvent) {
-		return handleSessionEvent(state, event as SessionEvent, profile);
+		const result = handleSessionEvent(state, event as SessionEvent, profile);
+		// Suppress events during replay — replayed events should not be re-logged.
+		if (result.ok && result.events) {
+			return { ...result, events: [] };
+		}
+		return result;
 	}
 
 	const logosEvent = event as LogosEvent;

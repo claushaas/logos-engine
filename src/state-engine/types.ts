@@ -47,6 +47,8 @@ export type StateEngineResult =
 			readonly ok: true;
 			readonly state: LogosRuntimeState;
 			readonly snapshot?: StateEngineSnapshot;
+			/** Session events emitted by this transition (for audit log). */
+			readonly events?: SessionEvent[];
 	  }
 	| {
 			readonly ok: false;
@@ -156,10 +158,13 @@ export type StateEngineSnapshot = {
 export function stateOk(
 	state: LogosRuntimeState,
 	snapshot?: StateEngineSnapshot,
+	events?: SessionEvent[],
 ): StateEngineResult {
-	return snapshot !== undefined
-		? { ok: true as const, snapshot, state }
-		: { ok: true as const, state };
+	const base: StateEngineResult = { ok: true as const, state };
+	if (snapshot !== undefined)
+		(base as Record<string, unknown>).snapshot = snapshot;
+	if (events !== undefined) (base as Record<string, unknown>).events = events;
+	return base;
 }
 
 /**

@@ -9,6 +9,25 @@
  * @see {@link https://logos-engine/docs/architecture/03-module-boundaries.md §12}
  */
 
+export type {
+	CreateEventLogOptions,
+	EventLog,
+	EventLogFs,
+} from './event-log.js';
+export {
+	appendEvent,
+	createEventLog,
+	defaultEventLog,
+	getEvents,
+	getEventsByType,
+} from './event-log.js';
+export type {
+	CreateSnapshotStoreOptions,
+	PersistenceError,
+	SessionSummary,
+	SnapshotFs,
+	SnapshotStore,
+} from './snapshot-store.js';
 export {
 	CURRENT_SCHEMA_VERSION,
 	createAutoSave,
@@ -18,11 +37,4 @@ export {
 	loadSnapshot,
 	registerSignalHandlers,
 	saveSnapshot,
-} from './snapshot-store.js';
-export type {
-	CreateSnapshotStoreOptions,
-	PersistenceError,
-	SessionSummary,
-	SnapshotFs,
-	SnapshotStore,
 } from './snapshot-store.js';

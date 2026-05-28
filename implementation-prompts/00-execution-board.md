@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 13.1 — Implement session snapshot save and load
+Step 13.3 — Implement session resume with validation and repair
 
 ## Status Legend
 
@@ -78,7 +78,7 @@ Step 13.1 — Implement session snapshot save and load
 | Phase 12 | 12.1 | Implement document materializer (accepted answers → Markdown) | ✅ | `phase-12/step-12.1-implement-document-materializer-accepted-answers-to-markdown.md` | `feat/step-12-1-document-materializer` | `feat(materialization): implement document materializer` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Primary output pathway. `materializeDocument` + `previewDocument` implemented; 10 tests passing; completeness counts only fresh accepted sections; stale/missing markers render correctly |
 | Phase 12 | 12.2 | Implement document preview rendering in TUI | ✅ | `phase-12/step-12.2-implement-document-preview-rendering-in-tui.md` | `feat/step-12-2-document-preview` | `feat(tui): implement document preview rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Output inspection surface; checkpoint Phase 12 |
 | Phase 13 | 13.1 | Implement session snapshot save and load | ✅ | `phase-13/step-13.1-implement-session-snapshot-save-and-load.md` | `feat/step-13-1-snapshot-persistence` | `feat(persistence): implement session snapshot save and load` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Enables session continuity |
-| Phase 13 | 13.2 | Implement session event log | ⏳ | `phase-13/step-13.2-implement-session-event-log.md` | `feat/step-13-2-event-log` | `feat(persistence): implement session event log` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Audit trail and replay |
+| Phase 13 | 13.2 | Implement session event log | ✅ | `phase-13/step-13.2-implement-session-event-log.md` | `feat/step-13-2-event-log` | `feat(persistence): implement session event log` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Audit trail and replay |
 | Phase 13 | 13.3 | Implement session resume with validation and repair | ⏳ | `phase-13/step-13.3-implement-session-resume-with-validation-and-repair.md` | `feat/step-13-3-session-resume` | `feat(persistence): implement session resume with validation and repair` | `pnpm typecheck`, `pnpm test`, `pnpm check` | yes | yes — `@juicesharp/rpiv-advisor` | Core user need; checkpoint Phase 13 |
 | Phase 14 | 14.1 | Implement error categorization and diagnostic reporting | ⏳ | `phase-14/step-14.1-implement-error-categorization-and-diagnostic-reporting.md` | `feat/step-14-1-error-categorization` | `feat(diagnostics): implement error categorization and reporting` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Unified error handling |
 | Phase 14 | 14.2 | Implement error mode rendering in TUI | ⏳ | `phase-14/step-14.2-implement-error-mode-rendering-in-tui.md` | `feat/step-14-2-error-rendering` | `feat(tui): implement error mode rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | User-facing error recovery; checkpoint Phase 14 |
