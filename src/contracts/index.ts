@@ -76,6 +76,7 @@ export type {
 	DocumentPreviewPanel,
 	ErrorPanel,
 	ErrorRecoveryAction,
+	ExportOption,
 	ExportPanel,
 	IdlePanel,
 	InputRenderModel,

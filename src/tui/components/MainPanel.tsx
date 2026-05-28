@@ -17,6 +17,7 @@ import { ActionBar } from './ActionBar.js';
 import { ConversationPanel } from './ConversationPanel.js';
 import { DocumentPreview } from './DocumentPreview.js';
 import { ErrorPanel } from './ErrorPanel.js';
+import { ExportPanel } from './ExportPanel.js';
 
 // ─── MainPanel props ────────────────────────────────────────────────────────
 
@@ -146,28 +147,13 @@ export function MainPanel({
 
 		case 'export':
 			return (
-				<Box flexDirection="column" flexGrow={1} paddingX={2}>
-					<Box marginBottom={1}>
-						<Text bold={true}>Export</Text>
-					</Box>
-					<Box marginBottom={1}>
-						<Text>
-							Available formats: {mainPanel.availableFormats.join(', ')}
-						</Text>
-					</Box>
-					{mainPanel.generatedArtifacts.length > 0 && (
-						<Box flexDirection="column" marginBottom={1}>
-							<Text bold={true}>Generated artifacts:</Text>
-							{mainPanel.generatedArtifacts.map((a) => (
-								<Box key={a.id}>
-									<Text>
-										{a.type} - {a.path} {a.stale ? '(stale)' : ''}
-									</Text>
-								</Box>
-							))}
-						</Box>
-					)}
-				</Box>
+				<ExportPanel
+					actionBar={actionBar}
+					focusedActionIndex={focusedActionIndex}
+					focusedRegion={focusedRegion}
+					input={input}
+					panel={mainPanel}
+				/>
 			);
 
 		// ── Settings ─────────────────────────────────────────────────────

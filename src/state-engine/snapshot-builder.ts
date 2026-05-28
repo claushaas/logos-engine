@@ -13,6 +13,7 @@
 import type {
 	DocumentRuntimeState,
 	ErrorPanel,
+	ExportOption,
 	LogosProfile,
 	LogosRuntimeState,
 	MainPanelRenderModel,
@@ -27,6 +28,7 @@ import type {
 } from '../contracts/index.js';
 import type { DocumentId, NodeId } from '../shared/index.js';
 import { getAllowedActions } from './allowed-actions.js';
+import { computeDocumentReadiness } from './document-readiness.js';
 import { resolveSessionModeWithDiagnostics } from './session-mode.js';
 import type { StateDiagnostic, StateEngineSnapshot } from './types.js';
 
@@ -280,10 +282,88 @@ function buildMainPanel(
 	}
 
 	if (mode.mode === 'export') {
+		// ── Compute export availability per format ─────────────────────
+
+		const EXPORT_OPTION_DEFS = [
+			{
+				description:
+					'Canonical documentation in portable Markdown format.',
+				format: 'markdown' as const,
+				label: 'Markdown',
+			},
+			{
+				description:
+					'Styled documentation as a standalone HTML artifact.',
+				format: 'html' as const,
+				label: 'HTML',
+			},
+			{
+				description:
+					'Portable context package for downstream AI agents.',
+				format: 'agent_pack' as const,
+				label: 'Agent Pack',
+			},
+		] as const;
+
+		// Collect all documents from the profile.
+		const allDocIds = profile.documents.map((d) => d.id);
+		const readyDocIds: DocumentId[] = [];
+
+		for (const docId of allDocIds) {
+			const readiness = computeDocumentReadiness(docId, state, profile);
+			if (
+				readiness.status === 'ready' ||
+				readiness.status === 'drafted' ||
+				readiness.status === 'accepted'
+			) {
+				readyDocIds.push(docId);
+			}
+		}
+
+		// All formats share the same gate: at least one document ready.
+		const anyDocAvailable = readyDocIds.length > 0;
+
+		const exportOptions: ExportOption[] = EXPORT_OPTION_DEFS.map((def) => {
+			const entry: ExportOption = {
+				available: anyDocAvailable,
+				description: def.description,
+				format: def.format,
+				label: def.label,
+			};
+
+			if (!anyDocAvailable) {
+				(entry as { blockedReason?: string }).blockedReason =
+					'No documents are ready for export. Complete at least one document.';
+			}
+
+			return entry;
+		});
+
+		// Collect available formats and eligible document IDs.
+		const availableFormatsSet = new Set<
+			'markdown' | 'html' | 'agent_pack'
+		>();
+		for (const opt of exportOptions) {
+			if (opt.available) {
+				availableFormatsSet.add(opt.format);
+			}
+		}
+
+		// Gather generated artifacts from export state.
+		const generatedArtifacts = (state.exportState?.artifacts ?? []).map(
+			(a) => ({
+				id: a.id,
+				path: a.path,
+				stale: a.stale,
+				type: a.type,
+			}),
+		);
+
 		return {
-			availableFormats: ['markdown', 'html', 'agent_pack'],
-			eligibleDocumentIds: [],
-			generatedArtifacts: [],
+			availableFormats: [...availableFormatsSet],
+			eligibleDocumentIds: readyDocIds,
+			exportOptions,
+			generatedArtifacts,
 			kind: 'export',
 		} as MainPanelRenderModel;
 	}

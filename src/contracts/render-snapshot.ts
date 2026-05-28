@@ -205,6 +205,29 @@ export type DocumentPreviewPanel = {
 };
 
 /**
+ * A single export option rendered in the export panel.
+ *
+ * Each option describes one output format with its availability
+ * status and a human-readable blocked reason when unavailable.
+ */
+export type ExportOption = {
+	/** Export format. */
+	readonly format: 'markdown' | 'html' | 'agent_pack';
+
+	/** Human-readable label (e.g., "Markdown"). */
+	readonly label: string;
+
+	/** Short description of the output format. */
+	readonly description: string;
+
+	/** Whether the format is currently available for export. */
+	readonly available: boolean;
+
+	/** Human-readable reason when `available === false`. */
+	readonly blockedReason?: string;
+};
+
+/**
  * Panel shown when the export surface is active.
  */
 export type ExportPanel = {
@@ -223,6 +246,12 @@ export type ExportPanel = {
 		readonly path: string;
 		readonly stale: boolean;
 	}>;
+
+	/** Per-format export options for rendering the export list. */
+	readonly exportOptions?: ExportOption[];
+
+	/** Output path shown after a successful export, or `undefined`. */
+	readonly outputPath?: string;
 };
 
 /**

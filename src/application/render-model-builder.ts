@@ -369,6 +369,68 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 		return { actions };
 	}
 
+	// ── Export mode: per-format export actions + close ─────────────────
+
+	if (snapshot.mode === 'export' && snapshot.mainPanel.kind === 'export') {
+		let exportOptions = snapshot.mainPanel.exportOptions;
+
+		// Fallback for legacy ExportPanel without exportOptions:
+		// derive default options from availableFormats.
+		if (exportOptions === undefined) {
+			const FORMAT_LABEL_MAP: Readonly<Record<string, string>> = {
+				agent_pack: 'Agent Pack',
+				html: 'HTML',
+				markdown: 'Markdown',
+			};
+
+			const allFormats = [
+				'markdown' as const,
+				'html' as const,
+				'agent_pack' as const,
+			];
+
+			exportOptions = allFormats.map((format) => {
+				const available =
+					snapshot.mainPanel.kind === 'export' &&
+					snapshot.mainPanel.availableFormats.includes(format);
+
+				return {
+					available,
+					description: '',
+					format,
+					label: FORMAT_LABEL_MAP[format] ?? format,
+				};
+			});
+		}
+
+		for (const opt of exportOptions) {
+			const actionId = `export_${opt.format}`;
+			const base = {
+				enabled: opt.available,
+				id: actionId,
+				label: `[Export ${opt.label}]`,
+			};
+
+			if (!opt.available && opt.blockedReason !== undefined) {
+				const withReason: ActionBarRenderAction = {
+					...base,
+					reasonIfDisabled: opt.blockedReason,
+				};
+				actions.push(withReason);
+			} else {
+				actions.push(base);
+			}
+		}
+
+		actions.push({
+			enabled: true,
+			id: 'close_export',
+			label: '[Close]',
+		});
+
+		return { actions };
+	}
+
 	// ── Error mode: map recovery actions to buttons ─────────────────────
 
 	if (snapshot.mode === 'error' && snapshot.mainPanel.kind === 'error') {
