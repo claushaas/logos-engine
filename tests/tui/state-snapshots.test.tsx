@@ -19,21 +19,15 @@ import { describe, expect, it } from 'vitest';
 import type {
 	DocumentId,
 	DocumentPreviewPanel,
-	ErrorPanel,
-	ErrorRecoveryAction,
 	ExportOption,
 	ExportPanel,
 	IdlePanel,
 	NodeConversationPanel,
 	ProfilePanel,
-	SessionMode,
 	TuiRenderSnapshot,
 } from '../../src/contracts/index.js';
 import type { NodeId } from '../../src/shared/index.js';
-import {
-	AppShell,
-	TuiApplicationProvider,
-} from '../../src/tui/index.js';
+import { AppShell, TuiApplicationProvider } from '../../src/tui/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Render helper
@@ -77,7 +71,11 @@ function sidebarNode(
 	nodeId: string,
 	title: string,
 	statusSymbol: string,
-	overrides: { selected?: boolean; disabled?: boolean; reasonIfDisabled?: string } = {},
+	overrides: {
+		selected?: boolean;
+		disabled?: boolean;
+		reasonIfDisabled?: string;
+	} = {},
 ) {
 	return {
 		disabled: overrides.disabled ?? false,
@@ -119,7 +117,15 @@ function minimalSidebar(
 /**
  * Create action bar items from a list of id/label pairs.
  */
-function actionBar(...actions: Array<{ id: string; label: string; enabled?: boolean; nodeAction?: string; reasonIfDisabled?: string }>) {
+function actionBar(
+	...actions: Array<{
+		id: string;
+		label: string;
+		enabled?: boolean;
+		nodeAction?: string;
+		reasonIfDisabled?: string;
+	}>
+) {
 	return {
 		actions: actions.map((a) => ({
 			enabled: a.enabled ?? true,
@@ -159,7 +165,10 @@ const structureOverviewSnapshot: TuiRenderSnapshot = {
 		{ id: 'change_profile', label: '[Change Profile]' },
 	),
 	diagnostics: [],
-	input: { enabled: false, reasonIfDisabled: 'Select a node from the sidebar.' },
+	input: {
+		enabled: false,
+		reasonIfDisabled: 'Select a node from the sidebar.',
+	},
 	mainPanel: {
 		availableProfileIds: ['startup'],
 		kind: 'profile',
@@ -185,17 +194,26 @@ const notStartedSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
 		{ id: 'answer', label: '[Answer]', nodeAction: 'answer' },
 		{ id: 'skip', label: '[Skip]', nodeAction: 'skip' },
-		{ id: 'ask_for_example', label: '[Ask for example]', nodeAction: 'ask_for_example' },
+		{
+			id: 'ask_for_example',
+			label: '[Ask for example]',
+			nodeAction: 'ask_for_example',
+		},
 	),
 	diagnostics: [],
-	input: { enabled: true, placeholder: 'Type your answer…', submitAction: 'answer' },
+	input: {
+		enabled: true,
+		placeholder: 'Type your answer…',
+		submitAction: 'answer',
+	},
 	mainPanel: nodeConversationPanel({
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerPreview: null,
 		lifecycle: 'not_started',
 		messages: [
 			{
-				content: 'What conviction makes this project necessary? What truth about the world drives the decision to build this?',
+				content:
+					'What conviction makes this project necessary? What truth about the world drives the decision to build this?',
 				createdAt: '2025-01-01T00:00:00.000Z',
 				id: 'msg-1',
 				role: 'assistant',
@@ -219,24 +237,38 @@ const activeSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
 		{ id: 'answer', label: '[Answer]', nodeAction: 'answer' },
 		{ id: 'defer', label: '[Defer]', nodeAction: 'defer' },
-		{ id: 'mark_as_assumption', label: '[Mark as Assumption]', nodeAction: 'mark_as_assumption' },
-		{ id: 'mark_as_decision', label: '[Mark as Decision]', nodeAction: 'mark_as_decision' },
+		{
+			id: 'mark_as_assumption',
+			label: '[Mark as Assumption]',
+			nodeAction: 'mark_as_assumption',
+		},
+		{
+			id: 'mark_as_decision',
+			label: '[Mark as Decision]',
+			nodeAction: 'mark_as_decision',
+		},
 	),
 	diagnostics: [],
-	input: { enabled: true, placeholder: 'Type your answer…', submitAction: 'answer' },
+	input: {
+		enabled: true,
+		placeholder: 'Type your answer…',
+		submitAction: 'answer',
+	},
 	mainPanel: nodeConversationPanel({
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerPreview: null,
 		lifecycle: 'active',
 		messages: [
 			{
-				content: 'We believe the current hiring process filters for credentials instead of competence. The world is shifting toward skill-based evaluation but tools haven\'t caught up.',
+				content:
+					"We believe the current hiring process filters for credentials instead of competence. The world is shifting toward skill-based evaluation but tools haven't caught up.",
 				createdAt: '2025-01-01T00:01:00.000Z',
 				id: 'msg-user',
 				role: 'user',
 			},
 			{
-				content: 'That\'s a clear conviction. Is the tension primarily that hiring is slow, that it\'s unfair, or that it produces bad outcomes?',
+				content:
+					"That's a clear conviction. Is the tension primarily that hiring is slow, that it's unfair, or that it produces bad outcomes?",
 				createdAt: '2025-01-01T00:02:00.000Z',
 				id: 'msg-agent',
 				role: 'assistant',
@@ -260,23 +292,32 @@ const needsClarificationSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
 		{ id: 'answer', label: '[Answer]', nodeAction: 'answer' },
 		{ id: 'defer', label: '[Defer]', nodeAction: 'defer' },
-		{ id: 'open_prerequisite', label: '[Open Prerequisite]', nodeAction: 'open_prerequisite' },
+		{
+			id: 'open_prerequisite',
+			label: '[Open Prerequisite]',
+			nodeAction: 'open_prerequisite',
+		},
 	),
 	diagnostics: [],
-	input: { enabled: true, placeholder: 'Type your answer…', submitAction: 'answer' },
+	input: {
+		enabled: true,
+		placeholder: 'Type your answer…',
+		submitAction: 'answer',
+	},
 	mainPanel: nodeConversationPanel({
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerPreview: null,
 		lifecycle: 'needs_clarification',
 		messages: [
 			{
-				content: 'You mentioned the product is for "everyone" but also mentioned "technical teams." These point in different directions.',
+				content:
+					'You mentioned the product is for "everyone" but also mentioned "technical teams." These point in different directions.',
 				createdAt: '2025-01-01T00:02:00.000Z',
 				id: 'msg-agent',
 				role: 'assistant',
 			},
 			{
-				content: 'Who is the primary user you\'re building for first?',
+				content: "Who is the primary user you're building for first?",
 				createdAt: '2025-01-01T00:03:00.000Z',
 				id: 'msg-agent-2',
 				role: 'assistant',
@@ -299,23 +340,33 @@ const needsRefinementSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
 		{ id: 'answer', label: '[Answer]', nodeAction: 'answer' },
 		{ id: 'defer', label: '[Defer]', nodeAction: 'defer' },
-		{ id: 'ask_for_example', label: '[Ask for example]', nodeAction: 'ask_for_example' },
+		{
+			id: 'ask_for_example',
+			label: '[Ask for example]',
+			nodeAction: 'ask_for_example',
+		},
 	),
 	diagnostics: [],
-	input: { enabled: true, placeholder: 'Type your answer…', submitAction: 'answer' },
+	input: {
+		enabled: true,
+		placeholder: 'Type your answer…',
+		submitAction: 'answer',
+	},
 	mainPanel: nodeConversationPanel({
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerPreview: null,
 		lifecycle: 'needs_refinement',
 		messages: [
 			{
-				content: 'Your thesis is clear but could apply to any startup. What makes this conviction specific to your project?',
+				content:
+					'Your thesis is clear but could apply to any startup. What makes this conviction specific to your project?',
 				createdAt: '2025-01-01T00:03:00.000Z',
 				id: 'msg-agent',
 				role: 'assistant',
 			},
 			{
-				content: 'For example, is there a personal experience, a dataset, or a market shift that only you\'ve observed?',
+				content:
+					"For example, is there a personal experience, a dataset, or a market shift that only you've observed?",
 				createdAt: '2025-01-01T00:04:00.000Z',
 				id: 'msg-agent-2',
 				role: 'assistant',
@@ -343,12 +394,16 @@ const synthesizedSnapshot: TuiRenderSnapshot = {
 		{ id: 'reopen', label: '[Reopen]', nodeAction: 'reopen' },
 	),
 	diagnostics: [],
-	input: { enabled: false, reasonIfDisabled: 'Review the draft answer before providing input.' },
+	input: {
+		enabled: false,
+		reasonIfDisabled: 'Review the draft answer before providing input.',
+	},
 	mainPanel: nodeConversationPanel({
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerAccepted: false,
 		canonicalAnswerConfidence: 'medium',
-		canonicalAnswerPreview: 'The hiring industry evaluates credentials over competence and pedigree over demonstrated ability. As work becomes more project-based and remote, skill verification is the bottleneck. This project exists to make skill-based evaluation the default.',
+		canonicalAnswerPreview:
+			'The hiring industry evaluates credentials over competence and pedigree over demonstrated ability. As work becomes more project-based and remote, skill verification is the bottleneck. This project exists to make skill-based evaluation the default.',
 		canonicalAnswerSourceMessageCount: 8,
 		canonicalAnswerStale: false,
 		lifecycle: 'synthesized',
@@ -383,7 +438,11 @@ const acceptedSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
 		{ id: 'continue_next', label: '[Continue →]', nodeAction: 'continue_next' },
 		{ id: 'reopen', label: '[Reopen]', nodeAction: 'reopen' },
-		{ id: 'open_document_preview', label: '[Preview Document]', nodeAction: 'open_document_preview' },
+		{
+			id: 'open_document_preview',
+			label: '[Preview Document]',
+			nodeAction: 'open_document_preview',
+		},
 	),
 	diagnostics: [],
 	input: { enabled: false },
@@ -391,7 +450,8 @@ const acceptedSnapshot: TuiRenderSnapshot = {
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerAccepted: true,
 		canonicalAnswerConfidence: 'medium',
-		canonicalAnswerPreview: 'The hiring industry evaluates credentials over competence. As work becomes more project-based and remote, skill verification is the bottleneck. This project exists to make skill-based evaluation the default.',
+		canonicalAnswerPreview:
+			'The hiring industry evaluates credentials over competence. As work becomes more project-based and remote, skill verification is the bottleneck. This project exists to make skill-based evaluation the default.',
 		canonicalAnswerSourceMessageCount: 8,
 		canonicalAnswerStale: false,
 		lifecycle: 'accepted',
@@ -441,7 +501,8 @@ const deferredSnapshot: TuiRenderSnapshot = {
 		lifecycle: 'deferred',
 		messages: [
 			{
-				content: 'This node has been deferred. You can resume it when ready, or continue with other nodes.',
+				content:
+					'This node has been deferred. You can resume it when ready, or continue with other nodes.',
 				createdAt: '2025-01-01T00:05:00.000Z',
 				id: 'msg-deferred',
 				role: 'assistant',
@@ -462,7 +523,11 @@ const deferredSnapshot: TuiRenderSnapshot = {
 
 const blockedSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
-		{ id: 'open_prerequisite', label: '[Open Prerequisite]', nodeAction: 'open_prerequisite' },
+		{
+			id: 'open_prerequisite',
+			label: '[Open Prerequisite]',
+			nodeAction: 'open_prerequisite',
+		},
 		{ id: 'defer', label: '[Defer]', nodeAction: 'defer' },
 	),
 	diagnostics: [],
@@ -473,7 +538,8 @@ const blockedSnapshot: TuiRenderSnapshot = {
 		lifecycle: 'blocked',
 		messages: [
 			{
-				content: 'This node depends on your Core Thesis, which must be accepted first. The assumptions you make here need a clear thesis as context.',
+				content:
+					'This node depends on your Core Thesis, which must be accepted first. The assumptions you make here need a clear thesis as context.',
 				createdAt: '2025-01-01T00:00:00.000Z',
 				id: 'msg-blocked',
 				role: 'assistant',
@@ -484,7 +550,11 @@ const blockedSnapshot: TuiRenderSnapshot = {
 	mode: 'node_focus',
 	sidebar: minimalSidebar('n2' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '✓'),
-		sidebarNode('n2', 'Core Assumptions', '⚠', { selected: true, disabled: true, reasonIfDisabled: 'Blocked by prerequisite.' }),
+		sidebarNode('n2', 'Core Assumptions', '⚠', {
+			disabled: true,
+			reasonIfDisabled: 'Blocked by prerequisite.',
+			selected: true,
+		}),
 	]),
 };
 
@@ -495,11 +565,20 @@ const blockedSnapshot: TuiRenderSnapshot = {
 const documentPreviewSnapshot: TuiRenderSnapshot = {
 	actionBar: actionBar(
 		{ id: 'regenerate_document', label: '[Regenerate]' },
-		{ id: 'export_document', label: '[Export]', enabled: false, reasonIfDisabled: 'Not all required sections accepted.' },
+		{
+			enabled: false,
+			id: 'export_document',
+			label: '[Export]',
+			reasonIfDisabled: 'Not all required sections accepted.',
+		},
 		{ id: 'close_document_preview', label: '[Close]' },
 	),
 	diagnostics: [],
-	input: { enabled: false, reasonIfDisabled: 'Text input is not available while previewing a document.' },
+	input: {
+		enabled: false,
+		reasonIfDisabled:
+			'Text input is not available while previewing a document.',
+	},
 	mainPanel: {
 		content: [
 			'# Foundation Thesis',
@@ -564,7 +643,12 @@ const exportSnapshot: TuiRenderSnapshot = {
 		actions: [
 			{ enabled: true, id: 'export_markdown', label: '[Export Markdown]' },
 			{ enabled: true, id: 'export_html', label: '[Export HTML]' },
-			{ enabled: false, id: 'export_agent_pack', label: '[Export Agent Pack]', reasonIfDisabled: 'Blocked: Product Phase missing 4/6 required nodes.' },
+			{
+				enabled: false,
+				id: 'export_agent_pack',
+				label: '[Export Agent Pack]',
+				reasonIfDisabled: 'Blocked: Product Phase missing 4/6 required nodes.',
+			},
 			{ enabled: true, id: 'close_export', label: '[Close]' },
 		],
 	},
@@ -586,9 +670,7 @@ const exportSnapshot: TuiRenderSnapshot = {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const settingsSnapshot: TuiRenderSnapshot = {
-	actionBar: actionBar(
-		{ id: 'close_settings', label: '[Close]' },
-	),
+	actionBar: actionBar({ id: 'close_settings', label: '[Close]' }),
 	diagnostics: [],
 	input: { enabled: false },
 	mainPanel: { kind: 'settings' },
@@ -711,7 +793,9 @@ describe('State 3.3 — Not Started', () => {
 
 	it('renders initial agent question', () => {
 		const { lastFrame } = renderShell(notStartedSnapshot);
-		expect(lastFrame()).toContain('What conviction makes this project necessary?');
+		expect(lastFrame()).toContain(
+			'What conviction makes this project necessary?',
+		);
 	});
 
 	it('shows enabled input with placeholder', () => {
@@ -756,7 +840,7 @@ describe('State 3.4 — Active / In Progress', () => {
 
 	it('renders latest agent message prominently', () => {
 		const { lastFrame } = renderShell(activeSnapshot);
-		expect(lastFrame()).toContain('That\'s a clear conviction');
+		expect(lastFrame()).toContain("That's a clear conviction");
 	});
 
 	it('shows correct actions: Answer, Defer, Mark as Assumption, Mark as Decision', () => {
