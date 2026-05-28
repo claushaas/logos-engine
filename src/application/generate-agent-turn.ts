@@ -18,8 +18,13 @@ import {
 import type { PromptRegistry } from '../prompt-orchestration/prompt-registry.js';
 import { selectPrompt } from '../prompt-orchestration/prompt-selector.js';
 import type { NodeId } from '../shared/index.js';
+import { isErr } from '../shared/index.js';
 import { getAllowedActions } from '../state-engine/allowed-actions.js';
 import { validateAgentTurnOutput } from '../validation/agent-turn-validator.js';
+import {
+	buildNextRepairAttempt,
+	DEFAULT_REPAIR_ATTEMPT_LIMIT,
+} from '../validation/repair-prompt.js';
 import { applyAgentTurn } from './apply-agent-turn.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -140,36 +145,83 @@ export async function generateAgentTurn(
 		},
 	};
 
-	// ── 4. Call LLM ─────────────────────────────────────────────────
-	let output: AgentTurnOutput;
-	try {
-		output = await llmProvider.generateStructuredOutput(enrichedRequest);
-	} catch (e) {
-		return {
-			error: `LLM provider failed: ${e instanceof Error ? e.message : String(e)}`,
-			ok: false as const,
-		};
+	// ── 4–5. Call LLM with repair loop ─────────────────────────────
+	//
+	// Pipeline:
+	//   a. Call the provider with the assembled request.
+	//   b. Validate the output against the AgentTurnOutput contract.
+	//   c. If valid → break out of the loop and apply the turn.
+	//   d. If invalid → build a repair request with `buildNextRepairAttempt`.
+	//   e. Call the provider again with the repair request.
+	//   f. After `DEFAULT_REPAIR_ATTEMPT_LIMIT` failures, return a
+	//      recoverable error.
+	//
+	// No invalid assistant messages are appended and no state is
+	// mutated until a valid output is available.
+
+	const maxRepairAttempts = DEFAULT_REPAIR_ATTEMPT_LIMIT;
+	let currentRequest = enrichedRequest;
+	let attemptsUsed = 0;
+	let validOutput: AgentTurnOutput | null = null;
+
+	while (attemptsUsed <= maxRepairAttempts) {
+		let output: AgentTurnOutput;
+		try {
+			output = await llmProvider.generateStructuredOutput(currentRequest);
+		} catch (e) {
+			return {
+				error: `LLM provider failed: ${e instanceof Error ? e.message : String(e)}`,
+				ok: false as const,
+			};
+		}
+
+		// ── Validate the output ────────────────────────────────────
+		const validationResult = validateAgentTurnOutput(output, {
+			currentLifecycle: nodeState.lifecycle,
+		});
+
+		if (validationResult.ok) {
+			// Valid output — exit the repair loop.
+			validOutput = validationResult.value;
+			break;
+		}
+
+		// ── Validation failed — attempt repair ────────────────────
+		const repairResult = buildNextRepairAttempt(
+			enrichedRequest,
+			validationResult.error,
+			attemptsUsed,
+			maxRepairAttempts,
+		);
+
+		if (isErr(repairResult)) {
+			// All repair attempts exhausted — return a recoverable error.
+			// No state has been mutated and no invalid assistant messages
+			// have been appended.
+			return {
+				error: repairResult.error.message,
+				ok: false as const,
+			};
+		}
+
+		// Prepare the next repair attempt.
+		currentRequest = repairResult.value.request;
+		attemptsUsed = repairResult.value.attempt;
 	}
 
-	// ── 5. Validate ─────────────────────────────────────────────────
-	const validationResult = validateAgentTurnOutput(output, {
-		currentLifecycle: nodeState.lifecycle,
-	});
-	if (!validationResult.ok) {
+	// ── Defence: the loop should always exit via `break` or `return`,
+	//    but guard against an impossible path. ────────────────────────
+	if (validOutput === null) {
 		return {
-			error: `LLM output validation failed: ${validationResult.error.map((e) => e.message).join('; ')}`,
+			error:
+				'LLM output validation failed after exhausting all repair attempts (unexpected code path).',
 			ok: false as const,
 		};
 	}
 
 	// ── 6. Apply agent turn (full pipeline — lifecycle transitions
 	//    are allowed here, unlike the initial question case) ─────────
-	const applyResult = applyAgentTurn(
-		state,
-		nodeId,
-		validationResult.value,
-		profile,
-	);
+	const applyResult = applyAgentTurn(state, nodeId, validOutput, profile);
 
 	if (!applyResult.ok) {
 		return {

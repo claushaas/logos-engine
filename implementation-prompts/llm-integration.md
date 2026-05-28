@@ -1,4 +1,4 @@
-Implemente exatamente a etapa LLM-09 - Prompt Context Redaction descrita em
+Implemente exatamente a etapa LLM-11 - Manual Live Smoke Test descrita em
 docs/15-real-llm-implementation-roadmap.md.
 
 Escopo:
