@@ -16,6 +16,14 @@ export {
 	LlmConfig,
 	type LlmConfigData,
 	loadLlmConfig,
+	type ProviderConfig,
+	type ProviderConfigOptions,
+	type ProviderId,
+	type ProviderMode,
+	resolveApiKey,
+	resolveProviderConfig,
+	type SafeProviderConfig,
+	toSafeProviderConfig,
 	validateLlmConfig,
 } from './config.js';
 

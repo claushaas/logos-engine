@@ -1,4 +1,4 @@
-Implemente exatamente a etapa LLM-01 - Provider Configuration Model descrita em
+Implemente exatamente a etapa LLM-02 - AgentTurnOutput JSON Schema descrita em
 docs/15-real-llm-implementation-roadmap.md.
 
 Escopo:
