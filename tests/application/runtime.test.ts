@@ -380,3 +380,138 @@ describe('createApplicationRuntime', () => {
 		runtime.dispose();
 	});
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Provider selection (LLM-05)
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('createApplicationRuntime — provider selection', () => {
+	let tmp: string;
+
+	beforeEach(() => {
+		tmp = tempDir();
+		// Clear provider-related env to avoid leakage.
+		delete process.env.LOGOS_LLM_PROVIDER;
+		delete process.env.LOGOS_LLM_API_KEY;
+		delete process.env.LOGOS_LLM_MODEL;
+		delete process.env.LOGOS_USE_MOCK_LLM;
+		delete process.env.LOGOS_LLM_TOKEN_ENV;
+		process.env.LOGOS_ENV_FILE = '/tmp/logos-nonexistent-env-file.env';
+	});
+
+	afterEach(() => {
+		cleanup(tmp);
+		delete process.env.LOGOS_ENV_FILE;
+	});
+
+	it('useMockLlm: true selects mock provider and reports mode "mock"', async () => {
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+			useMockLlm: true,
+		});
+
+		expect(runtime.providerMode).toBe('mock');
+		runtime.dispose();
+	});
+
+	it('default (no flags) selects mock provider and reports mode "mock"', async () => {
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+		});
+
+		expect(runtime.providerMode).toBe('mock');
+		runtime.dispose();
+	});
+
+	it('injected llmProvider overrides all other resolution', async () => {
+		const mock = new (
+			await import('../../src/llm/mock-provider.js')
+		).MockLlmProvider();
+
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+			llmProvider: mock,
+			useMockLlm: false,
+		});
+
+		expect(runtime.providerMode).toBe('injected');
+		runtime.dispose();
+	});
+
+	it('injected llmProvider takes priority even when useMockLlm is true', async () => {
+		const { MockLlmProvider } = await import('../../src/llm/mock-provider.js');
+		const mock = new MockLlmProvider();
+
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+			llmProvider: mock,
+			useMockLlm: true,
+		});
+
+		expect(runtime.providerMode).toBe('injected');
+		runtime.dispose();
+	});
+
+	it('real provider configured via env selects mode "real"', async () => {
+		process.env.LOGOS_LLM_PROVIDER = 'openai-compatible';
+		process.env.LOGOS_LLM_API_KEY = 'sk-test';
+
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+		});
+
+		expect(runtime.providerMode).toBe('real');
+		runtime.dispose();
+	});
+
+	it('unconfigured real provider reports mode "unconfigured" and sets diagnostic', async () => {
+		process.env.LOGOS_LLM_PROVIDER = 'openai-compatible';
+		// No LOGOS_LLM_API_KEY set.
+
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+		});
+
+		expect(runtime.providerMode).toBe('unconfigured');
+
+		// The idle snapshot should include a provider-unconfigured diagnostic.
+		const snapshot = runtime.getSnapshot();
+		expect(snapshot.mode).toBe('idle');
+		expect(
+			snapshot.diagnostics.some((d) => d.code === 'LLM_PROVIDER_UNCONFIGURED'),
+		).toBe(true);
+
+		runtime.dispose();
+	});
+
+	it('LOGOS_USE_MOCK_LLM=true overrides LOGOS_LLM_PROVIDER', async () => {
+		process.env.LOGOS_LLM_PROVIDER = 'openai-compatible';
+		process.env.LOGOS_LLM_API_KEY = 'sk-test';
+		process.env.LOGOS_USE_MOCK_LLM = 'true';
+
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+		});
+
+		expect(runtime.providerMode).toBe('mock');
+		runtime.dispose();
+	});
+
+	it('providerConfig option bypasses env resolution', async () => {
+		// Set env to real, but pass explicit mock config.
+		process.env.LOGOS_LLM_PROVIDER = 'openai-compatible';
+		process.env.LOGOS_LLM_API_KEY = 'sk-test';
+
+		const { resolveProviderConfig } = await import('../../src/llm/config.js');
+		const mockConfig = resolveProviderConfig({ useMock: true });
+
+		const runtime = await createApplicationRuntime({
+			dataDir: tmp,
+			providerConfig: mockConfig,
+		});
+
+		// The config says 'mock', so the runtime should use mock.
+		expect(runtime.providerMode).toBe('mock');
+		runtime.dispose();
+	});
+});

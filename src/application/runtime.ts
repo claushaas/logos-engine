@@ -20,8 +20,12 @@ import type {
 	LogosRuntimeState,
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
-import type { LlmProvider } from '../llm/index.js';
-import { MockLlmProvider } from '../llm/index.js';
+import type { LlmProvider, ProviderConfig } from '../llm/index.js';
+import {
+	MockLlmProvider,
+	OpenAiCompatibleLlmProvider,
+	resolveProviderConfig,
+} from '../llm/index.js';
 import { exportMarkdown } from '../outputs/index.js';
 import { resumeSessionWithDiagnostics } from '../persistence/session-resume.js';
 import type { SnapshotStore } from '../persistence/snapshot-store.js';
@@ -101,7 +105,10 @@ export type CreateRuntimeOptions = {
 	/** Use mock LLM provider instead of a real one. */
 	readonly useMockLlm?: boolean;
 
-	/** Optional custom LLM provider (overrides mock flag). */
+	/** Provider configuration for real provider selection. */
+	readonly providerConfig?: ProviderConfig;
+
+	/** Optional custom LLM provider (overrides all other resolution). */
 	readonly llmProvider?: LlmProvider;
 
 	/** Snapshot store (for injection; defaults to `createSnapshotStore`). */
@@ -132,6 +139,9 @@ export type ApplicationRuntime = {
 
 	/** Cleanup resources (signal handlers, subscriptions). */
 	readonly dispose: () => void;
+
+	/** Resolved provider operation mode: 'mock', 'real', or 'unconfigured'. */
+	readonly providerMode: string;
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -140,8 +150,26 @@ export type ApplicationRuntime = {
 
 /**
  * Build a minimal idle render snapshot for the initial (no profile) screen.
+ *
+ * When the provider mode is `unconfigured`, a diagnostic is included so
+ * the TUI can show actionable guidance before any node turn is attempted.
  */
-function buildIdleSnapshot(hasAvailableSessions: boolean): TuiRenderSnapshot {
+function buildIdleSnapshot(
+	hasAvailableSessions: boolean,
+	providerMode = 'mock',
+): TuiRenderSnapshot {
+	const diagnostics: TuiRenderSnapshot['diagnostics'] = [];
+
+	if (providerMode === 'unconfigured') {
+		diagnostics.push({
+			code: 'LLM_PROVIDER_UNCONFIGURED',
+			message:
+				'Real LLM provider was requested but is unconfigured. ' +
+				'Set the required API token environment variable or use --mock for deterministic mode.',
+			severity: 'warning',
+		});
+	}
+
 	return {
 		actionBar: {
 			actions: [
@@ -161,7 +189,7 @@ function buildIdleSnapshot(hasAvailableSessions: boolean): TuiRenderSnapshot {
 					: []),
 			],
 		},
-		diagnostics: [],
+		diagnostics,
 		input: {
 			enabled: false,
 			reasonIfDisabled: 'Select a profile to begin.',
@@ -200,13 +228,41 @@ export async function createApplicationRuntime(
 
 	// ── Resolve LLM provider ─────────────────────────────────────────
 	let llmProvider: LlmProvider;
+	let providerMode: string;
+
 	if (options.llmProvider) {
+		// Explicit injection (tests, custom providers) — highest priority.
 		llmProvider = options.llmProvider;
+		providerMode = 'injected';
 	} else if (options.useMockLlm) {
+		// Explicit mock mode (--mock flag or LOGOS_USE_MOCK_LLM=true).
 		llmProvider = new MockLlmProvider();
+		providerMode = 'mock';
 	} else {
-		// No real provider yet — default to mock for safe startup.
-		llmProvider = new MockLlmProvider();
+		// Resolve from environment variables and/or explicit providerConfig.
+		const cfg = options.providerConfig ?? resolveProviderConfig();
+
+		if (cfg.mode === 'real') {
+			llmProvider = new OpenAiCompatibleLlmProvider(cfg);
+			providerMode = 'real';
+		} else if (cfg.mode === 'unconfigured') {
+			// Real AI was explicitly requested but cannot be constructed
+			// (e.g., LOGOS_LLM_PROVIDER is set but the token is missing).
+			// Do NOT silently fall back to mock — the user expects real AI.
+			// Node turns that require an LLM will fail recoverably.
+			llmProvider = {
+				generateStructuredOutput: async () => {
+					throw new Error(
+						`Provider "${cfg.provider}" is unconfigured: no API token found in ${cfg.tokenEnv}. Set the environment variable or use --mock for deterministic mode.`,
+					);
+				},
+			};
+			providerMode = 'unconfigured';
+		} else {
+			// Default: use mock for safe startup when nothing is specified.
+			llmProvider = new MockLlmProvider();
+			providerMode = 'mock';
+		}
 	}
 
 	// ── Prompt registry ──────────────────────────────────────────────
@@ -300,7 +356,7 @@ export async function createApplicationRuntime(
 				currentProfile,
 			);
 		}
-		return buildIdleSnapshot(hasSessions);
+		return buildIdleSnapshot(hasSessions, providerMode);
 	}
 
 	/** Notify all listeners with the current snapshot. */
@@ -652,6 +708,7 @@ export async function createApplicationRuntime(
 		getState() {
 			return currentState;
 		},
+		providerMode,
 		save: persistState,
 		sessionId,
 		subscribe(listener: RuntimeListener) {
