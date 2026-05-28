@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 15.2 — Implement contract and schema tests
+Step 15.4 — Implement materialization tests
 
 ## Status Legend
 
@@ -84,7 +84,7 @@ Step 15.2 — Implement contract and schema tests
 | Phase 14 | 14.2 | Implement error mode rendering in TUI | ✅ | `phase-14/step-14.2-implement-error-mode-rendering-in-tui.md` | `feat/step-14-2-error-rendering` | `feat(tui): implement error mode rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | ErrorPanel component + render-model enrichment; typecheck/test passing; checkpoint Phase 14 |
 | Phase 15 | 15.1 | Implement transition matrix tests | ✅ | `phase-15/step-15.1-implement-transition-matrix-tests.md` | `test/step-15-1-transition-matrix` | `test(state-engine): add transition matrix tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | 100 lifecycle transition combinations |
 | Phase 15 | 15.2 | Implement contract and schema tests | ✅ | `phase-15/step-15.2-implement-contract-and-schema-tests.md` | `test/step-15-2-contract-schema` | `test(contracts): add contract and schema tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | 4 test files, 48 tests, production `validateAgentTurnOutput` reused, all gates pass |
-| Phase 15 | 15.3 | Implement persistence round-trip tests | ⏳ | `phase-15/step-15.3-implement-persistence-round-trip-tests.md` | `test/step-15-3-persistence-roundtrip` | `test(persistence): add round-trip tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Save/load integrity |
+| Phase 15 | 15.3 | Implement persistence round-trip tests | ✅ | `phase-15/step-15.3-implement-persistence-round-trip-tests.md` | `test/step-15-3-persistence-roundtrip` | `test(persistence): add round-trip tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Save/load integrity |
 | Phase 15 | 15.4 | Implement materialization tests | ⏳ | `phase-15/step-15.4-implement-materialization-tests.md` | `test/step-15-4-materialization` | `test(materialization): add materialization tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Document generation correctness; checkpoint Phase 15 |
 | Phase 16 | 16.1 | Implement CLI/TUI entry point and command routing | ⏳ | `phase-16/step-16.1-implement-cli-tui-entry-point-and-command-routing.md` | `feat/step-16-1-cli-entry` | `feat(cli): implement entry point and command routing` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Launch entry point |
 | Phase 16 | 16.2 | Implement Markdown export | ⏳ | `phase-16/step-16.2-implement-markdown-export.md` | `feat/step-16-2-markdown-export` | `feat(outputs): implement Markdown export` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Canonical output format; checkpoint Phase 16 |
