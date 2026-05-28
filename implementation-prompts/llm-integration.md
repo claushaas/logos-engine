@@ -1,4 +1,4 @@
-Implemente exatamente a etapa LLM-04 - Adapter Contract Tests descrita em
+Implemente exatamente a etapa LLM-05 - Runtime Provider Selection descrita em
 docs/15-real-llm-implementation-roadmap.md.
 
 Escopo:

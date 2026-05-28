@@ -937,4 +937,174 @@ describe('OpenAiCompatibleLlmProvider', () => {
 		expect(mockFetch).toBeDefined();
 		expect(vi.isMockFunction(mockFetch)).toBe(true);
 	});
+
+	// ── 9. Edge cases from provider (LLM-04) ─────────────────────────
+
+	it('handles empty choices from provider gracefully', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+			retry: { maxRetries: 0 },
+		});
+
+		mockFetch.mockResolvedValueOnce(mockJsonResponse({ choices: [] }));
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			expect(le.category).toBe('llm_provider');
+			expect(le.code).toBe('LOGOS_PROVIDER_ERROR');
+			expect(le.message).toContain('no choices');
+		}
+	});
+
+	it('handles missing choices field from provider', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+			retry: { maxRetries: 0 },
+		});
+
+		mockFetch.mockResolvedValueOnce(mockJsonResponse({}));
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			expect(le.category).toBe('llm_provider');
+			expect(le.message).toContain('no choices');
+		}
+	});
+
+	it('handles message with no content from provider', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({
+				choices: [
+					{
+						finish_reason: 'stop',
+						message: { role: 'assistant' },
+					},
+				],
+			}),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			// Empty content → JSON.parse('') fails first.
+			expect(le.code).toBe('LOGOS_JSON_PARSE_FAILED');
+			expect(le.category).toBe('structured_output');
+		}
+	});
+
+	it('handles 403 Forbidden as a non-retryable provider error', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({ error: { message: 'Forbidden' } }, 403),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			expect(le.code).toBe('LOGOS_PROVIDER_ERROR');
+			expect(le.category).toBe('llm_provider');
+			expect(le.recoverable).toBe(true);
+		}
+	});
+
+	it('error message does not contain API key on 403 response', async () => {
+		process.env.LOGOS_LLM_API_KEY = 'sk-very-secret-token';
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({ error: { message: 'Forbidden' } }, 403),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			const msg = error instanceof Error ? error.message : String(error);
+			expect(msg).not.toContain('sk-very-secret-token');
+
+			if (error instanceof LogosError) {
+				const detailsStr = JSON.stringify(error.details);
+				expect(detailsStr).not.toContain('sk-very-secret-token');
+			}
+		}
+	});
+
+	it('handles 500 server error (retryable) as provider error', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+			retry: { maxRetries: 0 },
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({ error: { message: 'Server error' } }, 500),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			expect(le.code).toBe('LOGOS_PROVIDER_ERROR');
+			expect(le.category).toBe('llm_provider');
+			expect(le.recoverable).toBe(true);
+		}
+	});
+
+	it('error message on 500 does not contain API key', async () => {
+		process.env.LOGOS_LLM_API_KEY = 'sk-another-secret';
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+			retry: { maxRetries: 0 },
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({ error: { message: 'Server error' } }, 500),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			const msg = error instanceof Error ? error.message : String(error);
+			expect(msg).not.toContain('sk-another-secret');
+		}
+	});
 });
