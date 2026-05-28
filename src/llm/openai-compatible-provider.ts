@@ -37,6 +37,7 @@ import type { ProviderConfig } from './config.js';
 import { resolveApiKey } from './config.js';
 import { generateText } from './generate-text.js';
 import type { LlmProvider, LlmResponse } from './mock-provider.js';
+import { type RedactionDiagnostics, redactLlmRequest } from './redaction.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Public types
@@ -82,6 +83,15 @@ export interface ProviderCallDiagnostics {
 	 * (LLM-10).
 	 */
 	readonly repairAttempt?: number;
+
+	/**
+	 * Redaction diagnostics from the prompt-context redaction pass.
+	 *
+	 * Present when at least one secret was redacted. The diagnostics
+	 * include only per-category match counts — raw matches are never
+	 * stored.
+	 */
+	readonly redaction?: RedactionDiagnostics;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -211,8 +221,15 @@ export class OpenAiCompatibleLlmProvider implements LlmProvider {
 		const effectiveModel = request.model ?? this.config.model;
 		const baseUrlHost = extractHost(this.config.baseUrl);
 
-		// ── Map messages ─────────────────────────────────────────────
-		const messages = mapMessages(request);
+		// ── Redact secrets from prompt context ───────────────────────
+		// Redact the assembled LlmRequest before any content leaves
+		// the machine. The original `request` is not mutated.
+		const redactionResult = redactLlmRequest(request);
+
+		// ── Map messages from the redacted request ───────────────────
+		// The system prompt and user/assistant messages have already
+		// been redacted, so the provider only sees sanitised content.
+		const messages = mapMessages(redactionResult.redacted);
 
 		// ── Build the request ────────────────────────────────────────
 		const textInput: GenerateTextInput = {
@@ -248,7 +265,10 @@ export class OpenAiCompatibleLlmProvider implements LlmProvider {
 			const latencyMs = Date.now() - startMs;
 
 			// ── Capture sanitized diagnostics ──────────────────────────
-			const diagBase = {
+			const diagBase: Omit<
+				ProviderCallDiagnostics,
+				'tokenUsage' | 'redaction'
+			> = {
 				baseUrlHost,
 				finishReason: result.finishReason,
 				latencyMs,
@@ -264,8 +284,21 @@ export class OpenAiCompatibleLlmProvider implements LlmProvider {
 					}
 				: undefined;
 
-			this._lastDiagnostics =
-				tokenUsage !== undefined ? { ...diagBase, tokenUsage } : diagBase;
+			// Include redaction diagnostics only when secrets were found.
+			const redaction =
+				redactionResult.diagnostics.totalMatches > 0
+					? redactionResult.diagnostics
+					: undefined;
+
+			this._lastDiagnostics = {
+				baseUrlHost: diagBase.baseUrlHost,
+				finishReason: diagBase.finishReason,
+				latencyMs: diagBase.latencyMs,
+				model: diagBase.model,
+				provider: diagBase.provider,
+				...(tokenUsage !== undefined ? { tokenUsage } : {}),
+				...(redaction !== undefined ? { redaction } : {}),
+			};
 
 			// ── Parse JSON response ────────────────────────────────────
 			let parsed: unknown;

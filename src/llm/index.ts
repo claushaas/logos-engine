@@ -43,6 +43,13 @@ export {
 	type ProviderCallDiagnostics,
 } from './openai-compatible-provider.js';
 export {
+	type RedactionCategory,
+	type RedactionDiagnostics,
+	type RedactionResult,
+	redactLlmRequest,
+	redactText,
+} from './redaction.js';
+export {
 	extractIssues,
 	formatValidationIssues,
 	response_validation,

@@ -1205,4 +1205,162 @@ describe('OpenAiCompatibleLlmProvider', () => {
 			expect(msg).not.toContain('sk-another-secret');
 		}
 	});
+
+	// ── Redaction integration (LLM-09) ─────────────────────────────
+
+	it('redacts API keys from prompt context before provider call', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({
+				choices: [
+					{
+						finish_reason: 'stop',
+						message: { content: JSON.stringify(VALID_OUTPUT) },
+					},
+				],
+			}),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		// Request with an API key embedded in a user message.
+		const request = makeRequest({
+			messages: [
+				{
+					content:
+						'My API key is sk-proj-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0. Is that correct?',
+					role: 'user',
+				},
+			],
+		});
+
+		await provider.generateStructuredOutput(request);
+
+		// Verify the redacted message was sent (not the raw key).
+		const callBody = JSON.parse(mockFetch.mock.calls[0]?.[1]?.body as string);
+		const userMessage = callBody.messages.find(
+			(m: { role: string }) => m.role === 'user',
+		);
+		expect(userMessage.content).toContain('[REDACTED: api_key]');
+		expect(userMessage.content).not.toContain('sk-proj-');
+
+		// Diagnostics should include redaction info.
+		const diag = provider.lastDiagnostics;
+		expect(diag).not.toBeNull();
+		expect(diag?.redaction).toBeDefined();
+		expect(diag?.redaction?.totalMatches).toBeGreaterThanOrEqual(1);
+		expect(diag?.redaction?.categories.api_key).toBeGreaterThanOrEqual(1);
+	});
+
+	it('redacts secrets from system prompt before provider call', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({
+				choices: [
+					{
+						finish_reason: 'stop',
+						message: { content: JSON.stringify(VALID_OUTPUT) },
+					},
+				],
+			}),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		const request = makeRequest({
+			systemPrompt: 'System instruction. Use password=supersecret for auth.',
+		});
+
+		await provider.generateStructuredOutput(request);
+
+		const callBody = JSON.parse(mockFetch.mock.calls[0]?.[1]?.body as string);
+		const systemMsg = callBody.messages.find(
+			(m: { role: string }) => m.role === 'system',
+		);
+		expect(systemMsg.content).toContain('[REDACTED: password]');
+		expect(systemMsg.content).not.toContain('supersecret');
+
+		const diag = provider.lastDiagnostics;
+		expect(diag?.redaction?.categories.password_like).toBeGreaterThanOrEqual(1);
+	});
+
+	it('redaction diagnostics are absent when no secrets found', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({
+				choices: [
+					{
+						finish_reason: 'stop',
+						message: { content: JSON.stringify(VALID_OUTPUT) },
+					},
+				],
+			}),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		const request = makeRequest({
+			messages: [
+				{
+					content: 'What is the core thesis of this project?',
+					role: 'user',
+				},
+			],
+			systemPrompt: 'You are an expert interviewer.',
+		});
+
+		await provider.generateStructuredOutput(request);
+
+		const diag = provider.lastDiagnostics;
+		expect(diag).not.toBeNull();
+		expect(diag?.redaction).toBeUndefined();
+	});
+
+	it('redaction does not affect non-provider validation errors', async () => {
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+		});
+
+		// Return empty JSON object — parsed successfully but missing userFacingMessage.
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({
+				choices: [
+					{
+						finish_reason: 'stop',
+						message: { content: '{}' },
+					},
+				],
+			}),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		const request = makeRequest({
+			messages: [
+				{
+					content: 'My key: sk-proj-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0',
+					role: 'user',
+				},
+			],
+		});
+
+		try {
+			await provider.generateStructuredOutput(request);
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			// Should be missing userFacingMessage, not a redaction issue.
+			expect(le.code).toBe('LOGOS_MISSING_USER_FACING_MESSAGE');
+		}
+	});
 });
