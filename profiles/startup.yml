@@ -1,0 +1,650 @@
+# ─── LOGOS Engine — Startup Sample Profile ───────────────────────────────────
+#
+# A complete profile for early-stage startup documentation.
+# 3 phases, 6 documents, 12 nodes with canonical questions, coverage topics,
+# sufficiency criteria, dependency declarations, and materialization rules.
+#
+# Compatible with the LogosProfile contract from `src/contracts/profile.ts`.
+# Loaded by `loadProfile()` in `src/profiles/profile-loader.ts`.
+#
+# Usage:
+#   logos --mock --profile startup
+
+id: startup
+title: Startup Documentation
+version: '1.0.0'
+description: >
+  A structured documentation profile for early-stage startups.
+  Covers foundation, validation, and product definition through
+  guided conversational nodes that produce canonical source material.
+
+# ─── Phases ──────────────────────────────────────────────────────────────────
+
+phases:
+  - id: 01-foundation
+    title: Foundation
+    order: 1
+    purpose: >
+      Define why the project exists, what problem it solves, for whom,
+      and under what principles. Establishes the conceptual bedrock
+      that all downstream decisions reference.
+
+  - id: 02-validation
+    title: Validation
+    order: 2
+    purpose: >
+      Validate assumptions, identify risks, define success metrics,
+      and build the evidence base. Converts conviction into testable
+      beliefs and measurable outcomes.
+
+  - id: 03-product
+    title: Product
+    order: 3
+    purpose: >
+      Define what will be built, the core promise to users, MVP scope,
+      primary user journey, and acceptance criteria. Translates
+      validated beliefs into concrete product decisions.
+
+# ─── Documents ───────────────────────────────────────────────────────────────
+
+documents:
+  # Foundation documents
+  - id: foundation.thesis
+    phaseId: 01-foundation
+    title: Foundation Thesis
+    order: 1
+    purpose: >
+      The core thesis document captures the central conviction,
+      the unresolved tension that makes the project necessary,
+      and what the project is explicitly not.
+    outputPath: docs/01-foundation/thesis.md
+    requiredNodeIds:
+      - foundation.thesis.core
+      - foundation.thesis.tension
+    optionalNodeIds: []
+
+  - id: foundation.problem
+    phaseId: 01-foundation
+    title: Problem Space
+    order: 2
+    purpose: >
+      Defines the problem being solved and identifies the people
+      and systems affected. Grounds the thesis in concrete,
+      observable reality.
+    outputPath: docs/01-foundation/problem-space.md
+    requiredNodeIds:
+      - foundation.problem.core
+      - foundation.problem.stakeholders
+    optionalNodeIds: []
+
+  # Validation documents
+  - id: validation.assumptions
+    phaseId: 02-validation
+    title: Core Assumptions
+    order: 1
+    purpose: >
+      Enumerates the key assumptions underlying the project,
+      prioritises them by risk, and records decisions made
+      under uncertainty.
+    outputPath: docs/02-validation/assumptions.md
+    requiredNodeIds:
+      - validation.assumptions.core
+      - validation.assumptions.risks
+    optionalNodeIds: []
+
+  - id: validation.evidence
+    phaseId: 02-validation
+    title: Evidence & Metrics
+    order: 2
+    purpose: >
+      Defines how assumptions will be tested, what evidence is
+      needed, and which metrics signal success or failure.
+    outputPath: docs/02-validation/evidence-metrics.md
+    requiredNodeIds:
+      - validation.evidence.plan
+      - validation.evidence.metrics
+    optionalNodeIds: []
+
+  # Product documents
+  - id: product.brief
+    phaseId: 03-product
+    title: Product Brief
+    order: 1
+    purpose: >
+      Defines the product promise, core value proposition,
+      and what must exist for the first release to be viable.
+    outputPath: docs/03-product/product-brief.md
+    requiredNodeIds:
+      - product.brief.promise
+      - product.brief.mvp_scope
+    optionalNodeIds: []
+
+  - id: product.experience
+    phaseId: 03-product
+    title: User Experience
+    order: 2
+    purpose: >
+      Describes the primary user journey from first encounter
+      to core value delivery, and defines measurable acceptance
+      criteria for the experience.
+    outputPath: docs/03-product/user-experience.md
+    requiredNodeIds:
+      - product.experience.journey
+      - product.experience.criteria
+    optionalNodeIds: []
+
+# ─── Nodes ───────────────────────────────────────────────────────────────────
+
+nodes:
+  # ── Foundation / Thesis ────────────────────────────────────────────────────
+
+  - id: foundation.thesis.core
+    phaseId: 01-foundation
+    documentId: foundation.thesis
+    title: Core Thesis
+    order: 1
+    canonicalQuestion: >
+      What truth, hypothesis, or conviction justifies this project
+      existing? What do you believe that others don't?
+    coverageTopics:
+      - central conviction
+      - relevant change in the world
+      - unresolved tension
+      - ignored truth
+      - why now
+    sufficiencyCriteria:
+      - the thesis is specific to this project, not generic
+      - the central tension is explicit
+      - the claim is not confused with the solution
+      - unsupported claims are marked as assumptions
+    promptRefs:
+      initial: prompts/startup/foundation/thesis/core/initial.md
+      followUp: prompts/startup/foundation/thesis/core/follow-up.md
+      clarification: prompts/startup/foundation/thesis/core/clarification.md
+      refinement: prompts/startup/foundation/thesis/core/refinement.md
+      synthesis: prompts/startup/foundation/thesis/core/synthesis.md
+      review: prompts/startup/foundation/thesis/core/review.md
+
+  - id: foundation.thesis.tension
+    phaseId: 01-foundation
+    documentId: foundation.thesis
+    title: Central Tension
+    order: 2
+    canonicalQuestion: >
+      What is the central tension or conflict that your thesis
+      addresses? What is broken, misaligned, or overlooked in
+      the current state of the world?
+    coverageTopics:
+      - current state description
+      - structural mismatch or gap
+      - consequences of inaction
+      - who is harmed by the status quo
+      - what prevents natural resolution
+    sufficiencyCriteria:
+      - the tension is described in concrete terms
+      - a structural cause is identified, not just symptoms
+      - the scope of the problem is bounded
+      - emotional or anecdotal claims are grounded in observables
+    promptRefs:
+      initial: prompts/startup/foundation/thesis/tension/initial.md
+      followUp: prompts/startup/foundation/thesis/tension/follow-up.md
+      clarification: prompts/startup/foundation/thesis/tension/clarification.md
+      refinement: prompts/startup/foundation/thesis/tension/refinement.md
+      synthesis: prompts/startup/foundation/thesis/tension/synthesis.md
+      review: prompts/startup/foundation/thesis/tension/review.md
+
+  # ── Foundation / Problem Space ─────────────────────────────────────────────
+
+  - id: foundation.problem.core
+    phaseId: 01-foundation
+    documentId: foundation.problem
+    title: Core Problem
+    order: 1
+    canonicalQuestion: >
+      What specific, observable problem are you solving? Describe it
+      as if you were explaining it to someone who has never heard
+      of your industry.
+    coverageTopics:
+      - problem definition in plain language
+      - current workarounds and their cost
+      - frequency and severity
+      - root cause vs. symptoms
+      - measurable impact of the problem
+    sufficiencyCriteria:
+      - the problem is stated without jargon or solution language
+      - the problem is distinguishable from the solution
+      - current alternatives are acknowledged
+      - the cost of inaction is estimated, not asserted
+    promptRefs:
+      initial: prompts/startup/foundation/problem/core/initial.md
+      followUp: prompts/startup/foundation/problem/core/follow-up.md
+      clarification: prompts/startup/foundation/problem/core/clarification.md
+      refinement: prompts/startup/foundation/problem/core/refinement.md
+      synthesis: prompts/startup/foundation/problem/core/synthesis.md
+      review: prompts/startup/foundation/problem/core/review.md
+
+  - id: foundation.problem.stakeholders
+    phaseId: 01-foundation
+    documentId: foundation.problem
+    title: Stakeholders
+    order: 2
+    canonicalQuestion: >
+      Who experiences this problem? Who pays for it, who ignores it,
+      and who benefits from it remaining unsolved?
+    coverageTopics:
+      - primary users or affected groups
+      - decision-makers and buyers
+      - indirect stakeholders
+      - incentives and disincentives
+      - excluded groups
+    sufficiencyCriteria:
+      - at least one primary user group is named and described
+      - the distinction between user and buyer is explicit
+      - incentives keeping the problem in place are identified
+      - no group is described as "everyone"
+    promptRefs:
+      initial: prompts/startup/foundation/problem/stakeholders/initial.md
+      followUp: prompts/startup/foundation/problem/stakeholders/follow-up.md
+      clarification: prompts/startup/foundation/problem/stakeholders/clarification.md
+      refinement: prompts/startup/foundation/problem/stakeholders/refinement.md
+      synthesis: prompts/startup/foundation/problem/stakeholders/synthesis.md
+      review: prompts/startup/foundation/problem/stakeholders/review.md
+
+  # ── Validation / Assumptions ───────────────────────────────────────────────
+
+  - id: validation.assumptions.core
+    phaseId: 02-validation
+    documentId: validation.assumptions
+    title: Core Assumptions
+    order: 1
+    canonicalQuestion: >
+      What assumptions are you making about the problem, the users,
+      the market, and the solution? Which ones, if wrong, would
+      invalidate the project?
+    coverageTopics:
+      - problem assumptions
+      - user behaviour assumptions
+      - market assumptions
+      - solution assumptions
+      - assumption criticality ranking
+    sufficiencyCriteria:
+      - assumptions are stated as falsifiable statements
+      - the most critical assumptions are identified
+      - at least one assumption is testable within 30 days
+      - assumptions are not disguised as facts
+    promptRefs:
+      initial: prompts/startup/validation/assumptions/core/initial.md
+      followUp: prompts/startup/validation/assumptions/core/follow-up.md
+      clarification: prompts/startup/validation/assumptions/core/clarification.md
+      refinement: prompts/startup/validation/assumptions/core/refinement.md
+      synthesis: prompts/startup/validation/assumptions/core/synthesis.md
+      review: prompts/startup/validation/assumptions/core/review.md
+    dependencies:
+      requiredNodeIds:
+        - foundation.thesis.core
+      recommendedNodeIds:
+        - foundation.thesis.tension
+
+  - id: validation.assumptions.risks
+    phaseId: 02-validation
+    documentId: validation.assumptions
+    title: Risk Register
+    order: 2
+    canonicalQuestion: >
+      What are the top risks to the project, ordered by likelihood
+      and impact? What signals would indicate each risk is
+      materialising?
+    coverageTopics:
+      - technical risks
+      - market risks
+      - execution risks
+      - competitive risks
+      - risk detection signals
+      - mitigation strategies
+    sufficiencyCriteria:
+      - at least five distinct risks are identified
+      - each risk has a likelihood and impact estimate
+      - detection signals are specific, not generic
+      - mitigation is described for the top three risks
+    promptRefs:
+      initial: prompts/startup/validation/assumptions/risks/initial.md
+      followUp: prompts/startup/validation/assumptions/risks/follow-up.md
+      clarification: prompts/startup/validation/assumptions/risks/clarification.md
+      refinement: prompts/startup/validation/assumptions/risks/refinement.md
+      synthesis: prompts/startup/validation/assumptions/risks/synthesis.md
+      review: prompts/startup/validation/assumptions/risks/review.md
+    dependencies:
+      requiredNodeIds:
+        - validation.assumptions.core
+      recommendedNodeIds: []
+
+  # ── Validation / Evidence ──────────────────────────────────────────────────
+
+  - id: validation.evidence.plan
+    phaseId: 02-validation
+    documentId: validation.evidence
+    title: Evidence Plan
+    order: 1
+    canonicalQuestion: >
+      How will you test your critical assumptions? What experiments,
+      interviews, prototypes, or data will produce dispositive
+      evidence?
+    coverageTopics:
+      - assumption-to-test mapping
+      - experiment design
+      - data sources
+      - minimum sample or signal threshold
+      - timeline and order
+    sufficiencyCriteria:
+      - each critical assumption has at least one proposed test
+      - tests are described with method, not just intent
+      - the bar for "validated" is explicit
+      - at least one test can begin immediately
+    promptRefs:
+      initial: prompts/startup/validation/evidence/plan/initial.md
+      followUp: prompts/startup/validation/evidence/plan/follow-up.md
+      clarification: prompts/startup/validation/evidence/plan/clarification.md
+      refinement: prompts/startup/validation/evidence/plan/refinement.md
+      synthesis: prompts/startup/validation/evidence/plan/synthesis.md
+      review: prompts/startup/validation/evidence/plan/review.md
+
+  - id: validation.evidence.metrics
+    phaseId: 02-validation
+    documentId: validation.evidence
+    title: Success Metrics
+    order: 2
+    canonicalQuestion: >
+      What metrics will tell you whether the project is on the right
+      track? What numbers, observed behaviours, or signals constitute
+      evidence of progress or failure?
+    coverageTopics:
+      - north star metric
+      - leading indicators
+      - lagging indicators
+      - counter-metrics (what good numbers could hide)
+      - measurement cadence
+    sufficiencyCriteria:
+      - a single north star metric is identified
+      - leading indicators are distinct from lagging
+      - counter-metrics are explicitly named
+      - baseline values are stated where known
+    promptRefs:
+      initial: prompts/startup/validation/evidence/metrics/initial.md
+      followUp: prompts/startup/validation/evidence/metrics/follow-up.md
+      clarification: prompts/startup/validation/evidence/metrics/clarification.md
+      refinement: prompts/startup/validation/evidence/metrics/refinement.md
+      synthesis: prompts/startup/validation/evidence/metrics/synthesis.md
+      review: prompts/startup/validation/evidence/metrics/review.md
+
+  # ── Product / Brief ────────────────────────────────────────────────────────
+
+  - id: product.brief.promise
+    phaseId: 03-product
+    documentId: product.brief
+    title: Product Promise
+    order: 1
+    canonicalQuestion: >
+      What is the core promise of the product? If the product succeeds,
+      what changes for the user that they could not achieve before?
+    coverageTopics:
+      - core value proposition
+      - functional outcome (not feature list)
+      - emotional or status outcome
+      - what the product replaces
+      - who the product is explicitly not for
+    sufficiencyCriteria:
+      - the promise is stated in one sentence a user would recognise
+      - the functional outcome is distinguished from features
+      - the promise is specific enough to be falsifiable
+      - the product is not described as doing "everything"
+    promptRefs:
+      initial: prompts/startup/product/brief/promise/initial.md
+      followUp: prompts/startup/product/brief/promise/follow-up.md
+      clarification: prompts/startup/product/brief/promise/clarification.md
+      refinement: prompts/startup/product/brief/promise/refinement.md
+      synthesis: prompts/startup/product/brief/promise/synthesis.md
+      review: prompts/startup/product/brief/promise/review.md
+    dependencies:
+      requiredNodeIds:
+        - foundation.thesis.core
+      recommendedNodeIds:
+        - validation.assumptions.core
+
+  - id: product.brief.mvp_scope
+    phaseId: 03-product
+    documentId: product.brief
+    title: MVP Scope
+    order: 2
+    canonicalQuestion: >
+      What is the smallest thing you can build that tests the product
+      promise? What must be included, and what is explicitly deferred?
+    coverageTopics:
+      - must-have capabilities
+      - nice-to-have distinctions
+      - explicit deferrals with rationale
+      - minimum user flow
+      - launch constraints
+    sufficiencyCriteria:
+      - the scope boundary is explicit and reasoned
+      - deferred items have clear rationale
+      - the minimum user flow is described end-to-end
+      - the scope is consistent with the product promise
+    promptRefs:
+      initial: prompts/startup/product/brief/mvp-scope/initial.md
+      followUp: prompts/startup/product/brief/mvp-scope/follow-up.md
+      clarification: prompts/startup/product/brief/mvp-scope/clarification.md
+      refinement: prompts/startup/product/brief/mvp-scope/refinement.md
+      synthesis: prompts/startup/product/brief/mvp-scope/synthesis.md
+      review: prompts/startup/product/brief/mvp-scope/review.md
+    dependencies:
+      requiredNodeIds:
+        - product.brief.promise
+      recommendedNodeIds: []
+
+  # ── Product / Experience ───────────────────────────────────────────────────
+
+  - id: product.experience.journey
+    phaseId: 03-product
+    documentId: product.experience
+    title: Primary Journey
+    order: 1
+    canonicalQuestion: >
+      Walk through the primary user journey from first encounter to
+      core value delivery. What does the user see, do, and feel at
+      each step?
+    coverageTopics:
+      - discovery and first encounter
+      - onboarding and first success
+      - core loop
+      - failure and recovery
+      - exit and return paths
+    sufficiencyCriteria:
+      - the journey is described step-by-step, not in abstract
+      - at least one failure path is described
+      - the moment of first value is explicitly identified
+      - the journey is consistent with the MVP scope
+    promptRefs:
+      initial: prompts/startup/product/experience/journey/initial.md
+      followUp: prompts/startup/product/experience/journey/follow-up.md
+      clarification: prompts/startup/product/experience/journey/clarification.md
+      refinement: prompts/startup/product/experience/journey/refinement.md
+      synthesis: prompts/startup/product/experience/journey/synthesis.md
+      review: prompts/startup/product/experience/journey/review.md
+    dependencies:
+      requiredNodeIds:
+        - product.brief.promise
+      recommendedNodeIds:
+        - product.brief.mvp_scope
+
+  - id: product.experience.criteria
+    phaseId: 03-product
+    documentId: product.experience
+    title: Acceptance Criteria
+    order: 2
+    canonicalQuestion: >
+      What specific, observable conditions must be true for the
+      product experience to be considered acceptable? What would
+      constitute failure?
+    coverageTopics:
+      - functional acceptance criteria
+      - performance and reliability thresholds
+      - usability and accessibility standards
+      - user sentiment indicators
+      - explicit failure conditions
+    sufficiencyCriteria:
+      - criteria are stated as testable conditions
+      - at least one criterion addresses user sentiment, not just function
+      - explicit failure thresholds are defined
+      - criteria are traceable to the product promise
+    promptRefs:
+      initial: prompts/startup/product/experience/criteria/initial.md
+      followUp: prompts/startup/product/experience/criteria/follow-up.md
+      clarification: prompts/startup/product/experience/criteria/clarification.md
+      refinement: prompts/startup/product/experience/criteria/refinement.md
+      synthesis: prompts/startup/product/experience/criteria/synthesis.md
+      review: prompts/startup/product/experience/criteria/review.md
+    dependencies:
+      requiredNodeIds:
+        - product.experience.journey
+      recommendedNodeIds: []
+
+# ─── Materialization Rules ───────────────────────────────────────────────────
+
+materializationRules:
+  # Foundation Thesis
+  - documentId: foundation.thesis
+    title: Foundation Thesis
+    outputPath: docs/01-foundation/thesis.md
+    sourceNodeIds:
+      - foundation.thesis.core
+      - foundation.thesis.tension
+    requiredNodeIds:
+      - foundation.thesis.core
+      - foundation.thesis.tension
+    optionalNodeIds: []
+    sections:
+      - id: core-thesis
+        title: Core Thesis
+        sourceNodeIds:
+          - foundation.thesis.core
+        required: true
+      - id: central-tension
+        title: Central Tension
+        sourceNodeIds:
+          - foundation.thesis.tension
+        required: true
+
+  # Problem Space
+  - documentId: foundation.problem
+    title: Problem Space
+    outputPath: docs/01-foundation/problem-space.md
+    sourceNodeIds:
+      - foundation.problem.core
+      - foundation.problem.stakeholders
+    requiredNodeIds:
+      - foundation.problem.core
+      - foundation.problem.stakeholders
+    optionalNodeIds: []
+    sections:
+      - id: core-problem
+        title: Core Problem
+        sourceNodeIds:
+          - foundation.problem.core
+        required: true
+      - id: stakeholders
+        title: Stakeholders
+        sourceNodeIds:
+          - foundation.problem.stakeholders
+        required: true
+
+  # Core Assumptions
+  - documentId: validation.assumptions
+    title: Core Assumptions
+    outputPath: docs/02-validation/assumptions.md
+    sourceNodeIds:
+      - validation.assumptions.core
+      - validation.assumptions.risks
+    requiredNodeIds:
+      - validation.assumptions.core
+      - validation.assumptions.risks
+    optionalNodeIds: []
+    sections:
+      - id: core-assumptions
+        title: Core Assumptions
+        sourceNodeIds:
+          - validation.assumptions.core
+        required: true
+      - id: risk-register
+        title: Risk Register
+        sourceNodeIds:
+          - validation.assumptions.risks
+        required: true
+
+  # Evidence & Metrics
+  - documentId: validation.evidence
+    title: Evidence & Metrics
+    outputPath: docs/02-validation/evidence-metrics.md
+    sourceNodeIds:
+      - validation.evidence.plan
+      - validation.evidence.metrics
+    requiredNodeIds:
+      - validation.evidence.plan
+      - validation.evidence.metrics
+    optionalNodeIds: []
+    sections:
+      - id: evidence-plan
+        title: Evidence Plan
+        sourceNodeIds:
+          - validation.evidence.plan
+        required: true
+      - id: success-metrics
+        title: Success Metrics
+        sourceNodeIds:
+          - validation.evidence.metrics
+        required: true
+
+  # Product Brief
+  - documentId: product.brief
+    title: Product Brief
+    outputPath: docs/03-product/product-brief.md
+    sourceNodeIds:
+      - product.brief.promise
+      - product.brief.mvp_scope
+    requiredNodeIds:
+      - product.brief.promise
+      - product.brief.mvp_scope
+    optionalNodeIds: []
+    sections:
+      - id: product-promise
+        title: Product Promise
+        sourceNodeIds:
+          - product.brief.promise
+        required: true
+      - id: mvp-scope
+        title: MVP Scope
+        sourceNodeIds:
+          - product.brief.mvp_scope
+        required: true
+
+  # User Experience
+  - documentId: product.experience
+    title: User Experience
+    outputPath: docs/03-product/user-experience.md
+    sourceNodeIds:
+      - product.experience.journey
+      - product.experience.criteria
+    requiredNodeIds:
+      - product.experience.journey
+      - product.experience.criteria
+    optionalNodeIds: []
+    sections:
+      - id: primary-journey
+        title: Primary Journey
+        sourceNodeIds:
+          - product.experience.journey
+        required: true
+      - id: acceptance-criteria
+        title: Acceptance Criteria
+        sourceNodeIds:
+          - product.experience.criteria
+        required: true
