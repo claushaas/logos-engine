@@ -60,3 +60,11 @@ export {
 	type SubmitUserMessageResult,
 	submitUserMessageUseCase,
 } from './use-cases/submit-user-message.js';
+
+export {
+	type ApplicationRuntime,
+	type CreateRuntimeOptions,
+	type RuntimeEvent,
+	type RuntimeListener,
+	createApplicationRuntime,
+} from './runtime.js';

@@ -43,6 +43,9 @@
 		"ai",
 		"typescript"
 	],
+	"bin": {
+		"logos": "./dist/cli/main.js"
+	},
 	"license": "MIT",
 	"main": "./dist/index.js",
 	"name": "logos-engine",
