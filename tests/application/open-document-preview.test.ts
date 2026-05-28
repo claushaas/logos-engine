@@ -8,15 +8,12 @@
  *  - Export disabled when missing/stale.
  */
 import { describe, expect, it } from 'vitest';
-
-import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
+import { openDocumentPreviewUseCase } from '../../src/application/use-cases/open-document-preview.js';
 import type {
 	LogosProfile,
 	LogosRuntimeState,
 } from '../../src/contracts/index.js';
-import {
-	openDocumentPreviewUseCase,
-} from '../../src/application/use-cases/open-document-preview.js';
+import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Fixtures
@@ -41,9 +38,9 @@ function testProfile(): LogosProfile {
 		materializationRules: [
 			{
 				documentId: 'doc-1' as DocumentId,
+				optionalNodeIds: [],
 				outputPath: '/dev/null',
 				requiredNodeIds: ['n1' as NodeId, 'n2' as NodeId],
-				optionalNodeIds: [],
 				sections: [
 					{
 						required: true,

@@ -21,8 +21,9 @@
  * @see {@link https://logos-engine/docs/architecture/10-local-development-and-deployment.md §11}
  * @see {@link https://logos-engine/docs/13-prototypes.md §3.12}
  */
-import { mkdir, writeFile, access } from 'node:fs/promises';
+
 import { constants } from 'node:fs';
+import { access, mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import type {
 	DocumentMaterializationRule,
@@ -32,7 +33,7 @@ import type {
 } from '../contracts/index.js';
 import { materializeDocument } from '../materialization/document-materializer.js';
 import type { DocumentId, Result } from '../shared/index.js';
-import { err, generateId, ok, nowIso } from '../shared/index.js';
+import { err, generateId, nowIso, ok } from '../shared/index.js';
 import { computeDocumentReadiness } from '../state-engine/document-readiness.js';
 import type { ExportError } from './markdown-exporter.js';
 
@@ -64,9 +65,7 @@ function findRule(
 	profile: LogosProfile,
 	documentId: DocumentId,
 ): DocumentMaterializationRule | undefined {
-	return profile.materializationRules.find(
-		(r) => r.documentId === documentId,
-	);
+	return profile.materializationRules.find((r) => r.documentId === documentId);
 }
 
 /**
@@ -79,10 +78,10 @@ function deriveHtmlPath(rule: DocumentMaterializationRule): string {
 	const outputPath = rule.outputPath;
 
 	if (outputPath.endsWith('.md')) {
-		return outputPath.slice(0, -3) + '.html';
+		return `${outputPath.slice(0, -3)}.html`;
 	}
 	if (outputPath.endsWith('.markdown')) {
-		return outputPath.slice(0, -9) + '.html';
+		return `${outputPath.slice(0, -9)}.html`;
 	}
 	return `${outputPath}.html`;
 }

@@ -21,9 +21,9 @@ export {
 } from './default-prompts.js';
 export {
 	AGENT_TURN_OUTPUT_SCHEMA_REFERENCE,
+	type AssemblyMetadata,
 	assemblePromptRequest,
 	assemblePromptRequestWithMetadata,
-	type AssemblyMetadata,
 	estimateTokens,
 	type LlmMessage,
 	type LlmRequest,

@@ -20,6 +20,13 @@ export {
 	getStatusSymbolForLifecycle,
 } from './render-model-builder.js';
 export {
+	type ApplicationRuntime,
+	type CreateRuntimeOptions,
+	createApplicationRuntime,
+	type RuntimeEvent,
+	type RuntimeListener,
+} from './runtime.js';
+export {
 	type AcceptCanonicalAnswerOptions,
 	type AcceptCanonicalAnswerResult,
 	acceptCanonicalAnswerUseCase,
@@ -29,6 +36,12 @@ export {
 	type EditCanonicalAnswerResult,
 	editCanonicalAnswerUseCase,
 } from './use-cases/edit-canonical-answer.js';
+export {
+	closeDocumentPreviewUseCase,
+	type OpenDocumentPreviewOptions,
+	type OpenDocumentPreviewResult,
+	openDocumentPreviewUseCase,
+} from './use-cases/open-document-preview.js';
 export {
 	type RegenerateCanonicalAnswerOptions,
 	type RegenerateCanonicalAnswerResult,
@@ -50,21 +63,7 @@ export {
 	skipNodeUseCase,
 } from './use-cases/skip-node.js';
 export {
-	type OpenDocumentPreviewOptions,
-	type OpenDocumentPreviewResult,
-	openDocumentPreviewUseCase,
-	closeDocumentPreviewUseCase,
-} from './use-cases/open-document-preview.js';
-export {
 	type SubmitUserMessageOptions,
 	type SubmitUserMessageResult,
 	submitUserMessageUseCase,
 } from './use-cases/submit-user-message.js';
-
-export {
-	type ApplicationRuntime,
-	type CreateRuntimeOptions,
-	type RuntimeEvent,
-	type RuntimeListener,
-	createApplicationRuntime,
-} from './runtime.js';

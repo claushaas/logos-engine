@@ -11,18 +11,10 @@
  * @see {@link https://logos-engine/docs/13-prototypes.md §4.4}
  */
 import { describe, expect, it } from 'vitest';
-import {
-	acceptCanonicalAnswerUseCase,
-} from '../../src/application/use-cases/accept-canonical-answer.js';
-import {
-	editCanonicalAnswerUseCase,
-} from '../../src/application/use-cases/edit-canonical-answer.js';
-import {
-	regenerateCanonicalAnswerUseCase,
-} from '../../src/application/use-cases/regenerate-canonical-answer.js';
-import {
-	reopenNodeUseCase,
-} from '../../src/application/use-cases/reopen-node.js';
+import { acceptCanonicalAnswerUseCase } from '../../src/application/use-cases/accept-canonical-answer.js';
+import { editCanonicalAnswerUseCase } from '../../src/application/use-cases/edit-canonical-answer.js';
+import { regenerateCanonicalAnswerUseCase } from '../../src/application/use-cases/regenerate-canonical-answer.js';
+import { reopenNodeUseCase } from '../../src/application/use-cases/reopen-node.js';
 import type {
 	LogosProfile,
 	LogosRuntimeState,
@@ -101,11 +93,7 @@ function sessionSynthesized(): {
 	);
 	expect(r0.ok).toBe(true);
 
-	const r1 = dispatch(
-		r0.state!,
-		{ nodeId, type: 'SELECT_NODE' },
-		profile,
-	);
+	const r1 = dispatch(r0.state!, { nodeId, type: 'SELECT_NODE' }, profile);
 	expect(r1.ok).toBe(true);
 
 	const existingNode = r1.state!.nodeStates[nodeId]!;
@@ -116,7 +104,8 @@ function sessionSynthesized(): {
 		canonicalAnswer: {
 			accepted: false,
 			confidence: 'medium',
-			content: 'The hiring industry evaluates credentials over competence. This project aims to make skill-based evaluation the default.',
+			content:
+				'The hiring industry evaluates credentials over competence. This project aims to make skill-based evaluation the default.',
 			format: 'markdown',
 			generatedAt: now,
 			generatedFromMessageIds: ['msg-001', 'msg-003'],
@@ -131,7 +120,8 @@ function sessionSynthesized(): {
 				role: 'assistant',
 			},
 			{
-				content: 'We believe hiring filters for credentials instead of competence.',
+				content:
+					'We believe hiring filters for credentials instead of competence.',
 				createdAt: now,
 				id: 'msg-001',
 				metadata: {},
@@ -145,14 +135,16 @@ function sessionSynthesized(): {
 				role: 'assistant',
 			},
 			{
-				content: 'It is about outcomes — credentials don\'t predict job performance.',
+				content:
+					"It is about outcomes — credentials don't predict job performance.",
 				createdAt: now,
 				id: 'msg-003',
 				metadata: {},
 				role: 'user',
 			},
 			{
-				content: 'Here\'s a draft of your canonical answer. Review it and accept, edit, or regenerate.',
+				content:
+					"Here's a draft of your canonical answer. Review it and accept, edit, or regenerate.",
 				createdAt: now,
 				id: 'msg-review',
 				metadata: { promptState: 'review' },
@@ -336,16 +328,13 @@ describe('Flow D — Review, Edit, Regenerate', () => {
 
 		// Try to edit from accepted → should fail (edit guard in dispatch
 		// via USER_MESSAGE_ADDED rejects answers in non-answer lifecycles)
-		const editResult = await editCanonicalAnswerUseCase(
-			acceptResult.state,
-			{
-				content: 'Cannot edit accepted',
-				llmProvider: mockLlm,
-				nodeId,
-				profile,
-				promptRegistry: registry,
-			},
-		);
+		const editResult = await editCanonicalAnswerUseCase(acceptResult.state, {
+			content: 'Cannot edit accepted',
+			llmProvider: mockLlm,
+			nodeId,
+			profile,
+			promptRegistry: registry,
+		});
 
 		expect(editResult.ok).toBe(false);
 		expect(editResult.error).toBeDefined();

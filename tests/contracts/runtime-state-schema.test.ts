@@ -35,7 +35,12 @@ import type {
 	NodeRuntimeState,
 	SessionMode,
 } from '../../src/contracts/index.js';
-import type { DocumentId, NodeId, ProfileId, SessionId } from '../../src/shared/index.js';
+import type {
+	DocumentId,
+	NodeId,
+	ProfileId,
+	SessionId,
+} from '../../src/shared/index.js';
 import { generateId, nowIso } from '../../src/shared/index.js';
 
 // ─── Test-local validators ─────────────────────────────────────────────────
@@ -43,7 +48,7 @@ import { generateId, nowIso } from '../../src/shared/index.js';
 /**
  * Validate that a value is an array.
  */
-function assertArray(value: unknown, path: string): void {
+function _assertArray(value: unknown, path: string): void {
 	if (!Array.isArray(value)) {
 		throw new Error(`${path}: expected array, got ${typeof value}`);
 	}
@@ -52,7 +57,7 @@ function assertArray(value: unknown, path: string): void {
 /**
  * Validate that a string is non-empty.
  */
-function assertNonEmptyString(value: unknown, path: string): void {
+function _assertNonEmptyString(value: unknown, path: string): void {
 	if (typeof value !== 'string' || value.trim().length === 0) {
 		throw new Error(`${path}: expected non-empty string, got ${typeof value}`);
 	}
@@ -132,7 +137,10 @@ function makeNodeRuntimeState(
 	nodeId: NodeId,
 	lifecycle: NodeLifecycle,
 ): NodeRuntimeState {
-	const ALLOWED_ACTIONS: Record<NodeLifecycle, import('../../src/contracts/index.js').NodeAction[]> = {
+	const ALLOWED_ACTIONS: Record<
+		NodeLifecycle,
+		import('../../src/contracts/index.js').NodeAction[]
+	> = {
 		accepted: ['continue_next', 'reopen', 'open_document_preview'],
 		active: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
 		answered: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
@@ -145,7 +153,10 @@ function makeNodeRuntimeState(
 		synthesized: ['accept', 'edit', 'regenerate', 'defer', 'reopen'],
 	};
 
-	const promptStateMap: Record<NodeLifecycle, import('../../src/contracts/index.js').PromptState> = {
+	const promptStateMap: Record<
+		NodeLifecycle,
+		import('../../src/contracts/index.js').PromptState
+	> = {
 		accepted: 'accepted',
 		active: 'follow_up',
 		answered: 'follow_up',
@@ -208,15 +219,18 @@ function makeDocumentRuntimeState(
 ): DocumentRuntimeState {
 	return {
 		documentId,
-		draft: status === 'drafted' || status === 'accepted' ? {
-			content: '# Generated Document\n\nContent here.',
-			documentId,
-			format: 'markdown',
-			generatedAt: nowIso(),
-			missingSections: status === 'drafted' ? ['section-2'] : [],
-			sourceNodeIds: ['node-1' as NodeId],
-			stale: status === 'stale',
-		} : null,
+		draft:
+			status === 'drafted' || status === 'accepted'
+				? {
+						content: '# Generated Document\n\nContent here.',
+						documentId,
+						format: 'markdown',
+						generatedAt: nowIso(),
+						missingSections: status === 'drafted' ? ['section-2'] : [],
+						sourceNodeIds: ['node-1' as NodeId],
+						stale: status === 'stale',
+					}
+				: null,
 		missingRequiredNodeIds:
 			status === 'not_ready'
 				? ['node-1' as NodeId]
@@ -284,7 +298,10 @@ function structureOverviewState(): LogosRuntimeState {
 /**
  * Node focus state — a node is active with conversation.
  */
-function nodeFocusState(nodeId: NodeId, lifecycle: NodeLifecycle): LogosRuntimeState {
+function nodeFocusState(
+	nodeId: NodeId,
+	lifecycle: NodeLifecycle,
+): LogosRuntimeState {
 	const nodeState = makeNodeRuntimeState(nodeId, lifecycle);
 	return {
 		...idleState(),
@@ -457,9 +474,16 @@ describe('Runtime state schema — valid examples', () => {
 
 	it('all 10 lifecycle states produce valid node runtime states', () => {
 		const lifecycles: NodeLifecycle[] = [
-			'not_started', 'active', 'answered', 'needs_clarification',
-			'needs_refinement', 'ready_for_synthesis', 'synthesized',
-			'accepted', 'deferred', 'blocked',
+			'not_started',
+			'active',
+			'answered',
+			'needs_clarification',
+			'needs_refinement',
+			'ready_for_synthesis',
+			'synthesized',
+			'accepted',
+			'deferred',
+			'blocked',
 		];
 		for (const lc of lifecycles) {
 			const ns = makeNodeRuntimeState('node-x' as NodeId, lc);
@@ -472,7 +496,12 @@ describe('Runtime state schema — valid examples', () => {
 
 	it('document runtime state supports all 6 statuses', () => {
 		const statuses: import('../../src/contracts/index.js').DocumentStatus[] = [
-			'not_ready', 'partially_ready', 'ready', 'drafted', 'accepted', 'stale',
+			'not_ready',
+			'partially_ready',
+			'ready',
+			'drafted',
+			'accepted',
+			'stale',
 		];
 		for (const st of statuses) {
 			const ds = makeDocumentRuntimeState('doc-x' as DocumentId, st);
@@ -497,13 +526,17 @@ describe('Runtime state schema — broken states', () => {
 	});
 
 	it('node state without nodeId is detected', () => {
-		const broken = { ...makeNodeRuntimeState('n1' as NodeId, 'active') } as Record<string, unknown>;
+		const broken = {
+			...makeNodeRuntimeState('n1' as NodeId, 'active'),
+		} as Record<string, unknown>;
 		delete broken.nodeId;
 		expect(broken).not.toHaveProperty('nodeId');
 	});
 
 	it('node state without lifecycle is detected', () => {
-		const broken = { ...makeNodeRuntimeState('n1' as NodeId, 'active') } as Record<string, unknown>;
+		const broken = {
+			...makeNodeRuntimeState('n1' as NodeId, 'active'),
+		} as Record<string, unknown>;
 		delete broken.lifecycle;
 		expect(broken).not.toHaveProperty('lifecycle');
 	});

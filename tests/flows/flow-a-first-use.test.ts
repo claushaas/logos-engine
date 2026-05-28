@@ -27,8 +27,8 @@ describe('Flow A — First Use', () => {
 
 		// ── Step 2: Select profile ─────────────────────────────────
 		const r1 = dispatch(state, {
-			type: 'SELECT_PROFILE',
 			profileId: profile.id,
+			type: 'SELECT_PROFILE',
 		});
 		expect(r1.ok).toBe(true);
 		const s1 = r1.state!;
@@ -38,8 +38,8 @@ describe('Flow A — First Use', () => {
 		// ── Step 3: Select first node ──────────────────────────────
 		const nodeId = profile.nodes[0]!.id;
 		const r2 = dispatch(s1, {
-			type: 'SELECT_NODE',
 			nodeId,
+			type: 'SELECT_NODE',
 		});
 		expect(r2.ok).toBe(true);
 		const s2 = r2.state!;
@@ -72,8 +72,8 @@ describe('Flow A — First Use', () => {
 		const { state, dispatch } = createTestSession(profile);
 
 		const result = dispatch(state, {
-			type: 'SELECT_NODE',
 			nodeId: profile.nodes[0]!.id,
+			type: 'SELECT_NODE',
 		});
 		expect(result.ok).toBe(false);
 	});

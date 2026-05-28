@@ -21,7 +21,6 @@ import type {
 	NodeRuntimeState,
 } from '../../src/contracts/index.js';
 import { getAvailableExports } from '../../src/outputs/index.js';
-import type { ExportAvailability } from '../../src/outputs/index.js';
 import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
 import { nowIso } from '../../src/shared/index.js';
 
@@ -29,10 +28,7 @@ import { nowIso } from '../../src/shared/index.js';
 // Test helpers
 // ═══════════════════════════════════════════════════════════════════════════
 
-function acceptedNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function acceptedNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	return {
 		allowedActions: ['continue_next', 'reopen', 'open_document_preview'],
 		canonicalAnswer: {
@@ -68,10 +64,7 @@ function acceptedNodeState(
 	};
 }
 
-function staleNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function staleNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	const base = acceptedNodeState(nodeId, content);
 	return {
 		...base,
@@ -128,11 +121,8 @@ function testRule(documentId: DocumentId): DocumentMaterializationRule {
 	};
 }
 
-function testProfile(
-	rules?: DocumentMaterializationRule[],
-): LogosProfile {
-	const effectiveRules =
-		rules ?? [testRule('test-doc' as DocumentId)];
+function testProfile(rules?: DocumentMaterializationRule[]): LogosProfile {
+	const effectiveRules = rules ?? [testRule('test-doc' as DocumentId)];
 
 	return {
 		description: 'Test profile',
@@ -161,9 +151,7 @@ function testProfile(
 				title: 'Node A',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Test Profile',
 		version: '1.0.0',
 	};
@@ -214,8 +202,7 @@ describe('getAvailableExports', () => {
 
 		const mdEntry = avail.find(
 			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'markdown',
+				e.documentId === ('test-doc' as DocumentId) && e.format === 'markdown',
 		);
 		expect(mdEntry).toBeDefined();
 		expect(mdEntry!.available).toBe(true);
@@ -227,16 +214,13 @@ describe('getAvailableExports', () => {
 
 	it('marks Markdown as unavailable for an incomplete document', () => {
 		const profile = testProfile();
-		const state = stateWithNodes([
-			activeNodeState('node-a' as NodeId),
-		]);
+		const state = stateWithNodes([activeNodeState('node-a' as NodeId)]);
 
 		const avail = getAvailableExports(state, profile);
 
 		const mdEntry = avail.find(
 			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'markdown',
+				e.documentId === ('test-doc' as DocumentId) && e.format === 'markdown',
 		);
 		expect(mdEntry).toBeDefined();
 		expect(mdEntry!.available).toBe(false);
@@ -256,8 +240,7 @@ describe('getAvailableExports', () => {
 
 		const mdEntry = avail.find(
 			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'markdown',
+				e.documentId === ('test-doc' as DocumentId) && e.format === 'markdown',
 		);
 		expect(mdEntry).toBeDefined();
 		expect(mdEntry!.available).toBe(false);
@@ -279,8 +262,7 @@ describe('getAvailableExports', () => {
 
 		const mdEntry = avail.find(
 			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'markdown',
+				e.documentId === ('test-doc' as DocumentId) && e.format === 'markdown',
 		);
 		expect(mdEntry).toBeDefined();
 		expect(mdEntry!.available).toBe(false);
@@ -298,9 +280,7 @@ describe('getAvailableExports', () => {
 		const avail = getAvailableExports(state, profile);
 
 		const htmlEntry = avail.find(
-			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'html',
+			(e) => e.documentId === ('test-doc' as DocumentId) && e.format === 'html',
 		);
 		expect(htmlEntry).toBeDefined();
 		expect(htmlEntry!.available).toBe(true);
@@ -309,16 +289,12 @@ describe('getAvailableExports', () => {
 
 	it('marks HTML as unavailable when document is incomplete (same gate as Markdown)', () => {
 		const profile = testProfile();
-		const state = stateWithNodes([
-			activeNodeState('node-a' as NodeId),
-		]);
+		const state = stateWithNodes([activeNodeState('node-a' as NodeId)]);
 
 		const avail = getAvailableExports(state, profile);
 
 		const htmlEntry = avail.find(
-			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'html',
+			(e) => e.documentId === ('test-doc' as DocumentId) && e.format === 'html',
 		);
 		expect(htmlEntry).toBeDefined();
 		expect(htmlEntry!.available).toBe(false);
@@ -376,11 +352,7 @@ describe('getAvailableExports', () => {
 
 		expect(formatsPerDoc.size).toBe(2);
 		for (const [, info] of formatsPerDoc) {
-			expect(info.formats.sort()).toEqual([
-				'agent_pack',
-				'html',
-				'markdown',
-			]);
+			expect(info.formats.sort()).toEqual(['agent_pack', 'html', 'markdown']);
 		}
 	});
 
@@ -418,8 +390,7 @@ describe('getAvailableExports', () => {
 
 		const mdEntry = avail.find(
 			(e) =>
-				e.documentId === ('test-doc' as DocumentId) &&
-				e.format === 'markdown',
+				e.documentId === ('test-doc' as DocumentId) && e.format === 'markdown',
 		);
 		expect(mdEntry).toBeDefined();
 		expect(mdEntry!.available).toBe(false);

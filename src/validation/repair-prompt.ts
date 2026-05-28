@@ -17,9 +17,13 @@
  * @see {@link https://logos-engine/docs/05-prompt-orchestration-spec.md §11}
  * @see {@link https://logos-engine/docs/architecture/05-llm-integration-architecture.md §7}
  */
+
+import type {
+	LlmMessage,
+	LlmRequest,
+} from '../prompt-orchestration/prompt-assembler.js';
 import type { Result } from '../shared/index.js';
 import { err, ok } from '../shared/index.js';
-import type { LlmRequest, LlmMessage } from '../prompt-orchestration/prompt-assembler.js';
 import type { ValidationError } from './agent-turn-validator.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -91,9 +95,7 @@ export type RepairAttempt = {
  * When the path is empty, `<root>` is used as the field reference.
  */
 function formatError(error: ValidationError, index: number): string {
-	const field = error.path.length > 0
-		? error.path.join('.')
-		: '<root>';
+	const field = error.path.length > 0 ? error.path.join('.') : '<root>';
 	return `${index}. [${error.code}] ${field}: ${error.message}`;
 }
 

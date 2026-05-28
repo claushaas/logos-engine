@@ -25,8 +25,8 @@ import type {
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
 import type { NodeId } from '../shared/index.js';
-import { flattenSidebarTree } from './components/NodeTree.js';
 import { MainPanel } from './components/MainPanel.js';
+import { flattenSidebarTree } from './components/NodeTree.js';
 import { Sidebar } from './components/Sidebar.js';
 import { useFocus } from './hooks/use-focus.js';
 import { useNavigation } from './hooks/use-navigation.js';
@@ -41,8 +41,16 @@ import { useNavigation } from './hooks/use-navigation.js';
  */
 export type TuiDispatchEvent =
 	| { readonly type: 'NODE_SELECTED'; readonly nodeId: NodeId }
-	| { readonly type: 'ACTION_SELECTED'; readonly actionId: string; readonly nodeAction?: string }
-	| { readonly type: 'USER_MESSAGE'; readonly content: string; readonly submitAction?: string }
+	| {
+			readonly type: 'ACTION_SELECTED';
+			readonly actionId: string;
+			readonly nodeAction?: string;
+	  }
+	| {
+			readonly type: 'USER_MESSAGE';
+			readonly content: string;
+			readonly submitAction?: string;
+	  }
 	| { readonly type: 'ESCAPE' };
 
 // ─── TUI application context ────────────────────────────────────────────────
@@ -183,15 +191,12 @@ export function AppShell() {
 
 	// ── Focus management ─────────────────────────────────────────────────
 
-	const focus = useFocus(
-		snapshot.sidebar,
-		snapshot.actionBar,
-		snapshot.input,
-		{ totalSidebarItems: visibleItems.length },
-	);
+	const focus = useFocus(snapshot.sidebar, snapshot.actionBar, snapshot.input, {
+		totalSidebarItems: visibleItems.length,
+	});
 
 	// Reset focus and clear input buffer when snapshot changes (e.g., mode switch)
-	const snapshotKey = useMemo(
+	const _snapshotKey = useMemo(
 		() => `${snapshot.mode}:${snapshot.sidebar.activeNodeId ?? 'none'}`,
 		[snapshot.mode, snapshot.sidebar.activeNodeId],
 	);
@@ -199,12 +204,26 @@ export function AppShell() {
 	useEffect(() => {
 		focus.resetFocus();
 		setInputBuffer('');
-	}, [snapshotKey]);
+	}, [focus.resetFocus]);
 
 	// ── Keyboard handler ─────────────────────────────────────────────────
 
 	const handleInput = useCallback(
-		(input: string, key: { upArrow: boolean; downArrow: boolean; leftArrow: boolean; rightArrow: boolean; return: boolean; escape: boolean; tab: boolean; shift: boolean; backspace: boolean; delete: boolean }) => {
+		(
+			input: string,
+			key: {
+				upArrow: boolean;
+				downArrow: boolean;
+				leftArrow: boolean;
+				rightArrow: boolean;
+				return: boolean;
+				escape: boolean;
+				tab: boolean;
+				shift: boolean;
+				backspace: boolean;
+				delete: boolean;
+			},
+		) => {
 			// ── Text input mode: append printable chars, handle special keys
 
 			if (focus.region === 'input' && snapshot.input.enabled) {
@@ -227,11 +246,11 @@ export function AppShell() {
 										content: inputBuffer,
 										submitAction: snapshot.input.submitAction,
 										type: 'USER_MESSAGE',
-								  }
+									}
 								: {
 										content: inputBuffer,
 										type: 'USER_MESSAGE',
-								  };
+									};
 						dispatch?.(event);
 						setInputBuffer('');
 					}
@@ -300,7 +319,11 @@ export function AppShell() {
 						// Find the parent document by scanning backwards
 						for (let i = focus.focusedNodeIndex - 1; i >= 0; i--) {
 							const prev = visibleItems[i];
-							if (prev !== undefined && prev.kind === 'document' && prev.expanded) {
+							if (
+								prev !== undefined &&
+								prev.kind === 'document' &&
+								prev.expanded
+							) {
 								setCollapsedDocumentIds((prevSet) => {
 									const next = new Set(prevSet);
 									next.add(prev.documentId);
@@ -396,10 +419,7 @@ export function AppShell() {
 						return;
 					}
 				} else if (focus.region === 'actions') {
-					const action =
-						snapshot.actionBar.actions[
-							focus.focusedActionIndex
-						];
+					const action = snapshot.actionBar.actions[focus.focusedActionIndex];
 					if (action?.enabled) {
 						const dispEvent: TuiDispatchEvent =
 							action.nodeAction !== undefined
@@ -407,11 +427,11 @@ export function AppShell() {
 										actionId: action.id,
 										nodeAction: action.nodeAction,
 										type: 'ACTION_SELECTED',
-								  }
+									}
 								: {
 										actionId: action.id,
 										type: 'ACTION_SELECTED',
-								  };
+									};
 						dispatch?.(dispEvent);
 					}
 				}
@@ -425,7 +445,16 @@ export function AppShell() {
 				return;
 			}
 		},
-		[dispatch, focus, inputBuffer, navigation, snapshot.actionBar.actions, snapshot.input.enabled, snapshot.input.submitAction, snapshot.sidebar, visibleItems, setCollapsedPhaseIds, setCollapsedDocumentIds],
+		[
+			dispatch,
+			focus,
+			inputBuffer,
+			navigation,
+			snapshot.actionBar.actions,
+			snapshot.input.enabled,
+			snapshot.input.submitAction,
+			visibleItems,
+		],
 	);
 
 	useInput(handleInput);
@@ -465,9 +494,7 @@ export function AppShell() {
 					actionBar={snapshot.actionBar}
 					focusedActionIndex={focus.focusedActionIndex}
 					focusedRegion={
-						focus.availableRegions.includes('main')
-							? focus.region
-							: null
+						focus.availableRegions.includes('main') ? focus.region : null
 					}
 					input={snapshot.input}
 					inputValue={inputBuffer}
@@ -480,15 +507,10 @@ export function AppShell() {
 
 			{/* Diagnostics footer (only when diagnostics exist) */}
 			{snapshot.diagnostics.length > 0 && (
-				<Box borderTop={true} borderStyle="single" paddingX={1}>
-					{snapshot.diagnostics.map(
-						(d: RuntimeDiagnostic, i: number) => (
-							<DiagnosticEntry
-								key={`${d.code}-${i}`}
-								diagnostic={d}
-							/>
-						),
-					)}
+				<Box borderStyle="single" borderTop={true} paddingX={1}>
+					{snapshot.diagnostics.map((d: RuntimeDiagnostic, i: number) => (
+						<DiagnosticEntry diagnostic={d} key={`${d.code}-${i}`} />
+					))}
 				</Box>
 			)}
 		</Box>

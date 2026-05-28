@@ -26,6 +26,11 @@ export {
 } from './generate-structured-output.js';
 export { generateText } from './generate-text.js';
 export {
+	type LlmProvider,
+	type LlmResponse,
+	MockLlmProvider,
+} from './mock-provider.js';
+export {
 	extractIssues,
 	formatValidationIssues,
 	response_validation,
@@ -42,9 +47,3 @@ export {
 	type RetryConfig,
 	withRetry,
 } from './retry-policy.js';
-
-export {
-	type LlmProvider,
-	type LlmResponse,
-	MockLlmProvider,
-} from './mock-provider.js';

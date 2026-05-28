@@ -65,14 +65,14 @@ export function ActionBar({
 	const isActionsFocused = focusedRegion === 'actions';
 
 	return (
-		<Box flexDirection="row" marginTop={1} gap={1}>
+		<Box flexDirection="row" gap={1} marginTop={1}>
 			<Text dimColor={true}>Actions: </Text>
 
 			{actionBar.actions.map((action, idx) => (
 				<ActionItem
-					key={action.id}
 					isDisabled={!action.enabled}
 					isFocused={isActionsFocused && focusedActionIndex === idx}
+					key={action.id}
 					label={action.label}
 				/>
 			))}

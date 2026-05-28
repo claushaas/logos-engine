@@ -13,15 +13,9 @@
 import { describe, it } from 'vitest';
 
 describe('Flow F — Blocked Node', () => {
-	it.todo(
-		'node with unmet dependency opens as blocked',
-	);
+	it.todo('node with unmet dependency opens as blocked');
 
-	it.todo(
-		'blocked node explains prerequisite and links to it',
-	);
+	it.todo('blocked node explains prerequisite and links to it');
 
-	it.todo(
-		'prerequisite acceptance auto-resolves blocked node',
-	);
+	it.todo('prerequisite acceptance auto-resolves blocked node');
 });

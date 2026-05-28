@@ -5,8 +5,9 @@
  * Tests cover: idle screen, structure overview, node focus,
  * focus management, keyboard dispatch.
  */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { render } from 'ink-testing-library';
+import { describe, expect, it, vi } from 'vitest';
 
 import type {
 	DocumentId,
@@ -103,9 +104,24 @@ function nodeFocusSnapshot(): TuiRenderSnapshot {
 	return {
 		actionBar: {
 			actions: [
-				{ enabled: true, id: 'accept', label: '[Accept]', nodeAction: 'accept' as never },
-				{ enabled: true, id: 'edit', label: '[Edit]', nodeAction: 'edit' as never },
-				{ enabled: true, id: 'regenerate', label: '[Regenerate]', nodeAction: 'regenerate' as never },
+				{
+					enabled: true,
+					id: 'accept',
+					label: '[Accept]',
+					nodeAction: 'accept' as never,
+				},
+				{
+					enabled: true,
+					id: 'edit',
+					label: '[Edit]',
+					nodeAction: 'edit' as never,
+				},
+				{
+					enabled: true,
+					id: 'regenerate',
+					label: '[Regenerate]',
+					nodeAction: 'regenerate' as never,
+				},
 			],
 		},
 		diagnostics: [
@@ -454,9 +470,24 @@ function notStartedSnapshot(): TuiRenderSnapshot {
 	return {
 		actionBar: {
 			actions: [
-				{ enabled: true, id: 'answer', label: '[Answer]', nodeAction: 'answer' as never },
-				{ enabled: true, id: 'skip', label: '[Skip]', nodeAction: 'skip' as never },
-				{ enabled: true, id: 'ask_for_example', label: '[Ask for example]', nodeAction: 'ask_for_example' as never },
+				{
+					enabled: true,
+					id: 'answer',
+					label: '[Answer]',
+					nodeAction: 'answer' as never,
+				},
+				{
+					enabled: true,
+					id: 'skip',
+					label: '[Skip]',
+					nodeAction: 'skip' as never,
+				},
+				{
+					enabled: true,
+					id: 'ask_for_example',
+					label: '[Ask for example]',
+					nodeAction: 'ask_for_example' as never,
+				},
 			],
 		},
 		diagnostics: [],
@@ -515,9 +546,24 @@ function acceptedSnapshot(): TuiRenderSnapshot {
 	return {
 		actionBar: {
 			actions: [
-				{ enabled: true, id: 'continue_next', label: '[Continue →]', nodeAction: 'continue_next' as never },
-				{ enabled: true, id: 'reopen', label: '[Reopen]', nodeAction: 'reopen' as never },
-				{ enabled: true, id: 'open_document_preview', label: '[Preview Document]', nodeAction: 'open_document_preview' as never },
+				{
+					enabled: true,
+					id: 'continue_next',
+					label: '[Continue →]',
+					nodeAction: 'continue_next' as never,
+				},
+				{
+					enabled: true,
+					id: 'reopen',
+					label: '[Reopen]',
+					nodeAction: 'reopen' as never,
+				},
+				{
+					enabled: true,
+					id: 'open_document_preview',
+					label: '[Preview Document]',
+					nodeAction: 'open_document_preview' as never,
+				},
 			],
 		},
 		diagnostics: [],
@@ -526,7 +572,8 @@ function acceptedSnapshot(): TuiRenderSnapshot {
 			breadcrumb: 'Foundation / Thesis / Core Thesis',
 			canonicalAnswerAccepted: true,
 			canonicalAnswerConfidence: 'medium',
-			canonicalAnswerPreview: 'The hiring industry evaluates credentials over competence.',
+			canonicalAnswerPreview:
+				'The hiring industry evaluates credentials over competence.',
 			canonicalAnswerSourceMessageCount: 8,
 			canonicalAnswerStale: false,
 			kind: 'node_conversation',
@@ -587,8 +634,18 @@ function blockedSnapshot(): TuiRenderSnapshot {
 	return {
 		actionBar: {
 			actions: [
-				{ enabled: true, id: 'open_prerequisite', label: '[Open Prerequisite]', nodeAction: 'open_prerequisite' as never },
-				{ enabled: true, id: 'defer', label: '[Defer]', nodeAction: 'defer' as never },
+				{
+					enabled: true,
+					id: 'open_prerequisite',
+					label: '[Open Prerequisite]',
+					nodeAction: 'open_prerequisite' as never,
+				},
+				{
+					enabled: true,
+					id: 'defer',
+					label: '[Defer]',
+					nodeAction: 'defer' as never,
+				},
 			],
 		},
 		diagnostics: [],
@@ -601,7 +658,8 @@ function blockedSnapshot(): TuiRenderSnapshot {
 			lifecycle: 'blocked',
 			messages: [
 				{
-					content: 'This node depends on your Core Thesis, which must be accepted first.',
+					content:
+						'This node depends on your Core Thesis, which must be accepted first.',
 					createdAt: '2025-01-01T00:00:00.000Z',
 					id: 'msg-1',
 					role: 'assistant',
@@ -819,6 +877,7 @@ describe('Conversation message ordering', () => {
 			...notStartedSnapshot(),
 			mainPanel: {
 				...(notStartedSnapshot().mainPanel as NodeConversationPanel),
+				lifecycle: 'active' as const,
 				messages: [
 					{
 						content: 'My answer goes here.',
@@ -833,7 +892,6 @@ describe('Conversation message ordering', () => {
 						role: 'assistant' as const,
 					},
 				],
-				lifecycle: 'active' as const,
 			},
 		};
 		const { lastFrame } = renderShell(snap);
@@ -880,20 +938,72 @@ function allLifecycleSymbolsSnapshot(): TuiRenderSnapshot {
 		disabled: boolean;
 		reasonIfDisabled?: string;
 	}> = [
-		{ disabled: false, nodeId: 'n-o' as NodeId, selected: false, statusSymbol: '○', title: 'Not Started' },
-		{ disabled: false, nodeId: 'n-a' as NodeId, selected: false, statusSymbol: '◐', title: 'Active' },
-		{ disabled: false, nodeId: 'n-q' as NodeId, selected: false, statusSymbol: '?', title: 'Needs Clarification' },
-		{ disabled: false, nodeId: 'n-r' as NodeId, selected: false, statusSymbol: '△', title: 'Needs Refinement' },
-		{ disabled: false, nodeId: 'n-s' as NodeId, selected: false, statusSymbol: '◆', title: 'Ready for Synthesis' },
-		{ disabled: false, nodeId: 'n-v' as NodeId, selected: true, statusSymbol: '✓', title: 'Accepted' },
-		{ disabled: false, nodeId: 'n-d' as NodeId, selected: false, statusSymbol: '⏸', title: 'Deferred' },
-		{ disabled: true, nodeId: 'n-b' as NodeId, reasonIfDisabled: 'Blocked by prerequisite.', selected: false, statusSymbol: '⚠', title: 'Blocked' },
+		{
+			disabled: false,
+			nodeId: 'n-o' as NodeId,
+			selected: false,
+			statusSymbol: '○',
+			title: 'Not Started',
+		},
+		{
+			disabled: false,
+			nodeId: 'n-a' as NodeId,
+			selected: false,
+			statusSymbol: '◐',
+			title: 'Active',
+		},
+		{
+			disabled: false,
+			nodeId: 'n-q' as NodeId,
+			selected: false,
+			statusSymbol: '?',
+			title: 'Needs Clarification',
+		},
+		{
+			disabled: false,
+			nodeId: 'n-r' as NodeId,
+			selected: false,
+			statusSymbol: '△',
+			title: 'Needs Refinement',
+		},
+		{
+			disabled: false,
+			nodeId: 'n-s' as NodeId,
+			selected: false,
+			statusSymbol: '◆',
+			title: 'Ready for Synthesis',
+		},
+		{
+			disabled: false,
+			nodeId: 'n-v' as NodeId,
+			selected: true,
+			statusSymbol: '✓',
+			title: 'Accepted',
+		},
+		{
+			disabled: false,
+			nodeId: 'n-d' as NodeId,
+			selected: false,
+			statusSymbol: '⏸',
+			title: 'Deferred',
+		},
+		{
+			disabled: true,
+			nodeId: 'n-b' as NodeId,
+			reasonIfDisabled: 'Blocked by prerequisite.',
+			selected: false,
+			statusSymbol: '⚠',
+			title: 'Blocked',
+		},
 	];
 
 	return {
 		actionBar: { actions: [] },
 		diagnostics: [],
-		input: { enabled: false, reasonIfDisabled: 'Select a node from the sidebar.' },
+		input: {
+			enabled: false,
+			reasonIfDisabled: 'Select a node from the sidebar.',
+		},
 		mainPanel: {
 			availableProfileIds: ['test-profile'],
 			kind: 'profile',
@@ -1007,10 +1117,7 @@ describe('AppShell — sidebar collapse/expand (Step 9.1)', () => {
 
 	it('dispatches NODE_SELECTED for a blocked node', async () => {
 		const dispatch = vi.fn();
-		const { stdin } = renderShell(
-			structureOverviewSnapshot(),
-			dispatch,
-		);
+		const { stdin } = renderShell(structureOverviewSnapshot(), dispatch);
 
 		// Navigate to the blocked node (index 3: Central Tension)
 		// index 0: phase, index 1: document, index 2: n1, index 3: n2
@@ -1094,7 +1201,8 @@ function documentPreviewSnapshot(): TuiRenderSnapshot {
 		diagnostics: [],
 		input: {
 			enabled: false,
-			reasonIfDisabled: 'Text input is not available while previewing a document.',
+			reasonIfDisabled:
+				'Text input is not available while previewing a document.',
 		},
 		mainPanel: {
 			content: '# Test\n\nSome text.\n\nCompleteness: 0/0',
@@ -1164,10 +1272,30 @@ function recoverableErrorSnapshot(): TuiRenderSnapshot {
 		actionBar: {
 			actions: [
 				{ enabled: true, id: 'retry', label: '[Retry]' },
-				{ enabled: false, id: 'reopen_node', label: '[Reopen Node]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'open_missing_prerequisite', label: '[Open Prerequisite]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'export_recovery_bundle', label: '[Export Recovery Bundle]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'restore_previous_snapshot', label: '[Restore Previous Snapshot]', reasonIfDisabled: 'Not available for this error.' },
+				{
+					enabled: false,
+					id: 'reopen_node',
+					label: '[Reopen Node]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'open_missing_prerequisite',
+					label: '[Open Prerequisite]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'export_recovery_bundle',
+					label: '[Export Recovery Bundle]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'restore_previous_snapshot',
+					label: '[Restore Previous Snapshot]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
 				{ enabled: true, id: 'close_error', label: '[Close]' },
 			],
 		},
@@ -1200,11 +1328,36 @@ function fatalErrorSnapshot(): TuiRenderSnapshot {
 	return {
 		actionBar: {
 			actions: [
-				{ enabled: false, id: 'retry', label: '[Retry]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'reopen_node', label: '[Reopen Node]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'open_missing_prerequisite', label: '[Open Prerequisite]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'export_recovery_bundle', label: '[Export Recovery Bundle]', reasonIfDisabled: 'Not available for this error.' },
-				{ enabled: false, id: 'restore_previous_snapshot', label: '[Restore Previous Snapshot]', reasonIfDisabled: 'Not available for this error.' },
+				{
+					enabled: false,
+					id: 'retry',
+					label: '[Retry]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'reopen_node',
+					label: '[Reopen Node]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'open_missing_prerequisite',
+					label: '[Open Prerequisite]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'export_recovery_bundle',
+					label: '[Export Recovery Bundle]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
+				{
+					enabled: false,
+					id: 'restore_previous_snapshot',
+					label: '[Restore Previous Snapshot]',
+					reasonIfDisabled: 'Not available for this error.',
+				},
 				{ enabled: true, id: 'close_error', label: '[Close]' },
 			],
 		},

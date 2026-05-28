@@ -101,11 +101,7 @@ export function getAvailableExports(
 		} else {
 			// Compute readiness on-the-fly so availability is always current —
 			// does not depend on pre-computed documentStates.
-			const readiness = computeDocumentReadiness(
-				documentId,
-				state,
-				profile,
-			);
+			const readiness = computeDocumentReadiness(documentId, state, profile);
 
 			const exportableStatuses = new Set(['ready', 'drafted', 'accepted']);
 
@@ -126,11 +122,7 @@ export function getAvailableExports(
 			} else {
 				// Document is ready / drafted / accepted — materialize and
 				// cross-check for inconsistencies.
-				const draftResult = materializeDocument(
-					documentId,
-					state,
-					profile,
-				);
+				const draftResult = materializeDocument(documentId, state, profile);
 
 				if (!draftResult.ok) {
 					blockedReason = draftResult.error.message;
@@ -138,8 +130,7 @@ export function getAvailableExports(
 					blockedReason =
 						'Materialized draft is stale. Source nodes may have changed.';
 				} else if (draftResult.value.missingSections.length > 0) {
-					const sections =
-						draftResult.value.missingSections.join(', ');
+					const sections = draftResult.value.missingSections.join(', ');
 					blockedReason = `Missing required sections: ${sections}.`;
 				} else {
 					documentExportAvailable = true;
@@ -168,16 +159,14 @@ export function getAvailableExports(
 			format: 'html',
 		};
 		if (!documentExportAvailable && blockedReason !== undefined) {
-			(htmlEntry as { blockedReason?: string }).blockedReason =
-				blockedReason;
+			(htmlEntry as { blockedReason?: string }).blockedReason = blockedReason;
 		}
 		results.push(htmlEntry);
 
 		// ── Agent Pack: placeholder — Phase 17 ───────────────────────
 		results.push({
 			available: false,
-			blockedReason:
-				'Agent Pack export is not yet implemented (Phase 17).',
+			blockedReason: 'Agent Pack export is not yet implemented (Phase 17).',
 			documentId,
 			documentTitle: title,
 			format: 'agent_pack',

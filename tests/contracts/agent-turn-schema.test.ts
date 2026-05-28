@@ -19,7 +19,10 @@
  */
 import { describe, expect, it } from 'vitest';
 
-import type { AgentTurnOutput, NodeLifecycle } from '../../src/contracts/index.js';
+import type {
+	AgentTurnOutput,
+	NodeLifecycle,
+} from '../../src/contracts/index.js';
 import { isErr, isOk } from '../../src/shared/index.js';
 import {
 	type AgentTurnValidationContext,
@@ -49,7 +52,8 @@ function fullOutput(): AgentTurnOutput {
 	return {
 		canonicalAnswerDraft: {
 			confidence: 'medium',
-			content: 'The core thesis is: sustainable food systems require local production loops.',
+			content:
+				'The core thesis is: sustainable food systems require local production loops.',
 			format: 'markdown',
 			generatedAt: '2026-05-27T00:00:00.000Z',
 			generatedFromMessageIds: ['msg_001', 'msg_002'],
@@ -84,7 +88,8 @@ function fullOutput(): AgentTurnOutput {
 			event: 'USER_ANSWER_EVALUATED',
 			reason: 'User provided a substantive answer to the initial question.',
 		},
-		userFacingMessage: "That's a solid start! Let me ask a follow-up question to deepen the answer.",
+		userFacingMessage:
+			"That's a solid start! Let me ask a follow-up question to deepen the answer.",
 	};
 }
 
@@ -116,7 +121,8 @@ function synthesisOutput(): AgentTurnOutput {
 			event: 'SYNTHESIS_PROPOSED',
 			reason: 'All coverage topics are sufficient. Ready for review.',
 		},
-		userFacingMessage: "Here's the synthesized canonical answer for your review.",
+		userFacingMessage:
+			"Here's the synthesized canonical answer for your review.",
 	};
 }
 
@@ -286,7 +292,9 @@ describe('AgentTurnOutput schema — broken outputs', () => {
 		);
 		expect(isErr(result)).toBe(true);
 		if (isErr(result)) {
-			expect(result.error.some((e) => e.code === 'INVALID_TRANSITION')).toBe(true);
+			expect(result.error.some((e) => e.code === 'INVALID_TRANSITION')).toBe(
+				true,
+			);
 		}
 	});
 
@@ -323,7 +331,9 @@ describe('AgentTurnOutput schema — broken outputs', () => {
 		);
 		expect(isErr(result)).toBe(true);
 		if (isErr(result)) {
-			expect(result.error.some((e) => e.code === 'ACTION_NOT_ALLOWED')).toBe(true);
+			expect(result.error.some((e) => e.code === 'ACTION_NOT_ALLOWED')).toBe(
+				true,
+			);
 		}
 	});
 
@@ -374,7 +384,9 @@ describe('AgentTurnOutput schema — broken outputs', () => {
 		expect(isErr(result)).toBe(true);
 		if (isErr(result)) {
 			expect(
-				result.error.some((e) => e.code === 'COMPLETENESS_CONTRADICTS_LIFECYCLE'),
+				result.error.some(
+					(e) => e.code === 'COMPLETENESS_CONTRADICTS_LIFECYCLE',
+				),
 			).toBe(true);
 		}
 	});
@@ -433,9 +445,16 @@ describe('AgentTurnOutput schema — edge cases', () => {
 
 	it('valid output with all 10 lifecycle values (one at a time) passes schema check', () => {
 		const lifecycles: NodeLifecycle[] = [
-			'not_started', 'active', 'answered', 'needs_clarification',
-			'needs_refinement', 'ready_for_synthesis', 'synthesized',
-			'accepted', 'deferred', 'blocked',
+			'not_started',
+			'active',
+			'answered',
+			'needs_clarification',
+			'needs_refinement',
+			'ready_for_synthesis',
+			'synthesized',
+			'accepted',
+			'deferred',
+			'blocked',
 		];
 		for (const lc of lifecycles) {
 			const result = validateAgentTurnOutput({
@@ -446,7 +465,9 @@ describe('AgentTurnOutput schema — edge cases', () => {
 			if (isErr(result)) {
 				// Only flag schema errors as unexpected
 				const schemaOnly = result.error.filter(
-					(e) => e.path.includes('proposedLifecycle') && e.code === 'invalid_enum_value',
+					(e) =>
+						e.path.includes('proposedLifecycle') &&
+						e.code === 'invalid_enum_value',
 				);
 				expect(schemaOnly).toEqual([]);
 			}
@@ -455,7 +476,13 @@ describe('AgentTurnOutput schema — edge cases', () => {
 
 	it('multiple errors are returned at once', () => {
 		const result = validateAgentTurnOutput({
-			canonicalAnswerDraft: { confidence: 'low', content: '', format: 'invalid', generatedAt: '', generatedFromMessageIds: [] },
+			canonicalAnswerDraft: {
+				confidence: 'low',
+				content: '',
+				format: 'invalid',
+				generatedAt: '',
+				generatedFromMessageIds: [],
+			},
 			proposedLifecycle: 'invalid',
 			suggestedActions: ['invalid_action'],
 			userFacingMessage: '',

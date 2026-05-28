@@ -14,8 +14,8 @@
 // Shell
 export {
 	AppShell,
-	TuiApplicationProvider,
 	type TuiApplicationContextValue,
+	TuiApplicationProvider,
 	type TuiApplicationProviderProps,
 	type TuiDispatchEvent,
 	useTuiApplication,

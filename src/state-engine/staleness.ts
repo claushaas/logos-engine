@@ -56,9 +56,7 @@ const DIAG_STALE_NOT_ACCEPTED = 'LOGOS_STALE_NOT_ACCEPTED';
  * If the node has no canonical answer or the answer is already stale,
  * returns the node state unchanged.
  */
-function markNodeAnswerStale(
-	nodeState: NodeRuntimeState,
-): NodeRuntimeState {
+function markNodeAnswerStale(nodeState: NodeRuntimeState): NodeRuntimeState {
 	const answer = nodeState.canonicalAnswer;
 
 	if (answer === null || answer.stale === true) {
@@ -155,7 +153,7 @@ export function propagateStaleness(
 	}
 
 	// ── Guard: only cascade from accepted answers ────────────────────
-	if (!changedNode.canonicalAnswer || !changedNode.canonicalAnswer.accepted) {
+	if (!changedNode.canonicalAnswer?.accepted) {
 		// No-op: a non-accepted node's changes don't cascade to dependents.
 		const snapshot = buildSnapshot(state, profile, [
 			diagnostic(
@@ -199,11 +197,7 @@ export function propagateStaleness(
 		}
 
 		// Only mark stale if the dependent has an accepted, non-stale answer.
-		if (
-			depState.canonicalAnswer &&
-			depState.canonicalAnswer.accepted &&
-			!depState.canonicalAnswer.stale
-		) {
+		if (depState.canonicalAnswer?.accepted && !depState.canonicalAnswer.stale) {
 			nextNodeStates = {
 				...nextNodeStates,
 				[depId]: markNodeAnswerStale(depState),

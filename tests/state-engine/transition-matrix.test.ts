@@ -27,8 +27,8 @@ import { generateId, nowIso } from '../../src/shared/index.js';
 import {
 	allLifecycles,
 	applyLifecycleTransition,
-	type LifecycleTransitionEvent,
 	isValidTransition,
+	type LifecycleTransitionEvent,
 } from '../../src/state-engine/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -113,13 +113,15 @@ interface MatrixCase {
 	readonly valid: boolean;
 }
 
-const VALID_SET: ReadonlyMap<NodeLifecycle, ReadonlySet<NodeLifecycle>> =
-	new Map(
-		Object.entries(EXPECTED_VALID_TARGETS).map(([from, targets]) => [
-			from as NodeLifecycle,
-			new Set(targets),
-		]),
-	);
+const VALID_SET: ReadonlyMap<
+	NodeLifecycle,
+	ReadonlySet<NodeLifecycle>
+> = new Map(
+	Object.entries(EXPECTED_VALID_TARGETS).map(([from, targets]) => [
+		from as NodeLifecycle,
+		new Set(targets),
+	]),
+);
 
 const MATRIX_CASES: readonly MatrixCase[] = (() => {
 	const cases: MatrixCase[] = [];
@@ -140,12 +142,9 @@ describe('transition matrix — 100 combinations', () => {
 		expect(MATRIX_CASES).toHaveLength(100);
 	});
 
-	it.each(MATRIX_CASES)(
-		'$from → $to is $valid',
-		({ from, to, valid }) => {
-			expect(isValidTransition(from, to)).toBe(valid);
-		},
-	);
+	it.each(MATRIX_CASES)('$from → $to is $valid', ({ from, to, valid }) => {
+		expect(isValidTransition(from, to)).toBe(valid);
+	});
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -159,73 +158,73 @@ const INVALID_TRANSITIONS: readonly {
 }[] = [
 	{
 		from: 'not_started',
-		to: 'accepted',
 		reason: 'cannot jump from initial to final without conversation',
+		to: 'accepted',
 	},
 	{
 		from: 'needs_clarification',
-		to: 'accepted',
 		reason: 'ambiguous answers must be clarified before acceptance',
+		to: 'accepted',
 	},
 	{
 		from: 'needs_refinement',
-		to: 'accepted',
 		reason: 'weak answers must be refined before acceptance',
+		to: 'accepted',
 	},
 	{
 		from: 'blocked',
-		to: 'accepted',
 		reason: 'blocked nodes have unresolved dependencies',
+		to: 'accepted',
 	},
 	{
 		from: 'accepted',
-		to: 'synthesized',
 		reason: 'cannot revert to synthesized without reopening first',
+		to: 'synthesized',
 	},
 	{
 		from: 'not_started',
-		to: 'synthesized',
 		reason: 'cannot skip all intermediate states',
+		to: 'synthesized',
 	},
 	{
 		from: 'active',
-		to: 'accepted',
 		reason: 'must go through answered/synthesis before acceptance',
+		to: 'accepted',
 	},
 	{
 		from: 'answered',
-		to: 'accepted',
 		reason: 'must be synthesized before acceptance',
+		to: 'accepted',
 	},
 	{
 		from: 'ready_for_synthesis',
-		to: 'accepted',
 		reason: 'must be synthesized first',
+		to: 'accepted',
 	},
 	{
 		from: 'deferred',
-		to: 'accepted',
 		reason: 'deferred nodes must be resumed first',
+		to: 'accepted',
 	},
 	{
 		from: 'accepted',
-		to: 'deferred',
 		reason: 'accepted is a final state; cannot defer accepted',
+		to: 'deferred',
 	},
 	{
 		from: 'accepted',
-		to: 'blocked',
 		reason: 'accepted is a final state; cannot block accepted',
+		to: 'blocked',
 	},
 ];
 
 describe('§7 invalid transitions', () => {
-	it.each(INVALID_TRANSITIONS)(
-		'$from → $to is rejected ($reason)',
-		({ from, to }) => {
-			expect(isValidTransition(from, to)).toBe(false);
-		},
-	);
+	it.each(INVALID_TRANSITIONS)('$from → $to is rejected ($reason)', ({
+		from,
+		to,
+	}) => {
+		expect(isValidTransition(from, to)).toBe(false);
+	});
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -233,7 +232,9 @@ describe('§7 invalid transitions', () => {
 // ═══════════════════════════════════════════════════════════════════════════
 
 describe('self-transitions', () => {
-	it.each(allLifecycles())('%s → %s is invalid (no identity no-ops)', (lifecycle) => {
+	it.each(
+		allLifecycles(),
+	)('%s → %s is invalid (no identity no-ops)', (lifecycle) => {
 		expect(isValidTransition(lifecycle, lifecycle)).toBe(false);
 	});
 });
@@ -514,98 +515,123 @@ interface DocumentedTransition {
 }
 
 const DOCUMENTED_VALID_TRANSITIONS: readonly DocumentedTransition[] = [
-	{ from: 'not_started', to: 'active', event: 'ASKED_INITIAL' },
-	{ from: 'active', to: 'answered', event: 'USER_ANSWER_EVALUATED' },
-	{ from: 'active', to: 'needs_clarification', event: 'CLARIFICATION_REQUESTED' },
-	{ from: 'active', to: 'needs_refinement', event: 'REFINEMENT_REQUESTED' },
-	{ from: 'active', to: 'ready_for_synthesis', event: 'AUTO_EVALUATE', needsNodeDef: true },
-	{ from: 'active', to: 'deferred', event: 'USER_DEFER' },
-	{ from: 'active', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'answered', to: 'needs_clarification', event: 'CLARIFICATION_REQUESTED' },
-	{ from: 'answered', to: 'needs_refinement', event: 'REFINEMENT_REQUESTED' },
-	{ from: 'answered', to: 'ready_for_synthesis', event: 'SYNTHESIS_PROPOSED', needsNodeDef: true },
-	{ from: 'answered', to: 'deferred', event: 'USER_DEFER' },
-	{ from: 'answered', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'needs_clarification', to: 'active', event: 'USER_ANSWERED' },
-	{ from: 'needs_clarification', to: 'deferred', event: 'USER_DEFER' },
-	{ from: 'needs_clarification', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'needs_refinement', to: 'active', event: 'USER_ANSWERED' },
-	{ from: 'needs_refinement', to: 'ready_for_synthesis', event: 'AUTO_EVALUATE', needsNodeDef: true },
-	{ from: 'needs_refinement', to: 'deferred', event: 'USER_DEFER' },
-	{ from: 'needs_refinement', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'ready_for_synthesis', to: 'synthesized', event: 'SYNTHESIS_PROPOSED' },
-	{ from: 'ready_for_synthesis', to: 'deferred', event: 'USER_DEFER' },
-	{ from: 'ready_for_synthesis', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'synthesized', to: 'accepted', event: 'USER_ACCEPT' },
-	{ from: 'synthesized', to: 'active', event: 'USER_REOPEN' },
-	{ from: 'synthesized', to: 'deferred', event: 'USER_DEFER' },
-	{ from: 'synthesized', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'accepted', to: 'active', event: 'USER_REOPEN' },
-	{ from: 'deferred', to: 'active', event: 'USER_RESUME' },
-	{ from: 'deferred', to: 'blocked', event: 'NODE_BLOCKED' },
-	{ from: 'blocked', to: 'active', event: 'DEPENDENCY_RESOLVED' },
-	{ from: 'blocked', to: 'not_started', event: 'DEPENDENCY_RESOLVED' },
-	{ from: 'blocked', to: 'deferred', event: 'USER_DEFER' },
+	{ event: 'ASKED_INITIAL', from: 'not_started', to: 'active' },
+	{ event: 'USER_ANSWER_EVALUATED', from: 'active', to: 'answered' },
+	{
+		event: 'CLARIFICATION_REQUESTED',
+		from: 'active',
+		to: 'needs_clarification',
+	},
+	{ event: 'REFINEMENT_REQUESTED', from: 'active', to: 'needs_refinement' },
+	{
+		event: 'AUTO_EVALUATE',
+		from: 'active',
+		needsNodeDef: true,
+		to: 'ready_for_synthesis',
+	},
+	{ event: 'USER_DEFER', from: 'active', to: 'deferred' },
+	{ event: 'NODE_BLOCKED', from: 'active', to: 'blocked' },
+	{
+		event: 'CLARIFICATION_REQUESTED',
+		from: 'answered',
+		to: 'needs_clarification',
+	},
+	{ event: 'REFINEMENT_REQUESTED', from: 'answered', to: 'needs_refinement' },
+	{
+		event: 'SYNTHESIS_PROPOSED',
+		from: 'answered',
+		needsNodeDef: true,
+		to: 'ready_for_synthesis',
+	},
+	{ event: 'USER_DEFER', from: 'answered', to: 'deferred' },
+	{ event: 'NODE_BLOCKED', from: 'answered', to: 'blocked' },
+	{ event: 'USER_ANSWERED', from: 'needs_clarification', to: 'active' },
+	{ event: 'USER_DEFER', from: 'needs_clarification', to: 'deferred' },
+	{ event: 'NODE_BLOCKED', from: 'needs_clarification', to: 'blocked' },
+	{ event: 'USER_ANSWERED', from: 'needs_refinement', to: 'active' },
+	{
+		event: 'AUTO_EVALUATE',
+		from: 'needs_refinement',
+		needsNodeDef: true,
+		to: 'ready_for_synthesis',
+	},
+	{ event: 'USER_DEFER', from: 'needs_refinement', to: 'deferred' },
+	{ event: 'NODE_BLOCKED', from: 'needs_refinement', to: 'blocked' },
+	{
+		event: 'SYNTHESIS_PROPOSED',
+		from: 'ready_for_synthesis',
+		to: 'synthesized',
+	},
+	{ event: 'USER_DEFER', from: 'ready_for_synthesis', to: 'deferred' },
+	{ event: 'NODE_BLOCKED', from: 'ready_for_synthesis', to: 'blocked' },
+	{ event: 'USER_ACCEPT', from: 'synthesized', to: 'accepted' },
+	{ event: 'USER_REOPEN', from: 'synthesized', to: 'active' },
+	{ event: 'USER_DEFER', from: 'synthesized', to: 'deferred' },
+	{ event: 'NODE_BLOCKED', from: 'synthesized', to: 'blocked' },
+	{ event: 'USER_REOPEN', from: 'accepted', to: 'active' },
+	{ event: 'USER_RESUME', from: 'deferred', to: 'active' },
+	{ event: 'NODE_BLOCKED', from: 'deferred', to: 'blocked' },
+	{ event: 'DEPENDENCY_RESOLVED', from: 'blocked', to: 'active' },
+	{ event: 'DEPENDENCY_RESOLVED', from: 'blocked', to: 'not_started' },
+	{ event: 'USER_DEFER', from: 'blocked', to: 'deferred' },
 ];
 
 describe('all documented valid transitions pass with correct events', () => {
-	it.each(DOCUMENTED_VALID_TRANSITIONS)(
-		'$from → $to with $event succeeds',
-		({ from, to, event, needsNodeDef }) => {
-			// Prepare state with resolved dependencies for blocked transitions
-			const deps =
-				from === 'blocked'
-					? { blockedBy: [] }
-					: undefined;
-			let state = stateWithNode('node-A' as NodeId, from, deps);
+	it.each(DOCUMENTED_VALID_TRANSITIONS)('$from → $to with $event succeeds', ({
+		from,
+		to,
+		event,
+		needsNodeDef,
+	}) => {
+		// Prepare state with resolved dependencies for blocked transitions
+		const deps = from === 'blocked' ? { blockedBy: [] } : undefined;
+		let state = stateWithNode('node-A' as NodeId, from, deps);
 
-			const extraOpts: { nodeDef?: NodeDefinition } = {};
-			if (needsNodeDef) {
-				// The completeness guard (Step 3.6) requires a node definition
-				// and a conversation that satisfies coverage topics.
-				const nodeDef: NodeDefinition = {
-					canonicalQuestion: 'What is the core thesis?',
-					coverageTopics: ['Core thesis'],
-					documentId: 'doc-1' as NodeId,
-					id: 'node-A' as NodeId,
-					order: 1,
-					phaseId: 'phase-1',
-					promptRefs: {},
-					sufficiencyCriteria: ['Specific thesis'],
-					title: 'Core Thesis',
-				};
-				const existingNode = state.nodeStates['node-A'];
-				state = {
-					...state,
-					nodeStates: {
-						...state.nodeStates,
-						'node-A': existingNode
-							? {
-									...existingNode,
-									conversation: [
-										{
-											content: 'Our core thesis: hiring is broken because it filters on credentials, not competence.',
-											createdAt: nowIso(),
-											id: 'msg-1',
-											role: 'user' as const,
-										},
-									],
-								}
-							: undefined,
-					},
-				};
-				extraOpts.nodeDef = nodeDef;
-			}
+		const extraOpts: { nodeDef?: NodeDefinition } = {};
+		if (needsNodeDef) {
+			// The completeness guard (Step 3.6) requires a node definition
+			// and a conversation that satisfies coverage topics.
+			const nodeDef: NodeDefinition = {
+				canonicalQuestion: 'What is the core thesis?',
+				coverageTopics: ['Core thesis'],
+				documentId: 'doc-1' as NodeId,
+				id: 'node-A' as NodeId,
+				order: 1,
+				phaseId: 'phase-1',
+				promptRefs: {},
+				sufficiencyCriteria: ['Specific thesis'],
+				title: 'Core Thesis',
+			};
+			const existingNode = state.nodeStates['node-A'];
+			state = {
+				...state,
+				nodeStates: {
+					...state.nodeStates,
+					'node-A': existingNode
+						? {
+								...existingNode,
+								conversation: [
+									{
+										content:
+											'Our core thesis: hiring is broken because it filters on credentials, not competence.',
+										createdAt: nowIso(),
+										id: 'msg-1',
+										role: 'user' as const,
+									},
+								],
+							}
+						: undefined,
+				},
+			};
+			extraOpts.nodeDef = nodeDef;
+		}
 
-			const result = applyLifecycleTransition(
-				state,
-				'node-A' as NodeId,
-				to,
-				{ event, ...extraOpts },
-			);
-			expect(result.ok).toBe(true);
-		},
-	);
+		const result = applyLifecycleTransition(state, 'node-A' as NodeId, to, {
+			event,
+			...extraOpts,
+		});
+		expect(result.ok).toBe(true);
+	});
 });
 
 // ═══════════════════════════════════════════════════════════════════════════

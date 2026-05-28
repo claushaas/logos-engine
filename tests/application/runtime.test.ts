@@ -11,15 +11,13 @@
  *  - Dispose cleans up signal handlers and listeners.
  *  - Snapshot reflects current state after events.
  */
-import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { createApplicationRuntime } from '../../src/application/runtime.js';
-import { MockLlmProvider } from '../../src/llm/mock-provider.js';
-import { PromptRegistry } from '../../src/prompt-orchestration/prompt-registry.js';
-import type { ProfileId } from '../../src/shared/index.js';
 
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { createApplicationRuntime } from '../../src/application/runtime.js';
+import type { ProfileId } from '../../src/shared/index.js';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -29,7 +27,7 @@ function tempDir(): string {
 
 function cleanup(dir: string): void {
 	try {
-		fs.rmSync(dir, { recursive: true, force: true });
+		fs.rmSync(dir, { force: true, recursive: true });
 	} catch {
 		// Best-effort cleanup.
 	}
@@ -144,7 +142,7 @@ describe('createApplicationRuntime', () => {
 	it('saves and can be listed by a new runtime', async () => {
 		const sessionsDir = path.join(tmp, 'sessions');
 		const runtime1 = await createApplicationRuntime({ dataDir: sessionsDir });
-		const sessionId = runtime1.sessionId;
+		const _sessionId = runtime1.sessionId;
 		await runtime1.save();
 		runtime1.dispose();
 
@@ -246,7 +244,11 @@ describe('createApplicationRuntime', () => {
 
 		// Select a node first.
 		const phases = runtime.getSnapshot().sidebar.phases;
-		if (phases.length > 0 && phases[0]!.documents.length > 0 && phases[0]!.documents[0]!.nodes.length > 0) {
+		if (
+			phases.length > 0 &&
+			phases[0]!.documents.length > 0 &&
+			phases[0]!.documents[0]!.nodes.length > 0
+		) {
 			const firstNodeId = phases[0]!.documents[0]!.nodes[0]!.nodeId;
 
 			await runtime.dispatch({ nodeId: firstNodeId, type: 'NODE_SELECTED' });
@@ -283,7 +285,11 @@ describe('createApplicationRuntime', () => {
 
 		// Select a node to trigger a state change.
 		const phases = runtime.getSnapshot().sidebar.phases;
-		if (phases.length > 0 && phases[0]!.documents.length > 0 && phases[0]!.documents[0]!.nodes.length > 0) {
+		if (
+			phases.length > 0 &&
+			phases[0]!.documents.length > 0 &&
+			phases[0]!.documents[0]!.nodes.length > 0
+		) {
 			const firstNodeId = phases[0]!.documents[0]!.nodes[0]!.nodeId;
 
 			await runtime.dispatch({ nodeId: firstNodeId, type: 'NODE_SELECTED' });
@@ -317,7 +323,11 @@ describe('createApplicationRuntime', () => {
 
 		// Selecting a node after dispose should NOT notify.
 		const phases = runtime.getSnapshot().sidebar.phases;
-		if (phases.length > 0 && phases[0]!.documents.length > 0 && phases[0]!.documents[0]!.nodes.length > 0) {
+		if (
+			phases.length > 0 &&
+			phases[0]!.documents.length > 0 &&
+			phases[0]!.documents[0]!.nodes.length > 0
+		) {
 			const firstNodeId = phases[0]!.documents[0]!.nodes[0]!.nodeId;
 
 			await runtime.dispatch({ nodeId: firstNodeId, type: 'NODE_SELECTED' });

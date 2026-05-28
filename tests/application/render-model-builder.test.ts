@@ -1355,11 +1355,7 @@ describe('buildRenderSnapshot — error mode', () => {
 
 	it('disables all non-close actions for unknown error codes', () => {
 		const profile = testProfile();
-		const snap = errorSnapshot(
-			'LOGOS_UNKNOWN_CODE',
-			'Unknown error.',
-			profile,
-		);
+		const snap = errorSnapshot('LOGOS_UNKNOWN_CODE', 'Unknown error.', profile);
 
 		const render = buildRenderSnapshot(snap, profile);
 

@@ -9,10 +9,7 @@
  * @see {@link https://logos-engine/docs/13-prototypes.md §4.1, §4.4}
  */
 import type { AgentTurnOutput } from '../contracts/agent-turn.js';
-import type {
-	LogosProfile,
-	LogosRuntimeState,
-} from '../contracts/index.js';
+import type { LogosProfile, LogosRuntimeState } from '../contracts/index.js';
 import type { LlmProvider } from '../llm/index.js';
 import {
 	assemblePromptRequest,

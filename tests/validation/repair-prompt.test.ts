@@ -12,14 +12,13 @@
 import { describe, expect, it } from 'vitest';
 
 import type { LlmRequest } from '../../src/prompt-orchestration/prompt-assembler.js';
-import { isOk, isErr } from '../../src/shared/index.js';
+import { isErr, isOk } from '../../src/shared/index.js';
 import {
-	type RepairAttempt,
+	buildNextRepairAttempt,
+	buildRepairPrompt,
+	DEFAULT_REPAIR_ATTEMPT_LIMIT,
 	type RepairFailedError,
 	type ValidationError,
-	buildRepairPrompt,
-	buildNextRepairAttempt,
-	DEFAULT_REPAIR_ATTEMPT_LIMIT,
 } from '../../src/validation/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -99,7 +98,7 @@ describe('buildRepairPrompt', () => {
 	});
 
 	it('preserves the schema reference', () => {
-		const schema = { name: 'CustomSchema', fields: {} };
+		const schema = { fields: {}, name: 'CustomSchema' };
 		const original = makeOriginalRequest({ schema });
 		const result = buildRepairPrompt(original, makeSampleErrors());
 
@@ -119,11 +118,11 @@ describe('buildRepairPrompt', () => {
 
 	it('preserves metadata fields', () => {
 		const original = makeOriginalRequest({
-			metadata: { traceId: 'abc123', nodeId: 'n1' },
+			metadata: { nodeId: 'n1', traceId: 'abc123' },
 		});
 		const result = buildRepairPrompt(original, makeSampleErrors());
 
-		expect(result.metadata).toEqual({ traceId: 'abc123', nodeId: 'n1' });
+		expect(result.metadata).toEqual({ nodeId: 'n1', traceId: 'abc123' });
 	});
 
 	it('appends "Repair Mode" to the system prompt', () => {
@@ -198,9 +197,7 @@ describe('buildRepairPrompt', () => {
 		const result = buildRepairPrompt(original, makeSampleErrors());
 
 		const repairMessage = result.messages[result.messages.length - 1];
-		expect(repairMessage.content).toContain(
-			'Do not re-ask the original task.',
-		);
+		expect(repairMessage.content).toContain('Do not re-ask the original task.');
 	});
 
 	it('includes "Do not reinterpret or expand the original request" guard rule', () => {
@@ -384,7 +381,7 @@ describe('buildNextRepairAttempt', () => {
 
 	it('merges repair metadata with existing metadata', () => {
 		const original = makeOriginalRequest({
-			metadata: { traceId: 'xyz', nodeId: 'n1' },
+			metadata: { nodeId: 'n1', traceId: 'xyz' },
 		});
 		const result = buildNextRepairAttempt(original, makeSampleErrors(), 0);
 

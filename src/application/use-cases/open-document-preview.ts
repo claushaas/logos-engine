@@ -35,9 +35,11 @@ import type {
 import { previewDocument } from '../../materialization/document-materializer.js';
 import type { DocumentId, NodeId } from '../../shared/index.js';
 import { nowIso } from '../../shared/index.js';
-import type { StateEngineSnapshot } from '../../state-engine/types.js';
-import type { StateDiagnostic } from '../../state-engine/types.js';
 import { buildSnapshot } from '../../state-engine/snapshot-builder.js';
+import type {
+	StateDiagnostic,
+	StateEngineSnapshot,
+} from '../../state-engine/types.js';
 import { buildRenderSnapshot } from '../render-model-builder.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -106,7 +108,7 @@ function computeDocumentStatus(
 function isExportEligible(
 	documentState: DocumentRuntimeState | undefined,
 ): boolean {
-	if (!documentState || !documentState.draft) return false;
+	if (!documentState?.draft) return false;
 	if (documentState.draft.stale) return false;
 	if (documentState.missingRequiredNodeIds.length > 0) return false;
 	if (documentState.staleSourceNodeIds.length > 0) return false;
@@ -137,13 +139,10 @@ export function openDocumentPreviewUseCase(
 	const { profile } = options;
 
 	// ── Step 1: Resolve the target document ─────────────────────────
-	let documentId: DocumentId | null =
-		options.documentId ?? null;
+	let documentId: DocumentId | null = options.documentId ?? null;
 
 	if (documentId === null && state.activeNodeId !== null) {
-		const nodeDef = profile.nodes.find(
-			(n) => n.id === state.activeNodeId,
-		);
+		const nodeDef = profile.nodes.find((n) => n.id === state.activeNodeId);
 		if (nodeDef) {
 			documentId = nodeDef.documentId;
 		}
@@ -175,14 +174,13 @@ export function openDocumentPreviewUseCase(
 
 	const updatedDocState: DocumentRuntimeState = {
 		documentId,
-		status: newDocStatus,
-		sourceNodeIds: existingDocState?.sourceNodeIds ?? [],
-		requiredNodeIds: existingDocState?.requiredNodeIds ?? [],
-		optionalNodeIds: existingDocState?.optionalNodeIds ?? [],
-		missingRequiredNodeIds:
-			existingDocState?.missingRequiredNodeIds ?? [],
-		staleSourceNodeIds: existingDocState?.staleSourceNodeIds ?? [],
 		draft,
+		missingRequiredNodeIds: existingDocState?.missingRequiredNodeIds ?? [],
+		optionalNodeIds: existingDocState?.optionalNodeIds ?? [],
+		requiredNodeIds: existingDocState?.requiredNodeIds ?? [],
+		sourceNodeIds: existingDocState?.sourceNodeIds ?? [],
+		staleSourceNodeIds: existingDocState?.staleSourceNodeIds ?? [],
+		status: newDocStatus,
 		updatedAt: now,
 	};
 
@@ -216,9 +214,10 @@ export function openDocumentPreviewUseCase(
 	// ── Step 8: Construct StateEngineSnapshot with document_preview ─
 	const previewSnapshot: StateEngineSnapshot = {
 		activeNodeId: state.activeNodeId,
-		activeNodeState: state.activeNodeId !== null
-			? state.nodeStates[state.activeNodeId] ?? null
-			: null,
+		activeNodeState:
+			state.activeNodeId !== null
+				? (state.nodeStates[state.activeNodeId] ?? null)
+				: null,
 		allowedActions: [],
 		diagnostics: [],
 		mainPanel: previewPanel as MainPanelRenderModel,

@@ -15,9 +15,7 @@
 import { describe, it } from 'vitest';
 
 describe('Flow E — Deferred Node', () => {
-	it.todo(
-		'defers a stuck node, continues elsewhere, and resumes later',
-	);
+	it.todo('defers a stuck node, continues elsewhere, and resumes later');
 
 	it.todo('deferred node preserves conversation and lifecycle');
 

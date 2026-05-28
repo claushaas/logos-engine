@@ -13,9 +13,7 @@ import type {
 	NodeRuntimeState,
 	PromptState,
 } from '../../src/contracts/index.js';
-import type { NodeAction } from '../../src/contracts/node-state.js';
 import {
-	AGENT_TURN_OUTPUT_SCHEMA_REFERENCE,
 	assemblePromptRequest,
 	assemblePromptRequestWithMetadata,
 	estimateTokens,
@@ -23,12 +21,7 @@ import {
 	type PromptAssemblyInput,
 } from '../../src/prompt-orchestration/prompt-assembler.js';
 import type { PromptDefinition } from '../../src/prompt-orchestration/prompt-registry.js';
-import type {
-	DocumentId,
-	NodeId,
-	ProfileId,
-	PromptId,
-} from '../../src/shared/index.js';
+import type { DocumentId, NodeId, PromptId } from '../../src/shared/index.js';
 
 // ─── Test helpers ───────────────────────────────────────────────────────────
 
@@ -65,10 +58,7 @@ function makeNodeDef(
 }
 
 /** Create a `NodeMessage`. */
-function makeUserMsg(
-	id: string,
-	content: string,
-): NodeMessage {
+function makeUserMsg(id: string, content: string): NodeMessage {
 	return {
 		content,
 		createdAt: new Date().toISOString(),
@@ -77,10 +67,7 @@ function makeUserMsg(
 	};
 }
 
-function makeAssistantMsg(
-	id: string,
-	content: string,
-): NodeMessage {
+function makeAssistantMsg(id: string, content: string): NodeMessage {
 	return {
 		content,
 		createdAt: new Date().toISOString(),
@@ -148,9 +135,12 @@ function makeCanonicalAnswer(content: string): CanonicalAnswer {
 }
 
 /** Create the full `PromptAssemblyInput` with defaults for tests. */
-function makeInput(overrides: Partial<PromptAssemblyInput> = {}): PromptAssemblyInput {
+function makeInput(
+	overrides: Partial<PromptAssemblyInput> = {},
+): PromptAssemblyInput {
 	const nodeDef = overrides.nodeDefinition ?? makeNodeDef('node-1');
-	const nodeState = overrides.nodeRuntimeState ?? makeNodeState('node-1', 'active');
+	const nodeState =
+		overrides.nodeRuntimeState ?? makeNodeState('node-1', 'active');
 	return {
 		acceptedDependencies: [],
 		allowedActions: overrides.allowedActions ?? ['answer', 'defer'],
@@ -193,7 +183,9 @@ describe('assemblePromptRequest', () => {
 		const request = assemblePromptRequest(input);
 
 		// System prompt includes the selected prompt content.
-		expect(request.systemPrompt).toContain('structured documentation assistant');
+		expect(request.systemPrompt).toContain(
+			'structured documentation assistant',
+		);
 
 		// Messages should include the node definition block.
 		const contents = messageContents(request.messages);
@@ -273,18 +265,12 @@ describe('assemblePromptRequest', () => {
 		expect(metadata.summaryInjected).toBe(true);
 		expect(metadata.trimmedMessageCount).toBeGreaterThan(0);
 		// Token budget should be respected.
-		expect(metadata.promptTokens).toBeLessThanOrEqual(
-			metadata.effectiveBudget,
-		);
+		expect(metadata.promptTokens).toBeLessThanOrEqual(metadata.effectiveBudget);
 		// We included fewer messages than the total.
-		expect(metadata.includedMessageCount).toBeLessThan(
-			conversation.length,
-		);
+		expect(metadata.includedMessageCount).toBeLessThan(conversation.length);
 
 		// Token budget should be respected.
-		expect(metadata.promptTokens).toBeLessThanOrEqual(
-			metadata.effectiveBudget,
-		);
+		expect(metadata.promptTokens).toBeLessThanOrEqual(metadata.effectiveBudget);
 
 		const contents = messageContents(request.messages);
 
@@ -297,7 +283,9 @@ describe('assemblePromptRequest', () => {
 		expect(request.messages.length).toBeLessThan(conversation.length + 10);
 
 		// The system prompt should still be intact.
-		expect(request.systemPrompt).toContain('structured documentation assistant');
+		expect(request.systemPrompt).toContain(
+			'structured documentation assistant',
+		);
 	});
 
 	// ── Small budget — extreme truncation ────────────────────────────────
@@ -336,9 +324,7 @@ describe('assemblePromptRequest', () => {
 		expect(metadata.summaryInjected).toBe(true);
 
 		// Token budget should be respected.
-		expect(metadata.promptTokens).toBeLessThanOrEqual(
-			metadata.effectiveBudget,
-		);
+		expect(metadata.promptTokens).toBeLessThanOrEqual(metadata.effectiveBudget);
 
 		// With a tight budget, included messages should be heavily reduced.
 		expect(metadata.includedMessageCount).toBeLessThanOrEqual(
@@ -400,7 +386,10 @@ describe('assemblePromptRequest', () => {
 	// ── Custom output schema ────────────────────────────────────────────
 
 	it('uses custom output schema when provided', () => {
-		const customSchema = { type: 'object', properties: { answer: { type: 'string' } } };
+		const customSchema = {
+			properties: { answer: { type: 'string' } },
+			type: 'object',
+		};
 		const input = makeInput({ outputSchema: customSchema });
 
 		const request = assemblePromptRequest(input);

@@ -18,11 +18,7 @@ import type {
 	LogosRuntimeState,
 	NodeRuntimeState,
 } from '../../src/contracts/index.js';
-import type {
-	DocumentId,
-	NodeId,
-	ProfileId,
-} from '../../src/shared/index.js';
+import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
 import { nowIso } from '../../src/shared/index.js';
 import { dispatch } from '../../src/state-engine/dispatch.js';
 import { buildSnapshot } from '../../src/state-engine/snapshot-builder.js';
@@ -174,9 +170,7 @@ function chainProfile(): LogosProfile {
 				title: 'Node C (depends on B)',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Chain Profile',
 		version: '1.0.0',
 	};
@@ -251,9 +245,7 @@ function fanOutProfile(): LogosProfile {
 				title: 'Node C (depends on A)',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Fan-Out Profile',
 		version: '1.0.0',
 	};
@@ -293,9 +285,7 @@ function soloProfile(): LogosProfile {
 				title: 'Node A',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Solo Profile',
 		version: '1.0.0',
 	};
@@ -316,12 +306,12 @@ describe('propagateStaleness', () => {
 		]);
 
 		// Initial: both answers fresh
-		expect(
-			state.nodeStates['node-a' as NodeId]!.canonicalAnswer!.stale,
-		).toBe(false);
-		expect(
-			state.nodeStates['node-b' as NodeId]!.canonicalAnswer!.stale,
-		).toBe(false);
+		expect(state.nodeStates['node-a' as NodeId]!.canonicalAnswer!.stale).toBe(
+			false,
+		);
+		expect(state.nodeStates['node-b' as NodeId]!.canonicalAnswer!.stale).toBe(
+			false,
+		);
 
 		// Mark node-a's answer stale (simulating reopen/edit)
 		const staleA = {
@@ -339,11 +329,7 @@ describe('propagateStaleness', () => {
 		};
 
 		// Propagate staleness downstream
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -381,11 +367,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -420,11 +402,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -450,11 +428,7 @@ describe('propagateStaleness', () => {
 			acceptedNodeState('node-b' as NodeId),
 		]);
 
-		const result = propagateStaleness(
-			state,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(state, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -486,11 +460,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -502,9 +472,7 @@ describe('propagateStaleness', () => {
 
 	it('no dependents → recomputes document readiness and returns info diagnostic', () => {
 		const profile = soloProfile();
-		const state = stateWithNodes([
-			acceptedNodeState('node-a' as NodeId),
-		]);
+		const state = stateWithNodes([acceptedNodeState('node-a' as NodeId)]);
 
 		const staleA = {
 			...state,
@@ -520,11 +488,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -564,11 +528,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -586,11 +546,7 @@ describe('propagateStaleness', () => {
 		const profile = chainProfile();
 		const state = stateWithNodes([]);
 
-		const result = propagateStaleness(
-			state,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(state, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(false);
 	});
 
@@ -617,11 +573,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 
 		// Should succeed — uninitialised dependents are just skipped
 		expect(result.ok).toBe(true);
@@ -661,11 +613,7 @@ describe('propagateStaleness', () => {
 			},
 		};
 
-		const result = propagateStaleness(
-			staleA,
-			'node-a' as NodeId,
-			profile,
-		);
+		const result = propagateStaleness(staleA, 'node-a' as NodeId, profile);
 		expect(result.ok).toBe(true);
 		if (!result.ok) return;
 
@@ -717,7 +665,9 @@ describe('dispatch staleness cascade on reopen', () => {
 			result.state.nodeStates['node-a' as NodeId]!.canonicalAnswer!.stale,
 		).toBe(true);
 		// node-a lifecycle should now be active
-		expect(result.state.nodeStates['node-a' as NodeId]!.lifecycle).toBe('active');
+		expect(result.state.nodeStates['node-a' as NodeId]!.lifecycle).toBe(
+			'active',
+		);
 
 		// node-b and node-c should also be stale (cascade)
 		expect(

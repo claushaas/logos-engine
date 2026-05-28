@@ -17,14 +17,13 @@
  */
 import { describe, expect, it } from 'vitest';
 
+import type { LogosProfile } from '../../src/contracts/index.js';
 import type {
-	DocumentDefinition,
-	DocumentMaterializationRule,
-	LogosProfile,
-	NodeDefinition,
-	PhaseDefinition,
-} from '../../src/contracts/index.js';
-import type { DocumentId, NodeId, ProfileId, PromptId } from '../../src/shared/index.js';
+	DocumentId,
+	NodeId,
+	ProfileId,
+	PromptId,
+} from '../../src/shared/index.js';
 
 // ─── Test-local shape validators ────────────────────────────────────────────
 
@@ -52,10 +51,7 @@ function checkArray(value: unknown, path: string): string | null {
 /**
  * Validate a PhaseDefinition shape.
  */
-function validatePhaseShape(
-	phase: unknown,
-	index: number,
-): string[] {
+function validatePhaseShape(phase: unknown, index: number): string[] {
 	const errors: string[] = [];
 	const path = `phases[${index}]`;
 
@@ -121,7 +117,7 @@ function validateDocumentShape(
 	if (req) {
 		errors.push(req);
 	} else {
-		for (const nid of (d.requiredNodeIds as unknown[])) {
+		for (const nid of d.requiredNodeIds as unknown[]) {
 			if (!knownNodeIds.has(String(nid))) {
 				errors.push(
 					`${path}.requiredNodeIds: references unknown node "${String(nid)}"`,
@@ -134,7 +130,7 @@ function validateDocumentShape(
 	if (opt) {
 		errors.push(opt);
 	} else {
-		for (const nid of (d.optionalNodeIds as unknown[])) {
+		for (const nid of d.optionalNodeIds as unknown[]) {
 			if (!knownNodeIds.has(String(nid))) {
 				errors.push(
 					`${path}.optionalNodeIds: references unknown node "${String(nid)}"`,
@@ -191,7 +187,10 @@ function validateNodeShape(
 	const topics = checkArray(n.coverageTopics, `${path}.coverageTopics`);
 	if (topics) errors.push(topics);
 
-	const criteria = checkArray(n.sufficiencyCriteria, `${path}.sufficiencyCriteria`);
+	const criteria = checkArray(
+		n.sufficiencyCriteria,
+		`${path}.sufficiencyCriteria`,
+	);
 	if (criteria) errors.push(criteria);
 
 	if (!n.promptRefs || typeof n.promptRefs !== 'object') {
@@ -245,7 +244,7 @@ function validateMaterializationRuleShape(
 	if (src) {
 		errors.push(src);
 	} else {
-		for (const nid of (r.sourceNodeIds as unknown[])) {
+		for (const nid of r.sourceNodeIds as unknown[]) {
 			if (!knownNodeIds.has(String(nid))) {
 				errors.push(
 					`${path}.sourceNodeIds: references unknown node "${String(nid)}"`,
@@ -259,7 +258,7 @@ function validateMaterializationRuleShape(
 	if (req) {
 		errors.push(req);
 	} else {
-		for (const nid of (r.requiredNodeIds as unknown[])) {
+		for (const nid of r.requiredNodeIds as unknown[]) {
 			if (!knownNodeIds.has(String(nid))) {
 				errors.push(
 					`${path}.requiredNodeIds: references unknown node "${String(nid)}"`,
@@ -273,7 +272,7 @@ function validateMaterializationRuleShape(
 	if (opt) {
 		errors.push(opt);
 	} else {
-		for (const nid of (r.optionalNodeIds as unknown[])) {
+		for (const nid of r.optionalNodeIds as unknown[]) {
 			if (!knownNodeIds.has(String(nid))) {
 				errors.push(
 					`${path}.optionalNodeIds: references unknown node "${String(nid)}"`,
@@ -331,14 +330,24 @@ function validateProfileShape(profile: unknown): string[] {
 	const knownDocIds = new Set<string>();
 	const knownNodeIds = new Set<string>();
 
-	for (const n of (p.nodes as unknown[])) {
-		if (typeof n === 'object' && n !== null && 'id' in n && typeof (n as Record<string, unknown>).id === 'string') {
+	for (const n of p.nodes as unknown[]) {
+		if (
+			typeof n === 'object' &&
+			n !== null &&
+			'id' in n &&
+			typeof (n as Record<string, unknown>).id === 'string'
+		) {
 			knownNodeIds.add((n as Record<string, unknown>).id as string);
 		}
 	}
 
-	for (const d of (p.documents as unknown[])) {
-		if (typeof d === 'object' && d !== null && 'id' in d && typeof (d as Record<string, unknown>).id === 'string') {
+	for (const d of p.documents as unknown[]) {
+		if (
+			typeof d === 'object' &&
+			d !== null &&
+			'id' in d &&
+			typeof (d as Record<string, unknown>).id === 'string'
+		) {
 			knownDocIds.add((d as Record<string, unknown>).id as string);
 		}
 	}
@@ -357,7 +366,9 @@ function validateProfileShape(profile: unknown): string[] {
 	});
 
 	(p.materializationRules as unknown[]).forEach((rule, i) => {
-		errors.push(...validateMaterializationRuleShape(rule, i, knownDocIds, knownNodeIds));
+		errors.push(
+			...validateMaterializationRuleShape(rule, i, knownDocIds, knownNodeIds),
+		);
 	});
 
 	return errors;
@@ -370,17 +381,6 @@ function validateProfileShape(profile: unknown): string[] {
  */
 function minimalProfile(): LogosProfile {
 	return {
-		id: 'p_minimal' as ProfileId,
-		title: 'Minimal Profile',
-		version: '1.0.0',
-		phases: [
-			{
-				id: 'phase-foundation',
-				order: 1,
-				purpose: 'Define the foundational thesis.',
-				title: 'Foundation',
-			},
-		],
 		documents: [
 			{
 				id: 'doc-thesis' as DocumentId,
@@ -393,21 +393,7 @@ function minimalProfile(): LogosProfile {
 				title: 'Thesis Document',
 			},
 		],
-		nodes: [
-			{
-				canonicalQuestion: 'What truth justifies this project?',
-				coverageTopics: ['central conviction', 'unresolved tension'],
-				documentId: 'doc-thesis' as DocumentId,
-				id: 'node-thesis-core' as NodeId,
-				order: 1,
-				phaseId: 'phase-foundation',
-				promptRefs: {
-					initial: 'prompt_initial' as PromptId,
-				},
-				sufficiencyCriteria: ['thesis is specific'],
-				title: 'Core Thesis',
-			},
-		],
+		id: 'p_minimal' as ProfileId,
 		materializationRules: [
 			{
 				documentId: 'doc-thesis' as DocumentId,
@@ -426,6 +412,31 @@ function minimalProfile(): LogosProfile {
 				title: 'Thesis Output',
 			},
 		],
+		nodes: [
+			{
+				canonicalQuestion: 'What truth justifies this project?',
+				coverageTopics: ['central conviction', 'unresolved tension'],
+				documentId: 'doc-thesis' as DocumentId,
+				id: 'node-thesis-core' as NodeId,
+				order: 1,
+				phaseId: 'phase-foundation',
+				promptRefs: {
+					initial: 'prompt_initial' as PromptId,
+				},
+				sufficiencyCriteria: ['thesis is specific'],
+				title: 'Core Thesis',
+			},
+		],
+		phases: [
+			{
+				id: 'phase-foundation',
+				order: 1,
+				purpose: 'Define the foundational thesis.',
+				title: 'Foundation',
+			},
+		],
+		title: 'Minimal Profile',
+		version: '1.0.0',
 	};
 }
 
@@ -435,23 +446,6 @@ function minimalProfile(): LogosProfile {
 function fullProfile(): LogosProfile {
 	return {
 		description: 'Standard startup documentation profile.',
-		id: 'p_startup' as ProfileId,
-		title: 'Startup Profile',
-		version: '1.0.0',
-		phases: [
-			{
-				id: '01-foundation',
-				order: 1,
-				purpose: 'Define why the project exists.',
-				title: 'Foundation',
-			},
-			{
-				id: '02-validation',
-				order: 2,
-				purpose: 'Validate assumptions.',
-				title: 'Validation',
-			},
-		],
 		documents: [
 			{
 				id: 'doc-foundation-thesis' as DocumentId,
@@ -460,7 +454,10 @@ function fullProfile(): LogosProfile {
 				outputPath: 'docs/foundation/thesis.md',
 				phaseId: '01-foundation',
 				purpose: 'Articulate the central thesis.',
-				requiredNodeIds: ['node-thesis-core' as NodeId, 'node-thesis-context' as NodeId],
+				requiredNodeIds: [
+					'node-thesis-core' as NodeId,
+					'node-thesis-context' as NodeId,
+				],
 				title: 'Thesis',
 			},
 			{
@@ -474,11 +471,53 @@ function fullProfile(): LogosProfile {
 				title: 'Validation Strategy',
 			},
 		],
+		id: 'p_startup' as ProfileId,
+		materializationRules: [
+			{
+				documentId: 'doc-foundation-thesis' as DocumentId,
+				optionalNodeIds: ['node-thesis-evidence' as NodeId],
+				outputPath: 'docs/foundation/thesis.md',
+				requiredNodeIds: [
+					'node-thesis-core' as NodeId,
+					'node-thesis-context' as NodeId,
+				],
+				sections: [
+					{
+						id: 'core-thesis',
+						required: true,
+						sourceNodeIds: ['node-thesis-core' as NodeId],
+						title: 'Core Thesis',
+					},
+					{
+						id: 'context',
+						required: true,
+						sourceNodeIds: ['node-thesis-context' as NodeId],
+						title: 'Context',
+					},
+					{
+						id: 'evidence',
+						required: false,
+						sourceNodeIds: ['node-thesis-evidence' as NodeId],
+						title: 'Supporting Evidence',
+					},
+				],
+				sourceNodeIds: [
+					'node-thesis-core' as NodeId,
+					'node-thesis-context' as NodeId,
+					'node-thesis-evidence' as NodeId,
+				],
+				title: 'Foundation Thesis Document',
+			},
+		],
 		nodes: [
 			{
 				canonicalQuestion: 'What conviction makes this project necessary?',
-				coverageTopics: ['central conviction', 'relevant change', 'unresolved tension'],
-				dependencies: { requiredNodeIds: [], recommendedNodeIds: [] },
+				coverageTopics: [
+					'central conviction',
+					'relevant change',
+					'unresolved tension',
+				],
+				dependencies: { recommendedNodeIds: [], requiredNodeIds: [] },
 				documentId: 'doc-foundation-thesis' as DocumentId,
 				id: 'node-thesis-core' as NodeId,
 				order: 1,
@@ -490,13 +529,19 @@ function fullProfile(): LogosProfile {
 					review: 'prompt_review' as PromptId,
 					synthesis: 'prompt_synth' as PromptId,
 				},
-				sufficiencyCriteria: ['thesis is specific', 'problem is not confused with solution'],
+				sufficiencyCriteria: [
+					'thesis is specific',
+					'problem is not confused with solution',
+				],
 				title: 'Core Thesis',
 			},
 			{
 				canonicalQuestion: 'What broader conditions make this thesis relevant?',
 				coverageTopics: ['market conditions', 'timing', 'relevant trends'],
-				dependencies: { requiredNodeIds: ['node-thesis-core' as NodeId], recommendedNodeIds: [] },
+				dependencies: {
+					recommendedNodeIds: [],
+					requiredNodeIds: ['node-thesis-core' as NodeId],
+				},
 				documentId: 'doc-foundation-thesis' as DocumentId,
 				id: 'node-thesis-context' as NodeId,
 				order: 2,
@@ -519,50 +564,46 @@ function fullProfile(): LogosProfile {
 			},
 			{
 				canonicalQuestion: 'How will we test the riskiest assumptions?',
-				coverageTopics: ['riskiest assumptions', 'validation methods', 'success criteria'],
+				coverageTopics: [
+					'riskiest assumptions',
+					'validation methods',
+					'success criteria',
+				],
 				dependencies: {
-					requiredNodeIds: ['node-thesis-core' as NodeId],
 					recommendedNodeIds: ['node-thesis-context' as NodeId],
+					requiredNodeIds: ['node-thesis-core' as NodeId],
 				},
 				documentId: 'doc-validation-strategy' as DocumentId,
 				id: 'node-val-strategy' as NodeId,
 				order: 1,
 				phaseId: '02-validation',
-				promptRefs: { initial: 'prompt_val' as PromptId, followUp: 'prompt_val_fu' as PromptId },
-				sufficiencyCriteria: ['each assumption has a test method', 'criteria are falsifiable'],
+				promptRefs: {
+					followUp: 'prompt_val_fu' as PromptId,
+					initial: 'prompt_val' as PromptId,
+				},
+				sufficiencyCriteria: [
+					'each assumption has a test method',
+					'criteria are falsifiable',
+				],
 				title: 'Validation Approach',
 			},
 		],
-		materializationRules: [
+		phases: [
 			{
-				documentId: 'doc-foundation-thesis' as DocumentId,
-				optionalNodeIds: ['node-thesis-evidence' as NodeId],
-				outputPath: 'docs/foundation/thesis.md',
-				requiredNodeIds: ['node-thesis-core' as NodeId, 'node-thesis-context' as NodeId],
-				sections: [
-					{
-						id: 'core-thesis',
-						required: true,
-						sourceNodeIds: ['node-thesis-core' as NodeId],
-						title: 'Core Thesis',
-					},
-					{
-						id: 'context',
-						required: true,
-						sourceNodeIds: ['node-thesis-context' as NodeId],
-						title: 'Context',
-					},
-					{
-						id: 'evidence',
-						required: false,
-						sourceNodeIds: ['node-thesis-evidence' as NodeId],
-						title: 'Supporting Evidence',
-					},
-				],
-				sourceNodeIds: ['node-thesis-core' as NodeId, 'node-thesis-context' as NodeId, 'node-thesis-evidence' as NodeId],
-				title: 'Foundation Thesis Document',
+				id: '01-foundation',
+				order: 1,
+				purpose: 'Define why the project exists.',
+				title: 'Foundation',
+			},
+			{
+				id: '02-validation',
+				order: 2,
+				purpose: 'Validate assumptions.',
+				title: 'Validation',
 			},
 		],
+		title: 'Startup Profile',
+		version: '1.0.0',
 	};
 }
 
@@ -679,7 +720,9 @@ describe('Profile schema — valid fixtures', () => {
 	it('full profile has node with dependency definition', () => {
 		const profile = fullProfile();
 		const deps = profile.nodes.find(
-			(n) => n.dependencies && n.dependencies.requiredNodeIds && n.dependencies.requiredNodeIds.length > 0,
+			(n) =>
+				n.dependencies?.requiredNodeIds &&
+				n.dependencies.requiredNodeIds.length > 0,
 		);
 		expect(deps).toBeDefined();
 		if (deps?.dependencies) {
@@ -689,7 +732,9 @@ describe('Profile schema — valid fixtures', () => {
 
 	it('full profile node promptRefs has multiple prompt states', () => {
 		const profile = fullProfile();
-		const coreThesis = profile.nodes.find((n) => n.id === ('node-thesis-core' as NodeId));
+		const coreThesis = profile.nodes.find(
+			(n) => n.id === ('node-thesis-core' as NodeId),
+		);
 		expect(coreThesis).toBeDefined();
 		if (coreThesis) {
 			expect(coreThesis.promptRefs.initial).toBeDefined();
@@ -750,11 +795,13 @@ describe('Profile schema — intentionally broken fixtures', () => {
 	it('non-string phase id is detected', () => {
 		const broken = {
 			...minimalProfile(),
-			phases: [{ id: 42, title: 'Test', order: 1, purpose: 'test' }],
+			phases: [{ id: 42, order: 1, purpose: 'test', title: 'Test' }],
 		};
 		const errors = validateProfileShape(broken);
 		expect(errors.length).toBeGreaterThan(0);
-		expect(errors.some((e) => e.includes('id') && e.includes('string'))).toBe(true);
+		expect(errors.some((e) => e.includes('id') && e.includes('string'))).toBe(
+			true,
+		);
 	});
 
 	it('null profile is detected', () => {

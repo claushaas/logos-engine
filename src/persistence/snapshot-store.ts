@@ -19,7 +19,7 @@ import * as path from 'node:path';
 
 import type { SessionSnapshot } from '../contracts/persistence.js';
 import type { LogosRuntimeState } from '../contracts/runtime-state.js';
-import { type Result, err, generateId, nowIso, ok } from '../shared/index.js';
+import { err, generateId, nowIso, ok, type Result } from '../shared/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Constants
@@ -108,12 +108,12 @@ export type SnapshotFs = {
 /** Default filesystem adapter — delegates to `node:fs/promises`. */
 const defaultFs: SnapshotFs = {
 	mkdir: fs.mkdir,
-	writeFile: fs.writeFile,
+	readdir: fs.readdir,
 	readFile: (p: string) => fs.readFile(p, 'utf-8'),
 	rename: fs.rename,
-	unlink: fs.unlink,
-	readdir: fs.readdir,
 	stat: fs.stat,
+	unlink: fs.unlink,
+	writeFile: fs.writeFile,
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -134,7 +134,7 @@ function persistErr(
 		recoverable,
 		recoveryOptions,
 	};
-	if (path_ !== undefined) return { ...base, path: path_, cause };
+	if (path_ !== undefined) return { ...base, cause, path: path_ };
 	if (cause !== undefined) return { ...base, cause };
 	return base;
 }
@@ -261,10 +261,10 @@ export function createSnapshotStore(
 		const tmpPath = tempPath(sessionsDir, sessionId, suffix);
 
 		const snapshot: SessionSnapshot = {
-			sessionId: sessionId as import('../shared/index.js').SessionId,
-			schemaVersion: CURRENT_SCHEMA_VERSION,
 			runtimeState: state,
 			savedAt: nowIso(),
+			schemaVersion: CURRENT_SCHEMA_VERSION,
+			sessionId: sessionId as import('../shared/index.js').SessionId,
 		};
 
 		try {
@@ -438,10 +438,10 @@ export function createSnapshotStore(
 		// Treat runtimeState as opaque — we do NOT interpret lifecycle,
 		// completeness, or any other domain rules.
 		return ok({
-			sessionId: obj.sessionId as SessionSnapshot['sessionId'],
-			schemaVersion: obj.schemaVersion,
 			runtimeState: obj.runtimeState as LogosRuntimeState,
 			savedAt: obj.savedAt,
+			schemaVersion: obj.schemaVersion,
+			sessionId: obj.sessionId as SessionSnapshot['sessionId'],
 		});
 	}
 
@@ -500,9 +500,9 @@ export function createSnapshotStore(
 			}
 
 			summaries.push({
-				sessionId,
 				savedAt: new Date(stat.mtimeMs).toISOString(),
 				schemaVersion,
+				sessionId,
 			});
 		}
 
@@ -512,7 +512,7 @@ export function createSnapshotStore(
 		return summaries;
 	}
 
-	return { loadSnapshot, listSessions, saveSnapshot };
+	return { listSessions, loadSnapshot, saveSnapshot };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

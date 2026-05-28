@@ -3,7 +3,10 @@
  * compatibility between `RuntimeError` interface and `LogosError` class.
  */
 import { describe, expect, it } from 'vitest';
-import type { RuntimeError, RuntimeErrorCategory } from '../../src/diagnostics/index.js';
+import type {
+	RuntimeError,
+	RuntimeErrorCategory,
+} from '../../src/diagnostics/index.js';
 import { LogosError } from '../../src/shared/index.js';
 
 // ─── RuntimeErrorCategory coverage ─────────────────────────────────────────
@@ -42,9 +45,9 @@ describe('RuntimeErrorCategory', () => {
 describe('RuntimeError interface', () => {
 	it('is satisfied by LogosError instances', () => {
 		const err = new LogosError('ERR_001', 'validation', 'bad input', {
+			details: { field: 'title' },
 			recoverable: true,
 			userFacingMessage: 'Please check your input.',
-			details: { field: 'title' },
 		});
 
 		const runtimeErr: RuntimeError = err;
@@ -58,8 +61,8 @@ describe('RuntimeError interface', () => {
 
 	it('is satisfied by plain objects with the required shape', () => {
 		const plainErr: RuntimeError = {
-			code: 'PLAIN_ERR',
 			category: 'persistence',
+			code: 'PLAIN_ERR',
 			message: 'disk full',
 			recoverable: false,
 		};

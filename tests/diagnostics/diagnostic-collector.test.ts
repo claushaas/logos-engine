@@ -8,10 +8,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { RuntimeDiagnostic } from '../../src/contracts/index.js';
-import {
-	DiagnosticCollector,
-	type DiagnosticReport,
-} from '../../src/diagnostics/index.js';
+import { DiagnosticCollector } from '../../src/diagnostics/index.js';
 import { LogosError, type NodeId } from '../../src/shared/index.js';
 import { dispatch } from '../../src/state-engine/dispatch.js';
 import { createSession } from '../../src/state-engine/state-engine.js';
@@ -43,9 +40,7 @@ describe('DiagnosticCollector (isolated)', () => {
 		expect(report.severity).toBe('warning');
 		expect(report.recoveryActions).toEqual([]); // unknown code
 		expect(report.recoverable).toBe(false);
-		expect(report.timestamp).toMatch(
-			/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/,
-		);
+		expect(report.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
 	});
 
 	it('adds a diagnostic with error severity', () => {
@@ -101,7 +96,9 @@ describe('DiagnosticCollector (isolated)', () => {
 		expect(diags[0].message).toBe('runtime');
 		expect(diags[0].severity).toBe('warning');
 		// Should not leak DiagnosticReport fields
-		expect((diags[0] as Record<string, unknown>).recoveryActions).toBeUndefined();
+		expect(
+			(diags[0] as Record<string, unknown>).recoveryActions,
+		).toBeUndefined();
 	});
 
 	it('getReports enriches diagnostics with recovery actions', () => {
@@ -203,13 +200,13 @@ describe('DiagnosticCollector (isolated)', () => {
 			'persistence',
 			'write failed',
 			{
-				details: { path: '/tmp/snap.json', errno: 28 },
+				details: { errno: 28, path: '/tmp/snap.json' },
 			},
 		);
 		collector.addError(err);
 
 		const reports = collector.getReports();
-		expect(reports[0].details).toEqual({ path: '/tmp/snap.json', errno: 28 });
+		expect(reports[0].details).toEqual({ errno: 28, path: '/tmp/snap.json' });
 	});
 
 	it('addError uses userFacingMessage over message', () => {
@@ -223,9 +220,7 @@ describe('DiagnosticCollector (isolated)', () => {
 		collector.addError(err);
 
 		const reports = collector.getReports();
-		expect(reports[0].message).toBe(
-			'Too many requests. Please wait a moment.',
-		);
+		expect(reports[0].message).toBe('Too many requests. Please wait a moment.');
 	});
 
 	it('addError resolves recovery actions from code + category', () => {
@@ -262,8 +257,8 @@ describe('DiagnosticCollector with state engine dispatch', () => {
 		const collector = new DiagnosticCollector();
 
 		const result = dispatch(state, {
-			type: 'SELECT_NODE',
 			nodeId: 'nonexistent' as NodeId,
+			type: 'SELECT_NODE',
 		});
 
 		expect(result.ok).toBe(false);
@@ -291,8 +286,8 @@ describe('DiagnosticCollector with state engine dispatch', () => {
 		const collector = new DiagnosticCollector();
 
 		const result = dispatch(state, {
-			type: 'SELECT_NODE',
 			nodeId: 'nonexistent' as NodeId,
+			type: 'SELECT_NODE',
 		});
 
 		if (!result.ok) {
@@ -308,9 +303,7 @@ describe('DiagnosticCollector with state engine dispatch', () => {
 			expect(typeof report.timestamp).toBe('string');
 			expect(typeof report.code).toBe('string');
 			expect(typeof report.message).toBe('string');
-			expect(
-				['info', 'warning', 'error'].includes(report.severity),
-			).toBe(true);
+			expect(['info', 'warning', 'error'].includes(report.severity)).toBe(true);
 		}
 	});
 
@@ -320,16 +313,16 @@ describe('DiagnosticCollector with state engine dispatch', () => {
 
 		// First failure
 		const result1 = dispatch(state, {
-			type: 'SELECT_NODE',
 			nodeId: 'node-x' as NodeId,
+			type: 'SELECT_NODE',
 		});
 		if (!result1.ok) collector.addMany(result1.diagnostics);
 
 		// Second failure (same state, different event)
 		const result2 = dispatch(state, {
-			type: 'USER_MESSAGE',
-			nodeId: 'node-y' as NodeId,
 			content: 'Hello',
+			nodeId: 'node-y' as NodeId,
+			type: 'USER_MESSAGE',
 		});
 		if (!result2.ok) collector.addMany(result2.diagnostics);
 
@@ -346,8 +339,8 @@ describe('DiagnosticCollector with state engine dispatch', () => {
 		const collector = new DiagnosticCollector();
 
 		const result = dispatch(state, {
-			type: 'SELECT_NODE',
 			nodeId: 'node-x' as NodeId,
+			type: 'SELECT_NODE',
 		});
 		if (!result.ok) collector.addMany(result.diagnostics);
 

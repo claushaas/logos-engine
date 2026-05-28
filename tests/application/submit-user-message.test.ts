@@ -226,14 +226,14 @@ describe('submitUserMessageUseCase', () => {
 		// Simulate a request where the node is in needs_clarification
 		// with round >= 3.
 		const output = await mock.generateStructuredOutput({
-			systemPrompt: '',
 			messages: [],
-			schema: {},
 			metadata: {
-				lifecycle: 'needs_clarification',
 				clarificationRound: 3,
+				lifecycle: 'needs_clarification',
 				nodeId: 'n1',
 			},
+			schema: {},
+			systemPrompt: '',
 		});
 
 		// Fallback message should mention the round count
@@ -251,14 +251,14 @@ describe('submitUserMessageUseCase', () => {
 		const mock = new MockLlmProvider();
 
 		const output = await mock.generateStructuredOutput({
-			systemPrompt: '',
 			messages: [],
-			schema: {},
 			metadata: {
 				lifecycle: 'needs_refinement',
-				refinementRound: 4,
 				nodeId: 'n1',
+				refinementRound: 4,
 			},
+			schema: {},
+			systemPrompt: '',
 		});
 
 		// Fallback message should mention the round count

@@ -543,9 +543,7 @@ export function applyAgentTurn(
 			// Use the node's current conversation from `nextState`
 			// (after the assistant message was appended).
 			const conv = nextState.nodeStates[nodeId]?.conversation ?? [];
-			const userMsgIds = conv
-				.filter((m) => m.role === 'user')
-				.map((m) => m.id);
+			const userMsgIds = conv.filter((m) => m.role === 'user').map((m) => m.id);
 			if (userMsgIds.length > 0) {
 				draft = { ...draft, generatedFromMessageIds: userMsgIds };
 			}

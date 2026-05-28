@@ -88,8 +88,7 @@ export function useFocus(
 	options?: UseFocusOptions,
 ): FocusState {
 	const totalNodes = sidebar.phases.reduce(
-		(sum, p) =>
-			sum + p.documents.reduce((s, d) => s + d.nodes.length, 0),
+		(sum, p) => sum + p.documents.reduce((s, d) => s + d.nodes.length, 0),
 		0,
 	);
 
@@ -137,9 +136,7 @@ export function useFocus(
 	const activeNodeIndex =
 		region === 'sidebar' ? Math.max(0, focusedNodeIndex) : focusedNodeIndex;
 	const activeActionIndex =
-		region === 'actions'
-			? Math.max(0, focusedActionIndex)
-			: focusedActionIndex;
+		region === 'actions' ? Math.max(0, focusedActionIndex) : focusedActionIndex;
 
 	// ── Clamp focusedNodeIndex when sidebarCount changes ─────────────────
 
@@ -180,8 +177,7 @@ export function useFocus(
 
 	const focusPreviousRegion = () => {
 		const idx = availableRegions.indexOf(region);
-		const prev =
-			(idx - 1 + availableRegions.length) % availableRegions.length;
+		const prev = (idx - 1 + availableRegions.length) % availableRegions.length;
 		const prevRegion = availableRegions[prev]!;
 		setRegion(prevRegion);
 
@@ -201,9 +197,7 @@ export function useFocus(
 
 	const focusUp = () => {
 		if (region === 'sidebar' && sidebarCount > 0) {
-			setFocusedNodeIndex((prev) =>
-				prev <= 0 ? sidebarCount - 1 : prev - 1,
-			);
+			setFocusedNodeIndex((prev) => (prev <= 0 ? sidebarCount - 1 : prev - 1));
 		} else if (region === 'actions' && totalActions > 0) {
 			setFocusedActionIndex((prev) =>
 				prev <= 0 ? totalActions - 1 : prev - 1,
@@ -213,9 +207,7 @@ export function useFocus(
 
 	const focusDown = () => {
 		if (region === 'sidebar' && sidebarCount > 0) {
-			setFocusedNodeIndex((prev) =>
-				prev >= sidebarCount - 1 ? 0 : prev + 1,
-			);
+			setFocusedNodeIndex((prev) => (prev >= sidebarCount - 1 ? 0 : prev + 1));
 		} else if (region === 'actions' && totalActions > 0) {
 			setFocusedActionIndex((prev) =>
 				prev >= totalActions - 1 ? 0 : prev + 1,
@@ -242,12 +234,12 @@ export function useFocus(
 	return {
 		availableRegions,
 		focusDown,
+		focusedActionIndex: activeActionIndex,
+		focusedNodeIndex: activeNodeIndex,
 		focusNextRegion,
 		focusPreviousRegion,
 		focusSelect,
 		focusUp,
-		focusedActionIndex: activeActionIndex,
-		focusedNodeIndex: activeNodeIndex,
 		region,
 		resetFocus,
 		totalActions,

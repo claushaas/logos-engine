@@ -22,8 +22,6 @@ import type {
 	NodeMessageMetadata,
 	PromptState,
 } from '../../src/contracts/index.js';
-import type { NodeId, SessionId } from '../../src/shared/index.js';
-import { generateId } from '../../src/shared/index.js';
 import {
 	appendAssistantMessage,
 	appendSystemMessage,
@@ -31,6 +29,8 @@ import {
 	getConversation,
 	getRecentMessages,
 } from '../../src/conversation-runtime/index.js';
+import type { NodeId, SessionId } from '../../src/shared/index.js';
+import { generateId } from '../../src/shared/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Test helpers
@@ -59,7 +59,12 @@ function nodeFocusState(): LogosRuntimeState {
 		mode: 'node_focus',
 		nodeStates: {
 			[n1]: {
-				allowedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+				allowedActions: [
+					'answer',
+					'defer',
+					'mark_as_assumption',
+					'mark_as_decision',
+				],
 				canonicalAnswer: null,
 				completeness: {
 					blockingIssues: [],
@@ -87,7 +92,8 @@ function nodeFocusState(): LogosRuntimeState {
 				updatedAt: new Date().toISOString(),
 			},
 		},
-		selectedProfileId: 'test-profile' as import('../../src/shared/index.js').ProfileId,
+		selectedProfileId:
+			'test-profile' as import('../../src/shared/index.js').ProfileId,
 		sessionId,
 		updatedAt: new Date().toISOString(),
 	};
@@ -364,7 +370,11 @@ describe('appendSystemMessage', () => {
 	it('appends a system message with correct role', () => {
 		const state = nodeFocusState();
 
-		const result = appendSystemMessage(state, N1, 'Internal note: context updated.');
+		const result = appendSystemMessage(
+			state,
+			N1,
+			'Internal note: context updated.',
+		);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected ok');
@@ -615,11 +625,16 @@ describe('integration', () => {
 		expect(r1.state.nodeStates[N1]?.lastAssistantMessageId).toBeUndefined();
 
 		// Assistant responds
-		const r2 = appendAssistantMessage(r1.state, N1, 'The thesis is about distributed systems.', {
-			promptId: 'prompt-001' as import('../../src/shared/index.js').PromptId,
-			promptState: 'follow_up' as PromptState,
-			structuredOutputId: 'out-001',
-		});
+		const r2 = appendAssistantMessage(
+			r1.state,
+			N1,
+			'The thesis is about distributed systems.',
+			{
+				promptId: 'prompt-001' as import('../../src/shared/index.js').PromptId,
+				promptState: 'follow_up' as PromptState,
+				structuredOutputId: 'out-001',
+			},
+		);
 		if (!r2.ok) throw new Error('Expected ok');
 		const asstMsg = r2.state.nodeStates[N1]?.conversation[1];
 

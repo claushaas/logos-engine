@@ -76,12 +76,11 @@ export function CanonicalPreview({ panel }: CanonicalPreviewProps) {
 					)}
 					{panel.canonicalAnswerConfidence !== undefined &&
 						panel.canonicalAnswerSourceMessageCount !== undefined && (
-							<Text dimColor={true}>  ·  </Text>
+							<Text dimColor={true}> · </Text>
 						)}
 					{panel.canonicalAnswerSourceMessageCount !== undefined && (
 						<Text dimColor={true}>
-							Generated from{' '}
-							{panel.canonicalAnswerSourceMessageCount} messages
+							Generated from {panel.canonicalAnswerSourceMessageCount} messages
 						</Text>
 					)}
 				</Box>

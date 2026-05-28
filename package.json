@@ -1,4 +1,7 @@
 {
+	"bin": {
+		"logos": "./dist/cli/main.js"
+	},
 	"dependencies": {
 		"commander": "^14.0.3",
 		"ink": "^7.0.2",
@@ -43,9 +46,6 @@
 		"ai",
 		"typescript"
 	],
-	"bin": {
-		"logos": "./dist/cli/main.js"
-	},
 	"license": "MIT",
 	"main": "./dist/index.js",
 	"name": "logos-engine",

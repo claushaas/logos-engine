@@ -23,8 +23,11 @@
  */
 import { Box, Text, useInput } from 'ink';
 import { useCallback, useMemo, useState } from 'react';
-import type { DocumentPreviewPanel } from '../../contracts/index.js';
-import type { ActionBarRenderModel, InputRenderModel } from '../../contracts/index.js';
+import type {
+	ActionBarRenderModel,
+	DocumentPreviewPanel,
+	InputRenderModel,
+} from '../../contracts/index.js';
 import type { FocusRegion } from '../hooks/use-focus.js';
 import { ActionBar } from './ActionBar.js';
 
@@ -110,11 +113,7 @@ function parseLine(line: string): ContentLine {
 
 // ─── ContentLineComponent ───────────────────────────────────────────────────
 
-function ContentLineComponent({
-	line,
-}: {
-	readonly line: ContentLine;
-}) {
+function ContentLineComponent({ line }: { readonly line: ContentLine }) {
 	switch (line.kind) {
 		case 'missing':
 			return (
@@ -139,7 +138,7 @@ function ContentLineComponent({
 
 		default:
 			if (line.text.length === 0) {
-				return <Text>{' '}</Text>;
+				return <Text> </Text>;
 			}
 
 			if (line.text.startsWith('# ')) {
@@ -179,7 +178,7 @@ function MissingNodeLinks({
 
 	return (
 		<Box flexDirection="column" marginBottom={1}>
-			<Text color="yellow" bold={true}>
+			<Text bold={true} color="yellow">
 				Missing required nodes:
 			</Text>
 			{missingNodeIds.slice(0, 9).map((nid, idx) => (
@@ -281,17 +280,16 @@ export function DocumentPreview({
 				paddingX={1}
 			>
 				<Box marginBottom={1}>
-					<Text bold={true}>
-						Document: {panel.title}
-					</Text>
+					<Text bold={true}>Document: {panel.title}</Text>
 				</Box>
 				<Box marginBottom={1}>
 					<Text dimColor={true}>
-						No content yet. Accept node answers to populate this
-						document.
+						No content yet. Accept node answers to populate this document.
 					</Text>
 				</Box>
-				<MissingNodeLinks missingNodeIds={panel.missingNodeIds as readonly string[]} />
+				<MissingNodeLinks
+					missingNodeIds={panel.missingNodeIds as readonly string[]}
+				/>
 				<Box>
 					<Text dimColor={true}>
 						{panel.exportEligible
@@ -325,10 +323,7 @@ export function DocumentPreview({
 			{/* ── Content (paginated) ──────────────────────────── */}
 			<Box flexDirection="column" flexGrow={1} marginBottom={1}>
 				{visibleLines.map((line, idx) => (
-					<ContentLineComponent
-						key={`${safePage}-${idx}`}
-						line={line}
-					/>
+					<ContentLineComponent key={`${safePage}-${idx}`} line={line} />
 				))}
 			</Box>
 
@@ -342,14 +337,15 @@ export function DocumentPreview({
 			)}
 
 			{/* ── Missing node links ──────────────────────────── */}
-			<MissingNodeLinks missingNodeIds={panel.missingNodeIds as readonly string[]} />
+			<MissingNodeLinks
+				missingNodeIds={panel.missingNodeIds as readonly string[]}
+			/>
 
 			{/* ── Page indicator (when content spans multiple pages) ── */}
 			{totalPages > 1 && (
 				<Box marginBottom={1}>
 					<Text dimColor={true}>
-						Page {safePage + 1}/{totalPages}{' '}
-						(n/p to navigate)
+						Page {safePage + 1}/{totalPages} (n/p to navigate)
 					</Text>
 				</Box>
 			)}

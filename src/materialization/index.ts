@@ -11,7 +11,7 @@
  * @see {@link https://logos-engine/docs/07-document-materialization-spec.md}
  */
 export {
+	type MaterializationError,
 	materializeDocument,
 	previewDocument,
-	type MaterializationError,
 } from './document-materializer.js';

@@ -14,9 +14,9 @@ export {
 } from './agent-turn-validator.js';
 
 export {
+	buildNextRepairAttempt,
+	buildRepairPrompt,
 	DEFAULT_REPAIR_ATTEMPT_LIMIT,
 	type RepairAttempt,
 	type RepairFailedError,
-	buildNextRepairAttempt,
-	buildRepairPrompt,
 } from './repair-prompt.js';

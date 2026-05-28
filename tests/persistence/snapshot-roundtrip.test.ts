@@ -134,7 +134,12 @@ function richState(sessionId = 'sess-rich'): LogosRuntimeState {
 
 	// ── Node state n2 — active in progress, no canonical answer yet ──
 	const n2State: NodeRuntimeState = {
-		allowedActions: ['answer', 'defer', 'mark_as_assumption', 'mark_as_decision'],
+		allowedActions: [
+			'answer',
+			'defer',
+			'mark_as_assumption',
+			'mark_as_decision',
+		],
 		canonicalAnswer: null,
 		completeness: {
 			blockingIssues: [],
@@ -183,8 +188,8 @@ function richState(sessionId = 'sess-rich'): LogosRuntimeState {
 			stale: false,
 		},
 		missingRequiredNodeIds: [],
-		requiredNodeIds: ['n1' as NodeId],
 		optionalNodeIds: ['n2' as NodeId],
+		requiredNodeIds: ['n1' as NodeId],
 		sourceNodeIds: ['n1' as NodeId, 'n2' as NodeId],
 		staleSourceNodeIds: [],
 		status: 'drafted',
@@ -361,7 +366,9 @@ describe('snapshot round-trip', () => {
 
 			// Extracted data.
 			expect(n1!.extracted.assumptions).toEqual(['Users prefer CLI tools']);
-			expect(n1!.extracted.decisions).toEqual(['Use TypeScript for type safety']);
+			expect(n1!.extracted.decisions).toEqual([
+				'Use TypeScript for type safety',
+			]);
 			expect(n1!.extracted.facts).toEqual([
 				'Documentation is critical for onboarding',
 			]);
@@ -621,9 +628,9 @@ describe('snapshot round-trip', () => {
 			await fs.writeFile(
 				filePath,
 				JSON.stringify({
-					sessionId: 'sess-no-schema',
-					savedAt: nowIso(),
 					runtimeState: idleState('sess-no-schema'),
+					savedAt: nowIso(),
+					sessionId: 'sess-no-schema',
 					// schemaVersion intentionally omitted.
 				}),
 			);
@@ -647,9 +654,9 @@ describe('snapshot round-trip', () => {
 			await fs.writeFile(
 				filePath,
 				JSON.stringify({
+					savedAt: nowIso(),
 					schemaVersion: CURRENT_SCHEMA_VERSION,
 					sessionId: 'sess-no-state',
-					savedAt: nowIso(),
 					// runtimeState intentionally omitted.
 				}),
 			);
@@ -673,9 +680,7 @@ describe('snapshot round-trip', () => {
 			if (result.ok) throw new Error('Expected failure');
 			expect(result.error.code).toBe('PERSISTENCE_SESSION_NOT_FOUND');
 			expect(result.error.recoverable).toBe(true);
-			expect(result.error.recoveryOptions).toContain(
-				'Start a new session.',
-			);
+			expect(result.error.recoveryOptions).toContain('Start a new session.');
 		});
 	});
 

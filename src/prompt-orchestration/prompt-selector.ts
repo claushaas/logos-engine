@@ -7,8 +7,16 @@
  * - `promptStateForLifecycle` — deterministic lifecycle → prompt state mapping.
  * - `selectPrompt` — selects a prompt definition for a given node state.
  */
-import type { NodeLifecycle, NodeRuntimeState, PromptState } from '../contracts/node-state.js';
-import type { LogosProfile, NodeDefinition, NodePromptRefs } from '../contracts/profile.js';
+import type {
+	NodeLifecycle,
+	NodeRuntimeState,
+	PromptState,
+} from '../contracts/node-state.js';
+import type {
+	LogosProfile,
+	NodeDefinition,
+	NodePromptRefs,
+} from '../contracts/profile.js';
 import type { PromptDefinition, PromptRegistry } from './prompt-registry.js';
 
 // ─── Lifecycle → PromptState mapping ───────────────────────────────────────

@@ -10,12 +10,10 @@
  * @see {@link https://logos-engine/docs/13-prototypes.md §4.1 steps 4-5}
  */
 import { describe, expect, it } from 'vitest';
-import {
-	acceptCanonicalAnswerUseCase,
-} from '../../src/application/use-cases/accept-canonical-answer.js';
-import { submitUserMessageUseCase } from '../../src/application/use-cases/submit-user-message.js';
-import { selectNodeUseCase } from '../../src/application/use-cases/select-node.js';
 import { generateAgentTurn } from '../../src/application/generate-agent-turn.js';
+import { acceptCanonicalAnswerUseCase } from '../../src/application/use-cases/accept-canonical-answer.js';
+import { selectNodeUseCase } from '../../src/application/use-cases/select-node.js';
+import { submitUserMessageUseCase } from '../../src/application/use-cases/submit-user-message.js';
 import type {
 	LogosProfile,
 	LogosRuntimeState,
@@ -102,11 +100,7 @@ function sessionReadyForSynthesis(): {
 	);
 	expect(r0.ok).toBe(true);
 
-	const r1 = dispatch(
-		r0.state!,
-		{ nodeId, type: 'SELECT_NODE' },
-		profile,
-	);
+	const r1 = dispatch(r0.state!, { nodeId, type: 'SELECT_NODE' }, profile);
 	expect(r1.ok).toBe(true);
 
 	// Patch the node to `ready_for_synthesis` with a conversation that
@@ -126,7 +120,8 @@ function sessionReadyForSynthesis(): {
 				role: 'assistant',
 			},
 			{
-				content: 'We believe hiring filters for credentials instead of competence.',
+				content:
+					'We believe hiring filters for credentials instead of competence.',
 				createdAt: now,
 				id: 'msg-001',
 				metadata: {},
@@ -140,7 +135,8 @@ function sessionReadyForSynthesis(): {
 				role: 'assistant',
 			},
 			{
-				content: 'It is about outcomes — credentials don\'t predict job performance.',
+				content:
+					"It is about outcomes — credentials don't predict job performance.",
 				createdAt: now,
 				id: 'msg-003',
 				metadata: {},
@@ -185,7 +181,8 @@ function sessionSynthesized(): {
 		canonicalAnswer: {
 			accepted: false,
 			confidence: 'medium',
-			content: 'The hiring industry evaluates credentials over competence. This project aims to make skill-based evaluation the default.',
+			content:
+				'The hiring industry evaluates credentials over competence. This project aims to make skill-based evaluation the default.',
 			format: 'markdown',
 			generatedAt: now,
 			generatedFromMessageIds: ['msg-001', 'msg-003'],
@@ -423,7 +420,9 @@ describe('Flow A — Steps 4-5: Synthesis → Acceptance', () => {
 		expect(node.canonicalAnswer!.stale).toBe(false);
 
 		// generatedFromMessageIds should include user message IDs
-		expect(node.canonicalAnswer!.generatedFromMessageIds.length).toBeGreaterThan(0);
+		expect(
+			node.canonicalAnswer!.generatedFromMessageIds.length,
+		).toBeGreaterThan(0);
 
 		// Allowed actions should be the review set
 		const actions = node.allowedActions;
@@ -436,8 +435,12 @@ describe('Flow A — Steps 4-5: Synthesis → Acceptance', () => {
 		// Snapshot should show canonical answer preview
 		expect(submitResult.snapshot.mainPanel.kind).toBe('node_conversation');
 		if (submitResult.snapshot.mainPanel.kind === 'node_conversation') {
-			expect(submitResult.snapshot.mainPanel.canonicalAnswerPreview).not.toBeNull();
-			expect(submitResult.snapshot.mainPanel.canonicalAnswerAccepted).toBe(false);
+			expect(
+				submitResult.snapshot.mainPanel.canonicalAnswerPreview,
+			).not.toBeNull();
+			expect(submitResult.snapshot.mainPanel.canonicalAnswerAccepted).toBe(
+				false,
+			);
 		}
 
 		// ── Now accept ──────────────────────────────────────────────

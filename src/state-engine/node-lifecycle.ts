@@ -16,6 +16,7 @@
  * @see {@link https://logos-engine/docs/13-prototypes.md §1.2}
  */
 import type {
+	CanonicalAnswer,
 	LogosProfile,
 	LogosRuntimeState,
 	NodeDefinition,
@@ -35,7 +36,6 @@ import {
 	stateErr,
 	stateOk,
 } from './types.js';
-import type { CanonicalAnswer } from '../contracts/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Canonical answer staleness helper

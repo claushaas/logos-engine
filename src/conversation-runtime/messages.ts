@@ -257,34 +257,28 @@ export function appendAssistantMessage(
 	// (`PromptId` is a branded string type — a defined value is
 	// guaranteed non-empty by the type system.)
 	if (!metadata.promptId) {
-		return convErr(
-			'Assistant message metadata must include a `promptId`.',
-			[
-				convDiag(
-					DIAG_MISSING_PROMPT_ID,
-					'Assistant messages must record the prompt ID that produced them.',
-					'error',
-					nodeId,
-				),
-			],
-		);
+		return convErr('Assistant message metadata must include a `promptId`.', [
+			convDiag(
+				DIAG_MISSING_PROMPT_ID,
+				'Assistant messages must record the prompt ID that produced them.',
+				'error',
+				nodeId,
+			),
+		]);
 	}
 
 	// Runtime guard: assistant messages require promptState.
 	// (`PromptState` is a union of non-empty string literals, so
 	// a defined value is guaranteed non-empty by the type system.)
 	if (!metadata.promptState) {
-		return convErr(
-			'Assistant message metadata must include a `promptState`.',
-			[
-				convDiag(
-					DIAG_MISSING_PROMPT_STATE,
-					'Assistant messages must record the prompt state at generation time.',
-					'error',
-					nodeId,
-				),
-			],
-		);
+		return convErr('Assistant message metadata must include a `promptState`.', [
+			convDiag(
+				DIAG_MISSING_PROMPT_STATE,
+				'Assistant messages must record the prompt state at generation time.',
+				'error',
+				nodeId,
+			),
+		]);
 	}
 
 	// Runtime guard: assistant messages require structuredOutputId.

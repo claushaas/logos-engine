@@ -10,7 +10,7 @@
  */
 import { Text } from 'ink';
 import { render } from 'ink-testing-library';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TuiDispatchEvent } from '../../src/tui/app-shell.js';
 import { useNavigation } from '../../src/tui/hooks/use-navigation.js';
@@ -43,7 +43,7 @@ function TestHarness({
 	// Persist nav object for the test to drive.
 	useEffect(() => {
 		controlsRef.current = nav;
-	}, [nav]);
+	}, [nav, controlsRef]);
 
 	return React.createElement(Text, null, 'test-harness');
 }
@@ -55,7 +55,9 @@ function renderNavigationControls(
 	dispatch?: (event: TuiDispatchEvent) => void,
 	debounceMs?: number,
 ): ReturnType<typeof useNavigation> {
-	const controlsRef: React.MutableRefObject<ReturnType<typeof useNavigation> | null> = {
+	const controlsRef: React.MutableRefObject<ReturnType<
+		typeof useNavigation
+	> | null> = {
 		current: null,
 	};
 
@@ -208,7 +210,9 @@ describe('useNavigation', () => {
 	});
 
 	it('cleanup on unmount clears pending timers', () => {
-		const controlsRef: React.MutableRefObject<ReturnType<typeof useNavigation> | null> = {
+		const controlsRef: React.MutableRefObject<ReturnType<
+			typeof useNavigation
+		> | null> = {
 			current: null,
 		};
 

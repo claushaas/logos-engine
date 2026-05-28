@@ -90,8 +90,14 @@ describe('CLI argument parsing', () => {
 
 		// Both types are structurally identical — the cast in main.ts is safe.
 		const nodeEvent: SimpleEvent = { nodeId: 'n1', type: 'NODE_SELECTED' };
-		const actionEvent: SimpleEvent = { actionId: 'accept', type: 'ACTION_SELECTED' };
-		const messageEvent: SimpleEvent = { content: 'hello', type: 'USER_MESSAGE' };
+		const actionEvent: SimpleEvent = {
+			actionId: 'accept',
+			type: 'ACTION_SELECTED',
+		};
+		const messageEvent: SimpleEvent = {
+			content: 'hello',
+			type: 'USER_MESSAGE',
+		};
 		const escapeEvent: SimpleEvent = { type: 'ESCAPE' };
 
 		expect(nodeEvent.type).toBe('NODE_SELECTED');

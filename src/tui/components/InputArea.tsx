@@ -30,32 +30,21 @@ export function InputArea({ focusedRegion, input, value }: InputAreaProps) {
 		return null;
 	}
 
-	const displayText = value !== undefined && value.length > 0
-		? value
-		: input.placeholder ?? 'Type your answer…';
+	const displayText =
+		value !== undefined && value.length > 0
+			? value
+			: (input.placeholder ?? 'Type your answer…');
 
 	if (isInputFocused) {
 		return (
-			<Box
-				borderColor="blue"
-				borderStyle="round"
-				marginTop={1}
-				paddingX={1}
-			>
-				<Text color="blue">
-					▸ {displayText}
-				</Text>
+			<Box borderColor="blue" borderStyle="round" marginTop={1} paddingX={1}>
+				<Text color="blue">▸ {displayText}</Text>
 			</Box>
 		);
 	}
 
 	return (
-		<Box
-			borderColor="blue"
-			borderStyle="round"
-			marginTop={1}
-			paddingX={1}
-		>
+		<Box borderColor="blue" borderStyle="round" marginTop={1} paddingX={1}>
 			<Text dimColor={true}>
 				{'>>>'} {displayText}
 			</Text>

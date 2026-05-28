@@ -26,8 +26,8 @@ import type {
 	LogosRuntimeState,
 	NodeRuntimeState,
 } from '../../src/contracts/index.js';
-import { exportMarkdown } from '../../src/outputs/index.js';
 import type { ExportError } from '../../src/outputs/index.js';
+import { exportMarkdown } from '../../src/outputs/index.js';
 import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
 import { nowIso } from '../../src/shared/index.js';
 
@@ -53,10 +53,7 @@ afterEach(() => {
 
 // ─── Node state factories (reusing proven patterns from materializer tests) ─
 
-function acceptedNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function acceptedNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	return {
 		allowedActions: ['continue_next', 'reopen', 'open_document_preview'],
 		canonicalAnswer: {
@@ -92,10 +89,7 @@ function acceptedNodeState(
 	};
 }
 
-function staleNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function staleNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	const base = acceptedNodeState(nodeId, content);
 	return {
 		...base,
@@ -157,9 +151,7 @@ function testRule(
 	};
 }
 
-function testProfile(
-	rule?: DocumentMaterializationRule,
-): LogosProfile {
+function testProfile(rule?: DocumentMaterializationRule): LogosProfile {
 	const effectiveRule = rule ?? testRule('test-doc' as DocumentId);
 	return {
 		description: 'Test profile',
@@ -190,17 +182,13 @@ function testProfile(
 				title: 'Node A',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Test Profile',
 		version: '1.0.0',
 	};
 }
 
-function stateWithNodes(
-	nodes: NodeRuntimeState[],
-): LogosRuntimeState {
+function stateWithNodes(nodes: NodeRuntimeState[]): LogosRuntimeState {
 	const nodeStates: Record<NodeId, NodeRuntimeState> = {};
 	for (const n of nodes) {
 		nodeStates[n.nodeId] = n;
@@ -234,7 +222,10 @@ describe('exportMarkdown', () => {
 	it('exports a ready document to a Markdown file', async () => {
 		const profile = testProfile();
 		const state = stateWithNodes([
-			acceptedNodeState('node-a' as NodeId, '## The Answer\n\nThis is the content.'),
+			acceptedNodeState(
+				'node-a' as NodeId,
+				'## The Answer\n\nThis is the content.',
+			),
 		]);
 
 		const result = await exportMarkdown(
@@ -480,9 +471,7 @@ describe('exportMarkdown', () => {
 		expect(artifact.sessionId).toBe(state.sessionId);
 		expect(artifact.type).toBe('markdown');
 		expect(artifact.path).toBe(outputPath);
-		expect(artifact.sourceDocumentIds).toEqual([
-			'test-doc' as DocumentId,
-		]);
+		expect(artifact.sourceDocumentIds).toEqual(['test-doc' as DocumentId]);
 		expect(artifact.sourceNodeIds).toEqual(['node-a' as NodeId]);
 		expect(artifact.stale).toBe(false);
 		expect(artifact.generatedAt).toBeTruthy();

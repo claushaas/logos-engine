@@ -17,8 +17,9 @@
  * @see {@link https://logos-engine/docs/07-document-materialization-spec.md}
  * @see {@link https://logos-engine/docs/13-prototypes.md §4.8}
  */
-import { mkdir, writeFile, access } from 'node:fs/promises';
+
 import { constants } from 'node:fs';
+import { access, mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import type {
 	DocumentMaterializationRule,
@@ -56,9 +57,7 @@ function findRule(
 	profile: LogosProfile,
 	documentId: DocumentId,
 ): DocumentMaterializationRule | undefined {
-	return profile.materializationRules.find(
-		(r) => r.documentId === documentId,
-	);
+	return profile.materializationRules.find((r) => r.documentId === documentId);
 }
 
 /**

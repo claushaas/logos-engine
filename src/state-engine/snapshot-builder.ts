@@ -64,9 +64,7 @@ function buildSidebarNode(
 		nodeState?.lifecycle === 'accepted' &&
 		nodeState?.canonicalAnswer?.stale === true;
 
-	const statusSymbol = isAcceptedStale
-		? '↻'
-		: STATUS_SYMBOL_MAP[lifecycle];
+	const statusSymbol = isAcceptedStale ? '↻' : STATUS_SYMBOL_MAP[lifecycle];
 
 	return {
 		disabled: false,
@@ -213,8 +211,7 @@ function buildMainPanel(
 
 		const canonicalAnswer = nodeState.canonicalAnswer;
 		const canonicalAnswerPreview = canonicalAnswer?.content ?? null;
-		const canonicalAnswerAccepted =
-			canonicalAnswer?.accepted === true;
+		const canonicalAnswerAccepted = canonicalAnswer?.accepted === true;
 		const canonicalAnswerConfidence = canonicalAnswer?.confidence;
 		const canonicalAnswerSourceMessageCount =
 			canonicalAnswer?.generatedFromMessageIds.length;
@@ -256,7 +253,7 @@ function buildMainPanel(
 						canonicalAnswerConfidence,
 						canonicalAnswerSourceMessageCount,
 						canonicalAnswerStale,
-				  }
+					}
 				: basePanel;
 
 		if (completenessSummary !== undefined) {

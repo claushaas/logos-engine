@@ -3,16 +3,16 @@
  * mapping, registry fallback chain integration, and `promptRefs` override resolution.
  */
 import { describe, expect, it } from 'vitest';
-import type { NodeLifecycle, PromptState } from '../../src/contracts/node-state.js';
+import type {
+	NodeLifecycle,
+	NodeRuntimeState,
+	PromptState,
+} from '../../src/contracts/node-state.js';
 import type {
 	LogosProfile,
 	NodeDefinition,
 } from '../../src/contracts/profile.js';
-import type { NodeRuntimeState } from '../../src/contracts/node-state.js';
-import {
-	DEFAULT_FALLBACK_PROMPTS,
-	PROMPT_STATES,
-} from '../../src/prompt-orchestration/default-prompts.js';
+import { PROMPT_STATES } from '../../src/prompt-orchestration/default-prompts.js';
 import {
 	type PromptDefinition,
 	PromptRegistry,
@@ -74,8 +74,8 @@ function makeNodeState(
 			openQuestions: [],
 			risks: [],
 		},
-		lastUserMessageId: undefined,
 		lastAssistantMessageId: undefined,
+		lastUserMessageId: undefined,
 		lifecycle,
 		nodeId: nodeId as NodeId,
 		promptState: 'initial', // Derived by selector, not used directly.
@@ -136,12 +136,11 @@ describe('promptStateForLifecycle', () => {
 		['deferred', null],
 	];
 
-	it.each(lifecycleMappings)(
-		'%s → %s',
-		(lifecycle: NodeLifecycle, expected: PromptState | null) => {
-			expect(promptStateForLifecycle(lifecycle)).toBe(expected);
-		},
-	);
+	it.each(
+		lifecycleMappings,
+	)('%s → %s', (lifecycle: NodeLifecycle, expected: PromptState | null) => {
+		expect(promptStateForLifecycle(lifecycle)).toBe(expected);
+	});
 
 	it('covers all NodeLifecycle values', () => {
 		const lifecycles: NodeLifecycle[] = [
@@ -316,7 +315,11 @@ describe('selectPrompt — promptRefs overrides', () => {
 		// The ID-based resolution is what selects it, not the scope.
 		const overridePrompt = def(
 			'custom.initial.override',
-			{ level: 'node', profileId: 'override-profile', nodeType: 'override-node' },
+			{
+				level: 'node',
+				nodeType: 'override-node',
+				profileId: 'override-profile',
+			},
 			'initial',
 			'custom initial from promptRefs',
 		);

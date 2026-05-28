@@ -63,8 +63,7 @@ export function ConversationPanel({
 	onSelectAction,
 	panel,
 }: ConversationPanelProps) {
-	const lifecycleLabel =
-		LIFECYCLE_LABELS[panel.lifecycle] ?? panel.lifecycle;
+	const lifecycleLabel = LIFECYCLE_LABELS[panel.lifecycle] ?? panel.lifecycle;
 
 	// ── Split messages: history + latest agent message ────────────────────
 
@@ -92,9 +91,10 @@ export function ConversationPanel({
 	const hasHistory = historyMessages.length > 0;
 
 	// Avoid passing undefined onSelectAction — conditionally include
-	const actionBarProps = onSelectAction !== undefined
-		? { actionBar, focusedActionIndex, focusedRegion, onSelectAction }
-		: { actionBar, focusedActionIndex, focusedRegion };
+	const actionBarProps =
+		onSelectAction !== undefined
+			? { actionBar, focusedActionIndex, focusedRegion, onSelectAction }
+			: { actionBar, focusedActionIndex, focusedRegion };
 
 	return (
 		<Box flexDirection="column" flexGrow={1} paddingX={1}>
@@ -118,8 +118,8 @@ export function ConversationPanel({
 					{historyMessages.map((msg) => (
 						<Box key={msg.id} marginTop={1}>
 							<Text
-								dimColor={true}
 								color={msg.role === 'user' ? 'green' : 'cyan'}
+								dimColor={true}
 							>
 								{msg.role === 'user' ? 'You' : 'Agent'}
 							</Text>
@@ -143,9 +143,7 @@ export function ConversationPanel({
 				</Box>
 			) : panel.messages.length === 0 ? (
 				<Box marginBottom={1}>
-					<Text dimColor={true}>
-						No messages yet. Start the conversation.
-					</Text>
+					<Text dimColor={true}>No messages yet. Start the conversation.</Text>
 				</Box>
 			) : null}
 
@@ -156,7 +154,11 @@ export function ConversationPanel({
 			<ActionBar {...actionBarProps} />
 
 			{/* Input area */}
-			<InputArea focusedRegion={focusedRegion} input={input} value={inputValue} />
+			<InputArea
+				focusedRegion={focusedRegion}
+				input={input}
+				value={inputValue}
+			/>
 		</Box>
 	);
 }

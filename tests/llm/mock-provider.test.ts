@@ -11,15 +11,14 @@
  * 7. fixture responses are deeply cloned (no cross-contamination).
  */
 import { describe, expect, it } from 'vitest';
-
-import type { LlmRequest } from '../../src/prompt-orchestration/prompt-assembler.js';
-import { isOk } from '../../src/shared/index.js';
-import { validateAgentTurnOutput } from '../../src/validation/agent-turn-validator.js';
-import { MockLlmProvider } from '../../src/llm/mock-provider.js';
 import type {
 	AgentTurnOutput,
 	NodeLifecycle,
 } from '../../src/contracts/index.js';
+import { MockLlmProvider } from '../../src/llm/mock-provider.js';
+import type { LlmRequest } from '../../src/prompt-orchestration/prompt-assembler.js';
+import { isOk } from '../../src/shared/index.js';
+import { validateAgentTurnOutput } from '../../src/validation/agent-turn-validator.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Helpers
@@ -46,12 +45,12 @@ const ALL_LIFECYCLES: readonly NodeLifecycle[] = [
  */
 function makeRequest(overrides: Partial<LlmRequest> = {}): LlmRequest {
 	return {
-		systemPrompt: 'You are an expert interviewer.',
 		messages: [
-			{ role: 'user', content: 'Node: Core Thesis' },
-			{ role: 'user', content: 'What is the central thesis?' },
+			{ content: 'Node: Core Thesis', role: 'user' },
+			{ content: 'What is the central thesis?', role: 'user' },
 		],
 		schema: { name: 'AgentTurnOutput' },
+		systemPrompt: 'You are an expert interviewer.',
 		...overrides,
 	};
 }
@@ -63,10 +62,10 @@ function makeRequest(overrides: Partial<LlmRequest> = {}): LlmRequest {
 function makeRequestWithLifecycleBlock(lifecycle: NodeLifecycle): LlmRequest {
 	return makeRequest({
 		messages: [
-			{ role: 'user', content: '## Node Definition\nNode: Core Thesis' },
+			{ content: '## Node Definition\nNode: Core Thesis', role: 'user' },
 			{
-				role: 'user',
 				content: `## Current State\nLifecycle: ${lifecycle}\nPrompt State: initial`,
+				role: 'user',
 			},
 		],
 	});
@@ -116,9 +115,9 @@ describe('MockLlmProvider', () => {
 	// ── 3. constructor custom fixture overrides default ──────────────
 	it('supports custom fixtures via constructor', async () => {
 		const customNotStarted: AgentTurnOutput = {
-			userFacingMessage: 'Custom initial question.',
 			proposedLifecycle: 'active',
 			suggestedActions: ['answer'],
+			userFacingMessage: 'Custom initial question.',
 		};
 
 		const provider = new MockLlmProvider({ not_started: customNotStarted });
@@ -139,9 +138,9 @@ describe('MockLlmProvider', () => {
 
 		// Override the active fixture at runtime.
 		provider.setFixture('active', {
-			userFacingMessage: 'Runtime override for active.',
 			proposedPromptState: 'follow_up',
 			suggestedActions: ['defer'],
+			userFacingMessage: 'Runtime override for active.',
 		});
 
 		const response = await provider.generateStructuredOutput(
@@ -170,23 +169,22 @@ describe('MockLlmProvider', () => {
 	});
 
 	// ── 6. every lifecycle fixture passes schema validation ──────────
-	it.each(ALL_LIFECYCLES)(
-		'default fixture for %s passes validateAgentTurnOutput',
-		async (lifecycle) => {
-			const provider = new MockLlmProvider();
-			const response = await provider.generateStructuredOutput(
-				makeRequest({ metadata: { lifecycle } }),
-			);
+	it.each(
+		ALL_LIFECYCLES,
+	)('default fixture for %s passes validateAgentTurnOutput', async (lifecycle) => {
+		const provider = new MockLlmProvider();
+		const response = await provider.generateStructuredOutput(
+			makeRequest({ metadata: { lifecycle } }),
+		);
 
-			const result = validateAgentTurnOutput(response);
-			expect(
-				isOk(result),
-				`Fixture for ${lifecycle} failed validation: ${
-					!isOk(result) ? JSON.stringify(result.error) : ''
-				}`,
-			).toBe(true);
-		},
-	);
+		const result = validateAgentTurnOutput(response);
+		expect(
+			isOk(result),
+			`Fixture for ${lifecycle} failed validation: ${
+				!isOk(result) ? JSON.stringify(result.error) : ''
+			}`,
+		).toBe(true);
+	});
 
 	// ── 7. fixtures are cloned (no cross-contamination) ───────────────
 	it('returns cloned fixtures to prevent mutation leakage', async () => {
@@ -211,7 +209,9 @@ describe('MockLlmProvider', () => {
 	it('falls back to not_started when lifecycle metadata is absent', async () => {
 		const provider = new MockLlmProvider();
 		const response = await provider.generateStructuredOutput(
-			makeRequest({ messages: [{ role: 'user', content: 'no lifecycle here' }] }),
+			makeRequest({
+				messages: [{ content: 'no lifecycle here', role: 'user' }],
+			}),
 		);
 
 		expect(response.proposedLifecycle).toBe('active');

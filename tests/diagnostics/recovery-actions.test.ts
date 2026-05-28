@@ -5,7 +5,10 @@
  * two-argument `getRecoveryActionsForError` variant.
  */
 import { describe, expect, it } from 'vitest';
-import type { RecoveryAction, RuntimeErrorCategory } from '../../src/diagnostics/index.js';
+import type {
+	RecoveryAction,
+	RuntimeErrorCategory,
+} from '../../src/diagnostics/index.js';
 import {
 	getRecoveryActions,
 	getRecoveryActionsForError,
@@ -78,9 +81,7 @@ describe('getRecoveryActions (code only)', () => {
 	});
 
 	it('LOGOS_LLM_API_KEY → open_settings', () => {
-		expect(getRecoveryActions('LOGOS_LLM_API_KEY')).toEqual([
-			'open_settings',
-		]);
+		expect(getRecoveryActions('LOGOS_LLM_API_KEY')).toEqual(['open_settings']);
 	});
 
 	// ── Structured output ────────────────────────────────────────────────
@@ -214,9 +215,9 @@ describe('getRecoveryActionsForError', () => {
 	});
 
 	it('falls back to category default when code is unknown', () => {
-		expect(
-			getRecoveryActionsForError('SOME_NEW_ERROR', 'persistence'),
-		).toEqual(['retry', 'export_recovery_bundle', 'restore_previous_snapshot']);
+		expect(getRecoveryActionsForError('SOME_NEW_ERROR', 'persistence')).toEqual(
+			['retry', 'export_recovery_bundle', 'restore_previous_snapshot'],
+		);
 	});
 
 	it('returns empty array for unknown code and undefined-like category', () => {
@@ -245,7 +246,11 @@ describe('getRecoveryActionsForError', () => {
 		},
 		{
 			category: 'persistence',
-			expected: ['retry', 'export_recovery_bundle', 'restore_previous_snapshot'],
+			expected: [
+				'retry',
+				'export_recovery_bundle',
+				'restore_previous_snapshot',
+			],
 		},
 		{ category: 'profile_schema', expected: ['open_settings'] },
 		{
@@ -261,9 +266,9 @@ describe('getRecoveryActionsForError', () => {
 
 	for (const { category, expected } of categoryTests) {
 		it(`category "${category}" → ${JSON.stringify(expected)}`, () => {
-			expect(
-				getRecoveryActionsForError('UNKNOWN_CODE', category),
-			).toEqual(expected);
+			expect(getRecoveryActionsForError('UNKNOWN_CODE', category)).toEqual(
+				expected,
+			);
 		});
 	}
 });

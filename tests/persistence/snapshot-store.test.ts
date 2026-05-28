@@ -14,12 +14,12 @@ import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import type { LogosRuntimeState } from '../../src/contracts/index.js';
-import type { DocumentId, SessionId } from '../../src/shared/index.js';
 import {
 	createSnapshotStore,
 	type SnapshotFs,
 	type SnapshotStore,
 } from '../../src/persistence/snapshot-store.js';
+import type { DocumentId, SessionId } from '../../src/shared/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Minimal runtime state fixture
@@ -110,32 +110,32 @@ describe('snapshot-store', () => {
 				mode: 'node_focus',
 				nodeStates: {
 					'node-1': {
-						lifecycle: 'active',
-						promptState: 'follow_up',
-						conversation: [
-							{
-								id: 'msg-1',
-								role: 'user' as const,
-								content: 'What is the thesis?',
-								createdAt: '2026-01-01T00:00:00.000Z',
-							},
-						],
+						allowedActions: ['answer_question'],
+						canonicalAnswer: null,
 						completeness: {
+							blockingIssues: [],
 							complete: false,
 							coverage: {},
 							missing: ['thesis'],
 							weak: [],
-							blockingIssues: [],
 						},
+						conversation: [
+							{
+								content: 'What is the thesis?',
+								createdAt: '2026-01-01T00:00:00.000Z',
+								id: 'msg-1',
+								role: 'user' as const,
+							},
+						],
 						extracted: {
-							facts: [],
 							assumptions: [],
 							decisions: [],
-							risks: [],
+							facts: [],
 							openQuestions: [],
+							risks: [],
 						},
-						canonicalAnswer: null,
-						allowedActions: ['answer_question'],
+						lifecycle: 'active',
+						promptState: 'follow_up',
 						updatedAt: '2026-01-01T00:00:00.000Z',
 					} as import('../../src/contracts/index.js').NodeRuntimeState,
 				},
@@ -305,9 +305,9 @@ describe('snapshot-store', () => {
 			await fs.writeFile(
 				join(dir_, `${encoded}.snapshot.json`),
 				JSON.stringify({
-					sessionId: 'bad-schema',
-					savedAt: '2026-01-01T00:00:00.000Z',
 					runtimeState: {},
+					savedAt: '2026-01-01T00:00:00.000Z',
+					sessionId: 'bad-schema',
 				}),
 			);
 
@@ -328,9 +328,9 @@ describe('snapshot-store', () => {
 			await fs.writeFile(
 				join(dir_, `${encoded}.snapshot.json`),
 				JSON.stringify({
-					sessionId: 'no-runtime',
-					schemaVersion: '1.0.0',
 					savedAt: '2026-01-01T00:00:00.000Z',
+					schemaVersion: '1.0.0',
+					sessionId: 'no-runtime',
 				}),
 			);
 
@@ -374,9 +374,9 @@ describe('snapshot-store', () => {
 					callLog.push(`mkdir:${p}`);
 					return fs.mkdir(p, opts);
 				},
-				writeFile: async (p, data) => {
-					callLog.push(`writeFile:${p}`);
-					return fs.writeFile(p, data);
+				readdir: async (p) => {
+					callLog.push(`readdir:${p}`);
+					return fs.readdir(p);
 				},
 				readFile: async (p) => {
 					callLog.push(`readFile:${p}`);
@@ -386,23 +386,23 @@ describe('snapshot-store', () => {
 					callLog.push(`rename:${oldP}->${newP}`);
 					return fs.rename(oldP, newP);
 				},
-				unlink: async (p) => {
-					callLog.push(`unlink:${p}`);
-					return fs.unlink(p);
-				},
-				readdir: async (p) => {
-					callLog.push(`readdir:${p}`);
-					return fs.readdir(p);
-				},
 				stat: async (p) => {
 					callLog.push(`stat:${p}`);
 					return fs.stat(p);
 				},
+				unlink: async (p) => {
+					callLog.push(`unlink:${p}`);
+					return fs.unlink(p);
+				},
+				writeFile: async (p, data) => {
+					callLog.push(`writeFile:${p}`);
+					return fs.writeFile(p, data);
+				},
 			};
 
 			const mockStore = createSnapshotStore({
-				sessionsDir: await tempDir(),
 				fs: mockFs,
+				sessionsDir: await tempDir(),
 			});
 
 			const saveResult = await mockStore.saveSnapshot('atomic-test', state);
@@ -449,25 +449,25 @@ describe('snapshot-store', () => {
 			// Use a mock FS that fails on writeFile.
 			const mockFs: SnapshotFs = {
 				mkdir: async () => undefined,
-				writeFile: async () => {
-					throw new Error('Simulated write failure');
-				},
+				readdir: async () => [],
 				readFile: async () => {
 					throw new Error('should not be called');
 				},
 				rename: async () => {
 					throw new Error('should not be called');
 				},
+				stat: async () => ({ mtimeMs: 0 }),
 				unlink: async () => {
 					// Expected: temp file cleanup.
 				},
-				readdir: async () => [],
-				stat: async () => ({ mtimeMs: 0 }),
+				writeFile: async () => {
+					throw new Error('Simulated write failure');
+				},
 			};
 
 			const mockStore = createSnapshotStore({
-				sessionsDir: '/mock/dir',
 				fs: mockFs,
+				sessionsDir: '/mock/dir',
 			});
 
 			const result = await mockStore.saveSnapshot(

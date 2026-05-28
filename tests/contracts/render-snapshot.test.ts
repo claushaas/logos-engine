@@ -35,12 +35,14 @@ import type {
 	RuntimeDiagnostic,
 	SessionMode,
 	SidebarNode,
-	SidebarPhase,
 	SidebarRenderModel,
 	TuiRenderSnapshot,
 } from '../../src/contracts/index.js';
 import type { DocumentId, NodeId } from '../../src/shared/index.js';
-import { getAllowedActions, type NodeAction } from '../../src/state-engine/index.js';
+import {
+	getAllowedActions,
+	type NodeAction,
+} from '../../src/state-engine/index.js';
 
 // ─── Test-local shape validators ───────────────────────────────────────────
 
@@ -68,14 +70,10 @@ function validateSnapshotShape(snapshot: TuiRenderSnapshot): string[] {
 	const errors: string[] = [];
 
 	// Top-level required fields
-	const topMissing = hasAllKeys(snapshot as unknown as Record<string, unknown>, [
-		'mode',
-		'sidebar',
-		'mainPanel',
-		'actionBar',
-		'input',
-		'diagnostics',
-	]);
+	const topMissing = hasAllKeys(
+		snapshot as unknown as Record<string, unknown>,
+		['mode', 'sidebar', 'mainPanel', 'actionBar', 'input', 'diagnostics'],
+	);
 	for (const k of topMissing) {
 		errors.push(`snapshot.${k}: missing required field`);
 	}
@@ -159,7 +157,8 @@ function makeSidebarNode(
 	return {
 		disabled: lifecycle === 'blocked',
 		nodeId,
-		reasonIfDisabled: lifecycle === 'blocked' ? 'Blocked by prerequisite' : undefined,
+		reasonIfDisabled:
+			lifecycle === 'blocked' ? 'Blocked by prerequisite' : undefined,
 		selected,
 		statusSymbol: STATUS_SYMBOLS[lifecycle] ?? '·',
 		title,
@@ -170,9 +169,24 @@ function makeSidebarRenderModel(
 	activeNodeId: NodeId | null,
 ): SidebarRenderModel {
 	const nodes: SidebarNode[] = [
-		makeSidebarNode('node-thesis' as NodeId, 'Core Thesis', 'answered', activeNodeId === ('node-thesis' as NodeId)),
-		makeSidebarNode('node-problem' as NodeId, 'Core Problem', 'not_started', activeNodeId === ('node-problem' as NodeId)),
-		makeSidebarNode('node-val' as NodeId, 'Validation Approach', 'blocked', activeNodeId === ('node-val' as NodeId)),
+		makeSidebarNode(
+			'node-thesis' as NodeId,
+			'Core Thesis',
+			'answered',
+			activeNodeId === ('node-thesis' as NodeId),
+		),
+		makeSidebarNode(
+			'node-problem' as NodeId,
+			'Core Problem',
+			'not_started',
+			activeNodeId === ('node-problem' as NodeId),
+		),
+		makeSidebarNode(
+			'node-val' as NodeId,
+			'Validation Approach',
+			'blocked',
+			activeNodeId === ('node-val' as NodeId),
+		),
 	];
 
 	return {
@@ -268,7 +282,9 @@ function profilePanel(): ProfilePanel {
 	};
 }
 
-function nodeConversationPanel(lifecycle: NodeLifecycle): NodeConversationPanel {
+function nodeConversationPanel(
+	lifecycle: NodeLifecycle,
+): NodeConversationPanel {
 	return {
 		breadcrumb: 'Foundation / Thesis / Core Thesis',
 		canonicalAnswerAccepted: lifecycle === 'accepted',
@@ -294,7 +310,8 @@ function nodeConversationPanel(lifecycle: NodeLifecycle): NodeConversationPanel 
 				role: 'assistant',
 			},
 			{
-				content: 'My thesis is that sustainable food requires local production.',
+				content:
+					'My thesis is that sustainable food requires local production.',
 				createdAt: '2026-05-27T00:01:00.000Z',
 				id: 'msg_2',
 				role: 'user',
@@ -414,8 +431,18 @@ describe('Render snapshot schema — valid examples', () => {
 			nodeConversationPanel(lifecycle),
 			makeSidebarRenderModel('node-thesis' as NodeId),
 			makeActionBar([
-				{ enabled: true, id: 'answer', label: 'Answer', nodeAction: 'answer' as NodeAction },
-				{ enabled: true, id: 'defer', label: 'Defer', nodeAction: 'defer' as NodeAction },
+				{
+					enabled: true,
+					id: 'answer',
+					label: 'Answer',
+					nodeAction: 'answer' as NodeAction,
+				},
+				{
+					enabled: true,
+					id: 'defer',
+					label: 'Defer',
+					nodeAction: 'defer' as NodeAction,
+				},
 			]),
 			makeInput(true, 'Type your answer...'),
 		);
@@ -439,8 +466,18 @@ describe('Render snapshot schema — valid examples', () => {
 			nodeConversationPanel(lifecycle),
 			makeSidebarRenderModel('node-problem' as NodeId),
 			makeActionBar([
-				{ enabled: true, id: 'answer', label: 'Answer', nodeAction: 'answer' as NodeAction },
-				{ enabled: true, id: 'skip', label: 'Skip', nodeAction: 'skip' as NodeAction },
+				{
+					enabled: true,
+					id: 'answer',
+					label: 'Answer',
+					nodeAction: 'answer' as NodeAction,
+				},
+				{
+					enabled: true,
+					id: 'skip',
+					label: 'Skip',
+					nodeAction: 'skip' as NodeAction,
+				},
 			]),
 			makeInput(true, 'Type your answer...'),
 		);
@@ -458,9 +495,24 @@ describe('Render snapshot schema — valid examples', () => {
 			nodeConversationPanel(lifecycle),
 			makeSidebarRenderModel('node-thesis' as NodeId),
 			makeActionBar([
-				{ enabled: true, id: 'accept', label: 'Accept', nodeAction: 'accept' as NodeAction },
-				{ enabled: true, id: 'edit', label: 'Edit', nodeAction: 'edit' as NodeAction },
-				{ enabled: true, id: 'regenerate', label: 'Regenerate', nodeAction: 'regenerate' as NodeAction },
+				{
+					enabled: true,
+					id: 'accept',
+					label: 'Accept',
+					nodeAction: 'accept' as NodeAction,
+				},
+				{
+					enabled: true,
+					id: 'edit',
+					label: 'Edit',
+					nodeAction: 'edit' as NodeAction,
+				},
+				{
+					enabled: true,
+					id: 'regenerate',
+					label: 'Regenerate',
+					nodeAction: 'regenerate' as NodeAction,
+				},
 			]),
 			makeInput(false),
 		);
@@ -478,8 +530,18 @@ describe('Render snapshot schema — valid examples', () => {
 			nodeConversationPanel(lifecycle),
 			makeSidebarRenderModel('node-thesis' as NodeId),
 			makeActionBar([
-				{ enabled: true, id: 'continue', label: 'Continue', nodeAction: 'continue_next' as NodeAction },
-				{ enabled: true, id: 'reopen', label: 'Reopen', nodeAction: 'reopen' as NodeAction },
+				{
+					enabled: true,
+					id: 'continue',
+					label: 'Continue',
+					nodeAction: 'continue_next' as NodeAction,
+				},
+				{
+					enabled: true,
+					id: 'reopen',
+					label: 'Reopen',
+					nodeAction: 'reopen' as NodeAction,
+				},
 			]),
 			makeInput(false),
 		);
@@ -495,9 +557,7 @@ describe('Render snapshot schema — valid examples', () => {
 			'document_preview',
 			documentPreviewPanel(),
 			makeSidebarRenderModel(null),
-			makeActionBar([
-				{ enabled: true, id: 'export', label: 'Export' },
-			]),
+			makeActionBar([{ enabled: true, id: 'export', label: 'Export' }]),
 			makeInput(false),
 		);
 		const errors = validateSnapshotShape(snapshot);
@@ -538,9 +598,7 @@ describe('Render snapshot schema — valid examples', () => {
 			'error',
 			errorPanel(),
 			makeSidebarRenderModel(null),
-			makeActionBar([
-				{ enabled: true, id: 'retry', label: 'Retry' },
-			]),
+			makeActionBar([{ enabled: true, id: 'retry', label: 'Retry' }]),
 			makeInput(false),
 			makeWarningDiagnostics(),
 		);
@@ -559,7 +617,14 @@ describe('Render snapshot schema — architecture invariants', () => {
 			'node_focus',
 			nodeConversationPanel('active'),
 			makeSidebarRenderModel('node-thesis' as NodeId),
-			makeActionBar([{ enabled: true, id: 'answer', label: 'Answer', nodeAction: 'answer' as NodeAction }]),
+			makeActionBar([
+				{
+					enabled: true,
+					id: 'answer',
+					label: 'Answer',
+					nodeAction: 'answer' as NodeAction,
+				},
+			]),
 			makeInput(true),
 			makeWarningDiagnostics(),
 		);
@@ -587,7 +652,12 @@ describe('Render snapshot schema — architecture invariants', () => {
 	it('action bar with incompatible action is caught by invariant check', () => {
 		const lifecycle: NodeLifecycle = 'not_started';
 		const actions: ActionBarRenderAction[] = [
-			{ enabled: true, id: 'accept', label: 'Accept', nodeAction: 'accept' as NodeAction },
+			{
+				enabled: true,
+				id: 'accept',
+				label: 'Accept',
+				nodeAction: 'accept' as NodeAction,
+			},
 		];
 		const errors = validateActionsCompatibleWithLifecycle(actions, lifecycle);
 		expect(errors.length).toBeGreaterThan(0);
@@ -596,9 +666,16 @@ describe('Render snapshot schema — architecture invariants', () => {
 
 	it('all 10 lifecycles have a valid action set', () => {
 		const lifecycles: NodeLifecycle[] = [
-			'not_started', 'active', 'answered', 'needs_clarification',
-			'needs_refinement', 'ready_for_synthesis', 'synthesized',
-			'accepted', 'deferred', 'blocked',
+			'not_started',
+			'active',
+			'answered',
+			'needs_clarification',
+			'needs_refinement',
+			'ready_for_synthesis',
+			'synthesized',
+			'accepted',
+			'deferred',
+			'blocked',
 		];
 		for (const lc of lifecycles) {
 			const actions = getAllowedActions(lc);
@@ -654,7 +731,9 @@ describe('Render snapshot schema — architecture invariants', () => {
 		const allNodes = sidebar.phases.flatMap((p) =>
 			p.documents.flatMap((d) => d.nodes),
 		);
-		const blockedNode = allNodes.find((n) => n.nodeId === ('node-val' as NodeId));
+		const blockedNode = allNodes.find(
+			(n) => n.nodeId === ('node-val' as NodeId),
+		);
 		expect(blockedNode).toBeDefined();
 		expect(blockedNode?.disabled).toBe(true);
 		expect(blockedNode?.reasonIfDisabled).toBeDefined();
@@ -737,7 +816,9 @@ describe('Render snapshot schema — broken snapshots', () => {
 
 	it('sidebar missing phases is detected', () => {
 		const sidebar = { activeNodeId: null } as unknown as SidebarRenderModel;
-		expect(Array.isArray((sidebar as Record<string, unknown>).phases)).toBe(false);
+		expect(Array.isArray((sidebar as Record<string, unknown>).phases)).toBe(
+			false,
+		);
 	});
 
 	it('sidebar node with empty title is suspicious', () => {
@@ -754,7 +835,12 @@ describe('Render snapshot schema — broken snapshots', () => {
 	it('action with incompatible nodeAction is caught (accept in not_started)', () => {
 		const lifecycle: NodeLifecycle = 'not_started';
 		const actions: ActionBarRenderAction[] = [
-			{ enabled: true, id: 'accept', label: 'Accept', nodeAction: 'accept' as NodeAction },
+			{
+				enabled: true,
+				id: 'accept',
+				label: 'Accept',
+				nodeAction: 'accept' as NodeAction,
+			},
 		];
 		const errors = validateActionsCompatibleWithLifecycle(actions, lifecycle);
 		expect(errors.length).toBeGreaterThan(0);
@@ -763,7 +849,12 @@ describe('Render snapshot schema — broken snapshots', () => {
 	it('action with incompatible nodeAction is caught (defer in ready_for_synthesis)', () => {
 		const lifecycle: NodeLifecycle = 'ready_for_synthesis';
 		const actions: ActionBarRenderAction[] = [
-			{ enabled: true, id: 'defer', label: 'Defer', nodeAction: 'defer' as NodeAction },
+			{
+				enabled: true,
+				id: 'defer',
+				label: 'Defer',
+				nodeAction: 'defer' as NodeAction,
+			},
 		];
 		const errors = validateActionsCompatibleWithLifecycle(actions, lifecycle);
 		expect(errors.length).toBeGreaterThan(0);

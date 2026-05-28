@@ -70,12 +70,12 @@ const RECENT_MESSAGE_FLOOR = 3;
  * validation schema is defined in Step 6.1.
  */
 export const AGENT_TURN_OUTPUT_SCHEMA_REFERENCE = {
-	name: 'AgentTurnOutput',
-	ref: 'AgentTurnOutput',
 	description:
 		'Structured output containing userFacingMessage (required), ' +
 		'proposedLifecycle, proposedPromptState, canonicalAnswerDraft, ' +
 		'completenessEvaluation, extracted, suggestedActions, transitionIntent, diagnostics.',
+	name: 'AgentTurnOutput',
+	ref: 'AgentTurnOutput',
 } as const;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -325,9 +325,7 @@ function buildNodeDefinitionBlock(def: NodeDefinition): string {
 		lines.push(`Coverage Topics: ${def.coverageTopics.join(', ')}`);
 	}
 	if (def.sufficiencyCriteria.length > 0) {
-		lines.push(
-			`Sufficiency Criteria: ${def.sufficiencyCriteria.join('; ')}`,
-		);
+		lines.push(`Sufficiency Criteria: ${def.sufficiencyCriteria.join('; ')}`);
 	}
 
 	return lines.join('\n');
@@ -350,9 +348,7 @@ function buildLifecycleBlock(
  *
  * Priority 4. Returns `null` if no user message exists.
  */
-function buildLatestUserMessageBlock(
-	messages: NodeMessage[],
-): string | null {
+function buildLatestUserMessageBlock(messages: NodeMessage[]): string | null {
 	// Walk backwards to find the latest user message.
 	for (let i = messages.length - 1; i >= 0; i--) {
 		const msg = messages[i];
@@ -368,9 +364,7 @@ function buildLatestUserMessageBlock(
  *
  * Priority 5. `messages` is already ordered oldest-first.
  */
-function buildRecentConversationBlock(
-	messages: NodeMessage[],
-): string {
+function buildRecentConversationBlock(messages: NodeMessage[]): string {
 	if (messages.length === 0) return '';
 
 	const lines: string[] = ['## Recent Conversation'];
@@ -441,9 +435,7 @@ function buildProfileMetadataBlock(
 	metadata: ProfileMetadata | undefined,
 ): string | null {
 	if (!metadata) return null;
-	const parts: string[] = [
-		`Profile: ${metadata.title} (${metadata.id})`,
-	];
+	const parts: string[] = [`Profile: ${metadata.title} (${metadata.id})`];
 	if (metadata.description) {
 		parts.push(`Description: ${metadata.description}`);
 	}
@@ -476,7 +468,9 @@ function assembleSystemPrompt(
 	sections.push(selectedPrompt.content);
 
 	// 2. Non-negotiable safety rules.
-	sections.push(`## Safety & Integrity Rules\n${SAFETY_RULES.map((r) => `- ${r}`).join('\n')}`);
+	sections.push(
+		`## Safety & Integrity Rules\n${SAFETY_RULES.map((r) => `- ${r}`).join('\n')}`,
+	);
 
 	// 3. Allowed action constraints.
 	const actionsBlock = formatAllowedActions(allowedActions);
@@ -516,48 +510,44 @@ function assembleContextMessages(
 	const blocks: { label: string; content: string }[] = [];
 
 	const nodeDefBlock = buildNodeDefinitionBlock(input.nodeDefinition);
-	blocks.push({ label: 'node-definition', content: nodeDefBlock });
+	blocks.push({ content: nodeDefBlock, label: 'node-definition' });
 
 	const lifecycleBlock = buildLifecycleBlock(
 		input.nodeRuntimeState.lifecycle,
 		input.nodeRuntimeState.promptState,
 	);
-	blocks.push({ label: 'lifecycle', content: lifecycleBlock });
+	blocks.push({ content: lifecycleBlock, label: 'lifecycle' });
 
-	const latestUser = buildLatestUserMessageBlock(
-		input.conversationContext,
-	);
+	const latestUser = buildLatestUserMessageBlock(input.conversationContext);
 	if (latestUser) {
-		blocks.push({ label: 'latest-user', content: latestUser });
+		blocks.push({ content: latestUser, label: 'latest-user' });
 	}
 
 	if (conversationMessages.length > 0) {
 		const convBlock = buildRecentConversationBlock(conversationMessages);
-		blocks.push({ label: 'conversation', content: convBlock });
+		blocks.push({ content: convBlock, label: 'conversation' });
 	}
 
 	if (summaryInjected) {
 		const summary = buildSummaryBlock(input.conversationContext);
 		if (summary) {
-			blocks.push({ label: 'summary', content: summary });
+			blocks.push({ content: summary, label: 'summary' });
 		}
 	}
 
-	const depsBlock = buildAcceptedDependenciesBlock(
-		input.acceptedDependencies,
-	);
+	const depsBlock = buildAcceptedDependenciesBlock(input.acceptedDependencies);
 	if (depsBlock) {
-		blocks.push({ label: 'dependencies', content: depsBlock });
+		blocks.push({ content: depsBlock, label: 'dependencies' });
 	}
 
 	const globalBlock = buildGlobalContextBlock(input.globalContext);
 	if (globalBlock) {
-		blocks.push({ label: 'global-context', content: globalBlock });
+		blocks.push({ content: globalBlock, label: 'global-context' });
 	}
 
 	const profileBlock = buildProfileMetadataBlock(input.profileMetadata);
 	if (profileBlock) {
-		blocks.push({ label: 'profile', content: profileBlock });
+		blocks.push({ content: profileBlock, label: 'profile' });
 	}
 
 	return blocks.map((b) => ({ content: b.content, role: 'user' as const }));
@@ -591,10 +581,14 @@ function applyTokenBudget(
 	trimmedCount: number;
 	summaryInjected: boolean;
 } {
-	let remaining = conversationBudget;
+	const remaining = conversationBudget;
 	if (remaining <= 0) {
 		// Barely any room — include no conversation, fall back to summary.
-		return { messages: [], trimmedCount: conversation.length, summaryInjected: true };
+		return {
+			messages: [],
+			summaryInjected: true,
+			trimmedCount: conversation.length,
+		};
 	}
 
 	// 1. Try to include the conversation up to recentMessageLimit.
@@ -609,8 +603,8 @@ function applyTokenBudget(
 		const trimmedCount = Math.max(0, conversation.length - recent.length);
 		return {
 			messages: recent,
-			trimmedCount,
 			summaryInjected: trimmedCount > 0,
+			trimmedCount,
 		};
 	}
 
@@ -625,7 +619,11 @@ function applyTokenBudget(
 
 	if (floorTokens > remaining) {
 		// Even the floor doesn't fit — include nothing, rely on summary.
-		return { messages: [], trimmedCount: conversation.length, summaryInjected: true };
+		return {
+			messages: [],
+			summaryInjected: true,
+			trimmedCount: conversation.length,
+		};
 	}
 
 	// Try to extend from floor up to budget.
@@ -641,7 +639,7 @@ function applyTokenBudget(
 	}
 
 	const trimmedCount = conversation.length - included.length;
-	return { messages: included, trimmedCount, summaryInjected: true };
+	return { messages: included, summaryInjected: true, trimmedCount };
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -678,8 +676,7 @@ function assembleInternal(input: PromptAssemblyInput): {
 	const recentMessageLimit =
 		input.recentMessageLimit ?? DEFAULT_RECENT_MESSAGE_LIMIT;
 	const effectiveBudget = maxTokens - DEFAULT_RESPONSE_TOKEN_RESERVE;
-	const outputSchema =
-		input.outputSchema ?? AGENT_TURN_OUTPUT_SCHEMA_REFERENCE;
+	const outputSchema = input.outputSchema ?? AGENT_TURN_OUTPUT_SCHEMA_REFERENCE;
 
 	// 1. Assemble the system prompt.
 	const systemPrompt = assembleSystemPrompt(
@@ -693,9 +690,7 @@ function assembleInternal(input: PromptAssemblyInput): {
 	// 2. Pre-compute the summary block and its token cost so it is
 	//    accounted for *before* deciding how many conversation messages fit.
 	const summaryBlock = buildSummaryBlock(input.conversationContext);
-	const summaryTokens = summaryBlock
-		? estimateTokens(summaryBlock)
-		: 0;
+	const summaryTokens = summaryBlock ? estimateTokens(summaryBlock) : 0;
 
 	// 3. Build the *fixed* context blocks (everything except conversation
 	//    and summary). We build them once to measure their token cost.
@@ -783,8 +778,9 @@ export function assemblePromptRequest(input: PromptAssemblyInput): LlmRequest {
  * @param input  - All inputs required for assembly.
  * @returns The assembled `LlmRequest` and `AssemblyMetadata`.
  */
-export function assemblePromptRequestWithMetadata(
-	input: PromptAssemblyInput,
-): { request: LlmRequest; metadata: AssemblyMetadata } {
+export function assemblePromptRequestWithMetadata(input: PromptAssemblyInput): {
+	request: LlmRequest;
+	metadata: AssemblyMetadata;
+} {
 	return assembleInternal(input);
 }

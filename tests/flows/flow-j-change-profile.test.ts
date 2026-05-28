@@ -23,8 +23,8 @@ describe('Flow J — Change Profile', () => {
 
 		// Select profile A
 		const r1 = dispatch(state, {
-			type: 'SELECT_PROFILE',
 			profileId: profileA.id,
+			type: 'SELECT_PROFILE',
 		});
 		expect(r1.ok).toBe(true);
 		const s1 = r1.state!;
@@ -33,7 +33,7 @@ describe('Flow J — Change Profile', () => {
 		// Change to profile B (must pass profileB as override)
 		const r2 = dispatch(
 			s1,
-			{ type: 'CHANGE_PROFILE', profileId: profileB.id },
+			{ profileId: profileB.id, type: 'CHANGE_PROFILE' },
 			profileB,
 		);
 		expect(r2.ok).toBe(true);

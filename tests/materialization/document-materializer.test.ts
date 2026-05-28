@@ -32,12 +32,12 @@ import type {
 	LogosRuntimeState,
 	NodeRuntimeState,
 } from '../../src/contracts/index.js';
-import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
-import { nowIso } from '../../src/shared/index.js';
 import {
 	materializeDocument,
 	previewDocument,
 } from '../../src/materialization/index.js';
+import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
+import { nowIso } from '../../src/shared/index.js';
 import { computeDocumentReadiness } from '../../src/state-engine/document-readiness.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -49,10 +49,7 @@ import { computeDocumentReadiness } from '../../src/state-engine/document-readin
  *
  * The content is deterministic so tests can assert exact output.
  */
-function acceptedNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function acceptedNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	return {
 		allowedActions: ['continue_next', 'reopen', 'open_document_preview'],
 		canonicalAnswer: {
@@ -193,8 +190,18 @@ function testRule(
 		outputPath: '/tmp/test.md',
 		requiredNodeIds: ['node-a' as NodeId, 'node-b' as NodeId],
 		sections: (sections ?? [
-			{ id: 'section-1', required: true, sourceNodeIds: ['node-a' as NodeId], title: 'Section One' },
-			{ id: 'section-2', required: true, sourceNodeIds: ['node-b' as NodeId], title: 'Section Two' },
+			{
+				id: 'section-1',
+				required: true,
+				sourceNodeIds: ['node-a' as NodeId],
+				title: 'Section One',
+			},
+			{
+				id: 'section-2',
+				required: true,
+				sourceNodeIds: ['node-b' as NodeId],
+				title: 'Section Two',
+			},
 		]) as DocumentMaterializationRule['sections'],
 		sourceNodeIds: ['node-a' as NodeId, 'node-b' as NodeId],
 		title: 'Test Document',
@@ -204,9 +211,7 @@ function testRule(
 /**
  * Minimal `LogosProfile` for testing document materialization.
  */
-function testProfile(
-	rule?: DocumentMaterializationRule,
-): LogosProfile {
+function testProfile(rule?: DocumentMaterializationRule): LogosProfile {
 	const effectiveRule = rule ?? testRule('test-doc' as DocumentId);
 	return {
 		description: 'Test profile',
@@ -248,9 +253,7 @@ function testProfile(
 				title: 'Node B',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Test Profile',
 		version: '1.0.0',
 	};
@@ -259,9 +262,7 @@ function testProfile(
 /**
  * Build a `LogosRuntimeState` with specific node states.
  */
-function stateWithNodes(
-	nodes: NodeRuntimeState[],
-): LogosRuntimeState {
+function stateWithNodes(nodes: NodeRuntimeState[]): LogosRuntimeState {
 	const nodeStates: Record<NodeId, NodeRuntimeState> = {};
 	for (const n of nodes) {
 		nodeStates[n.nodeId] = n;
@@ -438,9 +439,7 @@ describe('materializeDocument', () => {
 
 	it('returns error when no materialization rule is found', () => {
 		const profile = testProfile();
-		const state = stateWithNodes([
-			acceptedNodeState('node-a' as NodeId),
-		]);
+		const state = stateWithNodes([acceptedNodeState('node-a' as NodeId)]);
 
 		const result = materializeDocument(
 			'nonexistent-doc' as DocumentId,
@@ -529,11 +528,7 @@ describe('previewDocument', () => {
 			acceptedNodeState('node-b' as NodeId, 'Content B'),
 		]);
 
-		const preview = previewDocument(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const preview = previewDocument('test-doc' as DocumentId, state, profile);
 
 		expect(preview.content).toContain('# Test Document');
 		expect(preview.content).toContain('Content A');
@@ -564,7 +559,7 @@ describe('previewDocument', () => {
 	// ── Fallback title from DocumentDefinition ───────────────────────
 
 	it('uses DocumentDefinition title as fallback when rule is not found', () => {
-		const profile = testProfile();
+		const _profile = testProfile();
 		const state = stateWithNodes([]);
 
 		// 'test-doc' has a DocumentDefinition with title "Test Document"
@@ -592,11 +587,7 @@ describe('previewDocument', () => {
 			makeStaleNodeState('node-b' as NodeId, 'Stale Content B'),
 		]);
 
-		const preview = previewDocument(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const preview = previewDocument('test-doc' as DocumentId, state, profile);
 
 		expect(preview.content).toContain('[⚠ STALE — source node has changed]');
 		expect(preview.content).toContain('Stale Content B');
@@ -613,11 +604,7 @@ describe('previewDocument', () => {
 			activeNodeState('node-b' as NodeId),
 		]);
 
-		const preview = previewDocument(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const preview = previewDocument('test-doc' as DocumentId, state, profile);
 
 		// Partial preview must still produce valid Markdown.
 		expect(preview.documentId).toBe('test-doc' as DocumentId);
@@ -706,8 +693,12 @@ describe('Step 15.4 — materialization tests', () => {
 		const draft = result.value;
 
 		// The raw conversation text must not appear in the output.
-		expect(draft.content).not.toContain('RAW CONVERSATION MUST NOT APPEAR IN OUTPUT');
-		expect(draft.content).not.toContain('This is a conversation response, not a canonical answer.');
+		expect(draft.content).not.toContain(
+			'RAW CONVERSATION MUST NOT APPEAR IN OUTPUT',
+		);
+		expect(draft.content).not.toContain(
+			'This is a conversation response, not a canonical answer.',
+		);
 
 		// The section for node-b must be marked as missing.
 		expect(draft.content).toContain('[MISSING — requires node: node-b]');
@@ -736,12 +727,8 @@ describe('Step 15.4 — materialization tests', () => {
 		// Document is not ready because node-b is missing.
 		expect(readiness.status).toBe('partially_ready');
 		expect(readiness.status).not.toBe('ready');
-		expect(readiness.missingRequiredNodeIds).toContain(
-			'node-b' as NodeId,
-		);
-		expect(readiness.missingRequiredNodeIds).not.toContain(
-			'node-a' as NodeId,
-		);
+		expect(readiness.missingRequiredNodeIds).toContain('node-b' as NodeId);
+		expect(readiness.missingRequiredNodeIds).not.toContain('node-a' as NodeId);
 		expect(readiness.staleSourceNodeIds).toEqual([]);
 	});
 

@@ -26,8 +26,8 @@ import type {
 	LogosRuntimeState,
 	NodeRuntimeState,
 } from '../../src/contracts/index.js';
-import { exportHtml } from '../../src/outputs/index.js';
 import type { ExportError } from '../../src/outputs/index.js';
+import { exportHtml } from '../../src/outputs/index.js';
 import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
 import { nowIso } from '../../src/shared/index.js';
 
@@ -54,10 +54,7 @@ afterEach(() => {
 
 // ─── Node state factories ──────────────────────────────────────────────────
 
-function acceptedNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function acceptedNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	return {
 		allowedActions: ['continue_next', 'reopen', 'open_document_preview'],
 		canonicalAnswer: {
@@ -93,10 +90,7 @@ function acceptedNodeState(
 	};
 }
 
-function staleNodeState(
-	nodeId: NodeId,
-	content?: string,
-): NodeRuntimeState {
+function staleNodeState(nodeId: NodeId, content?: string): NodeRuntimeState {
 	const base = acceptedNodeState(nodeId, content);
 	return {
 		...base,
@@ -158,9 +152,7 @@ function testRule(
 	};
 }
 
-function testProfile(
-	rule?: DocumentMaterializationRule,
-): LogosProfile {
+function testProfile(rule?: DocumentMaterializationRule): LogosProfile {
 	const effectiveRule = rule ?? testRule('test-doc' as DocumentId);
 	return {
 		description: 'Test profile',
@@ -191,17 +183,13 @@ function testProfile(
 				title: 'Node A',
 			},
 		],
-		phases: [
-			{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' },
-		],
+		phases: [{ id: 'phase-1', order: 1, purpose: 'Test', title: 'Phase 1' }],
 		title: 'Test Profile',
 		version: '1.0.0',
 	};
 }
 
-function stateWithNodes(
-	nodes: NodeRuntimeState[],
-): LogosRuntimeState {
+function stateWithNodes(nodes: NodeRuntimeState[]): LogosRuntimeState {
 	const nodeStates: Record<NodeId, NodeRuntimeState> = {};
 	for (const n of nodes) {
 		nodeStates[n.nodeId] = n;
@@ -235,14 +223,13 @@ describe('exportHtml', () => {
 	it('exports a ready document to an HTML file', async () => {
 		const profile = testProfile();
 		const state = stateWithNodes([
-			acceptedNodeState('node-a' as NodeId, '## The Answer\n\nThis is the content.'),
+			acceptedNodeState(
+				'node-a' as NodeId,
+				'## The Answer\n\nThis is the content.',
+			),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -271,17 +258,14 @@ describe('exportHtml', () => {
 	// ── AC: Content is properly escaped (XSS-safe) ─────────────────
 
 	it('escapes HTML special characters in document content', async () => {
-		const dangerousContent = '<script>alert("XSS")</script> & "quotes" \'single\'';
+		const dangerousContent =
+			'<script>alert("XSS")</script> & "quotes" \'single\'';
 		const profile = testProfile();
 		const state = stateWithNodes([
 			acceptedNodeState('node-a' as NodeId, dangerousContent),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -308,11 +292,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Safe content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -334,11 +314,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -362,11 +338,7 @@ describe('exportHtml', () => {
 		const profile = testProfile();
 		const state = stateWithNodes([activeNodeState('node-a' as NodeId)]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected failure');
@@ -385,11 +357,7 @@ describe('exportHtml', () => {
 			staleNodeState('node-a' as NodeId, 'Stale content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected failure');
@@ -411,11 +379,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected failure');
@@ -440,11 +404,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected failure');
@@ -464,11 +424,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -490,11 +446,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -513,11 +465,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -533,11 +481,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, '## Content\n\nAnswer body.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -549,9 +493,7 @@ describe('exportHtml', () => {
 		expect(artifact.sessionId).toBe(state.sessionId);
 		expect(artifact.type).toBe('html');
 		expect(artifact.path).toBe(outputPath.replace(/\.md$/, '.html'));
-		expect(artifact.sourceDocumentIds).toEqual([
-			'test-doc' as DocumentId,
-		]);
+		expect(artifact.sourceDocumentIds).toEqual(['test-doc' as DocumentId]);
 		expect(artifact.sourceNodeIds).toEqual(['node-a' as NodeId]);
 		expect(artifact.stale).toBe(false);
 		expect(artifact.generatedAt).toBeTruthy();
@@ -608,11 +550,7 @@ describe('exportHtml', () => {
 			activeNodeState('node-b' as NodeId),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(false);
 		if (result.ok) throw new Error('Expected failure');
@@ -633,11 +571,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'HTML content.'),
 		]);
 
-		const result = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result = await exportHtml('test-doc' as DocumentId, state, profile);
 
 		expect(result.ok).toBe(true);
 		if (!result.ok) throw new Error('Expected success');
@@ -659,11 +593,7 @@ describe('exportHtml', () => {
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
 		]);
 
-		const result1 = await exportHtml(
-			'test-doc' as DocumentId,
-			state,
-			profile,
-		);
+		const result1 = await exportHtml('test-doc' as DocumentId, state, profile);
 		expect(result1.ok).toBe(true);
 		if (!result1.ok) throw new Error('Expected success');
 

@@ -41,10 +41,7 @@ function caOk(state: LogosRuntimeState): StateEngineResult {
 	return { ok: true, state };
 }
 
-function caErr(
-	error: string,
-	diagnostics: CaDiag[] = [],
-): StateEngineResult {
+function caErr(error: string, diagnostics: CaDiag[] = []): StateEngineResult {
 	return { diagnostics, error, ok: false };
 }
 

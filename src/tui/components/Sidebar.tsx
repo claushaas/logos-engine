@@ -15,9 +15,9 @@
 import { Box, Text } from 'ink';
 import type { SidebarRenderModel } from '../../contracts/index.js';
 import {
-	NodeTree,
 	type CollapsedDocumentIds,
 	type CollapsedPhaseIds,
+	NodeTree,
 } from './NodeTree.js';
 
 // ─── Sidebar props ──────────────────────────────────────────────────────────

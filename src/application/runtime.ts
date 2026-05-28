@@ -22,29 +22,36 @@ import type {
 } from '../contracts/index.js';
 import type { LlmProvider } from '../llm/index.js';
 import { MockLlmProvider } from '../llm/index.js';
+import { exportMarkdown } from '../outputs/index.js';
+import { resumeSessionWithDiagnostics } from '../persistence/session-resume.js';
 import type { SnapshotStore } from '../persistence/snapshot-store.js';
 import {
 	createSnapshotStore,
 	registerSignalHandlers,
 } from '../persistence/snapshot-store.js';
-import { resumeSessionWithDiagnostics } from '../persistence/session-resume.js';
 import { getProfile } from '../profiles/index.js';
 import type { PromptRegistry } from '../prompt-orchestration/prompt-registry.js';
 import { PromptRegistry as PromptRegistryClass } from '../prompt-orchestration/prompt-registry.js';
-import { nowIso } from '../shared/index.js';
 import type { NodeId, ProfileId, SessionId } from '../shared/index.js';
+import { nowIso } from '../shared/index.js';
 import { buildSnapshot } from '../state-engine/snapshot-builder.js';
-import { createSession, deselectNode, selectProfile } from '../state-engine/state-engine.js';
+import {
+	createSession,
+	deselectNode,
+	selectProfile,
+} from '../state-engine/state-engine.js';
 import { buildRenderSnapshot } from './render-model-builder.js';
-import { selectNodeUseCase } from './use-cases/select-node.js';
-import { submitUserMessageUseCase } from './use-cases/submit-user-message.js';
 import { acceptCanonicalAnswerUseCase } from './use-cases/accept-canonical-answer.js';
-import { reopenNodeUseCase } from './use-cases/reopen-node.js';
-import { regenerateCanonicalAnswerUseCase } from './use-cases/regenerate-canonical-answer.js';
 import { editCanonicalAnswerUseCase } from './use-cases/edit-canonical-answer.js';
+import {
+	closeDocumentPreviewUseCase,
+	openDocumentPreviewUseCase,
+} from './use-cases/open-document-preview.js';
+import { regenerateCanonicalAnswerUseCase } from './use-cases/regenerate-canonical-answer.js';
+import { reopenNodeUseCase } from './use-cases/reopen-node.js';
+import { selectNodeUseCase } from './use-cases/select-node.js';
 import { skipNodeUseCase } from './use-cases/skip-node.js';
-import { openDocumentPreviewUseCase, closeDocumentPreviewUseCase } from './use-cases/open-document-preview.js';
-import { exportMarkdown } from '../outputs/index.js';
+import { submitUserMessageUseCase } from './use-cases/submit-user-message.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Public types
@@ -58,8 +65,16 @@ import { exportMarkdown } from '../outputs/index.js';
  */
 export type RuntimeEvent =
 	| { readonly type: 'NODE_SELECTED'; readonly nodeId: NodeId }
-	| { readonly type: 'ACTION_SELECTED'; readonly actionId: string; readonly nodeAction?: string }
-	| { readonly type: 'USER_MESSAGE'; readonly content: string; readonly submitAction?: string }
+	| {
+			readonly type: 'ACTION_SELECTED';
+			readonly actionId: string;
+			readonly nodeAction?: string;
+	  }
+	| {
+			readonly type: 'USER_MESSAGE';
+			readonly content: string;
+			readonly submitAction?: string;
+	  }
 	| { readonly type: 'ESCAPE' };
 
 /**
@@ -208,8 +223,9 @@ export async function createApplicationRuntime(
 		const resumeResult = await resumeSessionWithDiagnostics(
 			options.sessionId as string,
 			{
+				loadProfile: (profileId) =>
+					getProfile(profileId as ProfileId, profileDir),
 				store,
-				loadProfile: (profileId) => getProfile(profileId as ProfileId, profileDir),
 			},
 		);
 
@@ -245,9 +261,8 @@ export async function createApplicationRuntime(
 		if (profileResult.ok) {
 			// Select the profile in the state engine.
 			// Only pass profileDirectory if it's defined (exactOptionalPropertyTypes).
-			const selectOpts = profileDir !== undefined
-				? { profileDirectory: profileDir }
-				: undefined;
+			const selectOpts =
+				profileDir !== undefined ? { profileDirectory: profileDir } : undefined;
 			const result = selectProfile(currentState, options.profileId, selectOpts);
 
 			if (result.ok) {
@@ -310,9 +325,7 @@ export async function createApplicationRuntime(
 		if (disposed) return;
 		const result = await store.saveSnapshot(sessionId, currentState);
 		if (!result.ok) {
-			console.error(
-				`[logos] Failed to save session: ${result.error.message}`,
-			);
+			console.error(`[logos] Failed to save session: ${result.error.message}`);
 		}
 	}
 
@@ -364,16 +377,13 @@ export async function createApplicationRuntime(
 					const activeNodeId = currentState.activeNodeId;
 					if (!activeNodeId) return;
 
-					const result = await editCanonicalAnswerUseCase(
-						currentState,
-						{
-							content: event.content,
-							llmProvider,
-							nodeId: activeNodeId,
-							profile: currentProfile,
-							promptRegistry,
-						},
-					);
+					const result = await editCanonicalAnswerUseCase(currentState, {
+						content: event.content,
+						llmProvider,
+						nodeId: activeNodeId,
+						profile: currentProfile,
+						promptRegistry,
+					});
 
 					if (result.ok) {
 						currentState = result.state;
@@ -433,13 +443,10 @@ export async function createApplicationRuntime(
 				switch (nodeAction ?? actionId) {
 					case 'accept': {
 						if (!activeNodeId) return;
-						const result = acceptCanonicalAnswerUseCase(
-							currentState,
-							{
-								nodeId: activeNodeId,
-								profile: currentProfile,
-							},
-						);
+						const result = acceptCanonicalAnswerUseCase(currentState, {
+							nodeId: activeNodeId,
+							profile: currentProfile,
+						});
 						if (result.ok) {
 							currentState = result.state;
 							refreshSnapshot();
@@ -450,13 +457,10 @@ export async function createApplicationRuntime(
 
 					case 'reopen': {
 						if (!activeNodeId) return;
-						const result = reopenNodeUseCase(
-							currentState,
-							{
-								nodeId: activeNodeId,
-								profile: currentProfile,
-							},
-						);
+						const result = reopenNodeUseCase(currentState, {
+							nodeId: activeNodeId,
+							profile: currentProfile,
+						});
 						if (result.ok) {
 							currentState = result.state;
 							refreshSnapshot();
@@ -492,11 +496,13 @@ export async function createApplicationRuntime(
 
 					case 'skip':
 					case 'defer': {
-						const skipOpts: { profile: typeof currentProfile } & { nodeId?: NodeId } = {
+						const skipOpts: { profile: typeof currentProfile } & {
+							nodeId?: NodeId;
+						} = {
 							profile: currentProfile,
 						};
-					if (activeNodeId !== null) skipOpts.nodeId = activeNodeId;
-					const result = skipNodeUseCase(currentState, skipOpts);
+						if (activeNodeId !== null) skipOpts.nodeId = activeNodeId;
+						const result = skipNodeUseCase(currentState, skipOpts);
 						if (result.ok) {
 							currentState = result.state;
 							refreshSnapshot();
@@ -516,12 +522,9 @@ export async function createApplicationRuntime(
 					}
 
 					case 'open_document_preview': {
-						const result = openDocumentPreviewUseCase(
-							currentState,
-							{
-								profile: currentProfile,
-							},
-						);
+						const result = openDocumentPreviewUseCase(currentState, {
+							profile: currentProfile,
+						});
 						if (result.ok) {
 							currentState = result.state;
 							// Use the snapshot returned by the use case —
@@ -540,8 +543,7 @@ export async function createApplicationRuntime(
 							currentSnapshot.mode === 'document_preview' &&
 							currentSnapshot.mainPanel.kind === 'document_preview'
 						) {
-							const documentId =
-								currentSnapshot.mainPanel.documentId;
+							const documentId = currentSnapshot.mainPanel.documentId;
 							const exportResult = await exportMarkdown(
 								documentId,
 								currentState,
@@ -554,8 +556,7 @@ export async function createApplicationRuntime(
 									...currentState,
 									exportState: {
 										artifacts: [
-											...currentState.exportState
-												.artifacts,
+											...currentState.exportState.artifacts,
 											exportResult.value,
 										],
 									},
@@ -584,8 +585,7 @@ export async function createApplicationRuntime(
 										...currentSnapshot.diagnostics,
 										{
 											code: `EXPORT_${exportResult.error.code}`,
-											message:
-												exportResult.error.message,
+											message: exportResult.error.message,
 											severity: 'error',
 										},
 									],
@@ -598,15 +598,11 @@ export async function createApplicationRuntime(
 
 					// ── Close document preview (action bar button) ──
 					case 'close_document_preview': {
-						if (
-							currentSnapshot.mode === 'document_preview' &&
-							currentProfile
-						) {
-							currentSnapshot =
-								closeDocumentPreviewUseCase(
-									currentState,
-									currentProfile,
-								);
+						if (currentSnapshot.mode === 'document_preview' && currentProfile) {
+							currentSnapshot = closeDocumentPreviewUseCase(
+								currentState,
+								currentProfile,
+							);
 							notifyListeners();
 						}
 						return;
@@ -614,10 +610,9 @@ export async function createApplicationRuntime(
 
 					// ── Regenerate document preview ────────────────
 					case 'regenerate_document': {
-						const result = openDocumentPreviewUseCase(
-							currentState,
-							{ profile: currentProfile },
-						);
+						const result = openDocumentPreviewUseCase(currentState, {
+							profile: currentProfile,
+						});
 						if (result.ok) {
 							currentState = result.state;
 							currentSnapshot = result.snapshot;
@@ -651,13 +646,19 @@ export async function createApplicationRuntime(
 			cleanupSignalHandlers();
 			listeners.clear();
 		},
-		getSnapshot() { return currentSnapshot; },
-		getState() { return currentState; },
+		getSnapshot() {
+			return currentSnapshot;
+		},
+		getState() {
+			return currentState;
+		},
 		save: persistState,
 		sessionId,
 		subscribe(listener: RuntimeListener) {
 			listeners.add(listener);
-			return () => { listeners.delete(listener); };
+			return () => {
+				listeners.delete(listener);
+			};
 		},
 	};
 }

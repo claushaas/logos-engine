@@ -27,8 +27,8 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 
 		// ── Setup: select profile ─────────────────────────────────
 		const r0 = dispatch(state, {
-			type: 'SELECT_PROFILE',
 			profileId: profile.id,
+			type: 'SELECT_PROFILE',
 		});
 		expect(r0.ok).toBe(true);
 		let s = r0.state!;
@@ -36,8 +36,8 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 
 		// ── Step 1: Select and work on Node A ─────────────────────
 		const r1 = dispatch(s, {
-			type: 'SELECT_NODE',
 			nodeId: nodeAId,
+			type: 'SELECT_NODE',
 		} as LogosEvent);
 		expect(r1.ok).toBe(true);
 		s = r1.state!;
@@ -58,8 +58,8 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 
 		// ── Step 2: Navigate to Node B ────────────────────────────
 		const r2 = dispatch(s, {
-			type: 'SELECT_NODE',
 			nodeId: nodeBId,
+			type: 'SELECT_NODE',
 		} as LogosEvent);
 		expect(r2.ok).toBe(true);
 		s = r2.state!;
@@ -68,9 +68,7 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 		// Node A state should still exist and be unchanged
 		expect(s.nodeStates[nodeAId]).toBeDefined();
 		expect(s.nodeStates[nodeAId]!.lifecycle).toBe(lifecycleABefore);
-		expect(s.nodeStates[nodeAId]!.conversation.length).toBe(
-			convLengthABefore,
-		);
+		expect(s.nodeStates[nodeAId]!.conversation.length).toBe(convLengthABefore);
 
 		// lastActiveNodeId should point to Node A
 		expect(s.lastActiveNodeId).toBe(nodeAId);
@@ -84,14 +82,12 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 		expect(turnB1.ok).toBe(true);
 		s = turnB1.state!;
 
-		expect(
-			s.nodeStates[nodeBId]!.conversation.length,
-		).toBeGreaterThan(0);
+		expect(s.nodeStates[nodeBId]!.conversation.length).toBeGreaterThan(0);
 
 		// ── Step 4: Navigate back to Node A ───────────────────────
 		const r4 = dispatch(s, {
-			type: 'SELECT_NODE',
 			nodeId: nodeAId,
+			type: 'SELECT_NODE',
 		} as LogosEvent);
 		expect(r4.ok).toBe(true);
 		s = r4.state!;
@@ -116,15 +112,15 @@ describe('Flow C — Sidebar Navigation During Work', () => {
 		const { state, dispatch } = createTestSession(profile);
 
 		const r0 = dispatch(state, {
-			type: 'SELECT_PROFILE',
 			profileId: profile.id,
+			type: 'SELECT_PROFILE',
 		});
 		expect(r0.ok).toBe(true);
 		let s = r0.state!;
 
 		const r1 = dispatch(s, {
-			type: 'SELECT_NODE',
 			nodeId: profile.nodes[0]!.id,
+			type: 'SELECT_NODE',
 		} as LogosEvent);
 		expect(r1.ok).toBe(true);
 		s = r1.state!;

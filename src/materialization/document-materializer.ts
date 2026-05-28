@@ -59,9 +59,7 @@ function findRule(
 	profile: LogosProfile,
 	documentId: DocumentId,
 ): DocumentMaterializationRule | undefined {
-	return profile.materializationRules.find(
-		(r) => r.documentId === documentId,
-	);
+	return profile.materializationRules.find((r) => r.documentId === documentId);
 }
 
 /**
@@ -97,8 +95,8 @@ function isAccepted(nodeState: NodeRuntimeState | undefined): boolean {
 function isStale(nodeState: NodeRuntimeState | undefined): boolean {
 	return (
 		isAccepted(nodeState) &&
-		nodeState!.canonicalAnswer !== null &&
-		nodeState!.canonicalAnswer.stale === true
+		nodeState?.canonicalAnswer !== null &&
+		nodeState?.canonicalAnswer.stale === true
 	);
 }
 
@@ -142,7 +140,7 @@ function buildMaterializedDraft(
 		lines.push('');
 
 		let allFreshAccepted = section.sourceNodeIds.length > 0;
-		let anyStaleInSection = false;
+		let _anyStaleInSection = false;
 
 		for (const nodeId of section.sourceNodeIds) {
 			const nodeState = state.nodeStates[nodeId];
@@ -151,18 +149,18 @@ function buildMaterializedDraft(
 				// Stale accepted answer — include content but mark stale.
 				lines.push(STALE_MARKER);
 				lines.push('');
-				if (nodeState!.canonicalAnswer!.content) {
-					lines.push(nodeState!.canonicalAnswer!.content);
+				if (nodeState?.canonicalAnswer?.content) {
+					lines.push(nodeState?.canonicalAnswer?.content);
 					lines.push('');
 				}
 				anyStale = true;
-				anyStaleInSection = true;
+				_anyStaleInSection = true;
 				allFreshAccepted = false;
 				sourceNodeIds.push(nodeId);
 			} else if (isAccepted(nodeState)) {
 				// Fresh accepted answer — include content as-is.
-				if (nodeState!.canonicalAnswer!.content) {
-					lines.push(nodeState!.canonicalAnswer!.content);
+				if (nodeState?.canonicalAnswer?.content) {
+					lines.push(nodeState?.canonicalAnswer?.content);
 					lines.push('');
 				}
 				sourceNodeIds.push(nodeId);
@@ -201,12 +199,12 @@ function buildMaterializedDraft(
 	);
 
 	return {
-		documentId,
 		content: contentLines.join('\n'),
+		documentId,
 		format: 'markdown',
 		generatedAt: nowIso(),
-		sourceNodeIds,
 		missingSections: [...missingSectionsSet],
+		sourceNodeIds,
 		stale: anyStale,
 	};
 }
@@ -277,7 +275,6 @@ export function previewDocument(
 		const title = docDef?.title ?? String(documentId);
 
 		return {
-			documentId,
 			content: [
 				`# ${title}`,
 				'',
@@ -285,10 +282,11 @@ export function previewDocument(
 				'',
 				'Completeness: 0/0 sections accepted',
 			].join('\n'),
+			documentId,
 			format: 'markdown',
 			generatedAt: nowIso(),
-			sourceNodeIds: [],
 			missingSections: [],
+			sourceNodeIds: [],
 			stale: false,
 		};
 	}

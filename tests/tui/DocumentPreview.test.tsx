@@ -5,11 +5,11 @@
  * Tests cover: partial completeness, stale sections,
  * no content state, and export eligibility display.
  */
-import { describe, expect, it } from 'vitest';
-import { render } from 'ink-testing-library';
 
-import type { DocumentId } from '../../src/shared/index.js';
+import { render } from 'ink-testing-library';
+import { describe, expect, it } from 'vitest';
 import type { DocumentPreviewPanel } from '../../src/contracts/index.js';
+import type { DocumentId } from '../../src/shared/index.js';
 import { DocumentPreview } from '../../src/tui/components/DocumentPreview.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -96,7 +96,10 @@ function noContentPanel(): DocumentPreviewPanel {
 		documentId: 'foundation.thesis' as DocumentId,
 		exportEligible: false,
 		kind: 'document_preview',
-		missingNodeIds: ['foundation.thesis.core' as DocumentId, 'foundation.thesis.tension' as DocumentId],
+		missingNodeIds: [
+			'foundation.thesis.core' as DocumentId,
+			'foundation.thesis.tension' as DocumentId,
+		],
 		staleNodeIds: [],
 		title: 'Foundation Thesis',
 	} as DocumentPreviewPanel;
@@ -153,9 +156,9 @@ function renderPreview(
 			focusedActionIndex={-1}
 			focusedRegion={null}
 			input={BASE_INPUT}
-			panel={panel}
 			onSelectAction={overrides.onSelectAction}
 			onSelectMissingNode={overrides.onSelectMissingNode}
+			panel={panel}
 		/>,
 	);
 }

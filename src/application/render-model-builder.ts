@@ -30,7 +30,10 @@ import type {
 	SidebarRenderModel,
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
-import { getCategoryFromCode, getRecoveryActions } from '../diagnostics/index.js';
+import {
+	getCategoryFromCode,
+	getRecoveryActions,
+} from '../diagnostics/index.js';
 import type { DocumentId, NodeId } from '../shared/index.js';
 import type { StateEngineSnapshot } from '../state-engine/types.js';
 
@@ -368,10 +371,7 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 
 	// ── Error mode: map recovery actions to buttons ─────────────────────
 
-	if (
-		snapshot.mode === 'error' &&
-		snapshot.mainPanel.kind === 'error'
-	) {
+	if (snapshot.mode === 'error' && snapshot.mainPanel.kind === 'error') {
 		const suggestedRecovery = new Set<string>(
 			snapshot.mainPanel.recoveryActions ?? [],
 		);
@@ -392,9 +392,8 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 					label: ERROR_ACTION_LABEL_MAP[actionId],
 				};
 				if (!enabled) {
-					(
-						action as { reasonIfDisabled?: string }
-					).reasonIfDisabled = 'Not available for this error.';
+					(action as { reasonIfDisabled?: string }).reasonIfDisabled =
+						'Not available for this error.';
 				}
 				actions.push(action as ActionBarRenderAction);
 			}

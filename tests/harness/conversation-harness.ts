@@ -14,7 +14,6 @@
 import { applyAgentTurn } from '../../src/application/apply-agent-turn.js';
 import type {
 	CanonicalAnswer,
-	GlobalContext,
 	LogosProfile,
 	LogosRuntimeState,
 	NodeDefinition,
@@ -30,7 +29,11 @@ import {
 	type LlmRequest,
 } from '../../src/prompt-orchestration/prompt-assembler.js';
 import type { PromptDefinition } from '../../src/prompt-orchestration/prompt-registry.js';
-import type { DocumentId, ProfileId, PromptId } from '../../src/shared/index.js';
+import type {
+	DocumentId,
+	ProfileId,
+	PromptId,
+} from '../../src/shared/index.js';
 import { dispatch as stateEngineDispatch } from '../../src/state-engine/dispatch.js';
 import { createSession } from '../../src/state-engine/state-engine.js';
 import type {
@@ -105,8 +108,8 @@ export function createTestSession(profile: LogosProfile): {
 	_setEntry(state.sessionId, { profile, provider });
 
 	return {
-		state,
 		dispatch: _dispatch,
+		state,
 	};
 }
 
@@ -162,9 +165,7 @@ function _dispatch(
  * Used so the harness can exercise the real {@link assemblePromptRequest}
  * path without requiring a fully populated prompt registry.
  */
-function _makePromptDefinition(
-	promptState: PromptState,
-): PromptDefinition {
+function _makePromptDefinition(promptState: PromptState): PromptDefinition {
 	return {
 		content:
 			'You are a structured documentation assistant. ' +
@@ -194,10 +195,10 @@ function _buildHarnessRequest(
 		// Should never happen after dispatch validates node existence,
 		// but safety-fallback to a minimal empty request.
 		return {
-			systemPrompt: '',
 			messages: [],
-			schema: {},
 			metadata: { lifecycle },
+			schema: {},
+			systemPrompt: '',
 		};
 	}
 
@@ -207,10 +208,7 @@ function _buildHarnessRequest(
 	const acceptedDeps: CanonicalAnswer[] = [];
 	for (const depId of nodeState.dependencies.requiredNodeIds) {
 		const depState = state.nodeStates[depId];
-		if (
-			depState?.canonicalAnswer &&
-			depState.lifecycle === 'accepted'
-		) {
+		if (depState?.canonicalAnswer && depState.lifecycle === 'accepted') {
 			acceptedDeps.push(depState.canonicalAnswer);
 		}
 	}
@@ -262,16 +260,16 @@ export async function simulateUserTurn(
 	const nodeId = state.activeNodeId;
 	if (nodeId === null) {
 		return {
-			ok: false as const,
-			error: 'No active node selected for user turn',
 			diagnostics: [],
+			error: 'No active node selected for user turn',
+			ok: false as const,
 		};
 	}
 
 	const userResult = _dispatch(state, {
-		type: 'USER_MESSAGE_ADDED',
-		nodeId,
 		content: input,
+		nodeId,
+		type: 'USER_MESSAGE_ADDED',
 	} as LogosEvent);
 
 	if (!userResult.ok) return userResult;
@@ -312,12 +310,7 @@ export async function simulateAgentTurn(
 	const lifecycle: NodeLifecycle =
 		lifecycleOverride ?? nodeState?.lifecycle ?? 'not_started';
 
-	const request = _buildHarnessRequest(
-		state,
-		nodeId,
-		lifecycle,
-		profile,
-	);
+	const request = _buildHarnessRequest(state, nodeId, lifecycle, profile);
 
 	const agentOutput = await provider.generateStructuredOutput(request);
 
@@ -363,15 +356,14 @@ export async function simulateNodeCompletion(
 	// Ensure the target node is selected.
 	if (current.activeNodeId !== nodeId) {
 		const selResult = _dispatch(current, {
-			type: 'SELECT_NODE',
 			nodeId,
+			type: 'SELECT_NODE',
 		} as LogosEvent);
 		if (!selResult.ok) return selResult;
 		current = selResult.state;
 	}
 
-	const startLifecycle =
-		current.nodeStates[nodeId]?.lifecycle ?? 'not_started';
+	const startLifecycle = current.nodeStates[nodeId]?.lifecycle ?? 'not_started';
 
 	// Already accepted — nothing to do.
 	if (startLifecycle === 'accepted') {
@@ -397,9 +389,9 @@ export async function simulateNodeCompletion(
 		afterTurn !== 'accepted'
 	) {
 		const rfsResult = _dispatch(current, {
-			type: 'NODE_LIFECYCLE_CHANGED',
 			nodeId,
 			to: 'ready_for_synthesis' as NodeLifecycle,
+			type: 'NODE_LIFECYCLE_CHANGED',
 		} as LogosEvent);
 		if (!rfsResult.ok) return rfsResult;
 		current = rfsResult.state;
@@ -419,9 +411,9 @@ export async function simulateNodeCompletion(
 	// ── Step 4: synthesized → accepted ───────────────────────────
 	if (current.nodeStates[nodeId]?.lifecycle === 'synthesized') {
 		const acceptResult = _dispatch(current, {
-			type: 'NODE_LIFECYCLE_CHANGED',
 			nodeId,
 			to: 'accepted' as NodeLifecycle,
+			type: 'NODE_LIFECYCLE_CHANGED',
 		} as LogosEvent);
 		if (!acceptResult.ok) return acceptResult;
 		current = acceptResult.state;
@@ -458,8 +450,7 @@ export function createFlowTestProfile(
 		materializationRules: [],
 		nodes: [
 			{
-				canonicalQuestion:
-					'What conviction makes this project necessary?',
+				canonicalQuestion: 'What conviction makes this project necessary?',
 				coverageTopics: ['thesis'],
 				dependencies: { recommendedNodeIds: [], requiredNodeIds: [] },
 				documentId: 'doc-thesis' as DocumentId,
@@ -500,10 +491,7 @@ export function createMultiNodeProfile(): LogosProfile {
 				outputPath: '/dev/null',
 				phaseId: 'phase-foundation',
 				purpose: 'Testing',
-				requiredNodeIds: [
-					'node-thesis' as NodeId,
-					'node-tension' as NodeId,
-				],
+				requiredNodeIds: ['node-thesis' as NodeId, 'node-tension' as NodeId],
 				title: 'Thesis Document',
 			},
 		],
@@ -511,8 +499,7 @@ export function createMultiNodeProfile(): LogosProfile {
 		materializationRules: [],
 		nodes: [
 			{
-				canonicalQuestion:
-					'What conviction makes this project necessary?',
+				canonicalQuestion: 'What conviction makes this project necessary?',
 				coverageTopics: ['thesis'],
 				dependencies: { recommendedNodeIds: [], requiredNodeIds: [] },
 				documentId: 'doc-thesis' as DocumentId,

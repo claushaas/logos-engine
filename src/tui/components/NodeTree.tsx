@@ -177,7 +177,12 @@ function formatOrder(order: number): string {
  * Returns `null` for no special rendering; returns attribute combinations
  * for grouped styles.
  */
-type LineStyle = 'normal' | 'focused' | 'selected' | 'focused-selected' | 'disabled';
+type LineStyle =
+	| 'normal'
+	| 'focused'
+	| 'selected'
+	| 'focused-selected'
+	| 'disabled';
 
 function itemStyle(
 	isFocused: boolean,
@@ -228,25 +233,25 @@ export function NodeTree({
 					case 'phase':
 						return (
 							<PhaseRow
-								key={item.phaseId}
 								isFocused={isItemFocused}
 								item={item}
+								key={item.phaseId}
 							/>
 						);
 					case 'document':
 						return (
 							<DocumentRow
-								key={item.documentId}
 								isFocused={isItemFocused}
 								item={item}
+								key={item.documentId}
 							/>
 						);
 					case 'node':
 						return (
 							<NodeRow
-								key={item.nodeId}
 								isFocused={isItemFocused}
 								item={item}
+								key={item.nodeId}
 							/>
 						);
 				}
@@ -269,11 +274,7 @@ function PhaseRow({
 
 	return (
 		<Box>
-			<Text
-				bold={true}
-				color="cyan"
-				inverse={isFocused}
-			>
+			<Text bold={true} color="cyan" inverse={isFocused}>
 				{label}
 			</Text>
 		</Box>
@@ -291,16 +292,13 @@ function DocumentRow({
 }) {
 	const chevron = item.expanded ? '▾' : '▸';
 	const hasNodes = item.nodeCount > 0;
-	const statusPrefix = item.statusSymbol !== undefined ? `${item.statusSymbol} ` : '';
+	const statusPrefix =
+		item.statusSymbol !== undefined ? `${item.statusSymbol} ` : '';
 	const label = `  ${hasNodes ? chevron : ' '} ${statusPrefix}${item.title}`;
 
 	return (
 		<Box>
-			<Text
-				bold={isFocused}
-				dimColor={!isFocused}
-				inverse={isFocused}
-			>
+			<Text bold={isFocused} dimColor={!isFocused} inverse={isFocused}>
 				{label}
 			</Text>
 		</Box>

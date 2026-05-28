@@ -25,8 +25,6 @@ import type {
 	NodeLifecycle,
 	PromptState,
 } from '../../src/contracts/index.js';
-import type { NodeId } from '../../src/shared/index.js';
-import { generateId, nowIso } from '../../src/shared/index.js';
 import {
 	acceptCanonicalAnswer,
 	appendUserMessage,
@@ -34,6 +32,8 @@ import {
 	regenerateCanonicalAnswer,
 	setCanonicalAnswerDraft,
 } from '../../src/conversation-runtime/index.js';
+import type { NodeId } from '../../src/shared/index.js';
+import { generateId, nowIso } from '../../src/shared/index.js';
 import { applyLifecycleTransition } from '../../src/state-engine/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -43,10 +43,13 @@ import { applyLifecycleTransition } from '../../src/state-engine/index.js';
 const N1: NodeId = 'n1' as NodeId;
 
 /** Create a valid `CanonicalAnswerDraft` fixture. */
-function makeDraft(overrides?: Partial<CanonicalAnswerDraft>): CanonicalAnswerDraft {
+function makeDraft(
+	overrides?: Partial<CanonicalAnswerDraft>,
+): CanonicalAnswerDraft {
 	return {
 		confidence: 'medium',
-		content: 'The central thesis is that distributed systems improve resilience.',
+		content:
+			'The central thesis is that distributed systems improve resilience.',
 		format: 'markdown',
 		generatedAt: nowIso(),
 		generatedFromMessageIds: ['msg-001'],
@@ -55,7 +58,7 @@ function makeDraft(overrides?: Partial<CanonicalAnswerDraft>): CanonicalAnswerDr
 }
 
 /** Create a canonical answer already on a node (for accept/stale/regenerate tests). */
-function acceptedAnswer(): CanonicalAnswer {
+function _acceptedAnswer(): CanonicalAnswer {
 	return {
 		accepted: false,
 		confidence: 'high',
@@ -111,7 +114,8 @@ function stateWithLifecycle(lifecycle: NodeLifecycle): LogosRuntimeState {
 				updatedAt: nowIso(),
 			},
 		},
-		selectedProfileId: 'test-profile' as import('../../src/shared/index.js').ProfileId,
+		selectedProfileId:
+			'test-profile' as import('../../src/shared/index.js').ProfileId,
 		sessionId: sessionId as import('../../src/shared/index.js').SessionId,
 		updatedAt: nowIso(),
 	};
@@ -299,7 +303,11 @@ describe('markCanonicalAnswerStale', () => {
 describe('regenerateCanonicalAnswer', () => {
 	it('marks old answer as stale, then new draft can be set', () => {
 		const state = stateWithLifecycle('synthesized');
-		const dr = setCanonicalAnswerDraft(state, N1, makeDraft({ content: 'Old answer' }));
+		const dr = setCanonicalAnswerDraft(
+			state,
+			N1,
+			makeDraft({ content: 'Old answer' }),
+		);
 		if (!dr.ok) throw new Error('Expected ok');
 
 		// Regenerate — marks old as stale
@@ -490,7 +498,11 @@ describe('end-to-end flow', () => {
 		expect(r3.state.nodeStates[N1]?.canonicalAnswer?.stale).toBe(false);
 
 		// 4. New user message marks stale
-		const r4 = appendUserMessage(r3.state, N1, 'Actually, I want to change this.');
+		const r4 = appendUserMessage(
+			r3.state,
+			N1,
+			'Actually, I want to change this.',
+		);
 		if (!r4.ok) throw new Error('Expected ok');
 		expect(r4.state.nodeStates[N1]?.canonicalAnswer?.stale).toBe(true);
 

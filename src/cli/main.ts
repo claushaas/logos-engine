@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { Command } from 'commander';
+import { render } from 'ink';
+import type { ReactNode } from 'react';
 /**
  * CLI entry point for the LOGOS Engine.
  *
@@ -21,19 +24,16 @@
  * @see {@link https://logos-engine/docs/architecture/10-local-development-and-deployment.md}
  */
 import { createElement } from 'react';
-import type { ReactNode } from 'react';
-import { render } from 'ink';
-import { Command } from 'commander';
-import {
-	AppShell,
-	TuiApplicationProvider,
-	type TuiDispatchEvent,
-} from '../tui/index.js';
 import {
 	createApplicationRuntime,
 	type RuntimeEvent,
 } from '../application/runtime.js';
 import type { ProfileId, SessionId } from '../shared/index.js';
+import {
+	AppShell,
+	TuiApplicationProvider,
+	type TuiDispatchEvent,
+} from '../tui/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CLI definition
@@ -49,10 +49,7 @@ program
 	.option('--session <id>', 'Resume a previous session')
 	.option('--mock', 'Use mock LLM provider (no API key needed)')
 	.option('--data-dir <path>', 'Set persistence directory (default: sessions)')
-	.option(
-		'--help-profile',
-		'Show profile-related options and exit',
-	);
+	.option('--help-profile', 'Show profile-related options and exit');
 
 program.parse(process.argv);
 
@@ -87,11 +84,11 @@ if (process.argv.includes('--help') || process.argv.includes('-h')) {
 // ═══════════════════════════════════════════════════════════════════════
 
 const useMockLlm =
-	opts.mock === true || process.env['LOGOS_USE_MOCK_LLM'] === 'true';
+	opts.mock === true || process.env.LOGOS_USE_MOCK_LLM === 'true';
 
-const dataDir = opts.dataDir ?? process.env['LOGOS_DATA_DIR'] ?? 'sessions';
+const dataDir = opts.dataDir ?? process.env.LOGOS_DATA_DIR ?? 'sessions';
 
-const profileDir = process.env['LOGOS_PROFILE_DIR'] ?? undefined;
+const profileDir = process.env.LOGOS_PROFILE_DIR ?? undefined;
 
 // ═══════════════════════════════════════════════════════════════════════
 // Main
@@ -112,18 +109,24 @@ async function main(): Promise<void> {
 		useMockLlm,
 	};
 	if (profileDir !== undefined) runtimeOpts.profileDir = profileDir;
-	if (opts.profile !== undefined) runtimeOpts.profileId = opts.profile as ProfileId;
-	if (opts.session !== undefined) runtimeOpts.sessionId = opts.session as SessionId;
+	if (opts.profile !== undefined)
+		runtimeOpts.profileId = opts.profile as ProfileId;
+	if (opts.session !== undefined)
+		runtimeOpts.sessionId = opts.session as SessionId;
 
 	const runtime = await createApplicationRuntime(runtimeOpts);
 
 	// ── Build TUI element tree ────────────────────────────────────────
 
-	function buildElement(snapshot: ReturnType<typeof runtime.getSnapshot>, dispatch: typeof handleTuiDispatch): ReactNode {
-		return createElement(
-			TuiApplicationProvider,
-			{ children: createElement(AppShell), dispatch, snapshot },
-		);
+	function buildElement(
+		snapshot: ReturnType<typeof runtime.getSnapshot>,
+		dispatch: typeof handleTuiDispatch,
+	): ReactNode {
+		return createElement(TuiApplicationProvider, {
+			children: createElement(AppShell),
+			dispatch,
+			snapshot,
+		});
 	}
 
 	// ── Mount the TUI ─────────────────────────────────────────────────

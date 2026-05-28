@@ -108,8 +108,8 @@ export class DiagnosticCollector {
 			...(diagnostic.sourceId !== undefined
 				? { sourceId: diagnostic.sourceId }
 				: {}),
-			recoveryActions: [...recoveryActions],
 			recoverable: recoveryActions.length > 0,
+			recoveryActions: [...recoveryActions],
 			timestamp: nowIso(),
 		});
 	}
@@ -150,9 +150,7 @@ export class DiagnosticCollector {
 			category: error.category,
 			recoverable: error.recoverable || recoveryActions.length > 0,
 			recoveryActions: [...recoveryActions],
-			...(error.details !== undefined
-				? { details: { ...error.details } }
-				: {}),
+			...(error.details !== undefined ? { details: { ...error.details } } : {}),
 			timestamp: nowIso(),
 		});
 	}

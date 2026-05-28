@@ -52,9 +52,7 @@ export type ErrorPanelProps = {
  * - `tui_rendering` → `TUI rendering`
  */
 function formatCategory(category: string): string {
-	return category
-		.replace(/_/g, ' ')
-		.replace(/\b\w/g, (c) => c.toUpperCase());
+	return category.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 // ─── ErrorPanel ─────────────────────────────────────────────────────────────
