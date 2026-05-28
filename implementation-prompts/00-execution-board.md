@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 16.1 — Implement CLI/TUI entry point and command routing
+Step 17.2 — Implement Agent Pack generation placeholder
 
 ## Status Legend
 
@@ -88,7 +88,7 @@ Step 16.1 — Implement CLI/TUI entry point and command routing
 | Phase 15 | 15.4 | Implement materialization tests | ✅ | `phase-15/step-15.4-implement-materialization-tests.md` | `test/step-15-4-materialization` | `test(materialization): add materialization tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Materialization tests extended: partial preview, raw conversation exclusion, export gating via readiness. 14 tests. |
 | Phase 16 | 16.1 | Implement CLI/TUI entry point and command routing | ✅ | `phase-16/step-16.1-implement-cli-tui-entry-point-and-command-routing.md` | `feat/step-16-1-cli-entry` | `feat(cli): implement entry point and command routing` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | CLI wired: mock mode, profile/session args, resume-with-profile, signal handlers, Ink TUI mount |
 | Phase 16 | 16.2 | Implement Markdown export | ✅ | `phase-16/step-16.2-implement-markdown-export.md` | `feat/step-16-2-markdown-export` | `feat(outputs): implement Markdown export` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Canonical output format; checkpoint Phase 16 |
-| Phase 17 | 17.1 | Implement HTML artifact generation placeholder | ⏳ | `phase-17/step-17.1-implement-html-artifact-generation-placeholder.md` | `feat/step-17-1-html-export` | `feat(outputs): implement HTML artifact generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Readable shareable format |
+| Phase 17 | 17.1 | Implement HTML artifact generation placeholder | ✅ | `phase-17/step-17.1-implement-html-artifact-generation-placeholder.md` | `feat/step-17-1-html-export` | `feat(outputs): implement HTML artifact generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | HTML exporter added; export-manager HTML availability enabled; escape/validity tests pass |
 | Phase 17 | 17.2 | Implement Agent Pack generation placeholder | ⏳ | `phase-17/step-17.2-implement-agent-pack-generation-placeholder.md` | `feat/step-17-2-agent-pack` | `feat(outputs): implement Agent Pack generation` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Portable context for AI agents |
 | Phase 17 | 17.3 | Implement export panel in TUI | ⏳ | `phase-17/step-17.3-implement-export-panel-in-tui.md` | `feat/step-17-3-export-panel` | `feat(tui): implement export panel` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Unified export view; checkpoint Phase 17 |
 | Phase 18 | 18.1 | Implement remaining flow tests (E-J) | ⏳ | `phase-18/step-18.1-implement-remaining-flow-tests-e-j.md` | `test/step-18-1-remaining-flow-tests` | `test(flows): add remaining flow tests E-J` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Complete flow coverage |

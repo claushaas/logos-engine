@@ -3,6 +3,7 @@
  *
  * Provides:
  * - `exportMarkdown()` — write materialized documents to `.md` files.
+ * - `exportHtml()` — write materialized documents to `.html` files.
  * - `getAvailableExports()` — evaluate export availability across all
  *   documents and formats.
  *
@@ -11,5 +12,6 @@
  */
 export { exportMarkdown } from './markdown-exporter.js';
 export type { ExportError } from './markdown-exporter.js';
+export { exportHtml } from './html-exporter.js';
 export { getAvailableExports } from './export-manager.js';
 export type { ExportAvailability } from './export-manager.js';

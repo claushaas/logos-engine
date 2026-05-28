@@ -6,7 +6,8 @@
  *  - Incomplete document → unavailable with blocked reason.
  *  - Stale document → unavailable with blocked reason.
  *  - No materialization rule → unavailable with blocked reason.
- *  - HTML / Agent Pack → unavailable (placeholder).
+ *  - HTML mirrors Markdown readiness (same gates).
+ *  - Agent Pack → unavailable (placeholder).
  *  - Multiple documents → each gets availability entries.
  *
  * @see {@link https://logos-engine/docs/07-document-materialization-spec.md}
@@ -286,9 +287,9 @@ describe('getAvailableExports', () => {
 		expect(mdEntry!.blockedReason).toMatch(/No materialization rule/i);
 	});
 
-	// ── AC: HTML / Agent Pack → unavailable (placeholder) ─────────
+	// ── AC: HTML mirrors Markdown readiness; Agent Pack still placeholder ─
 
-	it('marks HTML and Agent Pack as unavailable with placeholder reason', () => {
+	it('marks HTML as available when document is ready (same gate as Markdown)', () => {
 		const profile = testProfile();
 		const state = stateWithNodes([
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
@@ -296,16 +297,50 @@ describe('getAvailableExports', () => {
 
 		const avail = getAvailableExports(state, profile);
 
-		for (const format of ['html', 'agent_pack'] as const) {
-			const entry = avail.find(
-				(e) =>
-					e.documentId === ('test-doc' as DocumentId) &&
-					e.format === format,
-			);
-			expect(entry).toBeDefined();
-			expect(entry!.available).toBe(false);
-			expect(entry!.blockedReason).toMatch(/not yet implemented|Phase 17/i);
-		}
+		const htmlEntry = avail.find(
+			(e) =>
+				e.documentId === ('test-doc' as DocumentId) &&
+				e.format === 'html',
+		);
+		expect(htmlEntry).toBeDefined();
+		expect(htmlEntry!.available).toBe(true);
+		expect(htmlEntry!.blockedReason).toBeUndefined();
+	});
+
+	it('marks HTML as unavailable when document is incomplete (same gate as Markdown)', () => {
+		const profile = testProfile();
+		const state = stateWithNodes([
+			activeNodeState('node-a' as NodeId),
+		]);
+
+		const avail = getAvailableExports(state, profile);
+
+		const htmlEntry = avail.find(
+			(e) =>
+				e.documentId === ('test-doc' as DocumentId) &&
+				e.format === 'html',
+		);
+		expect(htmlEntry).toBeDefined();
+		expect(htmlEntry!.available).toBe(false);
+		expect(htmlEntry!.blockedReason).toBeDefined();
+	});
+
+	it('marks Agent Pack as unavailable with placeholder reason', () => {
+		const profile = testProfile();
+		const state = stateWithNodes([
+			acceptedNodeState('node-a' as NodeId, 'Content.'),
+		]);
+
+		const avail = getAvailableExports(state, profile);
+
+		const apEntry = avail.find(
+			(e) =>
+				e.documentId === ('test-doc' as DocumentId) &&
+				e.format === 'agent_pack',
+		);
+		expect(apEntry).toBeDefined();
+		expect(apEntry!.available).toBe(false);
+		expect(apEntry!.blockedReason).toMatch(/not yet implemented|Phase 17/i);
 	});
 
 	// ── AC: Each document gets all three format entries ───────────

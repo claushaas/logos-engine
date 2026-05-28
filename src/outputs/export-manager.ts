@@ -7,6 +7,9 @@
  * incomplete or stale documents show as unavailable with a concrete
  * blocked reason.
  *
+ * Markdown and HTML share the same readiness gate; Agent Pack is a
+ * placeholder (Phase 17).
+ *
  * Pure function — no side effects, no state mutation.
  *
  * @see {@link https://logos-engine/docs/07-document-materialization-spec.md §10}
@@ -55,8 +58,8 @@ export type ExportAvailability = {
  * - Is the document stale?
  * - Does the materialized draft pass the completeness check?
  *
- * Non-markdown formats (html, agent_pack) are reported as unavailable
- * with a placeholder reason — they will be implemented in Phase 17.
+ * HTML export mirrors Markdown readiness (same gates); Agent Pack
+ * remains a placeholder (Phase 17).
  *
  * Already-generated artifacts (from `state.exportState`) are included
  * for informational purposes but do not affect availability assessment.
@@ -89,8 +92,8 @@ export function getAvailableExports(
 		const docDef = profile.documents.find((d) => d.id === documentId);
 		const title = docDef?.title ?? String(documentId);
 
-		// Compute a single readiness verdict for Markdown (the canonical format).
-		let markdownAvailable = false;
+		// Compute a single readiness verdict shared by Markdown and HTML.
+		let documentExportAvailable = false;
 		let blockedReason: string | undefined;
 
 		if (!rule) {
@@ -139,32 +142,36 @@ export function getAvailableExports(
 						draftResult.value.missingSections.join(', ');
 					blockedReason = `Missing required sections: ${sections}.`;
 				} else {
-					markdownAvailable = true;
+					documentExportAvailable = true;
 				}
 			}
 		}
 
 		// ── Markdown: the canonical format — implemented ─────────────
 		const markdownEntry: ExportAvailability = {
-			available: markdownAvailable,
+			available: documentExportAvailable,
 			documentId,
 			documentTitle: title,
 			format: 'markdown',
 		};
-		if (!markdownAvailable && blockedReason !== undefined) {
+		if (!documentExportAvailable && blockedReason !== undefined) {
 			(markdownEntry as { blockedReason?: string }).blockedReason =
 				blockedReason;
 		}
 		results.push(markdownEntry);
 
-		// ── HTML: placeholder — Phase 17 ─────────────────────────────
-		results.push({
-			available: false,
-			blockedReason: 'HTML export is not yet implemented (Phase 17).',
+		// ── HTML: mirrors Markdown readiness (same gates) ────────────
+		const htmlEntry: ExportAvailability = {
+			available: documentExportAvailable,
 			documentId,
 			documentTitle: title,
 			format: 'html',
-		});
+		};
+		if (!documentExportAvailable && blockedReason !== undefined) {
+			(htmlEntry as { blockedReason?: string }).blockedReason =
+				blockedReason;
+		}
+		results.push(htmlEntry);
 
 		// ── Agent Pack: placeholder — Phase 17 ───────────────────────
 		results.push({
