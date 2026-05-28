@@ -25,6 +25,7 @@ export {
 export { ActionBar } from './components/ActionBar.js';
 export { CanonicalPreview } from './components/CanonicalPreview.js';
 export { ConversationPanel } from './components/ConversationPanel.js';
+export { DiagnosticsPanel } from './components/DiagnosticsPanel.js';
 export { InputArea } from './components/InputArea.js';
 export { MainPanel } from './components/MainPanel.js';
 export {

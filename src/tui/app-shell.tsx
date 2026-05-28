@@ -25,6 +25,7 @@ import type {
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
 import type { NodeId } from '../shared/index.js';
+import { DiagnosticsPanel } from './components/DiagnosticsPanel.js';
 import { MainPanel } from './components/MainPanel.js';
 import { flattenSidebarTree } from './components/NodeTree.js';
 import { Sidebar } from './components/Sidebar.js';
@@ -165,6 +166,10 @@ export function AppShell() {
 
 	const navigation = useNavigation(dispatch);
 
+	// ── Diagnostics panel toggle (ephemeral TUI state) ──────────────────
+
+	const [showDiagnosticsPanel, setShowDiagnosticsPanel] = useState(false);
+
 	// ── Ephemeral input buffer (TUI-owned transient state) ───────────────
 
 	const [inputBuffer, setInputBuffer] = useState('');
@@ -222,10 +227,26 @@ export function AppShell() {
 				escape: boolean;
 				tab: boolean;
 				shift: boolean;
+				ctrl: boolean;
+				meta: boolean;
 				backspace: boolean;
 				delete: boolean;
 			},
 		) => {
+			// ── Ctrl+D: toggle diagnostics panel (always available) ──────
+
+			if (key.ctrl && input.toLowerCase() === 'd') {
+				setShowDiagnosticsPanel((prev) => !prev);
+				return;
+			}
+
+			// ── Diagnostics panel open: Escape closes it ────────────────
+
+			if (showDiagnosticsPanel && key.escape) {
+				setShowDiagnosticsPanel(false);
+				return;
+			}
+
 			// ── Text input mode: append printable chars, handle special keys
 
 			if (focus.region === 'input' && snapshot.input.enabled) {
@@ -453,6 +474,7 @@ export function AppShell() {
 			focus,
 			inputBuffer,
 			navigation,
+			showDiagnosticsPanel,
 			snapshot.actionBar.actions,
 			snapshot.input.enabled,
 			snapshot.input.submitAction,
@@ -478,38 +500,52 @@ export function AppShell() {
 				)}
 			</Box>
 
-			{/* Body: sidebar + main panel */}
+			{/* Body: sidebar + main panel (or diagnostics overlay) */}
 			<Box flexDirection="row" flexGrow={1}>
-				{showSidebar && (
-					<Sidebar
-						collapsedDocumentIds={collapsedDocumentIds}
-						collapsedPhaseIds={collapsedPhaseIds}
-						focusedItemIndex={focus.focusedNodeIndex}
-						isFocused={
-							focus.availableRegions.includes('sidebar') &&
-							focus.region === 'sidebar'
+				{showDiagnosticsPanel ? (
+					<DiagnosticsPanel
+						actionBar={snapshot.actionBar}
+						diagnostics={snapshot.diagnostics}
+						focusedActionIndex={focus.focusedActionIndex}
+						focusedRegion={
+							focus.availableRegions.includes('main') ? focus.region : null
 						}
-						sidebar={snapshot.sidebar}
+						input={snapshot.input}
 					/>
-				)}
+				) : (
+					<>
+						{showSidebar && (
+							<Sidebar
+								collapsedDocumentIds={collapsedDocumentIds}
+								collapsedPhaseIds={collapsedPhaseIds}
+								focusedItemIndex={focus.focusedNodeIndex}
+								isFocused={
+									focus.availableRegions.includes('sidebar') &&
+									focus.region === 'sidebar'
+								}
+								sidebar={snapshot.sidebar}
+							/>
+						)}
 
-				<MainPanel
-					actionBar={snapshot.actionBar}
-					focusedActionIndex={focus.focusedActionIndex}
-					focusedRegion={
-						focus.availableRegions.includes('main') ? focus.region : null
-					}
-					input={snapshot.input}
-					inputValue={inputBuffer}
-					mainPanel={snapshot.mainPanel}
-					onSelectMissingNode={(nodeId: string) => {
-						dispatch?.({ nodeId: nodeId as NodeId, type: 'NODE_SELECTED' });
-					}}
-				/>
+						<MainPanel
+							actionBar={snapshot.actionBar}
+							focusedActionIndex={focus.focusedActionIndex}
+							focusedRegion={
+								focus.availableRegions.includes('main') ? focus.region : null
+							}
+							input={snapshot.input}
+							inputValue={inputBuffer}
+							mainPanel={snapshot.mainPanel}
+							onSelectMissingNode={(nodeId: string) => {
+								dispatch?.({ nodeId: nodeId as NodeId, type: 'NODE_SELECTED' });
+							}}
+						/>
+					</>
+				)}
 			</Box>
 
-			{/* Diagnostics footer (only when diagnostics exist) */}
-			{snapshot.diagnostics.length > 0 && (
+			{/* Diagnostics footer (hidden when full panel is open to avoid duplication) */}
+			{!showDiagnosticsPanel && snapshot.diagnostics.length > 0 && (
 				<Box borderStyle="single" borderTop={true} paddingX={1}>
 					{snapshot.diagnostics.map((d: RuntimeDiagnostic, _i: number) => (
 						<DiagnosticEntry diagnostic={d} key={d.code} />
