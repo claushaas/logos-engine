@@ -323,9 +323,10 @@ export function DocumentPreview({
 
 			{/* ── Content (paginated) ──────────────────────────── */}
 			<Box flexDirection="column" flexGrow={1} marginBottom={1}>
-				{visibleLines.map((line, _idx) => (
-					<ContentLineComponent key={`${safePage}-${line}`} line={line} />
-				))}
+				{visibleLines.map((line, idx) => {
+					const lineKey = `${safePage}-${line.kind}-${idx}-${line.text.slice(0, 20)}`;
+					return <ContentLineComponent key={lineKey} line={line} />;
+				})}
 			</Box>
 
 			{/* ── Stale node warnings ──────────────────────────── */}
