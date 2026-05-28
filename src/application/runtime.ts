@@ -20,12 +20,20 @@ import type {
 	LogosRuntimeState,
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
-import type { LlmProvider, ProviderConfig } from '../llm/index.js';
+import type {
+	LlmProvider,
+	ProviderConfig,
+	ProviderConfigOptions,
+} from '../llm/index.js';
 import {
 	MockLlmProvider,
 	OpenAiCompatibleLlmProvider,
 	resolveProviderConfig,
 } from '../llm/index.js';
+
+// Re-export for CLI consumers.
+export type { ProviderConfigOptions } from '../llm/index.js';
+
 import { exportMarkdown } from '../outputs/index.js';
 import { resumeSessionWithDiagnostics } from '../persistence/session-resume.js';
 import type { SnapshotStore } from '../persistence/snapshot-store.js';
@@ -107,6 +115,16 @@ export type CreateRuntimeOptions = {
 
 	/** Provider configuration for real provider selection. */
 	readonly providerConfig?: ProviderConfig;
+
+	/**
+	 * Partial overrides for provider configuration resolution.
+	 *
+	 * Passed to {@link resolveProviderConfig} when neither
+	 * `llmProvider` nor `useMockLlm` is set. Useful for CLI flags
+	 * and programmatic configuration that should be merged with
+	 * environment variables.
+	 */
+	readonly providerConfigOptions?: ProviderConfigOptions;
 
 	/** Optional custom LLM provider (overrides all other resolution). */
 	readonly llmProvider?: LlmProvider;
@@ -240,7 +258,9 @@ export async function createApplicationRuntime(
 		providerMode = 'mock';
 	} else {
 		// Resolve from environment variables and/or explicit providerConfig.
-		const cfg = options.providerConfig ?? resolveProviderConfig();
+		const cfg =
+			options.providerConfig ??
+			resolveProviderConfig(options.providerConfigOptions);
 
 		if (cfg.mode === 'real') {
 			llmProvider = new OpenAiCompatibleLlmProvider(cfg);

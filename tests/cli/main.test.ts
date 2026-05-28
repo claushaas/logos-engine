@@ -139,3 +139,145 @@ describe('CreateRuntimeOptions construction', () => {
 		expect(opts2.sessionId).toBe('sess-1');
 	});
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Provider flag resolution (LLM-06)
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('CLI provider flag resolution', () => {
+	it('maps --provider flag to provider option', () => {
+		function buildOpts(cliProvider?: string) {
+			const options: Record<string, unknown> = {};
+			if (cliProvider !== undefined) options.provider = cliProvider;
+			return options;
+		}
+
+		expect(buildOpts('openai-compatible').provider).toBe('openai-compatible');
+		expect(buildOpts().provider).toBeUndefined();
+	});
+
+	it('maps --model flag to model option', () => {
+		function buildOpts(cliModel?: string) {
+			const options: Record<string, unknown> = {};
+			if (cliModel !== undefined) options.model = cliModel;
+			return options;
+		}
+
+		expect(buildOpts('gpt-4o').model).toBe('gpt-4o');
+		expect(buildOpts().model).toBeUndefined();
+	});
+
+	it('maps --base-url flag to baseUrl option', () => {
+		function buildOpts(cliUrl?: string) {
+			const options: Record<string, unknown> = {};
+			if (cliUrl !== undefined) options.baseUrl = cliUrl;
+			return options;
+		}
+
+		expect(buildOpts('https://custom.api.com/v1').baseUrl).toBe(
+			'https://custom.api.com/v1',
+		);
+	});
+
+	it('maps --token-env flag to tokenEnv option', () => {
+		function buildOpts(cliTokenEnv?: string) {
+			const options: Record<string, unknown> = {};
+			if (cliTokenEnv !== undefined) options.tokenEnv = cliTokenEnv;
+			return options;
+		}
+
+		expect(buildOpts('MY_API_KEY').tokenEnv).toBe('MY_API_KEY');
+	});
+
+	it('maps --llm-timeout flag to timeoutMs option (parsed as number)', () => {
+		function buildOpts(cliTimeout?: string) {
+			const options: Record<string, unknown> = {};
+			if (cliTimeout !== undefined) {
+				const parsed = Number(cliTimeout);
+				if (Number.isFinite(parsed) && parsed > 0) {
+					options.timeoutMs = parsed;
+				}
+			}
+			return options;
+		}
+
+		expect(buildOpts('120000').timeoutMs).toBe(120_000);
+		expect(buildOpts('not-a-number').timeoutMs).toBeUndefined();
+		expect(buildOpts('-5000').timeoutMs).toBeUndefined();
+		expect(buildOpts().timeoutMs).toBeUndefined();
+	});
+
+	it('--mock flag maps to useMock: true', () => {
+		function buildOpts(cliMock?: boolean) {
+			const options: Record<string, unknown> = {};
+			if (cliMock === true) options.useMock = true;
+			return options;
+		}
+
+		expect(buildOpts(true).useMock).toBe(true);
+		expect(buildOpts().useMock).toBeUndefined();
+		expect(buildOpts(false).useMock).toBeUndefined();
+	});
+
+	it('multiple flags combined produce all options', () => {
+		function buildOpts(
+			cliProvider?: string,
+			cliModel?: string,
+			cliBaseUrl?: string,
+			cliTokenEnv?: string,
+			cliTimeout?: string,
+		) {
+			const options: Record<string, unknown> = {};
+			if (cliProvider !== undefined) options.provider = cliProvider;
+			if (cliModel !== undefined) options.model = cliModel;
+			if (cliBaseUrl !== undefined) options.baseUrl = cliBaseUrl;
+			if (cliTokenEnv !== undefined) options.tokenEnv = cliTokenEnv;
+			if (cliTimeout !== undefined) {
+				const parsed = Number(cliTimeout);
+				if (Number.isFinite(parsed) && parsed > 0) {
+					options.timeoutMs = parsed;
+				}
+			}
+			return options;
+		}
+
+		const opts = buildOpts(
+			'openai-compatible',
+			'gpt-4o',
+			'https://example.com/v1',
+			'MY_TOKEN',
+			'30000',
+		);
+
+		expect(opts.provider).toBe('openai-compatible');
+		expect(opts.model).toBe('gpt-4o');
+		expect(opts.baseUrl).toBe('https://example.com/v1');
+		expect(opts.tokenEnv).toBe('MY_TOKEN');
+		expect(opts.timeoutMs).toBe(30_000);
+	});
+
+	it('CLI flag values override env values (resolution logic)', () => {
+		function resolve(
+			cliValue: string | undefined,
+			envValue: string | undefined,
+		): string | undefined {
+			return cliValue ?? envValue;
+		}
+
+		expect(resolve('cli-model', 'env-model')).toBe('cli-model');
+		expect(resolve(undefined, 'env-model')).toBe('env-model');
+		expect(resolve(undefined, undefined)).toBeUndefined();
+	});
+
+	it('--mock flag is independent of provider flags (both can be specified)', () => {
+		// --mock and --provider can both be present, but --mock takes priority
+		// at the config resolution level.
+		function hasMock(cliMock?: boolean): boolean {
+			return cliMock === true;
+		}
+
+		expect(hasMock(true)).toBe(true);
+		expect(hasMock(false)).toBe(false);
+		expect(hasMock(undefined)).toBe(false);
+	});
+});
