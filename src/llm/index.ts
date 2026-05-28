@@ -39,6 +39,10 @@ export {
 	MockLlmProvider,
 } from './mock-provider.js';
 export {
+	OpenAiCompatibleLlmProvider,
+	type ProviderCallDiagnostics,
+} from './openai-compatible-provider.js';
+export {
 	extractIssues,
 	formatValidationIssues,
 	response_validation,
