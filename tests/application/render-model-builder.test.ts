@@ -13,6 +13,7 @@ import { describe, expect, it } from 'vitest';
 import {
 	buildRenderSnapshot,
 	getStatusSymbolForLifecycle,
+	resolveProviderStatus,
 } from '../../src/application/index.js';
 import type {
 	DocumentPreviewPanel,
@@ -1383,5 +1384,69 @@ describe('buildRenderSnapshot — error mode', () => {
 		expect(render.input.reasonIfDisabled).toBe(
 			'Text input is not available in error mode.',
 		);
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Provider status surfaces (LLM-07)
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('resolveProviderStatus', () => {
+	it('mock mode returns label "Mock" and null guidance', () => {
+		const status = resolveProviderStatus('mock');
+		expect(status.mode).toBe('mock');
+		expect(status.label).toBe('Mock');
+		expect(status.guidance).toBeNull();
+	});
+
+	it('real mode returns label "Real AI" and null guidance', () => {
+		const status = resolveProviderStatus('real');
+		expect(status.mode).toBe('real');
+		expect(status.label).toBe('Real AI');
+		expect(status.guidance).toBeNull();
+	});
+
+	it('injected mode returns label "Custom" and null guidance', () => {
+		const status = resolveProviderStatus('injected');
+		expect(status.mode).toBe('injected');
+		expect(status.label).toBe('Custom');
+		expect(status.guidance).toBeNull();
+	});
+
+	it('unconfigured mode returns label "Unconfigured" and actionable guidance', () => {
+		const status = resolveProviderStatus('unconfigured');
+		expect(status.mode).toBe('unconfigured');
+		expect(status.label).toBe('Unconfigured');
+		expect(status.guidance).toContain('Set the required API token');
+		expect(status.guidance).toContain('--mock');
+	});
+
+	it('unknown mode defaults to mock', () => {
+		const status = resolveProviderStatus('bogus');
+		expect(status.mode).toBe('mock');
+		expect(status.label).toBe('Mock');
+		expect(status.guidance).toBeNull();
+	});
+});
+
+describe('buildRenderSnapshot — provider status', () => {
+	it('defaults providerMode to mock when not specified', () => {
+		// Build a minimal idle snapshot to verify the default.
+		const snap = idleSnapshot();
+		const profile = testProfile();
+
+		const render = buildRenderSnapshot(snap, profile);
+		expect(render.providerStatus.mode).toBe('mock');
+	});
+
+	it('passes through explicit providerMode', () => {
+		const snap = idleSnapshot();
+		const profile = testProfile();
+
+		const render = buildRenderSnapshot(snap, profile, {
+			providerMode: 'real',
+		});
+		expect(render.providerStatus.mode).toBe('real');
+		expect(render.providerStatus.label).toBe('Real AI');
 	});
 });

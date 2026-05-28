@@ -52,7 +52,10 @@ import {
 	deselectNode,
 	selectProfile,
 } from '../state-engine/state-engine.js';
-import { buildRenderSnapshot } from './render-model-builder.js';
+import {
+	buildRenderSnapshot,
+	resolveProviderStatus,
+} from './render-model-builder.js';
 import { acceptCanonicalAnswerUseCase } from './use-cases/accept-canonical-answer.js';
 import { editCanonicalAnswerUseCase } from './use-cases/edit-canonical-answer.js';
 import {
@@ -217,6 +220,7 @@ function buildIdleSnapshot(
 			kind: 'idle',
 		},
 		mode: 'idle',
+		providerStatus: resolveProviderStatus(providerMode),
 		sidebar: {
 			activeNodeId: null,
 			phases: [],
@@ -374,6 +378,10 @@ export async function createApplicationRuntime(
 			return buildRenderSnapshot(
 				buildSnapshot(currentState, currentProfile),
 				currentProfile,
+				{
+					hasAvailableSessions: hasSessions,
+					providerMode,
+				},
 			);
 		}
 		return buildIdleSnapshot(hasSessions, providerMode);

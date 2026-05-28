@@ -20,10 +20,19 @@ import type {
 	ActionBarRenderModel,
 	InputRenderModel,
 	MainPanelRenderModel,
+	ProviderStatus,
 	RuntimeDiagnostic,
 	SidebarRenderModel,
 	TuiRenderSnapshot,
 } from './index.js';
+
+// ─── Shared provider status for typecheck snapshots ────────────────────────
+
+const _mockProviderStatus: ProviderStatus = {
+	guidance: null,
+	label: 'Mock',
+	mode: 'mock',
+};
 
 // ─── 1. TuiRenderSnapshot for each panel variant ────────────────────────────
 
@@ -34,6 +43,7 @@ const _idleSnapshot: TuiRenderSnapshot = {
 	input: { enabled: false },
 	mainPanel: { kind: 'idle' },
 	mode: 'idle',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: null,
 		phases: [],
@@ -55,6 +65,7 @@ const _profileSnapshot: TuiRenderSnapshot = {
 		message: 'Select a profile',
 	},
 	mode: 'profile_selection',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: null,
 		phases: [],
@@ -107,6 +118,7 @@ const _nodeConversationSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	},
 	mode: 'node_focus',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: 'node_core_thesis' as NodeId,
 		phases: [
@@ -149,6 +161,7 @@ const _documentPreviewSnapshot: TuiRenderSnapshot = {
 		title: 'Thesis Document',
 	},
 	mode: 'document_preview',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: 'node_core_thesis' as NodeId,
 		phases: [],
@@ -172,6 +185,7 @@ const _exportSnapshot: TuiRenderSnapshot = {
 		kind: 'export',
 	},
 	mode: 'export',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: null,
 		phases: [],
@@ -186,6 +200,7 @@ const _settingsSnapshot: TuiRenderSnapshot = {
 	input: { enabled: false },
 	mainPanel: { kind: 'settings' },
 	mode: 'settings',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: null,
 		phases: [],
@@ -211,6 +226,7 @@ const _errorSnapshot: TuiRenderSnapshot = {
 		recoveryHint: 'Check the profile path',
 	},
 	mode: 'error',
+	providerStatus: _mockProviderStatus,
 	sidebar: {
 		activeNodeId: null,
 		phases: [],

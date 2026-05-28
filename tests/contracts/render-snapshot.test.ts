@@ -376,6 +376,7 @@ function makeSnapshot(
 		input,
 		mainPanel,
 		mode,
+		providerStatus: { guidance: null, label: 'Mock', mode: 'mock' },
 		sidebar,
 	};
 }

@@ -24,6 +24,7 @@ import type {
 	IdlePanel,
 	NodeConversationPanel,
 	ProfilePanel,
+	ProviderStatus,
 	TuiRenderSnapshot,
 } from '../../src/contracts/index.js';
 import type { NodeId } from '../../src/shared/index.js';
@@ -40,6 +41,16 @@ function renderShell(snapshot: TuiRenderSnapshot): ReturnType<typeof render> {
 		</TuiApplicationProvider>,
 	);
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Shared fixtures
+// ═══════════════════════════════════════════════════════════════════════════
+
+const mockProviderStatus: ProviderStatus = {
+	guidance: null,
+	label: 'Mock',
+	mode: 'mock',
+};
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Shared fixture builders
@@ -151,6 +162,7 @@ const idleSnapshot: TuiRenderSnapshot = {
 	input: { enabled: false, reasonIfDisabled: 'Select a profile to begin.' },
 	mainPanel: { kind: 'idle' } as IdlePanel,
 	mode: 'idle',
+	providerStatus: mockProviderStatus,
 	sidebar: { activeNodeId: null, phases: [] },
 };
 
@@ -175,6 +187,7 @@ const structureOverviewSnapshot: TuiRenderSnapshot = {
 		message: 'Profile: Startup — 3/12 nodes accepted',
 	} as ProfilePanel,
 	mode: 'structure_overview',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar(
 		null,
 		[
@@ -222,6 +235,7 @@ const notStartedSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '○', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -277,6 +291,7 @@ const activeSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '◐', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -326,6 +341,7 @@ const needsClarificationSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '?', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -375,6 +391,7 @@ const needsRefinementSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '△', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -424,6 +441,7 @@ const synthesizedSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '◆', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -478,6 +496,7 @@ const acceptedSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '✓', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -511,6 +530,7 @@ const deferredSnapshot: TuiRenderSnapshot = {
 		title: 'Core Thesis',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n1' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '⏸', { selected: true }),
 		sidebarNode('n2', 'Central Tension', '○'),
@@ -548,6 +568,7 @@ const blockedSnapshot: TuiRenderSnapshot = {
 		title: 'Core Assumptions',
 	}),
 	mode: 'node_focus',
+	providerStatus: mockProviderStatus,
 	sidebar: minimalSidebar('n2' as NodeId, [
 		sidebarNode('n1', 'Core Thesis', '✓'),
 		sidebarNode('n2', 'Core Assumptions', '⚠', {
@@ -609,6 +630,7 @@ const documentPreviewSnapshot: TuiRenderSnapshot = {
 		title: 'Foundation Thesis',
 	} as DocumentPreviewPanel,
 	mode: 'document_preview',
+	providerStatus: mockProviderStatus,
 	sidebar: { activeNodeId: null, phases: [] },
 };
 
@@ -662,6 +684,7 @@ const exportSnapshot: TuiRenderSnapshot = {
 		kind: 'export',
 	} as ExportPanel,
 	mode: 'export',
+	providerStatus: mockProviderStatus,
 	sidebar: { activeNodeId: null, phases: [] },
 };
 
@@ -675,6 +698,7 @@ const settingsSnapshot: TuiRenderSnapshot = {
 	input: { enabled: false },
 	mainPanel: { kind: 'settings' },
 	mode: 'settings',
+	providerStatus: mockProviderStatus,
 	sidebar: { activeNodeId: null, phases: [] },
 };
 

@@ -22,6 +22,8 @@ import type {
 	MainPanelRenderModel,
 	NodeAction,
 	NodeLifecycle,
+	ProviderStatus,
+	ProviderStatusMode,
 	RuntimeDiagnostic,
 	SessionMode,
 	SidebarDocument,
@@ -584,7 +586,38 @@ function reasonForDisabledInput(lifecycle: NodeLifecycle): string {
 export type BuildRenderSnapshotOptions = {
 	/** Whether one or more previous session snapshots exist on disk. */
 	readonly hasAvailableSessions?: boolean;
+
+	/**
+	 * Provider mode from runtime resolution.
+	 *
+	 * Determines the {@link ProviderStatus} included in every snapshot.
+	 * If omitted, defaults to `'mock'`.
+	 */
+	readonly providerMode?: string;
 };
+
+/**
+ * Build a {@link ProviderStatus} from a runtime provider mode string.
+ */
+export function resolveProviderStatus(providerMode: string): ProviderStatus {
+	const mode = providerMode as ProviderStatusMode;
+
+	switch (mode) {
+		case 'real':
+			return { guidance: null, label: 'Real AI', mode };
+		case 'injected':
+			return { guidance: null, label: 'Custom', mode };
+		case 'unconfigured':
+			return {
+				guidance:
+					'Real AI requested but not configured. Set the required API token environment variable or use --mock.',
+				label: 'Unconfigured',
+				mode,
+			};
+		default:
+			return { guidance: null, label: 'Mock', mode: 'mock' };
+	}
+}
 
 /**
  * Build a `TuiRenderSnapshot` — the fully-specified render model consumed
@@ -608,6 +641,10 @@ export function buildRenderSnapshot(
 	// surface the [Resume Session] action.
 	const hasAvailableSessions =
 		snapshot.mainPanel.kind === 'idle' && options.hasAvailableSessions === true;
+
+	// ── Resolve provider status ────────────────────────────────────────
+
+	const providerStatus = resolveProviderStatus(options.providerMode ?? 'mock');
 
 	// Clone the snapshot with the flag injected so buildActionBar
 	// and buildMainPanel can see it.
@@ -677,6 +714,7 @@ export function buildRenderSnapshot(
 		input: buildInput(snapshot),
 		mainPanel,
 		mode: snapshot.mode,
+		providerStatus,
 		sidebar: buildSidebar(snapshot, profile),
 	};
 }

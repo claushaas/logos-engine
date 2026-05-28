@@ -1,4 +1,4 @@
-Implemente exatamente a etapa LLM-06 - CLI and Environment Wiring descrita em
+Implemente exatamente a etapa LLM-07 - Provider Status Surfaces descrita em
 docs/15-real-llm-implementation-roadmap.md.
 
 Escopo:

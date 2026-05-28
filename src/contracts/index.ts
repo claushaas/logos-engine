@@ -87,6 +87,8 @@ export type {
 	MainPanelRenderModel,
 	NodeConversationPanel,
 	ProfilePanel,
+	ProviderStatus,
+	ProviderStatusMode,
 	RuntimeDiagnostic,
 	SettingsPanel,
 	SidebarDocument,

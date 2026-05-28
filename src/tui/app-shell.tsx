@@ -21,6 +21,7 @@ import {
 	useState,
 } from 'react';
 import type {
+	ProviderStatus,
 	RuntimeDiagnostic,
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
@@ -148,6 +149,22 @@ function DiagnosticEntry({
 			</Text>
 		</Box>
 	);
+}
+
+// ─── Provider status badge helper ───────────────────────────────────────────
+
+/** Resolve a color for the provider status badge. */
+function providerStatusColor(status: ProviderStatus): string {
+	switch (status.mode) {
+		case 'real':
+			return 'green';
+		case 'injected':
+			return 'cyan';
+		case 'unconfigured':
+			return 'yellow';
+		default:
+			return 'grey';
+	}
 }
 
 // ─── AppShell ───────────────────────────────────────────────────────────────
@@ -497,6 +514,18 @@ export function AppShell() {
 				<Text bold={true}>LOGOS Engine</Text>
 				{snapshot.mode !== 'idle' && (
 					<Text dimColor={true}> — {snapshot.mode}</Text>
+				)}
+				<Box marginLeft={1}>
+					<Text color={providerStatusColor(snapshot.providerStatus)}>
+						[{snapshot.providerStatus.label}]
+					</Text>
+				</Box>
+				{snapshot.providerStatus.guidance !== null && (
+					<Box marginLeft={1}>
+						<Text dimColor={true} wrap="truncate">
+							— {snapshot.providerStatus.guidance}
+						</Text>
+					</Box>
 				)}
 			</Box>
 

@@ -30,6 +30,12 @@ import {
 // Fixtures
 // ═══════════════════════════════════════════════════════════════════════════
 
+const mockProviderStatus: ProviderStatus = {
+	guidance: null,
+	label: 'Mock',
+	mode: 'mock',
+};
+
 function idleSnapshot(): TuiRenderSnapshot {
 	return {
 		actionBar: {
@@ -46,6 +52,7 @@ function idleSnapshot(): TuiRenderSnapshot {
 		},
 		mainPanel: { kind: 'idle' } as IdlePanel,
 		mode: 'idle',
+		providerStatus: mockProviderStatus,
 		sidebar: { activeNodeId: null, phases: [] },
 	};
 }
@@ -64,6 +71,7 @@ function structureOverviewSnapshot(): TuiRenderSnapshot {
 			message: 'Working with profile: Test Profile',
 		} as ProfilePanel,
 		mode: 'structure_overview',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: null,
 			phases: [
@@ -158,6 +166,7 @@ function nodeFocusSnapshot(): TuiRenderSnapshot {
 			title: 'Core Thesis',
 		} as NodeConversationPanel,
 		mode: 'node_focus',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: 'n1' as NodeId,
 			phases: [
@@ -514,6 +523,7 @@ function notStartedSnapshot(): TuiRenderSnapshot {
 			title: 'Core Thesis',
 		} as NodeConversationPanel,
 		mode: 'node_focus',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: 'n1' as NodeId,
 			phases: [
@@ -602,6 +612,7 @@ function acceptedSnapshot(): TuiRenderSnapshot {
 			title: 'Core Thesis',
 		} as NodeConversationPanel,
 		mode: 'node_focus',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: 'n1' as NodeId,
 			phases: [
@@ -669,6 +680,7 @@ function blockedSnapshot(): TuiRenderSnapshot {
 			title: 'Core Assumptions',
 		} as NodeConversationPanel,
 		mode: 'node_focus',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: 'n2' as NodeId,
 			phases: [
@@ -1010,6 +1022,7 @@ function allLifecycleSymbolsSnapshot(): TuiRenderSnapshot {
 			message: 'Profile loaded.',
 		} as ProfilePanel,
 		mode: 'structure_overview',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: 'n-v' as NodeId,
 			phases: [
@@ -1214,6 +1227,7 @@ function documentPreviewSnapshot(): TuiRenderSnapshot {
 			title: 'Test Document',
 		} as DocumentPreviewPanel,
 		mode: 'document_preview',
+		providerStatus: mockProviderStatus,
 		sidebar: {
 			activeNodeId: null,
 			phases: [],
@@ -1320,6 +1334,7 @@ function recoverableErrorSnapshot(): TuiRenderSnapshot {
 			recoveryActions: ['retry' as ErrorRecoveryAction],
 		} as ErrorPanel,
 		mode: 'error',
+		providerStatus: mockProviderStatus,
 		sidebar: { activeNodeId: null, phases: [] },
 	};
 }
@@ -1380,6 +1395,7 @@ function fatalErrorSnapshot(): TuiRenderSnapshot {
 			recoverable: false,
 		} as ErrorPanel,
 		mode: 'error',
+		providerStatus: mockProviderStatus,
 		sidebar: { activeNodeId: null, phases: [] },
 	};
 }

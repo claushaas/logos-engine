@@ -373,6 +373,38 @@ export type InputRenderModel = {
 	readonly reasonIfDisabled?: string;
 };
 
+// ─── Provider status ────────────────────────────────────────────────────────
+
+/**
+ * Provider mode as it appears in the render snapshot.
+ *
+ * Mirror of the runtime-level provider resolution, converted to a
+ * TUI-safe representation. The TUI uses this to display provider
+ * status badges and actionable diagnostics.
+ */
+export type ProviderStatusMode = 'mock' | 'real' | 'unconfigured' | 'injected';
+
+/**
+ * Provider status surfaced to the TUI.
+ *
+ * Included in every render snapshot so the user can tell at a glance
+ * whether they are using a mock or real AI provider before submitting
+ * meaningful content.
+ */
+export type ProviderStatus = {
+	/** Current provider mode. */
+	readonly mode: ProviderStatusMode;
+
+	/** Human-readable label for the status badge. */
+	readonly label: string;
+
+	/**
+	 * Actionable guidance for unconfigured or problematic states.
+	 * `null` when the provider is fully operational.
+	 */
+	readonly guidance: string | null;
+};
+
 // ─── TuiRenderSnapshot ─────────────────────────────────────────────────────
 
 /**
@@ -402,4 +434,10 @@ export type TuiRenderSnapshot = {
 
 	/** Non-fatal diagnostics to surface to the user. */
 	readonly diagnostics: RuntimeDiagnostic[];
+
+	/**
+	 * Provider status — always present so the TUI can show a badge
+	 * before the user submits content.
+	 */
+	readonly providerStatus: ProviderStatus;
 };

@@ -2,7 +2,7 @@
 
 exports[`State 3.1 — Idle / No Active Node > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine                                                                                     │
+│ LOGOS Engine [Mock]                                                                              │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
   Welcome to LOGOS Engine
 
@@ -16,7 +16,7 @@ exports[`State 3.1 — Idle / No Active Node > matches full frame snapshot 1`] =
 
 exports[`State 3.2 — Structure Overview > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — structure_overview                                                                │
+│ LOGOS Engine — structure_overview [Mock]                                                         │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────┐  Structure Overview
 │Profile: Startup              │
@@ -31,7 +31,7 @@ exports[`State 3.2 — Structure Overview > matches full frame snapshot 1`] = `
 
 exports[`State 3.3 — Not Started > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌───────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup       │
@@ -52,7 +52,7 @@ exports[`State 3.3 — Not Started > matches full frame snapshot 1`] = `
 
 exports[`State 3.4 — Active / In Progress > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup      │
@@ -79,7 +79,7 @@ exports[`State 3.4 — Active / In Progress > matches full frame snapshot 1`] = 
 
 exports[`State 3.5 — Needs Clarification > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌─────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup     │
@@ -104,7 +104,7 @@ exports[`State 3.5 — Needs Clarification > matches full frame snapshot 1`] = `
 
 exports[`State 3.6 — Needs Refinement > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌─────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup     │
@@ -130,7 +130,7 @@ exports[`State 3.6 — Needs Refinement > matches full frame snapshot 1`] = `
 
 exports[`State 3.7 — Synthesized / Awaiting Review > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup      │
@@ -160,7 +160,7 @@ exports[`State 3.7 — Synthesized / Awaiting Review > matches full frame snapsh
 
 exports[`State 3.8 — Accepted > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup      │
@@ -194,7 +194,7 @@ exports[`State 3.8 — Accepted > matches full frame snapshot 1`] = `
 
 exports[`State 3.9 — Deferred > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────┐ Foundation / Thesis / Core Thesis
 │Profile: Startup        │
@@ -211,7 +211,7 @@ exports[`State 3.9 — Deferred > matches full frame snapshot 1`] = `
 
 exports[`State 3.10 — Blocked > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — node_focus                                                                        │
+│ LOGOS Engine — node_focus [Mock]                                                                 │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────┐ Validation / Core Assumptions
 │Profile: Startup      │
@@ -228,7 +228,7 @@ exports[`State 3.10 — Blocked > matches full frame snapshot 1`] = `
 
 exports[`State 3.11 — Document Preview > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — document_preview                                                                  │
+│ LOGOS Engine — document_preview [Mock]                                                           │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
 │ Document: Foundation Thesis                                                                      │
@@ -264,7 +264,7 @@ exports[`State 3.11 — Document Preview > matches full frame snapshot 1`] = `
 
 exports[`State 3.12 — Export / Outcome Generation > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — export                                                                            │
+│ LOGOS Engine — export [Mock]                                                                     │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
   Export Outcomes
 
@@ -288,7 +288,7 @@ exports[`State 3.12 — Export / Outcome Generation > matches full frame snapsho
 
 exports[`State 3.13 — Settings / Config > matches full frame snapshot 1`] = `
 "┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ LOGOS Engine — settings                                                                          │
+│ LOGOS Engine — settings [Mock]                                                                   │
 └──────────────────────────────────────────────────────────────────────────────────────────────────┘
   Settings
 

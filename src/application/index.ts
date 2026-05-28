@@ -18,11 +18,13 @@ export { generateAgentTurn } from './generate-agent-turn.js';
 export {
 	buildRenderSnapshot,
 	getStatusSymbolForLifecycle,
+	resolveProviderStatus,
 } from './render-model-builder.js';
 export {
 	type ApplicationRuntime,
 	type CreateRuntimeOptions,
 	createApplicationRuntime,
+	type ProviderConfigOptions,
 	type RuntimeEvent,
 	type RuntimeListener,
 } from './runtime.js';
