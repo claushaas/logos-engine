@@ -20,6 +20,10 @@ export type {
 	TransitionEvent,
 	TransitionIntent,
 } from './agent-turn.js';
+export {
+	AGENT_TURN_OUTPUT_SCHEMA_NAME,
+	agentTurnOutputJsonSchema,
+} from './agent-turn.schema.js';
 // Step 1.2 — Runtime state, node state, canonical answer, and completeness types.
 export type {
 	CanonicalAnswer,
