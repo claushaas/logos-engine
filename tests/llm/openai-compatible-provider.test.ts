@@ -104,6 +104,7 @@ function setupProviderConfig(overrides: Record<string, string> = {}): void {
 	process.env.LOGOS_LLM_PROVIDER = 'openai-compatible';
 	process.env.LOGOS_LLM_API_KEY = 'sk-test-mock-key';
 	process.env.LOGOS_LLM_MODEL = 'gpt-4.1-mini';
+	process.env.LOGOS_DISCLOSURE_ACCEPTED = 'true';
 	for (const [key, value] of Object.entries(overrides)) {
 		process.env[key] = value;
 	}
@@ -119,6 +120,7 @@ function clearProviderEnv(): void {
 	delete process.env.LOGOS_LLM_BASE_URL;
 	delete process.env.LOGOS_LLM_TOKEN_ENV;
 	delete process.env.LOGOS_USE_MOCK_LLM;
+	delete process.env.LOGOS_DISCLOSURE_ACCEPTED;
 	delete process.env.LOGOS_ENV_FILE;
 }
 
@@ -150,6 +152,102 @@ describe('OpenAiCompatibleLlmProvider', () => {
 
 		// TypeScript structural check: the class satisfies the interface.
 		expect(typeof provider.generateStructuredOutput).toBe('function');
+	});
+
+	// ── 1.5. Disclosure gate (LLM-08) ──────────────────────────────
+
+	it('blocks remote call when disclosure is not accepted', async () => {
+		// Override the setupProviderConfig default of LOGOS_DISCLOSURE_ACCEPTED=true
+		process.env.LOGOS_DISCLOSURE_ACCEPTED = 'false';
+		const config = resolveProviderConfig({
+			provider: 'openai-compatible',
+			// disclosureAccepted defaults to false when env says 'false'.
+		});
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			expect(le.code).toBe('LOGOS_DISCLOSURE_NOT_ACCEPTED');
+			expect(le.category).toBe('llm_provider');
+			expect(le.recoverable).toBe(true);
+		}
+
+		// The mock fetch must NOT have been called — the gate blocks before
+		// any network request is attempted.
+		expect(mockFetch).not.toHaveBeenCalled();
+	});
+
+	it('blocks remote call when disclosureAccepted is explicitly false', async () => {
+		const config = resolveProviderConfig({
+			disclosureAccepted: false,
+			provider: 'openai-compatible',
+		});
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(LogosError);
+			const le = error as LogosError;
+			expect(le.code).toBe('LOGOS_DISCLOSURE_NOT_ACCEPTED');
+		}
+
+		// Verify no fetch was attempted.
+		expect(mockFetch).not.toHaveBeenCalled();
+	});
+
+	it('allows remote call when disclosure is accepted', async () => {
+		const config = resolveProviderConfig({
+			disclosureAccepted: true,
+			provider: 'openai-compatible',
+		});
+
+		mockFetch.mockResolvedValueOnce(
+			mockJsonResponse({
+				choices: [
+					{
+						finish_reason: 'stop',
+						message: { content: JSON.stringify(VALID_OUTPUT) },
+					},
+				],
+			}),
+		);
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+		const result = await provider.generateStructuredOutput(makeRequest());
+
+		expect(result.userFacingMessage).toBe(VALID_OUTPUT.userFacingMessage);
+		expect(mockFetch).toHaveBeenCalledTimes(1);
+	});
+
+	it('disclosure error message does not contain API key', async () => {
+		process.env.LOGOS_LLM_API_KEY = 'sk-very-secret-disclosure-key';
+		const config = resolveProviderConfig({
+			disclosureAccepted: false,
+			provider: 'openai-compatible',
+		});
+
+		const provider = new OpenAiCompatibleLlmProvider(config);
+
+		try {
+			await provider.generateStructuredOutput(makeRequest());
+			expect.fail('Expected an error to be thrown');
+		} catch (error) {
+			const msg = error instanceof Error ? error.message : String(error);
+			expect(msg).not.toContain('sk-very-secret-disclosure-key');
+
+			if (error instanceof LogosError) {
+				const detailsStr = JSON.stringify(error.details);
+				expect(detailsStr).not.toContain('sk-very-secret-disclosure-key');
+			}
+		}
 	});
 
 	// ── 2. Calls /chat/completions ───────────────────────────────────

@@ -1,4 +1,4 @@
-Implemente exatamente a etapa LLM-07 - Provider Status Surfaces descrita em
+Implemente exatamente a etapa LLM-09 - Prompt Context Redaction descrita em
 docs/15-real-llm-implementation-roadmap.md.
 
 Escopo:

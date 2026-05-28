@@ -886,4 +886,66 @@ describe('snapshot round-trip', () => {
 			expect(restoredNode!.extracted.assumptions).toEqual([]);
 		});
 	});
+
+	// ─────────────────────────────────────────────────────────────
+	// Token safety (LLM-08) — session snapshots never contain raw API keys
+	// ─────────────────────────────────────────────────────────────
+
+	describe('token safety', () => {
+		it('serialized snapshot never contains API key patterns', async () => {
+			const s = await setupStore();
+			const state = richState('sess-token-safety');
+
+			await s.saveSnapshot('sess-token-safety', state);
+
+			const result = await s.loadSnapshot('sess-token-safety');
+			expect(result.ok).toBe(true);
+			if (!result.ok) throw new Error('Expected success');
+
+			// Serialize the entire snapshot to JSON and verify no API key
+			// patterns are present.
+			const serialized = JSON.stringify(result.value);
+
+			// Check for common token patterns.
+			expect(serialized).not.toMatch(/sk-[A-Za-z0-9]+/);
+			expect(serialized).not.toMatch(/api[_-]?key/i);
+			expect(serialized).not.toMatch(/bearer\s+[A-Za-z0-9_-]+/i);
+			expect(serialized).not.toMatch(/Authorization:\s*Bearer/i);
+		});
+
+		it('serialized idle snapshot never contains API key patterns', async () => {
+			const s = await setupStore();
+			const state = idleState('sess-idle-token');
+
+			await s.saveSnapshot('sess-idle-token', state);
+
+			const result = await s.loadSnapshot('sess-idle-token');
+			expect(result.ok).toBe(true);
+			if (!result.ok) throw new Error('Expected success');
+
+			const serialized = JSON.stringify(result.value);
+
+			expect(serialized).not.toMatch(/sk-[A-Za-z0-9]+/);
+			expect(serialized).not.toMatch(/api[_-]?key/i);
+			expect(serialized).not.toMatch(/bearer\s+[A-Za-z0-9_-]+/i);
+		});
+
+		it('snapshot does not contain provider configuration fields', async () => {
+			const s = await setupStore();
+			const state = richState('sess-no-provider-config');
+
+			await s.saveSnapshot('sess-no-provider-config', state);
+
+			const result = await s.loadSnapshot('sess-no-provider-config');
+			expect(result.ok).toBe(true);
+			if (!result.ok) throw new Error('Expected success');
+
+			const serialized = JSON.stringify(result.value);
+
+			// Provider configuration fields should never leak into persisted state.
+			// These are the ProviderConfig fields that hold sensitive routing info.
+			expect(serialized).not.toContain('"providerConfig"');
+			expect(serialized).not.toContain('"disclosureAccepted"');
+		});
+	});
 });

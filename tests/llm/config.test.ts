@@ -35,6 +35,7 @@ const RELEVANT_ENV_VARS = [
 	'LOGOS_LLM_TOKEN_ENV',
 	'LOGOS_LLM_TIMEOUT',
 	'LOGOS_USE_MOCK_LLM',
+	'LOGOS_DISCLOSURE_ACCEPTED',
 	'LOGOS_ENV_FILE',
 ];
 
@@ -299,6 +300,22 @@ describe('resolveProviderConfig', () => {
 		const config = resolveProviderConfig({ disclosureAccepted: true });
 
 		expect(config.disclosureAccepted).toBe(true);
+	});
+
+	it('reads disclosureAccepted from LOGOS_DISCLOSURE_ACCEPTED env var', () => {
+		process.env.LOGOS_DISCLOSURE_ACCEPTED = 'true';
+
+		const config = resolveProviderConfig();
+
+		expect(config.disclosureAccepted).toBe(true);
+	});
+
+	it('options.disclosureAccepted overrides LOGOS_DISCLOSURE_ACCEPTED env', () => {
+		process.env.LOGOS_DISCLOSURE_ACCEPTED = 'true';
+
+		const config = resolveProviderConfig({ disclosureAccepted: false });
+
+		expect(config.disclosureAccepted).toBe(false);
 	});
 });
 

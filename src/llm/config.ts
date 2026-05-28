@@ -322,7 +322,9 @@ export function resolveProviderConfig(
 		...(options.retry ?? {}),
 	};
 
-	const disclosureAccepted = options.disclosureAccepted ?? false;
+	const disclosureAccepted =
+		options.disclosureAccepted ??
+		process.env.LOGOS_DISCLOSURE_ACCEPTED === 'true';
 
 	return {
 		baseUrl,

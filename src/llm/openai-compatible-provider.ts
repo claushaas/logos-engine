@@ -173,12 +173,30 @@ export class OpenAiCompatibleLlmProvider implements LlmProvider {
 	 * Send the assembled request to the provider and return the parsed
 	 * {@link AgentTurnOutput}.
 	 *
+	 * Requires disclosure acceptance ({@link ProviderConfig.disclosureAccepted})
+	 * before any remote call is attempted. Throws
+	 * `LOGOS_DISCLOSURE_NOT_ACCEPTED` if disclosure has not been accepted.
+	 *
 	 * @throws {@link LogosError} with category `llm_provider` on
-	 *   transport/auth failures, or `structured_output` on parse/validation
-	 *   failures.
+	 *   transport/auth/disclosure failures, or `structured_output` on
+	 *   parse/validation failures.
 	 */
 	async generateStructuredOutput(request: LlmRequest): Promise<LlmResponse> {
-		// ── Resolve API key ──────────────────────────────────────────
+		// ── Disclosure gate ────────────────────────────────────
+		// Remote calls are blocked until the user explicitly accepts the
+		// disclosure that their data will be sent to a remote provider.
+		// This is a session-local gate — disclosure state is never persisted.
+		if (!this.config.disclosureAccepted) {
+			throw new LogosError(
+				'LOGOS_DISCLOSURE_NOT_ACCEPTED',
+				'llm_provider',
+				'Remote provider calls require explicit disclosure acceptance. ' +
+					'Accept the disclosure before making remote calls to this provider.',
+				{ recoverable: true },
+			);
+		}
+
+		// ── Resolve API key ────────────────────────────────────────
 		const apiKey = resolveApiKey(this.config);
 		if (!apiKey) {
 			throw new LogosError(
