@@ -233,6 +233,22 @@ export type SettingsPanel = {
 };
 
 /**
+ * Recovery actions that may be presented to the user in the error panel.
+ *
+ * Defined here as a presentation-safe contract so the TUI can render
+ * labels without depending on the diagnostics layer.
+ */
+export type ErrorRecoveryAction =
+	| 'retry'
+	| 'reopen_node'
+	| 'open_missing_prerequisite'
+	| 'regenerate_canonical_answer'
+	| 'clear_invalid_active_node'
+	| 'export_recovery_bundle'
+	| 'restore_previous_snapshot'
+	| 'open_settings';
+
+/**
  * Panel shown when the session enters an error mode.
  */
 export type ErrorPanel = {
@@ -243,6 +259,21 @@ export type ErrorPanel = {
 
 	/** Optional recovery hint. */
 	readonly recoveryHint?: string;
+
+	/** Machine-readable error code (e.g., `LOGOS_DISPATCH_NO_PROFILE`). */
+	readonly code?: string;
+
+	/** Error category for display (e.g., `invalid_state`, `persistence`). */
+	readonly category?: string;
+
+	/** Whether the system can attempt guided recovery. */
+	readonly recoverable?: boolean;
+
+	/** Suggested recovery actions the user may take. */
+	readonly recoveryActions?: readonly ErrorRecoveryAction[];
+
+	/** Additional structured context (e.g., affected node IDs). */
+	readonly details?: Record<string, unknown>;
 };
 
 /**

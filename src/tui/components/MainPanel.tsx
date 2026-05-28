@@ -16,6 +16,7 @@ import type { FocusRegion } from '../hooks/use-focus.js';
 import { ActionBar } from './ActionBar.js';
 import { ConversationPanel } from './ConversationPanel.js';
 import { DocumentPreview } from './DocumentPreview.js';
+import { ErrorPanel } from './ErrorPanel.js';
 
 // ─── MainPanel props ────────────────────────────────────────────────────────
 
@@ -187,21 +188,13 @@ export function MainPanel({
 
 		case 'error':
 			return (
-				<Box flexDirection="column" flexGrow={1} paddingX={2}>
-					<Box marginBottom={1}>
-						<Text bold={true} color="red">
-							Error
-						</Text>
-					</Box>
-					<Box marginBottom={1}>
-						<Text color="red">{mainPanel.message}</Text>
-					</Box>
-					{mainPanel.recoveryHint !== undefined && (
-						<Box>
-							<Text dimColor={true}>{mainPanel.recoveryHint}</Text>
-						</Box>
-					)}
-				</Box>
+				<ErrorPanel
+					actionBar={actionBar}
+					focusedActionIndex={focusedActionIndex}
+					focusedRegion={focusedRegion}
+					input={input}
+					panel={mainPanel}
+				/>
 			);
 
 		default:

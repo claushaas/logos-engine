@@ -18,6 +18,7 @@ export {
 	type DiagnosticSeverity,
 } from './diagnostic-collector.js';
 export {
+	getCategoryFromCode,
 	getRecoveryActions,
 	getRecoveryActionsForError,
 	type RecoveryAction,

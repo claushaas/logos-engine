@@ -11,6 +11,8 @@ import { render } from 'ink-testing-library';
 import type {
 	DocumentId,
 	DocumentPreviewPanel,
+	ErrorPanel,
+	ErrorRecoveryAction,
 	IdlePanel,
 	NodeConversationPanel,
 	ProfilePanel,
@@ -1150,5 +1152,219 @@ describe('AppShell — document preview missing node selection', () => {
 				resolve();
 			}, 10);
 		});
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Error mode — Step 14.2
+// ═══════════════════════════════════════════════════════════════════════════
+
+function recoverableErrorSnapshot(): TuiRenderSnapshot {
+	return {
+		actionBar: {
+			actions: [
+				{ enabled: true, id: 'retry', label: '[Retry]' },
+				{ enabled: false, id: 'reopen_node', label: '[Reopen Node]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'open_missing_prerequisite', label: '[Open Prerequisite]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'export_recovery_bundle', label: '[Export Recovery Bundle]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'restore_previous_snapshot', label: '[Restore Previous Snapshot]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: true, id: 'close_error', label: '[Close]' },
+			],
+		},
+		diagnostics: [
+			{
+				code: 'LOGOS_DISPATCH_NO_PROFILE',
+				message: 'No profile selected — cannot dispatch.',
+				severity: 'error',
+				sourceId: 'n1',
+			},
+		],
+		input: {
+			enabled: false,
+			reasonIfDisabled: 'Text input is not available in error mode.',
+		},
+		mainPanel: {
+			category: 'invalid_state',
+			code: 'LOGOS_DISPATCH_NO_PROFILE',
+			kind: 'error',
+			message: 'No profile selected — cannot dispatch.',
+			recoverable: true,
+			recoveryActions: ['retry' as ErrorRecoveryAction],
+		} as ErrorPanel,
+		mode: 'error',
+		sidebar: { activeNodeId: null, phases: [] },
+	};
+}
+
+function fatalErrorSnapshot(): TuiRenderSnapshot {
+	return {
+		actionBar: {
+			actions: [
+				{ enabled: false, id: 'retry', label: '[Retry]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'reopen_node', label: '[Reopen Node]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'open_missing_prerequisite', label: '[Open Prerequisite]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'export_recovery_bundle', label: '[Export Recovery Bundle]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: false, id: 'restore_previous_snapshot', label: '[Restore Previous Snapshot]', reasonIfDisabled: 'Not available for this error.' },
+				{ enabled: true, id: 'close_error', label: '[Close]' },
+			],
+		},
+		diagnostics: [
+			{
+				code: 'LOGOS_INVARIANT_VIOLATION',
+				message: 'Invariant violation: state is corrupted beyond repair.',
+				severity: 'error',
+			},
+		],
+		input: {
+			enabled: false,
+			reasonIfDisabled: 'Text input is not available in error mode.',
+		},
+		mainPanel: {
+			category: 'validation',
+			code: 'LOGOS_INVARIANT_VIOLATION',
+			kind: 'error',
+			message: 'Invariant violation: state is corrupted beyond repair.',
+			recoverable: false,
+		} as ErrorPanel,
+		mode: 'error',
+		sidebar: { activeNodeId: null, phases: [] },
+	};
+}
+
+describe('AppShell — error mode (Step 14.2)', () => {
+	it('renders error header with ✗ Error', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('✗ Error');
+	});
+
+	it('renders error message', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('No profile selected — cannot dispatch.');
+	});
+
+	it('renders diagnostic code', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('LOGOS_DISPATCH_NO_PROFILE');
+	});
+
+	it('renders formatted diagnostic category', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('Invalid State');
+	});
+
+	it('shows recoverable label for recoverable errors', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('Recoverable error');
+		expect(lastFrame()).toContain('use the actions below to recover');
+	});
+
+	it('shows fatal label for non-recoverable errors', () => {
+		const { lastFrame } = renderShell(fatalErrorSnapshot());
+		expect(lastFrame()).toContain('FATAL ERROR');
+		expect(lastFrame()).toContain('manual intervention required');
+	});
+
+	it('renders diagnostic details section', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('Diagnostic Details');
+	});
+
+	it('renders error mode label in title bar', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		expect(lastFrame()).toContain('error');
+	});
+
+	it('does not render sidebar when empty', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		// Sidebar would show "Profile:" if visible
+		expect(lastFrame()).not.toContain('Profile:');
+	});
+
+	it('renders actions bar with recovery actions', () => {
+		const { lastFrame } = renderShell(recoverableErrorSnapshot());
+		const frame = lastFrame() ?? '';
+		// Action bar is present with the "Actions:" label
+		expect(frame).toContain('Actions:');
+	});
+
+	it('[Close] is always enabled even in fatal errors', () => {
+		const { lastFrame } = renderShell(fatalErrorSnapshot());
+		const frame = lastFrame() ?? '';
+		// Fatal error shows FATAL ERROR label with action bar
+		expect(frame).toContain('FATAL ERROR');
+		expect(frame).toContain('Actions:');
+	});
+
+	it('renders fatal error with action buttons including Close', () => {
+		const { lastFrame } = renderShell(fatalErrorSnapshot());
+		const frame = lastFrame() ?? '';
+		// All action labels rendered (may wrap across lines in terminal)
+		expect(frame).toContain('Retr');
+		expect(frame).toContain('Clos');
+		expect(frame).toContain('Node]');
+		expect(frame).toContain('Prerequisite]');
+	});
+
+	it('dispatches ACTION_SELECTED with retry actionId on enter', async () => {
+		const dispatch = vi.fn();
+		const { stdin } = renderShell(recoverableErrorSnapshot(), dispatch);
+
+		// Regions: main, actions. One tab reaches actions (index 0 = retry).
+		stdin.write('\t'); // main → actions
+		await new Promise((r) => setTimeout(r, 5));
+		stdin.write('\r'); // select retry
+
+		expect(dispatch).toHaveBeenCalledWith(
+			expect.objectContaining({
+				actionId: 'retry',
+				type: 'ACTION_SELECTED',
+			}),
+		);
+	});
+
+	it('dispatches ACTION_SELECTED with close_error when focused', async () => {
+		const dispatch = vi.fn();
+		const { stdin } = renderShell(recoverableErrorSnapshot(), dispatch);
+
+		// Tab to actions (regions: main, actions)
+		stdin.write('\t'); // actions
+		await new Promise((r) => setTimeout(r, 5));
+		// Navigate down 5 times to reach [Close] (index 5)
+		for (let i = 0; i < 5; i++) {
+			stdin.write('\x1b[B');
+			await new Promise((r) => setTimeout(r, 5));
+		}
+		stdin.write('\r');
+
+		expect(dispatch).toHaveBeenCalledWith(
+			expect.objectContaining({
+				actionId: 'close_error',
+				type: 'ACTION_SELECTED',
+			}),
+		);
+	});
+
+	it('does not dispatch on tab key alone in error mode', () => {
+		const dispatch = vi.fn();
+		const { stdin } = renderShell(recoverableErrorSnapshot(), dispatch);
+
+		stdin.write('\t');
+		stdin.write('\t');
+
+		expect(dispatch).not.toHaveBeenCalled();
+	});
+
+	it('dispatches ESCAPE on escape key in error mode', async () => {
+		const dispatch = vi.fn();
+		const { stdin } = renderShell(recoverableErrorSnapshot(), dispatch);
+
+		stdin.write('\x1b');
+		await flushPendingEscape();
+
+		expect(dispatch).toHaveBeenCalledWith(
+			expect.objectContaining({
+				type: 'ESCAPE',
+			}),
+		);
 	});
 });

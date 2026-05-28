@@ -15,6 +15,8 @@
 import type {
 	ActionBarRenderAction,
 	ActionBarRenderModel,
+	ErrorPanel,
+	ErrorRecoveryAction,
 	InputRenderModel,
 	LogosProfile,
 	MainPanelRenderModel,
@@ -28,6 +30,7 @@ import type {
 	SidebarRenderModel,
 	TuiRenderSnapshot,
 } from '../contracts/index.js';
+import { getCategoryFromCode, getRecoveryActions } from '../diagnostics/index.js';
 import type { DocumentId, NodeId } from '../shared/index.js';
 import type { StateEngineSnapshot } from '../state-engine/types.js';
 
@@ -95,6 +98,37 @@ const GLOBAL_ACTION_LABEL_MAP: Readonly<Record<GlobalActionId, string>> = {
 	resume_session: '[Resume Session]',
 	select_profile: '[Select Profile]',
 };
+
+// ─── Error recovery action labels ───────────────────────────────────────────
+
+type ErrorActionId =
+	| 'retry'
+	| 'reopen_node'
+	| 'open_missing_prerequisite'
+	| 'export_recovery_bundle'
+	| 'restore_previous_snapshot'
+	| 'close_error';
+
+const ERROR_ACTION_LABEL_MAP: Readonly<Record<ErrorActionId, string>> = {
+	close_error: '[Close]',
+	export_recovery_bundle: '[Export Recovery Bundle]',
+	open_missing_prerequisite: '[Open Prerequisite]',
+	reopen_node: '[Reopen Node]',
+	restore_previous_snapshot: '[Restore Previous Snapshot]',
+	retry: '[Retry]',
+};
+
+/**
+ * All error actions in display order.
+ */
+const ERROR_ACTIONS_ORDER: readonly ErrorActionId[] = [
+	'retry',
+	'reopen_node',
+	'open_missing_prerequisite',
+	'export_recovery_bundle',
+	'restore_previous_snapshot',
+	'close_error',
+];
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Input enabled lifecycles
@@ -332,6 +366,43 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 		return { actions };
 	}
 
+	// ── Error mode: map recovery actions to buttons ─────────────────────
+
+	if (
+		snapshot.mode === 'error' &&
+		snapshot.mainPanel.kind === 'error'
+	) {
+		const suggestedRecovery = new Set<string>(
+			snapshot.mainPanel.recoveryActions ?? [],
+		);
+
+		for (const actionId of ERROR_ACTIONS_ORDER) {
+			if (actionId === 'close_error') {
+				// [Close] is always enabled.
+				actions.push({
+					enabled: true,
+					id: actionId,
+					label: ERROR_ACTION_LABEL_MAP[actionId],
+				});
+			} else {
+				const enabled = suggestedRecovery.has(actionId);
+				const action = {
+					enabled,
+					id: actionId,
+					label: ERROR_ACTION_LABEL_MAP[actionId],
+				};
+				if (!enabled) {
+					(
+						action as { reasonIfDisabled?: string }
+					).reasonIfDisabled = 'Not available for this error.';
+				}
+				actions.push(action as ActionBarRenderAction);
+			}
+		}
+
+		return { actions };
+	}
+
 	// ── Node-focused mode: map allowed node actions ─────────────────────
 
 	if (snapshot.activeNodeState !== null) {
@@ -489,11 +560,57 @@ export function buildRenderSnapshot(
 			}
 		: snapshot;
 
-	const mainPanel: MainPanelRenderModel =
+	let mainPanel: MainPanelRenderModel =
 		patchedSnapshot.mainPanel as MainPanelRenderModel;
 
+	// ── Build an action snapshot that may be enriched below ─────────────
+
+	let actionSnapshot: StateEngineSnapshot = patchedSnapshot;
+
+	// ── Enrich error panel with diagnostics data ────────────────────────
+
+	if (mainPanel.kind === 'error' && snapshot.diagnostics.length > 0) {
+		const firstDiag = snapshot.diagnostics[0]!;
+		const code: string = firstDiag.code;
+		const category: string | null = getCategoryFromCode(code);
+		const recoveryActions = getRecoveryActions(code);
+
+		// Preserve explicit fields from the existing error panel;
+		// only fill in diagnostics-derived data when not already present.
+		const existingCode = mainPanel.code;
+		const existingCategory = mainPanel.category;
+		const existingRecoverable = mainPanel.recoverable;
+		const existingRecoveryActions = mainPanel.recoveryActions;
+
+		const derivedRecoverable =
+			existingRecoverable ?? recoveryActions.length > 0;
+
+		const enriched: ErrorPanel = {
+			...mainPanel,
+			code: existingCode ?? code,
+			recoverable: derivedRecoverable,
+			recoveryActions:
+				existingRecoveryActions ??
+				(recoveryActions as readonly ErrorRecoveryAction[]),
+		};
+
+		// Only set category when not already present and we inferred one.
+		if (existingCategory === undefined && category !== null) {
+			(enriched as { category?: string }).category = category;
+		}
+
+		mainPanel = enriched;
+
+		// Build an enriched snapshot so buildActionBar sees the
+		// recovery actions from the enriched error panel.
+		actionSnapshot = {
+			...patchedSnapshot,
+			mainPanel,
+		};
+	}
+
 	return {
-		actionBar: buildActionBar(patchedSnapshot),
+		actionBar: buildActionBar(actionSnapshot),
 		diagnostics: snapshot.diagnostics as RuntimeDiagnostic[],
 		input: buildInput(snapshot),
 		mainPanel,

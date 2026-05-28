@@ -1205,3 +1205,187 @@ describe('buildRenderSnapshot — document preview', () => {
 		expect(exportAction?.label).toBe('[Export]');
 	});
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Error mode — Step 14.2
+// ═══════════════════════════════════════════════════════════════════════════
+
+function errorSnapshot(
+	code: string,
+	message: string,
+	profile: LogosProfile,
+): StateEngineSnapshot {
+	return {
+		activeNodeId: null,
+		activeNodeState: null,
+		allowedActions: [],
+		diagnostics: [
+			{
+				code,
+				message,
+				severity: 'error',
+			},
+		],
+		mainPanel: {
+			kind: 'error',
+			message,
+		} as MainPanelRenderModel,
+		mode: 'error',
+		selectedProfileId: profile.id,
+		sidebar: {
+			activeNodeId: null,
+			phases: [],
+		},
+	};
+}
+
+describe('buildRenderSnapshot — error mode', () => {
+	it('enriches error panel with code, category, and recovery actions from diagnostics', () => {
+		const profile = testProfile();
+		const snap = errorSnapshot(
+			'LOGOS_DISPATCH_NO_PROFILE',
+			'No profile selected — cannot dispatch.',
+			profile,
+		);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		expect(render.mode).toBe('error');
+
+		const panel = render.mainPanel as ErrorPanel;
+		expect(panel.kind).toBe('error');
+		expect(panel.code).toBe('LOGOS_DISPATCH_NO_PROFILE');
+		expect(panel.category).toBe('invalid_state');
+		expect(panel.recoverable).toBe(true);
+		expect(panel.recoveryActions).toBeDefined();
+		// LOGOS_DISPATCH_NO_PROFILE maps to ['open_settings']
+		expect(panel.recoveryActions).toContain('open_settings');
+	});
+
+	it('builds error action bar with recovery actions from diagnostics', () => {
+		const profile = testProfile();
+		const snap = errorSnapshot(
+			'LOGOS_DISPATCH_NO_PROFILE',
+			'No profile selected — cannot dispatch.',
+			profile,
+		);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		const { actions } = render.actionBar;
+		expect(actions.length).toBeGreaterThan(0);
+
+		// LOGOS_DISPATCH_NO_PROFILE → ['open_settings']
+		// So [open_settings] should be enabled as a recovery action
+		// Note: open_settings is not in the error action bar ids —
+		// it doesn't have a corresponding error action button.
+		// But [Close] should always be enabled
+		const closeAction = actions.find((a) => a.id === 'close_error');
+		expect(closeAction).toBeDefined();
+		expect(closeAction?.enabled).toBe(true);
+		expect(closeAction?.label).toBe('[Close]');
+
+		// Non-suggested actions should be disabled
+		const retryAction = actions.find((a) => a.id === 'retry');
+		expect(retryAction).toBeDefined();
+		expect(retryAction?.enabled).toBe(false);
+	});
+
+	it('preserves explicit error panel fields when already present', () => {
+		const profile = testProfile();
+		const snap: StateEngineSnapshot = {
+			...errorSnapshot(
+				'LOGOS_INVARIANT_VIOLATION',
+				'Invariant violation.',
+				profile,
+			),
+			mainPanel: {
+				code: 'PRESET_CODE',
+				kind: 'error',
+				message: 'Invariant violation.',
+				recoverable: false,
+				recoveryActions: [],
+			} as ErrorPanel,
+		};
+
+		const render = buildRenderSnapshot(snap, profile);
+		const panel = render.mainPanel as ErrorPanel;
+
+		// Preset fields should take priority over diagnostics-derived values
+		expect(panel.code).toBe('PRESET_CODE');
+		expect(panel.recoverable).toBe(false);
+		expect(panel.recoveryActions).toEqual([]);
+	});
+
+	it('pre-populates error action bar with all six actions', () => {
+		const profile = testProfile();
+		const snap = errorSnapshot(
+			'LOGOS_PERSISTENCE_READ_FAILED',
+			'Failed to read snapshot.',
+			profile,
+		);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		const actionIds = render.actionBar.actions.map((a) => a.id);
+		expect(actionIds).toEqual([
+			'retry',
+			'reopen_node',
+			'open_missing_prerequisite',
+			'export_recovery_bundle',
+			'restore_previous_snapshot',
+			'close_error',
+		]);
+	});
+
+	it('sets recoverable to false for unknown error codes', () => {
+		const profile = testProfile();
+		const snap = errorSnapshot(
+			'LOGOS_UNKNOWN_CODE',
+			'An unknown error occurred.',
+			profile,
+		);
+
+		const render = buildRenderSnapshot(snap, profile);
+		const panel = render.mainPanel as ErrorPanel;
+
+		expect(panel.recoverable).toBe(false);
+		expect(panel.recoveryActions).toEqual([]);
+	});
+
+	it('disables all non-close actions for unknown error codes', () => {
+		const profile = testProfile();
+		const snap = errorSnapshot(
+			'LOGOS_UNKNOWN_CODE',
+			'Unknown error.',
+			profile,
+		);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		// Only [Close] should be enabled
+		for (const action of render.actionBar.actions) {
+			if (action.id === 'close_error') {
+				expect(action.enabled).toBe(true);
+			} else {
+				expect(action.enabled).toBe(false);
+			}
+		}
+	});
+
+	it('input is disabled in error mode', () => {
+		const profile = testProfile();
+		const snap = errorSnapshot(
+			'LOGOS_DISPATCH_NO_PROFILE',
+			'No profile selected.',
+			profile,
+		);
+
+		const render = buildRenderSnapshot(snap, profile);
+
+		expect(render.input.enabled).toBe(false);
+		expect(render.input.reasonIfDisabled).toBe(
+			'Text input is not available in error mode.',
+		);
+	});
+});

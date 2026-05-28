@@ -223,6 +223,23 @@ export function getRecoveryActionsForError(
 	return [...(CATEGORY_DEFAULTS[category] ?? [])];
 }
 
+// ─── Public helper ─────────────────────────────────────────────────────────
+
+/**
+ * Infer an error category from the error code prefix.
+ *
+ * Returns a plain string suitable for display in the TUI error panel.
+ * Uses heuristics based on the naming convention observed across the
+ * codebase (e.g., `LOGOS_STATE_*` → `"invalid_state"`,
+ * `LOGOS_PROFILE_*` → `"profile_schema"`, etc.).
+ *
+ * @param code - The error code (e.g., `LOGOS_DISPATCH_NO_PROFILE`).
+ * @returns A category string, or `null` if no prefix matches.
+ */
+export function getCategoryFromCode(code: string): string | null {
+	return inferCategoryFromCode(code);
+}
+
 // ─── Internal helpers ──────────────────────────────────────────────────────
 
 /**
