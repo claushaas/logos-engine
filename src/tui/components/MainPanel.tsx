@@ -13,9 +13,9 @@ import type {
 	MainPanelRenderModel,
 } from '../../contracts/index.js';
 import type { FocusRegion } from '../hooks/use-focus.js';
+import { ActionBar } from './ActionBar.js';
 import { ConversationPanel } from './ConversationPanel.js';
 import { DocumentPreview } from './DocumentPreview.js';
-import { ActionBar } from './ActionBar.js';
 
 // ─── MainPanel props ────────────────────────────────────────────────────────
 
@@ -55,16 +55,21 @@ export function MainPanel({
 					</Box>
 					<Box marginBottom={1}>
 						<Text>
-							LOGOS helps you produce structured documentation
-							through guided conversation. Each decision,
-							assumption, and insight is captured as canonical
-							source material.
+							LOGOS helps you produce structured documentation through guided
+							conversation. Each decision, assumption, and insight is captured
+							as canonical source material.
 						</Text>
 					</Box>
+					{mainPanel.hasAvailableSessions === true && (
+						<Box marginBottom={1}>
+							<Text color="yellow">
+								A previous session is available — select [Resume Session] below
+								to continue where you left off.
+							</Text>
+						</Box>
+					)}
 					<Box>
-						<Text dimColor={true}>
-							To begin, select a project profile.
-						</Text>
+						<Text dimColor={true}>To begin, select a project profile.</Text>
 					</Box>
 					<ActionBar
 						actionBar={actionBar}
@@ -98,24 +103,25 @@ export function MainPanel({
 		// ── Node conversation ────────────────────────────────────────────
 
 		case 'node_conversation': {
-			const convProps = onSelectAction !== undefined
-				? {
-						actionBar,
-						focusedActionIndex,
-						focusedRegion,
-						input,
-						inputValue,
-						onSelectAction,
-						panel: mainPanel,
-				  }
-				: {
-						actionBar,
-						focusedActionIndex,
-						focusedRegion,
-						input,
-						inputValue,
-						panel: mainPanel,
-				  };
+			const convProps =
+				onSelectAction !== undefined
+					? {
+							actionBar,
+							focusedActionIndex,
+							focusedRegion,
+							input,
+							inputValue,
+							onSelectAction,
+							panel: mainPanel,
+						}
+					: {
+							actionBar,
+							focusedActionIndex,
+							focusedRegion,
+							input,
+							inputValue,
+							panel: mainPanel,
+						};
 
 			return <ConversationPanel {...convProps} />;
 		}
@@ -129,9 +135,9 @@ export function MainPanel({
 					focusedActionIndex={focusedActionIndex}
 					focusedRegion={focusedRegion}
 					input={input}
-					panel={mainPanel}
 					onSelectAction={onSelectAction}
 					onSelectMissingNode={onSelectMissingNode}
+					panel={mainPanel}
 				/>
 			);
 
@@ -145,18 +151,16 @@ export function MainPanel({
 					</Box>
 					<Box marginBottom={1}>
 						<Text>
-							Available formats:{' '}
-							{mainPanel.availableFormats.join(', ')}
+							Available formats: {mainPanel.availableFormats.join(', ')}
 						</Text>
 					</Box>
 					{mainPanel.generatedArtifacts.length > 0 && (
-						<Box marginBottom={1} flexDirection="column">
+						<Box flexDirection="column" marginBottom={1}>
 							<Text bold={true}>Generated artifacts:</Text>
 							{mainPanel.generatedArtifacts.map((a) => (
 								<Box key={a.id}>
 									<Text>
-										{a.type} - {a.path}{' '}
-										{a.stale ? '(stale)' : ''}
+										{a.type} - {a.path} {a.stale ? '(stale)' : ''}
 									</Text>
 								</Box>
 							))}
@@ -174,9 +178,7 @@ export function MainPanel({
 						<Text bold={true}>Settings</Text>
 					</Box>
 					<Box>
-						<Text dimColor={true}>
-							Settings panel is not yet implemented.
-						</Text>
+						<Text dimColor={true}>Settings panel is not yet implemented.</Text>
 					</Box>
 				</Box>
 			);
@@ -196,9 +198,7 @@ export function MainPanel({
 					</Box>
 					{mainPanel.recoveryHint !== undefined && (
 						<Box>
-							<Text dimColor={true}>
-								{mainPanel.recoveryHint}
-							</Text>
+							<Text dimColor={true}>{mainPanel.recoveryHint}</Text>
 						</Box>
 					)}
 				</Box>

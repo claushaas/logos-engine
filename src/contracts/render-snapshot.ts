@@ -112,6 +112,15 @@ export type SidebarRenderModel = {
  */
 export type IdlePanel = {
 	readonly kind: 'idle';
+
+	/**
+	 * Whether one or more previous sessions exists on disk.
+	 *
+	 * When `true`, the action bar should offer a `[Resume Session]`
+	 * action. Set by the application layer after checking the
+	 * snapshot store — the state engine does not own this value.
+	 */
+	readonly hasAvailableSessions?: boolean;
 };
 
 /**

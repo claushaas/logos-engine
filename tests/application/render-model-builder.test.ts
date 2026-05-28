@@ -10,9 +10,11 @@
  *  - Input model enabled/disabled per lifecycle.
  */
 import { describe, expect, it } from 'vitest';
-
+import {
+	buildRenderSnapshot,
+	getStatusSymbolForLifecycle,
+} from '../../src/application/index.js';
 import type {
-	ActionBarRenderAction,
 	DocumentPreviewPanel,
 	IdlePanel,
 	LogosProfile,
@@ -20,17 +22,9 @@ import type {
 	NodeAction,
 	NodeConversationPanel,
 	ProfilePanel,
-	SidebarNode,
 } from '../../src/contracts/index.js';
 import type { DocumentId, NodeId, ProfileId } from '../../src/shared/index.js';
-import type {
-	StateDiagnostic,
-	StateEngineSnapshot,
-} from '../../src/state-engine/types.js';
-import {
-	buildRenderSnapshot,
-	getStatusSymbolForLifecycle,
-} from '../../src/application/index.js';
+import type { StateEngineSnapshot } from '../../src/state-engine/types.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Fixtures
@@ -111,9 +105,7 @@ function idleSnapshot(): StateEngineSnapshot {
 /**
  * Create a structure-overview snapshot with profile selected.
  */
-function structureOverviewSnapshot(
-	profile: LogosProfile,
-): StateEngineSnapshot {
+function structureOverviewSnapshot(profile: LogosProfile): StateEngineSnapshot {
 	return {
 		activeNodeId: null,
 		activeNodeState: null,
@@ -265,18 +257,14 @@ describe('buildRenderSnapshot — idle mode', () => {
 		expect(render.sidebar.profileTitle).toBeUndefined();
 	});
 
-	it('produces deterministic global actions', () => {
+	it('produces deterministic global actions when no sessions available', () => {
 		const profile = testProfile();
 		const snap = idleSnapshot();
 
 		const render = buildRenderSnapshot(snap, profile);
 
 		const ids = render.actionBar.actions.map((a) => a.id);
-		expect(ids).toEqual([
-			'select_profile',
-			'import_context',
-			'open_settings',
-		]);
+		expect(ids).toEqual(['select_profile', 'import_context', 'open_settings']);
 
 		const labels = render.actionBar.actions.map((a) => a.label);
 		expect(labels).toEqual([
@@ -288,6 +276,41 @@ describe('buildRenderSnapshot — idle mode', () => {
 		for (const action of render.actionBar.actions) {
 			expect(action.enabled).toBe(true);
 		}
+
+		// mainPanel should not have hasAvailableSessions flag.
+		if (render.mainPanel.kind === 'idle') {
+			expect(render.mainPanel.hasAvailableSessions).toBeFalsy();
+		}
+	});
+
+	it('shows [Resume Session] action when hasAvailableSessions is true', () => {
+		const profile = testProfile();
+		const snap = idleSnapshot();
+
+		const render = buildRenderSnapshot(snap, profile, {
+			hasAvailableSessions: true,
+		});
+
+		const ids = render.actionBar.actions.map((a) => a.id);
+		expect(ids).toEqual([
+			'resume_session',
+			'select_profile',
+			'import_context',
+			'open_settings',
+		]);
+
+		const labels = render.actionBar.actions.map((a) => a.label);
+		expect(labels).toEqual([
+			'[Resume Session]',
+			'[Select Profile]',
+			'[Import Context]',
+			'[Settings]',
+		]);
+
+		// mainPanel should carry the flag.
+		if (render.mainPanel.kind === 'idle') {
+			expect(render.mainPanel.hasAvailableSessions).toBe(true);
+		}
 	});
 
 	it('has input disabled', () => {
@@ -297,9 +320,7 @@ describe('buildRenderSnapshot — idle mode', () => {
 		const render = buildRenderSnapshot(snap, profile);
 
 		expect(render.input.enabled).toBe(false);
-		expect(render.input.reasonIfDisabled).toBe(
-			'Select a profile to begin.',
-		);
+		expect(render.input.reasonIfDisabled).toBe('Select a profile to begin.');
 	});
 
 	it('has empty diagnostics when snapshot has none', () => {
@@ -407,7 +428,8 @@ describe('buildRenderSnapshot — node focus (synthesized)', () => {
 					acceptedAt: null,
 					assumptions: [],
 					confidence: 'medium',
-					content: 'The core thesis is that skill-based evaluation should replace credential-based hiring.',
+					content:
+						'The core thesis is that skill-based evaluation should replace credential-based hiring.',
 					generatedAt: '2025-01-15T10:00:00.000Z',
 					generatedFromMessageIds: [],
 					id: 'ca-1',
@@ -434,8 +456,8 @@ describe('buildRenderSnapshot — node focus (synthesized)', () => {
 					facts: [],
 					risks: [],
 				},
-				lastUserMessageId: undefined,
 				lastAssistantMessageId: undefined,
+				lastUserMessageId: undefined,
 				lifecycle: 'synthesized',
 				nodeId: 'n1' as NodeId,
 				promptState: 'review',
@@ -595,8 +617,8 @@ describe('buildRenderSnapshot — blocked node', () => {
 					facts: [],
 					risks: [],
 				},
-				lastUserMessageId: undefined,
 				lastAssistantMessageId: undefined,
+				lastUserMessageId: undefined,
 				lifecycle: 'blocked',
 				nodeId: 'n2' as NodeId,
 				promptState: 'blocked',
@@ -785,8 +807,8 @@ describe('buildRenderSnapshot — input model per lifecycle', () => {
 					facts: [],
 					risks: [],
 				},
-				lastUserMessageId: undefined,
 				lastAssistantMessageId: undefined,
+				lastUserMessageId: undefined,
 				lifecycle: lifecycle as never,
 				nodeId: 'n1' as NodeId,
 				promptState: 'follow_up' as never,
@@ -828,44 +850,66 @@ describe('buildRenderSnapshot — input model per lifecycle', () => {
 	}
 
 	it('enables input for not_started', () => {
-		const snap = snapshotForLifecycle('not_started', ['answer', 'skip', 'ask_for_example'] as NodeAction[]);
+		const snap = snapshotForLifecycle('not_started', [
+			'answer',
+			'skip',
+			'ask_for_example',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(true);
 		expect(render.input.submitAction).toBe('answer');
 	});
 
 	it('enables input for active', () => {
-		const snap = snapshotForLifecycle('active', ['answer', 'defer'] as NodeAction[]);
+		const snap = snapshotForLifecycle('active', [
+			'answer',
+			'defer',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(true);
 	});
 
 	it('enables input for answered', () => {
-		const snap = snapshotForLifecycle('answered', ['answer', 'defer'] as NodeAction[]);
+		const snap = snapshotForLifecycle('answered', [
+			'answer',
+			'defer',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(true);
 	});
 
 	it('enables input for needs_clarification', () => {
-		const snap = snapshotForLifecycle('needs_clarification', ['answer', 'defer'] as NodeAction[]);
+		const snap = snapshotForLifecycle('needs_clarification', [
+			'answer',
+			'defer',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(true);
 	});
 
 	it('enables input for needs_refinement', () => {
-		const snap = snapshotForLifecycle('needs_refinement', ['answer', 'defer'] as NodeAction[]);
+		const snap = snapshotForLifecycle('needs_refinement', [
+			'answer',
+			'defer',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(true);
 	});
 
 	it('disables input for synthesized', () => {
-		const snap = snapshotForLifecycle('synthesized', ['accept', 'edit'] as NodeAction[]);
+		const snap = snapshotForLifecycle('synthesized', [
+			'accept',
+			'edit',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(false);
 	});
 
 	it('disables input for accepted', () => {
-		const snap = snapshotForLifecycle('accepted', ['continue_next', 'reopen'] as NodeAction[]);
+		const snap = snapshotForLifecycle('accepted', [
+			'continue_next',
+			'reopen',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(false);
 		expect(render.input.reasonIfDisabled).toBe(
@@ -874,20 +918,28 @@ describe('buildRenderSnapshot — input model per lifecycle', () => {
 	});
 
 	it('disables input for deferred', () => {
-		const snap = snapshotForLifecycle('deferred', ['resume', 'continue_next'] as NodeAction[]);
+		const snap = snapshotForLifecycle('deferred', [
+			'resume',
+			'continue_next',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(false);
 	});
 
 	it('disables input for blocked', () => {
-		const snap = snapshotForLifecycle('blocked', ['open_prerequisite'] as NodeAction[]);
+		const snap = snapshotForLifecycle('blocked', [
+			'open_prerequisite',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(false);
 	});
 
 	it('disables input when answer not in allowedActions even with valid lifecycle', () => {
 		// Edge case: active lifecycle but 'answer' not allowed (shouldn't normally happen)
-		const snap = snapshotForLifecycle('active', ['defer', 'mark_as_assumption'] as NodeAction[]);
+		const snap = snapshotForLifecycle('active', [
+			'defer',
+			'mark_as_assumption',
+		] as NodeAction[]);
 		const render = buildRenderSnapshot(snap, testProfile());
 		expect(render.input.enabled).toBe(false);
 	});
@@ -942,8 +994,8 @@ describe('buildRenderSnapshot — action labels match Appendix A', () => {
 						facts: [],
 						risks: [],
 					},
-					lastUserMessageId: undefined,
 					lastAssistantMessageId: undefined,
+					lastUserMessageId: undefined,
 					lifecycle: 'active',
 					nodeId: 'n1' as NodeId,
 					promptState: 'follow_up',
@@ -1015,8 +1067,8 @@ describe('buildRenderSnapshot — action labels match Appendix A', () => {
 					facts: [],
 					risks: [],
 				},
-				lastUserMessageId: undefined,
 				lastAssistantMessageId: undefined,
+				lastUserMessageId: undefined,
 				lifecycle: 'ready_for_synthesis',
 				nodeId: 'n1' as NodeId,
 				promptState: 'synthesis',
@@ -1123,11 +1175,7 @@ describe('buildRenderSnapshot — document preview', () => {
 		expect(render.actionBar.actions.length).toBe(3);
 
 		const labels = render.actionBar.actions.map((a) => a.label);
-		expect(labels).toEqual([
-			'[Regenerate]',
-			'[Export]',
-			'[Close]',
-		]);
+		expect(labels).toEqual(['[Regenerate]', '[Export]', '[Close]']);
 	});
 
 	it('disables export when document is not export-eligible', () => {

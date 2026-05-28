@@ -83,11 +83,16 @@ const ACTION_LABEL_MAP: Readonly<Record<NodeAction, string>> = {
 
 // ─── Global (non-node) actions for structural modes ─────────────────────────
 
-type GlobalActionId = 'select_profile' | 'import_context' | 'open_settings';
+type GlobalActionId =
+	| 'select_profile'
+	| 'import_context'
+	| 'open_settings'
+	| 'resume_session';
 
 const GLOBAL_ACTION_LABEL_MAP: Readonly<Record<GlobalActionId, string>> = {
 	import_context: '[Import Context]',
 	open_settings: '[Settings]',
+	resume_session: '[Resume Session]',
 	select_profile: '[Select Profile]',
 };
 
@@ -166,9 +171,7 @@ function buildSidebar(
 	for (const phaseDef of sortedPhases) {
 		const phaseDocs: SidebarDocument[] = [];
 
-		for (const docDef of sortedDocs.filter(
-			(d) => d.phaseId === phaseDef.id,
-		)) {
+		for (const docDef of sortedDocs.filter((d) => d.phaseId === phaseDef.id)) {
 			const existingDocStatus = docStatusMap.get(docDef.id);
 			const docNodes: SidebarNode[] = [];
 
@@ -204,7 +207,7 @@ function buildSidebar(
 					}
 				} else {
 					// No existing state — default to not_started
-					statusSymbol = STATUS_SYMBOL_MAP['not_started'];
+					statusSymbol = STATUS_SYMBOL_MAP.not_started;
 					disabled = false;
 					reasonIfDisabled = undefined;
 				}
@@ -218,14 +221,14 @@ function buildSidebar(
 								selected: isActive,
 								statusSymbol,
 								title: nodeDef.title,
-						  }
+							}
 						: {
 								disabled,
 								nodeId: nodeDef.id,
 								selected: isActive,
 								statusSymbol,
 								title: nodeDef.title,
-						  },
+							},
 				);
 			}
 
@@ -279,11 +282,21 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 	// ── Idle mode: global deterministic actions ─────────────────────────
 
 	if (snapshot.mode === 'idle') {
-		for (const id of [
+		const globalIds: GlobalActionId[] = [
 			'select_profile',
 			'import_context',
 			'open_settings',
-		] as GlobalActionId[]) {
+		];
+
+		// Add [Resume Session] when previous sessions exist.
+		if (
+			snapshot.mainPanel.kind === 'idle' &&
+			snapshot.mainPanel.hasAvailableSessions === true
+		) {
+			globalIds.unshift('resume_session');
+		}
+
+		for (const id of globalIds) {
 			actions.push({
 				enabled: true,
 				id,
@@ -296,7 +309,10 @@ function buildActionBar(snapshot: StateEngineSnapshot): ActionBarRenderModel {
 
 	// ── Document preview mode: regenerate, export, close ───────────────
 
-	if (snapshot.mode === 'document_preview' && snapshot.mainPanel.kind === 'document_preview') {
+	if (
+		snapshot.mode === 'document_preview' &&
+		snapshot.mainPanel.kind === 'document_preview'
+	) {
 		actions.push({
 			enabled: true,
 			id: 'regenerate_document',
@@ -411,19 +427,32 @@ function formatDisabledInput(mode: SessionMode): InputRenderModel {
 function reasonForDisabledInput(lifecycle: NodeLifecycle): string {
 	const reasonMap: Readonly<Partial<Record<NodeLifecycle, string>>> = {
 		accepted: 'This node has been accepted. Reopen to edit.',
-		blocked:
-			'This node is blocked by unmet prerequisites. Resolve them first.',
+		blocked: 'This node is blocked by unmet prerequisites. Resolve them first.',
 		deferred: 'This node has been deferred. Resume to continue.',
 		synthesized:
 			'Review the draft answer before providing input. Accept, edit, or regenerate.',
 	};
 
-	return reasonMap[lifecycle] ?? `Text input is not available in the current state (${lifecycle}).`;
+	return (
+		reasonMap[lifecycle] ??
+		`Text input is not available in the current state (${lifecycle}).`
+	);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Public API
 // ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Options for `buildRenderSnapshot`.
+ *
+ * The application layer may inject session-awareness flags that the
+ * state engine does not own (e.g., whether resumable sessions exist).
+ */
+export type BuildRenderSnapshotOptions = {
+	/** Whether one or more previous session snapshots exist on disk. */
+	readonly hasAvailableSessions?: boolean;
+};
 
 /**
  * Build a `TuiRenderSnapshot` — the fully-specified render model consumed
@@ -434,17 +463,40 @@ function reasonForDisabledInput(lifecycle: NodeLifecycle): string {
  *
  * @param snapshot - The domain snapshot produced by the state engine.
  * @param profile  - The loaded profile definition (for structural ordering).
+ * @param options  - Optional flags for session-awareness (e.g., resume).
  * @returns A complete `TuiRenderSnapshot` ready for TUI rendering.
  */
 export function buildRenderSnapshot(
 	snapshot: StateEngineSnapshot,
 	profile: LogosProfile,
+	options: BuildRenderSnapshotOptions = {},
 ): TuiRenderSnapshot {
+	// If the main panel is idle and we have available sessions,
+	// inject the flag into the idle panel so the action bar can
+	// surface the [Resume Session] action.
+	const hasAvailableSessions =
+		snapshot.mainPanel.kind === 'idle' && options.hasAvailableSessions === true;
+
+	// Clone the snapshot with the flag injected so buildActionBar
+	// and buildMainPanel can see it.
+	const patchedSnapshot: StateEngineSnapshot = hasAvailableSessions
+		? {
+				...snapshot,
+				mainPanel: {
+					...snapshot.mainPanel,
+					hasAvailableSessions: true,
+				},
+			}
+		: snapshot;
+
+	const mainPanel: MainPanelRenderModel =
+		patchedSnapshot.mainPanel as MainPanelRenderModel;
+
 	return {
-		actionBar: buildActionBar(snapshot),
+		actionBar: buildActionBar(patchedSnapshot),
 		diagnostics: snapshot.diagnostics as RuntimeDiagnostic[],
 		input: buildInput(snapshot),
-		mainPanel: snapshot.mainPanel as MainPanelRenderModel,
+		mainPanel,
 		mode: snapshot.mode,
 		sidebar: buildSidebar(snapshot, profile),
 	};

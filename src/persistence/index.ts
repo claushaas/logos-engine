@@ -21,6 +21,22 @@ export {
 	getEvents,
 	getEventsByType,
 } from './event-log.js';
+export type { MigrationError } from './migrations.js';
+export {
+	DEFAULT_MIGRATIONS,
+	runMigrations,
+} from './migrations.js';
+export type {
+	ResumeDiagnostic,
+	ResumeError,
+	ResumeResult,
+	ResumeSessionOptions,
+} from './session-resume.js';
+export {
+	hasResumableSessions,
+	resumeSession,
+	resumeSessionWithDiagnostics,
+} from './session-resume.js';
 export type {
 	CreateSnapshotStoreOptions,
 	PersistenceError,
