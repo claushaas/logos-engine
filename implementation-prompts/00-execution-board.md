@@ -6,7 +6,7 @@ Linear step-by-step execution.
 
 ## Current Recommended Step
 
-Step 14.2 — Implement error mode rendering in TUI
+Step 15.2 — Implement contract and schema tests
 
 ## Status Legend
 
@@ -82,7 +82,7 @@ Step 14.2 — Implement error mode rendering in TUI
 | Phase 13 | 13.3 | Implement session resume with validation and repair | ✅ | `phase-13/step-13.3-implement-session-resume-with-validation-and-repair.md` | `feat/step-13-3-session-resume` | `feat(persistence): implement session resume with validation and repair` | `pnpm typecheck`, `pnpm test`, `pnpm check` | yes | yes — `@juicesharp/rpiv-advisor` | Core user need; checkpoint Phase 13 |
 | Phase 14 | 14.1 | Implement error categorization and diagnostic reporting | ✅ | `phase-14/step-14.1-implement-error-categorization-and-diagnostic-reporting.md` | `feat/step-14-1-error-categorization` | `feat(diagnostics): implement error categorization and reporting` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Unified error handling |
 | Phase 14 | 14.2 | Implement error mode rendering in TUI | ✅ | `phase-14/step-14.2-implement-error-mode-rendering-in-tui.md` | `feat/step-14-2-error-rendering` | `feat(tui): implement error mode rendering` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | ErrorPanel component + render-model enrichment; typecheck/test passing; checkpoint Phase 14 |
-| Phase 15 | 15.1 | Implement transition matrix tests | ⏳ | `phase-15/step-15.1-implement-transition-matrix-tests.md` | `test/step-15-1-transition-matrix` | `test(state-engine): add transition matrix tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | 100 lifecycle transition combinations |
+| Phase 15 | 15.1 | Implement transition matrix tests | 🟡 | `phase-15/step-15.1-implement-transition-matrix-tests.md` | `test/step-15-1-transition-matrix` | `test(state-engine): add transition matrix tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | 100 lifecycle transition combinations |
 | Phase 15 | 15.2 | Implement contract and schema tests | ⏳ | `phase-15/step-15.2-implement-contract-and-schema-tests.md` | `test/step-15-2-contract-schema` | `test(contracts): add contract and schema tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Runtime schema validation |
 | Phase 15 | 15.3 | Implement persistence round-trip tests | ⏳ | `phase-15/step-15.3-implement-persistence-round-trip-tests.md` | `test/step-15-3-persistence-roundtrip` | `test(persistence): add round-trip tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Save/load integrity |
 | Phase 15 | 15.4 | Implement materialization tests | ⏳ | `phase-15/step-15.4-implement-materialization-tests.md` | `test/step-15-4-materialization` | `test(materialization): add materialization tests` | `pnpm typecheck`, `pnpm test` | yes | yes — `@juicesharp/rpiv-advisor` | Document generation correctness; checkpoint Phase 15 |
