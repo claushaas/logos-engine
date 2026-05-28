@@ -1,0 +1,296 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`State 3.1 — Idle / No Active Node > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Welcome to LOGOS Engine
+
+  LOGOS helps you produce structured documentation through guided conversation. Each decision,
+  assumption, and insight is captured as canonical source material.
+
+  To begin, select a project profile.
+
+  Actions:  [Select Profile]  [Import Context]  [Settings]"
+`;
+
+exports[`State 3.2 — Structure Overview > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — structure_overview                                                                │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────┐  Structure Overview
+│Profile: Startup              │
+│                              │  Profile: Startup — 3/12 nodes accepted
+│▾ 01 Foundation               │
+│  ▾ Thesis                    │  Select a node from the sidebar to begin.
+│    ○ Core Thesis             │
+│    ○ Central Tension         │
+│    ✓ What This Is Not        │
+└──────────────────────────────┘"
+`;
+
+exports[`State 3.3 — Not Started > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup       │
+│                       │ Core Thesis — ○ Not started
+│▾ 01 Foundation        │
+│  ▾ Thesis             │ Agent
+│    ○ Core Thesis ◀    │
+│    ○ Central Tension  │ What conviction makes this project necessary? What truth about the world
+│    ○ What This Is     │ drives the decision to build this?
+│Not                    │
+│                       │
+│                       │ Actions:  [Answer]  [Skip]  [Ask for example]
+│                       │
+│                       │ ╭───────────────────────────────────────────────────────────────────────╮
+│                       │ │ >>> Type your answer…                                                 │
+└───────────────────────┘ ╰───────────────────────────────────────────────────────────────────────╯"
+`;
+
+exports[`State 3.4 — Active / In Progress > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup      │
+│                      │ Core Thesis — ◐ In progress
+│▾ 01 Foundation       │
+│  ▾ Thesis            │ ─── History ───
+│    ◐ Core Thesis ◀   │
+│    ○ Central         │ Yo: We believe the current hiring process filters for credentials instead
+│Tension               │   of competence. The world is shifting toward skill-based evaluation but
+│    ○ What This Is    │   tools haven't caught up.
+│Not                   │
+│                      │ Agent
+│                      │
+│                      │ That's a clear conviction. Is the tension primarily that hiring is slow,
+│                      │ that it's unfair, or that it produces bad outcomes?
+│                      │
+│                      │
+│                      │ Actions:  [Answer]  [Defer]  [Mark as Assumption]  [Mark as Decision]
+│                      │
+│                      │ ╭────────────────────────────────────────────────────────────────────────╮
+│                      │ │ >>> Type your answer…                                                  │
+└──────────────────────┘ ╰────────────────────────────────────────────────────────────────────────╯"
+`;
+
+exports[`State 3.5 — Needs Clarification > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup     │
+│                     │ Core Thesis — ? Needs clarification
+│▾ 01 Foundation      │
+│  ▾ Thesis           │ ─── History ───
+│    ? Core Thesis ◀  │
+│    ○ Central        │ Agent: You mentioned the product is for "everyone" but also mentioned
+│Tension              │      "technical teams." These point in different directions.
+│                     │
+│                     │ Agent
+│                     │
+│                     │ Who is the primary user you're building for first?
+│                     │
+│                     │
+│                     │ Actions:  [Answer]  [Defer]  [Open Prerequisite]
+│                     │
+│                     │ ╭─────────────────────────────────────────────────────────────────────────╮
+│                     │ │ >>> Type your answer…                                                   │
+└─────────────────────┘ ╰─────────────────────────────────────────────────────────────────────────╯"
+`;
+
+exports[`State 3.6 — Needs Refinement > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup     │
+│                     │ Core Thesis — △ Needs refinement
+│▾ 01 Foundation      │
+│  ▾ Thesis           │ ─── History ───
+│    △ Core Thesis ◀  │
+│    ○ Central        │ Agen: Your thesis is clear but could apply to any startup. What makes this
+│Tension              │      conviction specific to your project?
+│                     │
+│                     │ Agent
+│                     │
+│                     │ For example, is there a personal experience, a dataset, or a market shift
+│                     │ that only you've observed?
+│                     │
+│                     │
+│                     │ Actions:  [Answer]  [Defer]  [Ask for example]
+│                     │
+│                     │ ╭─────────────────────────────────────────────────────────────────────────╮
+│                     │ │ >>> Type your answer…                                                   │
+└─────────────────────┘ ╰─────────────────────────────────────────────────────────────────────────╯"
+`;
+
+exports[`State 3.7 — Synthesized / Awaiting Review > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup      │
+│                      │ Core Thesis — ◆ Awaiting review
+│▾ 01 Foundation       │
+│  ▾ Thesis            │ ─── History ───
+│    ◆ Core Thesis ◀   │
+│    ○ Central Tension │ Agent: What is your core thesis?
+│                      │
+│                      │ You: We believe in skill-based evaluation.
+│                      │
+│                      │
+│                      │ ┌────────────────────────────────────────────────────────────────────────┐
+│                      │ │ CANONICAL ANSWER (DRAFT)                                               │
+│                      │ │                                                                        │
+│                      │ │ The hiring industry evaluates credentials over competence and          │
+│                      │ │ pedigree over demonstrated ability. As work becomes more               │
+│                      │ │ project-based and remote, skill verification is the bottleneck. This   │
+│                      │ │ project exists to make skill-based evaluation the default.             │
+│                      │ │                                                                        │
+│                      │ │ Confidence: medium · Generated from 8 messages                         │
+│                      │ └────────────────────────────────────────────────────────────────────────┘
+│                      │
+│                      │
+└──────────────────────┘ Actions:  [Accept]  [Edit]  [Regenerate]  [Defer]  [Reopen]"
+`;
+
+exports[`State 3.8 — Accepted > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup      │
+│                      │ Core Thesis — ✓ Accepted
+│▾ 01 Foundation       │
+│  ▾ Thesis            │ ─── History ───
+│    ✓ Core Thesis ◀   │
+│    ○ Central Tension │ Agent: What is your core thesis?
+│                      │
+│                      │ You: We believe in skill-based evaluation.
+│                      │
+│                      │ Agent
+│                      │
+│                      │ Core thesis accepted.
+│                      │
+│                      │
+│                      │ ┌────────────────────────────────────────────────────────────────────────┐
+│                      │ │ CANONICAL ANSWER (ACCEPTED)                                            │
+│                      │ │                                                                        │
+│                      │ │ The hiring industry evaluates credentials over competence. As work     │
+│                      │ │ becomes more project-based and remote, skill verification is the       │
+│                      │ │ bottleneck. This project exists to make skill-based evaluation the     │
+│                      │ │ default.                                                               │
+│                      │ │                                                                        │
+│                      │ │ Confidence: medium · Generated from 8 messages                         │
+│                      │ └────────────────────────────────────────────────────────────────────────┘
+│                      │
+│                      │
+└──────────────────────┘ Actions:  [Continue →]  [Reopen]  [Preview Document]"
+`;
+
+exports[`State 3.9 — Deferred > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────┐ Foundation / Thesis / Core Thesis
+│Profile: Startup        │
+│                        │ Core Thesis — ⏸ Deferred
+│▾ 01 Foundation         │
+│  ▾ Thesis              │ Agent
+│    ⏸ Core Thesis ◀     │
+│    ○ Central Tension   │ This node has been deferred. You can resume it when ready, or continue
+│                        │ with other nodes.
+│                        │
+│                        │
+└────────────────────────┘ Actions:  [Resume]  [Continue →]"
+`;
+
+exports[`State 3.10 — Blocked > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — node_focus                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────┐ Validation / Core Assumptions
+│Profile: Startup      │
+│                      │ Core Assumptions — ⚠ Blocked
+│▾ 01 Foundation       │
+│  ▾ Thesis            │ Agent
+│    ✓ Core Thesis     │
+│    ⚠ Core            │ This node depends on your Core Thesis, which must be accepted first. The
+│Assumptions ◀         │ assumptions you make here need a clear thesis as context.
+│     (Blocked by      │
+│     prerequisite.)   │
+└──────────────────────┘ Actions:  [Open Prerequisite]  [Defer]"
+`;
+
+exports[`State 3.11 — Document Preview > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — document_preview                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Document: Foundation Thesis                                                                      │
+│                                                                                                  │
+│ Foundation Thesis                                                                                │
+│                                                                                                  │
+│                                                                                                  │
+│                                                                                                  │
+│ Core Thesis ✓                                                                                    │
+│                                                                                                  │
+│ The hiring industry evaluates credentials over competence and pedigree over demonstrated         │
+│ ability. This structural mismatch creates inefficiency, bias, and poor outcomes.                 │
+│                                                                                                  │
+│                                                                                                  │
+│ Central Tension ✓                                                                                │
+│                                                                                                  │
+│ There is a fundamental misalignment between how companies signal quality (credentials) and how   │
+│ they actually assess it (work samples, past performance).                                        │
+│                                                                                                  │
+│                                                                                                  │
+│ What This Is Not ✓                                                                               │
+│                                                                                                  │
+│                                                                                                  │
+│ Missing required nodes:                                                                          │
+│ [1] → problem.core                                                                               │
+│                                                                                                  │
+│ Page 1/2 (n/p to navigate)                                                                       │
+│                                                                                                  │
+│                                                                                                  │
+│ Actions:  [Regenerate]  [Export]  [Close]                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘"
+`;
+
+exports[`State 3.12 — Export / Outcome Generation > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — export                                                                            │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Export Outcomes
+
+  Available Exports
+
+   Markdown ✓
+   Canonical documentation in portable Markdown format.
+
+   HTML ✓
+   Styled documentation as a standalone HTML artifact.
+
+   Agent Pack ⚠
+   Portable context package for downstream AI agents.
+   Blocked: Blocked: Product Phase missing 4/6 required nodes.
+
+
+
+
+  Actions:  [Export Markdown]  [Export HTML]  [Export Agent Pack]  [Close]"
+`;
+
+exports[`State 3.13 — Settings / Config > matches full frame snapshot 1`] = `
+"┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ LOGOS Engine — settings                                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Settings
+
+  Settings panel is not yet implemented."
+`;
