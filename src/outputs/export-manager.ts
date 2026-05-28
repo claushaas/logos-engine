@@ -7,8 +7,7 @@
  * incomplete or stale documents show as unavailable with a concrete
  * blocked reason.
  *
- * Markdown and HTML share the same readiness gate; Agent Pack is a
- * placeholder (Phase 17).
+ * Markdown, HTML, and Agent Pack all share the same readiness gate.
  *
  * Pure function — no side effects, no state mutation.
  *
@@ -92,7 +91,7 @@ export function getAvailableExports(
 		const docDef = profile.documents.find((d) => d.id === documentId);
 		const title = docDef?.title ?? String(documentId);
 
-		// Compute a single readiness verdict shared by Markdown and HTML.
+		// Compute a single readiness verdict shared by all export formats.
 		let documentExportAvailable = false;
 		let blockedReason: string | undefined;
 
@@ -163,14 +162,18 @@ export function getAvailableExports(
 		}
 		results.push(htmlEntry);
 
-		// ── Agent Pack: placeholder — Phase 17 ───────────────────────
-		results.push({
-			available: false,
-			blockedReason: 'Agent Pack export is not yet implemented (Phase 17).',
+		// ── Agent Pack: same gates as Markdown/HTML — Phase 17 ─────
+		const agentPackEntry: ExportAvailability = {
+			available: documentExportAvailable,
 			documentId,
 			documentTitle: title,
 			format: 'agent_pack',
-		});
+		};
+		if (!documentExportAvailable && blockedReason !== undefined) {
+			(agentPackEntry as { blockedReason?: string }).blockedReason =
+				blockedReason;
+		}
+		results.push(agentPackEntry);
 	}
 
 	return results;

@@ -2,6 +2,7 @@
  * Outputs module — export management and artifact generation.
  *
  * Provides:
+ * - `exportAgentPack()` — write portable AI agent context as `.json` files.
  * - `exportMarkdown()` — write materialized documents to `.md` files.
  * - `exportHtml()` — write materialized documents to `.html` files.
  * - `getAvailableExports()` — evaluate export availability across all
@@ -11,6 +12,7 @@
  * @see {@link https://logos-engine/docs/13-prototypes.md §4.8}
  */
 
+export { exportAgentPack } from './agent-pack-exporter.js';
 export type { ExportAvailability } from './export-manager.js';
 export { getAvailableExports } from './export-manager.js';
 export { exportHtml } from './html-exporter.js';

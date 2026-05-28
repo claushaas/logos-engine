@@ -301,7 +301,7 @@ describe('getAvailableExports', () => {
 		expect(htmlEntry!.blockedReason).toBeDefined();
 	});
 
-	it('marks Agent Pack as unavailable with placeholder reason', () => {
+	it('marks Agent Pack as available when document is ready', () => {
 		const profile = testProfile();
 		const state = stateWithNodes([
 			acceptedNodeState('node-a' as NodeId, 'Content.'),
@@ -315,8 +315,7 @@ describe('getAvailableExports', () => {
 				e.format === 'agent_pack',
 		);
 		expect(apEntry).toBeDefined();
-		expect(apEntry!.available).toBe(false);
-		expect(apEntry!.blockedReason).toMatch(/not yet implemented|Phase 17/i);
+		expect(apEntry!.available).toBe(true);
 	});
 
 	// ── AC: Each document gets all three format entries ───────────
