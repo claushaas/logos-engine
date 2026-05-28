@@ -182,7 +182,9 @@ pnpm check  # typecheck + lint + test — exits 0
 
 ## 8. Recommendations for Next Phase
 
-1. Wire a real LLM provider (OpenAI or Anthropic adapter).
+1. Wire a real LLM provider (OpenAI or Anthropic adapter). See
+   `docs/14-real-llm-integration-plan.md` and
+   `docs/15-real-llm-implementation-roadmap.md`.
 2. Implement the 8 `it.todo` tests in stub files.
 3. Raise `snapshot-builder.ts` branch coverage above 80%.
 4. Add lifecycle-specific rendering tests for all 10 lifecycle states.

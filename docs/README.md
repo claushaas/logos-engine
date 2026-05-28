@@ -26,6 +26,8 @@ The TUI is not a form-based questionnaire. The sidebar is a navigable structural
 11-conversation-quality-and-completeness.md
 12-implementation-roadmap.md
 13-prototypes.md
+14-real-llm-integration-plan.md
+15-real-llm-implementation-roadmap.md
 ```
 
 ## Reading Order
@@ -43,3 +45,5 @@ The TUI is not a form-based questionnaire. The sidebar is a navigable structural
 11. `11-conversation-quality-and-completeness.md` — sufficiency and quality rules.
 12. `12-implementation-roadmap.md` — implementation plan.
 13. `13-prototypes.md` — rendered wireframes, state prototypes, and flow walkthroughs.
+14. `14-real-llm-integration-plan.md` — plan for replacing mock-only AI with real provider integration.
+15. `15-real-llm-implementation-roadmap.md` — step-by-step roadmap for real LLM implementation.
