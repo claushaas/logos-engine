@@ -31,6 +31,7 @@ import { resumeSessionWithDiagnostics } from '../persistence/session-resume.js';
 import { getProfile } from '../profiles/index.js';
 import type { PromptRegistry } from '../prompt-orchestration/prompt-registry.js';
 import { PromptRegistry as PromptRegistryClass } from '../prompt-orchestration/prompt-registry.js';
+import { nowIso } from '../shared/index.js';
 import type { NodeId, ProfileId, SessionId } from '../shared/index.js';
 import { buildSnapshot } from '../state-engine/snapshot-builder.js';
 import { createSession, deselectNode, selectProfile } from '../state-engine/state-engine.js';
@@ -43,6 +44,7 @@ import { regenerateCanonicalAnswerUseCase } from './use-cases/regenerate-canonic
 import { editCanonicalAnswerUseCase } from './use-cases/edit-canonical-answer.js';
 import { skipNodeUseCase } from './use-cases/skip-node.js';
 import { openDocumentPreviewUseCase, closeDocumentPreviewUseCase } from './use-cases/open-document-preview.js';
+import { exportMarkdown } from '../outputs/index.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Public types
@@ -522,7 +524,104 @@ export async function createApplicationRuntime(
 						);
 						if (result.ok) {
 							currentState = result.state;
-							refreshSnapshot();
+							// Use the snapshot returned by the use case —
+							// refreshSnapshot() would drop the document_preview
+							// mode because resolveSessionMode is structural.
+							currentSnapshot = result.snapshot;
+							notifyListeners();
+							await persistState();
+						}
+						return;
+					}
+
+					// ── Export document (from document preview) ────
+					case 'export_document': {
+						if (
+							currentSnapshot.mode === 'document_preview' &&
+							currentSnapshot.mainPanel.kind === 'document_preview'
+						) {
+							const documentId =
+								currentSnapshot.mainPanel.documentId;
+							const exportResult = await exportMarkdown(
+								documentId,
+								currentState,
+								currentProfile,
+							);
+
+							if (exportResult.ok) {
+								// Append the new artifact to export state.
+								currentState = {
+									...currentState,
+									exportState: {
+										artifacts: [
+											...currentState.exportState
+												.artifacts,
+											exportResult.value,
+										],
+									},
+									updatedAt: nowIso(),
+								};
+
+								// Show a success diagnostic.
+								currentSnapshot = {
+									...currentSnapshot,
+									diagnostics: [
+										...currentSnapshot.diagnostics,
+										{
+											code: 'EXPORT_OK',
+											message: `Exported to ${exportResult.value.path}`,
+											severity: 'info',
+										},
+									],
+								};
+								notifyListeners();
+								await persistState();
+							} else {
+								// Show error diagnostic.
+								currentSnapshot = {
+									...currentSnapshot,
+									diagnostics: [
+										...currentSnapshot.diagnostics,
+										{
+											code: `EXPORT_${exportResult.error.code}`,
+											message:
+												exportResult.error.message,
+											severity: 'error',
+										},
+									],
+								};
+								notifyListeners();
+							}
+						}
+						return;
+					}
+
+					// ── Close document preview (action bar button) ──
+					case 'close_document_preview': {
+						if (
+							currentSnapshot.mode === 'document_preview' &&
+							currentProfile
+						) {
+							currentSnapshot =
+								closeDocumentPreviewUseCase(
+									currentState,
+									currentProfile,
+								);
+							notifyListeners();
+						}
+						return;
+					}
+
+					// ── Regenerate document preview ────────────────
+					case 'regenerate_document': {
+						const result = openDocumentPreviewUseCase(
+							currentState,
+							{ profile: currentProfile },
+						);
+						if (result.ok) {
+							currentState = result.state;
+							currentSnapshot = result.snapshot;
+							notifyListeners();
 							await persistState();
 						}
 						return;
