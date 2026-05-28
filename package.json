@@ -62,6 +62,7 @@
 		"lint:md": "markdownlint \"**/*.md\" --ignore node_modules",
 		"nfr:evidence": "node scripts/nfr-evidence.js",
 		"security:check": "node scripts/security-check.js",
+		"smoke:llm": "LOGOS_SMOKE_LLM=1 vitest run tests/smoke/",
 		"smoke:package": "node scripts/smoke-package.js",
 		"test": "vitest run",
 		"test:coverage": "vitest run --coverage",
