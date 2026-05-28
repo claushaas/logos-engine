@@ -1,7 +1,7 @@
 /**
- * Tests for Step 12.1 — document materializer.
+ * Tests for Step 12.1 — document materializer, extended for Step 15.4.
  *
- * Covers:
+ * Covers (Step 12.1):
  *  - `materializeDocument` with all accepted nodes → full document.
  *  - `materializeDocument` with missing required node → `[MISSING]` marker.
  *  - `materializeDocument` with stale source → `[⚠ STALE]` marker.
@@ -9,12 +9,18 @@
  *  - `previewDocument` always returns a draft (including rule-not-found fallback).
  *  - Completeness indicator is present.
  *
+ * Covers (Step 15.4):
+ *  - Partial preview is allowed with mixed accepted/missing sources.
+ *  - Raw conversation messages are never used as final materialized content.
+ *  - Export gating: incomplete documents report `partially_ready` status.
+ *  - Export gating: stale documents report `stale` status.
+ *
  * Acceptance criteria (Step 12.1):
  *  - Accepted nodes produce sections with their canonical answer content.
  *  - Missing required nodes are flagged with source node reference.
  *  - Stale source nodes are flagged.
  *  - Document completeness is shown.
- *  - Unaccepted answers are not used for final output.
+ *  - Step 15.4 — partial preview, raw conversation exclusion, export gating.
  *
  * @see {@link https://logos-engine/docs/07-document-materialization-spec.md}
  */
@@ -32,6 +38,7 @@ import {
 	materializeDocument,
 	previewDocument,
 } from '../../src/materialization/index.js';
+import { computeDocumentReadiness } from '../../src/state-engine/document-readiness.js';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Test fixtures
@@ -594,5 +601,169 @@ describe('previewDocument', () => {
 		expect(preview.content).toContain('[⚠ STALE — source node has changed]');
 		expect(preview.content).toContain('Stale Content B');
 		expect(preview.stale).toBe(true);
+	});
+
+	// ── Partial preview is allowed ───────────────────────────────────
+
+	it('returns a partial draft when only some source nodes are accepted', () => {
+		const profile = testProfile();
+		const state = stateWithNodes([
+			acceptedNodeState('node-a' as NodeId, 'Content A'),
+			// node-b is active (not accepted) — section should be missing
+			activeNodeState('node-b' as NodeId),
+		]);
+
+		const preview = previewDocument(
+			'test-doc' as DocumentId,
+			state,
+			profile,
+		);
+
+		// Partial preview must still produce valid Markdown.
+		expect(preview.documentId).toBe('test-doc' as DocumentId);
+		expect(preview.format).toBe('markdown');
+
+		// Filled section content is present.
+		expect(preview.content).toContain('Content A');
+
+		// Missing section is flagged.
+		expect(preview.content).toContain('[MISSING — requires node: node-b]');
+
+		// Completeness reflects only one accepted section.
+		expect(preview.content).toContain('Completeness: 1/2 sections accepted');
+		expect(preview.missingSections).toContain('section-2');
+
+		// Partial preview is not stale.
+		expect(preview.stale).toBe(false);
+	});
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Step 15.4 — additional materialization tests
+// ═══════════════════════════════════════════════════════════════════════════
+
+describe('Step 15.4 — materialization tests', () => {
+	// ── Raw conversation is not used as final source ──────────────────
+
+	it('does not use raw conversation messages as materialized content', () => {
+		const profile = testProfile();
+
+		// Create a node that has an accepted canonical answer so section 1
+		// is filled — this leaves section 2 node-b without an accepted
+		// canonical answer but with rich conversation data that must NOT
+		// leak into the materialized document.
+		const nodeA = acceptedNodeState('node-a' as NodeId, 'Content A');
+
+		const nodeB: NodeRuntimeState = {
+			allowedActions: ['answer', 'defer'],
+			canonicalAnswer: null,
+			completeness: {
+				blockingIssues: [],
+				complete: false,
+				coverage: {},
+				missing: [],
+				weak: [],
+			},
+			conversation: [
+				{
+					content: 'RAW CONVERSATION MUST NOT APPEAR IN OUTPUT',
+					createdAt: nowIso(),
+					id: 'msg-raw-1',
+					role: 'user',
+				},
+				{
+					content: 'This is a conversation response, not a canonical answer.',
+					createdAt: nowIso(),
+					id: 'msg-raw-2',
+					role: 'assistant',
+				},
+			],
+			dependencies: { blockedBy: [], requiredNodeIds: [], unlocks: [] },
+			extracted: {
+				assumptions: [],
+				decisions: [],
+				facts: [],
+				openQuestions: [],
+				risks: [],
+			},
+			lifecycle: 'active',
+			nodeId: 'node-b' as NodeId,
+			promptState: 'follow_up',
+			updatedAt: nowIso(),
+		};
+
+		const state = stateWithNodes([nodeA, nodeB]);
+
+		const result = materializeDocument(
+			'test-doc' as DocumentId,
+			state,
+			profile,
+		);
+
+		expect(result.ok).toBe(true);
+		if (!result.ok) throw new Error('Expected success');
+
+		const draft = result.value;
+
+		// The raw conversation text must not appear in the output.
+		expect(draft.content).not.toContain('RAW CONVERSATION MUST NOT APPEAR IN OUTPUT');
+		expect(draft.content).not.toContain('This is a conversation response, not a canonical answer.');
+
+		// The section for node-b must be marked as missing.
+		expect(draft.content).toContain('[MISSING — requires node: node-b]');
+
+		// Only section-1 is accepted.
+		expect(draft.content).toContain('Completeness: 1/2 sections accepted');
+		expect(draft.missingSections).toContain('section-2');
+	});
+
+	// ── Export gating: incomplete document ────────────────────────────
+
+	it('reports partially ready status for incomplete documents (export gate)', () => {
+		const profile = testProfile();
+		const state = stateWithNodes([
+			acceptedNodeState('node-a' as NodeId, 'Content A'),
+			// node-b is active — not yet accepted.
+			activeNodeState('node-b' as NodeId),
+		]);
+
+		const readiness = computeDocumentReadiness(
+			'test-doc' as DocumentId,
+			state,
+			profile,
+		);
+
+		// Document is not ready because node-b is missing.
+		expect(readiness.status).toBe('partially_ready');
+		expect(readiness.status).not.toBe('ready');
+		expect(readiness.missingRequiredNodeIds).toContain(
+			'node-b' as NodeId,
+		);
+		expect(readiness.missingRequiredNodeIds).not.toContain(
+			'node-a' as NodeId,
+		);
+		expect(readiness.staleSourceNodeIds).toEqual([]);
+	});
+
+	// ── Export gating: stale document ────────────────────────────────
+
+	it('reports stale status when any source node is stale (export gate)', () => {
+		const profile = testProfile();
+		const state = stateWithNodes([
+			acceptedNodeState('node-a' as NodeId, 'Content A'),
+			makeStaleNodeState('node-b' as NodeId, 'Stale Content B'),
+		]);
+
+		const readiness = computeDocumentReadiness(
+			'test-doc' as DocumentId,
+			state,
+			profile,
+		);
+
+		// Document is stale because node-b has a stale canonical answer.
+		expect(readiness.status).toBe('stale');
+		expect(readiness.status).not.toBe('ready');
+		expect(readiness.staleSourceNodeIds).toContain('node-b' as NodeId);
+		expect(readiness.missingRequiredNodeIds).toEqual([]);
 	});
 });
